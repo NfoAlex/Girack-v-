@@ -9,12 +9,15 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@mdi/font": "^7.1.96",
+    "material-icons": "^1.13.1",
     "socket.io-client": "^4.6.1",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
     "vuetify": "^3.1.6"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.3.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "eslint": "^8.34.0",
     "eslint-plugin-vue": "^9.9.0",
