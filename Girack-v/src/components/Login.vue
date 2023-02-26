@@ -1,5 +1,5 @@
 <script>
-import { getSocket } from "../socket.js";
+import { getSocket, getCookie } from "../socket.js";
 const socket = getSocket();
 
 export default {
@@ -23,18 +23,35 @@ export default {
     },
 
     mounted() {
+        console.log(getCookie("sessionid"));
+        //クッキーが存在するなら認証開始
+        const checkCookie = setInterval( () => {
+            if ( getCookie("sessionid") !== "" ) {
+                socket.emit("authByCookie", getCookie("sessionid"));
+                console.log("checkCookie :: 認証リクエスト送信");
+
+            }
+
+            //Socketの接続が確認できていたらループ削除
+            if ( socket.connected ) {
+                clearInterval(checkCookie);
+                console.log("checkCookie :: ループ削除");
+
+            }
+
+        }, 1000);
+
         socket.on("authResult", (dat) => {
+            //ログインできたらページ移動
             if ( dat.result ) {
-                this.success = true;
-                this.$emit("login");
+                this.success = true; //成功を表示
+                setTimeout(() => this.$emit("login"), 1500); //1.5秒待ってから遷移
 
             } else {
-                this.error = true;
+                this.error = true; //エラーを表示
 
             }
             
-
-
         });
 
     }
@@ -54,8 +71,20 @@ export default {
     <br>
     <v-btn @click="requestAuth">認証</v-btn>
     <br>
-    <p v-if="success">ログイン成功</p>
-    <p v-if="error">ログイン失敗</p>
+    <v-alert
+        v-if="success"
+        style="width:80%; margin: 1% auto"
+        type="success"
+        title="ログイン成功"
+        text=""
+    ></v-alert>
+    <v-alert
+        v-if="error"
+        style="width:80%; margin: 1% auto"
+        type="error"
+        title="エラー"
+        text="ログイン失敗、パスワードを確認してね（またはBANされてそう）"
+    ></v-alert>
 </template>
 
 <style scoped>
