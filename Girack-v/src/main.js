@@ -12,21 +12,24 @@ import * as directives from 'vuetify/directives'
 const vuetify = createVuetify({
     theme: {
         themes: {
-          dark: { //name swapped!!!!!
-            dark: false,
-            colors: {
-              primary: colors.purple.lighten2, // #E53935
-              secondary: colors.purple.lighten4, // #FFCDD2
-            }
-          },
-          light: { //name swapped!!!!!
-            dark: true,
-            colors: {
-              primary: "#5E35B1", // #E53935
-              secondary: "#EDE7F6", // #FFCDD2
-            }
-          }
+            light: { //name swapped!!!!!
+                dark: false,
+                colors: {
+                    background: "whitesmoke",
+                    primary: colors.purple.lighten2, // #E53935
+                    secondary: colors.purple.lighten4, // #FFCDD2
+                }
+            },
+            dark: { //name swapped!!!!!
+                dark: true,
+                colors: {
+                    background: "#FFFFFF",
+                    primary: "#5E35B1", // #E53935
+                    secondary: "#EDE7F6", // #FFCDD2
+                }
+            },
         },
+        defaultTheme: "dark"
     },
     components,
     directives,
