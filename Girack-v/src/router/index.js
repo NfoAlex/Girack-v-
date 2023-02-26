@@ -17,10 +17,10 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../components/Login.vue')
     },
-    {
+    { //チャンネル画面
       path: '/c/:id',
       name: 'Channel',
-      component: () => import('../components/Main.vue')
+      component: () => import('../components/Channel.vue')
     }
   ]
 })

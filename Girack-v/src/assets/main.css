@@ -1,9 +1,7 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
 
   font-weight: normal;
 }
@@ -11,13 +9,13 @@
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: rgb(74, 74, 75);
   transition: 0.4s;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    color: whitesmoke;
   }
 }
 

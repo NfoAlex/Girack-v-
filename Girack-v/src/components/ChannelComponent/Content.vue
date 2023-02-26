@@ -1,5 +1,5 @@
 <script>
-import { getSocket } from "../socket.js";
+import { getSocket } from "../../socket.js";
 const socket = getSocket();
 
 export default {

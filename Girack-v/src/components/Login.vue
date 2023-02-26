@@ -44,11 +44,22 @@ export default {
 </script>
 
 <template>
-    <p>パスワード</p>
-    <input type="password" v-model="pw" />
+    <v-text-field
+        style="width:50%"
+        v-model="pw"
+        clearable
+        label="パスワード"
+        hint="乱数のやつ"
+    ></v-text-field>
     <br>
-    <button @click="requestAuth">認証</button>
+    <v-btn @click="requestAuth">認証</v-btn>
     <br>
     <p v-if="success">ログイン成功</p>
     <p v-if="error">ログイン失敗</p>
 </template>
+
+<style scoped>
+
+
+
+</style>

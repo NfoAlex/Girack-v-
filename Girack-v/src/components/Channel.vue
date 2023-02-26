@@ -1,6 +1,6 @@
 <script>
 import { getSocket } from "../socket.js";
-import Content from "./Content.vue";
+import Content from "./ChannelComponent/Content.vue";
 const socket = getSocket();
 
 export default {
