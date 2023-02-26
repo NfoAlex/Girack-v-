@@ -52,6 +52,7 @@ export default {
 
             } else { //違う人のメッセージなら普通に表示
                 this.msgDB[this.getPath].push({
+                    id: this.msgDB[this.getPath].length+1,
                     username: msg.username,
                     userid: msg.userid,
                     channelid: msg.channelid,
