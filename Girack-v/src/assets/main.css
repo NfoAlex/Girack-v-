@@ -2,14 +2,15 @@
 
 #app {
   margin: 0 auto;
+  overflow-y: hidden;
 
   font-weight: normal;
 }
 
-a,
-.green {
+a
+{
   text-decoration: none;
-  color: rgb(74, 74, 75);
+  color: "#90A4AE";
   transition: 0.4s;
 }
 

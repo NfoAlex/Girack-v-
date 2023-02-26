@@ -10,11 +10,11 @@ const socket = getSocket();
 export default {
     data() {
         return {
-        channelBar: "channelBar",
-        main: "main",
-        servername: "",
-        path: "",
-        loggedin: false
+            channelBar: "channelBar",
+            main: "main",
+            servername: "",
+            path: "",
+            loggedin: false
 
         }
 
@@ -49,13 +49,13 @@ export default {
     <div v-if="loggedin">
         <div :class="channelBar">
             <h2>{{ servername || "..." }}</h2>
-            <nav>
+            <nav style="margin:0 auto; width:90%;">
                 <RouterLink to="/">Home</RouterLink><br>
                 <RouterLink to="/login">Login(forDebug)</RouterLink><br>
                 <hr>
-                <!-- ここからチャンネルボタン描写 -->
-                <div style="margin:3% auto; width:90%;" v-for="l in userinfo.channelJoined">
-                    <RouterLink :to="'/c/'+l"><v-btn :variant=" path.indexOf(l)!==-1?'flat':'tonal' " style="width:100%">{{ l }}</v-btn></RouterLink>
+                <!-- ここからチャンネルボタン描写  -->
+                <div style="margin-top:3.5%" v-for="l in userinfo.channelJoined">
+                    <RouterLink :to="'/c/'+l"><v-btn :variant=" path.indexOf(l)!==-1?'tonal':'flat' " style="width:100%">{{ l }}</v-btn></RouterLink>
                     <br>
                 </div>
             </nav>
@@ -79,6 +79,11 @@ export default {
 {
     width: 20vw;
     height: 100vh;
+
+    box-sizing: border-box;
+    border-right: 1px gray solid;
+
+    background-color: #263238;
 }
 
 .main
@@ -89,5 +94,7 @@ export default {
 
     width: 80vw;
     height: 100vh;
+    
+    background-color: #212121;
 }
 </style>

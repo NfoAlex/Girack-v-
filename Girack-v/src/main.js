@@ -16,16 +16,16 @@ const vuetify = createVuetify({
                 dark: false,
                 colors: {
                     background: "whitesmoke",
-                    primary: colors.purple.lighten2, // #E53935
-                    secondary: colors.purple.lighten4, // #FFCDD2
+                    primary: "#607D8B", // #E53935
+                    secondary: "#ECEFF1", // #FFCDD2
                 }
             },
             dark: { //name swapped!!!!!
                 dark: true,
                 colors: {
-                    background: "#FFFFFF",
-                    primary: "#5E35B1", // #E53935
-                    secondary: "#EDE7F6", // #FFCDD2
+                    background: "gray",
+                    primary: "#263238", // #E53935
+                    secondary: "#546E7A", // #FFCDD2
                 }
             },
         },
