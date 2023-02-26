@@ -46,7 +46,7 @@ export default {
             //ログインできたらページ移動
             if ( dat.result ) {
                 this.success = true; //成功を表示
-                setTimeout(() => this.$emit("login"), 1500); //1.5秒待ってから遷移
+                setTimeout(() => this.$emit("login"), 1000); //1.5秒待ってから遷移
 
             } else {
                 this.error = true; //エラーを表示
@@ -72,7 +72,7 @@ export default {
     <br>
     <v-btn @click="requestAuth">認証</v-btn>
     <br>
-    
+
     <v-alert
         v-if="success"
         style="width:80%; margin: 1% auto"
