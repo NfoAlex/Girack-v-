@@ -9,6 +9,7 @@ export default {
         Head,
         Input
     },
+
     data() {
         return {
             w: "w",
@@ -46,17 +47,18 @@ export default {
 .head
 {
     height: 10vh;
+    border-bottom: solid 0.1px #424242;
 }
 
 .content
 {
     height: 82vh;
+    overflow-y: auto;
 }
 
 .input
 {
     height: 8vh;
-    border: solid 1px white;
 }
 
 </style>

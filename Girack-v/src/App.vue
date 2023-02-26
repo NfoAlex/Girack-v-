@@ -32,8 +32,8 @@ export default {
     mounted() {
         console.log(this.$route);
 
-        socket.emit("getInitInfo");
-        socket.on("serverinfo", (dat) => {
+        socket.emit("getInitInfo"); //サーバーの情報を取得
+        socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername;
             
         });
@@ -52,7 +52,7 @@ export default {
             <nav style="margin:0 auto; width:90%;">
                 <RouterLink to="/">Home</RouterLink><br>
                 <RouterLink to="/login">Login(forDebug)</RouterLink><br>
-                <hr>
+                <hr style="margin:5% 0">
                 <!-- ここからチャンネルボタン描写  -->
                 <div style="margin-top:3.5%" v-for="l in userinfo.channelJoined">
                     <RouterLink :to="'/c/'+l"><v-btn :variant=" path.indexOf(l)!==-1?'tonal':'flat' " style="width:100%">{{ l }}</v-btn></RouterLink>
@@ -81,7 +81,7 @@ export default {
     height: 100vh;
 
     box-sizing: border-box;
-    border-right: 1px gray solid;
+    border-right: 0.1px #424242 solid;
 
     background-color: #263238;
 }
@@ -97,4 +97,5 @@ export default {
     
     background-color: #212121;
 }
+
 </style>
