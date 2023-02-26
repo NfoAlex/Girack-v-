@@ -59,7 +59,6 @@ export default {
     <v-text-field
         ref="inp"
         :label="$route.params.id + 'へ送信'"
-        append-inner-icon="mdi-map-marker"
         variant="solo"
         style="margin:0 3%; width:80%;"
         v-model="txt"
