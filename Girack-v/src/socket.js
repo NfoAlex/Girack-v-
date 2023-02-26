@@ -1,7 +1,7 @@
 //socket.js
 //通信とかそこらへん
 
-import { io } from 'socket.io-client';
+import { io } from 'socket.io-client'; //ウェブソケット通信用
 
 const socket = io("http://localhost:33333");
 
@@ -14,12 +14,14 @@ export var userinfo = {
     channelJoined: [], //参加しているチャンネル
 }
 
+//サーバー(インスタンス)情報
 export var serverinfo = {
     servername: null,
     registerAvailable: null,
     inviteOnly: null
 };
 
+//ソケットの接続状態をもつオブジェクトを返すだけ
 export function getSocket() {
     return socket;
 
@@ -51,6 +53,9 @@ socket.on("authResult", (dat) => {
             channelJoined: dat.channelJoined, //参加しているチャンネル
         }
 
+        setCookie("sessionid", dat.sessionid, 15);
+        console.log("session id in cookie -> " + getCookie("sessionid"));
+
         console.log("userinfo ↓");
         console.log(userinfo);
 
@@ -58,3 +63,37 @@ socket.on("authResult", (dat) => {
         
 
 });
+
+//クッキー設定するやつ
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+
+}
+
+//クッキーを取得
+export function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+
+        }
+
+    }
+
+    return "";
+
+}
