@@ -51,11 +51,6 @@ export default {
 </script>
 
 <template>
-    <!-- <v-text-field 
-        label="テキスト"
-        clearable
-        style="margin:0 3%; width:80%"
-    ></v-text-field> -->
     <v-text-field
         ref="inp"
         :label="$route.params.id + 'へ送信'"
