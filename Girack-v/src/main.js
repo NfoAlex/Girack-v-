@@ -17,7 +17,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 const vuetify = createVuetify({
     theme: {
         themes: {
-            light: { //name swapped!!!!!
+            light: {
                 dark: false,
                 colors: {
                     background: "whitesmoke",
@@ -25,7 +25,7 @@ const vuetify = createVuetify({
                     secondary: "#ECEFF1", // #FFCDD2
                 }
             },
-            dark: { //name swapped!!!!!
+            dark: {
                 dark: true,
                 colors: {
                     background: "gray",

@@ -46,11 +46,11 @@ export default {
         //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
             let activeDB = this.msgDB[this.getPath];
-            //名前が同じかどうかを確認してからDB更新
+            //名前が一つ前のメッセージと同じなら連続して表示
             if ( activeDB[activeDB.length-1].userid === msg.userid ) { //一つ前のメッセージと名前が同じなら
                 this.msgDB[this.getPath][activeDB.length-1].msg.push(msg.content); //メッセージ配列に追加
 
-            } else { //違う人のメッセージなら
+            } else { //違う人のメッセージなら普通に表示
                 this.msgDB[this.getPath].push({
                     username: msg.username,
                     userid: msg.userid,
