@@ -73,7 +73,7 @@ export default {
             <v-avatar style="" size="x-large">
                 <v-img :alt="m.username" :src="'http://localhost:33333/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
-            <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:80%; padding:3% 1%;">
+            <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:3% 1%;">
                 <div :class="'text-h6'">{{ m.username }}</div>
                 <p style="font-size:16px" v-for="conte in m.msg">
                     {{ conte }}
