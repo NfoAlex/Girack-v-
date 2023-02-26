@@ -41,6 +41,7 @@ export default {
 
         }, 1000);
 
+        //認証結果の受け取りと処理
         socket.on("authResult", (dat) => {
             //ログインできたらページ移動
             if ( dat.result ) {
@@ -71,6 +72,7 @@ export default {
     <br>
     <v-btn @click="requestAuth">認証</v-btn>
     <br>
+    
     <v-alert
         v-if="success"
         style="width:80%; margin: 1% auto"
@@ -78,6 +80,7 @@ export default {
         title="ログイン成功"
         text=""
     ></v-alert>
+
     <v-alert
         v-if="error"
         style="width:80%; margin: 1% auto"
