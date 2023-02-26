@@ -15,7 +15,7 @@ export default {
                         msg: ["Ayo", "abc", "そしてこれが３つ目"]
                     },
                     {
-                        id: 0,
+                        id: 1,
                         username: "Admin",
                         userid: "xxx",
                         channelid: "001",
