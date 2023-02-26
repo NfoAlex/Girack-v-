@@ -1,18 +1,20 @@
 <script>
-import { getSocket } from "../socket.js";
 import Content from "./ChannelComponent/Content.vue";
-const socket = getSocket();
+import Head from "./ChannelComponent/Head.vue";
+import Input from "./ChannelComponent/Input.vue";
 
 export default {
     components: {
-        Content
+        Content,
+        Head,
+        Input
     },
     data() {
         return {
-            msg: "fdsa",
-            s: socket,
-            sStatus: false
-
+            w: "w",
+            head: "head",
+            content: "content",
+            input: "input"
         }
     }
 
@@ -21,5 +23,40 @@ export default {
 </script>
 
 <template>
-    <Content />
+    <div :class="[w,head]">
+        <Head  />
+    </div>
+    <div :class="[w,content]">
+        <Content />
+    </div>
+    <div :class="[w,input]">
+        <Input />
+    </div>
+    
 </template>
+
+<style scoped>
+
+.w
+{
+    width: 100%;
+    margin: 0 0;
+    box-sizing: border-box;
+}
+.head
+{
+    height: 10vh;
+}
+
+.content
+{
+    height: 82vh;
+}
+
+.input
+{
+    height: 8vh;
+    border: solid 1px white;
+}
+
+</style>
