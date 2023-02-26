@@ -7,6 +7,7 @@ export default {
 
     data() {
         return {
+            Connected: false,
             pw: "",
             success: false,
             error: false
@@ -23,18 +24,19 @@ export default {
     },
 
     mounted() {
-        console.log(getCookie("sessionid"));
         //クッキーが存在するなら認証開始
         const checkCookie = setInterval( () => {
             if ( getCookie("sessionid") !== "" ) {
                 socket.emit("authByCookie", getCookie("sessionid"));
                 console.log("checkCookie :: 認証リクエスト送信");
+                clearInterval(checkCookie); //ループ削除
 
             }
 
             //Socketの接続が確認できていたらループ削除
             if ( socket.connected ) {
                 clearInterval(checkCookie);
+                this.Connected = true;
                 console.log("checkCookie :: ループ削除");
 
             }
@@ -62,15 +64,24 @@ export default {
 </script>
 
 <template>
+    <v-alert
+        v-if="!Connected"
+        style="width:80%; margin: 1% auto"
+        type="error"
+        title="🤔"
+        text="サーバーつながってなくない?"
+    ></v-alert>
+
     <v-text-field
         style="width:50%"
         v-model="pw"
         clearable
+        :disabled="!Connected"
         label="パスワード"
         hint="乱数のやつ"
     ></v-text-field>
     <br>
-    <v-btn @click="requestAuth">認証</v-btn>
+    <v-btn :disabled="!Connected" @click="requestAuth">認証</v-btn>
     <br>
 
     <v-alert
