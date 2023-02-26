@@ -1,6 +1,9 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 import { getSocket, serverinfo } from "./socket.js";
+
+import Login from "./components/Login.vue";
+
 </script>
 
 <script>
@@ -12,6 +15,7 @@ export default {
         channelBar: "channelBar",
         main: "main",
         servername: "",
+        loggedin: false
 
         }
 
@@ -29,6 +33,31 @@ export default {
 }
 
 </script>
+
+<template>
+    <!-- ログイン後(Main) -->
+    <div v-if="loggedin">
+        <div :class="channelBar">
+            <h2>{{ servername || "..." }}</h2>
+            <nav>
+                <RouterLink to="/">Home</RouterLink><br>
+                <RouterLink to="/login">Login(forDebug)</RouterLink><br>
+                <hr>
+                <RouterLink to="/c/001">random</RouterLink><br>
+            </nav>
+        </div>
+
+        <div :class="main">
+            <RouterView />
+        </div>
+    </div>
+
+    <!-- ログイン前 -->
+    <div v-else>
+        <Login @login="() => loggedin = true" />
+    </div>
+
+</template>
 
 <style scoped>
 
@@ -48,22 +77,3 @@ export default {
     height: 100vh;
 }
 </style>
-
-<template>
-    <header>
-        <div :class="channelBar">
-            <h2>{{ servername || "..." }}</h2>
-            <nav>
-                <RouterLink to="/">Home</RouterLink><br>
-                <RouterLink to="/login">Login</RouterLink><br>
-                <hr>
-                <RouterLink to="/c/001">random</RouterLink><br>
-            </nav>
-        </div>
-    </header>
-
-    <div :class="main">
-        <RouterView />
-    </div>
-
-</template>

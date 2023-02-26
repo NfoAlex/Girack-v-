@@ -39,14 +39,22 @@ socket.on("serverinfo", (dat) => {
 
 });
 
+//認証結果
 socket.on("authResult", (dat) => {
-    userinfo = {
-        username: dat.username,
-        userid: dat.userid, //ユーザーID
-        loggedin: true, //ログイン状態
-        sessionid: dat.sessionid, //セッションID
-        channelJoined: dat.channelJoined, //参加しているチャンネル
+    //ユーザーデータの更新
+    if ( dat.result ) { //もしログイン成功なら
+        userinfo = {
+            username: dat.username,
+            userid: dat.userid, //ユーザーID
+            loggedin: true, //ログイン状態
+            sessionid: dat.sessionid, //セッションID
+            channelJoined: dat.channelJoined, //参加しているチャンネル
+        }
+
+        console.log("userinfo ↓");
+        console.log(userinfo);
+
     }
-    
+        
 
 });

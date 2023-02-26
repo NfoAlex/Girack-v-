@@ -3,16 +3,21 @@ import { getSocket } from "../socket.js";
 const socket = getSocket();
 
 export default {
+    emits: ["login"],
+
     data() {
         return {
             pw: "",
-            success: false
+            success: false,
+            error: false
         }
     },
 
     methods: {
         requestAuth() {
             socket.emit("auth", this.pw);
+            this.success = false;
+            this.error = false;
 
         }
     },
@@ -21,8 +26,13 @@ export default {
         socket.on("authResult", (dat) => {
             if ( dat.result ) {
                 this.success = true;
+                this.$emit("login");
+
+            } else {
+                this.error = true;
 
             }
+            
 
 
         });
@@ -40,4 +50,5 @@ export default {
     <button @click="requestAuth">認証</button>
     <br>
     <p v-if="success">ログイン成功</p>
+    <p v-if="error">ログイン失敗</p>
 </template>
