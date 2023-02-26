@@ -21,21 +21,43 @@ export default {
                         channelid: "001",
                         msg: ["は", "誰お前"]
                     }
+                ],
+                "002": [
+                    {
+                        id: 0,
+                        username: "Psyonix",
+                        userid: "xxx",
+                        channelid: "001",
+                        msg: ["いや","お前のランクよ","草"]
+                    },
                 ]
             }
 
         }
     },
 
+    computed: {
+        getPath() {
+            return this.$route.params.id;
+        }
+    },
+
     mounted() {
-        //メッセージ受け取り
+        //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
-            this.msgDB += this.msgDB.push({
-                username: msg.username,
-                userid: msg.userid,
-                channelid: msg.channelid,
-                msg: msg.content
-            });
+            let activeDB = this.msgDB[this.getPath];
+            //名前が同じかどうかを確認してからDB更新
+            if ( activeDB[activeDB.length-1].userid === msg.userid ) { //一つ前のメッセージと名前が同じなら
+                this.msgDB[this.getPath][activeDB.length-1].msg.push(msg.content); //メッセージ配列に追加
+
+            } else { //違う人のメッセージなら
+                this.msgDB[this.getPath].push({
+                    username: msg.username,
+                    userid: msg.userid,
+                    channelid: msg.channelid,
+                    msg: [msg.content]
+                });
+            }
 
         });
 
@@ -46,12 +68,17 @@ export default {
 </script>
 
 <template>
-    <div v-for="m in msgDB[$route.params.id]">
-        <v-card class="rounded-lg" variant="tonal" elevation="4" style="margin:3% auto; width:95%; padding:3% 1%;">
-            <div :class="'text-h6'">{{ m.username }}</div>
-            <p style="margin:1% 1% 0 1%" v-for="conte in m.msg">
-                {{ conte }}
-            </p>
-        </v-card>
+    <div ref="channelWindow">
+        <div style="display:flex; margin-top:2%; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
+            <v-avatar style="" size="x-large">
+                <v-img :alt="m.username" :src="'http://localhost:33333/img/' + m.userid + '.jpeg'"></v-img>
+            </v-avatar>
+            <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:80%; padding:3% 1%;">
+                <div :class="'text-h6'">{{ m.username }}</div>
+                <p style="font-size:16px" v-for="conte in m.msg">
+                    {{ conte }}
+                </p>
+            </v-card>
+        </div>
     </div>
 </template>
