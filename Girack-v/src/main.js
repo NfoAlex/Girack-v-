@@ -20,7 +20,7 @@ const vuetify = createVuetify({
             light: {
                 dark: false,
                 colors: {
-                    background: "whitesmoke",
+                    background: "#FAFAFA",
                     primary: "#607D8B", // #E53935
                     secondary: "#ECEFF1", // #FFCDD2
                 }
@@ -28,7 +28,7 @@ const vuetify = createVuetify({
             dark: {
                 dark: true,
                 colors: {
-                    background: "gray",
+                    background: "#212121",
                     primary: "#263238", // #E53935
                     secondary: "#546E7A", // #FFCDD2
                 }
