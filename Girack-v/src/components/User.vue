@@ -38,20 +38,8 @@ export default {
                 </v-col>
             </v-row>
         </v-container>
-        <div class="d-flex flex-row">
-            <!-- <v-card variant="tonal" :class="cd" style="width:30%; padding:0">
-                <v-img class="rounded-lg" :alt="userinfo.userid" :src="'http://localhost:33333/img/' + userinfo.userid + '.jpeg'"></v-img>
-            </v-card>
-            <v-card variant="tonal" :class="cd" style="width:50%; padding:1% 3% ">
-                <p color="secondary" class="text-left text-overline">
-                    # {{ userinfo.userid }}
-                </p>
-                <p class="text-h4 text-left" >
-                    {{ userinfo.username }}
-                </p>
-            </v-card> -->
-        </div>
-        <div class="d-flex flex-row">
+        <v-container class="bg-surface-variant">
+            <v-row no-gutters>
             <v-card variant="tonal" :class="cd" style="width:100%; ">
                 <p class="text--primary" >
                     参加しているチャンネル
@@ -67,7 +55,8 @@ export default {
                     {{ c }}
                 </v-card>
             </v-card>
-        </div>
+        </v-row>
+        </v-container>
     </div>
 </template>
 
@@ -75,7 +64,6 @@ export default {
 
 .card-default
 {
-    margin: 3% 3%;
     padding: 3%;
 
     text-align:center;
