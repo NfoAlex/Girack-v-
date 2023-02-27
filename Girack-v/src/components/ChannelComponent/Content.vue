@@ -75,6 +75,7 @@ export default {
             //名前が一つ前のメッセージと同じなら連続して表示
             if ( activeDB[activeDB.length-1].userid === msg.userid ) { //一つ前のメッセージと名前が同じなら
                 this.msgDB[this.getPath][activeDB.length-1].msg.push(msg.content); //メッセージ配列に追加
+                this.msgDB[this.getPath][activeDB.length-1].time = msg.time;
 
             } else { //違う人のメッセージなら普通に表示
                 this.msgDB[this.getPath].push({
