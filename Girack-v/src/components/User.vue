@@ -1,5 +1,5 @@
 <script setup>
-import { userinfo, getSocket, channelIndex } from '../socket.js';
+import { userinfo, getSocket, channelIndex, setCookie } from '../socket.js';
 
 const socket = getSocket();
 
@@ -8,11 +8,23 @@ const socket = getSocket();
 <script>
 
 export default {
+
     data() {
         return {
+            snackbar: false,
             cd: ["card-default","rounded-lg"]
         }
+    },
+    
+    methods: {
+        //ログアウト処理
+        logout() {
+            setCookie("sessionid", "", 0); //クッキー削除
+            location.reload(); //ページリロード
+
+        }
     }
+
 }
 </script>
 
@@ -27,7 +39,7 @@ export default {
                     </v-card>
                 </v-col>
                 <v-col>
-                    <div variant="tonal" :class="cd" style="padding:1% 3% ">
+                    <div variant="tonal" :class="cd" style="padding:1% 10% ">
                         <p color="secondary" class="text-left text-overline">
                             # {{ userinfo.userid }}
                         </p>
@@ -40,26 +52,48 @@ export default {
         </v-container>
         <v-container class="bg-surface-variant">
             <v-row no-gutters>
-            <v-card variant="tonal" :class="cd" style="width:100%; ">
-                <p class="text--primary text-left" >
-                    参加しているチャンネル
-                </p>
-                <v-card
-                    v-for="c in channelIndex"
-                    class="mx-auto text-left"
-                    :class="cd"
-                    max-width="95%"
-                    style="margin-top:15px"
-                    :elevation="6"
-                >
-                    <span class="text-h6" style="border-right:0.1px">{{ c.channelname }}</span>
-                    <span style="height:100%; border-right:1px solid grey; margin:0 1%"></span>
-                    <v-chip>公開</v-chip>
-                    <span style="height:100%; border-right:1px solid grey; margin:0 1%"></span>
-                    <span>{{ c.description }}</span>
+                <v-card variant="tonal" :class="cd" style="width:100%; ">
+                    <p class="text--primary text-left" >
+                        参加しているチャンネル
+                    </p>
+                    <v-card
+                        v-for="c in channelIndex"
+                        class="mx-auto text-left"
+                        :class="cd"
+                        max-width="95%"
+                        style="margin-top:15px"
+                        :elevation="6"
+                    >
+                        <span class="text-h6" style="border-right:0.1px">{{ c.channelname }}</span>
+                        <span style="height:100%; border-right:1px solid grey; margin:0 1%"></span>
+                        <v-chip>公開</v-chip>
+                        <span style="height:100%; border-right:1px solid grey; margin:0 1%"></span>
+                        <span>{{ c.description }}</span>
+                    </v-card>
                 </v-card>
-            </v-card>
-        </v-row>
+            </v-row>
+        </v-container>
+        <v-container class="bg-surface-variant">
+            <v-row no-gutters>
+                <v-card variant="tonal" :class="cd" style="width:100%; ">
+                    <v-btn color="red" block @click="snackbar=true">Logout</v-btn>
+                    <v-snackbar
+                        v-model="snackbar"
+                    >
+                    ログアウトしていいの？
+
+                    <template v-slot:actions>
+                        <v-btn
+                        color="pink"
+                        variant="text"
+                        @click="logout"
+                        >
+                        うん！
+                        </v-btn>
+                    </template>
+                    </v-snackbar>
+                </v-card>
+            </v-row>
         </v-container>
     </div>
 </template>
