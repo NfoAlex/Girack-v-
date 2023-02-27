@@ -21,6 +21,17 @@ export var serverinfo = {
     inviteOnly: null
 };
 
+//チャンネル情報
+export var channelIndex = {
+    /*
+    "001": {
+        channelname: "random",
+        description: "Hello, Girack",
+        scope: false
+    }
+     */
+}
+
 //ソケットの接続状態をもつオブジェクトを返すだけ
 export function getSocket() {
     return socket;
@@ -41,10 +52,22 @@ socket.on("serverinfo", (dat) => {
 
 });
 
+//チャンネル情報受け取り
+socket.on("infoResult", (dat) => {
+    if ( dat.type !== "channel" ) { return; } //channel用じゃなければ
+    channelIndex[dat.channelid] = {
+        channelname: dat.channelname,
+        description: dat.description,
+        scope: dat.scope
+    };
+
+});
+
 //認証結果
 socket.on("authResult", (dat) => {
     //ユーザーデータの更新
     if ( dat.result ) { //もしログイン成功なら
+        //ユーザー情報を更新
         userinfo = {
             username: dat.username,
             userid: dat.userid, //ユーザーID
@@ -58,6 +81,17 @@ socket.on("authResult", (dat) => {
 
         console.log("userinfo ↓");
         console.log(userinfo);
+
+        //チャンネル情報の取得
+        for ( let c in userinfo.channelJoined ) {
+            socket.emit("getInfo", { //リクエスト送信
+                target: "channel",
+                targetid: userinfo.channelJoined[c],
+                userid: userinfo.userid,
+                sessionid: userinfo.sessionid
+            });
+
+        }
 
     }
 
