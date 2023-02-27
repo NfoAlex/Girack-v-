@@ -171,7 +171,7 @@ export default {
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
-            <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:1% 1%;">
+            <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:85.5%; padding:1% 1%;">
                 
                 <div :class="'text-h6'">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
