@@ -1,5 +1,5 @@
 <script>
-import { getSocket } from "../../socket.js";
+import { getSocket, userinfo } from "../../socket.js";
 const socket = getSocket();
 
 export default {
@@ -9,34 +9,43 @@ export default {
                 "001": [
                     {
                         id: 0,
-                        username: "Test",
-                        userid: "xxx",
+                        username: "",
+                        userid: "xx0",
                         channelid: "001",
+                        time: "20200217165240643",
                         msg: ["Ayo", "abc", "そしてこれが３つ目"]
                     },
                     {
                         id: 1,
-                        username: "Admin",
-                        userid: "xxx",
+                        username: "",
+                        userid: "xx1",
                         channelid: "001",
+                        time: "20200227165240646",
                         msg: ["は", "誰お前"]
                     }
                 ],
                 "002": [
                     {
                         id: 0,
-                        username: "Psyonix",
-                        userid: "xxx",
+                        username: "",
+                        userid: "xx2",
                         channelid: "001",
+                        time: "20190327165240646",
                         msg: ["いや","お前のランクよ","草"]
                     },
                 ]
+            },
+            userIndex: {
+                "xx0": {username:"Test", role:"Member"},
+                "xx1": {username:"Admin", role:"Member"},
+                "xx2": {username:"Psyonix", role:"Member"}
             }
 
         }
     },
 
     computed: {
+        //現在いるパスを返す
         getPath() {
             return this.$route.params.id;
         }
@@ -45,7 +54,23 @@ export default {
     mounted() {
         //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
+            console.log("msgReceive :: ↓");
+            console.log(msg);
+
+            //使用するDBレコード
             let activeDB = this.msgDB[this.getPath];
+
+            //もしユーザーの名前リストに名前がなかったら
+            if ( this.userIndex[msg.userid] === undefined ) {
+                //名前をリクエスト
+                socket.emit("getInfo", {
+                    target: "user",
+                    targetid: msg.userid,
+                    userid: userinfo.userid,
+                    sessionid: userinfo.sessionid
+                });
+            }
+
             //名前が一つ前のメッセージと同じなら連続して表示
             if ( activeDB[activeDB.length-1].userid === msg.userid ) { //一つ前のメッセージと名前が同じなら
                 this.msgDB[this.getPath][activeDB.length-1].msg.push(msg.content); //メッセージ配列に追加
@@ -53,15 +78,76 @@ export default {
             } else { //違う人のメッセージなら普通に表示
                 this.msgDB[this.getPath].push({
                     id: this.msgDB[this.getPath].length+1,
-                    username: msg.username,
                     userid: msg.userid,
                     channelid: msg.channelid,
+                    time: msg.time,
                     msg: [msg.content]
                 });
+
             }
 
         });
 
+        //名前の受け取り
+        socket.on("infoResult", (dat) => {
+            console.log("Content :: infoResult : 名前情報受け取り \\/")
+            console.log(dat);
+
+            let username = dat.username;
+            let userid = dat.userid;
+            let role = dat.role;
+
+            this.userIndex[userid] = {};
+
+            this.userIndex[userid].username = username;
+            this.userIndex[userid].role = role;
+
+        });
+
+    },
+
+    methods: {
+        getRole(userid) {
+            try {
+                return this.userIndex[userid].role;
+
+            }
+            catch(e) {
+                return "Member";
+
+            }
+
+        },
+        printDate(time) {
+            let t = new Date();
+            let y = t.getFullYear().toString(); //今年 (４桁)
+            let m = "0" + (t.getMonth()+1); //月 (0も含めて２桁に)
+            //let d = t.getDate().toString();
+
+            let timestamp = ""; //出力予定の文字列
+
+            //もし去年以上からのメッセージだったら
+            if ( time.slice(0,4) !== y ) { 
+                timestamp += time.slice(0,4) + "/";
+                timestamp += time.slice(4,6) + "/";
+                timestamp += time.slice(6,8) ;
+
+                return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+
+            }
+
+            //もし昨日以上前のメッセージだったら
+            if ( time.slice(4,6) !== m ) {
+                timestamp += time.slice(4,6) + "/";
+                timestamp += time.slice(6,8);
+
+                return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+            
+            }
+
+            return " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+            //return time.slice(0,4) + "/" +  time.slice(4,6) + "/" +  time.slice(6,8) + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+        }
     }
 
 }
@@ -72,10 +158,23 @@ export default {
     <div ref="channelWindow">
         <div style="display:flex; margin-top:2%; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
             <v-avatar style="" size="x-large">
-                <v-img :alt="m.username" :src="'http://localhost:33333/img/' + m.userid + '.jpeg'"></v-img>
+                <v-img :alt="m.userid" :src="'http://localhost:33333/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
             <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:3% 1%;">
-                <div :class="'text-h6'">{{ m.username }}</div>
+                <div :class="'text-h6'">
+                    {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : m.userid }}
+                    <v-badge
+                        v-if="getRole(m.userid)!=='Member'"
+                        color="purple"
+                        :content="getRole(m.userid)"
+                        inline
+                    ></v-badge>
+                    <span class="text-body-2 font-italic">
+                        {{ printDate(m.time) }}
+                        
+                    </span>
+                </div>
+                
                 <p style="font-size:16px" v-for="conte in m.msg">
                     {{ conte }}
                 </p>
