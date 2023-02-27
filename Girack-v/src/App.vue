@@ -51,6 +51,7 @@ export default {
             <v-card
                 class="mx-auto"
                 width="80%"
+                variant="tonal"
             >
                 <div class="mx-auto" style="width:fit-content; margin-top:10%">
                     <RouterLink to="/user">
@@ -71,7 +72,7 @@ export default {
                 <!-- ここからチャンネルボタン描写  -->
                 <div style="margin-top:3.5%" v-for="l in userinfo.channelJoined">
                     <RouterLink :to="'/c/'+l">
-                        <v-btn :variant=" path.indexOf(l)!==-1?'flat':'text' " style="width:100%">
+                        <v-btn :variant=" path.indexOf(l)!==-1?'tonal':'text' " style="width:100%">
                             {{ channelIndex[l].channelname }}
                         </v-btn>
                     </RouterLink>
