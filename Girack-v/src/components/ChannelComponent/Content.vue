@@ -89,6 +89,7 @@ export default {
 
             this.userIndex[userid] = {};
 
+            //ユーザーインデックス更新
             this.userIndex[userid].username = username;
             this.userIndex[userid].role = role;
 
@@ -125,6 +126,7 @@ export default {
 
         },
 
+        //メッセージの時間を出力する関数
         printDate(time) {
             let t = new Date();
             let y = t.getFullYear().toString(); //今年 (４桁)
@@ -151,6 +153,7 @@ export default {
             
             }
 
+            //普通に今日だったら
             return " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
             
         }
@@ -169,6 +172,7 @@ export default {
             </v-avatar>
 
             <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:1% 1%;">
+                
                 <div :class="'text-h6'">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
@@ -187,6 +191,7 @@ export default {
                 <p style="font-size:16px" v-for="conte in m.content">
                     {{ conte }}
                 </p>
+
             </v-card>
 
         </div>
