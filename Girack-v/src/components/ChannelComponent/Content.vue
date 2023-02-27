@@ -45,7 +45,7 @@ export default {
     },
 
     computed: {
-        //現在いるパスを返す
+        //現在いるパスを返すだけ
         getPath() {
             return this.$route.params.id;
         }
@@ -69,6 +69,7 @@ export default {
                     userid: userinfo.userid,
                     sessionid: userinfo.sessionid
                 });
+
             }
 
             //名前が一つ前のメッセージと同じなら連続して表示
@@ -171,7 +172,6 @@ export default {
                     ></v-badge>
                     <span class="text-body-2 font-italic">
                         {{ printDate(m.time) }}
-                        
                     </span>
                 </div>
                 
