@@ -92,6 +92,7 @@ export default {
 
         //名前の受け取り
         socket.on("infoResult", (dat) => {
+            if ( dat.type !== "user" ) { return; } //ユーザー情報じゃなければ
             console.log("Content :: infoResult : 名前情報受け取り \\/")
             console.log(dat);
 
