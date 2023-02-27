@@ -7,10 +7,6 @@ const socket = getSocket();
 
 export default {
 
-    data() {
-        channelinfo: {}
-    },
-
     computed: {
         getPath() {
             return this.$route.params.id;
