@@ -110,6 +110,19 @@ export default {
 
         },
 
+        //もし人のやつほしくなったら
+        needUserIndex(userid) {
+            socket.emit("getInfo", {
+                target: "user",
+                targetid: userid,
+                userid: userinfo.userid,
+                sessionid: userinfo.sessionid
+            });
+
+            return userid;
+
+        },
+
         printDate(time) {
             let t = new Date();
             let y = t.getFullYear().toString(); //今年 (４桁)
@@ -155,7 +168,7 @@ export default {
 
             <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:1% 1%;">
                 <div :class="'text-h6'">
-                    {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : m.userid }}
+                    {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
                         v-if="getRole(m.userid)!=='Member'"
                         color="purple"
