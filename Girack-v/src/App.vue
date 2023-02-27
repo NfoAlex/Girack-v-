@@ -49,11 +49,13 @@ export default {
         <div :class="channelBar">
             <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ servername || "..." }}</h2>
             <br>
+            
             <v-card
                 class="mx-auto"
                 width="80%"
                 variant="tonal"
             >
+
                 <div class="mx-auto" style="width:fit-content; margin-top:10%">
                     <RouterLink to="/user">
                         <v-avatar style=" width:4vmax;height:auto;">
@@ -61,15 +63,26 @@ export default {
                         </v-avatar>
                     </RouterLink>
                 </div>
+
                 <v-card-text class="text-subtitle-1 text-center mx-auto">
                     <span>
                         {{ userinfo.username }}
                     </span>
                 </v-card-text>
+
             </v-card>
             
-            <nav style="margin:0 auto; width:90%;">
+            <nav style="margin:5% auto; width:90%;">
+                <RouterLink :to="'/c/browser'">
+                    <v-btn variant="outlined" style="width:100%; text-align:left !important">
+                        <span style="width:100%; text-align:left !important; float:left !important">
+                            <span class="mdi mdi-text-search">チャンネルブラウザ</span>
+                        </span>
+                    </v-btn>
+                </RouterLink>
+
                 <hr style="margin:5% 0">
+
                 <!-- ここからチャンネルボタン描写  -->
                 <div style="margin-top:1%; padding:0" v-for="l in userinfo.channelJoined">
                     <RouterLink :to="'/c/'+l">
@@ -81,6 +94,7 @@ export default {
                     </RouterLink>
                     <br>
                 </div>
+
             </nav>
         </div>
 
