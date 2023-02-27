@@ -1,5 +1,5 @@
 <script setup>
-import { userinfo, getSocket } from '../socket.js';
+import { userinfo, getSocket, channelIndex } from '../socket.js';
 
 const socket = getSocket();
 
@@ -41,18 +41,22 @@ export default {
         <v-container class="bg-surface-variant">
             <v-row no-gutters>
             <v-card variant="tonal" :class="cd" style="width:100%; ">
-                <p class="text--primary" >
+                <p class="text--primary text-left" >
                     参加しているチャンネル
                 </p>
                 <v-card
-                    v-for="c in userinfo.channelJoined"
-                    class="mx-auto"
+                    v-for="c in channelIndex"
+                    class="mx-auto text-left"
                     :class="cd"
-                    max-width="75%"
+                    max-width="95%"
                     style="margin-top:15px"
                     :elevation="6"
                 >
-                    {{ c }}
+                    <span class="text-h6" style="border-right:0.1px">{{ c.channelname }}</span>
+                    <span style="height:100%; border-right:1px solid grey; margin:0 1%"></span>
+                    <v-chip>公開</v-chip>
+                    <span style="height:100%; border-right:1px solid grey; margin:0 1%"></span>
+                    <span>{{ c.description }}</span>
                 </v-card>
             </v-card>
         </v-row>
