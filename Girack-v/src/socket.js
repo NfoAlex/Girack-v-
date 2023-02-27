@@ -12,7 +12,7 @@ export var userinfo = {
     loggedin: false, //ログイン状態
     sessionid: 0, //セッションID
     channelJoined: [], //参加しているチャンネル
-}
+};
 
 //サーバー(インスタンス)情報
 export var serverinfo = {
@@ -27,14 +27,57 @@ export var channelIndex = {
     "001": {
         channelname: "random",
         description: "Hello, Girack",
-        scope: false
+        scope: open
     }
      */
-}
+};
+
+export var msgDBbackup = {
+    "001": [
+        {
+            id: 0,
+            username: "",
+            userid: "xx0",
+            channelid: "001",
+            time: "20200217165240643",
+            msg: ["Ayo", "abc", "そしてこれが３つ目"]
+        },
+        {
+            id: 1,
+            username: "",
+            userid: "xx1",
+            channelid: "001",
+            time: "20200227165240646",
+            msg: ["は", "誰お前"]
+        }
+    ],
+    "002": [
+        {
+            id: 0,
+            username: "",
+            userid: "xx2",
+            channelid: "001",
+            time: "20190327165240646",
+            msg: ["いや","お前のランクよ","草"]
+        },
+    ]
+};
+
+export var userIndexBackup = {
+    "xx0": {username:"Test", role:"Member"},
+    "xx1": {username:"Admin", role:"Member"},
+    "xx2": {username:"Psyonix", role:"Member"}
+};
 
 //ソケットの接続状態をもつオブジェクトを返すだけ
 export function getSocket() {
     return socket;
+
+}
+
+//メッセージ履歴を保存しておくだけ（マウント外れた時用）
+export function backupMsg(dat) {
+    msgDBbackup = dat;
 
 }
 
