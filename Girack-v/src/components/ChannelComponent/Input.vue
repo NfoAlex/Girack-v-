@@ -1,11 +1,17 @@
 <script setup>
 import { userinfo, getSocket } from '../../socket.js';
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdiAccount } from '@mdi/js';
 </script>
 
 <script>
 const socket = getSocket();
 
 export default {
+    components: {
+        SvgIcon,
+    },
+
     data() {
         return {
             txt: "",
@@ -51,13 +57,17 @@ export default {
 </script>
 
 <template>
-    <v-text-field
-        ref="inp"
-        :label="$route.params.id + 'へ送信'"
-        variant="solo"
-        style="margin:0 3%; width:80%;"
-        v-model="txt"
-    ></v-text-field>
-    <v-btn icon="float-right mdi-send-outline" color="primary" />
+    <div class="d-flex flex-row bg-surface-variant">
+        <v-text-field
+            ref="inp"
+            :label="$route.params.id + 'へ送信'"
+            variant="solo"
+            style="margin:0 2% 0 5%;"
+            clearable
+            v-model="txt"
+        ></v-text-field>
+        <v-btn class="mdi mdi-send-outline" style="margin-right:1vw;" icon="" @click="msgSend" color="primary">
+        </v-btn>
+    </div>
 
 </template>
