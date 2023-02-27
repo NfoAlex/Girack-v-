@@ -1,5 +1,5 @@
 <script setup>
-import { userinfo, getSocket } from '../../socket.js';
+import { userinfo, channelIndex, getSocket } from '../../socket.js';
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiAccount } from '@mdi/js';
 </script>
@@ -39,6 +39,10 @@ export default {
 
             }
 
+        },
+        getChannelname() {
+            return channelIndex[this.getPath].channelname;
+
         }
     },
 
@@ -60,7 +64,7 @@ export default {
     <div class="d-flex flex-row bg-surface-variant">
         <v-text-field
             ref="inp"
-            :label="$route.params.id + 'へ送信'"
+            :label="getChannelname() + 'へ送信'"
             variant="solo"
             style="margin:0 2% 0 5%;"
             clearable
