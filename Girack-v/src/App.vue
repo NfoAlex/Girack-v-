@@ -14,8 +14,8 @@ export default {
             main: "main",
             servername: "",
             path: "",
-            loggedin: false
-
+            loggedin: false,
+            channelIndex: {}
         }
 
     },
@@ -30,8 +30,6 @@ export default {
     },
 
     mounted() {
-        console.log(this.$route);
-
         socket.emit("getInitInfo"); //サーバーの情報を取得
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername;
@@ -48,10 +46,27 @@ export default {
     <!-- ログイン後(Main) -->
     <div v-if="loggedin">
         <div :class="channelBar">
-            <h2>{{ servername || "..." }}</h2>
+            <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ servername || "..." }}</h2>
+            <br>
+            <v-card
+                class="mx-auto"
+                width="80%"
+            >
+                <div class="mx-auto" style="width:fit-content; margin-top:10%">
+                    <RouterLink to="/user">
+                        <v-avatar style=" width:4vmax;height:auto;">
+                            <v-img :alt="userinfo.userid" :src="'http://localhost:33333/img/' + userinfo.userid + '.jpeg'"></v-img>
+                        </v-avatar>
+                    </RouterLink>
+                </div>
+                <v-card-text class="text-subtitle-1 text-center mx-auto">
+                    <span>
+                        {{ userinfo.username }}
+                    </span>
+                </v-card-text>
+            </v-card>
+            
             <nav style="margin:0 auto; width:90%;">
-                <RouterLink to="/">Home</RouterLink><br>
-                <RouterLink to="/login">Login(forDebug)</RouterLink><br>
                 <hr style="margin:5% 0">
                 <!-- ここからチャンネルボタン描写  -->
                 <div style="margin-top:3.5%" v-for="l in userinfo.channelJoined">
