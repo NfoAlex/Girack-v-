@@ -51,21 +51,21 @@ export default {
         <v-container class="bg-surface-variant">
             <v-row no-gutters>
                 <v-card variant="tonal" :class="cd" style="width:100%;">
-                    <p class="text--primary text-h6 text-left" >
-                        参加しているチャンネル
+                    <p class="text--primary text-left" >
+                        参加しているチャンネルについて
                     </p>
-                    <div style="overflow-y:scroll !important; max-height:40vh">
+                    <div style="overflow-y:scroll !important; max-height:50vh">
                         <v-card
                             v-for="c in channelIndex"
                             class="mx-auto text-left"
                             max-width="95%"
-                            style="margin-top:15px; height:30%; padding:8px 3%;"
+                            style="margin-top:15px; height:45%; padding:8px 3%;"
                             :elevation="6"
                         >
-                            <span class="text-h6" style="border-right:0.1px">{{ c.channelname }}</span>
-                            <span style="height:100%; border-right:1px solid grey; margin:0 1%"></span>
+                            <span style="border-right:0.1px">{{ c.channelname }}</span>
+                            <span style="height:100%; border-right:1px solid grey; margin:0 2%"></span>
                             <v-chip>{{ c.scope==="public"?"公開":"非公開" }}</v-chip>
-                            <span style="height:100%; border-right:1px solid grey; margin:0 1%"></span>
+                            <span style="height:100%; border-right:1px solid grey; margin:0 2%"></span>
                             <span>{{ c.description }}</span>
                         </v-card>
                     </div>
