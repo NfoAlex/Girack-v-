@@ -70,10 +70,10 @@ export default {
             <nav style="margin:0 auto; width:90%;">
                 <hr style="margin:5% 0">
                 <!-- ここからチャンネルボタン描写  -->
-                <div style="margin-top:3.5%" v-for="l in userinfo.channelJoined">
+                <div style="margin-top:1%; padding:0" v-for="l in userinfo.channelJoined">
                     <RouterLink :to="'/c/'+l">
-                        <v-btn :variant=" path.indexOf(l)!==-1?'tonal':'text' " style="width:100%">
-                            {{ channelIndex[l].channelname }}
+                        <v-btn :variant=" path.indexOf(l)!==-1?'tonal':'text' " style="width:100%; text-align:left">
+                            <span class="mdi mdi-pound"></span>{{ channelIndex[l].channelname }}
                         </v-btn>
                     </RouterLink>
                     <br>
