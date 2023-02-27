@@ -1,6 +1,6 @@
 # Girack-v
 
-This template should help get you started developing with Vue 3 in Vite.
+Girackだな
 
 ## Recommended IDE Setup
 
