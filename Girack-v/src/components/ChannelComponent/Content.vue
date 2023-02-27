@@ -1,45 +1,12 @@
 <script>
-import { getSocket, userinfo } from "../../socket.js";
+import { getSocket, userinfo, msgDBbackup, userIndexBackup, backupMsg } from "../../socket.js";
 const socket = getSocket();
 
 export default {
     data() {
         return {
-            msgDB: {
-                "001": [
-                    {
-                        id: 0,
-                        username: "",
-                        userid: "xx0",
-                        channelid: "001",
-                        time: "20200217165240643",
-                        msg: ["Ayo", "abc", "そしてこれが３つ目"]
-                    },
-                    {
-                        id: 1,
-                        username: "",
-                        userid: "xx1",
-                        channelid: "001",
-                        time: "20200227165240646",
-                        msg: ["は", "誰お前"]
-                    }
-                ],
-                "002": [
-                    {
-                        id: 0,
-                        username: "",
-                        userid: "xx2",
-                        channelid: "001",
-                        time: "20190327165240646",
-                        msg: ["いや","お前のランクよ","草"]
-                    },
-                ]
-            },
-            userIndex: {
-                "xx0": {username:"Test", role:"Member"},
-                "xx1": {username:"Admin", role:"Member"},
-                "xx2": {username:"Psyonix", role:"Member"}
-            }
+            msgDB: {},
+            userIndex: {}
 
         }
     },
@@ -48,14 +15,24 @@ export default {
         //現在いるパスを返すだけ
         getPath() {
             return this.$route.params.id;
+
         }
     },
 
     mounted() {
+        this.msgDB = msgDBbackup;
+        this.userIndex = userIndexBackup;
+
         //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
             console.log("msgReceive :: ↓");
             console.log(msg);
+
+            if ( this.msgDB[this.getPath] === undefined ) {
+                this.msgDB[this.getPath] = [];
+
+            }
+
 
             //使用するDBレコード
             let activeDB = this.msgDB[this.getPath];
@@ -73,11 +50,24 @@ export default {
             }
 
             //名前が一つ前のメッセージと同じなら連続して表示
-            if ( activeDB[activeDB.length-1].userid === msg.userid ) { //一つ前のメッセージと名前が同じなら
-                this.msgDB[this.getPath][activeDB.length-1].msg.push(msg.content); //メッセージ配列に追加
-                this.msgDB[this.getPath][activeDB.length-1].time = msg.time;
+            try { //メッセージの長さが１個以上あるかどうか
+                //一つ前のメッセージと名前が同じなら
+                if ( activeDB[activeDB.length-1].userid === msg.userid ) {
+                    this.msgDB[this.getPath][activeDB.length-1].msg.push(msg.content); //メッセージ配列に追加
+                    this.msgDB[this.getPath][activeDB.length-1].time = msg.time;
 
-            } else { //違う人のメッセージなら普通に表示
+                } else { //違う人のメッセージなら普通に表示
+                    this.msgDB[this.getPath].push({
+                        id: this.msgDB[this.getPath].length+1,
+                        userid: msg.userid,
+                        channelid: msg.channelid,
+                        time: msg.time,
+                        msg: [msg.content]
+                    });
+
+                }
+            }
+            catch(e) { //DBが空なら
                 this.msgDB[this.getPath].push({
                     id: this.msgDB[this.getPath].length+1,
                     userid: msg.userid,
@@ -87,6 +77,8 @@ export default {
                 });
 
             }
+
+            backupMsg(this.msgDB); //出力、保存
 
         });
 

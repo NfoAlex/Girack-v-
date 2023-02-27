@@ -72,8 +72,10 @@ export default {
                 <!-- ここからチャンネルボタン描写  -->
                 <div style="margin-top:1%; padding:0" v-for="l in userinfo.channelJoined">
                     <RouterLink :to="'/c/'+l">
-                        <v-btn :variant=" path.indexOf(l)!==-1?'tonal':'text' " style="width:100%; text-align:left">
-                            <span class="mdi mdi-pound"></span>{{ channelIndex[l].channelname }}
+                        <v-btn :variant=" path.indexOf(l)!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                            <span style="width:100%; text-align:left !important; float:left !important">
+                                <span class="mdi mdi-pound ">{{ channelIndex[l].channelname }}</span>
+                            </span>
                         </v-btn>
                     </RouterLink>
                     <br>
