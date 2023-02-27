@@ -1,13 +1,13 @@
 <script>
-import { getSocket, userinfo, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
+import { getSocket, userinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
 const socket = getSocket();
 
 export default {
     data() {
         return {
             msgDB: {},
-            userIndex: {}
-
+            userIndex: {},
+            uri: backendURI
         }
     },
 
@@ -168,7 +168,7 @@ export default {
         <div style="display:flex; margin-top:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
             
             <v-avatar size="x-large">
-                <v-img :alt="m.userid" :src="'http://localhost:33333/img/' + m.userid + '.jpeg'"></v-img>
+                <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
             <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:1% 1%;">

@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, channelIndex, userinfo } from "./socket.js";
+import { getSocket, channelIndex, userinfo, backendURI } from "./socket.js";
 import Login from "./components/Login.vue";
 </script>
 
@@ -15,7 +15,8 @@ export default {
             servername: "",
             path: "",
             loggedin: false,
-            channelIndex: {}
+            channelIndex: {},
+            uri: backendURI
         }
 
     },
@@ -56,7 +57,7 @@ export default {
                 <div class="mx-auto" style="width:fit-content; margin-top:10%">
                     <RouterLink to="/user">
                         <v-avatar style=" width:4vmax;height:auto;">
-                            <v-img :alt="userinfo.userid" :src="'http://localhost:33333/img/' + userinfo.userid + '.jpeg'"></v-img>
+                            <v-img :alt="userinfo.userid" :src="uri + '/img/' + userinfo.userid + '.jpeg'"></v-img>
                         </v-avatar>
                     </RouterLink>
                 </div>

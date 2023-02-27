@@ -3,7 +3,9 @@
 
 import { io } from 'socket.io-client'; //ウェブソケット通信用
 
-const socket = io("http://localhost:33333");
+//FOR DEVELOPMENT
+export const backendURI = "http://" + location.hostname + ":33333";
+const socket = io(backendURI);
 
 //ユーザー情報
 export var userinfo = {
@@ -204,7 +206,7 @@ socket.on("authResult", (dat) => {
 });
 
 //クッキー設定するやつ
-function setCookie(cname, cvalue, exdays) {
+export function setCookie(cname, cvalue, exdays) {
     const d = new Date();
 
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
