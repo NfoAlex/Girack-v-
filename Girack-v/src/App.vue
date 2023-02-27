@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, userinfo } from "./socket.js";
+import { getSocket, channelIndex, userinfo } from "./socket.js";
 import Login from "./components/Login.vue";
 </script>
 
@@ -70,7 +70,11 @@ export default {
                 <hr style="margin:5% 0">
                 <!-- ここからチャンネルボタン描写  -->
                 <div style="margin-top:3.5%" v-for="l in userinfo.channelJoined">
-                    <RouterLink :to="'/c/'+l"><v-btn :variant=" path.indexOf(l)!==-1?'tonal':'flat' " style="width:100%">{{ l }}</v-btn></RouterLink>
+                    <RouterLink :to="'/c/'+l">
+                        <v-btn :variant=" path.indexOf(l)!==-1?'flat':'text' " style="width:100%">
+                            {{ channelIndex[l].channelname }}
+                        </v-btn>
+                    </RouterLink>
                     <br>
                 </div>
             </nav>
