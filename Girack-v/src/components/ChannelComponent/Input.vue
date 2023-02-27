@@ -26,7 +26,7 @@ export default {
                 userid: userinfo.userid, //名前
                 content: this.txt, //内容
                 //content: Txt, //内容
-                channelid: this.channelid, //チャンネルID
+                channelid: this.getPath, //チャンネルID
                 sessionid: userinfo.sessionid //セッションID);
             });
             this.txt = ""; //入力欄を空に

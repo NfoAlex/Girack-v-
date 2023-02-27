@@ -47,7 +47,7 @@ export default {
             try { //メッセージの長さが１個以上あるかどうか
                 //一つ前のメッセージと名前が同じなら
                 if ( activeDB[activeDB.length-1].userid === msg.userid ) {
-                    this.msgDB[this.getPath][activeDB.length-1].msg.push(msg.content); //メッセージ配列に追加
+                    this.msgDB[this.getPath][activeDB.length-1].content.push(msg.content); //メッセージ配列に追加
                     this.msgDB[this.getPath][activeDB.length-1].time = msg.time;
 
                 } else { //違う人のメッセージなら普通に表示
@@ -56,7 +56,7 @@ export default {
                         userid: msg.userid,
                         channelid: msg.channelid,
                         time: msg.time,
-                        msg: [msg.content]
+                        content: [msg.content]
                     });
 
                 }
@@ -68,7 +68,7 @@ export default {
                     userid: msg.userid,
                     channelid: msg.channelid,
                     time: msg.time,
-                    msg: [msg.content]
+                    content: [msg.content]
                 });
 
             }
@@ -109,11 +109,11 @@ export default {
             }
 
         },
+
         printDate(time) {
             let t = new Date();
             let y = t.getFullYear().toString(); //今年 (４桁)
             let m = "0" + (t.getMonth()+1); //月 (0も含めて２桁に)
-            //let d = t.getDate().toString();
 
             let timestamp = ""; //出力予定の文字列
 
@@ -137,7 +137,7 @@ export default {
             }
 
             return " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
-            //return time.slice(0,4) + "/" +  time.slice(4,6) + "/" +  time.slice(6,8) + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+            
         }
     }
 
@@ -169,7 +169,7 @@ export default {
                     </span>
                 </div>
                 
-                <p style="font-size:16px" v-for="conte in m.msg">
+                <p style="font-size:16px" v-for="conte in m.content">
                     {{ conte }}
                 </p>
             </v-card>

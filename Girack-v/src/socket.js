@@ -40,7 +40,7 @@ export var msgDBbackup = {
             userid: "xx0",
             channelid: "001",
             time: "20200217165240643",
-            msg: ["Ayo", "abc", "そしてこれが３つ目"]
+            content: ["Ayo", "abc", "そしてこれが３つ目"]
         },
         {
             id: 1,
@@ -48,7 +48,7 @@ export var msgDBbackup = {
             userid: "xx1",
             channelid: "001",
             time: "20200227165240646",
-            msg: ["は", "誰お前"]
+            content: ["は", "誰お前"]
         }
     ],
     "002": [
@@ -58,7 +58,7 @@ export var msgDBbackup = {
             userid: "xx2",
             channelid: "001",
             time: "20190327165240646",
-            msg: ["いや","お前のランクよ","草"]
+            content: ["いや","お前のランクよ","草"]
         },
     ]
 };
@@ -72,6 +72,19 @@ export var userIndexBackup = {
 //ソケットの接続状態をもつオブジェクトを返すだけ
 export function getSocket() {
     return socket;
+
+}
+
+//メッセージ履歴の取得をする
+export function getMessage(channelid, readLength) {
+    socket.emit("getMessage", {
+        reqSender: {
+            userid: userinfo.userid,
+            sessionid: userinfo.sessionid
+        },
+        channelid: channelid,
+        readLength: readLength
+    });
 
 }
 
@@ -106,6 +119,43 @@ socket.on("infoResult", (dat) => {
 
 });
 
+//メッセージの履歴受け取り
+socket.on("messageResult", (history) => {
+    if ( history === 0 ) {
+        console.log("このチャンネル履歴空だわ");
+        return;
+    
+    }
+
+    console.log(history);
+
+    let channelid = "";
+
+    try {
+        channelid = history[0].channelid;
+    }
+    catch(e) {
+        console.log("???");
+        console.log(history);
+        return;
+    }
+    let index = 0;
+
+    for ( index in history ) {
+        try {
+            msgDBbackup[channelid].push(history[index]);
+        }
+        catch(e) {
+            msgDBbackup[channelid] = [history[index]];
+
+        }
+
+    }
+    
+    console.log(msgDBbackup[channelid]);
+
+});
+
 //認証結果
 socket.on("authResult", (dat) => {
     //ユーザーデータの更新
@@ -133,6 +183,12 @@ socket.on("authResult", (dat) => {
                 userid: userinfo.userid,
                 sessionid: userinfo.sessionid
             });
+
+        }
+
+        //メッセージ履歴の取得
+        for ( let cid in userinfo.channelJoined ) {
+            getMessage(userinfo.channelJoined[cid], 10); //リクエスト送信する
 
         }
 
