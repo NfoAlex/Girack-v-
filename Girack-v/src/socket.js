@@ -1,7 +1,7 @@
 //socket.js
 //通信とかそこらへん
 
-import { io } from 'socket.io-client';
+import { io } from 'socket.io-client'; //ウェブソケット通信用
 
 const socket = io("http://localhost:33333");
 
@@ -12,16 +12,92 @@ export var userinfo = {
     loggedin: false, //ログイン状態
     sessionid: 0, //セッションID
     channelJoined: [], //参加しているチャンネル
-}
+};
 
+//サーバー(インスタンス)情報
 export var serverinfo = {
     servername: null,
     registerAvailable: null,
     inviteOnly: null
 };
 
+//チャンネル情報
+export var channelIndex = {
+    /*
+    "001": {
+        channelname: "random",
+        description: "Hello, Girack",
+        scope: open
+    }
+     */
+};
+
+export var msgDBbackup = {
+    "001": [
+        {
+            id: 0,
+            username: "",
+            userid: "xx0",
+            channelid: "001",
+            time: "20200217165240643",
+            content: ["Ayo", "abc", "そしてこれが３つ目"]
+        },
+        {
+            id: 1,
+            username: "",
+            userid: "xx1",
+            channelid: "001",
+            time: "20200227165240646",
+            content: ["は", "誰お前"]
+        }
+    ],
+    "002": [
+        {
+            id: 0,
+            username: "",
+            userid: "xx2",
+            channelid: "001",
+            time: "20190327165240646",
+            content: ["いや","お前のランクよ","草"]
+        },
+    ]
+};
+
+export var userIndexBackup = {
+    "xx0": {username:"Test", role:"Member"},
+    "xx1": {username:"Admin", role:"Member"},
+    "xx2": {username:"Psyonix", role:"Member"}
+};
+
+//ソケットの接続状態をもつオブジェクトを返すだけ
 export function getSocket() {
     return socket;
+
+}
+
+//メッセージ履歴の取得をする
+export function getMessage(channelid, readLength) {
+    socket.emit("getMessage", {
+        //送信者の情報
+        reqSender: {
+            userid: userinfo.userid, //ユーザーID
+            sessionid: userinfo.sessionid //セッションID
+        },
+        channelid: channelid, //ほしい履歴のチャンネルID
+        readLength: readLength //ほしい長さ
+    });
+
+}
+
+//メッセージ履歴を保存しておくだけ（マウント外れた時用）
+export function backupMsg(dat) {
+    msgDBbackup = dat;
+
+}
+
+//ユーザー情報を保存しておくだけ（マウント外れた時用）
+export function backupUser(dat) {
+    userIndexBackup = dat;
 
 }
 
@@ -39,14 +115,124 @@ socket.on("serverinfo", (dat) => {
 
 });
 
-socket.on("authResult", (dat) => {
-    userinfo = {
-        username: dat.username,
-        userid: dat.userid, //ユーザーID
-        loggedin: true, //ログイン状態
-        sessionid: dat.sessionid, //セッションID
-        channelJoined: dat.channelJoined, //参加しているチャンネル
-    }
-    
+//チャンネル情報受け取り
+socket.on("infoResult", (dat) => {
+    if ( dat.type !== "channel" ) { return; } //channel用じゃなければ
+    //チャンネル用情報JSONへ追加
+    channelIndex[dat.channelid] = {
+        channelname: dat.channelname, //チャンネル名
+        description: dat.description, //チャンネル概要
+        scope: dat.scope //チャンネルの公開範囲
+    };
 
 });
+
+//メッセージの履歴受け取り
+socket.on("messageResult", (history) => {
+    if ( history === 0 ) {
+        console.log("このチャンネル履歴空だわ");
+        return;
+    
+    }
+
+    let channelid = ""; //履歴を入れるチャンネルID
+
+    try {
+        channelid = history[0].channelid; //受け取ったデータの中身使っちゃうんだよね
+    }
+    catch(e) {
+        console.log("???");
+        console.log(history);
+        return;
+    }
+
+    let index = 0; //チャンネル参照インデックス変数
+
+    //履歴の長さ分DBへ追加
+    for ( index in history ) {
+        //配列が存在してなかったら新しく作って配置する
+        try {
+            msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
+        }
+        catch(e) {
+            msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
+
+        }
+
+    }
+
+});
+
+//認証結果
+socket.on("authResult", (dat) => {
+    //ユーザーデータの更新
+    if ( dat.result ) { //もしログイン成功なら
+        //ユーザー情報を更新
+        userinfo = {
+            username: dat.username,
+            userid: dat.userid, //ユーザーID
+            loggedin: true, //ログイン状態
+            sessionid: dat.sessionid, //セッションID
+            channelJoined: dat.channelJoined, //参加しているチャンネル
+        }
+
+        setCookie("sessionid", dat.sessionid, 15);
+        console.log("session id in cookie -> " + getCookie("sessionid"));
+
+        console.log("userinfo ↓");
+        console.log(userinfo);
+
+        //チャンネル情報の取得
+        for ( let c in userinfo.channelJoined ) {
+            socket.emit("getInfo", { //リクエスト送信
+                target: "channel",
+                targetid: userinfo.channelJoined[c],
+                userid: userinfo.userid,
+                sessionid: userinfo.sessionid
+            });
+
+        }
+
+        //メッセージ履歴の取得
+        for ( let cid in userinfo.channelJoined ) {
+            getMessage(userinfo.channelJoined[cid], 10); //リクエスト送信する
+
+        }
+
+    }
+
+});
+
+//クッキー設定するやつ
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+
+}
+
+//クッキーを取得
+export function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+
+        }
+
+    }
+
+    return "";
+
+}
