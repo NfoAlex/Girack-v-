@@ -78,12 +78,13 @@ export function getSocket() {
 //メッセージ履歴の取得をする
 export function getMessage(channelid, readLength) {
     socket.emit("getMessage", {
+        //送信者の情報
         reqSender: {
-            userid: userinfo.userid,
-            sessionid: userinfo.sessionid
+            userid: userinfo.userid, //ユーザーID
+            sessionid: userinfo.sessionid //セッションID
         },
-        channelid: channelid,
-        readLength: readLength
+        channelid: channelid, //ほしい履歴のチャンネルID
+        readLength: readLength //ほしい長さ
     });
 
 }
@@ -91,6 +92,12 @@ export function getMessage(channelid, readLength) {
 //メッセージ履歴を保存しておくだけ（マウント外れた時用）
 export function backupMsg(dat) {
     msgDBbackup = dat;
+
+}
+
+//ユーザー情報を保存しておくだけ（マウント外れた時用）
+export function backupUser(dat) {
+    userIndexBackup = dat;
 
 }
 
@@ -111,10 +118,11 @@ socket.on("serverinfo", (dat) => {
 //チャンネル情報受け取り
 socket.on("infoResult", (dat) => {
     if ( dat.type !== "channel" ) { return; } //channel用じゃなければ
+    //チャンネル用情報JSONへ追加
     channelIndex[dat.channelid] = {
-        channelname: dat.channelname,
-        description: dat.description,
-        scope: dat.scope
+        channelname: dat.channelname, //チャンネル名
+        description: dat.description, //チャンネル概要
+        scope: dat.scope //チャンネルの公開範囲
     };
 
 });
@@ -127,32 +135,31 @@ socket.on("messageResult", (history) => {
     
     }
 
-    console.log(history);
-
-    let channelid = "";
+    let channelid = ""; //履歴を入れるチャンネルID
 
     try {
-        channelid = history[0].channelid;
+        channelid = history[0].channelid; //受け取ったデータの中身使っちゃうんだよね
     }
     catch(e) {
         console.log("???");
         console.log(history);
         return;
     }
-    let index = 0;
 
+    let index = 0; //チャンネル参照インデックス変数
+
+    //履歴の長さ分DBへ追加
     for ( index in history ) {
+        //配列が存在してなかったら新しく作って配置する
         try {
-            msgDBbackup[channelid].push(history[index]);
+            msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
         }
         catch(e) {
-            msgDBbackup[channelid] = [history[index]];
+            msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
 
         }
 
     }
-    
-    console.log(msgDBbackup[channelid]);
 
 });
 
