@@ -109,6 +109,7 @@ export default {
     },
 
     methods: {
+        //ロールを取得するだけ
         getRole(userid) {
             try {
                 return this.userIndex[userid].role;
@@ -158,10 +159,12 @@ export default {
 
 <template>
     <div ref="channelWindow">
-        <div style="display:flex; margin-top:2%; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
-            <v-avatar style="" size="x-large">
+        <div style="display:flex; margin-top:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
+            
+            <v-avatar size="x-large">
                 <v-img :alt="m.userid" :src="'http://localhost:33333/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
+
             <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:1% 1%;">
                 <div :class="'text-h6'">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : m.userid }}
@@ -182,6 +185,7 @@ export default {
                     {{ conte }}
                 </p>
             </v-card>
+
         </div>
     </div>
 </template>

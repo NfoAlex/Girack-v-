@@ -60,7 +60,6 @@ socket.on("authResult", (dat) => {
         console.log(userinfo);
 
     }
-        
 
 });
 

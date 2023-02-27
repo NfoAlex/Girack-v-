@@ -1,4 +1,5 @@
 <script>
+
 import Content from "./ChannelComponent/Content.vue";
 import Head from "./ChannelComponent/Head.vue";
 import Input from "./ChannelComponent/Input.vue";
