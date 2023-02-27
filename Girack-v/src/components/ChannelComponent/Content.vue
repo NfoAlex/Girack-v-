@@ -28,12 +28,6 @@ export default {
             console.log("msgReceive :: ↓");
             console.log(msg);
 
-            if ( this.msgDB[this.getPath] === undefined ) {
-                this.msgDB[this.getPath] = [];
-
-            }
-
-
             //使用するDBレコード
             let activeDB = this.msgDB[this.getPath];
 
@@ -68,6 +62,7 @@ export default {
                 }
             }
             catch(e) { //DBが空なら
+                this.msgDB[this.getPath] = [];
                 this.msgDB[this.getPath].push({
                     id: this.msgDB[this.getPath].length+1,
                     userid: msg.userid,
