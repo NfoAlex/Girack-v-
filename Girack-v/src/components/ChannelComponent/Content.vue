@@ -1,5 +1,5 @@
 <script>
-import { getSocket, userinfo, msgDBbackup, userIndexBackup, backupMsg } from "../../socket.js";
+import { getSocket, userinfo, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
 const socket = getSocket();
 
 export default {
@@ -91,6 +91,8 @@ export default {
 
             this.userIndex[userid].username = username;
             this.userIndex[userid].role = role;
+
+            backupUser(this.userIndex); //ユーザー情報をバックアップ
 
         });
 
