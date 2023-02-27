@@ -165,7 +165,7 @@ export default {
 
 <template>
     <div ref="channelWindow">
-        <div style="display:flex; margin-top:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
+        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
             
             <v-avatar size="x-large">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
