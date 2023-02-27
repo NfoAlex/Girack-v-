@@ -1,7 +1,5 @@
 <script setup>
-import { userinfo, getSocket, channelIndex, setCookie } from '../socket.js';
-
-const socket = getSocket();
+import { userinfo, channelIndex, setCookie } from '../socket.js';
 
 </script>
 
