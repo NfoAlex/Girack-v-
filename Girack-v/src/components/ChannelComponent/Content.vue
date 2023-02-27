@@ -165,12 +165,14 @@ export default {
             <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:1% 1%;">
                 <div :class="'text-h6'">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : m.userid }}
-                    <v-badge
+                    <v-chip
                         v-if="getRole(m.userid)!=='Member'"
                         color="purple"
-                        :content="getRole(m.userid)"
-                        inline
-                    ></v-badge>
+                        size="small"
+                        :elevation="6"
+                    >
+                    {{ getRole(m.userid) }}
+                    </v-chip>
                     <span class="text-body-2 font-italic">
                         {{ printDate(m.time) }}
                     </span>
