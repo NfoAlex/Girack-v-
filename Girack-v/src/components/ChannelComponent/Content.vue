@@ -87,13 +87,14 @@ export default {
                 channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
 
             }
-            backupMsg(this.msgDB); //出力、保存
+
+            backupMsg(this.msgDB); //メッセージDBの出力、保存
 
         });
 
-        //名前の受け取り
+        //他人の名前の受け取り
         socket.on("infoResult", (dat) => {
-            if ( dat.type !== "user" ) { return; } //ユーザー情報じゃなければ
+            if ( dat.type !== "user" ) { return; } //ユーザー情報じゃなければ取りやめ
             console.log("Content :: infoResult : 名前情報受け取り \\/")
             console.log(dat);
 
@@ -104,8 +105,8 @@ export default {
             this.userIndex[userid] = {};
 
             //ユーザーインデックス更新
-            this.userIndex[userid].username = username;
-            this.userIndex[userid].role = role;
+            this.userIndex[userid].username = username; //名前
+            this.userIndex[userid].role = role; //ロール
 
             backupUser(this.userIndex); //ユーザー情報をバックアップ
 
