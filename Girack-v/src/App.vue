@@ -48,8 +48,11 @@ export default {
 
         socket.on("infoResult", (dat) => {
             if ( dat.type === "channel" || dat.type === "user" ) {
+                
                 this.channelIndexListing = channelIndex;
                 this.channelJoined = userinfo.channelJoined;
+
+                this.$forceUpdate();
 
                 console.log("infoResult :: チャンネルリスト更新したい");
                 console.log(channelIndex);
@@ -58,6 +61,11 @@ export default {
             }
 
         });
+
+    },
+
+    unmounted() {
+        socket.off("infoResult");
 
     }
 
@@ -106,11 +114,11 @@ export default {
                 <hr style="margin:5% 0">
 
                 <!-- ここからチャンネルボタン描写  -->
-                <div style="margin-top:1%; padding:0" v-for="l in userinfo.channelJoined">
-                    <RouterLink :to="'/c/'+l">
-                        <v-btn :variant=" path.indexOf(l)!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                <div style="margin-top:1%; padding:0" v-for="l in Object.entries(channelIndex)">
+                    <RouterLink :to="'/c/'+l[0]">
+                        <v-btn :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                             <span style="width:100%; text-align:left !important; float:left !important">
-                                <span class="mdi mdi-pound ">{{ channelIndex[l].channelname }}</span>
+                                <span class="mdi mdi-pound ">{{ channelIndex[l[0]].channelname }}</span>
                             </span>
                         </v-btn>
                     </RouterLink>
