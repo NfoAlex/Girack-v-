@@ -53,7 +53,6 @@ export default {
 .content
 {
     height: 82vh;
-    overflow-y: auto;
 }
 
 .input

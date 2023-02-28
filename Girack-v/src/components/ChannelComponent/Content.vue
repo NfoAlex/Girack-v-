@@ -8,7 +8,8 @@ export default {
         return {
             msgDB: {},
             userIndex: {},
-            uri: backendURI
+            uri: backendURI,
+            scrolled: false
         }
     },
 
@@ -24,10 +25,15 @@ export default {
         this.msgDB = msgDBbackup;
         this.userIndex = userIndexBackup;
 
+        const channelWindow = document.querySelector("#channelWindow");
+
         //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
             console.log("msgReceive :: ↓");
             console.log(msg);
+            //スクロールしきっているか確認
+            let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
+            console.log("scrolledState -> " + scrolledState);
 
             //使用するDBレコード
             let activeDB = this.msgDB[this.getPath];
@@ -76,6 +82,11 @@ export default {
 
             }
 
+            //スクロールされきっていたら最後へ自動スクロールする
+            if ( scrolledState ) { //この関数用の変数で確認
+                channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+            }
             backupMsg(this.msgDB); //出力、保存
 
         });
@@ -175,7 +186,7 @@ export default {
 </script>
 
 <template>
-    <div ref="channelWindow">
+    <div id="channelWindow" style="height:100%; overflow-y:auto;">
         <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
             
             <v-avatar size="x-large">
