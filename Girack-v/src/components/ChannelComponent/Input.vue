@@ -1,6 +1,5 @@
 <script setup>
 import { userinfo, channelIndex, getSocket } from '../../socket.js';
-import SvgIcon from '@jamescoyle/vue-icon';
 </script>
 
 <script>
