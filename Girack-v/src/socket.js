@@ -189,8 +189,10 @@ socket.on("authResult", (dat) => {
             socket.emit("getInfo", { //リクエスト送信
                 target: "channel",
                 targetid: userinfo.channelJoined[c],
-                userid: userinfo.userid,
-                sessionid: userinfo.sessionid
+                reqSender: {
+                    userid: userinfo.userid, //ユーザーID
+                    sessionid: userinfo.sessionid //セッションID
+                }
             });
 
         }

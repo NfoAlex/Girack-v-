@@ -3,6 +3,7 @@ import { getSocket, userinfo, backendURI, msgDBbackup, userIndexBackup, backupMs
 const socket = getSocket();
 
 export default {
+
     data() {
         return {
             msgDB: {},
@@ -37,8 +38,10 @@ export default {
                 socket.emit("getInfo", {
                     target: "user",
                     targetid: msg.userid,
-                    userid: userinfo.userid,
-                    sessionid: userinfo.sessionid
+                    reqSender: {
+                        userid: userinfo.userid, //ユーザーID
+                        sessionid: userinfo.sessionid //セッションID
+                    }
                 });
 
             }
@@ -118,8 +121,10 @@ export default {
             socket.emit("getInfo", {
                 target: "user",
                 targetid: userid,
-                userid: userinfo.userid,
-                sessionid: userinfo.sessionid
+                reqSender: {
+                    userid: userinfo.userid, //ユーザーID
+                    sessionid: userinfo.sessionid //セッションID
+                }
             });
 
             return userid;
