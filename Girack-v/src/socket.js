@@ -149,11 +149,11 @@ socket.on("infoResult", (dat) => {
     if ( dat.type === "user" ) {
         //もし自分の情報だったら更新
         if ( dat.userid === userinfo.userid ) {
-            console.log("*******************");
-            console.log("自分のや!");
-            console.log(dat.channelJoined.length + " と " + userinfo.channelJoined.length);
-            console.log(( dat.channelJoined.length > userinfo.channelJoined.length ));
-            console.log("*******************");
+            // console.log("*******************");
+            // console.log("自分のや!");
+            // console.log(dat.channelJoined.length + " と " + userinfo.channelJoined.length);
+            // console.log(( dat.channelJoined.length > userinfo.channelJoined.length ));
+            // console.log("*******************");
 
             if ( dat.channelJoined.length !== userinfo.channelJoined.length ) {
                 //チャンネル数が増えているなら
@@ -188,6 +188,7 @@ socket.on("infoResult", (dat) => {
                     for (let c=0; c<Object.keys(channelIndex).length; c++ ) {
                         let channelid = Object.keys(channelIndex)[c];
                         console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
+                        
                         //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
                         if ( !dat.channelJoined.includes(channelid) ) {
                             delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
