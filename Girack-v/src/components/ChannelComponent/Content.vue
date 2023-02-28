@@ -102,6 +102,12 @@ export default {
 
     },
 
+    //アンロード時の処理
+    unmounted() {
+        socket.off("msgReceive"); //メッセージの受け取り中止
+
+    },
+
     methods: {
         //ロールを取得するだけ
         getRole(userid) {
