@@ -75,7 +75,7 @@ export default {
         <v-container class="bg-surface-variant">
             <v-row no-gutters>
                 <v-card variant="tonal" :class="cd" style="width:100%; ">
-                    <v-btn color="red" block @click="snackbar=true">Logout</v-btn>
+                    <v-btn color="red" block @click="snackbar=true"><span class="mdi mdi-logout"></span>Logout</v-btn>
                     <v-snackbar
                         v-model="snackbar"
                     >
