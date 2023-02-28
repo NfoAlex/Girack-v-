@@ -22,10 +22,9 @@ export default {
     },
 
     mounted() {
-        this.msgDB = msgDBbackup;
-        this.userIndex = userIndexBackup;
-
-        const channelWindow = document.querySelector("#channelWindow");
+        this.msgDB = msgDBbackup; //使うメッセージDB
+        this.userIndex = userIndexBackup; //使うユーザーの名前リスト
+        const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
         //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
@@ -55,12 +54,14 @@ export default {
             //名前が一つ前のメッセージと同じなら連続して表示
             try { //メッセージの長さが１個以上あるかどうか
                 //一つ前のメッセージと名前が同じなら
-                if ( activeDB[activeDB.length-1].userid === msg.userid ) {
-                    this.msgDB[this.getPath][activeDB.length-1].content.push(msg.content); //メッセージ配列に追加
-                    this.msgDB[this.getPath][activeDB.length-1].time = msg.time;
+                console.log("Content :: ");
+                console.log(this.msgDB[msg.channelid][4]);
+                if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
+                    this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
+                    this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
 
                 } else { //違う人のメッセージなら普通に表示
-                    this.msgDB[this.getPath].push({
+                    this.msgDB[msg.channelid].push({
                         id: this.msgDB[this.getPath].length+1,
                         userid: msg.userid,
                         channelid: msg.channelid,
@@ -71,9 +72,9 @@ export default {
                 }
             }
             catch(e) { //DBが空なら
-                this.msgDB[this.getPath] = [];
-                this.msgDB[this.getPath].push({
-                    id: this.msgDB[this.getPath].length+1,
+                this.msgDB[msg.channelid] = [];
+                this.msgDB[msg.channelid].push({
+                    id: this.msgDB[msg.channelid].length+1,
                     userid: msg.userid,
                     channelid: msg.channelid,
                     time: msg.time,
