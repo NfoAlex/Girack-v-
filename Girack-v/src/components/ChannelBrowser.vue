@@ -134,7 +134,7 @@ export default {
 <template>
     <div style="margin:3% auto; width: 85%">
         <p class="text-h4">チャンネルブラウザー</p>
-        <v-list style="height:100%; overflow-y:scroll;">
+        <v-list style="height:100%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
             >
