@@ -36,18 +36,6 @@ export default {
                 }
             });
 
-            // //入っているユーザーリストを見る
-            // socket.emit("getInfo", {
-            //     target: "user",
-            //     targetid: userinfo.userid,
-            //     reqSender: {
-            //         userid: userinfo.userid, //ユーザーID
-            //         sessionid: userinfo.sessionid //セッションID
-            //     }
-            // });
-
-            //this.channelJoin.push(channelid);
-
         },
         //チャンネルから退出
         channelLeave(channelid) {
@@ -71,33 +59,11 @@ export default {
                 }
             });
 
-            // //入っているユーザーリストを見る
-            // socket.emit("getInfo", {
-            //     target: "user",
-            //     targetid: userinfo.userid,
-            //     reqSender: {
-            //         userid: userinfo.userid, //ユーザーID
-            //         sessionid: userinfo.sessionid //セッションID
-            //     }
-            // });
-
-            //this.channelJoin.splice(this.channelJoin.indexOf(channelid),1);
-
         }
     },
 
-    // watch: {
-    //     channelIndex(cI) {
-    //         this.channelList = cI;
-
-    //     }
-    // },
-
     mounted() {
         this.channelJoined = userinfo.channelJoined;
-        //this.channelList = channelIndex;
-        // console.log("ChannelBrowser :: this.channelList \\/");
-        // console.log(this.channelList);
 
         //チャンネルリストの取得
         socket.emit("getInfo", {
