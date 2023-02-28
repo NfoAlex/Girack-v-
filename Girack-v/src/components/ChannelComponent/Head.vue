@@ -1,5 +1,5 @@
 <script setup>
-import { getSocket, channelIndex } from '../../socket';
+import { getSocket, channelIndex, userinfo } from '../../socket';
 const socket = getSocket();
 </script>
 
@@ -10,21 +10,37 @@ export default {
     computed: {
         getPath() {
             return this.$route.params.id;
+
         }
     },
 
     methods: {
         getChannelInfo() {
-            return channelIndex[this.getPath];
+            console.log("getChannelInfo :: ");
+            console.log(channelIndex[this.getPath]);
+            try {
+                if ( channelIndex[this.getPath] !== undefined ) {
+                    return channelIndex[this.getPath];
+
+                } else {
+                    location.pathname = "/home";
+
+                }
+            }
+            catch(e) {
+                location.pathname = "/";
+                return null;
+            }
 
         }
     },
 
     mounted() {
-        // this.channelname = channelIndex[this.getPath].channelname;
-        console.log("HEAD");
-        console.log(this.channelname);
-        console.log(channelIndex);
+        if ( userinfo.channelJoined.includes(this.getPath) === -1 ) {
+            location.pathname = "/";
+
+        }
+
     }
 
 }
