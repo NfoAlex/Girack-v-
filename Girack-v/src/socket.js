@@ -117,15 +117,97 @@ socket.on("serverinfo", (dat) => {
 
 });
 
-//チャンネル情報受け取り
+//情報受け取り
 socket.on("infoResult", (dat) => {
-    if ( dat.type !== "channel" ) { return; } //channel用じゃなければ
-    //チャンネル用情報JSONへ追加
-    channelIndex[dat.channelid] = {
-        channelname: dat.channelname, //チャンネル名
-        description: dat.description, //チャンネル概要
-        scope: dat.scope //チャンネルの公開範囲
-    };
+    console.log("socket :: infoResult : 情報受け取り!");
+    console.log(dat);
+
+    //データがチャンネル用なら
+    if ( dat.type === "channel" ) {
+        console.log("channelIndexを更新します");
+        //チャンネル用情報JSONへ追加
+        channelIndex[dat.channelid] = {
+            channelname: dat.channelname, //チャンネル名
+            description: dat.description, //チャンネル概要
+            scope: dat.scope //チャンネルの公開範囲
+        };
+
+    }
+
+    //データがサーバー用なら
+    if ( dat.type === "server" ) {
+        //サーバーの基本情報の更新
+        serverinfo = {
+            servername: dat.servername, //サーバーの名前
+            registerAvailable: dat.registerAvailable, //登録できるかどうか
+            inviteOnly: dat.inviteOnly //招待オンリーかどうか
+        };
+
+    }
+
+    //データが自分の情報なら
+    if ( dat.type === "user" ) {
+        //もし自分の情報だったら更新
+        if ( dat.userid === userinfo.userid ) {
+            console.log("*******************");
+            console.log("自分のや!");
+            console.log(dat.channelJoined.length + " と " + userinfo.channelJoined.length);
+            console.log(( dat.channelJoined.length > userinfo.channelJoined.length ));
+            console.log("*******************");
+
+            if ( dat.channelJoined.length !== userinfo.channelJoined.length ) {
+                //チャンネル数が増えているなら
+                if ( dat.channelJoined.length > userinfo.channelJoined.length ) {
+                    let channelNew = (dat.channelJoined).filter( cid => !(userinfo.channelJoined).includes(cid) );
+                    
+                    console.log("socket :: チャンネル差 : ");
+                    console.log(channelNew);
+
+                    //チャンネル情報の取得
+                    for ( let c in channelNew ) {
+                        socket.emit("getInfo", { //リクエスト送信
+                            target: "channel",
+                            targetid: channelNew[c],
+                            reqSender: {
+                                userid: userinfo.userid, //ユーザーID
+                                sessionid: userinfo.sessionid //セッションID
+                            }
+                        });
+
+                    }
+
+                }
+
+                //チャンネル数が減っている（チャンネルを抜けた）なら
+                if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
+                    console.log("socket :: チャンネル差が少ないから減らす");
+                    dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
+                    
+                    Object.keys(channelIndex);
+                    for (let c in Object.keys(channelIndex) ) {
+                        let channelid = Object.keys(channelIndex)[c];
+                        if ( !userinfo.channelJoined.includes(channelid) ) {
+                            delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            userinfo = {
+                username: dat.username,
+                userid: userinfo.userid, //ユーザーID
+                loggedin: true, //ログイン状態はそのまま
+                sessionid: userinfo.sessionid, //セッションIDはそのまま
+                channelJoined: dat.channelJoined, //参加しているチャンネル
+            }
+
+        }
+
+    }
 
 });
 
@@ -181,7 +263,7 @@ socket.on("authResult", (dat) => {
         setCookie("sessionid", dat.sessionid, 15);
         console.log("session id in cookie -> " + getCookie("sessionid"));
 
-        console.log("userinfo ↓");
+        console.log("socket :: authResult : userinfo ↓");
         console.log(userinfo);
 
         //チャンネル情報の取得

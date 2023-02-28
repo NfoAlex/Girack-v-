@@ -10,12 +10,13 @@ const socket = getSocket();
 export default {
     data() {
         return {
-            channelBar: "channelBar",
+            channelBar: "channelBar", //css用
             main: "main",
             servername: "",
             path: "",
             loggedin: false,
-            channelIndex: {},
+            channelIndexListing: {},
+            channelJoined: [],
             uri: backendURI
         }
 
@@ -27,14 +28,35 @@ export default {
             //console.log(r);
             this.path = r.path; //変数へ取り込む
 
+        },
+        channelIndex(cI) {
+            console.log("==========================================");
+            this.channelIndexListing = cI;
+
         }
     },
 
     mounted() {
+        this.channelIndexListing = channelIndex;
+        this.channelJoined = userinfo.channelJoined;
+
         socket.emit("getInitInfo"); //サーバーの情報を取得
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername;
             
+        });
+
+        socket.on("infoResult", (dat) => {
+            if ( dat.type === "channel" || dat.type === "user" ) {
+                this.channelIndexListing = channelIndex;
+                this.channelJoined = userinfo.channelJoined;
+
+                console.log("infoResult :: チャンネルリスト更新したい");
+                console.log(channelIndex);
+                console.log(userinfo.channelJoined);
+
+            }
+
         });
 
     }
