@@ -1,13 +1,15 @@
 <script>
-import { getSocket, userinfo, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
+import { getSocket, userinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
 const socket = getSocket();
 
 export default {
+
     data() {
         return {
             msgDB: {},
-            userIndex: {}
-
+            userIndex: {},
+            uri: backendURI,
+            scrolled: false
         }
     },
 
@@ -23,10 +25,15 @@ export default {
         this.msgDB = msgDBbackup;
         this.userIndex = userIndexBackup;
 
+        const channelWindow = document.querySelector("#channelWindow");
+
         //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
             console.log("msgReceive :: ↓");
             console.log(msg);
+            //スクロールしきっているか確認
+            let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
+            console.log("scrolledState -> " + scrolledState);
 
             //使用するDBレコード
             let activeDB = this.msgDB[this.getPath];
@@ -37,8 +44,10 @@ export default {
                 socket.emit("getInfo", {
                     target: "user",
                     targetid: msg.userid,
-                    userid: userinfo.userid,
-                    sessionid: userinfo.sessionid
+                    reqSender: {
+                        userid: userinfo.userid, //ユーザーID
+                        sessionid: userinfo.sessionid //セッションID
+                    }
                 });
 
             }
@@ -73,13 +82,19 @@ export default {
 
             }
 
-            backupMsg(this.msgDB); //出力、保存
+            //スクロールされきっていたら最後へ自動スクロールする
+            if ( scrolledState ) { //この関数用の変数で確認
+                channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+            }
+
+            backupMsg(this.msgDB); //メッセージDBの出力、保存
 
         });
 
-        //名前の受け取り
+        //他人の名前の受け取り
         socket.on("infoResult", (dat) => {
-            if ( dat.type !== "user" ) { return; } //ユーザー情報じゃなければ
+            if ( dat.type !== "user" ) { return; } //ユーザー情報じゃなければ取りやめ
             console.log("Content :: infoResult : 名前情報受け取り \\/")
             console.log(dat);
 
@@ -90,12 +105,18 @@ export default {
             this.userIndex[userid] = {};
 
             //ユーザーインデックス更新
-            this.userIndex[userid].username = username;
-            this.userIndex[userid].role = role;
+            this.userIndex[userid].username = username; //名前
+            this.userIndex[userid].role = role; //ロール
 
             backupUser(this.userIndex); //ユーザー情報をバックアップ
 
         });
+
+    },
+
+    //アンロード時の処理
+    unmounted() {
+        socket.off("msgReceive"); //メッセージの受け取り中止
 
     },
 
@@ -118,8 +139,10 @@ export default {
             socket.emit("getInfo", {
                 target: "user",
                 targetid: userid,
-                userid: userinfo.userid,
-                sessionid: userinfo.sessionid
+                reqSender: {
+                    userid: userinfo.userid, //ユーザーID
+                    sessionid: userinfo.sessionid //セッションID
+                }
             });
 
             return userid;
@@ -164,14 +187,14 @@ export default {
 </script>
 
 <template>
-    <div ref="channelWindow">
-        <div style="display:flex; margin-top:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
+    <div id="channelWindow" style="height:100%; overflow-y:auto;">
+        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
             
             <v-avatar size="x-large">
-                <v-img :alt="m.userid" :src="'http://localhost:33333/img/' + m.userid + '.jpeg'"></v-img>
+                <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
-            <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:87.5%; padding:1% 1%;">
+            <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:85.5%; padding:1% 1%;">
                 
                 <div :class="'text-h6'">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}

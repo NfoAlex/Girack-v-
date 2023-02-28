@@ -25,10 +25,15 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../components/User.vue')
     },
+    { //チャンネルブラウザ
+      path: '/c/browser',
+      name: 'Channel Browser',
+      component: () => import('../components/ChannelBrowser.vue')
+    },
     { //チャンネル画面
       path: '/c/:id',
       name: 'Channel',
-      component: () => import('../components/Channel.vue')
+      component: () => import('../components/ChannelWindow.vue')
     }
   ],
   scrollBehavior(to, from, savedPosition) { //スクロール位置の処理

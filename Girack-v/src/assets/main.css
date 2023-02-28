@@ -1,8 +1,11 @@
 @import './base.css';
 
+html {
+  overflow-y: hidden;
+}
+
 #app {
   margin: 0 auto;
-  overflow-y: hidden;
 
   font-weight: normal;
 }

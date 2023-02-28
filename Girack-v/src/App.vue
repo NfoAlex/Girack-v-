@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, channelIndex, userinfo } from "./socket.js";
+import { getSocket, channelIndex, userinfo, backendURI } from "./socket.js";
 import Login from "./components/Login.vue";
 </script>
 
@@ -10,12 +10,14 @@ const socket = getSocket();
 export default {
     data() {
         return {
-            channelBar: "channelBar",
+            channelBar: "channelBar", //css用
             main: "main",
             servername: "",
             path: "",
             loggedin: false,
-            channelIndex: {}
+            channelIndexListing: {},
+            channelJoined: [],
+            uri: backendURI
         }
 
     },
@@ -26,15 +28,44 @@ export default {
             //console.log(r);
             this.path = r.path; //変数へ取り込む
 
+        },
+        channelIndex(cI) {
+            console.log("==========================================");
+            this.channelIndexListing = cI;
+
         }
     },
 
     mounted() {
+        this.channelIndexListing = channelIndex;
+        this.channelJoined = userinfo.channelJoined;
+
         socket.emit("getInitInfo"); //サーバーの情報を取得
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername;
             
         });
+
+        socket.on("infoResult", (dat) => {
+            if ( dat.type === "channel" || dat.type === "user" ) {
+                
+                this.channelIndexListing = channelIndex;
+                this.channelJoined = userinfo.channelJoined;
+
+                this.$forceUpdate();
+
+                console.log("infoResult :: チャンネルリスト更新したい");
+                console.log(channelIndex);
+                console.log(userinfo.channelJoined);
+
+            }
+
+        });
+
+    },
+
+    unmounted() {
+        socket.off("infoResult");
 
     }
 
@@ -48,38 +79,52 @@ export default {
         <div :class="channelBar">
             <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ servername || "..." }}</h2>
             <br>
+            
             <v-card
                 class="mx-auto"
                 width="80%"
                 variant="tonal"
             >
+
                 <div class="mx-auto" style="width:fit-content; margin-top:10%">
                     <RouterLink to="/user">
                         <v-avatar style=" width:4vmax;height:auto;">
-                            <v-img :alt="userinfo.userid" :src="'http://localhost:33333/img/' + userinfo.userid + '.jpeg'"></v-img>
+                            <v-img :alt="userinfo.userid" :src="uri + '/img/' + userinfo.userid + '.jpeg'"></v-img>
                         </v-avatar>
                     </RouterLink>
                 </div>
+
                 <v-card-text class="text-subtitle-1 text-center mx-auto">
                     <span>
                         {{ userinfo.username }}
                     </span>
                 </v-card-text>
+
             </v-card>
             
-            <nav style="margin:0 auto; width:90%;">
+            <nav style="margin:5% auto; width:90%;">
+                <RouterLink :to="'/c/browser'">
+                    <v-btn variant="outlined" style="width:100%; text-align:left !important">
+                        <span style="width:100%; text-align:left !important; float:left !important">
+                            <span class="mdi mdi-text-search">チャンネルブラウザ</span>
+                        </span>
+                    </v-btn>
+                </RouterLink>
+
                 <hr style="margin:5% 0">
+
                 <!-- ここからチャンネルボタン描写  -->
-                <div style="margin-top:1%; padding:0" v-for="l in userinfo.channelJoined">
-                    <RouterLink :to="'/c/'+l">
-                        <v-btn :variant=" path.indexOf(l)!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                <div style="margin-top:1%; padding:0" v-for="l in Object.entries(channelIndex)">
+                    <RouterLink :to="'/c/'+l[0]">
+                        <v-btn :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                             <span style="width:100%; text-align:left !important; float:left !important">
-                                <span class="mdi mdi-pound ">{{ channelIndex[l].channelname }}</span>
+                                <span class="mdi mdi-pound ">{{ channelIndex[l[0]].channelname }}</span>
                             </span>
                         </v-btn>
                     </RouterLink>
                     <br>
                 </div>
+
             </nav>
         </div>
 

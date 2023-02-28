@@ -1,5 +1,4 @@
 <script>
-
 import Content from "./ChannelComponent/Content.vue";
 import Head from "./ChannelComponent/Head.vue";
 import Input from "./ChannelComponent/Input.vue";
@@ -54,7 +53,6 @@ export default {
 .content
 {
     height: 82vh;
-    overflow-y: auto;
 }
 
 .input

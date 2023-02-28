@@ -1,17 +1,11 @@
 <script setup>
 import { userinfo, channelIndex, getSocket } from '../../socket.js';
-import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiAccount } from '@mdi/js';
 </script>
 
 <script>
 const socket = getSocket();
 
 export default {
-    components: {
-        SvgIcon,
-    },
-
     data() {
         return {
             txt: "",
@@ -25,7 +19,6 @@ export default {
             socket.emit("msgSend", {
                 userid: userinfo.userid, //名前
                 content: this.txt, //内容
-                //content: Txt, //内容
                 channelid: this.getPath, //チャンネルID
                 sessionid: userinfo.sessionid //セッションID);
             });

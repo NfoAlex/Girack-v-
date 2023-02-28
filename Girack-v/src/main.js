@@ -4,7 +4,6 @@ import router from './router'
 
 // Vuetify
 import 'vuetify/styles'
-import colors from 'vuetify/lib/util/colors'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
