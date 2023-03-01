@@ -9,7 +9,10 @@ export default {
             msgDB: {},
             userIndex: {},
             uri: backendURI,
+
             NotAtBottom: true,
+            msgHovered: false,
+            msgIdHovering: 0,
 
             goBottom: "goBottom" //下に行くボタン用CSSクラス
         }
@@ -72,7 +75,7 @@ export default {
 
                 } else { //違う人のメッセージなら普通に表示
                     this.msgDB[msg.channelid].push({
-                        id: this.msgDB[this.getPath].length+1,
+                        //id: this.msgDB[this.getPath].length+1,
                         userid: msg.userid,
                         channelid: msg.channelid,
                         content: [
@@ -90,10 +93,9 @@ export default {
             catch(e) { //DBが空なら
                 this.msgDB[msg.channelid] = [];
                 this.msgDB[msg.channelid].push({
-                    id: this.msgDB[msg.channelid].length+1,
+                    //id: this.msgDB[msg.channelid].length+1,
                     userid: msg.userid,
                     channelid: msg.channelid,
-                    time: msg.time,
                     content: [msg.content]
                 });
 
@@ -151,7 +153,7 @@ export default {
 
         },
 
-        //絵文字を取得するだけ
+        //絵文字を取得するだけ(ToDo:別コンポーネントとして独立)
         getReaction(reaction) {
             switch(reaction) {
                 case "smile":
@@ -188,6 +190,35 @@ export default {
         //スクロールさせるだけの関数
         scrollIt() {
             channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+        },
+
+        //ホバー時アクション
+        mouseOverMsg(msgId, bool) {
+            if ( bool === "on" ) {
+                //console.log("mouseOverMsg :: ON msgId -> ");
+                this.msgHovered = true;
+                this.msgIdHovering = msgId;
+                //console.log(msgId);
+
+            }
+
+            if ( bool === "off" ) {
+                //console.log("mouseOverMsg :: OFF msgId -> " + msgId);
+                this.msgHovered = false;
+                this.msgIdHovering = null;
+
+            }
+    
+            //console.log("mouseOverMsg :: hovered on -> " + this.msgIdHovering);
+
+        },
+
+        messageAction(act, dat) {
+            if ( act === "delete" ) {
+                //socket.emit("")
+
+            }
 
         },
 
@@ -266,13 +297,30 @@ export default {
                 </div>
                 
                 <!-- ToDo:ここのフォントサイズの調整 -->
-                <p style="font-size:16px" v-for="conte in m.content">
+                <p
+                    @mouseover="mouseOverMsg(conte.textid, 'on')"
+                    @mouseleave="mouseOverMsg(conte.textid, 'off')"
+                    style="font-size:16px"
+                    v-for="conte in m.content"
+                >
 
                     <span class="text-body-2 font-italic">
                         {{ printDate(conte.time) }}
                     </span>
 
                     {{ conte.text }}
+
+                    <span v-if="msgHovered && ( msgIdHovering === conte.textid )" style="float:right">
+                        <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                            😀
+                        </v-btn>
+                        <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                            🤔
+                        </v-btn>
+                        <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                            <span style="font-size:1.5vmax" class="mdi mdi-delete-forever"></span>
+                        </v-btn>
+                    </span>
 
                     <br v-if="conte.reaction">
                     <v-chip size="small" color="white" v-for="r in conte.reaction">
@@ -286,7 +334,7 @@ export default {
         </div>
     </div>
     <!-- 一番下にスクロールするボタン -->
-    <v-btn v-if="NotAtBottom" style="padding:0" icon="" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+    <v-btn v-if="NotAtBottom" style="padding:0" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
         <span width="100%" style="font-size:2vmax;" class="mdi mdi-arrow-down-bold"></span>
     </v-btn>
 </template>
@@ -296,7 +344,7 @@ export default {
 .goBottom
 {
     position: absolute;
-    right: 3vh;
+    right: 1vw;
     bottom: 3vh;
 
     width: 4vmax;
