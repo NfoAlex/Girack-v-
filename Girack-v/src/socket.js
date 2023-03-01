@@ -35,34 +35,24 @@ export var channelIndex = {
 };
 
 export var msgDBbackup = {
-    "001": [
-        {
-            id: 0,
-            username: "",
-            userid: "xx0",
-            channelid: "001",
-            time: "20200217165240643",
-            content: ["Ayo", "abc", "そしてこれが３つ目"]
-        },
-        {
-            id: 1,
-            username: "",
-            userid: "xx1",
-            channelid: "001",
-            time: "20200227165240646",
-            content: ["は", "誰お前"]
-        }
-    ],
-    "002": [
-        {
-            id: 0,
-            username: "",
-            userid: "xx2",
-            channelid: "001",
-            time: "20190327165240646",
-            content: ["いや","お前のランクよ","草"]
-        },
-    ]
+    // "001": [
+    //     {
+    //         id: 0,
+    //         username: "",
+    //         userid: "xx0",
+    //         channelid: "001",
+    //         time: "20200217165240643",
+    //         content: ["Ayo", "abc", "そしてこれが３つ目"]
+    //     },
+    //     {
+    //         id: 1,
+    //         username: "",
+    //         userid: "xx1",
+    //         channelid: "001",
+    //         time: "20200227165240646",
+    //         content: ["は", "誰お前"]
+    //     }
+    // ]
 };
 
 export var userIndexBackup = {
