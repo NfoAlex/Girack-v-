@@ -288,7 +288,7 @@ export default {
                     <v-chip
                         v-if="getRole(m.userid)!=='Member'"
                         color="purple"
-                        size="small"
+                        size="x-small"
                         :elevation="6"
                     >
                     {{ getRole(m.userid) }}
