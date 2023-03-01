@@ -9,7 +9,9 @@ export default {
             msgDB: {},
             userIndex: {},
             uri: backendURI,
-            scrolled: false
+            NotAtBottom: true,
+
+            goBottom: "goBottom" //下に行くボタン用CSSクラス
         }
     },
 
@@ -18,14 +20,20 @@ export default {
         getPath() {
             return this.$route.params.id;
 
-        }
+        },
+
     },
 
     mounted() {
-        this.msgDB = msgDBbackup;
-        this.userIndex = userIndexBackup;
+        let ref = this;
+        this.msgDB = msgDBbackup; //使うメッセージDB
+        this.userIndex = userIndexBackup; //使うユーザーの名前リスト
+        const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-        const channelWindow = document.querySelector("#channelWindow");
+        channelWindow.addEventListener("scroll", function (event) {
+            ref.setScrollState();
+
+        });
 
         //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
@@ -55,12 +63,14 @@ export default {
             //名前が一つ前のメッセージと同じなら連続して表示
             try { //メッセージの長さが１個以上あるかどうか
                 //一つ前のメッセージと名前が同じなら
-                if ( activeDB[activeDB.length-1].userid === msg.userid ) {
-                    this.msgDB[this.getPath][activeDB.length-1].content.push(msg.content); //メッセージ配列に追加
-                    this.msgDB[this.getPath][activeDB.length-1].time = msg.time;
+                console.log("Content :: ");
+                console.log(this.msgDB[msg.channelid][4]);
+                if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
+                    this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
+                    this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
 
                 } else { //違う人のメッセージなら普通に表示
-                    this.msgDB[this.getPath].push({
+                    this.msgDB[msg.channelid].push({
                         id: this.msgDB[this.getPath].length+1,
                         userid: msg.userid,
                         channelid: msg.channelid,
@@ -71,9 +81,9 @@ export default {
                 }
             }
             catch(e) { //DBが空なら
-                this.msgDB[this.getPath] = [];
-                this.msgDB[this.getPath].push({
-                    id: this.msgDB[this.getPath].length+1,
+                this.msgDB[msg.channelid] = [];
+                this.msgDB[msg.channelid].push({
+                    id: this.msgDB[msg.channelid].length+1,
                     userid: msg.userid,
                     channelid: msg.channelid,
                     time: msg.time,
@@ -149,6 +159,24 @@ export default {
 
         },
 
+        //スクロールさせるだけの関数
+        scrollIt() {
+            channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+        },
+
+        //スクロール位置によって一番下に行くボタンの表示切り替えをする
+        setScrollState() {
+            if ( channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
+                this.NotAtBottom = false;
+
+            } else {
+                this.NotAtBottom = true;
+
+            }
+
+        },
+
         //メッセージの時間を出力する関数
         printDate(time) {
             let t = new Date();
@@ -219,4 +247,23 @@ export default {
 
         </div>
     </div>
+    <v-btn v-if="NotAtBottom" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+        <span class="mdi mdi-arrow-down-bold"></span>
+    </v-btn>
 </template>
+
+<style scoped>
+
+.goBottom
+{
+    position: absolute;
+    right: 3vh;
+    bottom: 3vh;
+
+    width: 4vmax;
+    height: 4vmax;
+
+    background-color: grey;
+}
+
+</style>
