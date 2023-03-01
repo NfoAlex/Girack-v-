@@ -9,7 +9,9 @@ export default {
             msgDB: {},
             userIndex: {},
             uri: backendURI,
-            scrolled: false
+            NotAtBottom: true,
+
+            goBottom: "goBottom" //下に行くボタン用CSSクラス
         }
     },
 
@@ -18,13 +20,20 @@ export default {
         getPath() {
             return this.$route.params.id;
 
-        }
+        },
+
     },
 
     mounted() {
+        let ref = this;
         this.msgDB = msgDBbackup; //使うメッセージDB
         this.userIndex = userIndexBackup; //使うユーザーの名前リスト
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
+
+        channelWindow.addEventListener("scroll", function (event) {
+            ref.setScrollState();
+
+        });
 
         //メッセージ受け取り、出力
         socket.on("msgReceive", (msg) => {
@@ -150,6 +159,24 @@ export default {
 
         },
 
+        //スクロールさせるだけの関数
+        scrollIt() {
+            channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+        },
+
+        //スクロール位置によって一番下に行くボタンの表示切り替えをする
+        setScrollState() {
+            if ( channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
+                this.NotAtBottom = false;
+
+            } else {
+                this.NotAtBottom = true;
+
+            }
+
+        },
+
         //メッセージの時間を出力する関数
         printDate(time) {
             let t = new Date();
@@ -220,4 +247,23 @@ export default {
 
         </div>
     </div>
+    <v-btn v-if="NotAtBottom" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+        <span class="mdi mdi-arrow-down-bold"></span>
+    </v-btn>
 </template>
+
+<style scoped>
+
+.goBottom
+{
+    position: absolute;
+    right: 3vh;
+    bottom: 3vh;
+
+    width: 4vmax;
+    height: 4vmax;
+
+    background-color: grey;
+}
+
+</style>
