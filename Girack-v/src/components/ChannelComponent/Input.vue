@@ -18,11 +18,21 @@ export default {
         msgSend() {
             socket.emit("msgSend", {
                 userid: userinfo.userid, //名前
-                content: this.txt, //内容
                 channelid: this.getPath, //チャンネルID
-                sessionid: userinfo.sessionid //セッションID);
+                sessionid: userinfo.sessionid, //セッションID);
+                content: {
+                    text: this.txt,
+                } //内容
             });
             this.txt = ""; //入力欄を空に
+            console.log("sended ↓");
+            console.log(userinfo);
+            // console.log({
+            //     userid: userinfo.userid, //名前
+            //     content: this.txt, //内容
+            //     channelid: this.getPath, //チャンネルID
+            //     sessionid: userinfo.sessionid
+            // });
 
         },
         //Enterキー押されたときの処理
@@ -63,7 +73,7 @@ export default {
             clearable
             v-model="txt"
         ></v-text-field>
-        <v-btn class="mdi mdi-send-outline" style="margin-right:1vw;" icon="" @click="msgSend" color="primary">
+        <v-btn class="rounded-lg mdi mdi-send-outline" style="margin-right:1vw;" icon="" @click="msgSend" color="primary">
         </v-btn>
     </div>
 

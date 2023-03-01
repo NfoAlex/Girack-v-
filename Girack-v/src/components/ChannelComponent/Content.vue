@@ -25,13 +25,14 @@ export default {
     },
 
     mounted() {
-        let ref = this;
+        let ref = this; //methodsの関数使う用（直接参照はできないため）
         this.msgDB = msgDBbackup; //使うメッセージDB
         this.userIndex = userIndexBackup; //使うユーザーの名前リスト
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
+        //スクロールした際に"下に行く"ボタンを表示するかどうか計算
         channelWindow.addEventListener("scroll", function (event) {
-            ref.setScrollState();
+            ref.setScrollState(); //確認開始
 
         });
 
@@ -67,15 +68,21 @@ export default {
                 console.log(this.msgDB[msg.channelid][4]);
                 if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
                     this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
-                    this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
+                    //this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
 
                 } else { //違う人のメッセージなら普通に表示
                     this.msgDB[msg.channelid].push({
                         id: this.msgDB[this.getPath].length+1,
                         userid: msg.userid,
                         channelid: msg.channelid,
-                        time: msg.time,
-                        content: [msg.content]
+                        content: [
+                            {
+                                textid: msg.content.textid,
+                                text: msg.content.text,
+                                time: msg.content.time,
+                                reaction: []
+                            }
+                        ]
                     });
 
                 }
@@ -144,6 +151,25 @@ export default {
 
         },
 
+        //絵文字を取得するだけ
+        getReaction(reaction) {
+            switch(reaction) {
+                case "smile":
+                    return "😀";
+
+                case "thinking_face":
+                    return "🤔";
+
+                case "smirk":
+                    return "😏";
+
+                default:
+                    return reaction;
+
+            }
+
+        },
+
         //もし人のやつほしくなったら
         needUserIndex(userid) {
             socket.emit("getInfo", {
@@ -167,11 +193,12 @@ export default {
 
         //スクロール位置によって一番下に行くボタンの表示切り替えをする
         setScrollState() {
+            //一番下？
             if ( channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
-                this.NotAtBottom = false;
+                this.NotAtBottom = false; //スクロールしきってないと保存
 
             } else {
-                this.NotAtBottom = true;
+                this.NotAtBottom = true; //スクロールしきったと保存
 
             }
 
@@ -222,6 +249,7 @@ export default {
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
+            <!-- メッセージ本体 -->
             <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:85.5%; padding:1% 1%;">
                 
                 <div :class="'text-h6'">
@@ -234,21 +262,32 @@ export default {
                     >
                     {{ getRole(m.userid) }}
                     </v-chip>
-                    <span class="text-body-2 font-italic">
-                        {{ printDate(m.time) }}
-                    </span>
+                    
                 </div>
                 
+                <!-- ToDo:ここのフォントサイズの調整 -->
                 <p style="font-size:16px" v-for="conte in m.content">
-                    {{ conte }}
+
+                    <span class="text-body-2 font-italic">
+                        {{ printDate(conte.time) }}
+                    </span>
+
+                    {{ conte.text }}
+
+                    <br v-if="conte.reaction">
+                    <v-chip size="small" color="white" v-for="r in conte.reaction">
+                        {{ getReaction(Object.keys(r)[0]) }} {{ r[Object.keys(r)[0]] }}
+                    </v-chip>
+
                 </p>
 
             </v-card>
 
         </div>
     </div>
-    <v-btn v-if="NotAtBottom" :class="[goBottom,'rounded-lg']" @click="scrollIt">
-        <span class="mdi mdi-arrow-down-bold"></span>
+    <!-- 一番下にスクロールするボタン -->
+    <v-btn v-if="NotAtBottom" style="padding:0" icon="" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+        <span width="100%" style="font-size:2vmax;" class="mdi mdi-arrow-down-bold"></span>
     </v-btn>
 </template>
 
@@ -261,7 +300,10 @@ export default {
     bottom: 3vh;
 
     width: 4vmax;
+    max-width: 5vh;
+
     height: 4vmax;
+    max-height: 5vh;
 
     background-color: grey;
 }

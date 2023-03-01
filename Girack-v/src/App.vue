@@ -103,7 +103,14 @@ export default {
             </v-card>
             
             <nav style="margin:5% auto; width:90%;">
-                <RouterLink :to="'/c/browser'">
+                <RouterLink :to="'/jsonviewer'">
+                    <v-btn variant="outlined" style="width:100%; text-align:left !important">
+                        <span style="width:100%; text-align:left !important; float:left !important">
+                            JSONviewer(debug)
+                        </span>
+                    </v-btn>
+                </RouterLink>
+                <RouterLink :to="'/browser'">
                     <v-btn variant="outlined" style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
                             <span class="mdi mdi-text-search">チャンネルブラウザ</span>
