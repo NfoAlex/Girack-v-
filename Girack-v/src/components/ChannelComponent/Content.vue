@@ -151,6 +151,25 @@ export default {
 
         },
 
+        //絵文字を取得するだけ
+        getReaction(reaction) {
+            switch(reaction) {
+                case "smile":
+                    return "😀";
+
+                case "thinking_face":
+                    return "🤔";
+
+                case "smirk":
+                    return "😏";
+
+                default:
+                    return reaction;
+
+            }
+
+        },
+
         //もし人のやつほしくなったら
         needUserIndex(userid) {
             socket.emit("getInfo", {
@@ -253,7 +272,11 @@ export default {
                     </span>
 
                     {{ conte.text }}
-                    
+
+                    <br v-if="conte.reaction">
+                    <v-chip size="small" color="white" v-for="r in conte.reaction">
+                        {{ getReaction(Object.keys(r)[0]) }} {{ r[Object.keys(r)[0]] }}
+                    </v-chip>
 
                 </p>
 
