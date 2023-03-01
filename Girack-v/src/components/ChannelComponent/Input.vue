@@ -18,11 +18,21 @@ export default {
         msgSend() {
             socket.emit("msgSend", {
                 userid: userinfo.userid, //名前
-                content: this.txt, //内容
                 channelid: this.getPath, //チャンネルID
-                sessionid: userinfo.sessionid //セッションID);
+                sessionid: userinfo.sessionid, //セッションID);
+                content: {
+                    text: this.txt,
+                } //内容
             });
             this.txt = ""; //入力欄を空に
+            console.log("sended ↓");
+            console.log(userinfo);
+            // console.log({
+            //     userid: userinfo.userid, //名前
+            //     content: this.txt, //内容
+            //     channelid: this.getPath, //チャンネルID
+            //     sessionid: userinfo.sessionid
+            // });
 
         },
         //Enterキー押されたときの処理

@@ -68,15 +68,21 @@ export default {
                 console.log(this.msgDB[msg.channelid][4]);
                 if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
                     this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
-                    this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
+                    //this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
 
                 } else { //違う人のメッセージなら普通に表示
                     this.msgDB[msg.channelid].push({
                         id: this.msgDB[this.getPath].length+1,
                         userid: msg.userid,
                         channelid: msg.channelid,
-                        time: msg.time,
-                        content: [msg.content]
+                        content: [
+                            {
+                                textid: msg.content.textid,
+                                text: msg.content.text,
+                                time: msg.content.time,
+                                reaction: []
+                            }
+                        ]
                     });
 
                 }
@@ -236,13 +242,19 @@ export default {
                     >
                     {{ getRole(m.userid) }}
                     </v-chip>
-                    <span class="text-body-2 font-italic">
-                        {{ printDate(m.time) }}
-                    </span>
+                    
                 </div>
                 
+                <!-- ToDo:ここのフォントサイズの調整 -->
                 <p style="font-size:16px" v-for="conte in m.content">
-                    {{ conte }}
+
+                    <span class="text-body-2 font-italic">
+                        {{ printDate(conte.time) }}
+                    </span>
+
+                    {{ conte.text }}
+                    
+
                 </p>
 
             </v-card>
