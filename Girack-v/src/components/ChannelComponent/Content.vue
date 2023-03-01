@@ -25,13 +25,14 @@ export default {
     },
 
     mounted() {
-        let ref = this;
+        let ref = this; //methodsの関数使う用（直接参照はできないため）
         this.msgDB = msgDBbackup; //使うメッセージDB
         this.userIndex = userIndexBackup; //使うユーザーの名前リスト
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
+        //スクロールした際に"下に行く"ボタンを表示するかどうか計算
         channelWindow.addEventListener("scroll", function (event) {
-            ref.setScrollState();
+            ref.setScrollState(); //確認開始
 
         });
 
@@ -167,11 +168,12 @@ export default {
 
         //スクロール位置によって一番下に行くボタンの表示切り替えをする
         setScrollState() {
+            //一番下？
             if ( channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
-                this.NotAtBottom = false;
+                this.NotAtBottom = false; //スクロールしきってないと保存
 
             } else {
-                this.NotAtBottom = true;
+                this.NotAtBottom = true; //スクロールしきったと保存
 
             }
 
