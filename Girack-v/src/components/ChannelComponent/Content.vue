@@ -304,13 +304,12 @@ export default {
                     v-for="conte in m.content"
                 >
 
-                    <span class="text-body-2 font-italic">
-                        {{ printDate(conte.time) }}
-                    </span>
-
                     {{ conte.text }}
 
                     <span v-if="msgHovered && ( msgIdHovering === conte.textid )" style="float:right">
+                        <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === conte.textid )">
+                            {{ printDate(conte.time) }}
+                        </span>
                         <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             😀
                         </v-btn>
