@@ -26,7 +26,7 @@ const router = createRouter({
       component: () => import('../components/User.vue')
     },
     { //チャンネルブラウザ
-      path: '/c/browser',
+      path: '/browser',
       name: 'Channel Browser',
       component: () => import('../components/ChannelBrowser.vue')
     },
@@ -34,6 +34,11 @@ const router = createRouter({
       path: '/c/:id',
       name: 'Channel',
       component: () => import('../components/ChannelWindow.vue')
+    },
+    { //JSON見るためだけのページ(デバッグ用)
+      path: '/jsonviewer/',
+      name: 'JSON viewer',
+      component: () => import('../components/JSONviewer.vue')
     }
   ],
   scrollBehavior(to, from, savedPosition) { //スクロール位置の処理
