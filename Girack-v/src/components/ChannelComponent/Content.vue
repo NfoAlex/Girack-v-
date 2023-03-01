@@ -249,6 +249,7 @@ export default {
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
+            <!-- メッセージ本体 -->
             <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:85.5%; padding:1% 1%;">
                 
                 <div :class="'text-h6'">

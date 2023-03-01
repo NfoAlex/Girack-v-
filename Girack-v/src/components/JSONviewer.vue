@@ -1,6 +1,7 @@
 /********************************************************
 
-THIS PAGE IS ONLY FOR debug
+THIS PAGE IS ONLY FOR DEBUGGING
+DELETE OR HIDE ON HOSTING
 
 ********************************************************/
 
