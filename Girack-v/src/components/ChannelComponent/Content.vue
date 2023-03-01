@@ -299,7 +299,10 @@ export default {
     bottom: 3vh;
 
     width: 4vmax;
+    max-width: 5vh;
+
     height: 4vmax;
+    max-height: 5vh;
 
     background-color: grey;
 }
