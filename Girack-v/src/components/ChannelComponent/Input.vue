@@ -73,7 +73,7 @@ export default {
             clearable
             v-model="txt"
         ></v-text-field>
-        <v-btn class="mdi mdi-send-outline" style="margin-right:1vw;" icon="" @click="msgSend" color="primary">
+        <v-btn class="rounded-lg mdi mdi-send-outline" style="margin-right:1vw;" icon="" @click="msgSend" color="primary">
         </v-btn>
     </div>
 

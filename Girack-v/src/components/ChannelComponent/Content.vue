@@ -284,8 +284,9 @@ export default {
 
         </div>
     </div>
-    <v-btn v-if="NotAtBottom" :class="[goBottom,'rounded-lg']" @click="scrollIt">
-        <span class="mdi mdi-arrow-down-bold"></span>
+    <!-- 一番下にスクロールするボタン -->
+    <v-btn v-if="NotAtBottom" style="padding:0" icon="" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+        <span width="100%" style="font-size:2vmax;" class="mdi mdi-arrow-down-bold"></span>
     </v-btn>
 </template>
 
