@@ -1,6 +1,12 @@
+<script setup>
+import { getSocket, getUserinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
+
+</script>
 <script>
-import { getSocket, userinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
+//import { getSocket, getUserinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
+
 const socket = getSocket();
+//const getUserinfo = getUserinfo();
 
 export default {
 
@@ -31,6 +37,8 @@ export default {
     },
 
     mounted() {
+        console.log("content :: ユーザーいんふぉ ↓");
+        console.log(getUserinfo());
         let ref = this; //methodsの関数使う用（直接参照はできないため）
         this.msgDB = msgDBbackup; //使うメッセージDB
         this.userIndex = userIndexBackup; //使うユーザーの名前リスト
@@ -51,7 +59,7 @@ export default {
             console.log("scrolledState -> " + scrolledState);
 
             //使用するDBレコード
-            let activeDB = this.msgDB[this.getPath];
+            //let activeDB = this.msgDB[this.getPath];
 
             //もしユーザーの名前リストに名前がなかったら
             if ( this.userIndex[msg.userid] === undefined ) {
@@ -175,14 +183,20 @@ export default {
 
         },
 
+        //ユーザー情報を返すだけ
+        // getUserinfo() {
+        //     return userinfo;
+
+        // },
+
         //もし人のやつほしくなったら
         needUserIndex(userid) {
             socket.emit("getInfo", {
                 target: "user",
                 targetid: userid,
                 reqSender: {
-                    userid: userinfo.userid, //ユーザーID
-                    sessionid: userinfo.sessionid //セッションID
+                    userid: getUserinfo().userid, //ユーザーID
+                    sessionid: getUserinfo().sessionid //セッションID
                 }
             });
 
@@ -290,7 +304,7 @@ export default {
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
                         v-if="getRole(m.userid)!=='Member'"
-                        color="purple"
+                        :color="getRole(m.userid)==='Admin'?'purple':'gray'"
                         size="x-small"
                         :elevation="6"
                     >
@@ -320,7 +334,8 @@ export default {
                         <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             🤔
                         </v-btn>
-                        <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <!-- 削除ボタン -->
+                        <v-btn v-if="getUserinfo().role==='Admin'" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             <span style="font-size:1.5vmax" class="mdi mdi-delete-forever"></span>
                         </v-btn>
                     </span>

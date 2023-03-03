@@ -10,6 +10,7 @@ const socket = io(backendURI);
 //ユーザー情報
 export var userinfo = {
     username: "Guest", //名前
+    role: "",
     userid: "", //ユーザーID
     loggedin: false, //ログイン状態
     sessionid: 0, //セッションID
@@ -78,6 +79,12 @@ export function getMessage(channelid, readLength) {
         channelid: channelid, //ほしい履歴のチャンネルID
         readLength: readLength //ほしい長さ
     });
+
+}
+
+//ユーザー情報返す
+export function getUserinfo() {
+    return userinfo;
 
 }
 
@@ -196,6 +203,7 @@ socket.on("infoResult", (dat) => {
             userinfo = {
                 username: dat.username,
                 userid: userinfo.userid, //ユーザーID
+                role: dat.role, //ロール
                 loggedin: true, //ログイン状態はそのまま
                 sessionid: userinfo.sessionid, //セッションIDはそのまま
                 channelJoined: dat.channelJoined, //参加しているチャンネル
@@ -251,6 +259,7 @@ socket.on("authResult", (dat) => {
         userinfo = {
             username: dat.username,
             userid: dat.userid, //ユーザーID
+            role: dat.role,
             loggedin: true, //ログイン状態
             sessionid: dat.sessionid, //セッションID
             channelJoined: dat.channelJoined, //参加しているチャンネル
