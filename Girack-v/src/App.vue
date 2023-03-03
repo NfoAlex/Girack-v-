@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 import { getSocket, channelIndex, userinfo, backendURI } from "./socket.js";
-import Login from "./components/Login.vue";
+import Auth from "./components/Auth.vue";
 </script>
 
 <script>
@@ -142,7 +142,7 @@ export default {
 
     <!-- ログイン前 -->
     <div v-else>
-        <Login @login="() => loggedin = true" />
+        <Auth @login="() => loggedin = true" />
     </div>
 
 </template>

@@ -49,7 +49,7 @@ export default {
         const checkCookie = setInterval( () => {
             if ( getCookie("sessionid") !== "" ) {
                 socket.emit("authByCookie", getCookie("sessionid"));
-                console.log("checkCookie :: 認証リクエスト送信");
+                //console.log("checkCookie :: 認証リクエスト送信");
                 clearInterval(checkCookie); //ループ削除
 
             }
@@ -68,7 +68,7 @@ export default {
             //ログインできたらページ移動
             if ( dat.result ) {
                 this.success = true; //成功を表示
-                setTimeout(() => this.$emit("login"), 1000); //1.5秒待ってから遷移
+                setTimeout(() => this.$emit("login"), 0); //1.5秒待ってから遷移
 
             } else {
                 this.error = true; //エラーを表示
