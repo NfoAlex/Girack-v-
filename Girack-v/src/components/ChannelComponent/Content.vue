@@ -344,7 +344,9 @@ export default {
                         </v-btn>
                         <!-- 削除ボタン -->
                         <v-btn v-if="getUserinfo().role==='Admin'||m.userid===getUserinfo().userid" @click="messageAction(conte.textid, m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                            <span style="font-size:1.5vmax" class="mdi mdi-delete-forever"></span>
+                            <span style="font-size:0.8vmax" class="mdi mdi-delete-forever">
+                            </span>
+                            削除
                         </v-btn>
                     </span>
 
