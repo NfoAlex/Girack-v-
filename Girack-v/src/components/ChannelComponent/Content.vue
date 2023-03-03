@@ -11,7 +11,10 @@ export default {
             uri: backendURI,
 
             NotAtBottom: true,
+
+            //ホバー処理用
             msgHovered: false,
+            msgContentIdHovering: 0,
             msgIdHovering: 0,
 
             goBottom: "goBottom" //下に行くボタン用CSSクラス
@@ -75,7 +78,7 @@ export default {
 
                 } else { //違う人のメッセージなら普通に表示
                     this.msgDB[msg.channelid].push({
-                        //id: this.msgDB[this.getPath].length+1,
+                        messageid: msg.messageid,
                         userid: msg.userid,
                         channelid: msg.channelid,
                         content: [
@@ -93,7 +96,7 @@ export default {
             catch(e) { //DBが空なら
                 this.msgDB[msg.channelid] = [];
                 this.msgDB[msg.channelid].push({
-                    //id: this.msgDB[msg.channelid].length+1,
+                    messageid: msg.messageid,
                     userid: msg.userid,
                     channelid: msg.channelid,
                     content: [msg.content]
@@ -194,18 +197,18 @@ export default {
         },
 
         //ホバー時アクション
-        mouseOverMsg(msgId, bool) {
+        mouseOverMsg(contentId, msgId, bool) {
             if ( bool === "on" ) {
-                //console.log("mouseOverMsg :: ON msgId -> ");
                 this.msgHovered = true;
+                this.msgContentIdHovering = contentId;
                 this.msgIdHovering = msgId;
-                //console.log(msgId);
 
             }
 
             if ( bool === "off" ) {
                 //console.log("mouseOverMsg :: OFF msgId -> " + msgId);
                 this.msgHovered = false;
+                this.msgContentIdHovering = null;
                 this.msgIdHovering = null;
 
             }
@@ -298,15 +301,16 @@ export default {
                 
                 <!-- ToDo:ここのフォントサイズの調整 -->
                 <p
-                    @mouseover="mouseOverMsg(conte.textid, 'on')"
-                    @mouseleave="mouseOverMsg(conte.textid, 'off')"
+                    @mouseover="mouseOverMsg(conte.textid, m.messageid, 'on')"
+                    @mouseleave="mouseOverMsg(conte.textid, m.messageid, 'off')"
                     style="font-size:16px"
                     v-for="conte in m.content"
                 >
 
                     {{ conte.text }}
 
-                    <span v-if="msgHovered && ( msgIdHovering === conte.textid )" style="float:right">
+                    <!-- コンポーネント化予定 -->
+                    <span v-if="msgHovered && ( msgContentIdHovering === conte.textid ) && ( msgIdHovering === m.messageid )" style="float:right">
                         <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === conte.textid )">
                             {{ printDate(conte.time) }}
                         </span>
