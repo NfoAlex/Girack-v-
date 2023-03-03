@@ -18,7 +18,7 @@ export var userinfo = {
 
 //サーバー(インスタンス)情報
 export var serverinfo = {
-    servername: null,
+    servername: "...",
     registerAvailable: null,
     inviteOnly: null
 };

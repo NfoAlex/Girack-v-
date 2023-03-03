@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getCookie } from "../socket.js";
+import { getSocket, getCookie, serverinfo } from "../socket.js";
 const socket = getSocket();
 
 export default {
@@ -7,16 +7,30 @@ export default {
 
     data() {
         return {
-            Connected: false,
-            pw: "",
-            success: false,
-            error: false
+            authWindow: ["authWindow","mx-auto"], //CSS用
+
+            servername: serverinfo.servername, //トップに表示する用
+
+            tab: null, //タブ用
+            Connected: false, //接続状況の保存用
+            usernameForRegister: "", //登録したいユーザー名
+            pwForAuth: "", //入力されたパスワード
+
+            success: false, //ログイン結果、成功用
+            error: false //ログイン結果、失敗用
         }
     },
 
     methods: {
         requestAuth() {
-            socket.emit("auth", this.pw);
+            socket.emit("auth", this.pwForAuth);
+            this.success = false;
+            this.error = false;
+
+        },
+
+        requestRegister() {
+            socket.emit("auth", this.usernameForRegister);
             this.success = false;
             this.error = false;
 
@@ -24,7 +38,13 @@ export default {
     },
 
     mounted() {
-        //クッキーが存在するなら認証開始
+        //console.log(this.$vuetify.theme);
+        //this.$vuetify.theme.current.dark = false;
+        //this.$vuetify.theme.set("light");
+
+        this.servername = serverinfo.servername;
+        
+        //サーバーに接続できるまでループでクッキーが存在するなら認証開始
         const checkCookie = setInterval( () => {
             if ( getCookie("sessionid") !== "" ) {
                 socket.emit("authByCookie", getCookie("sessionid"));
@@ -34,10 +54,9 @@ export default {
             }
 
             //Socketの接続が確認できていたらループ削除
-            if ( socket.connected ) {
-                clearInterval(checkCookie);
+            if ( socket.connected ) { //接続できているかどうか
+                clearInterval(checkCookie); //ループ削除
                 this.Connected = true;
-                console.log("checkCookie :: ループ削除");
 
             }
 
@@ -57,6 +76,19 @@ export default {
             
         });
 
+        //サーバー名表示用
+        socket.on("serverinfo", (dat) => {
+            this.servername = dat.servername;
+
+        });
+
+    },
+
+    unmounted() {
+        //通信初期化用
+        socket.off("authResult");
+        socket.off("serverinfo");
+
     }
 
 }
@@ -64,45 +96,110 @@ export default {
 </script>
 
 <template>
-    <v-alert
-        v-if="!Connected"
-        style="width:80%; margin: 1% auto"
-        type="error"
-        title="🤔"
-        text="サーバーつながってなくない?"
-    ></v-alert>
+    <p class="text-h4" style="margin:5% auto; text-align:center">
+        {{ servername }}
+    </p>
+    <v-card :class="authWindow" variant="tonal">
+        <v-tabs
+            v-model="tab"
+            bg-color="primary"
+            align-tabs="center"
+        >
+            <v-tab value="login">ログイン</v-tab>
+            <v-tab value="register">登録</v-tab>
+        </v-tabs>
 
-    <v-text-field
-        style="width:50%"
-        v-model="pw"
-        clearable
-        :disabled="!Connected"
-        label="パスワード"
-        hint="乱数のやつ"
-    ></v-text-field>
-    <br>
-    <v-btn :disabled="!Connected" @click="requestAuth">認証</v-btn>
-    <br>
+        <v-window v-model="tab">
+            <v-window-item value="login">
+                <p class="text-h6" style="margin:10% auto; text-align:center">
+                    Ayo
+                </p>
+                <div
+                    class="d-flex justify-center flex-column"
+                    style="margin:10% 10%;"
+                >
+                    <v-alert
+                        v-if="!Connected"
+                        style="margin: 3% auto"
+                        type="error"
+                        title="🤔"
+                        text="サーバーつながってなくない?"
+                    ></v-alert>
 
-    <v-alert
-        v-if="success"
-        style="width:80%; margin: 1% auto"
-        type="success"
-        title="ログイン成功"
-        text=""
-    ></v-alert>
+                    <p>パスワード</p>
+                    <v-text-field
+                        style="width:100%"
+                        v-model="pwForAuth"
+                        clearable
+                        :disabled="!Connected"
+                        label="パスワード"
+                        hint="乱数のやつ"
+                    ></v-text-field>
+                    <br>
+                    <v-btn :disabled="!Connected" @click="requestAuth" color="primary">認証</v-btn>
+                    <br>
 
-    <v-alert
-        v-if="error"
-        style="width:80%; margin: 1% auto"
-        type="error"
-        title="エラー"
-        text="ログイン失敗、パスワードを確認してね（またはBANされてそう）"
-    ></v-alert>
+                    <v-alert
+                        v-if="success"
+                        style="width:100%; margin: 3% auto"
+                        type="success"
+                        title="ログイン成功"
+                        text=""
+                    ></v-alert>
+
+                    <v-alert
+                        v-if="error"
+                        style="width:100%; margin: 3% auto"
+                        type="error"
+                        title="エラー"
+                        text="ログイン失敗、パスワードを確認してね（またはBANされてそう）"
+                    ></v-alert>
+                </div>
+            </v-window-item>
+
+            <v-window-item value="register">
+                <p class="text-h6" style="margin:10% auto; text-align:center">
+                    ようこそ!
+                </p>
+                <div
+                    class="d-flex justify-center flex-column"
+                    style="margin:10% 10%;"
+                >
+                    <v-alert
+                        v-if="!Connected"
+                        style="margin: 3% auto"
+                        type="error"
+                        title="🤔"
+                        text="サーバーつながってなくない?"
+                    ></v-alert>
+
+                    <p>パスワード</p>
+                    <v-text-field
+                        style="width:100%"
+                        v-model="usernameForRegister"
+                        clearable
+                        label="ユーザー名"
+                    ></v-text-field>
+                    <br>
+                    <v-btn :disabled="!Connected" @click="requestRegister" color="primary">登録</v-btn>
+                    <br>
+
+                </div>
+            </v-window-item>
+
+        </v-window>
+    </v-card>
 </template>
 
 <style scoped>
 
+.authWindow
+{
+    margin: 5%;
+    padding: 3% auto;
 
+    width: 30%;
+    height: 65%;
+}
 
 </style>
