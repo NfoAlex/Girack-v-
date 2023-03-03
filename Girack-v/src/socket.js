@@ -240,7 +240,8 @@ socket.on("messageResult", (history) => {
     for ( index in history ) {
         //配列が存在してなかったら新しく作って配置する
         try {
-            msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
+            //msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
+            msgDBbackup[channelid] = history; //履歴DBを更新
         }
         catch(e) {
             msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
