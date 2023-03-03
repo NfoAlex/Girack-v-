@@ -39,9 +39,12 @@ export default {
     mounted() {
         console.log("content :: ユーザーいんふぉ ↓");
         console.log(getUserinfo());
+
         let ref = this; //methodsの関数使う用（直接参照はできないため）
+
         this.msgDB = msgDBbackup; //使うメッセージDB
         this.userIndex = userIndexBackup; //使うユーザーの名前リスト
+        
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
         //スクロールした際に"下に行く"ボタンを表示するかどうか計算
@@ -68,8 +71,8 @@ export default {
                     target: "user",
                     targetid: msg.userid,
                     reqSender: {
-                        userid: userinfo.userid, //ユーザーID
-                        sessionid: userinfo.sessionid //セッションID
+                        userid: getUserinfo().userid, //ユーザーID
+                        sessionid: getUserinfo().sessionid //セッションID
                     }
                 });
 
@@ -78,8 +81,8 @@ export default {
             //名前が一つ前のメッセージと同じなら連続して表示
             try { //メッセージの長さが１個以上あるかどうか
                 //一つ前のメッセージと名前が同じなら
-                console.log("Content :: ");
-                console.log(this.msgDB[msg.channelid][4]);
+                // console.log("Content :: ");
+                // console.log(this.msgDB[msg.channelid][4]);
                 if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
                     this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
                     //this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
@@ -183,12 +186,6 @@ export default {
 
         },
 
-        //ユーザー情報を返すだけ
-        // getUserinfo() {
-        //     return userinfo;
-
-        // },
-
         //もし人のやつほしくなったら
         needUserIndex(userid) {
             socket.emit("getInfo", {
@@ -231,9 +228,20 @@ export default {
 
         },
 
-        messageAction(act, dat) {
+        messageAction(contentId, msgId, act) {
             if ( act === "delete" ) {
-                //socket.emit("")
+                console.log("messageAction :: 削除します");
+                //削除要請を送信
+                socket.emit("actMessage", {
+                    action: "delete",
+                    channelid: this.getPath,
+                    messageid: msgId,
+                    textid: contentId,
+                    reqSender: {
+                        userid: getUserinfo().userid,
+                        sessionid: getUserinfo().sessionid
+                    }
+                });
 
             }
 
@@ -335,7 +343,7 @@ export default {
                             🤔
                         </v-btn>
                         <!-- 削除ボタン -->
-                        <v-btn v-if="getUserinfo().role==='Admin'" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <v-btn v-if="getUserinfo().role==='Admin'||m.userid===getUserinfo().userid" @click="messageAction(conte.textid, m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             <span style="font-size:1.5vmax" class="mdi mdi-delete-forever"></span>
                         </v-btn>
                     </span>
