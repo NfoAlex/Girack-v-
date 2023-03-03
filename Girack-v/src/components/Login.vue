@@ -14,6 +14,7 @@ export default {
             tab: null, //タブ用
             Connected: false, //接続状況の保存用
             usernameForRegister: "", //登録したいユーザー名
+            codeForRegister: "",
             pwForAuth: "", //入力されたパスワード
 
             success: false, //ログイン結果、成功用
@@ -78,7 +79,7 @@ export default {
 
         //サーバー名表示用
         socket.on("serverinfo", (dat) => {
-            this.servername = dat.servername;
+            this.servername = dat.servername; //サーバーの名前更新
 
         });
 
@@ -132,9 +133,10 @@ export default {
                         v-model="pwForAuth"
                         clearable
                         :disabled="!Connected"
-                        label="パスワード"
                         hint="乱数のやつ"
-                    ></v-text-field>
+                    >
+                        <span style="margin-right:6px" class="mdi mdi-lock"></span>
+                    </v-text-field>
                     <br>
                     <v-btn :disabled="!Connected" @click="requestAuth" color="primary">認証</v-btn>
                     <br>
@@ -173,15 +175,24 @@ export default {
                         text="サーバーつながってなくない?"
                     ></v-alert>
 
-                    <p>パスワード</p>
+                    <p>ユーザー名</p>
                     <v-text-field
                         style="width:100%"
                         v-model="usernameForRegister"
                         clearable
-                        label="ユーザー名"
-                    ></v-text-field>
+                    >
+                        <span style="margin-right:6px" class="mdi mdi-account"></span>
+                    </v-text-field>
+
+                    <p>招待コード</p>
+                    <v-text-field
+                        style="width:100%"
+                        v-model="codeForRegister"
+                    >
+                        <span style="margin-right:6px" class="mdi mdi-human-edit"></span>
+                    </v-text-field>
                     <br>
-                    <v-btn :disabled="!Connected" @click="requestRegister" color="primary">登録</v-btn>
+                    <v-btn :disabled="!Connected && serverinfo.registerAvailable" @click="requestRegister" color="primary">登録</v-btn>
                     <br>
 
                 </div>
@@ -198,7 +209,7 @@ export default {
     margin: 5%;
     padding: 3% auto;
 
-    width: 30%;
+    width: 40%;
     height: 65%;
 }
 
