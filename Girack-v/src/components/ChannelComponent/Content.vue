@@ -290,7 +290,7 @@ export default {
 </script>
 
 <template>
-    <div id="channelWindow" style="height:100%; overflow-y:auto;">
+    <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
             
             <v-avatar size="x-large">
