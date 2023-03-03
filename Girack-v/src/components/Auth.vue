@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getCookie, serverinfo } from "../socket.js";
+import { getSocket, getCookie } from "../socket.js";
 const socket = getSocket();
 
 export default {
@@ -9,14 +9,24 @@ export default {
         return {
             authWindow: ["authWindow","mx-auto"], //CSS用
 
-            servername: serverinfo.servername, //トップに表示する用
+            //使うサーバーデータ
+            serverinfoLoaded: {
+                servername: "", //サーバーの名前
+                registerAvailable: false, //登録できるかどうか
+                inviteOnly: false //招待オンリーかどうか
+            },
 
-            tab: null, //タブ用
+            //見た目
+            tab: null, //ログインと登録のタブ用
             Connected: false, //接続状況の保存用
+
+            //入力用
             usernameForRegister: "", //登録したいユーザー名
-            codeForRegister: "",
+            invcodeForRegister: "", //登録に使う招待コード
             pwForAuth: "", //入力されたパスワード
 
+            //結果用
+            pwFromRegister: null, //登録したときにもらえるパスワード用
             success: false, //ログイン結果、成功用
             error: false //ログイン結果、失敗用
         }
@@ -31,7 +41,7 @@ export default {
         },
 
         requestRegister() {
-            socket.emit("auth", this.usernameForRegister);
+            socket.emit("register", [this.usernameForRegister,this.invcodeForRegister]);
             this.success = false;
             this.error = false;
 
@@ -43,7 +53,7 @@ export default {
         //this.$vuetify.theme.current.dark = false;
         //this.$vuetify.theme.set("light");
 
-        this.servername = serverinfo.servername;
+        this.servername = this.serverinfoLoaded.servername;
         
         //サーバーに接続できるまでループでクッキーが存在するなら認証開始
         const checkCookie = setInterval( () => {
@@ -77,9 +87,19 @@ export default {
             
         });
 
+        socket.on("registerEnd", (resultPassword) => {
+            if ( resultPassword === -1 ) {
+                return;
+
+            }
+
+            this.pwFromRegister = resultPassword; //パスワード更新
+
+        });
+
         //サーバー名表示用
         socket.on("serverinfo", (dat) => {
-            this.servername = dat.servername; //サーバーの名前更新
+            this.serverinfoLoaded = dat; //サーバーの情報
 
         });
 
@@ -98,7 +118,7 @@ export default {
 
 <template>
     <p class="text-h4" style="margin:5% auto; text-align:center">
-        {{ servername }}
+        {{ serverinfoLoaded.servername }}
     </p>
     <v-card :class="authWindow" variant="tonal">
         <v-tabs
@@ -107,10 +127,11 @@ export default {
             align-tabs="center"
         >
             <v-tab value="login">ログイン</v-tab>
-            <v-tab value="register">登録</v-tab>
+            <v-tab v-if="serverinfoLoaded.registerAvailable" value="register">登録</v-tab>
         </v-tabs>
 
         <v-window v-model="tab">
+            <!-- ログイン -->
             <v-window-item value="login">
                 <p class="text-h6" style="margin:10% auto; text-align:center">
                     Ayo
@@ -159,6 +180,7 @@ export default {
                 </div>
             </v-window-item>
 
+            <!-- 登録 -->
             <v-window-item value="register">
                 <p class="text-h6" style="margin:10% auto; text-align:center">
                     ようこそ!
@@ -175,25 +197,37 @@ export default {
                         text="サーバーつながってなくない?"
                     ></v-alert>
 
-                    <p>ユーザー名</p>
-                    <v-text-field
-                        style="width:100%"
-                        v-model="usernameForRegister"
-                        clearable
-                    >
-                        <span style="margin-right:6px" class="mdi mdi-account"></span>
-                    </v-text-field>
+                    <div v-if="pwFromRegister===null"><!--登録前用-->
+                        <p>ユーザー名</p>
+                        <v-text-field
+                            style="width:100%"
+                            v-model="usernameForRegister"
+                            clearable
+                        >
+                            <span style="margin-right:6px" class="mdi mdi-account"></span>
+                        </v-text-field>
 
-                    <p>招待コード</p>
-                    <v-text-field
-                        style="width:100%"
-                        v-model="codeForRegister"
-                    >
-                        <span style="margin-right:6px" class="mdi mdi-human-edit"></span>
-                    </v-text-field>
-                    <br>
-                    <v-btn :disabled="!Connected && serverinfo.registerAvailable" @click="requestRegister" color="primary">登録</v-btn>
-                    <br>
+                        <div v-if="serverinfoLoaded.inviteOnly">
+                            <p>招待コード</p>
+                            <v-text-field
+                                style="width:100%"
+                                v-model="invcodeForRegister"
+                            >
+                                <span style="margin-right:6px" class="mdi mdi-human-edit"></span>
+                            </v-text-field>
+                        </div>
+                        <br>
+                        <v-btn :disabled="!Connected && serverinfo.registerAvailable" @click="requestRegister" color="primary">登録</v-btn>
+                        <br>
+                    </div>
+                    <div v-if="pwFromRegister!==null"><!--登録後-->
+                        <p class="text-h4" style="text-align:center">🥰</p>
+                        <p class="text-h5" style="text-align:center">登録あざ</p>
+                        <br>
+                        <v-text-field v-model="pwFromRegister" readonly>
+                            <span class="mdi mdi-lock"></span>
+                        </v-text-field>
+                    </div>
 
                 </div>
             </v-window-item>
