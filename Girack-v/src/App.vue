@@ -46,17 +46,19 @@ export default {
             
         });
 
+        //データ更新用チャンネルバーの更新
         socket.on("infoResult", (dat) => {
+            //もし受け取ったデータがチャンネル用かユーザー用かならチャンネルバー更新
             if ( dat.type === "channel" || dat.type === "user" ) {
                 
                 this.channelIndexListing = channelIndex;
                 this.channelJoined = userinfo.channelJoined;
 
-                this.$forceUpdate();
+                this.$forceUpdate(); //レンダー更新
 
-                console.log("infoResult :: チャンネルリスト更新したい");
-                console.log(channelIndex);
-                console.log(userinfo.channelJoined);
+                // console.log("infoResult :: チャンネルリスト更新したい");
+                // console.log(channelIndex);
+                // console.log(userinfo.channelJoined);
 
             }
 
@@ -65,7 +67,7 @@ export default {
     },
 
     unmounted() {
-        socket.off("infoResult");
+        socket.off("infoResult"); //重複防止
 
     }
 
