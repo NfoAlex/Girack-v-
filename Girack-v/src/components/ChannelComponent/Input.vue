@@ -1,5 +1,5 @@
 <script setup>
-import { userinfo, channelIndex, getSocket } from '../../socket.js';
+import { getUserinfo, channelIndex, getSocket } from '../../socket.js';
 </script>
 
 <script>
@@ -17,16 +17,16 @@ export default {
         //メッセージを送信する
         msgSend() {
             socket.emit("msgSend", {
-                userid: userinfo.userid, //名前
+                userid: getUserinfo().userid, //名前
                 channelid: this.getPath, //チャンネルID
-                sessionid: userinfo.sessionid, //セッションID);
+                sessionid: getUserinfo().sessionid, //セッションID);
                 content: {
                     text: this.txt,
                 } //内容
             });
             this.txt = ""; //入力欄を空に
             console.log("sended ↓");
-            console.log(userinfo);
+            //console.log(userinfo);
             // console.log({
             //     userid: userinfo.userid, //名前
             //     content: this.txt, //内容
@@ -35,6 +35,7 @@ export default {
             // });
 
         },
+
         //Enterキー押されたときの処理
         funcEnter( event ) {
             if ( event.key === "Enter" && this.$refs.inp.focused === true ) {
@@ -43,6 +44,7 @@ export default {
             }
 
         },
+        
         getChannelname() {
             return channelIndex[this.getPath].channelname;
 
