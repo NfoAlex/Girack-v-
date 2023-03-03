@@ -27,6 +27,7 @@ export default {
 
             //結果用
             pwFromRegister: null, //登録したときにもらえるパスワード用
+            registerResult: 0, //登録結果用,
             success: false, //ログイン結果、成功用
             error: false //ログイン結果、失敗用
         }
@@ -44,6 +45,7 @@ export default {
             socket.emit("register", [this.usernameForRegister,this.invcodeForRegister]);
             this.success = false;
             this.error = false;
+            this.registerResult = 0;
 
         }
     },
@@ -89,11 +91,13 @@ export default {
 
         socket.on("registerEnd", (resultPassword) => {
             if ( resultPassword === -1 ) {
+                this.registerResult = -1;
                 return;
 
             }
 
             this.pwFromRegister = resultPassword; //パスワード更新
+            this.registerResult = 1;
 
         });
 
@@ -197,8 +201,10 @@ export default {
                         text="サーバーつながってなくない?"
                     ></v-alert>
 
-                    <div v-if="pwFromRegister===null"><!--登録前用-->
+                    <div v-if="registerResult<=0"><!--登録前用-->
+
                         <p>ユーザー名</p>
+
                         <v-text-field
                             style="width:100%"
                             v-model="usernameForRegister"
@@ -216,11 +222,21 @@ export default {
                                 <span style="margin-right:6px" class="mdi mdi-human-edit"></span>
                             </v-text-field>
                         </div>
+
                         <br>
                         <v-btn :disabled="!Connected && serverinfo.registerAvailable" @click="requestRegister" color="primary">登録</v-btn>
                         <br>
+
+                        <v-alert
+                        v-if="registerResult===-1"
+                        style="width:100%; margin: 3% auto"
+                        type="error"
+                        title="エラー"
+                        text="登録失敗、招待コード合ってる?"
+                    ></v-alert>
+
                     </div>
-                    <div v-if="pwFromRegister!==null"><!--登録後-->
+                    <div v-if="registerResult===1"><!--登録後-->
                         <p class="text-h4" style="text-align:center">🥰</p>
                         <p class="text-h5" style="text-align:center">登録あざ</p>
                         <br>
