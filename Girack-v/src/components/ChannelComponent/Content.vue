@@ -217,6 +217,27 @@ export default {
 
         },
 
+        //アバターを表示するかどうか
+        checkShowAvatar(userid, index) {
+            
+            try {
+                console.log("checkShowAvatar :: " + this.msgDB[this.getPath][index-1].userid + ", " + userid);
+                if ( this.msgDB[this.getPath][index-1].userid === userid ) {
+                    return false;
+
+                } else {
+                    return true;
+
+                }
+
+            }
+            catch(e) {
+                return true;
+
+            }
+
+        },
+
         //スクロールさせるだけの関数
         scrollIt() {
             channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
@@ -318,16 +339,16 @@ export default {
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
-        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
+        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="(m, index) in msgDB[$route.params.id]">
             
-            <v-avatar size="x-large">
+            <v-avatar size="x-large" v-if="checkShowAvatar(m.userid, index)">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
             <!-- メッセージ本体 -->
             <v-card class="rounded-lg" variant="tonal" style="; width:85.5%; padding:1% 1%;">
                 
-                <div :class="'text-h6'">
+                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
                         v-if="getRole(m.userid)!=='Member'"
