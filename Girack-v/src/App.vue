@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 import { getSocket, channelIndex, userinfo, backendURI } from "./socket.js";
-import Login from "./components/Login.vue";
+import Auth from "./components/Auth.vue";
 </script>
 
 <script>
@@ -46,17 +46,15 @@ export default {
             
         });
 
+        //データ更新用チャンネルバーの更新
         socket.on("infoResult", (dat) => {
+            //もし受け取ったデータがチャンネル用かユーザー用かならチャンネルバー更新
             if ( dat.type === "channel" || dat.type === "user" ) {
                 
                 this.channelIndexListing = channelIndex;
                 this.channelJoined = userinfo.channelJoined;
 
-                this.$forceUpdate();
-
-                console.log("infoResult :: チャンネルリスト更新したい");
-                console.log(channelIndex);
-                console.log(userinfo.channelJoined);
+                this.$forceUpdate(); //レンダー更新
 
             }
 
@@ -65,7 +63,7 @@ export default {
     },
 
     unmounted() {
-        socket.off("infoResult");
+        socket.off("infoResult"); //重複防止
 
     }
 
@@ -104,14 +102,14 @@ export default {
             
             <nav style="margin:5% auto; width:90%;">
                 <RouterLink :to="'/jsonviewer'">
-                    <v-btn variant="outlined" style="width:100%; text-align:left !important">
+                    <v-btn :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
                             JSONviewer(debug)
                         </span>
                     </v-btn>
                 </RouterLink>
                 <RouterLink :to="'/browser'">
-                    <v-btn variant="outlined" style="width:100%; text-align:left !important">
+                    <v-btn :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
                             <span class="mdi mdi-text-search">チャンネルブラウザ</span>
                         </span>
@@ -142,7 +140,7 @@ export default {
 
     <!-- ログイン前 -->
     <div v-else>
-        <Login @login="() => loggedin = true" />
+        <Auth @login="() => loggedin = true" />
     </div>
 
 </template>
