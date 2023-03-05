@@ -56,10 +56,6 @@ export default {
 
                 this.$forceUpdate(); //レンダー更新
 
-                // console.log("infoResult :: チャンネルリスト更新したい");
-                // console.log(channelIndex);
-                // console.log(userinfo.channelJoined);
-
             }
 
         });
@@ -106,14 +102,14 @@ export default {
             
             <nav style="margin:5% auto; width:90%;">
                 <RouterLink :to="'/jsonviewer'">
-                    <v-btn variant="outlined" style="width:100%; text-align:left !important">
+                    <v-btn :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
                             JSONviewer(debug)
                         </span>
                     </v-btn>
                 </RouterLink>
                 <RouterLink :to="'/browser'">
-                    <v-btn variant="outlined" style="width:100%; text-align:left !important">
+                    <v-btn :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
                             <span class="mdi mdi-text-search">チャンネルブラウザ</span>
                         </span>
