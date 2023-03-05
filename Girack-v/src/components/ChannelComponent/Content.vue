@@ -79,43 +79,6 @@ export default {
 
             }
 
-            //名前が一つ前のメッセージと同じなら連続して表示
-            // try { //メッセージの長さが１個以上あるかどうか
-            //     //一つ前のメッセージと名前が同じなら
-            //     // console.log("Content :: ");
-            //     // console.log(this.msgDB[msg.channelid][4]);
-            //     if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
-            //         this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
-            //         //this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
-
-            //     } else { //違う人のメッセージなら普通に表示
-            //         this.msgDB[msg.channelid].push({
-            //             messageid: msg.messageid,
-            //             userid: msg.userid,
-            //             channelid: msg.channelid,
-            //             content: [
-            //                 {
-            //                     textid: msg.content.textid,
-            //                     text: msg.content.text,
-            //                     time: msg.content.time,
-            //                     reaction: []
-            //                 }
-            //             ]
-            //         });
-
-            //     }
-            // }
-            // catch(e) { //DBが空なら
-            //     this.msgDB[msg.channelid] = [];
-            //     this.msgDB[msg.channelid].push({
-            //         messageid: msg.messageid,
-            //         userid: msg.userid,
-            //         channelid: msg.channelid,
-            //         content: [msg.content]
-            //     });
-
-            // }
-
             try{
                 //ローカルDBに追加
                 this.msgDB[msg.channelid].push({
@@ -219,20 +182,19 @@ export default {
 
         //アバターを表示するかどうか
         checkShowAvatar(userid, index) {
-            
             try {
-                console.log("checkShowAvatar :: " + this.msgDB[this.getPath][index-1].userid + ", " + userid);
-                if ( this.msgDB[this.getPath][index-1].userid === userid ) {
-                    return false;
+                //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
+                if ( this.msgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                    return false; //同じだから表示しない
 
                 } else {
-                    return true;
+                    return true; //違うから表示する
 
                 }
 
             }
             catch(e) {
-                return true;
+                return true; //最初だったりするときはとにかく表示する
 
             }
 
