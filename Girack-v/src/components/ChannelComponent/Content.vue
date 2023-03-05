@@ -57,6 +57,7 @@ export default {
         socket.on("msgReceive", (msg) => {
             console.log("msgReceive :: ↓");
             console.log(msg);
+
             //スクロールしきっているか確認
             let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
             console.log("scrolledState -> " + scrolledState);
@@ -79,40 +80,55 @@ export default {
             }
 
             //名前が一つ前のメッセージと同じなら連続して表示
-            try { //メッセージの長さが１個以上あるかどうか
-                //一つ前のメッセージと名前が同じなら
-                // console.log("Content :: ");
-                // console.log(this.msgDB[msg.channelid][4]);
-                if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
-                    this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
-                    //this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
+            // try { //メッセージの長さが１個以上あるかどうか
+            //     //一つ前のメッセージと名前が同じなら
+            //     // console.log("Content :: ");
+            //     // console.log(this.msgDB[msg.channelid][4]);
+            //     if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
+            //         this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
+            //         //this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
 
-                } else { //違う人のメッセージなら普通に表示
-                    this.msgDB[msg.channelid].push({
-                        messageid: msg.messageid,
-                        userid: msg.userid,
-                        channelid: msg.channelid,
-                        content: [
-                            {
-                                textid: msg.content.textid,
-                                text: msg.content.text,
-                                time: msg.content.time,
-                                reaction: []
-                            }
-                        ]
-                    });
+            //     } else { //違う人のメッセージなら普通に表示
+            //         this.msgDB[msg.channelid].push({
+            //             messageid: msg.messageid,
+            //             userid: msg.userid,
+            //             channelid: msg.channelid,
+            //             content: [
+            //                 {
+            //                     textid: msg.content.textid,
+            //                     text: msg.content.text,
+            //                     time: msg.content.time,
+            //                     reaction: []
+            //                 }
+            //             ]
+            //         });
 
-                }
-            }
-            catch(e) { //DBが空なら
-                this.msgDB[msg.channelid] = [];
+            //     }
+            // }
+            // catch(e) { //DBが空なら
+            //     this.msgDB[msg.channelid] = [];
+            //     this.msgDB[msg.channelid].push({
+            //         messageid: msg.messageid,
+            //         userid: msg.userid,
+            //         channelid: msg.channelid,
+            //         content: [msg.content]
+            //     });
+
+            // }
+
+            try{
+                //ローカルDBに追加
                 this.msgDB[msg.channelid].push({
                     messageid: msg.messageid,
                     userid: msg.userid,
                     channelid: msg.channelid,
-                    content: [msg.content]
+                    time: msg.time,
+                    content: msg.content,
+                    reaction: msg.reaction
                 });
-
+            }
+            catch(e) {
+                console.log("Content :: msgDB書き込みエラー");
             }
 
             //スクロールされきっていたら最後へ自動スクロールする
@@ -208,10 +224,9 @@ export default {
         },
 
         //ホバー時アクション
-        mouseOverMsg(contentId, msgId, bool) {
+        mouseOverMsg(msgId, bool) {
             if ( bool === "on" ) {
                 this.msgHovered = true;
-                this.msgContentIdHovering = contentId;
                 this.msgIdHovering = msgId;
 
             }
@@ -219,7 +234,6 @@ export default {
             if ( bool === "off" ) {
                 //console.log("mouseOverMsg :: OFF msgId -> " + msgId);
                 this.msgHovered = false;
-                this.msgContentIdHovering = null;
                 this.msgIdHovering = null;
 
             }
@@ -228,7 +242,8 @@ export default {
 
         },
 
-        messageAction(contentId, msgId, act) {
+        //削除したりリアクションしたり編集(ToDo)したり
+        messageAction(msgId, act) {
             if ( act === "delete" ) {
                 console.log("messageAction :: 削除します");
                 //削除要請を送信
@@ -236,7 +251,6 @@ export default {
                     action: "delete",
                     channelid: this.getPath,
                     messageid: msgId,
-                    textid: contentId,
                     reqSender: {
                         userid: getUserinfo().userid,
                         sessionid: getUserinfo().sessionid
@@ -299,6 +313,11 @@ export default {
 
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
+        
+        <div style="padding:10%" v-if="!msgDB[$route.params.id]">
+            <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
+        </div>
+
         <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
             
             <v-avatar size="x-large">
@@ -306,7 +325,7 @@ export default {
             </v-avatar>
 
             <!-- メッセージ本体 -->
-            <v-card class="rounded-lg" variant="tonal" elevation="4" style="; width:85.5%; padding:1% 1%;">
+            <v-card class="rounded-lg" variant="tonal" style="; width:85.5%; padding:1% 1%;">
                 
                 <div :class="'text-h6'">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
@@ -323,18 +342,17 @@ export default {
                 
                 <!-- ToDo:ここのフォントサイズの調整 -->
                 <p
-                    @mouseover="mouseOverMsg(conte.textid, m.messageid, 'on')"
-                    @mouseleave="mouseOverMsg(conte.textid, m.messageid, 'off')"
+                    @mouseover="mouseOverMsg(m.messageid, 'on')"
+                    @mouseleave="mouseOverMsg(m.messageid, 'off')"
                     style="font-size:16px"
-                    v-for="conte in m.content"
                 >
 
-                    {{ conte.text }}
+                    {{ m.content }}
 
                     <!-- コンポーネント化予定 -->
-                    <span v-if="msgHovered && ( msgContentIdHovering === conte.textid ) && ( msgIdHovering === m.messageid )" style="float:right">
-                        <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === conte.textid )">
-                            {{ printDate(conte.time) }}
+                    <span v-if="msgHovered && ( msgIdHovering === m.messageid )" style="float:right">
+                        <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === m.messageid )">
+                            {{ printDate(m.time) }}
                         </span>
                         <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             😀
@@ -343,15 +361,15 @@ export default {
                             🤔
                         </v-btn>
                         <!-- 削除ボタン -->
-                        <v-btn v-if="getUserinfo().role==='Admin'||m.userid===getUserinfo().userid" @click="messageAction(conte.textid, m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <v-btn v-if="getUserinfo().role==='Admin'||m.userid===getUserinfo().userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             <span style="font-size:0.8vmax" class="mdi mdi-delete-forever">
                             </span>
                             削除
                         </v-btn>
                     </span>
 
-                    <br v-if="conte.reaction">
-                    <v-chip size="small" color="white" v-for="r in conte.reaction">
+                    <br v-if="m.reaction">
+                    <v-chip size="small" color="white" v-for="r in m.reaction">
                         {{ getReaction(Object.keys(r)[0]) }} {{ r[Object.keys(r)[0]] }}
                     </v-chip>
 

@@ -20,9 +20,7 @@ export default {
                 userid: getUserinfo().userid, //名前
                 channelid: this.getPath, //チャンネルID
                 sessionid: getUserinfo().sessionid, //セッションID);
-                content: {
-                    text: this.txt,
-                } //内容
+                content: this.txt
             });
             this.txt = ""; //入力欄を空に
             console.log("sended ↓");
@@ -67,16 +65,19 @@ export default {
 
 <template>
     <div class="d-flex flex-row bg-surface-variant">
+
         <v-text-field
             ref="inp"
-            :label="getChannelname() + 'へ送信'"
+            :placeholder="getChannelname() + 'へ送信'"
             variant="solo"
             style="margin:0 2% 0 5%;"
             clearable
             v-model="txt"
         ></v-text-field>
-        <v-btn class="rounded-lg mdi mdi-send-outline" style="margin-right:1vw;" icon="" @click="msgSend" color="primary">
+
+        <v-btn class="rounded-lg mdi mdi-send-outline" style="margin-right:1vw;" elevation="0" icon="" @click="msgSend" color="primary">
         </v-btn>
+
     </div>
 
 </template>
