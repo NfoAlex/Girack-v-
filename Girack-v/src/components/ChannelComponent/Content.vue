@@ -308,7 +308,7 @@ export default {
             </v-avatar>
 
             <!-- メッセージ本体 -->
-            <v-card class="rounded-lg" variant="tonal" style="; width:85.5%; padding:1% 1%;">
+            <v-card class="rounded-lg" variant="tonal" style="; width:85.5%; padding:1.5% 1%;">
                 
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
