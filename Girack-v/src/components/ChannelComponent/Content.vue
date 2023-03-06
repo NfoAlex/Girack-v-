@@ -3,10 +3,7 @@ import { getSocket, getUserinfo, backendURI, msgDBbackup, userIndexBackup, backu
 
 </script>
 <script>
-//import { getSocket, getUserinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
-
 const socket = getSocket();
-//const getUserinfo = getUserinfo();
 
 export default {
 
