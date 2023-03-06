@@ -216,7 +216,10 @@ socket.on("infoResult", (dat) => {
 });
 
 //メッセージの履歴受け取り
-socket.on("messageResult", (history) => {
+socket.on("messageHistory", (history) => {
+    console.log("messageResult :: history ↓");
+    console.log(history);
+
     if ( history === 0 ) {
         console.log("このチャンネル履歴空だわ");
         return;
