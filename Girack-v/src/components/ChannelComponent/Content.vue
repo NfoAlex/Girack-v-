@@ -360,14 +360,14 @@ export default {
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
-        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
+        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
             
             <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="x-large">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
             <!-- メッセージ本体 -->
-            <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:87.5%; padding:0% 1%;">
+            <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:87.5%; padding:0 1%;">
                 
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
@@ -412,7 +412,7 @@ export default {
 
                     <br v-if="m.reaction">
                     <!-- リアクション -->
-                    <v-chip style="margin-right:8px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                    <v-chip style="margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
                         {{ getReaction(r[0]) }} {{ r[1] }}
                     </v-chip>
 
