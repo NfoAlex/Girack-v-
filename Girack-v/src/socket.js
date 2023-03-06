@@ -9,7 +9,7 @@ const socket = io(backendURI);
 
 //ユーザー情報
 export var userinfo = {
-    username: "Guest", //名前
+    username: null, //名前
     role: "",
     userid: "", //ユーザーID
     loggedin: false, //ログイン状態
@@ -39,19 +39,19 @@ export var msgDBbackup = {
     // "001": [
     //     {
     //         id: 0,
-    //         username: "",
+    //         username: "asdf",
     //         userid: "xx0",
     //         channelid: "001",
     //         time: "20200217165240643",
-    //         content: ["Ayo", "abc", "そしてこれが３つ目"]
+    //         content: "Ayo"
     //     },
     //     {
     //         id: 1,
-    //         username: "",
+    //         username: "fdsa",
     //         userid: "xx1",
     //         channelid: "001",
     //         time: "20200227165240646",
-    //         content: ["は", "誰お前"]
+    //         content: "は"
     //     }
     // ]
 };
@@ -216,7 +216,10 @@ socket.on("infoResult", (dat) => {
 });
 
 //メッセージの履歴受け取り
-socket.on("messageResult", (history) => {
+socket.on("messageHistory", (history) => {
+    console.log("messageResult :: history ↓");
+    console.log(history);
+
     if ( history === 0 ) {
         console.log("このチャンネル履歴空だわ");
         return;
@@ -235,7 +238,7 @@ socket.on("messageResult", (history) => {
     }
 
     let index = 0; //チャンネル参照インデックス変数
-
+    
     //履歴の長さ分DBへ追加
     for ( index in history ) {
         //配列が存在してなかったら新しく作って配置する
@@ -251,6 +254,38 @@ socket.on("messageResult", (history) => {
     }
 
 });
+
+//メッセージの更新
+// socket.on("messageUpdate", (dat) => {
+//     //メッセージ消したりリアクションされたり
+//     /*
+//     {
+//         action: "delete"|"reaction",
+//         channelid: dat.channelid,
+//         messageid: dat.messageid,
+//         ["reaction"だったら]
+//         reaction: dat.reaction
+//     }
+//     */
+
+//     switch( dat.action ) {
+//         //削除する
+//         case "delete":
+//             //ループでIDが一致するメッセージを探す
+//             for ( let index in msgDBbackup[dat.channelid] ) {
+//                 if ( msgDBbackup[dat.channelid][index].messageid === dat.messageid ) {
+//                     msgDBbackup[dat.channelid].splice(index,1); //削除
+
+//                 }
+
+//             }
+
+//         default:
+//             break;
+
+//     }
+
+// });
 
 //認証結果
 socket.on("authResult", (dat) => {

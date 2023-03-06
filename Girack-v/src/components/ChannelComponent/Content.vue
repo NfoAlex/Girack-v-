@@ -3,25 +3,21 @@ import { getSocket, getUserinfo, backendURI, msgDBbackup, userIndexBackup, backu
 
 </script>
 <script>
-//import { getSocket, getUserinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
-
 const socket = getSocket();
-//const getUserinfo = getUserinfo();
 
 export default {
 
     data() {
         return {
             msgDB: {},
-            userIndex: {},
-            uri: backendURI,
+            userIndex: {}, //ユーザー情報
+            uri: backendURI, //バックエンドのURI
 
-            NotAtBottom: true,
+            NotAtBottom: true, //一番下にスクロールしたかどうか
 
             //ホバー処理用
-            msgHovered: false,
-            msgContentIdHovering: 0,
-            msgIdHovering: 0,
+            msgHovered: false, //ホバーされたかどうか
+            msgIdHovering: 0, //ホバーされたメッセージのID
 
             goBottom: "goBottom" //下に行くボタン用CSSクラス
         }
@@ -42,7 +38,7 @@ export default {
 
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
-        this.msgDB = msgDBbackup; //使うメッセージDB
+        this.msgDB = msgDBbackup; //メッセージDBを持ってくる
         this.userIndex = userIndexBackup; //使うユーザーの名前リスト
         
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
@@ -78,43 +74,6 @@ export default {
                 });
 
             }
-
-            //名前が一つ前のメッセージと同じなら連続して表示
-            // try { //メッセージの長さが１個以上あるかどうか
-            //     //一つ前のメッセージと名前が同じなら
-            //     // console.log("Content :: ");
-            //     // console.log(this.msgDB[msg.channelid][4]);
-            //     if ( this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].userid === msg.userid ) {
-            //         this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].content.push(msg.content); //メッセージ配列に追加
-            //         //this.msgDB[msg.channelid][this.msgDB[msg.channelid].length-1].time = msg.time;
-
-            //     } else { //違う人のメッセージなら普通に表示
-            //         this.msgDB[msg.channelid].push({
-            //             messageid: msg.messageid,
-            //             userid: msg.userid,
-            //             channelid: msg.channelid,
-            //             content: [
-            //                 {
-            //                     textid: msg.content.textid,
-            //                     text: msg.content.text,
-            //                     time: msg.content.time,
-            //                     reaction: []
-            //                 }
-            //             ]
-            //         });
-
-            //     }
-            // }
-            // catch(e) { //DBが空なら
-            //     this.msgDB[msg.channelid] = [];
-            //     this.msgDB[msg.channelid].push({
-            //         messageid: msg.messageid,
-            //         userid: msg.userid,
-            //         channelid: msg.channelid,
-            //         content: [msg.content]
-            //     });
-
-            // }
 
             try{
                 //ローカルDBに追加
@@ -158,6 +117,53 @@ export default {
             this.userIndex[userid].role = role; //ロール
 
             backupUser(this.userIndex); //ユーザー情報をバックアップ
+
+        });
+
+        //メッセージの更新
+        socket.on("messageUpdate", (dat) => {
+            //メッセージ消したりリアクションされたり
+            /*
+            {
+                action: "delete"|"reaction",
+                channelid: dat.channelid,
+                messageid: dat.messageid,
+                ["reaction"だったら]
+                reaction: dat.reaction
+            }
+            */
+
+            switch( dat.action ) {
+                //削除する
+                case "delete":
+                    //ループでIDが一致するメッセージを探す
+                    for ( let index in this.msgDB[dat.channelid] ) {
+                        if ( this.msgDB[dat.channelid][index].messageid === dat.messageid ) {
+                            this.msgDB[dat.channelid].splice(index,1); //削除
+
+                        }
+
+                    }
+                    break;
+
+                //リアクションをつける
+                case "reaction":
+                    console.log("Content :: これからリアクション");
+                    console.log(dat);
+                    for ( let index in this.msgDB[dat.channelid] ) {
+                        if ( this.msgDB[dat.channelid][index].messageid === dat.messageid ) {
+                            this.msgDB[dat.channelid][index].reaction = dat.reaction; //リアクション更新
+
+                        }
+
+                    }
+
+                default:
+                    break;
+
+            }
+
+            backupMsg(this.msgDB); //メッセージDBの出力、保存
 
         });
 
@@ -217,6 +223,26 @@ export default {
 
         },
 
+        //アバターを表示するかどうか
+        checkShowAvatar(userid, index) {
+            try {
+                //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
+                if ( this.msgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                    return false; //同じだから表示しない
+
+                } else {
+                    return true; //違うから表示する
+
+                }
+
+            }
+            catch(e) {
+                return true; //最初だったりするときはとにかく表示する
+
+            }
+
+        },
+
         //スクロールさせるだけの関数
         scrollIt() {
             channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
@@ -243,7 +269,8 @@ export default {
         },
 
         //削除したりリアクションしたり編集(ToDo)したり
-        messageAction(msgId, act) {
+        messageAction(msgId, act, reaction) {
+            //削除する
             if ( act === "delete" ) {
                 console.log("messageAction :: 削除します");
                 //削除要請を送信
@@ -257,6 +284,21 @@ export default {
                     }
                 });
 
+            }
+
+            //リアクションする
+            if ( act === "reaction" ) {
+                //リアクションしたことを送信
+                socket.emit("actMessage", {
+                    action: "reaction",
+                    channelid: this.getPath,
+                    messageid: msgId,
+                    reaction: reaction, //送るリアクション
+                    reqSender: {
+                        userid: getUserinfo().userid,
+                        sessionid: getUserinfo().sessionid
+                    }
+                });
             }
 
         },
@@ -314,20 +356,20 @@ export default {
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         
-        <div style="padding:10%" v-if="!msgDB[$route.params.id]">
+        <div style="padding:10%" v-if="!msgDBbackup[$route.params.id]">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
-        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="m in msgDB[$route.params.id]">
+        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
             
-            <v-avatar size="x-large">
+            <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="x-large">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
             <!-- メッセージ本体 -->
-            <v-card class="rounded-lg" variant="tonal" style="; width:85.5%; padding:1% 1%;">
+            <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:87.5%; padding:0% 1%;">
                 
-                <div :class="'text-h6'">
+                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
                         v-if="getRole(m.userid)!=='Member'"
@@ -335,7 +377,7 @@ export default {
                         size="x-small"
                         :elevation="6"
                     >
-                    {{ getRole(m.userid) }}
+                        {{ getRole(m.userid) }}
                     </v-chip>
                     
                 </div>
@@ -354,10 +396,10 @@ export default {
                         <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === m.messageid )">
                             {{ printDate(m.time) }}
                         </span>
-                        <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             😀
                         </v-btn>
-                        <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             🤔
                         </v-btn>
                         <!-- 削除ボタン -->
@@ -369,13 +411,14 @@ export default {
                     </span>
 
                     <br v-if="m.reaction">
-                    <v-chip size="small" color="white" v-for="r in m.reaction">
-                        {{ getReaction(Object.keys(r)[0]) }} {{ r[Object.keys(r)[0]] }}
+                    <!-- リアクション -->
+                    <v-chip style="margin-right:8px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                        {{ getReaction(r[0]) }} {{ r[1] }}
                     </v-chip>
 
                 </p>
 
-            </v-card>
+            </span>
 
         </div>
     </div>
@@ -399,7 +442,12 @@ export default {
     height: 4vmax;
     max-height: 5vh;
 
-    background-color: grey;
+    background-color: gray;
+}
+
+.hovered
+{
+    background: #333333;
 }
 
 </style>
