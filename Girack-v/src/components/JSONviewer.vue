@@ -35,7 +35,7 @@ export default {
 </script>
 
 <template>
-    <div style="padding:3%; overflow:scroll !important;">
+    <div style="padding:3%; overflow:auto; height:100%">
         <v-btn variant="outlined" block>
             データ更新
         </v-btn>
