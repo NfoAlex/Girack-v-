@@ -128,6 +128,7 @@ export default {
     //アンロード時の処理
     unmounted() {
         socket.off("msgReceive"); //メッセージの受け取り中止
+        channelWindow.removeEventListener("scroll"); //スクロールの監視停止
 
     },
 
@@ -303,7 +304,7 @@ export default {
         <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
             
             <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="x-large">
-                <v-img  :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
+                <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
             <!-- メッセージ本体 -->
