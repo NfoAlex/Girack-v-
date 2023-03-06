@@ -301,14 +301,14 @@ export default {
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
-        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:space-evenly;" v-for="(m, index) in msgDB[$route.params.id]">
+        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
             
-            <v-avatar size="x-large" v-if="checkShowAvatar(m.userid, index)">
-                <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
+            <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="x-large">
+                <v-img  :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
             <!-- メッセージ本体 -->
-            <v-card class="rounded-lg" variant="tonal" style="; width:85.5%; padding:1.5% 1%;">
+            <span class="rounded-lg" variant="tonal" style="width:87.5%; padding:0% 1%;">
                 
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
@@ -358,7 +358,7 @@ export default {
 
                 </p>
 
-            </v-card>
+            </span>
 
         </div>
     </div>

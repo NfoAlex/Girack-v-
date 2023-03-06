@@ -104,7 +104,7 @@ export default {
             <v-list-item
                 v-for="c in Object.entries(channelList)"
             >
-                <v-card variant="tonal" class="rounded-lg" style="padding:3% 3%; margin-top:8px;">
+                <v-card variant="tonal" class="rounded-lg" style="padding:2% 2%; margin-top:8px;">
                     <p class="text-h6">
                         {{ c[1].name }}
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
