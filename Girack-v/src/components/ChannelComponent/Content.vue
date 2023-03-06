@@ -128,7 +128,6 @@ export default {
     //アンロード時の処理
     unmounted() {
         socket.off("msgReceive"); //メッセージの受け取り中止
-        channelWindow.removeEventListener("scroll"); //スクロールの監視停止
 
     },
 
