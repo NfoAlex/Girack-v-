@@ -238,7 +238,7 @@ socket.on("messageHistory", (history) => {
     }
 
     let index = 0; //チャンネル参照インデックス変数
-
+    
     //履歴の長さ分DBへ追加
     for ( index in history ) {
         //配列が存在してなかったら新しく作って配置する
@@ -250,6 +250,37 @@ socket.on("messageHistory", (history) => {
             msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
 
         }
+
+    }
+
+});
+
+//メッセージの更新
+socket.on("messageUpdate", (dat) => {
+    //メッセージ消したりリアクションされたり
+    /*
+    {
+        action: "delete"|"reaction",
+        channelid: dat.channelid,
+        messageid: dat.messageid,
+        ["reaction"だったら]
+        reaction: dat.reaction
+    }
+    */
+
+    switch( dat.action ) {
+        case "delete":
+            //ループでIDが一致するメッセージを探す
+            for ( let index in msgDBbackup[dat.channelid] ) {
+                if ( msgDBbackup[dat.channelid][index].messageid === dat.messageid ) {
+                    msgDBbackup[dat.channelid].splice(index,1); //削除
+
+                }
+
+            }
+
+        default:
+            break;
 
     }
 
