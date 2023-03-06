@@ -38,7 +38,7 @@ export default {
 
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
-        this.msgDB = msgDBbackup; //使うメッセージDB
+        this.msgDB = msgDBbackup; //メッセージDBを持ってくる
         this.userIndex = userIndexBackup; //使うユーザーの名前リスト
         
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
@@ -117,6 +117,40 @@ export default {
             this.userIndex[userid].role = role; //ロール
 
             backupUser(this.userIndex); //ユーザー情報をバックアップ
+
+        });
+
+        //メッセージの更新
+        socket.on("messageUpdate", (dat) => {
+            //メッセージ消したりリアクションされたり
+            /*
+            {
+                action: "delete"|"reaction",
+                channelid: dat.channelid,
+                messageid: dat.messageid,
+                ["reaction"だったら]
+                reaction: dat.reaction
+            }
+            */
+
+            console.log("Content :: メッセージ更新")
+
+            switch( dat.action ) {
+                //削除する
+                case "delete":
+                    //ループでIDが一致するメッセージを探す
+                    for ( let index in this.msgDB[dat.channelid] ) {
+                        if ( this.msgDB[dat.channelid][index].messageid === dat.messageid ) {
+                            this.msgDB[dat.channelid].splice(index,1); //削除
+
+                        }
+
+                    }
+
+                default:
+                    break;
+
+            }
 
         });
 
@@ -293,7 +327,7 @@ export default {
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         
-        <div style="padding:10%" v-if="!msgDB[$route.params.id]">
+        <div style="padding:10%" v-if="!msgDBbackup[$route.params.id]">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 

@@ -9,7 +9,7 @@ const socket = io(backendURI);
 
 //ユーザー情報
 export var userinfo = {
-    username: "Guest", //名前
+    username: null, //名前
     role: "",
     userid: "", //ユーザーID
     loggedin: false, //ログイン状態
@@ -256,35 +256,36 @@ socket.on("messageHistory", (history) => {
 });
 
 //メッセージの更新
-socket.on("messageUpdate", (dat) => {
-    //メッセージ消したりリアクションされたり
-    /*
-    {
-        action: "delete"|"reaction",
-        channelid: dat.channelid,
-        messageid: dat.messageid,
-        ["reaction"だったら]
-        reaction: dat.reaction
-    }
-    */
+// socket.on("messageUpdate", (dat) => {
+//     //メッセージ消したりリアクションされたり
+//     /*
+//     {
+//         action: "delete"|"reaction",
+//         channelid: dat.channelid,
+//         messageid: dat.messageid,
+//         ["reaction"だったら]
+//         reaction: dat.reaction
+//     }
+//     */
 
-    switch( dat.action ) {
-        case "delete":
-            //ループでIDが一致するメッセージを探す
-            for ( let index in msgDBbackup[dat.channelid] ) {
-                if ( msgDBbackup[dat.channelid][index].messageid === dat.messageid ) {
-                    msgDBbackup[dat.channelid].splice(index,1); //削除
+//     switch( dat.action ) {
+//         //削除する
+//         case "delete":
+//             //ループでIDが一致するメッセージを探す
+//             for ( let index in msgDBbackup[dat.channelid] ) {
+//                 if ( msgDBbackup[dat.channelid][index].messageid === dat.messageid ) {
+//                     msgDBbackup[dat.channelid].splice(index,1); //削除
 
-                }
+//                 }
 
-            }
+//             }
 
-        default:
-            break;
+//         default:
+//             break;
 
-    }
+//     }
 
-});
+// });
 
 //認証結果
 socket.on("authResult", (dat) => {
