@@ -133,8 +133,6 @@ export default {
             }
             */
 
-            console.log("Content :: メッセージ更新")
-
             switch( dat.action ) {
                 //削除する
                 case "delete":
@@ -146,11 +144,26 @@ export default {
                         }
 
                     }
+                    break;
+
+                //リアクションをつける
+                case "reaction":
+                    console.log("Content :: これからリアクション");
+                    console.log(dat);
+                    for ( let index in this.msgDB[dat.channelid] ) {
+                        if ( this.msgDB[dat.channelid][index].messageid === dat.messageid ) {
+                            this.msgDB[dat.channelid][index].reaction = dat.reaction; //リアクション更新
+
+                        }
+
+                    }
 
                 default:
                     break;
 
             }
+
+            backupMsg(this.msgDB); //メッセージDBの出力、保存
 
         });
 
@@ -256,7 +269,8 @@ export default {
         },
 
         //削除したりリアクションしたり編集(ToDo)したり
-        messageAction(msgId, act) {
+        messageAction(msgId, act, reaction) {
+            //削除する
             if ( act === "delete" ) {
                 console.log("messageAction :: 削除します");
                 //削除要請を送信
@@ -270,6 +284,21 @@ export default {
                     }
                 });
 
+            }
+
+            //リアクションする
+            if ( act === "reaction" ) {
+                //リアクションしたことを送信
+                socket.emit("actMessage", {
+                    action: "reaction",
+                    channelid: this.getPath,
+                    messageid: msgId,
+                    reaction: reaction, //送るリアクション
+                    reqSender: {
+                        userid: getUserinfo().userid,
+                        sessionid: getUserinfo().sessionid
+                    }
+                });
             }
 
         },
@@ -367,10 +396,10 @@ export default {
                         <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === m.messageid )">
                             {{ printDate(m.time) }}
                         </span>
-                        <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             😀
                         </v-btn>
-                        <v-btn style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             🤔
                         </v-btn>
                         <!-- 削除ボタン -->
@@ -382,8 +411,9 @@ export default {
                     </span>
 
                     <br v-if="m.reaction">
-                    <v-chip size="small" color="white" v-for="r in m.reaction">
-                        {{ getReaction(Object.keys(r)[0]) }} {{ r[Object.keys(r)[0]] }}
+                    <!-- リアクション -->
+                    <v-chip style="margin-right:8px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                        {{ getReaction(r[0]) }} {{ r[1] }}
                     </v-chip>
 
                 </p>
