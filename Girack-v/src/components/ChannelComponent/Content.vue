@@ -13,15 +13,14 @@ export default {
     data() {
         return {
             msgDB: {},
-            userIndex: {},
-            uri: backendURI,
+            userIndex: {}, //ユーザー情報
+            uri: backendURI, //バックエンドのURI
 
-            NotAtBottom: true,
+            NotAtBottom: true, //一番下にスクロールしたかどうか
 
             //ホバー処理用
-            msgHovered: false,
-            msgContentIdHovering: 0,
-            msgIdHovering: 0,
+            msgHovered: false, //ホバーされたかどうか
+            msgIdHovering: 0, //ホバーされたメッセージのID
 
             goBottom: "goBottom" //下に行くボタン用CSSクラス
         }
