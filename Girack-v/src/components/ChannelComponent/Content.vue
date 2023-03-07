@@ -43,6 +43,7 @@ export default {
         
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
+        //レンダー完了したらスクロールイベント開始
         this.$nextTick(() => {
             document.querySelector("#channelWindow").addEventListener("scroll", function (event) {
                 ref.setScrollState(); //確認開始

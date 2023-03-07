@@ -42,7 +42,7 @@ export default {
 
         socket.emit("getInitInfo"); //サーバーの情報を取得
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
-            this.servername = dat.servername;
+            this.servername = dat.servername; //表示する名前を変更
             
         });
 
