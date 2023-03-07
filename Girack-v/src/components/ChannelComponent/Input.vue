@@ -36,7 +36,8 @@ export default {
 
         //Enterキー押されたときの処理
         funcEnter( event ) {
-            if ( event.key === "Enter" && this.$refs.inp.focused === true ) {
+            let ref = this;
+            if ( event.key === "Enter" && ref.$refs.inp.focused === true ) {
                 this.msgSend(); //送信処理
 
             }
