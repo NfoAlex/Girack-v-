@@ -44,8 +44,15 @@ export default {
 
         },
         
+        //チャンネル名を取得するだけ
         getChannelname() {
-            return channelIndex[this.getPath].channelname;
+            try {
+                return channelIndex[this.getPath].channelname;
+            }
+            catch (e) {
+                setTimeout(this.$forceUpdate(), 1000);
+                return "";
+            }
 
         }
     },
