@@ -187,7 +187,10 @@ export default {
 
     //アンロード時の処理
     unmounted() {
-        socket.off("msgReceive"); //メッセージの受け取り中止
+        //socket通信の重複防止
+        socket.off("msgReceive");
+        socket.off("infoResult");
+        socket.off("messageUpdate");
 
     },
 
