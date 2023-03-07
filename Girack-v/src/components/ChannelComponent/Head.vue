@@ -24,7 +24,7 @@ export default {
                     return channelIndex[this.getPath];
 
                 } else {
-                    setTimeout(this.$forceUpdate(), 1000);
+                    setTimeout(() => {this.$forceUpdate()}, 1000);
                     return {
                         channelname: "ロード中...",
                         description: "",
@@ -35,7 +35,7 @@ export default {
                 }
             }
             catch(e) {
-                setTimeout(this.$forceUpdate(), 1000);
+                //setTimeout(this.$forceUpdate(), 1000);
                 return {
                     channelname: "ロード中...",
                     description: "",
