@@ -391,7 +391,7 @@ export default {
             </v-avatar>
 
             <!-- メッセージ本体 -->
-            <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:87.5%; padding:0 1%;">
+            <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                 
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
