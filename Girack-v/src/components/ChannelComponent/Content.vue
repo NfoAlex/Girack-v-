@@ -50,7 +50,7 @@ export default {
         });
 
         //メッセージ受け取り、出力
-        socket.on("msgReceive", (msg) => {
+        socket.on("messageReceive", (msg) => {
             console.log("msgReceive :: ↓");
             console.log(msg);
 
