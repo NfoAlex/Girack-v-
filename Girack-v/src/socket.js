@@ -30,7 +30,7 @@ export var channelIndex = {
     "001": {
         channelname: "random",
         description: "Hello, Girack",
-        scope: open
+        scope: "open"
     }
      */
 };
