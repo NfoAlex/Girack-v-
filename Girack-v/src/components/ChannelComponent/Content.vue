@@ -43,11 +43,19 @@ export default {
         
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-        //スクロールした際に"下に行く"ボタンを表示するかどうか計算
-        channelWindow.addEventListener("scroll", function (event) {
-            ref.setScrollState(); //確認開始
+        this.$nextTick(() => {
+            document.querySelector("#channelWindow").addEventListener("scroll", function (event) {
+                ref.setScrollState(); //確認開始
+
+            });
 
         });
+
+        // //スクロールした際に"下に行く"ボタンを表示するかどうか計算
+        // channelWindow.addEventListener("scroll", function (event) {
+        //     ref.setScrollState(); //確認開始
+
+        // });
 
         //メッセージ受け取り、出力
         socket.on("messageReceive", (msg) => {
@@ -108,12 +116,11 @@ export default {
 
             //スクロールされきっていたら最後へ自動スクロールする
             if ( scrolledState ) { //この関数用の変数で確認
+                //コンテンツのレンダーを待ってからスクロール
                 this.$nextTick(() => {
-                    console.log("レンダー完了、スクロール町");
                     channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
 
                 });
-                //channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
 
             }
 
