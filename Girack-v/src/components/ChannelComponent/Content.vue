@@ -76,18 +76,34 @@ export default {
             }
 
             try{
-                //ローカルDBに追加
-                this.msgDB[msg.channelid].push({
-                    messageid: msg.messageid,
-                    userid: msg.userid,
-                    channelid: msg.channelid,
-                    time: msg.time,
-                    content: msg.content,
-                    reaction: msg.reaction
-                });
+                //DB配列に追加
+                if ( this.msgDB[msg.channelid] !== undefined ) {
+                    //ローカルDBに追加
+                    this.msgDB[msg.channelid].push({
+                        messageid: msg.messageid,
+                        userid: msg.userid,
+                        channelid: msg.channelid,
+                        time: msg.time,
+                        content: msg.content,
+                        reaction: msg.reaction
+                    });
+
+                } else { //配列が空なら新しく作成、配置
+                    this.msgDB[msg.channelid] = [{
+                        messageid: msg.messageid,
+                        userid: msg.userid,
+                        channelid: msg.channelid,
+                        time: msg.time,
+                        content: msg.content,
+                        reaction: msg.reaction
+                    }];
+
+                }
+
             }
             catch(e) {
                 console.log("Content :: msgDB書き込みエラー");
+                console.log(e);
             }
 
             //スクロールされきっていたら最後へ自動スクロールする
