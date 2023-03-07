@@ -89,6 +89,12 @@ export default {
                         <v-avatar style=" width:4vmax;height:auto;">
                             <v-img :alt="userinfo.userid" :src="uri + '/img/' + userinfo.userid + '.jpeg'"></v-img>
                         </v-avatar>
+                        <v-tooltip
+                            activator="parent"
+                            location="top"
+                        >
+                            プロフィール
+                        </v-tooltip>
                     </RouterLink>
                 </div>
 

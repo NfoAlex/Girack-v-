@@ -76,6 +76,12 @@ export default {
         ></v-text-field>
 
         <v-btn class="rounded-lg mdi mdi-send-outline" style="margin-right:1vw;" elevation="0" icon="" @click="msgSend" color="primary">
+            <v-tooltip
+                activator="parent"
+                location="top"
+            >
+                送信!
+            </v-tooltip>
         </v-btn>
 
     </div>
