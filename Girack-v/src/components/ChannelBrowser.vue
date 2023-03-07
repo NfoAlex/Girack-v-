@@ -92,6 +92,12 @@ export default {
 
         });
 
+    },
+
+    unmounted() {
+        //通信重複防止
+        socket.off("infoResult");
+
     }
 
 }
