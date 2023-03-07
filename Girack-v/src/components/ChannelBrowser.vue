@@ -103,13 +103,14 @@ export default {
         <v-list style="height:100%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
+                style="padding:0;"
             >
-                <v-card variant="tonal" class="rounded-lg" style="padding:2% 2%; margin-top:8px;">
+                <v-card variant="tonal" class="rounded-lg" style="padding:2% 2%; margin-top:16px;">
                     <p class="text-h6">
                         {{ c[1].name }}
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
                         <v-btn v-if="!channelJoined.includes(c[0])" @click="channelJoin(c[0])" style="float: right" variant="tonal">参加</v-btn>
-                        <v-btn v-else @click="channelLeave(c[0])" style="float: right" variant="outlined">退出</v-btn>
+                        <v-btn v-else @click="channelLeave(c[0])" style="float:right" variant="outlined">退出</v-btn>
                     </p>
                     <p style="padding:1%">{{ c[1].description }}</p>
                 </v-card>
