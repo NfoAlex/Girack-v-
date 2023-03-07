@@ -108,7 +108,12 @@ export default {
 
             //スクロールされきっていたら最後へ自動スクロールする
             if ( scrolledState ) { //この関数用の変数で確認
-                channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+                this.$nextTick(() => {
+                    console.log("レンダー完了、スクロール町");
+                    channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+                });
+                //channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
 
             }
 
