@@ -1,5 +1,5 @@
 <script setup>
-import { getSocket, userinfo, channelIndex } from '../socket.js';
+import { getSocket, getUserinfo, channelIndex } from '../socket.js';
 </script>
 
 <script>
@@ -9,7 +9,10 @@ export default {
     data() {
         return {
             channelList: {},
-            channelJoined: []
+            channelJoined: [],
+
+            overlayChannelCreate: false, //チャンネル作成オーバーレイ
+            channelCreateName: "", //作りたいチャンネルの名前
         }
     },
 
@@ -21,8 +24,8 @@ export default {
                 action: "join",
                 channelid: channelid,
                 reqSender: {
-                    userid: userinfo.userid,
-                    sessionid: userinfo.sessionid
+                    userid: getUserinfo().userid,
+                    sessionid: getUserinfo().sessionid
                 }
             });
 
@@ -31,12 +34,13 @@ export default {
                 target: "list",
                 targetlist: "channel",
                 reqSender: {
-                    userid: userinfo.userid, //ユーザーID
-                    sessionid: userinfo.sessionid //セッションID
+                    userid: getUserinfo().userid, //ユーザーID
+                    sessionid: getUserinfo().sessionid //セッションID
                 }
             });
 
         },
+
         //チャンネルから退出
         channelLeave(channelid) {
             //抜けます。
@@ -59,19 +63,31 @@ export default {
                 }
             });
 
+        },
+
+        //チャンネル作成!
+        channelCreate() {
+            //チャンネル作りたい!
+            socket.emit("channelCreate", {
+                channelname: this.channelCreateName,
+                reqSender: {
+                    userid: getUserinfo().userid,
+                    sessinoid: getUserinfo().sessionid
+                }
+            });
         }
     },
 
     mounted() {
-        this.channelJoined = userinfo.channelJoined;
+        this.channelJoined = getUserinfo().channelJoined;
 
         //チャンネルリストの取得
         socket.emit("getInfo", {
             target: "list",
             targetlist: "channel",
             reqSender: {
-                userid: userinfo.userid, //ユーザーID
-                sessionid: userinfo.sessionid //セッションID
+                userid: getUserinfo().userid, //ユーザーID
+                sessionid: getUserinfo().sessionid //セッションID
             }
         });
 
@@ -86,7 +102,7 @@ export default {
             
             this.channelList = dat.channelList; //リスト追加
             //this.channelList = channelIndex; //リスト追加
-            this.channelJoined = userinfo.channelJoined;
+            this.channelJoined = getUserinfo().channelJoined;
             console.log("ChannelBrwoser :: infoResult : dat ↓ ");
             console.log(dat);
 
@@ -96,7 +112,7 @@ export default {
 
     unmounted() {
         //通信重複防止
-        socket.off("infoResult");
+        //socket.off("infoResult");
 
     }
 
@@ -104,9 +120,48 @@ export default {
 </script>
 
 <template>
+    <v-overlay
+        v-model="overlayChannelCreate"
+        class="align-center justify-center"
+        contained
+    >
+        <v-card style="width:65%; height:60%">
+
+            <p class="text-h5">チャンネル作成</p>
+
+            <v-divider />
+
+            <p style="float:left">チャンネル名</p>
+            <br>
+            <v-text-field variant="outlined" v-model="channelCreateName">
+            </v-text-field>
+
+            <br>
+
+            <v-btn @click="channelCreate">
+                作成!
+            </v-btn>
+
+        </v-card>
+    </v-overlay>
+
     <div style="margin:3% auto; width: 85%">
-        <p class="text-h4">チャンネルブラウザー</p>
-        <v-list style="height:100%; overflow-y:auto;">
+        <div class="d-flex justify-space-around bg-surface-variant">
+            <p class="text-h4 me-auto">チャンネルブラウザー</p>
+            <v-btn @click="overlayChannelCreate=true" variant="tonal" icon="" class="rounded-lg">
+                <v-icon size="large">
+                    <span class="mdi mdi-plus-box"></span>
+                </v-icon>
+                <v-tooltip
+                    activator="parent"
+                    location="bottom"
+                >
+                    チャンネル作成
+            </v-tooltip>
+            </v-btn>
+        </div>
+        <br>
+        <v-list style="height:100%; width:100%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
                 style="padding:0;"
