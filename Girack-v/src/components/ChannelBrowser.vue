@@ -48,8 +48,8 @@ export default {
                 action: "leave",
                 channelid: channelid,
                 reqSender: {
-                    userid: userinfo.userid,
-                    sessionid: userinfo.sessionid
+                    userid: getUserinfo().userid,
+                    sessionid: getUserinfo().sessionid
                 }
             });
 
@@ -58,8 +58,8 @@ export default {
                 target: "list",
                 targetlist: "channel",
                 reqSender: {
-                    userid: userinfo.userid, //ユーザーID
-                    sessionid: userinfo.sessionid //セッションID
+                    userid: getUserinfo().userid, //ユーザーID
+                    sessionid: getUserinfo().sessionid //セッションID
                 }
             });
 
@@ -72,7 +72,16 @@ export default {
                 channelname: this.channelCreateName,
                 reqSender: {
                     userid: getUserinfo().userid,
-                    sessinoid: getUserinfo().sessionid
+                    sessionid: getUserinfo().sessionid
+                }
+            });
+
+            socket.emit("getInfo", {
+                target: "list",
+                targetlist: "channel",
+                reqSender: {
+                    userid: getUserinfo().userid, //ユーザーID
+                    sessionid: getUserinfo().sessionid //セッションID
                 }
             });
         }
