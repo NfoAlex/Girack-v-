@@ -35,6 +35,7 @@ export var channelIndex = {
      */
 };
 
+//メッセージDBの保存用
 export var msgDBbackup = {
     // "001": [
     //     {
@@ -322,7 +323,7 @@ socket.on("authResult", (dat) => {
 
         //メッセージ履歴の取得
         for ( let cid in userinfo.channelJoined ) {
-            getMessage(userinfo.channelJoined[cid], 10); //リクエスト送信する
+            getMessage(userinfo.channelJoined[cid], 20); //リクエスト送信する
 
         }
 
