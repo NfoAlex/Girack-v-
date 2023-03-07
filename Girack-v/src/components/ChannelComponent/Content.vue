@@ -381,7 +381,7 @@ export default {
 
         <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
             
-            <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="x-large">
+            <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
