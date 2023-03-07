@@ -60,6 +60,11 @@ export default {
         document.addEventListener("keydown", this.funcEnter, false); //キー入力の検知
         this.channelid = this.getPath;
 
+    },
+
+    unmounted() {
+        document.removeEventListener("keydown", this.funcEnter); //送信キーをブロック
+
     }
 }
 </script>
