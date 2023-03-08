@@ -59,12 +59,50 @@ export default {
 
         });
 
+        let checkCount = 0;
         //チャンネル情報の更新
         socket.on("infoChannel", () => {
             let checkChannelInfo = setInterval(() => {
-                console.log("Lets check..." + updateState.channelinfo);
+                console.log("infoChannel :: Lets check..." + updateState.channelinfo);
                 if ( updateState.channelinfo > 0 ) {
                     console.log("App :: infoChannel : 情報あるわ")
+                    this.channelIndexListing = channelIndex;
+                    this.$forceUpdate(); //レンダー更新
+
+                    clearInterval(checkChannelInfo);
+
+                    updateStateTaken("channelinfo");
+                    //updateState.channelinfo = updateState.channelinfo - 1;
+
+                } else if ( updateState.channelinfo < 0 ) {
+                    clearInterval(checkChannelInfo);
+
+                }
+
+                if ( checkCount > 10 ) {
+                    clearInterval(checkChannelInfo);
+
+                }
+
+                checkCount++;
+
+            }, 100);
+
+        });
+
+        //プロフィールの更新を受けたら表示名を変更
+        socket.on("infoUser", (dat) => {
+            console.log("App :: infoUser : ユーザー名表示更新");
+            this.displayusername = dat.username;
+
+            this.channelIndexListing = channelIndex;
+            this.channelJoined = userinfo.channelJoined;
+
+            let checkCount = 0;
+            let checkChannelInfo = setInterval(() => {
+                console.log("infoUser : Lets check..." + updateState.channelinfo);
+                if ( updateState.channelinfo > 0 ) {
+                    console.log("App :: infoUser : 情報あるわ(チャンネル抜け)")
                     this.channelIndexListing = channelIndex;
                     this.$forceUpdate(); //レンダー更新
                     
@@ -78,17 +116,14 @@ export default {
 
                 }
 
+                if ( checkCount > 10 ) {
+                    clearInterval(checkChannelInfo);
+
+                }
+
+                checkCount++;
+
             }, 500);
-
-        });
-
-        //プロフィールの更新を受けたら表示名を変更
-        socket.on("infoUser", (dat) => {
-            console.log("App :: infoUser : ユーザー名表示更新");
-            this.displayusername = dat.username;
-
-            this.channelIndexListing = channelIndex;
-            this.channelJoined = userinfo.channelJoined;
 
         });
 

@@ -292,6 +292,8 @@ socket.on("infoUser", (dat) => {
                 //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
                 if ( !dat.channelJoined.includes(channelid) ) {
                     delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
+                    //チャンネル情報の更新料を加算
+                    updateState.channelinfo = updateState.channelinfo + 1;
                     console.log("socket :: infoResult : 削除された!");
                     break;
 
@@ -408,7 +410,7 @@ socket.on("authResult", (dat) => {
 
         });
 
-        setCookie("sessionid", dat.sessionid, 15);
+        setCookie("sessionid", dat.sessionid, 15); //クッキーにセッションIDを設定、寿命は15日
         console.log("session id in cookie -> " + getCookie("sessionid"));
 
         console.log("socket :: authResult : userinfo ↓");
