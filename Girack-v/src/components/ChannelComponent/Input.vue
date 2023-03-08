@@ -36,15 +36,24 @@ export default {
 
         //Enterキー押されたときの処理
         funcEnter( event ) {
-            if ( event.key === "Enter" && this.$refs.inp.focused === true ) {
+            let ref = this; //refsのエラー処理
+            //入力欄にフォーカスされていてEnterキーが押された時
+            if ( event.key === "Enter" && ref.$refs.inp.focused === true ) {
                 this.msgSend(); //送信処理
 
             }
 
         },
         
+        //チャンネル名を取得するだけ
         getChannelname() {
-            return channelIndex[this.getPath].channelname;
+            try {
+                return channelIndex[this.getPath].channelname;
+            }
+            catch (e) {
+                setTimeout(this.$forceUpdate(), 1000);
+                return "";
+            }
 
         }
     },
@@ -58,6 +67,11 @@ export default {
     mounted() {
         document.addEventListener("keydown", this.funcEnter, false); //キー入力の検知
         this.channelid = this.getPath;
+
+    },
+
+    unmounted() {
+        document.removeEventListener("keydown", this.funcEnter); //送信キーをブロック
 
     }
 }
@@ -76,6 +90,12 @@ export default {
         ></v-text-field>
 
         <v-btn class="rounded-lg mdi mdi-send-outline" style="margin-right:1vw;" elevation="0" icon="" @click="msgSend" color="primary">
+            <v-tooltip
+                activator="parent"
+                location="top"
+            >
+                送信!
+            </v-tooltip>
         </v-btn>
 
     </div>

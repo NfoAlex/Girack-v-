@@ -42,7 +42,7 @@ export default {
 
         socket.emit("getInitInfo"); //サーバーの情報を取得
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
-            this.servername = dat.servername;
+            this.servername = dat.servername; //表示する名前を変更
             
         });
 
@@ -60,10 +60,8 @@ export default {
 
         });
 
-    },
-
-    unmounted() {
-        socket.off("infoResult"); //重複防止
+        console.log("channelIndexListing :: ");
+        console.log(channelIndex);
 
     }
 
@@ -89,6 +87,12 @@ export default {
                         <v-avatar style=" width:4vmax;height:auto;">
                             <v-img :alt="userinfo.userid" :src="uri + '/img/' + userinfo.userid + '.jpeg'"></v-img>
                         </v-avatar>
+                        <v-tooltip
+                            activator="parent"
+                            location="top"
+                        >
+                            プロフィール
+                        </v-tooltip>
                     </RouterLink>
                 </div>
 

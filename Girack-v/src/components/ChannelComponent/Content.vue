@@ -43,14 +43,23 @@ export default {
         
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-        //スクロールした際に"下に行く"ボタンを表示するかどうか計算
-        channelWindow.addEventListener("scroll", function (event) {
-            ref.setScrollState(); //確認開始
+        //レンダー完了したらスクロールイベント開始
+        this.$nextTick(() => {
+            document.querySelector("#channelWindow").addEventListener("scroll", function (event) {
+                ref.setScrollState(); //確認開始
+
+            });
 
         });
 
+        // //スクロールした際に"下に行く"ボタンを表示するかどうか計算
+        // channelWindow.addEventListener("scroll", function (event) {
+        //     ref.setScrollState(); //確認開始
+
+        // });
+
         //メッセージ受け取り、出力
-        socket.on("msgReceive", (msg) => {
+        socket.on("messageReceive", (msg) => {
             console.log("msgReceive :: ↓");
             console.log(msg);
 
@@ -76,23 +85,43 @@ export default {
             }
 
             try{
-                //ローカルDBに追加
-                this.msgDB[msg.channelid].push({
-                    messageid: msg.messageid,
-                    userid: msg.userid,
-                    channelid: msg.channelid,
-                    time: msg.time,
-                    content: msg.content,
-                    reaction: msg.reaction
-                });
+                //DB配列に追加
+                if ( this.msgDB[msg.channelid] !== undefined ) {
+                    //ローカルDBに追加
+                    this.msgDB[msg.channelid].push({
+                        messageid: msg.messageid,
+                        userid: msg.userid,
+                        channelid: msg.channelid,
+                        time: msg.time,
+                        content: msg.content,
+                        reaction: msg.reaction
+                    });
+
+                } else { //配列が空なら新しく作成、配置
+                    this.msgDB[msg.channelid] = [{
+                        messageid: msg.messageid,
+                        userid: msg.userid,
+                        channelid: msg.channelid,
+                        time: msg.time,
+                        content: msg.content,
+                        reaction: msg.reaction
+                    }];
+
+                }
+
             }
             catch(e) {
                 console.log("Content :: msgDB書き込みエラー");
+                console.log(e);
             }
 
             //スクロールされきっていたら最後へ自動スクロールする
             if ( scrolledState ) { //この関数用の変数で確認
-                channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+                //コンテンツのレンダーを待ってからスクロール
+                this.$nextTick(() => {
+                    channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+                });
 
             }
 
@@ -171,7 +200,10 @@ export default {
 
     //アンロード時の処理
     unmounted() {
-        socket.off("msgReceive"); //メッセージの受け取り中止
+        //socket通信の重複防止
+        socket.off("messageReceive");
+        socket.off("infoResult");
+        socket.off("messageUpdate");
 
     },
 
@@ -318,33 +350,47 @@ export default {
 
         //メッセージの時間を出力する関数
         printDate(time) {
-            let t = new Date();
+            let t = new Date(); //時間取得用
             let y = t.getFullYear().toString(); //今年 (４桁)
-            let m = "0" + (t.getMonth()+1); //月 (0も含めて２桁に)
+            let m = (t.getMonth()+1).toString().padStart(2,0); //月 (0も含めて２桁に)
+            let d = t.getDate().toString().padStart(2,0); //日 (0も含めて２桁に)
 
             let timestamp = ""; //出力予定の文字列
 
             //もし去年以上からのメッセージだったら
-            if ( time.slice(0,4) !== y ) { 
+            if ( time.slice(0,4) !== y ) { //今年とデータのタイムスタンプが違っていたら
                 timestamp += time.slice(0,4) + "/";
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8) ;
 
+                //表記を返す(時間を足して)
                 return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
 
             }
 
-            //もし昨日以上前のメッセージだったら
-            if ( time.slice(4,6) !== m ) {
+            //↓これいる？
+            //もし先月以上前のメッセージだったら
+            if ( time.slice(4,6) !== m ) { //今月とデータのタイムスタンプが違っていたら
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8);
 
+                //表記を返す(時間を足して)
+                return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+            
+            }
+
+            //もし昨日以上前のメッセージだったら
+            if ( time.slice(6,8) !== d ) { //今日とデータのタイムスタンプが違っていたら
+                timestamp += time.slice(4,6) + "/";
+                timestamp += time.slice(6,8);
+
+                //表記を返す(時間を足して)
                 return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
             
             }
 
             //普通に今日だったら
-            return " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+            return " 今日 " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
             
         }
     }
@@ -360,14 +406,14 @@ export default {
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
-        <div style="display:flex; margin-top:12px; margin-bottom:12px; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
+        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
             
-            <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="x-large">
+            <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
             <!-- メッセージ本体 -->
-            <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:87.5%; padding:0% 1%;">
+            <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                 
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
@@ -412,7 +458,7 @@ export default {
 
                     <br v-if="m.reaction">
                     <!-- リアクション -->
-                    <v-chip style="margin-right:8px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                    <v-chip style="margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
                         {{ getReaction(r[0]) }} {{ r[1] }}
                     </v-chip>
 
