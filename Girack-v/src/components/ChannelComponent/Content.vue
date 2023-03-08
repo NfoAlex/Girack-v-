@@ -390,7 +390,7 @@ export default {
             }
 
             //普通に今日だったら
-            return " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+            return " 今日 " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
             
         }
     }
