@@ -350,10 +350,10 @@ export default {
 
         //メッセージの時間を出力する関数
         printDate(time) {
-            let t = new Date();
+            let t = new Date(); //時間取得用
             let y = t.getFullYear().toString(); //今年 (４桁)
             let m = (t.getMonth()+1).toString().padStart(2,0); //月 (0も含めて２桁に)
-            let d = t.getDay().toString().padStart(2,0);
+            let d = t.getDate().toString().padStart(2,0); //日 (0も含めて２桁に)
 
             let timestamp = ""; //出力予定の文字列
 
@@ -363,6 +363,7 @@ export default {
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8) ;
 
+                //表記を返す(時間を足して)
                 return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
 
             }
@@ -373,6 +374,7 @@ export default {
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8);
 
+                //表記を返す(時間を足して)
                 return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
             
             }
@@ -382,6 +384,7 @@ export default {
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8);
 
+                //表記を返す(時間を足して)
                 return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
             
             }
