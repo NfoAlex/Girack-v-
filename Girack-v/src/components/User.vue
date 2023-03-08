@@ -1,5 +1,5 @@
 <script setup>
-import { userinfo, channelIndex, setCookie, getSocket } from '../socket.js';
+import { userinfo, setCookie, getSocket } from '../socket.js';
 
 </script>
 
@@ -16,7 +16,6 @@ export default {
             okayIcon: '',
 
             nameEditing: false, //名前編集しているかどうか
-            nameDisplaying: "..." //表示する名前
         }
     },
     
@@ -28,24 +27,17 @@ export default {
 
         },
 
-        //表示する名前の取得
-        updateDisplay() {
-            this.nameDisplaying = userinfo.username;
-
-        },
-
         //名前更新
         updateName() {
             //名前更新
-            socket.emit("config", {
-                target: "user",
+            socket.emit("changeProfile", {
                 name: this.nameDisplaying,
-                targetid: userinfo.userid,
                 reqSender: {
                     userid: userinfo.userid,
                     sessionid: userinfo.sessionid
                 }
             });
+            this.nameEditing = false;
 
         },
 
@@ -55,11 +47,6 @@ export default {
 
         }
     },
-
-    mounted() {
-        this.updateDisplay();
-        
-    }
 
 }
 </script>
@@ -98,30 +85,6 @@ export default {
                         </v-text-field>
                     </div>
                 </v-col>
-            </v-row>
-        </v-container>
-        <v-container class="bg-surface-variant">
-            <v-row no-gutters>
-                <v-card variant="tonal" :class="cd" style="width:100%;">
-                    <p class="text--primary text-left" >
-                        参加しているチャンネルについて
-                    </p>
-                    <div style="overflow-y:scroll !important; max-height:50vh">
-                        <v-card
-                            v-for="c in channelIndex"
-                            class="mx-auto text-left"
-                            max-width="95%"
-                            style="margin-top:15px; height:45%; padding:8px 3%;"
-                            :elevation="6"
-                        >
-                            <span style="border-right:0.1px">{{ c.channelname }}</span>
-                            <span style="height:100%; border-right:1px solid grey; margin:0 2%"></span>
-                            <v-chip>{{ c.scope==="public"?"公開":"非公開" }}</v-chip>
-                            <span style="height:100%; border-right:1px solid grey; margin:0 2%"></span>
-                            <span>{{ c.description }}</span>
-                        </v-card>
-                    </div>
-                </v-card>
             </v-row>
         </v-container>
         <v-container class="bg-surface-variant">

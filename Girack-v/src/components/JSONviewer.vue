@@ -43,10 +43,10 @@ export default {
         <br>
 
         <v-card style="padding:3%; margin-top:8px;" variant="outlined" v-for="d in Object.entries(mDBb)">
-            {{ d[0] }}
-            <v-card variant="tonal" style="padding:1%; margin-top:8px;" v-for="m in d[1]">
-                {{ JSON.stringify(m, null, 4) }}
-            </v-card>
+                {{ d[0] }}
+                <v-card variant="tonal" style="padding:1%; margin-top:8px;" v-for="m in d[1]">
+                    {{ JSON.stringify(m, null, 4) }}
+                </v-card>
         </v-card>
     </div>
 </template>
