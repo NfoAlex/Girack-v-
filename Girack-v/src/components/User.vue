@@ -15,6 +15,7 @@ export default {
 
             okayIcon: '',
 
+            nameDisplaying: "...",
             nameEditing: false, //名前編集しているかどうか
         }
     },
@@ -29,15 +30,20 @@ export default {
 
         //名前更新
         updateName() {
+            let nameUpdating = this.nameDisplaying
             //名前更新
             socket.emit("changeProfile", {
-                name: this.nameDisplaying,
+                name: nameUpdating,
                 reqSender: {
                     userid: userinfo.userid,
                     sessionid: userinfo.sessionid
                 }
             });
             this.nameEditing = false;
+            this.nameDisplaying = nameUpdating;
+            this.$forceUpdate();
+
+            console.log("名前更新します -> " + this.nameDisplaying);
 
         },
 
@@ -47,6 +53,11 @@ export default {
 
         }
     },
+
+    mounted() {
+        this.nameDisplaying = userinfo.username;
+
+    }
 
 }
 </script>
