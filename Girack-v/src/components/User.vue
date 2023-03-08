@@ -1,16 +1,22 @@
 <script setup>
-import { userinfo, channelIndex, setCookie } from '../socket.js';
+import { userinfo, channelIndex, setCookie, getSocket } from '../socket.js';
 
 </script>
 
 <script>
+const socket = getSocket();
 
 export default {
-
+    
     data() {
         return {
-            snackbar: false,
-            cd: ["card-default","rounded-lg"]
+            snackbar: false, //ログアウトアラート出力用
+            cd: ["card-default","rounded-lg"], //CSS用クラス名
+
+            okayIcon: '',
+
+            nameEditing: false, //名前編集しているかどうか
+            nameDisplaying: "..." //表示する名前
         }
     },
     
@@ -20,7 +26,39 @@ export default {
             setCookie("sessionid", "", 0); //クッキー削除
             location.reload(); //ページリロード
 
+        },
+
+        //表示する名前の取得
+        updateDisplay() {
+            this.nameDisplaying = userinfo.username;
+
+        },
+
+        //名前更新
+        updateName() {
+            //名前更新
+            socket.emit("config", {
+                target: "user",
+                name: this.nameDisplaying,
+                targetid: userinfo.userid,
+                reqSender: {
+                    userid: userinfo.userid,
+                    sessionid: userinfo.sessionid
+                }
+            });
+
+        },
+
+        //編集しているかどうかを切り替えする
+        toggleEditing() {
+            this.nameEditing = !this.nameEditing;
+
         }
+    },
+
+    mounted() {
+        this.updateDisplay();
+        
     }
 
 }
@@ -41,9 +79,23 @@ export default {
                         <p class="text-left text-h6">
                             # {{ userinfo.userid }}
                         </p>
-                        <p class="text-h4 text-left" >
+                        <p v-if="!nameEditing" @dblclick="toggleEditing" class="text-h4 text-left" >
                             {{ userinfo.username }}
                         </p>
+                        <v-text-field
+                            v-if="nameEditing"
+                            v-model="nameDisplaying"
+                            variant="solo"
+                        >
+                            <template v-slot:append-inner>
+                                <v-btn @click="updateName" size="x-small" variant="tonal" icon="" class="rounded-lg" style="margin:0 4px 0 8px; float:right">
+                                    <span class="mdi mdi-check-bold"></span>
+                                </v-btn>
+                                <v-btn @click="toggleEditing" size="x-small" variant="tonal" icon="" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
+                                    <span class="mdi mdi-window-close"></span>
+                                </v-btn>
+                            </template>
+                        </v-text-field>
                     </div>
                 </v-col>
             </v-row>
