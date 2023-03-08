@@ -24,8 +24,8 @@ export default {
                     return channelIndex[this.getPath];
 
                 } else {
-                    setTimeout(() => {this.$forceUpdate()}, 1000);
-                    return {
+                    setTimeout(() => {this.$forceUpdate()}, 1000); //レンダーまた更新させる
+                    return { //とりあえず仮データ返す
                         channelname: "ロード中...",
                         description: "",
                         scope: "open"
@@ -36,7 +36,7 @@ export default {
             }
             catch(e) {
                 //setTimeout(this.$forceUpdate(), 1000);
-                return {
+                return { //とりあえず仮データ返す
                     channelname: "ロード中...",
                     description: "",
                     scope: "open"
