@@ -352,7 +352,8 @@ export default {
         printDate(time) {
             let t = new Date();
             let y = t.getFullYear().toString(); //今年 (４桁)
-            let m = "0" + (t.getMonth()+1); //月 (0も含めて２桁に)
+            let m = (t.getMonth()+1).toString().padStart(2,0); //月 (0も含めて２桁に)
+            let d = t.getDay().toString().padStart(2,0);
 
             let timestamp = ""; //出力予定の文字列
 
@@ -366,8 +367,18 @@ export default {
 
             }
 
-            //もし昨日以上前のメッセージだったら
+            //↓これいる？
+            //もし先月以上前のメッセージだったら
             if ( time.slice(4,6) !== m ) {
+                timestamp += time.slice(4,6) + "/";
+                timestamp += time.slice(6,8);
+
+                return timestamp + " " +  time.slice(8,10) + ":" +  time.slice(10,12) + ":" +  time.slice(12,14);
+            
+            }
+
+            //もし昨日以上前のメッセージだったら
+            if ( time.slice(6,8) !== d ) {
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8);
 
