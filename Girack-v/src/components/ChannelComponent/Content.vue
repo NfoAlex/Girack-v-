@@ -358,7 +358,7 @@ export default {
             let timestamp = ""; //出力予定の文字列
 
             //もし去年以上からのメッセージだったら
-            if ( time.slice(0,4) !== y ) { 
+            if ( time.slice(0,4) !== y ) { //今年とデータのタイムスタンプが違っていたら
                 timestamp += time.slice(0,4) + "/";
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8) ;
@@ -370,7 +370,7 @@ export default {
 
             //↓これいる？
             //もし先月以上前のメッセージだったら
-            if ( time.slice(4,6) !== m ) {
+            if ( time.slice(4,6) !== m ) { //今月とデータのタイムスタンプが違っていたら
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8);
 
@@ -380,7 +380,7 @@ export default {
             }
 
             //もし昨日以上前のメッセージだったら
-            if ( time.slice(6,8) !== d ) {
+            if ( time.slice(6,8) !== d ) { //今日とデータのタイムスタンプが違っていたら
                 timestamp += time.slice(4,6) + "/";
                 timestamp += time.slice(6,8);
 

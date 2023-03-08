@@ -60,10 +60,8 @@ export default {
 
         });
 
-    },
-
-    unmounted() {
-        socket.off("infoResult"); //重複防止
+        console.log("channelIndexListing :: ");
+        console.log(channelIndex);
 
     }
 
