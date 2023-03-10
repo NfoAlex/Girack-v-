@@ -87,7 +87,7 @@ export default {
         //ロールを取得するだけ
         getRole(userid) {
             try {
-                return this.userIndex[userid].role;
+                return UserIndex.value[userid].role;
 
             }
             catch(e) {
