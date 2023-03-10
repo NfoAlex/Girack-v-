@@ -1,9 +1,13 @@
 <script setup>
-import { getSocket, dataUser, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
+import { getSocket, dataMsg, dataUser, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
 </script>
+
 <script>
 const socket = getSocket();
-const { Userinfo } = dataUser();
+const { Userinfo } = dataUser(); //ユーザー情報
+const { MsgDB, UserIndex } = dataMsg(); //履歴用DB
+// console.log("Content :: MsgDB : ");
+// console.log(dataMsg());
 
 export default {
 
@@ -23,6 +27,26 @@ export default {
         }
     },
 
+    watch: {
+        MsgDB: {
+            handler(M) {
+                console.log("Content :: スクロールしたい");
+                //スクロール値を計算
+                let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight;
+                if ( scrolledState ) {
+                    //コンテンツのレンダーを待ってからスクロール
+                    this.$nextTick(() => {
+                        channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+                    });
+
+                }
+
+            },
+            deep: true
+        }
+    },
+
     computed: {
         //現在いるパスを返すだけ
         getPath() {
@@ -39,7 +63,7 @@ export default {
 
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
-        this.msgDB = msgDBbackup; //メッセージDBを持ってくる
+        //this.msgDB = msgDBbackup; //メッセージDBを持ってくる
         this.userIndex = userIndexBackup; //使うユーザーの名前リスト
         
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
@@ -60,74 +84,74 @@ export default {
         // });
 
         //メッセージ受け取り、出力
-        socket.on("messageReceive", (msg) => {
-            console.log("msgReceive :: ↓");
-            console.log(msg);
+        // socket.on("messageReceive", (msg) => {
+        //     console.log("msgReceive :: ↓");
+        //     console.log(msg);
 
-            //スクロールしきっているか確認
-            let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
-            console.log("scrolledState -> " + scrolledState);
+        //     //スクロールしきっているか確認
+        //     let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
+        //     console.log("scrolledState -> " + scrolledState);
 
-            //使用するDBレコード
-            //let activeDB = this.msgDB[this.getPath];
+        //     //使用するDBレコード
+        //     //let activeDB = this.msgDB[this.getPath];
 
-            //もしユーザーの名前リストに名前がなかったら
-            if ( this.userIndex[msg.userid] === undefined ) {
-                //名前をリクエスト
-                socket.emit("getInfoUser", {
-                    targetid: msg.userid,
-                    reqSender: {
-                        userid: dataUser().Userinfo.value.userid, //ユーザーID
-                        sessionid: dataUser().Userinfo.value.sessionid //セッションID
-                    }
-                });
+        //     //もしユーザーの名前リストに名前がなかったら
+        //     if ( this.userIndex[msg.userid] === undefined ) {
+        //         //名前をリクエスト
+        //         socket.emit("getInfoUser", {
+        //             targetid: msg.userid,
+        //             reqSender: {
+        //                 userid: dataUser().Userinfo.value.userid, //ユーザーID
+        //                 sessionid: dataUser().Userinfo.value.sessionid //セッションID
+        //             }
+        //         });
 
-            }
+        //     }
 
-            try{
-                //DB配列に追加
-                if ( this.msgDB[msg.channelid] !== undefined ) {
-                    //ローカルDBに追加
-                    this.msgDB[msg.channelid].push({
-                        messageid: msg.messageid,
-                        userid: msg.userid,
-                        channelid: msg.channelid,
-                        time: msg.time,
-                        content: msg.content,
-                        reaction: msg.reaction
-                    });
+        //     try{
+        //         //DB配列に追加
+        //         if ( this.msgDB[msg.channelid] !== undefined ) {
+        //             //ローカルDBに追加
+        //             this.msgDB[msg.channelid].push({
+        //                 messageid: msg.messageid,
+        //                 userid: msg.userid,
+        //                 channelid: msg.channelid,
+        //                 time: msg.time,
+        //                 content: msg.content,
+        //                 reaction: msg.reaction
+        //             });
 
-                } else { //配列が空なら新しく作成、配置
-                    this.msgDB[msg.channelid] = [{
-                        messageid: msg.messageid,
-                        userid: msg.userid,
-                        channelid: msg.channelid,
-                        time: msg.time,
-                        content: msg.content,
-                        reaction: msg.reaction
-                    }];
+        //         } else { //配列が空なら新しく作成、配置
+        //             this.msgDB[msg.channelid] = [{
+        //                 messageid: msg.messageid,
+        //                 userid: msg.userid,
+        //                 channelid: msg.channelid,
+        //                 time: msg.time,
+        //                 content: msg.content,
+        //                 reaction: msg.reaction
+        //             }];
 
-                }
+        //         }
 
-            }
-            catch(e) {
-                console.log("Content :: msgDB書き込みエラー");
-                console.log(e);
-            }
+        //     }
+        //     catch(e) {
+        //         console.log("Content :: msgDB書き込みエラー");
+        //         console.log(e);
+        //     }
 
-            //スクロールされきっていたら最後へ自動スクロールする
-            if ( scrolledState ) { //この関数用の変数で確認
-                //コンテンツのレンダーを待ってからスクロール
-                this.$nextTick(() => {
-                    channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+        //     //スクロールされきっていたら最後へ自動スクロールする
+        //     if ( scrolledState ) { //この関数用の変数で確認
+        //         //コンテンツのレンダーを待ってからスクロール
+        //         this.$nextTick(() => {
+        //             channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
 
-                });
+        //         });
 
-            }
+        //     }
 
-            backupMsg(this.msgDB); //メッセージDBの出力、保存
+        //     backupMsg(this.msgDB); //メッセージDBの出力、保存
 
-        });
+        // });
 
         //他人の名前の受け取り
         socket.on("infoResult", (dat) => {
@@ -139,13 +163,13 @@ export default {
             let userid = dat.userid;
             let role = dat.role;
 
-            this.userIndex[userid] = {};
+            UserIndex[userid] = {};
 
             //ユーザーインデックス更新
-            this.userIndex[userid].username = username; //名前
-            this.userIndex[userid].role = role; //ロール
+            UserIndex[userid].username = username; //名前
+            UserIndex[userid].role = role; //ロール
 
-            backupUser(this.userIndex); //ユーザー情報をバックアップ
+            //backupUser(this.userIndex); //ユーザー情報をバックアップ
 
         });
 
@@ -276,7 +300,7 @@ export default {
         checkShowAvatar(userid, index) {
             try {
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-                if ( this.msgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                if ( MsgDB.value[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
                     return false; //同じだから表示しない
 
                 } else {
@@ -287,6 +311,17 @@ export default {
             }
             catch(e) {
                 return true; //最初だったりするときはとにかく表示する
+
+            }
+
+        },
+
+        isMsgAvailable() {
+            if ( MsgDB[getPath] === undefined ) {
+                return false;
+
+            } else {
+                return true;
 
             }
 
@@ -419,11 +454,11 @@ export default {
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         
-        <div style="padding:10%" v-if="!msgDBbackup[$route.params.id]">
+        <div style="padding:10%" v-if="MsgDB[getPath]===undefined">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
-        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
+        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">
             
             <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>

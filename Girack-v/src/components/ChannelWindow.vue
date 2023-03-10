@@ -25,7 +25,7 @@ export default {
 
 <template>
     <div :class="[w,head]">
-        <Head  />
+        <Head />
     </div>
     <div :class="[w,content]">
         <Content />

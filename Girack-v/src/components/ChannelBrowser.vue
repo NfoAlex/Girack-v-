@@ -31,6 +31,7 @@ export default {
                         sessionid: U.value.sessionid //セッションID
                     }
                 });
+                
             },
             deep: true
         }

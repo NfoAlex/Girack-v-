@@ -5,7 +5,7 @@ import Auth from "./components/Auth.vue";
 
 //REFとしてインポート
 const { Userinfo } = dataUser();
-const ChannelIndex = dataChannel();
+const { ChannelIndex } = dataChannel();
 </script>
 
 <script>

@@ -1,8 +1,7 @@
 <script setup>
-import { getUserinfo, setCookie, getSocket, dataUser } from '../socket.js';
+import { setCookie, getSocket, dataUser } from '../socket.js';
 
 //const { Userinfo } = dataUser();
-const userinfo = getUserinfo();
 
 </script>
 
@@ -11,14 +10,6 @@ const socket = getSocket();
 const { Userinfo } = dataUser();
 
 export default {
-
-    // setup() {
-    //     const { Userinfo } = dataUser();
-    //     console.log("User :: setup : Userinfo -> ");
-    //     console.log(Userinfo);
-
-    //     return { Userinfo };
-    // },
     
     data() {
         return {
