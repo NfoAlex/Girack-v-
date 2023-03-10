@@ -173,6 +173,90 @@ socket.on("messageReceive", (msg) => {
 
 });
 
+//他人の名前の受け取り
+socket.on("infoResult", (dat) => {
+    if ( dat.type !== "user" ) { return; } //ユーザー情報じゃなければ取りやめ
+    console.log("Content :: infoResult : 名前情報受け取り \\/")
+    console.log(dat);
+
+    let username = dat.username;
+    let userid = dat.userid;
+    let role = dat.role;
+
+    UserIndex.value[userid] = {};
+
+    //ユーザーインデックス更新
+    UserIndex.value[userid].username = username; //名前
+    UserIndex.value[userid].role = role; //ロール
+
+    //backupUser(this.userIndex); //ユーザー情報をバックアップ
+
+});
+
+//メッセージの更新
+socket.on("messageUpdate", (dat) => {
+    //メッセージ消したりリアクションされたり
+    /*
+    {
+        action: "delete"|"reaction",
+        channelid: dat.channelid,
+        messageid: dat.messageid,
+        ["reaction"だったら]
+        reaction: dat.reaction
+    }
+    */
+
+    switch( dat.action ) {
+        //削除する
+        case "delete":
+            //ループでIDが一致するメッセージを探す
+            for ( let index in MsgDB.value[dat.channelid] ) {
+                if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
+                    MsgDB.value[dat.channelid].splice(index,1); //削除
+
+                }
+
+            }
+            break;
+
+        //リアクションをつける
+        case "reaction":
+            console.log("Content :: これからリアクション");
+            console.log(dat);
+            for ( let index in MsgDB.value[dat.channelid] ) {
+                if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
+                    MsgDB.value[dat.channelid][index].reaction = dat.reaction; //リアクション更新
+
+                }
+
+            }
+
+        default:
+            break;
+
+    }
+
+    //backupMsg(MsgDB.value); //メッセージDBの出力、保存
+
+});
+
+//プロフィール情報が来たら表示名の更新
+// socket.on("infoUser", (dat) => {
+//     //if ( dat.userid === userinfo.userid ) { return; }
+//     let username = dat.username;
+//     let userid = dat.userid;
+//     let role = dat.role;
+
+//     UserIndex.value[userid] = {};
+
+//     //ユーザーインデックス更新
+//     UserIndex.value[userid].username = username; //名前
+//     UserIndex.value[userid].role = role; //ロール
+
+//     //backupUser(this.userIndex); //ユーザー情報をバックアップ
+
+// });
+
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 //メッセージDBの保存用
@@ -284,99 +368,99 @@ socket.on("infoResult", (dat) => {
     }
 
     //データが自分の情報なら
-    if ( dat.type === "user" ) {
-        //もし自分の情報だったら更新
-        if ( dat.userid === userinfo.userid ) {
-            // console.log("*******************");
-            // console.log("自分のや!");
-            // console.log(dat.channelJoined.length + " と " + userinfo.channelJoined.length);
-            // console.log(( dat.channelJoined.length > userinfo.channelJoined.length ));
-            // console.log("*******************");
+    // if ( dat.type === "user" ) {
+    //     //もし自分の情報だったら更新
+    //     if ( dat.userid === userinfo.userid ) {
+    //         // console.log("*******************");
+    //         // console.log("自分のや!");
+    //         // console.log(dat.channelJoined.length + " と " + userinfo.channelJoined.length);
+    //         // console.log(( dat.channelJoined.length > userinfo.channelJoined.length ));
+    //         // console.log("*******************");
 
-            if ( dat.channelJoined.length !== userinfo.channelJoined.length ) {
-                //チャンネル数が増えているなら
-                if ( dat.channelJoined.length > userinfo.channelJoined.length ) {
-                    let channelNew = (dat.channelJoined).filter( cid => !(userinfo.channelJoined).includes(cid) );
+    //         if ( dat.channelJoined.length !== userinfo.channelJoined.length ) {
+    //             //チャンネル数が増えているなら
+    //             if ( dat.channelJoined.length > userinfo.channelJoined.length ) {
+    //                 let channelNew = (dat.channelJoined).filter( cid => !(userinfo.channelJoined).includes(cid) );
                     
-                    console.log("socket :: チャンネル差 : ");
-                    console.log(channelNew);
+    //                 console.log("socket :: チャンネル差 : ");
+    //                 console.log(channelNew);
 
-                    //チャンネル情報の取得
-                    for ( let c in channelNew ) {
-                        socket.emit("getInfo", { //リクエスト送信
-                            target: "channel",
-                            targetid: channelNew[c],
-                            reqSender: {
-                                userid: userinfo.userid, //ユーザーID
-                                sessionid: userinfo.sessionid //セッションID
-                            }
-                        });
+    //                 //チャンネル情報の取得
+    //                 for ( let c in channelNew ) {
+    //                     socket.emit("getInfo", { //リクエスト送信
+    //                         target: "channel",
+    //                         targetid: channelNew[c],
+    //                         reqSender: {
+    //                             userid: userinfo.userid, //ユーザーID
+    //                             sessionid: userinfo.sessionid //セッションID
+    //                         }
+    //                     });
 
-                    }
+    //                 }
 
-                }
+    //             }
 
-                //チャンネル数が減っている（チャンネルを抜けた）なら
-                if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
-                    console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-                    dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
+    //             //チャンネル数が減っている（チャンネルを抜けた）なら
+    //             if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
+    //                 console.log("socket :: infoResult : チャンネル差が少ないから減らす");
+    //                 dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
 
-                    console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
-                    //自分が抜けたチャンネル分channelIndexを削る
-                    for (let c=0; c<Object.keys(channelIndex).length; c++ ) {
-                        let channelid = Object.keys(channelIndex)[c];
-                        console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
+    //                 console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
+    //                 //自分が抜けたチャンネル分channelIndexを削る
+    //                 for (let c=0; c<Object.keys(channelIndex).length; c++ ) {
+    //                     let channelid = Object.keys(channelIndex)[c];
+    //                     console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
                         
-                        //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-                        if ( !dat.channelJoined.includes(channelid) ) {
-                            delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
-                            console.log("socket :: infoResult : 削除された!");
-                            break;
+    //                     //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
+    //                     if ( !dat.channelJoined.includes(channelid) ) {
+    //                         delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
+    //                         console.log("socket :: infoResult : 削除された!");
+    //                         break;
 
-                        }
+    //                     }
 
-                    }
+    //                 }
 
-                }
+    //             }
 
-                //=== REF版 ===
-                //チャンネル数が減っている（チャンネルを抜けた）なら
-                if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
-                    console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-                    dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
+    //             //=== REF版 ===
+    //             //チャンネル数が減っている（チャンネルを抜けた）なら
+    //             if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
+    //                 console.log("socket :: infoResult : チャンネル差が少ないから減らす");
+    //                 dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
 
-                    console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
-                    //自分が抜けたチャンネル分channelIndexを削る
-                    for (let c=0; c<Object.keys(ChannelIndex.value).length; c++ ) {
-                        let channelid = Object.keys(ChannelIndex)[c];
-                        console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
+    //                 console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
+    //                 //自分が抜けたチャンネル分channelIndexを削る
+    //                 for (let c=0; c<Object.keys(ChannelIndex.value).length; c++ ) {
+    //                     let channelid = Object.keys(ChannelIndex)[c];
+    //                     console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
                         
-                        //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-                        if ( !dat.channelJoined.includes(channelid) ) {
-                            delete ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
-                            console.log("socket :: infoResult : 削除された!");
-                            break;
+    //                     //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
+    //                     if ( !dat.channelJoined.includes(channelid) ) {
+    //                         delete ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
+    //                         console.log("socket :: infoResult : 削除された!");
+    //                         break;
 
-                        }
+    //                     }
 
-                    }
+    //                 }
 
-                }
+    //             }
 
-            }
+    //         }
 
-            userinfo = {
-                username: dat.username,
-                userid: userinfo.userid, //ユーザーID
-                role: dat.role, //ロール
-                loggedin: true, //ログイン状態はそのまま
-                sessionid: userinfo.sessionid, //セッションIDはそのまま
-                channelJoined: dat.channelJoined, //参加しているチャンネル
-            }
+    //         userinfo = {
+    //             username: dat.username,
+    //             userid: userinfo.userid, //ユーザーID
+    //             role: dat.role, //ロール
+    //             loggedin: true, //ログイン状態はそのまま
+    //             sessionid: userinfo.sessionid, //セッションIDはそのまま
+    //             channelJoined: dat.channelJoined, //参加しているチャンネル
+    //         }
 
-        }
+    //     }
 
-    }
+    // }
 
 });
 
@@ -403,6 +487,16 @@ socket.on("infoChannel", (dat) => {
 
 //プロフィール情報の受け取り
 socket.on("infoUser", (dat) => {
+    let username = dat.username;
+    let userid = dat.userid;
+    let role = dat.role;
+
+    UserIndex.value[userid] = {};
+
+    //ユーザーインデックス更新
+    UserIndex.value[userid].username = username; //名前
+    UserIndex.value[userid].role = role; //ロール
+
     //自分の情報の更新にだけ使うから
     if ( dat.userid !== userinfo.userid ) { return; }
 
@@ -432,29 +526,29 @@ socket.on("infoUser", (dat) => {
         }
 
         //チャンネル数が減っている（チャンネルを抜けた）なら
-        if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
-            console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-            dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
+        // if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
+        //     console.log("socket :: infoResult : チャンネル差が少ないから減らす");
+        //     dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
 
-            console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
-            //自分が抜けたチャンネル分channelIndexを削る
-            for (let c=0; c<Object.keys(channelIndex).length; c++ ) {
-                let channelid = Object.keys(channelIndex)[c];
-                console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
+        //     console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
+        //     //自分が抜けたチャンネル分channelIndexを削る
+        //     for (let c=0; c<Object.keys(channelIndex).length; c++ ) {
+        //         let channelid = Object.keys(channelIndex)[c];
+        //         console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
                 
-                //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-                if ( !dat.channelJoined.includes(channelid) ) {
-                    delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
-                    //チャンネル情報の更新料を加算
-                    updateState.channelinfo = updateState.channelinfo + 1;
-                    console.log("socket :: infoResult : 削除された!");
-                    break;
+        //         //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
+        //         if ( !dat.channelJoined.includes(channelid) ) {
+        //             delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
+        //             //チャンネル情報の更新料を加算
+        //             updateState.channelinfo = updateState.channelinfo + 1;
+        //             console.log("socket :: infoResult : 削除された!");
+        //             break;
 
-                }
+        //         }
 
-            }
+        //     }
 
-        }
+        // }
 
         // === REF ===
         //チャンネル数が減っている（チャンネルを抜けた）なら
@@ -466,14 +560,13 @@ socket.on("infoUser", (dat) => {
             //自分が抜けたチャンネル分channelIndexを削る
             for (let c=0; c<Object.keys(ChannelIndex.value).length; c++ ) {
                 let channelid = Object.keys(ChannelIndex.value)[c];
-                console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
+                //console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
                 
                 //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
                 if ( !dat.channelJoined.includes(channelid) ) {
                     delete ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
                     //チャンネル情報の更新料を加算
-                    updateState.channelinfo = updateState.channelinfo + 1;
-                    console.log("socket :: infoResult : 削除された!");
+                    //console.log("socket :: infoResult : 削除された!");
                     break;
 
                 }

@@ -1,9 +1,11 @@
 <script setup>
-import { getSocket, channelIndex, dataUser } from '../../socket';
+import { getSocket, dataChannel, dataUser } from '../../socket';
 const socket = getSocket();
+
 </script>
 
 <script>
+const { ChannelIndex } = dataChannel(); //チャンネル情報
 
 export default {
 
@@ -17,11 +19,11 @@ export default {
     methods: {
         getChannelInfo() {
             console.log("getChannelInfo :: ");
-            console.log(channelIndex[this.getPath]);
+            console.log(ChannelIndex.value[this.getPath]);
             try {
                 //チャンネルインデックスから情報を返す、データなければホームに返す
-                if ( channelIndex[this.getPath] !== undefined ) {
-                    return channelIndex[this.getPath];
+                if ( ChannelIndex.value[this.getPath] !== undefined ) {
+                    return ChannelIndex.value[this.getPath];
 
                 } else {
                     setTimeout(() => {this.$forceUpdate()}, 1000); //レンダーまた更新させる

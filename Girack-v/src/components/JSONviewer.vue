@@ -6,10 +6,11 @@ DELETE OR HIDE ON HOSTING
 ********************************************************/
 
 <script setup>
-import { msgDBbackup } from '../socket';
+import { msgDBbackup, dataMsg } from '../socket';
 </script>
 
 <script>
+const { MsgDB } = dataMsg();
 
 export default {
     data() {
@@ -42,7 +43,7 @@ export default {
         
         <br>
 
-        <v-card style="padding:3%; margin-top:8px;" variant="outlined" v-for="d in Object.entries(mDBb)">
+        <v-card style="padding:3%; margin-top:8px;" variant="outlined" v-for="d in Object.entries(MsgDB)">
                 {{ d[0] }}
                 <v-card variant="tonal" style="padding:1%; margin-top:8px;" v-for="m in d[1]">
                     {{ JSON.stringify(m, null, 4) }}

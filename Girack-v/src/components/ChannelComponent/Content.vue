@@ -1,13 +1,11 @@
 <script setup>
-import { getSocket, dataMsg, dataUser, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
+import { getSocket, dataMsg, dataUser, backendURI } from "../../socket.js";
 </script>
 
 <script>
 const socket = getSocket();
 const { Userinfo } = dataUser(); //ユーザー情報
 const { MsgDB, UserIndex } = dataMsg(); //履歴用DB
-// console.log("Content :: MsgDB : ");
-// console.log(dataMsg());
 
 export default {
 
@@ -29,7 +27,7 @@ export default {
 
     watch: {
         MsgDB: {
-            handler(M) {
+            handler() {
                 console.log("Content :: スクロールしたい");
                 //スクロール値を計算
                 let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight;
@@ -64,7 +62,7 @@ export default {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
         //this.msgDB = msgDBbackup; //メッセージDBを持ってくる
-        this.userIndex = userIndexBackup; //使うユーザーの名前リスト
+        //this.userIndex = userIndexBackup; //使うユーザーの名前リスト
         
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
@@ -83,168 +81,14 @@ export default {
 
         // });
 
-        //メッセージ受け取り、出力
-        // socket.on("messageReceive", (msg) => {
-        //     console.log("msgReceive :: ↓");
-        //     console.log(msg);
-
-        //     //スクロールしきっているか確認
-        //     let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
-        //     console.log("scrolledState -> " + scrolledState);
-
-        //     //使用するDBレコード
-        //     //let activeDB = this.msgDB[this.getPath];
-
-        //     //もしユーザーの名前リストに名前がなかったら
-        //     if ( this.userIndex[msg.userid] === undefined ) {
-        //         //名前をリクエスト
-        //         socket.emit("getInfoUser", {
-        //             targetid: msg.userid,
-        //             reqSender: {
-        //                 userid: dataUser().Userinfo.value.userid, //ユーザーID
-        //                 sessionid: dataUser().Userinfo.value.sessionid //セッションID
-        //             }
-        //         });
-
-        //     }
-
-        //     try{
-        //         //DB配列に追加
-        //         if ( this.msgDB[msg.channelid] !== undefined ) {
-        //             //ローカルDBに追加
-        //             this.msgDB[msg.channelid].push({
-        //                 messageid: msg.messageid,
-        //                 userid: msg.userid,
-        //                 channelid: msg.channelid,
-        //                 time: msg.time,
-        //                 content: msg.content,
-        //                 reaction: msg.reaction
-        //             });
-
-        //         } else { //配列が空なら新しく作成、配置
-        //             this.msgDB[msg.channelid] = [{
-        //                 messageid: msg.messageid,
-        //                 userid: msg.userid,
-        //                 channelid: msg.channelid,
-        //                 time: msg.time,
-        //                 content: msg.content,
-        //                 reaction: msg.reaction
-        //             }];
-
-        //         }
-
-        //     }
-        //     catch(e) {
-        //         console.log("Content :: msgDB書き込みエラー");
-        //         console.log(e);
-        //     }
-
-        //     //スクロールされきっていたら最後へ自動スクロールする
-        //     if ( scrolledState ) { //この関数用の変数で確認
-        //         //コンテンツのレンダーを待ってからスクロール
-        //         this.$nextTick(() => {
-        //             channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
-
-        //         });
-
-        //     }
-
-        //     backupMsg(this.msgDB); //メッセージDBの出力、保存
-
-        // });
-
-        //他人の名前の受け取り
-        socket.on("infoResult", (dat) => {
-            if ( dat.type !== "user" ) { return; } //ユーザー情報じゃなければ取りやめ
-            console.log("Content :: infoResult : 名前情報受け取り \\/")
-            console.log(dat);
-
-            let username = dat.username;
-            let userid = dat.userid;
-            let role = dat.role;
-
-            UserIndex[userid] = {};
-
-            //ユーザーインデックス更新
-            UserIndex[userid].username = username; //名前
-            UserIndex[userid].role = role; //ロール
-
-            //backupUser(this.userIndex); //ユーザー情報をバックアップ
-
-        });
-
-        //メッセージの更新
-        socket.on("messageUpdate", (dat) => {
-            //メッセージ消したりリアクションされたり
-            /*
-            {
-                action: "delete"|"reaction",
-                channelid: dat.channelid,
-                messageid: dat.messageid,
-                ["reaction"だったら]
-                reaction: dat.reaction
-            }
-            */
-
-            switch( dat.action ) {
-                //削除する
-                case "delete":
-                    //ループでIDが一致するメッセージを探す
-                    for ( let index in this.msgDB[dat.channelid] ) {
-                        if ( this.msgDB[dat.channelid][index].messageid === dat.messageid ) {
-                            this.msgDB[dat.channelid].splice(index,1); //削除
-
-                        }
-
-                    }
-                    break;
-
-                //リアクションをつける
-                case "reaction":
-                    console.log("Content :: これからリアクション");
-                    console.log(dat);
-                    for ( let index in this.msgDB[dat.channelid] ) {
-                        if ( this.msgDB[dat.channelid][index].messageid === dat.messageid ) {
-                            this.msgDB[dat.channelid][index].reaction = dat.reaction; //リアクション更新
-
-                        }
-
-                    }
-
-                default:
-                    break;
-
-            }
-
-            backupMsg(this.msgDB); //メッセージDBの出力、保存
-
-        });
-
-        //プロフィール情報が来たら表示名の更新
-        socket.on("infoUser", (dat) => {
-            //if ( dat.userid === userinfo.userid ) { return; }
-            let username = dat.username;
-            let userid = dat.userid;
-            let role = dat.role;
-
-            this.userIndex[userid] = {};
-
-            //ユーザーインデックス更新
-            this.userIndex[userid].username = username; //名前
-            this.userIndex[userid].role = role; //ロール
-
-            backupUser(this.userIndex); //ユーザー情報をバックアップ
-
-        });
-
     },
 
     //アンロード時の処理
     unmounted() {
         //socket通信の重複防止
-        socket.off("messageReceive");
-        socket.off("infoResult");
-        socket.off("messageUpdate");
+        // socket.off("messageReceive");
+        // socket.off("infoResult");
+        // socket.off("messageUpdate");
 
     },
 
@@ -468,7 +312,7 @@ export default {
             <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                 
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
-                    {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
+                    {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
                         v-if="getRole(m.userid)!=='Member'"
                         :color="getRole(m.userid)==='Admin'?'purple':'gray'"

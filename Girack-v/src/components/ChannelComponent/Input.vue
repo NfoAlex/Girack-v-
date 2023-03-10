@@ -24,7 +24,7 @@ export default {
                 content: this.txt
             });
             this.txt = ""; //入力欄を空に
-            console.log("sended ↓");
+            console.log("--- msg sent ---");
             //console.log(userinfo);
             // console.log({
             //     userid: userinfo.userid, //名前
@@ -52,8 +52,8 @@ export default {
                 return channelIndex[this.getPath].channelname;
             }
             catch (e) {
-                setTimeout(this.$forceUpdate(), 1000);
-                return "";
+                //setTimeout(this.$forceUpdate(), 1000);
+                return "テキストチャンネル";
             }
 
         }
