@@ -127,8 +127,8 @@ export function getMessage(channelid, readLength) {
     socket.emit("getMessage", {
         //送信者の情報
         reqSender: {
-            userid: userinfo.userid, //ユーザーID
-            sessionid: userinfo.sessionid //セッションID
+            userid: Userinfo.value.userid, //ユーザーID
+            sessionid: Userinfo.value.sessionid //セッションID
         },
         channelid: channelid, //ほしい履歴のチャンネルID
         readLength: readLength //ほしい長さ
