@@ -1,12 +1,24 @@
 <script setup>
-import { userinfo, setCookie, getSocket } from '../socket.js';
+import { getUserinfo, setCookie, getSocket, dataUser } from '../socket.js';
+
+//const { Userinfo } = dataUser();
+const userinfo = getUserinfo();
 
 </script>
 
 <script>
 const socket = getSocket();
+const { Userinfo } = dataUser();
 
 export default {
+
+    // setup() {
+    //     const { Userinfo } = dataUser();
+    //     console.log("User :: setup : Userinfo -> ");
+    //     console.log(Userinfo);
+
+    //     return { Userinfo };
+    // },
     
     data() {
         return {
@@ -17,6 +29,16 @@ export default {
 
             nameDisplaying: "...",
             nameEditing: false, //名前編集しているかどうか
+        }
+    },
+
+    watch: {
+        Userinfo: {
+            handler(U) {
+                this.nameDisplaying = U.username;
+
+            },
+            deep: true
         }
     },
     
@@ -30,18 +52,18 @@ export default {
 
         //名前更新
         updateName() {
-            let nameUpdating = this.nameDisplaying
+            let nameUpdating = this.nameDisplaying;
             //名前更新
             socket.emit("changeProfile", {
                 name: nameUpdating,
                 reqSender: {
-                    userid: userinfo.userid,
-                    sessionid: userinfo.sessionid
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
                 }
             });
             this.nameEditing = false;
-            this.nameDisplaying = nameUpdating;
-            this.$forceUpdate();
+            //this.nameDisplaying = nameUpdating;
+            //this.$forceUpdate();
 
             console.log("名前更新します -> " + this.nameDisplaying);
 
@@ -49,14 +71,22 @@ export default {
 
         //編集しているかどうかを切り替えする
         toggleEditing() {
+            this.nameDisplaying = Userinfo.value.username;
             this.nameEditing = !this.nameEditing;
 
         }
     },
 
     mounted() {
-        this.nameDisplaying = userinfo.username;
+        this.nameDisplaying = Userinfo.value.username;
+        console.log("User :: mounted : Userinfo");
+        console.log(Userinfo.value);
+        //console.log(userinfo);
 
+    },
+
+    created() {
+        //this.nameDisplaying = Userinfo.username;
     }
 
 }
@@ -69,16 +99,16 @@ export default {
             <v-row no-gutters>
                 <v-col cols="2">
                     <v-card variant="tonal" :class="cd" style="padding:0">
-                        <v-img class="rounded-lg" :alt="userinfo.userid" :src="'http://localhost:33333/img/' + userinfo.userid + '.jpeg'"></v-img>
+                        <v-img class="rounded-lg" :alt="Userinfo.userid" :src="'http://localhost:33333/img/' + Userinfo.userid + '.jpeg'"></v-img>
                     </v-card>
                 </v-col>
                 <v-col>
                     <div variant="tonal" :class="cd" style="padding:1% 10% ">
                         <p class="text-left text-h6">
-                            # {{ userinfo.userid }}
+                            # {{ Userinfo.userid }}
                         </p>
                         <p v-if="!nameEditing" @dblclick="toggleEditing" class="text-h4 text-left" >
-                            {{ userinfo.username }}
+                            {{ Userinfo.username }}
                         </p>
                         <v-text-field
                             v-if="nameEditing"

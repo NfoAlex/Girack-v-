@@ -1,11 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, channelIndex, userinfo, backendURI, updateState, updateStateTaken } from "./socket.js";
+import { getSocket, channelIndex, getUserinfo, dataUser, backendURI, updateState, updateStateTaken } from "./socket.js";
 import Auth from "./components/Auth.vue";
+
+const { Userinfo } = dataUser();
 </script>
 
 <script>
 const socket = getSocket();
+var userinfo = getUserinfo();
 
 export default {
     data() {
@@ -32,12 +35,23 @@ export default {
             //console.log(r);
             this.path = r.path; //変数へ取り込む
 
+        },
+        userinfo: {
+            handler(u) {
+                console.log("App :: watch : 情報更新 userinfo");
+                console.log(u);
+                this.channelJoined = u.channelJoined;
+                this.displayusername = u.username;
+            },
+            depth: true
         }
     },
 
     mounted() {
+        console.log("App :: mounted : userinfo");
+        //console.log(userinfo);
         this.channelIndexListing = channelIndex;
-        this.channelJoined = userinfo.channelJoined;
+        //this.channelJoined = userinfo.channelJoined;
 
         socket.emit("getInitInfo"); //サーバーの情報を取得
 
@@ -95,8 +109,8 @@ export default {
             console.log("App :: infoUser : ユーザー名表示更新");
             this.displayusername = dat.username;
 
-            this.channelIndexListing = channelIndex;
-            this.channelJoined = userinfo.channelJoined;
+            //this.channelIndexListing = channelIndex;
+            //this.channelJoined = userinfo.channelJoined;
 
             let checkCount = 0;
             let checkChannelInfo = setInterval(() => {
@@ -152,7 +166,7 @@ export default {
                 <div class="mx-auto" style="width:fit-content; margin-top:10%">
                     <RouterLink to="/user">
                         <v-avatar style=" width:4vmax;height:auto;">
-                            <v-img :alt="userinfo.userid" :src="uri + '/img/' + userinfo.userid + '.jpeg'"></v-img>
+                            <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
                         </v-avatar>
                         <v-tooltip
                             activator="parent"
@@ -165,7 +179,7 @@ export default {
 
                 <v-card-text class="text-subtitle-1 text-center mx-auto">
                     <span>
-                        {{ displayusername }}
+                        {{ Userinfo.username }}
                     </span>
                 </v-card-text>
 

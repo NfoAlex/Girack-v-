@@ -2,6 +2,7 @@
 //通信とかそこらへん
 
 import { io } from 'socket.io-client'; //ウェブソケット通信用
+import { ref } from "vue";
 
 //FOR DEVELOPMENT
 export const backendURI = "http://" + location.hostname + ":33333";
@@ -20,9 +21,28 @@ export function updateStateTaken(i) {
 
 }
 
+/* ==================================================== */
+//ref テスト用
+
+const Userinfo = ref({
+    username: "RefTesting", //名前
+    role: "Admin",
+    userid: "001", //ユーザーID
+    loggedin: false, //ログイン状態
+    sessionid: 0, //セッションID
+    channelJoined: [], //参加しているチャンネル
+});
+
+export function dataUser() {
+
+    return { Userinfo };
+}
+
+/* ==================================================== */
+
 //ユーザー情報
-export var userinfo = {
-    username: null, //名前
+let userinfo = {
+    username: "...", //名前
     role: "",
     userid: "", //ユーザーID
     loggedin: false, //ログイン状態
@@ -96,7 +116,7 @@ export function getMessage(channelid, readLength) {
 
 //ユーザー情報返すだけ
 export function getUserinfo() {
-    return userinfo;
+    return { userinfo };
 
 }
 
@@ -306,7 +326,25 @@ socket.on("infoUser", (dat) => {
     }
 
     //個人情報更新
+    // userinfo = {
+    //     username: dat.username,
+    //     userid: userinfo.userid, //ユーザーID
+    //     role: dat.role, //ロール
+    //     loggedin: true, //ログイン状態はそのまま
+    //     sessionid: userinfo.sessionid, //セッションIDはそのまま
+    //     channelJoined: dat.channelJoined, //参加しているチャンネル
+    // }
+
     userinfo = {
+        username: dat.username,
+        userid: userinfo.userid, //ユーザーID
+        role: dat.role, //ロール
+        loggedin: true, //ログイン状態はそのまま
+        sessionid: userinfo.sessionid, //セッションIDはそのまま
+        channelJoined: dat.channelJoined, //参加しているチャンネル
+    }
+
+    Userinfo.value = {
         username: dat.username,
         userid: userinfo.userid, //ユーザーID
         role: dat.role, //ロール
@@ -395,6 +433,13 @@ socket.on("authResult", (dat) => {
     if ( dat.result ) { //もしログイン成功なら
         //ユーザー情報を更新
         userinfo = {
+            userid: dat.userid, //ユーザーID
+            loggedin: true, //ログイン状態
+            sessionid: dat.sessionid, //セッションID
+            channelJoined: dat.channelJoined
+        };
+
+        Userinfo.value = {
             userid: dat.userid, //ユーザーID
             loggedin: true, //ログイン状態
             sessionid: dat.sessionid, //セッションID
