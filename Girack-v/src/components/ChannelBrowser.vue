@@ -124,7 +124,7 @@ export default {
         socket.on("infoList", (dat) => {
             //型が違うかデータが無効なら関数を終わらせる
             if ( dat.type !== "channel" || dat === -1 ) {
-                console.log("ChannelBrwoser :: infoResult : データ違うっぽい???"); 
+                console.log("ChannelBrwoser :: infoList : データ違うっぽい???"); 
                 return;
 
             }
@@ -132,7 +132,7 @@ export default {
             this.channelList = dat.channelList; //リスト追加
             //this.channelJoined = Userinfo.value.channelJoined;
 
-            console.log("ChannelBrwoser :: infoResult : dat ↓ ");
+            console.log("ChannelBrwoser :: infoList : dat ↓ ");
             console.log(dat);
 
         });
