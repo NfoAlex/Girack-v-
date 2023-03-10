@@ -9,7 +9,7 @@ export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI);
 
 /* ==================================================== */
-//ref テスト用
+//ref テスト用 ユーザー情報
 
 const Userinfo = ref({
     username: "RefTesting", //名前
@@ -21,8 +21,8 @@ const Userinfo = ref({
 });
 
 export function dataUser() {
-
     return { Userinfo };
+
 }
 
 /* ==================================================== */
@@ -55,13 +55,13 @@ export var channelIndex = {
     */
 };
 
-/* ==================================================== */
-//ref テスト用
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
+//ref テスト用 チャンネル情報
 
 //チャンネル情報
 const ChannelIndex = ref({
     /*
-    "001": {
+    "0001": {
         channelname: "random",
         description: "Hello, Girack",
         scope: "open"
@@ -71,11 +71,109 @@ const ChannelIndex = ref({
 
 //チャンネル情報を返すだけ
 export function dataChannel() {
-    return ChannelIndex;
+    return { ChannelIndex };
 
 }
 
-/* ==================================================== */
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
+
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
+//ref テスト用 メッセージDB（履歴）
+
+const MsgDB = ref({
+    // "001": [
+    //     {
+    //         id: 0,
+    //         username: "asdf",
+    //         userid: "xx0",
+    //         channelid: "001",
+    //         time: "20200217165240643",
+    //         content: "Ayo"
+    //     },
+    //     {
+    //         id: 1,
+    //         username: "fdsa",
+    //         userid: "xx1",
+    //         channelid: "001",
+    //         time: "20200227165240646",
+    //         content: "は"
+    //     }
+    // ]
+});
+
+const UserIndex = ref({
+
+});
+
+//履歴DB返すだけ
+export function dataMsg() {
+    // console.log("socket :: dataMsg : MsgDB ");
+    // console.log(MsgDB);
+    return { MsgDB, UserIndex };
+
+}
+
+//メッセージ受け取り、出力
+socket.on("messageReceive", (msg) => {
+    console.log("socket :: msgReceive : ↓");
+    console.log(msg);
+
+    //スクロールしきっているか確認
+    // let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
+    // console.log("scrolledState -> " + scrolledState);
+
+    //使用するDBレコード
+    //let activeDB = this.msgDB[this.getPath];
+
+    //もしユーザーの名前リストに名前がなかったら
+    if ( UserIndex.value[msg.userid] === undefined ) {
+        //名前をリクエスト
+        socket.emit("getInfoUser", {
+            targetid: msg.userid,
+            reqSender: {
+                userid: Userinfo.value.userid, //ユーザーID
+                sessionid: Userinfo.value.sessionid //セッションID
+            }
+        });
+
+    }
+
+    try{
+        //DB配列に追加
+        if ( MsgDB.value[msg.channelid] !== undefined ) {
+            //ローカルDBに追加
+            MsgDB.value[msg.channelid].push({
+                messageid: msg.messageid,
+                userid: msg.userid,
+                channelid: msg.channelid,
+                time: msg.time,
+                content: msg.content,
+                reaction: msg.reaction
+            });
+
+        } else { //配列が空なら新しく作成、配置
+            MsgDB.value[msg.channelid] = [{
+                messageid: msg.messageid,
+                userid: msg.userid,
+                channelid: msg.channelid,
+                time: msg.time,
+                content: msg.content,
+                reaction: msg.reaction
+            }];
+
+        }
+
+    }
+    catch(e) {
+        console.log("Content :: msgDB書き込みエラー");
+        console.log(e);
+    }
+
+    //backupMsg(this.msgDB); //メッセージDBの出力、保存
+
+});
+
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 //メッセージDBの保存用
 export var msgDBbackup = {
@@ -298,8 +396,8 @@ socket.on("infoChannel", (dat) => {
         scope: dat.scope //チャンネルの公開範囲
     };
 
-    console.log("channelIndex :: " + updateState.channelinfo);
-    console.log(Object.entries(ChannelIndex.value));
+    // console.log("channelIndex :: ");
+    // console.log(Object.entries(ChannelIndex.value));
 
 });
 
@@ -446,9 +544,15 @@ socket.on("messageHistory", (history) => {
         try {
             //msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
             msgDBbackup[channelid] = history; //履歴DBを更新
+            MsgDB.value[channelid] = history;
+            // console.log("socket :: messageHistory : MsgDB");
+            // console.log(MsgDB.value[channelid][0].messageid);
         }
         catch(e) {
             msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
+            MsgDB.value[channelid] = [history[index]];
+            console.log("socket :: messageHistory : MsgDB");
+            console.log(MsgDB.value);
 
         }
 
