@@ -6,7 +6,7 @@ DELETE OR HIDE ON HOSTING
 ********************************************************/
 
 <script setup>
-import { userinfo, msgDBbackup } from '../socket';
+import { msgDBbackup } from '../socket';
 </script>
 
 <script>

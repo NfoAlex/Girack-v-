@@ -5,8 +5,6 @@ const socket = getSocket();
 
 <script>
 
-const { Userinfo } = dataUser();
-
 export default {
 
     computed: {
@@ -51,6 +49,7 @@ export default {
     },
 
     mounted() {
+        //読み込みエラー対策
         if ( dataUser().Userinfo.value.channelJoined.includes(this.getPath) === -1 ) {
             location.pathname = "/";
 
