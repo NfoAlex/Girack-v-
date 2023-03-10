@@ -53,17 +53,17 @@ export default {
         });
 
         //データ更新用チャンネルバーの更新
-        socket.on("infoResult", (dat) => {
-            //もし受け取ったデータがチャンネル用かユーザー用かならチャンネルバー更新
-            if ( dat.type === "channel" || dat.type === "user" ) {
-                this.channelIndexListing = channelIndex;
-                this.channelJoined = Userinfo.value.channelJoined;
+        // socket.on("infoResult", (dat) => {
+        //     //もし受け取ったデータがチャンネル用かユーザー用かならチャンネルバー更新
+        //     if ( dat.type === "channel" || dat.type === "user" ) {
+        //         this.channelIndexListing = channelIndex;
+        //         this.channelJoined = Userinfo.value.channelJoined;
 
-                this.$forceUpdate(); //レンダー更新
+        //         this.$forceUpdate(); //レンダー更新
 
-            }
+        //     }
 
-        });
+        // });
 
         let checkCount = 0;
         //チャンネル情報の更新

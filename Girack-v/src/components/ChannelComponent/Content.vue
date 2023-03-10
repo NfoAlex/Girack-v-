@@ -1,9 +1,10 @@
 <script setup>
-import { getSocket, getUserinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
+import { getSocket, dataUser, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
 
 </script>
 <script>
 const socket = getSocket();
+const { Userinfo } = dataUser();
 
 export default {
 
@@ -263,8 +264,8 @@ export default {
                 target: "user",
                 targetid: userid,
                 reqSender: {
-                    userid: getUserinfo().userid, //ユーザーID
-                    sessionid: getUserinfo().sessionid //セッションID
+                    userid: Userinfo.value.userid, //ユーザーID
+                    sessionid: Userinfo.value.sessionid //セッションID
                 }
             });
 
@@ -466,7 +467,7 @@ export default {
                             🤔
                         </v-btn>
                         <!-- 削除ボタン -->
-                        <v-btn v-if="getUserinfo().role==='Admin'||m.userid===getUserinfo().userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <v-btn v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             <span style="font-size:0.8vmax" class="mdi mdi-delete-forever">
                             </span>
                             削除

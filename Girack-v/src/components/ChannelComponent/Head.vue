@@ -1,9 +1,11 @@
 <script setup>
-import { getSocket, channelIndex, userinfo } from '../../socket';
+import { getSocket, channelIndex, dataUser } from '../../socket';
 const socket = getSocket();
 </script>
 
 <script>
+
+const { Userinfo } = dataUser();
 
 export default {
 
@@ -49,7 +51,7 @@ export default {
     },
 
     mounted() {
-        if ( userinfo.channelJoined.includes(this.getPath) === -1 ) {
+        if ( dataUser().Userinfo.value.channelJoined.includes(this.getPath) === -1 ) {
             location.pathname = "/";
 
         }
