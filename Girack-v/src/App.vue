@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, channelIndex, dataChannel, getUserinfo, dataUser, backendURI, updateState, updateStateTaken } from "./socket.js";
+import { getSocket, channelIndex, dataChannel, dataUser, backendURI } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
 //REFとしてインポート
@@ -10,7 +10,6 @@ const ChannelIndex = dataChannel();
 
 <script>
 const socket = getSocket();
-var userinfo = getUserinfo();
 
 export default {
     data() {
@@ -52,87 +51,6 @@ export default {
             this.servername = dat.servername; //表示する名前を変更
             
         });
-
-        //データ更新用チャンネルバーの更新
-        // socket.on("infoResult", (dat) => {
-        //     //もし受け取ったデータがチャンネル用かユーザー用かならチャンネルバー更新
-        //     if ( dat.type === "channel" || dat.type === "user" ) {
-        //         this.channelIndexListing = channelIndex;
-        //         this.channelJoined = Userinfo.value.channelJoined;
-
-        //         this.$forceUpdate(); //レンダー更新
-
-        //     }
-
-        // });
-
-        let checkCount = 0;
-        //チャンネル情報の更新
-        // socket.on("infoChannel", () => {
-        //     let checkChannelInfo = setInterval(() => {
-        //         console.log("infoChannel :: Lets check..." + updateState.channelinfo);
-        //         if ( updateState.channelinfo > 0 ) {
-        //             console.log("App :: infoChannel : 情報あるわ")
-        //             this.channelIndexListing = channelIndex;
-        //             this.$forceUpdate(); //レンダー更新
-
-        //             clearInterval(checkChannelInfo);
-
-        //             updateStateTaken("channelinfo");
-        //             //updateState.channelinfo = updateState.channelinfo - 1;
-
-        //         } else if ( updateState.channelinfo < 0 ) {
-        //             clearInterval(checkChannelInfo);
-
-        //         }
-
-        //         if ( checkCount > 10 ) {
-        //             clearInterval(checkChannelInfo);
-
-        //         }
-
-        //         checkCount++;
-
-        //     }, 100);
-
-        // });
-
-        //プロフィールの更新を受けたら表示名を変更
-        // socket.on("infoUser", (dat) => {
-        //     console.log("App :: infoUser : ユーザー名表示更新");
-        //     this.displayusername = dat.username;
-
-        //     //this.channelIndexListing = channelIndex;
-        //     //this.channelJoined = userinfo.channelJoined;
-
-        //     let checkCount = 0;
-        //     let checkChannelInfo = setInterval(() => {
-        //         console.log("infoUser : Lets check..." + updateState.channelinfo);
-        //         if ( updateState.channelinfo > 0 ) {
-        //             console.log("App :: infoUser : 情報あるわ(チャンネル抜け)")
-        //             this.channelIndexListing = channelIndex;
-        //             this.$forceUpdate(); //レンダー更新
-                    
-        //             clearInterval(checkChannelInfo);
-
-        //             updateStateTaken("channelinfo");
-        //             //updateState.channelinfo = updateState.channelinfo - 1;
-
-        //         } else if ( updateState.channelinfo < 0 ) {
-        //             clearInterval(checkChannelInfo);
-
-        //         }
-
-        //         if ( checkCount > 10 ) {
-        //             clearInterval(checkChannelInfo);
-
-        //         }
-
-        //         checkCount++;
-
-        //     }, 500);
-
-        // });
 
         console.log("channelIndexListing :: ");
         console.log(channelIndex);

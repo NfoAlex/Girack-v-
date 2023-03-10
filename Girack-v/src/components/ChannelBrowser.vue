@@ -1,9 +1,5 @@
 <script setup>
-import { getSocket, getUserinfo, dataUser } from '../socket.js';
-import { defineExpose } from 'vue';
-
-//const Userinfo = dataUser();
-//defineExpose({ Userinfo });
+import { getSocket, dataUser } from '../socket.js';
 </script>
 
 <script>
