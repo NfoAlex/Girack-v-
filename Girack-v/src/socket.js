@@ -28,14 +28,14 @@ export function dataUser() {
 /* ==================================================== */
 
 //ユーザー情報
-let userinfo = {
-    username: "...", //名前
-    role: "",
-    userid: "", //ユーザーID
-    loggedin: false, //ログイン状態
-    sessionid: 0, //セッションID
-    channelJoined: [], //参加しているチャンネル
-};
+// let userinfo = {
+//     username: "...", //名前
+//     role: "",
+//     userid: "", //ユーザーID
+//     loggedin: false, //ログイン状態
+//     sessionid: 0, //セッションID
+//     channelJoined: [], //参加しているチャンネル
+// };
 
 //サーバー(インスタンス)情報
 export var serverinfo = {
@@ -498,15 +498,15 @@ socket.on("infoUser", (dat) => {
     UserIndex.value[userid].role = role; //ロール
 
     //自分の情報の更新にだけ使うから
-    if ( dat.userid !== userinfo.userid ) { return; }
+    if ( dat.userid !== Userinfo.value.userid ) { return; }
 
-    console.log("infoUser :: プロフィール更新");
+    console.log("socket :: infoUser : プロフィール更新");
 
     //参加しているチャンネルリストの長さ比較
-    if ( dat.channelJoined.length !== userinfo.channelJoined.length ) {
+    if ( dat.channelJoined.length !== Userinfo.value.channelJoined.length ) {
         //チャンネル数が増えているなら
-        if ( dat.channelJoined.length > userinfo.channelJoined.length ) {
-            let channelNew = (dat.channelJoined).filter( cid => !(userinfo.channelJoined).includes(cid) );
+        if ( dat.channelJoined.length > Userinfo.value.channelJoined.length ) {
+            let channelNew = (dat.channelJoined).filter( cid => !(Userinfo.value.channelJoined).includes(cid) );
             
             console.log("socket :: チャンネル差 : ");
             console.log(channelNew);
@@ -587,21 +587,21 @@ socket.on("infoUser", (dat) => {
     //     channelJoined: dat.channelJoined, //参加しているチャンネル
     // }
 
-    userinfo = {
-        username: dat.username,
-        userid: userinfo.userid, //ユーザーID
-        role: dat.role, //ロール
-        loggedin: true, //ログイン状態はそのまま
-        sessionid: userinfo.sessionid, //セッションIDはそのまま
-        channelJoined: dat.channelJoined, //参加しているチャンネル
-    }
+    // userinfo = {
+    //     username: dat.username,
+    //     userid: Userinfo.value.userid, //ユーザーID
+    //     role: dat.role, //ロール
+    //     loggedin: true, //ログイン状態はそのまま
+    //     sessionid: userinfo.sessionid, //セッションIDはそのまま
+    //     channelJoined: dat.channelJoined, //参加しているチャンネル
+    // }
 
     Userinfo.value = {
         username: dat.username,
-        userid: userinfo.userid, //ユーザーID
+        userid: Userinfo.value.userid, //ユーザーID
         role: dat.role, //ロール
         loggedin: true, //ログイン状態はそのまま
-        sessionid: userinfo.sessionid, //セッションIDはそのまま
+        sessionid: Userinfo.value.sessionid, //セッションIDはそのまま
         channelJoined: dat.channelJoined, //参加しているチャンネル
     }
 
@@ -690,12 +690,12 @@ socket.on("authResult", (dat) => {
     //ユーザーデータの更新
     if ( dat.result ) { //もしログイン成功なら
         //ユーザー情報を更新
-        userinfo = {
-            userid: dat.userid, //ユーザーID
-            loggedin: true, //ログイン状態
-            sessionid: dat.sessionid, //セッションID
-            channelJoined: dat.channelJoined
-        };
+        // userinfo = {
+        //     userid: dat.userid, //ユーザーID
+        //     loggedin: true, //ログイン状態
+        //     sessionid: dat.sessionid, //セッションID
+        //     channelJoined: dat.channelJoined
+        // };
 
         Userinfo.value = {
             userid: dat.userid, //ユーザーID
@@ -713,27 +713,25 @@ socket.on("authResult", (dat) => {
 
         });
 
-        setCookie("sessionid", dat.sessionid, 15); //クッキーにセッションIDを設定、寿命は15日
+        //クッキーにセッションIDを設定、寿命は15日
+        setCookie("sessionid", dat.sessionid, 15);
         console.log("session id in cookie -> " + getCookie("sessionid"));
 
-        console.log("socket :: authResult : userinfo ↓");
-        console.log(userinfo);
-
         //チャンネル情報の取得
-        for ( let c in userinfo.channelJoined ) {
+        for ( let c in Userinfo.value.channelJoined ) {
             socket.emit("getInfoChannel", { //リクエスト送信
-                targetid: userinfo.channelJoined[c],
+                targetid: Userinfo.value.channelJoined[c],
                 reqSender: {
-                    userid: userinfo.userid, //ユーザーID
-                    sessionid: userinfo.sessionid //セッションID
+                    userid: Userinfo.value.userid, //ユーザーID
+                    sessionid: Userinfo.value.sessionid //セッションID
                 }
             });
 
         }
 
         //メッセージ履歴の取得
-        for ( let cid in userinfo.channelJoined ) {
-            getMessage(userinfo.channelJoined[cid], 20); //リクエスト送信する
+        for ( let cid in Userinfo.value.channelJoined ) {
+            getMessage(Userinfo.value.channelJoined[cid], 20); //リクエスト送信する
 
         }
 

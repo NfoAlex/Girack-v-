@@ -83,15 +83,6 @@ export default {
 
     },
 
-    //アンロード時の処理
-    unmounted() {
-        //socket通信の重複防止
-        // socket.off("messageReceive");
-        // socket.off("infoResult");
-        // socket.off("messageUpdate");
-
-    },
-
     methods: {
         //ロールを取得するだけ
         getRole(userid) {
