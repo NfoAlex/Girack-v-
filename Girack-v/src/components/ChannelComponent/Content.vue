@@ -1,6 +1,5 @@
 <script setup>
 import { getSocket, dataUser, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
-
 </script>
 <script>
 const socket = getSocket();
@@ -78,8 +77,8 @@ export default {
                 socket.emit("getInfoUser", {
                     targetid: msg.userid,
                     reqSender: {
-                        userid: getUserinfo().userid, //ユーザーID
-                        sessionid: getUserinfo().sessionid //セッションID
+                        userid: dataUser().Userinfo.value.userid, //ユーザーID
+                        sessionid: dataUser().Userinfo.value.sessionid //セッションID
                     }
                 });
 
@@ -329,8 +328,8 @@ export default {
                     channelid: this.getPath,
                     messageid: msgId,
                     reqSender: {
-                        userid: getUserinfo().userid,
-                        sessionid: getUserinfo().sessionid
+                        userid: Userinfo.userid,
+                        sessionid: Userinfo.sessionid
                     }
                 });
 
@@ -345,8 +344,8 @@ export default {
                     messageid: msgId,
                     reaction: reaction, //送るリアクション
                     reqSender: {
-                        userid: getUserinfo().userid,
-                        sessionid: getUserinfo().sessionid
+                        userid: Userinfo.userid,
+                        sessionid: Userinfo.sessionid
                     }
                 });
             }
