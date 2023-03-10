@@ -8,19 +8,6 @@ import { ref } from "vue";
 export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI);
 
-//他のコンポーネントで情報が更新されたかどうかを管理
-export var updateState = {
-    userinfo: 0,
-    serverinfo: 0,
-    channelinfo: 0
-}
-
-//情報とったとやるだけ
-export function updateStateTaken(i) {
-    updateState[i] = updateState[i] - 1;
-
-}
-
 /* ==================================================== */
 //ref テスト用
 
@@ -166,8 +153,6 @@ socket.on("serverinfo", (dat) => {
         inviteOnly: dat.inviteOnly //招待オンリーかどうか
     };
 
-    updateState.serverinfo = true;
-
 });
 
 //情報受け取り
@@ -312,8 +297,6 @@ socket.on("infoChannel", (dat) => {
         description: dat.description, //チャンネル概要
         scope: dat.scope //チャンネルの公開範囲
     };
-
-    updateState.channelinfo = updateState.channelinfo + 1;
 
     console.log("channelIndex :: " + updateState.channelinfo);
     console.log(Object.entries(ChannelIndex.value));
