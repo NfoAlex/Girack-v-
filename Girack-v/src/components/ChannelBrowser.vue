@@ -175,7 +175,7 @@ export default {
         </v-card>
     </v-overlay>
 
-    <div style="margin:3% auto; width: 85%">
+    <div style="margin:3% auto; width:85%; height:94%;">
         <div class="d-flex justify-space-around bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" variant="tonal" icon="" class="rounded-lg">
@@ -191,7 +191,7 @@ export default {
             </v-btn>
         </div>
         <br>
-        <v-list style="height:100%; width:100%; overflow-y:auto;">
+        <v-list class="channelList" style="height:94%; width:100%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
                 style="padding:0;"
@@ -209,3 +209,16 @@ export default {
         </v-list>
     </div>
 </template>
+
+<style scoped>
+
+.channelList
+{
+    scrollbar-width: none; /* Firefox用 */
+}
+.channelList::-webkit-scrollbar
+{
+    display:none; /* Chrome用 */
+}
+
+</style>
