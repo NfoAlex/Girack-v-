@@ -1,16 +1,22 @@
 <script setup>
-import { userinfo, channelIndex, setCookie } from '../socket.js';
+import { userinfo, setCookie, getSocket } from '../socket.js';
 
 </script>
 
 <script>
+const socket = getSocket();
 
 export default {
-
+    
     data() {
         return {
-            snackbar: false,
-            cd: ["card-default","rounded-lg"]
+            snackbar: false, //ログアウトアラート出力用
+            cd: ["card-default","rounded-lg"], //CSS用クラス名
+
+            okayIcon: '',
+
+            nameDisplaying: "...",
+            nameEditing: false, //名前編集しているかどうか
         }
     },
     
@@ -20,7 +26,37 @@ export default {
             setCookie("sessionid", "", 0); //クッキー削除
             location.reload(); //ページリロード
 
+        },
+
+        //名前更新
+        updateName() {
+            let nameUpdating = this.nameDisplaying
+            //名前更新
+            socket.emit("changeProfile", {
+                name: nameUpdating,
+                reqSender: {
+                    userid: userinfo.userid,
+                    sessionid: userinfo.sessionid
+                }
+            });
+            this.nameEditing = false;
+            this.nameDisplaying = nameUpdating;
+            this.$forceUpdate();
+
+            console.log("名前更新します -> " + this.nameDisplaying);
+
+        },
+
+        //編集しているかどうかを切り替えする
+        toggleEditing() {
+            this.nameEditing = !this.nameEditing;
+
         }
+    },
+
+    mounted() {
+        this.nameDisplaying = userinfo.username;
+
     }
 
 }
@@ -41,35 +77,25 @@ export default {
                         <p class="text-left text-h6">
                             # {{ userinfo.userid }}
                         </p>
-                        <p class="text-h4 text-left" >
+                        <p v-if="!nameEditing" @dblclick="toggleEditing" class="text-h4 text-left" >
                             {{ userinfo.username }}
                         </p>
+                        <v-text-field
+                            v-if="nameEditing"
+                            v-model="nameDisplaying"
+                            variant="solo"
+                        >
+                            <template v-slot:append-inner>
+                                <v-btn @click="updateName" size="x-small" variant="tonal" icon="" class="rounded-lg" style="margin:0 4px 0 8px; float:right">
+                                    <span class="mdi mdi-check-bold"></span>
+                                </v-btn>
+                                <v-btn @click="toggleEditing" size="x-small" variant="tonal" icon="" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
+                                    <span class="mdi mdi-window-close"></span>
+                                </v-btn>
+                            </template>
+                        </v-text-field>
                     </div>
                 </v-col>
-            </v-row>
-        </v-container>
-        <v-container class="bg-surface-variant">
-            <v-row no-gutters>
-                <v-card variant="tonal" :class="cd" style="width:100%;">
-                    <p class="text--primary text-left" >
-                        参加しているチャンネルについて
-                    </p>
-                    <div style="overflow-y:scroll !important; max-height:50vh">
-                        <v-card
-                            v-for="c in channelIndex"
-                            class="mx-auto text-left"
-                            max-width="95%"
-                            style="margin-top:15px; height:45%; padding:8px 3%;"
-                            :elevation="6"
-                        >
-                            <span style="border-right:0.1px">{{ c.channelname }}</span>
-                            <span style="height:100%; border-right:1px solid grey; margin:0 2%"></span>
-                            <v-chip>{{ c.scope==="public"?"公開":"非公開" }}</v-chip>
-                            <span style="height:100%; border-right:1px solid grey; margin:0 2%"></span>
-                            <span>{{ c.description }}</span>
-                        </v-card>
-                    </div>
-                </v-card>
             </v-row>
         </v-container>
         <v-container class="bg-surface-variant">

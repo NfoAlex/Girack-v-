@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, channelIndex, userinfo, backendURI } from "./socket.js";
+import { getSocket, channelIndex, userinfo, backendURI, updateState, updateStateTaken } from "./socket.js";
 import Auth from "./components/Auth.vue";
 </script>
 
@@ -10,14 +10,18 @@ const socket = getSocket();
 export default {
     data() {
         return {
-            channelBar: "channelBar", //css用
-            main: "main",
+            //css用クラス
+            channelBar: "channelBar", //左のチャンネルバーとか
+            main: "main", //右のチャンネル表示するところ
+
             servername: "",
+            displayusername: "Null",
+
             path: "",
             loggedin: false,
             channelIndexListing: {},
             channelJoined: [],
-            uri: backendURI
+            uri: backendURI,
         }
 
     },
@@ -28,11 +32,6 @@ export default {
             //console.log(r);
             this.path = r.path; //変数へ取り込む
 
-        },
-        channelIndex(cI) {
-            console.log("==========================================");
-            this.channelIndexListing = cI;
-
         }
     },
 
@@ -41,6 +40,7 @@ export default {
         this.channelJoined = userinfo.channelJoined;
 
         socket.emit("getInitInfo"); //サーバーの情報を取得
+
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername; //表示する名前を変更
             
@@ -50,13 +50,80 @@ export default {
         socket.on("infoResult", (dat) => {
             //もし受け取ったデータがチャンネル用かユーザー用かならチャンネルバー更新
             if ( dat.type === "channel" || dat.type === "user" ) {
-                
                 this.channelIndexListing = channelIndex;
                 this.channelJoined = userinfo.channelJoined;
 
                 this.$forceUpdate(); //レンダー更新
 
             }
+
+        });
+
+        let checkCount = 0;
+        //チャンネル情報の更新
+        socket.on("infoChannel", () => {
+            let checkChannelInfo = setInterval(() => {
+                console.log("infoChannel :: Lets check..." + updateState.channelinfo);
+                if ( updateState.channelinfo > 0 ) {
+                    console.log("App :: infoChannel : 情報あるわ")
+                    this.channelIndexListing = channelIndex;
+                    this.$forceUpdate(); //レンダー更新
+
+                    clearInterval(checkChannelInfo);
+
+                    updateStateTaken("channelinfo");
+                    //updateState.channelinfo = updateState.channelinfo - 1;
+
+                } else if ( updateState.channelinfo < 0 ) {
+                    clearInterval(checkChannelInfo);
+
+                }
+
+                if ( checkCount > 10 ) {
+                    clearInterval(checkChannelInfo);
+
+                }
+
+                checkCount++;
+
+            }, 100);
+
+        });
+
+        //プロフィールの更新を受けたら表示名を変更
+        socket.on("infoUser", (dat) => {
+            console.log("App :: infoUser : ユーザー名表示更新");
+            this.displayusername = dat.username;
+
+            this.channelIndexListing = channelIndex;
+            this.channelJoined = userinfo.channelJoined;
+
+            let checkCount = 0;
+            let checkChannelInfo = setInterval(() => {
+                console.log("infoUser : Lets check..." + updateState.channelinfo);
+                if ( updateState.channelinfo > 0 ) {
+                    console.log("App :: infoUser : 情報あるわ(チャンネル抜け)")
+                    this.channelIndexListing = channelIndex;
+                    this.$forceUpdate(); //レンダー更新
+                    
+                    clearInterval(checkChannelInfo);
+
+                    updateStateTaken("channelinfo");
+                    //updateState.channelinfo = updateState.channelinfo - 1;
+
+                } else if ( updateState.channelinfo < 0 ) {
+                    clearInterval(checkChannelInfo);
+
+                }
+
+                if ( checkCount > 10 ) {
+                    clearInterval(checkChannelInfo);
+
+                }
+
+                checkCount++;
+
+            }, 500);
 
         });
 
@@ -98,7 +165,7 @@ export default {
 
                 <v-card-text class="text-subtitle-1 text-center mx-auto">
                     <span>
-                        {{ userinfo.username }}
+                        {{ displayusername }}
                     </span>
                 </v-card-text>
 

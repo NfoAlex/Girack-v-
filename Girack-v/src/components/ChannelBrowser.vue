@@ -30,14 +30,13 @@ export default {
             });
 
             //チャンネルリストを再取得
-            socket.emit("getInfo", {
-                target: "list",
-                targetlist: "channel",
-                reqSender: {
-                    userid: getUserinfo().userid, //ユーザーID
-                    sessionid: getUserinfo().sessionid //セッションID
-                }
-            });
+            socket.emit("getInfoList", {
+            target: "channel",
+            reqSender: {
+                userid: getUserinfo().userid, //ユーザーID
+                sessionid: getUserinfo().sessionid //セッションID
+            }
+        });
 
         },
 
@@ -54,14 +53,13 @@ export default {
             });
 
             //チャンネルリストを再取得
-            socket.emit("getInfo", {
-                target: "list",
-                targetlist: "channel",
-                reqSender: {
-                    userid: getUserinfo().userid, //ユーザーID
-                    sessionid: getUserinfo().sessionid //セッションID
-                }
-            });
+            socket.emit("getInfoList", {
+            target: "channel",
+            reqSender: {
+                userid: getUserinfo().userid, //ユーザーID
+                sessionid: getUserinfo().sessionid //セッションID
+            }
+        });
 
         },
 
@@ -76,14 +74,13 @@ export default {
                 }
             });
 
-            socket.emit("getInfo", {
-                target: "list",
-                targetlist: "channel",
-                reqSender: {
-                    userid: getUserinfo().userid, //ユーザーID
-                    sessionid: getUserinfo().sessionid //セッションID
-                }
-            });
+            socket.emit("getInfoList", {
+            target: "channel",
+            reqSender: {
+                userid: getUserinfo().userid, //ユーザーID
+                sessionid: getUserinfo().sessionid //セッションID
+            }
+        });
         }
     },
 
@@ -91,9 +88,8 @@ export default {
         this.channelJoined = getUserinfo().channelJoined;
 
         //チャンネルリストの取得
-        socket.emit("getInfo", {
-            target: "list",
-            targetlist: "channel",
+        socket.emit("getInfoList", {
+            target: "channel",
             reqSender: {
                 userid: getUserinfo().userid, //ユーザーID
                 sessionid: getUserinfo().sessionid //セッションID
@@ -101,17 +97,17 @@ export default {
         });
 
         //結果受け取り
-        socket.on("infoResult", (dat) => {
+        socket.on("infoList", (dat) => {
             //型が違うかデータが無効なら関数を終わらせる
-            if ( dat.type !== "list" || dat === -1 ) {
+            if ( dat.type !== "channel" || dat === -1 ) {
                 console.log("ChannelBrwoser :: infoResult : データ違うっぽい???"); 
                 return;
 
             }
             
             this.channelList = dat.channelList; //リスト追加
-            //this.channelList = channelIndex; //リスト追加
             this.channelJoined = getUserinfo().channelJoined;
+
             console.log("ChannelBrwoser :: infoResult : dat ↓ ");
             console.log(dat);
 

@@ -29,7 +29,6 @@ const vuetify = createVuetify({
                 colors: {
                     background: "#212121",
                     primary: "#263238", // #E53935
-                    secondary: "#546E7A", // #FFCDD2
                 }
             },
         },

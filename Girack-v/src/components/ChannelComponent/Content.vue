@@ -33,8 +33,9 @@ export default {
     },
 
     mounted() {
-        console.log("content :: ユーザーいんふぉ ↓");
-        console.log(getUserinfo());
+        // console.log("Content :: socket確率↓");
+        // console.log(socket);
+        // console.log(socket._callbacks);
 
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
@@ -73,8 +74,7 @@ export default {
             //もしユーザーの名前リストに名前がなかったら
             if ( this.userIndex[msg.userid] === undefined ) {
                 //名前をリクエスト
-                socket.emit("getInfo", {
-                    target: "user",
+                socket.emit("getInfoUser", {
                     targetid: msg.userid,
                     reqSender: {
                         userid: getUserinfo().userid, //ユーザーID
@@ -193,6 +193,23 @@ export default {
             }
 
             backupMsg(this.msgDB); //メッセージDBの出力、保存
+
+        });
+
+        //プロフィール情報が来たら表示名の更新
+        socket.on("infoUser", (dat) => {
+            //if ( dat.userid === userinfo.userid ) { return; }
+            let username = dat.username;
+            let userid = dat.userid;
+            let role = dat.role;
+
+            this.userIndex[userid] = {};
+
+            //ユーザーインデックス更新
+            this.userIndex[userid].username = username; //名前
+            this.userIndex[userid].role = role; //ロール
+
+            backupUser(this.userIndex); //ユーザー情報をバックアップ
 
         });
 
