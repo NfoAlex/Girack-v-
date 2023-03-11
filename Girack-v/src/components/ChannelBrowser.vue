@@ -1,9 +1,14 @@
 <script setup>
-import { getSocket, getUserinfo, channelIndex } from '../socket.js';
+import { getSocket, dataUser } from '../socket.js';
 </script>
 
 <script>
 const socket = getSocket();
+const { Userinfo } = dataUser();
+
+console.log("ChannelBrowser :: Userinfo");
+console.log(Userinfo);
+
 export default {
 
     data() {
@@ -16,6 +21,22 @@ export default {
         }
     },
 
+    watch: {
+        Userinfo: {
+            handler(U) {
+                socket.emit("getInfoList", {
+                    target: "channel",
+                    reqSender: {
+                        userid: U.value.userid, //ユーザーID
+                        sessionid: U.value.sessionid //セッションID
+                    }
+                });
+                
+            },
+            deep: true
+        }
+    },
+
     methods: {
         //チャンネルへ参加する処理
         channelJoin(channelid) {
@@ -24,8 +45,8 @@ export default {
                 action: "join",
                 channelid: channelid,
                 reqSender: {
-                    userid: getUserinfo().userid,
-                    sessionid: getUserinfo().sessionid
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
                 }
             });
 
@@ -33,8 +54,8 @@ export default {
             socket.emit("getInfoList", {
             target: "channel",
             reqSender: {
-                userid: getUserinfo().userid, //ユーザーID
-                sessionid: getUserinfo().sessionid //セッションID
+                userid: Userinfo.value.userid, //ユーザーID
+                sessionid: Userinfo.value.sessionid //セッションID
             }
         });
 
@@ -47,8 +68,8 @@ export default {
                 action: "leave",
                 channelid: channelid,
                 reqSender: {
-                    userid: getUserinfo().userid,
-                    sessionid: getUserinfo().sessionid
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
                 }
             });
 
@@ -56,8 +77,8 @@ export default {
             socket.emit("getInfoList", {
             target: "channel",
             reqSender: {
-                userid: getUserinfo().userid, //ユーザーID
-                sessionid: getUserinfo().sessionid //セッションID
+                userid: Userinfo.value.userid, //ユーザーID
+                sessionid: Userinfo.value.sessionid //セッションID
             }
         });
 
@@ -69,30 +90,34 @@ export default {
             socket.emit("channelCreate", {
                 channelname: this.channelCreateName,
                 reqSender: {
-                    userid: getUserinfo().userid,
-                    sessionid: getUserinfo().sessionid
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
                 }
             });
 
             socket.emit("getInfoList", {
             target: "channel",
             reqSender: {
-                userid: getUserinfo().userid, //ユーザーID
-                sessionid: getUserinfo().sessionid //セッションID
+                userid: Userinfo.value.userid, //ユーザーID
+                sessionid: Userinfo.value.sessionid //セッションID
             }
         });
         }
     },
 
     mounted() {
-        this.channelJoined = getUserinfo().channelJoined;
+        let U = dataUser();
+        //this.channelJoined = Userinfo.value.channelJoined;
+        // console.log("ChannelBrowser :: ユーザー情報をとろうとしている↓");
+        // console.log(dataUser().Userinfo);
+        // console.log(U.value);
 
         //チャンネルリストの取得
         socket.emit("getInfoList", {
             target: "channel",
             reqSender: {
-                userid: getUserinfo().userid, //ユーザーID
-                sessionid: getUserinfo().sessionid //セッションID
+                userid: dataUser().Userinfo.value.userid, //ユーザーID
+                sessionid: dataUser().Userinfo.value.sessionid //セッションID
             }
         });
 
@@ -100,15 +125,15 @@ export default {
         socket.on("infoList", (dat) => {
             //型が違うかデータが無効なら関数を終わらせる
             if ( dat.type !== "channel" || dat === -1 ) {
-                console.log("ChannelBrwoser :: infoResult : データ違うっぽい???"); 
+                console.log("ChannelBrwoser :: infoList : データ違うっぽい???"); 
                 return;
 
             }
             
             this.channelList = dat.channelList; //リスト追加
-            this.channelJoined = getUserinfo().channelJoined;
+            //this.channelJoined = Userinfo.value.channelJoined;
 
-            console.log("ChannelBrwoser :: infoResult : dat ↓ ");
+            console.log("ChannelBrwoser :: infoList : dat ↓ ");
             console.log(dat);
 
         });
@@ -150,7 +175,7 @@ export default {
         </v-card>
     </v-overlay>
 
-    <div style="margin:3% auto; width: 85%">
+    <div style="margin:3% auto; width:85%; height:94%;">
         <div class="d-flex justify-space-around bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" variant="tonal" icon="" class="rounded-lg">
@@ -166,7 +191,7 @@ export default {
             </v-btn>
         </div>
         <br>
-        <v-list style="height:100%; width:100%; overflow-y:auto;">
+        <v-list class="channelList" style="height:94%; width:100%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
                 style="padding:0;"
@@ -175,7 +200,7 @@ export default {
                     <p class="text-h6">
                         {{ c[1].name }}
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
-                        <v-btn v-if="!channelJoined.includes(c[0])" @click="channelJoin(c[0])" style="float: right" variant="tonal">参加</v-btn>
+                        <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" style="float: right" variant="tonal">参加</v-btn>
                         <v-btn v-else @click="channelLeave(c[0])" style="float:right" variant="outlined">退出</v-btn>
                     </p>
                     <p style="padding:1%">{{ c[1].description }}</p>
@@ -184,3 +209,16 @@ export default {
         </v-list>
     </div>
 </template>
+
+<style scoped>
+
+.channelList
+{
+    scrollbar-width: none; /* Firefox用 */
+}
+.channelList::-webkit-scrollbar
+{
+    display:none; /* Chrome用 */
+}
+
+</style>

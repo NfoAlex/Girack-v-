@@ -1,9 +1,10 @@
 <script setup>
-import { getUserinfo, channelIndex, getSocket } from '../../socket.js';
+import { dataUser, channelIndex, getSocket } from '../../socket.js';
 </script>
 
 <script>
 const socket = getSocket();
+const { Userinfo } = dataUser();
 
 export default {
     data() {
@@ -17,13 +18,14 @@ export default {
         //メッセージを送信する
         msgSend() {
             socket.emit("msgSend", {
-                userid: getUserinfo().userid, //名前
+                userid: Userinfo.value.userid, //名前
                 channelid: this.getPath, //チャンネルID
-                sessionid: getUserinfo().sessionid, //セッションID);
+                sessionid: Userinfo.value.sessionid, //セッションID);
                 content: this.txt
             });
+            
             this.txt = ""; //入力欄を空に
-            console.log("sended ↓");
+            console.log("--- msg sent ---");
             //console.log(userinfo);
             // console.log({
             //     userid: userinfo.userid, //名前
@@ -51,8 +53,8 @@ export default {
                 return channelIndex[this.getPath].channelname;
             }
             catch (e) {
-                setTimeout(this.$forceUpdate(), 1000);
-                return "";
+                //setTimeout(this.$forceUpdate(), 1000);
+                return "テキストチャンネル";
             }
 
         }

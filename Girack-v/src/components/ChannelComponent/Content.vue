@@ -1,11 +1,20 @@
-<script setup>
-import { getSocket, getUserinfo, backendURI, msgDBbackup, userIndexBackup, backupMsg, backupUser } from "../../socket.js";
 
-</script>
+
 <script>
+import { getSocket, dataMsg, dataUser, backendURI } from "../../socket.js";
+import { ref, watch } from "vue";
 const socket = getSocket();
+// const { Userinfo } = dataUser(); //ユーザー情報
+// const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
 
 export default {
+    setup() {
+        const { Userinfo } = dataUser(); //ユーザー情報
+        const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
+
+        return { Userinfo, MsgDB, UserIndex, StateScrolled, DoScroll };
+
+    },
 
     data() {
         return {
@@ -23,6 +32,26 @@ export default {
         }
     },
 
+    watch: {
+        //メッセージの更新監視
+        MsgDB: {
+            handler() {
+                console.log("Content :: watch : メッセージ更新された");
+                if ( this.StateScrolled ) {
+                    console.log("Content :: watch : trueだわ");
+                    this.$nextTick(() => {
+                        this.scrollIt(); //スクロール
+                        this.setScrollState(true); //
+
+                    });
+
+                }
+
+            },
+            deep: true
+        }
+    },
+
     computed: {
         //現在いるパスを返すだけ
         getPath() {
@@ -33,194 +62,18 @@ export default {
     },
 
     mounted() {
-        // console.log("Content :: socket確率↓");
-        // console.log(socket);
-        // console.log(socket._callbacks);
-
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
-        this.msgDB = msgDBbackup; //メッセージDBを持ってくる
-        this.userIndex = userIndexBackup; //使うユーザーの名前リスト
-        
-        const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
-
-        //レンダー完了したらスクロールイベント開始
+        //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
             document.querySelector("#channelWindow").addEventListener("scroll", function (event) {
                 ref.setScrollState(); //確認開始
 
             });
+            this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
+            this.setScrollState(true); //スクロール状態を"した"状態にする
 
         });
-
-        // //スクロールした際に"下に行く"ボタンを表示するかどうか計算
-        // channelWindow.addEventListener("scroll", function (event) {
-        //     ref.setScrollState(); //確認開始
-
-        // });
-
-        //メッセージ受け取り、出力
-        socket.on("messageReceive", (msg) => {
-            console.log("msgReceive :: ↓");
-            console.log(msg);
-
-            //スクロールしきっているか確認
-            let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
-            console.log("scrolledState -> " + scrolledState);
-
-            //使用するDBレコード
-            //let activeDB = this.msgDB[this.getPath];
-
-            //もしユーザーの名前リストに名前がなかったら
-            if ( this.userIndex[msg.userid] === undefined ) {
-                //名前をリクエスト
-                socket.emit("getInfoUser", {
-                    targetid: msg.userid,
-                    reqSender: {
-                        userid: getUserinfo().userid, //ユーザーID
-                        sessionid: getUserinfo().sessionid //セッションID
-                    }
-                });
-
-            }
-
-            try{
-                //DB配列に追加
-                if ( this.msgDB[msg.channelid] !== undefined ) {
-                    //ローカルDBに追加
-                    this.msgDB[msg.channelid].push({
-                        messageid: msg.messageid,
-                        userid: msg.userid,
-                        channelid: msg.channelid,
-                        time: msg.time,
-                        content: msg.content,
-                        reaction: msg.reaction
-                    });
-
-                } else { //配列が空なら新しく作成、配置
-                    this.msgDB[msg.channelid] = [{
-                        messageid: msg.messageid,
-                        userid: msg.userid,
-                        channelid: msg.channelid,
-                        time: msg.time,
-                        content: msg.content,
-                        reaction: msg.reaction
-                    }];
-
-                }
-
-            }
-            catch(e) {
-                console.log("Content :: msgDB書き込みエラー");
-                console.log(e);
-            }
-
-            //スクロールされきっていたら最後へ自動スクロールする
-            if ( scrolledState ) { //この関数用の変数で確認
-                //コンテンツのレンダーを待ってからスクロール
-                this.$nextTick(() => {
-                    channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
-
-                });
-
-            }
-
-            backupMsg(this.msgDB); //メッセージDBの出力、保存
-
-        });
-
-        //他人の名前の受け取り
-        socket.on("infoResult", (dat) => {
-            if ( dat.type !== "user" ) { return; } //ユーザー情報じゃなければ取りやめ
-            console.log("Content :: infoResult : 名前情報受け取り \\/")
-            console.log(dat);
-
-            let username = dat.username;
-            let userid = dat.userid;
-            let role = dat.role;
-
-            this.userIndex[userid] = {};
-
-            //ユーザーインデックス更新
-            this.userIndex[userid].username = username; //名前
-            this.userIndex[userid].role = role; //ロール
-
-            backupUser(this.userIndex); //ユーザー情報をバックアップ
-
-        });
-
-        //メッセージの更新
-        socket.on("messageUpdate", (dat) => {
-            //メッセージ消したりリアクションされたり
-            /*
-            {
-                action: "delete"|"reaction",
-                channelid: dat.channelid,
-                messageid: dat.messageid,
-                ["reaction"だったら]
-                reaction: dat.reaction
-            }
-            */
-
-            switch( dat.action ) {
-                //削除する
-                case "delete":
-                    //ループでIDが一致するメッセージを探す
-                    for ( let index in this.msgDB[dat.channelid] ) {
-                        if ( this.msgDB[dat.channelid][index].messageid === dat.messageid ) {
-                            this.msgDB[dat.channelid].splice(index,1); //削除
-
-                        }
-
-                    }
-                    break;
-
-                //リアクションをつける
-                case "reaction":
-                    console.log("Content :: これからリアクション");
-                    console.log(dat);
-                    for ( let index in this.msgDB[dat.channelid] ) {
-                        if ( this.msgDB[dat.channelid][index].messageid === dat.messageid ) {
-                            this.msgDB[dat.channelid][index].reaction = dat.reaction; //リアクション更新
-
-                        }
-
-                    }
-
-                default:
-                    break;
-
-            }
-
-            backupMsg(this.msgDB); //メッセージDBの出力、保存
-
-        });
-
-        //プロフィール情報が来たら表示名の更新
-        socket.on("infoUser", (dat) => {
-            //if ( dat.userid === userinfo.userid ) { return; }
-            let username = dat.username;
-            let userid = dat.userid;
-            let role = dat.role;
-
-            this.userIndex[userid] = {};
-
-            //ユーザーインデックス更新
-            this.userIndex[userid].username = username; //名前
-            this.userIndex[userid].role = role; //ロール
-
-            backupUser(this.userIndex); //ユーザー情報をバックアップ
-
-        });
-
-    },
-
-    //アンロード時の処理
-    unmounted() {
-        //socket通信の重複防止
-        socket.off("messageReceive");
-        socket.off("infoResult");
-        socket.off("messageUpdate");
 
     },
 
@@ -228,7 +81,7 @@ export default {
         //ロールを取得するだけ
         getRole(userid) {
             try {
-                return this.userIndex[userid].role;
+                return this.UserIndex[userid].role;
 
             }
             catch(e) {
@@ -263,8 +116,8 @@ export default {
                 target: "user",
                 targetid: userid,
                 reqSender: {
-                    userid: getUserinfo().userid, //ユーザーID
-                    sessionid: getUserinfo().sessionid //セッションID
+                    userid: this.Userinfo.userid, //ユーザーID
+                    sessionid: this.Userinfo.sessionid //セッションID
                 }
             });
 
@@ -276,7 +129,7 @@ export default {
         checkShowAvatar(userid, index) {
             try {
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-                if ( this.msgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                if ( this.MsgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
                     return false; //同じだから表示しない
 
                 } else {
@@ -292,8 +145,21 @@ export default {
 
         },
 
+        //メッセージが存在しているかどうか
+        isMsgAvailable() {
+            if ( this.MsgDB[getPath] === undefined ) {
+                return false;
+
+            } else {
+                return true;
+
+            }
+
+        },
+
         //スクロールさせるだけの関数
         scrollIt() {
+            const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
             channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
 
         },
@@ -328,8 +194,8 @@ export default {
                     channelid: this.getPath,
                     messageid: msgId,
                     reqSender: {
-                        userid: getUserinfo().userid,
-                        sessionid: getUserinfo().sessionid
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
                     }
                 });
 
@@ -344,8 +210,8 @@ export default {
                     messageid: msgId,
                     reaction: reaction, //送るリアクション
                     reqSender: {
-                        userid: getUserinfo().userid,
-                        sessionid: getUserinfo().sessionid
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
                     }
                 });
             }
@@ -353,13 +219,14 @@ export default {
         },
 
         //スクロール位置によって一番下に行くボタンの表示切り替えをする
-        setScrollState() {
+        setScrollState(s) {
+            const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
             //一番下？
-            if ( channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
-                this.NotAtBottom = false; //スクロールしきってないと保存
+            if ( s || channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
+                this.StateScrolled = true; //スクロールしきったと保存
 
             } else {
-                this.NotAtBottom = true; //スクロールしきったと保存
+                this.StateScrolled = false; //スクロールしきってないと保存
 
             }
 
@@ -419,11 +286,11 @@ export default {
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         
-        <div style="padding:10%" v-if="!msgDBbackup[$route.params.id]">
+        <div style="padding:10%" v-if="MsgDB[getPath]===undefined">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
-        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in msgDB[$route.params.id]">
+        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">
             
             <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
@@ -433,7 +300,7 @@ export default {
             <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                 
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
-                    {{ userIndex[m.userid]!==undefined ? userIndex[m.userid].username : needUserIndex(m.userid) }}
+                    {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
                         v-if="getRole(m.userid)!=='Member'"
                         :color="getRole(m.userid)==='Admin'?'purple':'gray'"
@@ -466,7 +333,7 @@ export default {
                             🤔
                         </v-btn>
                         <!-- 削除ボタン -->
-                        <v-btn v-if="getUserinfo().role==='Admin'||m.userid===getUserinfo().userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                        <v-btn v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             <span style="font-size:0.8vmax" class="mdi mdi-delete-forever">
                             </span>
                             削除
@@ -486,7 +353,7 @@ export default {
         </div>
     </div>
     <!-- 一番下にスクロールするボタン -->
-    <v-btn v-if="NotAtBottom" style="padding:0" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+    <v-btn v-if="!StateScrolled" style="padding:0" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
         <span width="100%" style="font-size:2vmax;" class="mdi mdi-arrow-down-bold"></span>
     </v-btn>
 </template>
