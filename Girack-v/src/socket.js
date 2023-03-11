@@ -108,13 +108,12 @@ const UserIndex = ref({
 });
 
 const StateScrolled = ref(false); //スクロールしきっているかどうか
-const DoScroll = ref(false);
 
 //履歴DB返すだけ
 export function dataMsg() {
     // console.log("socket :: dataMsg : MsgDB ");
     // console.log(MsgDB);
-    return { MsgDB, UserIndex, StateScrolled, DoScroll };
+    return { MsgDB, UserIndex, StateScrolled };
 
 }
 
@@ -168,15 +167,12 @@ socket.on("messageReceive", (msg) => {
 
         }
 
-        DoScroll.value = true; //スクロールしろと保存
-
     }
     catch(e) {
         console.log("Content :: msgDB書き込みエラー");
         console.log(e);
-    }
 
-    DoScroll.value = true; //スクロールしろと保存
+    }
 
 });
 

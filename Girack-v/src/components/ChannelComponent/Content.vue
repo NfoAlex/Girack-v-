@@ -40,12 +40,10 @@ export default {
                 if ( this.StateScrolled ) {
                     console.log("Content :: watch : trueだわ");
                     this.$nextTick(() => {
-                        this.scrollIt();
-                        this.setScrollState();
+                        this.scrollIt(); //スクロール
+                        this.setScrollState(true); //
 
                     });
-                    
-                    this.DoScroll = false;
 
                 }
 
@@ -64,30 +62,18 @@ export default {
     },
 
     mounted() {
-        // console.log("Content :: socket確率↓");
-        // console.log(socket);
-        // console.log(socket._callbacks);
-
         let ref = this; //methodsの関数使う用（直接参照はできないため）
-        
-        //const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-        //レンダー完了したらスクロールイベント開始
+        //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
             document.querySelector("#channelWindow").addEventListener("scroll", function (event) {
                 ref.setScrollState(); //確認開始
 
             });
-            this.scrollIt();
-            this.setScrollState(true);
+            this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
+            this.setScrollState(true); //スクロール状態を"した"状態にする
 
         });
-
-        // //スクロールした際に"下に行く"ボタンを表示するかどうか計算
-        // channelWindow.addEventListener("scroll", function (event) {
-        //     ref.setScrollState(); //確認開始
-
-        // });
 
     },
 
