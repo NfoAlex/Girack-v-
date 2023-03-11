@@ -6,30 +6,13 @@ DELETE OR HIDE ON HOSTING
 ********************************************************/
 
 <script setup>
-import { msgDBbackup, dataMsg } from '../socket';
+import { dataMsg } from '../socket';
 </script>
 
 <script>
 const { MsgDB } = dataMsg();
 
 export default {
-    data() {
-        return {
-            mDBb: {}
-        }
-    },
-
-    methods: {
-        refreshData() {
-            this.mDBb = msgDBbackup;
-
-        }
-    },
-
-    mounted() {
-        let ref = this;
-        ref.mDBb = msgDBbackup;
-    }
 
 }
 
@@ -37,12 +20,8 @@ export default {
 
 <template>
     <div style="padding:3%; overflow:auto; height:100%">
-        <v-btn variant="outlined" block>
-            データ更新
-        </v-btn>
-        
+        メッセージのJSON
         <br>
-
         <v-card style="padding:3%; margin-top:8px;" variant="outlined" v-for="d in Object.entries(MsgDB)">
                 {{ d[0] }}
                 <v-card variant="tonal" style="padding:1%; margin-top:8px;" v-for="m in d[1]">
