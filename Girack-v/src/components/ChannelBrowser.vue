@@ -94,14 +94,20 @@ export default {
                     sessionid: Userinfo.value.sessionid
                 }
             });
+            
+        },
 
-            socket.emit("getInfoList", {
-            target: "channel",
-            reqSender: {
-                userid: Userinfo.value.userid, //ユーザーID
-                sessionid: Userinfo.value.sessionid //セッションID
-            }
-        });
+        //チャンネル削除
+        channelRemove(cid) {
+            //チャンネル消したい!
+            socket.emit("channelRemove", {
+                channelid: cid,
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
+
         }
     },
 
@@ -142,7 +148,7 @@ export default {
 
     unmounted() {
         //通信重複防止
-        //socket.off("infoResult");
+        socket.off("infoList");
 
     }
 
@@ -197,11 +203,20 @@ export default {
                 style="padding:0;"
             >
                 <v-card variant="tonal" class="rounded-lg" style="padding:2% 2%; margin-top:16px;">
+                    
                     <p class="text-h6">
+
                         {{ c[1].name }}
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
-                        <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" style="float: right" variant="tonal">参加</v-btn>
-                        <v-btn v-else @click="channelLeave(c[0])" style="float:right" variant="outlined">退出</v-btn>
+
+                        <div style="float:right">
+                            <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
+                                <span class="mdi mdi-delete-forever"></span>
+                            </v-btn>
+                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal">参加</v-btn>
+                            <v-btn v-else @click="channelLeave(c[0])" variant="outlined">退出</v-btn>
+                        </div>
+
                     </p>
                     <p style="padding:1%">{{ c[1].description }}</p>
                 </v-card>
