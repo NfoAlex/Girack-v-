@@ -69,16 +69,9 @@ export default {
     },
 
     mounted() {
-        this.nameDisplaying = Userinfo.value.username;
-        console.log("User :: mounted : Userinfo");
-        console.log(Userinfo.value);
-        //console.log(userinfo);
+        this.nameDisplaying = Userinfo.value.username; //名前更新
 
     },
-
-    created() {
-        //this.nameDisplaying = Userinfo.username;
-    }
 
 }
 </script>
