@@ -1,13 +1,21 @@
-<script setup>
-import { getSocket, dataMsg, dataUser, backendURI } from "../../socket.js";
-</script>
+
 
 <script>
+import { getSocket, dataMsg, dataUser, backendURI } from "../../socket.js";
+import { ref, watch } from "vue";
 const socket = getSocket();
-const { Userinfo } = dataUser(); //ユーザー情報
-const { MsgDB, UserIndex } = dataMsg(); //履歴用DB
+// const { Userinfo } = dataUser(); //ユーザー情報
+// const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
 
 export default {
+    setup() {
+        const { Userinfo } = dataUser(); //ユーザー情報
+        const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
+
+        return { Userinfo, MsgDB, UserIndex, StateScrolled, DoScroll };
+
+    },
+
     data() {
         return {
             msgDB: {},
@@ -25,17 +33,19 @@ export default {
     },
 
     watch: {
+        //メッセージの更新監視
         MsgDB: {
             handler() {
-                console.log("Content :: スクロールしたい");
-                //スクロール値を計算
-                let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight;
-                if ( scrolledState ) {
-                    //コンテンツのレンダーを待ってからスクロール
+                console.log("Content :: watch : メッセージ更新された");
+                if ( this.StateScrolled ) {
+                    console.log("Content :: watch : trueだわ");
                     this.$nextTick(() => {
-                        channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+                        this.scrollIt();
+                        this.setScrollState();
 
                     });
+                    
+                    this.DoScroll = false;
 
                 }
 
@@ -60,7 +70,7 @@ export default {
 
         let ref = this; //methodsの関数使う用（直接参照はできないため）
         
-        const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
+        //const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
         //レンダー完了したらスクロールイベント開始
         this.$nextTick(() => {
@@ -68,6 +78,8 @@ export default {
                 ref.setScrollState(); //確認開始
 
             });
+            this.scrollIt();
+            this.setScrollState(true);
 
         });
 
@@ -83,7 +95,7 @@ export default {
         //ロールを取得するだけ
         getRole(userid) {
             try {
-                return UserIndex.value[userid].role;
+                return this.UserIndex[userid].role;
 
             }
             catch(e) {
@@ -118,8 +130,8 @@ export default {
                 target: "user",
                 targetid: userid,
                 reqSender: {
-                    userid: Userinfo.value.userid, //ユーザーID
-                    sessionid: Userinfo.value.sessionid //セッションID
+                    userid: this.Userinfo.userid, //ユーザーID
+                    sessionid: this.Userinfo.sessionid //セッションID
                 }
             });
 
@@ -131,7 +143,7 @@ export default {
         checkShowAvatar(userid, index) {
             try {
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-                if ( MsgDB.value[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                if ( this.MsgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
                     return false; //同じだから表示しない
 
                 } else {
@@ -149,7 +161,7 @@ export default {
 
         //メッセージが存在しているかどうか
         isMsgAvailable() {
-            if ( MsgDB[getPath] === undefined ) {
+            if ( this.MsgDB[getPath] === undefined ) {
                 return false;
 
             } else {
@@ -161,6 +173,7 @@ export default {
 
         //スクロールさせるだけの関数
         scrollIt() {
+            const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
             channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
 
         },
@@ -195,8 +208,8 @@ export default {
                     channelid: this.getPath,
                     messageid: msgId,
                     reqSender: {
-                        userid: Userinfo.userid,
-                        sessionid: Userinfo.sessionid
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
                     }
                 });
 
@@ -211,8 +224,8 @@ export default {
                     messageid: msgId,
                     reaction: reaction, //送るリアクション
                     reqSender: {
-                        userid: Userinfo.userid,
-                        sessionid: Userinfo.sessionid
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
                     }
                 });
             }
@@ -220,13 +233,14 @@ export default {
         },
 
         //スクロール位置によって一番下に行くボタンの表示切り替えをする
-        setScrollState() {
+        setScrollState(s) {
+            const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
             //一番下？
-            if ( channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
-                this.NotAtBottom = false; //スクロールしきったと保存
+            if ( s || channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
+                this.StateScrolled = true; //スクロールしきったと保存
 
             } else {
-                this.NotAtBottom = true; //スクロールしきってないと保存
+                this.StateScrolled = false; //スクロールしきってないと保存
 
             }
 
@@ -353,7 +367,7 @@ export default {
         </div>
     </div>
     <!-- 一番下にスクロールするボタン -->
-    <v-btn v-if="NotAtBottom" style="padding:0" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+    <v-btn v-if="!StateScrolled" style="padding:0" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
         <span width="100%" style="font-size:2vmax;" class="mdi mdi-arrow-down-bold"></span>
     </v-btn>
 </template>
