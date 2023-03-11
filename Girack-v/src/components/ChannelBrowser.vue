@@ -94,7 +94,7 @@ export default {
                     sessionid: Userinfo.value.sessionid
                 }
             });
-            
+
         },
 
         //チャンネル削除
@@ -112,7 +112,6 @@ export default {
     },
 
     mounted() {
-        let U = dataUser();
         //this.channelJoined = Userinfo.value.channelJoined;
         // console.log("ChannelBrowser :: ユーザー情報をとろうとしている↓");
         // console.log(dataUser().Userinfo);
