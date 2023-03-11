@@ -23,7 +23,6 @@ export default {
 
             path: "",
             loggedin: false,
-            channelIndexListing: {},
             channelJoined: [],
             uri: backendURI,
         }
@@ -39,20 +38,12 @@ export default {
     },
 
     mounted() {
-        console.log("App :: mounted : userinfo");
-        //console.log(userinfo);
-        this.channelIndexListing = channelIndex;
-        //this.channelJoined = userinfo.channelJoined;
-
         socket.emit("getInitInfo"); //サーバーの情報を取得
 
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername; //表示する名前を変更
             
         });
-
-        console.log("channelIndexListing :: ");
-        console.log(channelIndex);
 
     }
 
