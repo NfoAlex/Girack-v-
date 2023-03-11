@@ -169,8 +169,6 @@ socket.on("messageReceive", (msg) => {
         console.log(e);
     }
 
-    //backupMsg(this.msgDB); //メッセージDBの出力、保存
-
 });
 
 //他人の名前の受け取り
@@ -188,8 +186,6 @@ socket.on("infoResult", (dat) => {
     //ユーザーインデックス更新
     UserIndex.value[userid].username = username; //名前
     UserIndex.value[userid].role = role; //ロール
-
-    //backupUser(this.userIndex); //ユーザー情報をバックアップ
 
 });
 
@@ -253,37 +249,9 @@ socket.on("messageUpdate", (dat) => {
 //     UserIndex.value[userid].username = username; //名前
 //     UserIndex.value[userid].role = role; //ロール
 
-//     //backupUser(this.userIndex); //ユーザー情報をバックアップ
-
 // });
 
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
-
-//メッセージDBの保存用
-export var msgDBbackup = {
-    // "001": [
-    //     {
-    //         id: 0,
-    //         username: "asdf",
-    //         userid: "xx0",
-    //         channelid: "001",
-    //         time: "20200217165240643",
-    //         content: "Ayo"
-    //     },
-    //     {
-    //         id: 1,
-    //         username: "fdsa",
-    //         userid: "xx1",
-    //         channelid: "001",
-    //         time: "20200227165240646",
-    //         content: "は"
-    //     }
-    // ]
-};
-
-//ユーザー情報
-export var userIndexBackup = {
-};
 
 //ソケットの接続状態をもつオブジェクトを返すだけ
 export function getSocket() {
@@ -311,18 +279,6 @@ export function getUserinfo() {
 
 }
 
-//メッセージ履歴を保存しておくだけ（マウント外れた時用）
-export function backupMsg(dat) {
-    msgDBbackup = dat;
-
-}
-
-//ユーザー情報を保存しておくだけ（マウント外れた時用）
-export function backupUser(dat) {
-    userIndexBackup = dat;
-
-}
-
 //サーバー情報の受け取り
 socket.on("serverinfo", (dat) => {
     console.log("serverinfo :: ");
@@ -337,6 +293,7 @@ socket.on("serverinfo", (dat) => {
 
 });
 
+//ToDo:削除
 //情報受け取り
 socket.on("infoResult", (dat) => {
     console.log("socket :: infoResult : 情報受け取り!");
@@ -636,13 +593,13 @@ socket.on("messageHistory", (history) => {
         //配列が存在してなかったら新しく作って配置する
         try {
             //msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
-            msgDBbackup[channelid] = history; //履歴DBを更新
+            //msgDBbackup[channelid] = history; //履歴DBを更新
             MsgDB.value[channelid] = history;
             // console.log("socket :: messageHistory : MsgDB");
             // console.log(MsgDB.value[channelid][0].messageid);
         }
         catch(e) {
-            msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
+            //msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
             MsgDB.value[channelid] = [history[index]];
             console.log("socket :: messageHistory : MsgDB");
             console.log(MsgDB.value);
