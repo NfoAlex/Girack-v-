@@ -80,6 +80,7 @@ export function dataChannel() {
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 //ref テスト用 メッセージDB（履歴）
 
+//メッセージ履歴DB
 const MsgDB = ref({
     // "001": [
     //     {
@@ -101,6 +102,7 @@ const MsgDB = ref({
     // ]
 });
 
+//ユーザー情報(名前とかロールとか)
 const UserIndex = ref({
 
 });
@@ -473,8 +475,8 @@ socket.on("infoUser", (dat) => {
                 socket.emit("getInfoChannel", { //リクエスト送信
                     targetid: channelNew[c],
                     reqSender: {
-                        userid: userinfo.userid, //ユーザーID
-                        sessionid: userinfo.sessionid //セッションID
+                        userid: Userinfo.value.userid, //ユーザーID
+                        sessionid: Userinfo.value.sessionid //セッションID
                     }
                 });
 
@@ -509,9 +511,9 @@ socket.on("infoUser", (dat) => {
 
         // === REF ===
         //チャンネル数が減っている（チャンネルを抜けた）なら
-        if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
+        if ( dat.channelJoined.length < Userinfo.value.channelJoined.length ) {
             console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-            dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
+            dat.channelid = Userinfo.value.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
 
             console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
             //自分が抜けたチャンネル分channelIndexを削る
