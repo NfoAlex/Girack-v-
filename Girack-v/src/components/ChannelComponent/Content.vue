@@ -8,7 +8,6 @@ const { Userinfo } = dataUser(); //ユーザー情報
 const { MsgDB, UserIndex } = dataMsg(); //履歴用DB
 
 export default {
-
     data() {
         return {
             msgDB: {},
@@ -60,9 +59,6 @@ export default {
         // console.log(socket._callbacks);
 
         let ref = this; //methodsの関数使う用（直接参照はできないため）
-
-        //this.msgDB = msgDBbackup; //メッセージDBを持ってくる
-        //this.userIndex = userIndexBackup; //使うユーザーの名前リスト
         
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
@@ -151,6 +147,7 @@ export default {
 
         },
 
+        //メッセージが存在しているかどうか
         isMsgAvailable() {
             if ( MsgDB[getPath] === undefined ) {
                 return false;
@@ -226,10 +223,10 @@ export default {
         setScrollState() {
             //一番下？
             if ( channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
-                this.NotAtBottom = false; //スクロールしきってないと保存
+                this.NotAtBottom = false; //スクロールしきったと保存
 
             } else {
-                this.NotAtBottom = true; //スクロールしきったと保存
+                this.NotAtBottom = true; //スクロールしきってないと保存
 
             }
 

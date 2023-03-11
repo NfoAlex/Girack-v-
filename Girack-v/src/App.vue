@@ -33,7 +33,6 @@ export default {
     watch: {
         //URLの変更を検知
         $route(r) {
-            //console.log(r);
             this.path = r.path; //変数へ取り込む
 
         },

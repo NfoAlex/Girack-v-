@@ -23,6 +23,7 @@ export default {
                 sessionid: Userinfo.value.sessionid, //セッションID);
                 content: this.txt
             });
+            
             this.txt = ""; //入力欄を空に
             console.log("--- msg sent ---");
             //console.log(userinfo);
