@@ -59,7 +59,7 @@ export default {
             <br>
             
             <v-card
-                class="mx-auto"
+                class="mx-auto rounded-lg"
                 width="80%"
                 variant="tonal"
             >
