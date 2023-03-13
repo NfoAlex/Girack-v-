@@ -63,12 +63,14 @@ export default {
     },
 
     mounted() {
-        document.addEventListener("keydown", this.funcEnter, false); //キー入力の検知
+        //送信(Enter)のためのキーボード入力の監視
+        document.addEventListener("keydown", this.funcEnter, false);
 
     },
 
     unmounted() {
-        document.removeEventListener("keydown", this.funcEnter); //送信キーをブロック
+        //送信(Enter)のためのキーボードの入力監視をオフ
+        document.removeEventListener("keydown", this.funcEnter);
 
     }
 }
