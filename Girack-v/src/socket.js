@@ -427,7 +427,7 @@ socket.on("infoUser", (dat) => {
 
     console.log("socket :: infoUser : プロフィール更新");
 
-    //参加しているチャンネルリストの長さ比較
+    //参加しているチャンネルリストの長さを比較をして減ったり増えたりしたチャンネルのデータを処理
     if ( dat.channelJoined.length !== Userinfo.value.channelJoined.length ) {
         //チャンネル数が増えているなら
         if ( dat.channelJoined.length > Userinfo.value.channelJoined.length ) {
@@ -438,7 +438,8 @@ socket.on("infoUser", (dat) => {
 
             //新しく参加したチャンネル情報の取得
             for ( let c in channelNew ) {
-                socket.emit("getInfoChannel", { //リクエスト送信
+                //リクエスト送信
+                socket.emit("getInfoChannel", {
                     targetid: channelNew[c],
                     reqSender: {
                         userid: Userinfo.value.userid, //ユーザーID
@@ -457,32 +458,6 @@ socket.on("infoUser", (dat) => {
         }
 
         //チャンネル数が減っている（チャンネルを抜けた）なら
-        // if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
-        //     console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-        //     dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
-
-        //     console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
-        //     //自分が抜けたチャンネル分channelIndexを削る
-        //     for (let c=0; c<Object.keys(channelIndex).length; c++ ) {
-        //         let channelid = Object.keys(channelIndex)[c];
-        //         console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
-                
-        //         //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-        //         if ( !dat.channelJoined.includes(channelid) ) {
-        //             delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
-        //             //チャンネル情報の更新料を加算
-        //             updateState.channelinfo = updateState.channelinfo + 1;
-        //             console.log("socket :: infoResult : 削除された!");
-        //             break;
-
-        //         }
-
-        //     }
-
-        // }
-
-        // === REF ===
-        //チャンネル数が減っている（チャンネルを抜けた）なら
         if ( dat.channelJoined.length < Userinfo.value.channelJoined.length ) {
             console.log("socket :: infoResult : チャンネル差が少ないから減らす");
             dat.channelid = Userinfo.value.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
@@ -490,14 +465,14 @@ socket.on("infoUser", (dat) => {
             console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
             //自分が抜けたチャンネル分channelIndexを削る
             for (let c=0; c<Object.keys(ChannelIndex.value).length; c++ ) {
+                //チャンネルIDをチャンネル情報リストからとる
                 let channelid = Object.keys(ChannelIndex.value)[c];
-                //console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
                 
                 //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-                if ( !dat.channelJoined.includes(channelid) ) {
+                if ( !dat.channelJoined.includes(channelid) ) { //チャンネルがリストに入っていなければ
                     delete ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
-                    //チャンネル情報の更新料を加算
-                    //console.log("socket :: infoResult : 削除された!");
+                    delete MsgDB.value[channelid]; //そのチャンネルの履歴を削除
+
                     break;
 
                 }
