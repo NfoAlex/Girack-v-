@@ -289,7 +289,7 @@ export default {
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         
-        <div style="padding:10%" v-if="MsgDB[getPath]===undefined">
+        <div style="padding:10%" v-if="MsgDB[getPath]===undefined||MsgDB[getPath].length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 

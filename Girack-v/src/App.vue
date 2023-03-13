@@ -12,6 +12,7 @@ const { ChannelIndex } = dataChannel();
 const socket = getSocket();
 
 export default {
+    
     data() {
         return {
             //css用クラス

@@ -7,6 +7,7 @@ const socket = getSocket();
 const { Userinfo } = dataUser();
 
 export default {
+    
     data() {
         return {
             txt: "",

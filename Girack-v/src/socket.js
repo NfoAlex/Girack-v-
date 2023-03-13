@@ -596,13 +596,6 @@ socket.on("authResult", (dat) => {
     //ユーザーデータの更新
     if ( dat.result ) { //もしログイン成功なら
         //ユーザー情報を更新
-        // userinfo = {
-        //     userid: dat.userid, //ユーザーID
-        //     loggedin: true, //ログイン状態
-        //     sessionid: dat.sessionid, //セッションID
-        //     channelJoined: dat.channelJoined
-        // };
-
         Userinfo.value = {
             userid: dat.userid, //ユーザーID
             loggedin: true, //ログイン状態
@@ -610,13 +603,13 @@ socket.on("authResult", (dat) => {
             channelJoined: dat.channelJoined
         };
 
+        //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
             targetid: dat.userid,
             reqSender: {
                 userid: dat.userid,
                 sessionid: dat.sessionid
             },
-
         });
 
         //クッキーにセッションIDを設定、寿命は15日
