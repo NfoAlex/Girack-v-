@@ -24,12 +24,14 @@ export default {
     },
 
     watch: {
+        //ユーザー情報の監視
         Userinfo: {
+            //変更を検知したら表示名を変更
             handler(U) {
-                this.nameDisplaying = U.username;
+                this.nameDisplaying = U.username; //表示名を更新
 
             },
-            deep: true
+            deep: true //階層ごと監視するため
         }
     },
     

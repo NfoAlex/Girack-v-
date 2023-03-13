@@ -15,6 +15,7 @@ export default {
     },
 
     methods: {
+        //チャンネル情報を取得するだけ
         getChannelInfo() {
             console.log("getChannelInfo :: ");
             console.log(ChannelIndex.value[this.getPath]);
@@ -45,7 +46,7 @@ export default {
     },
 
     mounted() {
-        //読み込みエラー対策
+        //読み込みエラー対策(参加しているチャンネルリストに今のチャンネルがあるかどうか)
         if ( dataUser().Userinfo.value.channelJoined.includes(this.getPath) === -1 ) {
             location.pathname = "/";
 

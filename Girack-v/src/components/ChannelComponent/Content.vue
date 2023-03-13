@@ -35,20 +35,23 @@ export default {
     watch: {
         //メッセージの更新監視
         MsgDB: {
+            //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
                 console.log("Content :: watch : メッセージ更新された");
+                //もしスクロールしきった状態なら
                 if ( this.StateScrolled ) {
                     console.log("Content :: watch : trueだわ");
+                    //レンダーを待ってからスクロール
                     this.$nextTick(() => {
-                        this.scrollIt(); //スクロール
-                        this.setScrollState(true); //
+                        this.scrollIt(); //スクロールする
+                        this.setScrollState(true); //スクロール状態を"スクロールしきった"と保存
 
                     });
 
                 }
 
             },
-            deep: true
+            deep: true //階層ごと監視するため
         }
     },
 
