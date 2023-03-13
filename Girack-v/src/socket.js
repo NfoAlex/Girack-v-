@@ -436,7 +436,7 @@ socket.on("infoUser", (dat) => {
             console.log("socket :: チャンネル差 : ");
             console.log(channelNew);
 
-            //チャンネル情報の取得
+            //新しく参加したチャンネル情報の取得
             for ( let c in channelNew ) {
                 socket.emit("getInfoChannel", { //リクエスト送信
                     targetid: channelNew[c],
@@ -446,6 +446,12 @@ socket.on("infoUser", (dat) => {
                     }
                 });
 
+            }
+
+            //新しく参加したチャンネルの履歴を取得
+            for ( let c in channelNew ) {
+                getMessage(channelNew[c], 20); //リクエスト送信する
+    
             }
 
         }

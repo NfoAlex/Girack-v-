@@ -25,7 +25,7 @@ export default {
         //ユーザー情報の変更を監視
         Userinfo: {
             //変更を検知したらチャンネルリストを再取得
-            handler(U) {
+            handler(U) { //U => 変更されたあとのUserinfo
                 socket.emit("getInfoList", {
                     target: "channel",
                     reqSender: {
