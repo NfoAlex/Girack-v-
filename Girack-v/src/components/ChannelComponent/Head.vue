@@ -1,7 +1,5 @@
 <script setup>
-import { getSocket, dataChannel, dataUser } from '../../socket';
-const socket = getSocket();
-
+import { dataChannel, dataUser } from '../../socket';
 </script>
 
 <script>
@@ -32,19 +30,15 @@ export default {
                         description: "",
                         scope: "open"
                     }
-                    //location.pathname = "/home";
 
                 }
             }
             catch(e) {
-                //setTimeout(this.$forceUpdate(), 1000);
                 return { //とりあえず仮データ返す
                     channelname: "ロード中...",
                     description: "",
                     scope: "open"
                 }
-                //location.pathname = "/";
-                //return null;
             }
 
         }

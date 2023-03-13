@@ -8,8 +8,8 @@ import { ref } from "vue";
 export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI);
 
-/* ==================================================== */
-//ref テスト用 ユーザー情報
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
+//ユーザー情報
 
 const Userinfo = ref({
     username: "RefTesting", //名前
@@ -25,26 +25,18 @@ export function dataUser() {
 
 }
 
-/* ==================================================== */
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
-//ユーザー情報
-// let userinfo = {
-//     username: "...", //名前
-//     role: "",
-//     userid: "", //ユーザーID
-//     loggedin: false, //ログイン状態
-//     sessionid: 0, //セッションID
-//     channelJoined: [], //参加しているチャンネル
-// };
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-//サーバー(インスタンス)情報
+//サーバー(インスタンス)情報 (ToDo削除)
 export var serverinfo = {
     servername: "...",
     registerAvailable: null,
     inviteOnly: null
 };
 
-//チャンネル情報
+//チャンネル情報 (ToDo削除)
 export var channelIndex = {
     /*
     "001": {
@@ -54,9 +46,6 @@ export var channelIndex = {
     }
     */
 };
-
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-//ref テスト用 チャンネル情報
 
 //チャンネル情報
 const ChannelIndex = ref({
@@ -111,8 +100,6 @@ const StateScrolled = ref(false); //スクロールしきっているかどう�
 
 //履歴DB返すだけ
 export function dataMsg() {
-    // console.log("socket :: dataMsg : MsgDB ");
-    // console.log(MsgDB);
     return { MsgDB, UserIndex, StateScrolled };
 
 }
@@ -121,13 +108,6 @@ export function dataMsg() {
 socket.on("messageReceive", (msg) => {
     console.log("socket :: msgReceive : ↓");
     console.log(msg);
-
-    //スクロールしきっているか確認
-    // let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
-    // console.log("scrolledState -> " + scrolledState);
-
-    //使用するDBレコード
-    //let activeDB = this.msgDB[this.getPath];
 
     //もしユーザーの名前リストに名前がなかったら
     if ( UserIndex.value[msg.userid] === undefined ) {
@@ -240,21 +220,6 @@ socket.on("messageUpdate", (dat) => {
     //backupMsg(MsgDB.value); //メッセージDBの出力、保存
 
 });
-
-//プロフィール情報が来たら表示名の更新
-// socket.on("infoUser", (dat) => {
-//     //if ( dat.userid === userinfo.userid ) { return; }
-//     let username = dat.username;
-//     let userid = dat.userid;
-//     let role = dat.role;
-
-//     UserIndex.value[userid] = {};
-
-//     //ユーザーインデックス更新
-//     UserIndex.value[userid].username = username; //名前
-//     UserIndex.value[userid].role = role; //ロール
-
-// });
 
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
@@ -442,8 +407,6 @@ socket.on("infoChannel", (dat) => {
         scope: dat.scope //チャンネルの公開範囲
     };
 
-    // console.log("channelIndex :: ");
-    // console.log(Object.entries(ChannelIndex.value));
 
 });
 
@@ -701,30 +664,31 @@ socket.on("authResult", (dat) => {
 
 });
 
-//クッキー設定するやつ
+//クッキー設定するやつ(MDNから参考)
 export function setCookie(cname, cvalue, exdays) {
     const d = new Date();
 
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000)); //寿命のための時間計算
+    let expires = "expires="+d.toUTCString(); //寿命設定
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/"; //クッキー追加
 
 }
 
-//クッキーを取得
+//クッキーを取得(MDNから参考)
 export function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
+    let name = cname + "="; //検索するクッキーの名前を設定
+    let decodedCookie = decodeURIComponent(document.cookie); //クッキー取得
+    let ca = decodedCookie.split(';'); //クッキーを探せるようにするために分解
 
+    //該当クッキーの探索開始
     for(let i = 0; i <ca.length; i++) {
         let c = ca[i];
 
-        while (c.charAt(0) == ' ') {
+        while ( c.charAt(0) == ' ' ) {
             c = c.substring(1);
 
         }
-        if (c.indexOf(name) == 0) {
+        if ( c.indexOf(name) == 0 ) {
             return c.substring(name.length, c.length);
 
         }

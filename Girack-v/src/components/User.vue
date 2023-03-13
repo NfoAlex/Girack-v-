@@ -43,18 +43,17 @@ export default {
 
         //名前更新
         updateName() {
-            let nameUpdating = this.nameDisplaying;
+            let nameUpdating = this.nameDisplaying; //更新する名前
+
             //名前更新
             socket.emit("changeProfile", {
-                name: nameUpdating,
-                reqSender: {
+                name: nameUpdating, //更新する名前
+                reqSender: { //セッション認証に必要な情報送信
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
                 }
             });
-            this.nameEditing = false;
-            //this.nameDisplaying = nameUpdating;
-            //this.$forceUpdate();
+            this.nameEditing = false; //編集モードを閉じる
 
             console.log("名前更新します -> " + this.nameDisplaying);
 
@@ -63,7 +62,7 @@ export default {
         //編集しているかどうかを切り替えする
         toggleEditing() {
             this.nameDisplaying = Userinfo.value.username;
-            this.nameEditing = !this.nameEditing;
+            this.nameEditing = !this.nameEditing; //編集モード
 
         }
     },

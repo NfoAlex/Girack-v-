@@ -33,7 +33,7 @@ export default {
                 });
                 
             },
-            deep: true
+            deep: true //JSONの階層ごと監視するため
         }
     },
 
@@ -43,7 +43,7 @@ export default {
             //参加しまぁす！
             socket.emit("channelAction", {
                 action: "join",
-                channelid: channelid,
+                channelid: channelid, //参加するチャンネルのid
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -66,7 +66,7 @@ export default {
             //抜けます。
             socket.emit("channelAction", {
                 action: "leave",
-                channelid: channelid,
+                channelid: channelid, //抜けるチャンネルのID
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -88,7 +88,7 @@ export default {
         channelCreate() {
             //チャンネル作りたい!
             socket.emit("channelCreate", {
-                channelname: this.channelCreateName,
+                channelname: this.channelCreateName, //作るチャンネルの名前
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -101,7 +101,7 @@ export default {
         channelRemove(cid) {
             //チャンネル消したい!
             socket.emit("channelRemove", {
-                channelid: cid,
+                channelid: cid, //消すチャンネルのID
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -112,11 +112,6 @@ export default {
     },
 
     mounted() {
-        //this.channelJoined = Userinfo.value.channelJoined;
-        // console.log("ChannelBrowser :: ユーザー情報をとろうとしている↓");
-        // console.log(dataUser().Userinfo);
-        // console.log(U.value);
-
         //チャンネルリストの取得
         socket.emit("getInfoList", {
             target: "channel",
@@ -136,7 +131,6 @@ export default {
             }
             
             this.channelList = dat.channelList; //リスト追加
-            //this.channelJoined = Userinfo.value.channelJoined;
 
             console.log("ChannelBrwoser :: infoList : dat ↓ ");
             console.log(dat);
