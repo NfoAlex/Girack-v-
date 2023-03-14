@@ -84,7 +84,6 @@ export default {
 
             });
             this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
-            //this.setScrollState(true); //スクロール状態を"した"状態にする
 
         });
 
@@ -298,10 +297,8 @@ export default {
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
-        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
-            
-            <v-btn @click="getHistory" variant="text">↑過去を読み込む</v-btn>
-
+        <div v-if="MsgDB[getPath]!==undefined" style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
+            <v-btn size="small" @click="getHistory" variant="text">↑過去を読み込む</v-btn>
         </div>
 
         <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">
