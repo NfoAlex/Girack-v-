@@ -66,8 +66,8 @@ export default {
         </div>
         <p>{{ getChannelInfo().description }}</p>
     </div>
-    <div style="width:40%; float:right;" class="d-flex flex-row-reverse">
-        <v-chip>Funky</v-chip>
+    <div style="width:40%; float:right; padding-top:1%;" class="d-flex flex-row-reverse">
+        <!-- <v-chip>Funky</v-chip> -->
     </div>
     
 </template>
