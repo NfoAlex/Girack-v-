@@ -66,8 +66,8 @@ export default {
         </div>
         <p>{{ getChannelInfo().description }}</p>
     </div>
-    <div style="width:40%; float:right; padding: 0" class="d-flex flex-row-reverse">
-        <v-btn class="rounded-lg" variant="text" icon="" style="height:70px; width:70px;">履歴↑</v-btn>
+    <div style="width:40%; float:right;" class="d-flex flex-row-reverse">
+        <v-chip>Funky</v-chip>
     </div>
     
 </template>
