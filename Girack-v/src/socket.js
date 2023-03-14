@@ -230,7 +230,7 @@ export function getSocket() {
 }
 
 //メッセージ履歴の取得をする
-export function getMessage(channelid, readLength) {
+export function getMessage(channelid, readLength, startLength) {
     socket.emit("getMessage", {
         //送信者の情報
         reqSender: {
@@ -238,7 +238,8 @@ export function getMessage(channelid, readLength) {
             sessionid: Userinfo.value.sessionid //セッションID
         },
         channelid: channelid, //ほしい履歴のチャンネルID
-        readLength: readLength //ほしい長さ
+        readLength: readLength, //ほしい長さ
+        startLength: startLength //履歴を取得し始める位置
     });
 
 }
@@ -531,31 +532,21 @@ socket.on("messageHistory", (history) => {
     }
 
     let index = 0; //チャンネル参照インデックス変数
-    
-    //履歴の長さ分DBへ追加
-    // for ( index in history ) {
-    //     //配列が存在してなかったら新しく作って配置する
-    //     try {
-    //         //msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
-    //         //msgDBbackup[channelid] = history; //履歴DBを更新
-    //         MsgDB.value[channelid] = history;
-    //         ChannelIndex.value[channelid].historyReadCount += history.length;
-    //         // console.log("socket :: messageHistory : MsgDB");
-    //         // console.log(MsgDB.value[channelid][0].messageid);
-    //     }
-    //     catch(e) {
-    //         //msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
-    //         MsgDB.value[channelid] = [history[index]];
-    //         ChannelIndex.value[channelid].historyReadCount += history.length;
-    //         console.log("socket :: messageHistory : MsgDB");
-    //         console.log(MsgDB.value);
 
-    //     }
+    //履歴がすでに存在するなら履歴を頭から追加
+    if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
+        history = history.reverse();
+        for ( index in history ) {
+            MsgDB.value[channelid].unshift(history[index]);
 
-    // }
+        }
+        ChannelIndex.value[channelid].historyReadCount += history.length;
 
-    MsgDB.value[channelid] = history;
-    ChannelIndex.value[channelid].historyReadCount += history.length;
+    } else { //存在しないなら新しく追加
+        MsgDB.value[channelid] = history;
+        ChannelIndex.value[channelid].historyReadCount += history.length;
+
+    }
 
 });
 

@@ -1,5 +1,5 @@
 <script>
-import { getSocket, dataMsg, dataUser, backendURI, getMessage } from "../../socket.js";
+import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel } from "../../socket.js";
 const socket = getSocket();
 // const { Userinfo } = dataUser(); //ユーザー情報
 // const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
@@ -8,8 +8,9 @@ export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
         const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
+        const { ChannelIndex } = dataChannel();
 
-        return { Userinfo, MsgDB, UserIndex, StateScrolled, DoScroll };
+        return { Userinfo, MsgDB, UserIndex, StateScrolled, DoScroll, ChannelIndex };
 
     },
 
@@ -57,7 +58,7 @@ export default {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     this.scrollIt(); //スクロールする
-                    
+
                 });
 
             }
@@ -119,6 +120,13 @@ export default {
                     return reaction;
 
             }
+
+        },
+
+        //さらに過去の履歴を取得する
+        getHistory() {
+            console.log("履歴ほしいね :  path -> " + this.getPath + ", hrcount -> " + this.ChannelIndex[this.getPath].historyReadCount);
+            getMessage(this.getPath, 10, this.ChannelIndex[this.getPath].historyReadCount);
 
         },
 
@@ -288,6 +296,12 @@ export default {
         
         <div style="padding:10%" v-if="MsgDB[getPath]===undefined||MsgDB[getPath].length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
+        </div>
+
+        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
+            
+            <v-btn @click="getHistory" variant="text">↑過去を読み込む</v-btn>
+
         </div>
 
         <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">
