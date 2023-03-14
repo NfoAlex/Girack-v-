@@ -8,8 +8,8 @@ import { ref } from "vue";
 export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI);
 
-/* ==================================================== */
-//ref テスト用 ユーザー情報
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
+//ユーザー情報
 
 const Userinfo = ref({
     username: "RefTesting", //名前
@@ -25,38 +25,27 @@ export function dataUser() {
 
 }
 
-/* ==================================================== */
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
-//ユーザー情報
-// let userinfo = {
-//     username: "...", //名前
-//     role: "",
-//     userid: "", //ユーザーID
-//     loggedin: false, //ログイン状態
-//     sessionid: 0, //セッションID
-//     channelJoined: [], //参加しているチャンネル
-// };
+/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-//サーバー(インスタンス)情報
+//サーバー(インスタンス)情報 (ToDo削除)
 export var serverinfo = {
     servername: "...",
     registerAvailable: null,
     inviteOnly: null
 };
 
-//チャンネル情報
-export var channelIndex = {
-    /*
-    "001": {
-        channelname: "random",
-        description: "Hello, Girack",
-        scope: "open"
-    }
-    */
-};
-
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-//ref テスト用 チャンネル情報
+//チャンネル情報 (ToDo削除)
+// export var channelIndex = {
+//     /*
+//     "001": {
+//         channelname: "random",
+//         description: "Hello, Girack",
+//         scope: "open"
+//     }
+//     */
+// };
 
 //チャンネル情報
 const ChannelIndex = ref({
@@ -111,8 +100,6 @@ const StateScrolled = ref(false); //スクロールしきっているかどう�
 
 //履歴DB返すだけ
 export function dataMsg() {
-    // console.log("socket :: dataMsg : MsgDB ");
-    // console.log(MsgDB);
     return { MsgDB, UserIndex, StateScrolled };
 
 }
@@ -121,13 +108,6 @@ export function dataMsg() {
 socket.on("messageReceive", (msg) => {
     console.log("socket :: msgReceive : ↓");
     console.log(msg);
-
-    //スクロールしきっているか確認
-    // let scrolledState = channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight; 
-    // console.log("scrolledState -> " + scrolledState);
-
-    //使用するDBレコード
-    //let activeDB = this.msgDB[this.getPath];
 
     //もしユーザーの名前リストに名前がなかったら
     if ( UserIndex.value[msg.userid] === undefined ) {
@@ -241,21 +221,6 @@ socket.on("messageUpdate", (dat) => {
 
 });
 
-//プロフィール情報が来たら表示名の更新
-// socket.on("infoUser", (dat) => {
-//     //if ( dat.userid === userinfo.userid ) { return; }
-//     let username = dat.username;
-//     let userid = dat.userid;
-//     let role = dat.role;
-
-//     UserIndex.value[userid] = {};
-
-//     //ユーザーインデックス更新
-//     UserIndex.value[userid].username = username; //名前
-//     UserIndex.value[userid].role = role; //ロール
-
-// });
-
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 //ソケットの接続状態をもつオブジェクトを返すだけ
@@ -265,7 +230,7 @@ export function getSocket() {
 }
 
 //メッセージ履歴の取得をする
-export function getMessage(channelid, readLength) {
+export function getMessage(channelid, readLength, startLength) {
     socket.emit("getMessage", {
         //送信者の情報
         reqSender: {
@@ -273,7 +238,8 @@ export function getMessage(channelid, readLength) {
             sessionid: Userinfo.value.sessionid //セッションID
         },
         channelid: channelid, //ほしい履歴のチャンネルID
-        readLength: readLength //ほしい長さ
+        readLength: readLength, //ほしい長さ
+        startLength: startLength //履歴を取得し始める位置
     });
 
 }
@@ -430,20 +396,13 @@ socket.on("infoResult", (dat) => {
 socket.on("infoChannel", (dat) => {
     console.log("socket :: infoChannel : チャンネル情報更新");
 
-    channelIndex[dat.channelid] = {
-        channelname: dat.channelname, //チャンネル名
-        description: dat.description, //チャンネル概要
-        scope: dat.scope //チャンネルの公開範囲
-    };
-
     ChannelIndex.value[dat.channelid] = {
         channelname: dat.channelname, //チャンネル名
         description: dat.description, //チャンネル概要
-        scope: dat.scope //チャンネルの公開範囲
+        scope: dat.scope, //チャンネルの公開範囲
+        historyReadCount: 0 //すでに読んだ履歴の数
     };
 
-    // console.log("channelIndex :: ");
-    // console.log(Object.entries(ChannelIndex.value));
 
 });
 
@@ -464,7 +423,7 @@ socket.on("infoUser", (dat) => {
 
     console.log("socket :: infoUser : プロフィール更新");
 
-    //参加しているチャンネルリストの長さ比較
+    //参加しているチャンネルリストの長さを比較をして減ったり増えたりしたチャンネルのデータを処理
     if ( dat.channelJoined.length !== Userinfo.value.channelJoined.length ) {
         //チャンネル数が増えているなら
         if ( dat.channelJoined.length > Userinfo.value.channelJoined.length ) {
@@ -473,9 +432,10 @@ socket.on("infoUser", (dat) => {
             console.log("socket :: チャンネル差 : ");
             console.log(channelNew);
 
-            //チャンネル情報の取得
+            //新しく参加したチャンネル情報の取得
             for ( let c in channelNew ) {
-                socket.emit("getInfoChannel", { //リクエスト送信
+                //リクエスト送信
+                socket.emit("getInfoChannel", {
                     targetid: channelNew[c],
                     reqSender: {
                         userid: Userinfo.value.userid, //ユーザーID
@@ -485,34 +445,14 @@ socket.on("infoUser", (dat) => {
 
             }
 
+            //新しく参加したチャンネルの履歴を取得
+            for ( let c in channelNew ) {
+                getMessage(channelNew[c], 20); //リクエスト送信する
+    
+            }
+
         }
 
-        //チャンネル数が減っている（チャンネルを抜けた）なら
-        // if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
-        //     console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-        //     dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
-
-        //     console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
-        //     //自分が抜けたチャンネル分channelIndexを削る
-        //     for (let c=0; c<Object.keys(channelIndex).length; c++ ) {
-        //         let channelid = Object.keys(channelIndex)[c];
-        //         console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
-                
-        //         //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-        //         if ( !dat.channelJoined.includes(channelid) ) {
-        //             delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
-        //             //チャンネル情報の更新料を加算
-        //             updateState.channelinfo = updateState.channelinfo + 1;
-        //             console.log("socket :: infoResult : 削除された!");
-        //             break;
-
-        //         }
-
-        //     }
-
-        // }
-
-        // === REF ===
         //チャンネル数が減っている（チャンネルを抜けた）なら
         if ( dat.channelJoined.length < Userinfo.value.channelJoined.length ) {
             console.log("socket :: infoResult : チャンネル差が少ないから減らす");
@@ -521,14 +461,14 @@ socket.on("infoUser", (dat) => {
             console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
             //自分が抜けたチャンネル分channelIndexを削る
             for (let c=0; c<Object.keys(ChannelIndex.value).length; c++ ) {
+                //チャンネルIDをチャンネル情報リストからとる
                 let channelid = Object.keys(ChannelIndex.value)[c];
-                //console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
                 
                 //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-                if ( !dat.channelJoined.includes(channelid) ) {
+                if ( !dat.channelJoined.includes(channelid) ) { //チャンネルがリストに入っていなければ
                     delete ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
-                    //チャンネル情報の更新料を加算
-                    //console.log("socket :: infoResult : 削除された!");
+                    delete MsgDB.value[channelid]; //そのチャンネルの履歴を削除
+
                     break;
 
                 }
@@ -592,24 +532,19 @@ socket.on("messageHistory", (history) => {
     }
 
     let index = 0; //チャンネル参照インデックス変数
-    
-    //履歴の長さ分DBへ追加
-    for ( index in history ) {
-        //配列が存在してなかったら新しく作って配置する
-        try {
-            //msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
-            //msgDBbackup[channelid] = history; //履歴DBを更新
-            MsgDB.value[channelid] = history;
-            // console.log("socket :: messageHistory : MsgDB");
-            // console.log(MsgDB.value[channelid][0].messageid);
-        }
-        catch(e) {
-            //msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
-            MsgDB.value[channelid] = [history[index]];
-            console.log("socket :: messageHistory : MsgDB");
-            console.log(MsgDB.value);
+
+    //履歴がすでに存在するなら履歴を頭から追加
+    if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
+        history = history.reverse();
+        for ( index in history ) {
+            MsgDB.value[channelid].unshift(history[index]);
 
         }
+        ChannelIndex.value[channelid].historyReadCount += history.length;
+
+    } else { //存在しないなら新しく追加
+        MsgDB.value[channelid] = history;
+        ChannelIndex.value[channelid].historyReadCount += history.length;
 
     }
 
@@ -652,13 +587,6 @@ socket.on("authResult", (dat) => {
     //ユーザーデータの更新
     if ( dat.result ) { //もしログイン成功なら
         //ユーザー情報を更新
-        // userinfo = {
-        //     userid: dat.userid, //ユーザーID
-        //     loggedin: true, //ログイン状態
-        //     sessionid: dat.sessionid, //セッションID
-        //     channelJoined: dat.channelJoined
-        // };
-
         Userinfo.value = {
             userid: dat.userid, //ユーザーID
             loggedin: true, //ログイン状態
@@ -666,13 +594,13 @@ socket.on("authResult", (dat) => {
             channelJoined: dat.channelJoined
         };
 
+        //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
             targetid: dat.userid,
             reqSender: {
                 userid: dat.userid,
                 sessionid: dat.sessionid
             },
-
         });
 
         //クッキーにセッションIDを設定、寿命は15日
@@ -701,30 +629,31 @@ socket.on("authResult", (dat) => {
 
 });
 
-//クッキー設定するやつ
+//クッキー設定するやつ(MDNから参考)
 export function setCookie(cname, cvalue, exdays) {
     const d = new Date();
 
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires="+d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000)); //寿命のための時間計算
+    let expires = "expires="+d.toUTCString(); //寿命設定
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/"; //クッキー追加
 
 }
 
-//クッキーを取得
+//クッキーを取得(MDNから参考)
 export function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
+    let name = cname + "="; //検索するクッキーの名前を設定
+    let decodedCookie = decodeURIComponent(document.cookie); //クッキー取得
+    let ca = decodedCookie.split(';'); //クッキーを探せるようにするために分解
 
+    //該当クッキーの探索開始
     for(let i = 0; i <ca.length; i++) {
         let c = ca[i];
 
-        while (c.charAt(0) == ' ') {
+        while ( c.charAt(0) == ' ' ) {
             c = c.substring(1);
 
         }
-        if (c.indexOf(name) == 0) {
+        if ( c.indexOf(name) == 0 ) {
             return c.substring(name.length, c.length);
 
         }

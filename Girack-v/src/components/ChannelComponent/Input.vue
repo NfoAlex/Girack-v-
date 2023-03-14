@@ -1,12 +1,14 @@
 <script setup>
-import { dataUser, channelIndex, getSocket } from '../../socket.js';
+import { dataUser, dataChannel, getSocket } from '../../socket.js';
 </script>
 
 <script>
 const socket = getSocket();
 const { Userinfo } = dataUser();
+const { ChannelIndex } = dataChannel();
 
 export default {
+    
     data() {
         return {
             txt: "",
@@ -17,29 +19,24 @@ export default {
     methods: {
         //メッセージを送信する
         msgSend() {
+            //送信ｨﾝ!
             socket.emit("msgSend", {
                 userid: Userinfo.value.userid, //名前
                 channelid: this.getPath, //チャンネルID
                 sessionid: Userinfo.value.sessionid, //セッションID);
-                content: this.txt
+                content: this.txt //メッセージの本文
             });
             
             this.txt = ""; //入力欄を空に
             console.log("--- msg sent ---");
-            //console.log(userinfo);
-            // console.log({
-            //     userid: userinfo.userid, //名前
-            //     content: this.txt, //内容
-            //     channelid: this.getPath, //チャンネルID
-            //     sessionid: userinfo.sessionid
-            // });
 
         },
 
         //Enterキー押されたときの処理
         funcEnter( event ) {
-            let ref = this; //refsのエラー処理
-            //入力欄にフォーカスされていてEnterキーが押された時
+            let ref = this; //refsのエラー対策
+
+            //入力欄にフォーカスされている中でEnterキーが押された時に送信する
             if ( event.key === "Enter" && ref.$refs.inp.focused === true ) {
                 this.msgSend(); //送信処理
 
@@ -50,10 +47,9 @@ export default {
         //チャンネル名を取得するだけ
         getChannelname() {
             try {
-                return channelIndex[this.getPath].channelname;
+                return ChannelIndex[this.getPath].channelname; //チャンネル名取得、返す
             }
-            catch (e) {
-                //setTimeout(this.$forceUpdate(), 1000);
+            catch (e) { //読み込めなかったらとりあえず返す
                 return "テキストチャンネル";
             }
 
@@ -61,19 +57,21 @@ export default {
     },
 
     computed: {
+        //現在のパスからチャンネルのID返すだけ
         getPath() {
-            return this.$route.params.id;
+            return this.$route.params.id; //パス
         }
     },
 
     mounted() {
-        document.addEventListener("keydown", this.funcEnter, false); //キー入力の検知
-        this.channelid = this.getPath;
+        //送信(Enter)のためのキーボード入力の監視
+        document.addEventListener("keydown", this.funcEnter, false);
 
     },
 
     unmounted() {
-        document.removeEventListener("keydown", this.funcEnter); //送信キーをブロック
+        //送信(Enter)のためのキーボードの入力監視をオフ
+        document.removeEventListener("keydown", this.funcEnter);
 
     }
 }

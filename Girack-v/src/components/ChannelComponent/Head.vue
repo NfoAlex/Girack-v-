@@ -1,7 +1,5 @@
 <script setup>
-import { getSocket, dataChannel, dataUser } from '../../socket';
-const socket = getSocket();
-
+import { dataChannel, dataUser } from '../../socket';
 </script>
 
 <script>
@@ -17,6 +15,7 @@ export default {
     },
 
     methods: {
+        //チャンネル情報を取得するだけ
         getChannelInfo() {
             console.log("getChannelInfo :: ");
             console.log(ChannelIndex.value[this.getPath]);
@@ -32,26 +31,22 @@ export default {
                         description: "",
                         scope: "open"
                     }
-                    //location.pathname = "/home";
 
                 }
             }
             catch(e) {
-                //setTimeout(this.$forceUpdate(), 1000);
                 return { //とりあえず仮データ返す
                     channelname: "ロード中...",
                     description: "",
                     scope: "open"
                 }
-                //location.pathname = "/";
-                //return null;
             }
 
         }
     },
 
     mounted() {
-        //読み込みエラー対策
+        //読み込みエラー対策(参加しているチャンネルリストに今のチャンネルがあるかどうか)
         if ( dataUser().Userinfo.value.channelJoined.includes(this.getPath) === -1 ) {
             location.pathname = "/";
 
@@ -71,8 +66,8 @@ export default {
         </div>
         <p>{{ getChannelInfo().description }}</p>
     </div>
-    <div style="width:40%; float:right; padding: 0" class="d-flex flex-row-reverse">
-        <v-btn class="rounded-lg" variant="text" icon="" style="height:70px; width:70px;">履歴↑</v-btn>
+    <div style="width:40%; float:right; padding-top:1%;" class="d-flex flex-row-reverse">
+        <!-- <v-chip>Funky</v-chip> -->
     </div>
     
 </template>

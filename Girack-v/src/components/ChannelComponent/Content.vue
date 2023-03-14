@@ -1,8 +1,5 @@
-
-
 <script>
-import { getSocket, dataMsg, dataUser, backendURI } from "../../socket.js";
-import { ref, watch } from "vue";
+import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel } from "../../socket.js";
 const socket = getSocket();
 // const { Userinfo } = dataUser(); //ユーザー情報
 // const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
@@ -11,18 +8,15 @@ export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
         const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
+        const { ChannelIndex } = dataChannel();
 
-        return { Userinfo, MsgDB, UserIndex, StateScrolled, DoScroll };
+        return { Userinfo, MsgDB, UserIndex, StateScrolled, DoScroll, ChannelIndex };
 
     },
 
     data() {
         return {
-            msgDB: {},
-            userIndex: {}, //ユーザー情報
             uri: backendURI, //バックエンドのURI
-
-            NotAtBottom: true, //一番下にスクロールしたかどうか
 
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -35,20 +29,35 @@ export default {
     watch: {
         //メッセージの更新監視
         MsgDB: {
+            //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
                 console.log("Content :: watch : メッセージ更新された");
+                //もしスクロールしきった状態なら
                 if ( this.StateScrolled ) {
                     console.log("Content :: watch : trueだわ");
+                    //レンダーを待ってからスクロール
                     this.$nextTick(() => {
-                        this.scrollIt(); //スクロール
-                        this.setScrollState(true); //
+                        this.scrollIt(); //スクロールする
+                        this.setScrollState(true); //スクロール状態を"スクロールしきった"と保存
 
                     });
 
                 }
 
             },
-            deep: true
+            deep: true //階層ごと監視するため
+        },
+
+        //チャンネルの移動を監視
+        $route: { //URLパスの変更監視
+            handler() {
+                //レンダーを待ってからスクロール
+                this.$nextTick(() => {
+                    this.scrollIt(); //スクロールする
+
+                });
+
+            }
         }
     },
 
@@ -71,7 +80,6 @@ export default {
 
             });
             this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
-            this.setScrollState(true); //スクロール状態を"した"状態にする
 
         });
 
@@ -110,6 +118,13 @@ export default {
 
         },
 
+        //さらに過去の履歴を取得する
+        getHistory() {
+            console.log("履歴ほしいね :  path -> " + this.getPath + ", hrcount -> " + this.ChannelIndex[this.getPath].historyReadCount);
+            getMessage(this.getPath, 10, this.ChannelIndex[this.getPath].historyReadCount);
+
+        },
+
         //もし人のやつほしくなったら
         needUserIndex(userid) {
             socket.emit("getInfo", {
@@ -140,18 +155,6 @@ export default {
             }
             catch(e) {
                 return true; //最初だったりするときはとにかく表示する
-
-            }
-
-        },
-
-        //メッセージが存在しているかどうか
-        isMsgAvailable() {
-            if ( this.MsgDB[getPath] === undefined ) {
-                return false;
-
-            } else {
-                return true;
 
             }
 
@@ -286,8 +289,12 @@ export default {
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         
-        <div style="padding:10%" v-if="MsgDB[getPath]===undefined">
+        <div style="padding:10%" v-if="MsgDB[getPath]===undefined||MsgDB[getPath].length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
+        </div>
+
+        <div v-if="MsgDB[getPath]!==undefined" style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
+            <v-btn size="small" @click="getHistory" variant="text">↑過去を読み込む</v-btn>
         </div>
 
         <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">

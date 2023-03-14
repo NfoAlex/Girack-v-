@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, channelIndex, dataChannel, dataUser, backendURI } from "./socket.js";
+import { getSocket, dataChannel, dataUser, backendURI } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
 //REFとしてインポート
@@ -12,6 +12,7 @@ const { ChannelIndex } = dataChannel();
 const socket = getSocket();
 
 export default {
+    
     data() {
         return {
             //css用クラス
@@ -59,7 +60,7 @@ export default {
             <br>
             
             <v-card
-                class="mx-auto"
+                class="mx-auto rounded-lg"
                 width="80%"
                 variant="tonal"
             >

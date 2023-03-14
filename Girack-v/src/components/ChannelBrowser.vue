@@ -22,8 +22,10 @@ export default {
     },
 
     watch: {
+        //ユーザー情報の変更を監視
         Userinfo: {
-            handler(U) {
+            //変更を検知したらチャンネルリストを再取得
+            handler(U) { //U => 変更されたあとのUserinfo
                 socket.emit("getInfoList", {
                     target: "channel",
                     reqSender: {
@@ -33,7 +35,7 @@ export default {
                 });
                 
             },
-            deep: true
+            deep: true //JSONの階層ごと監視するため
         }
     },
 
@@ -43,7 +45,7 @@ export default {
             //参加しまぁす！
             socket.emit("channelAction", {
                 action: "join",
-                channelid: channelid,
+                channelid: channelid, //参加するチャンネルのid
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -66,7 +68,7 @@ export default {
             //抜けます。
             socket.emit("channelAction", {
                 action: "leave",
-                channelid: channelid,
+                channelid: channelid, //抜けるチャンネルのID
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -88,30 +90,30 @@ export default {
         channelCreate() {
             //チャンネル作りたい!
             socket.emit("channelCreate", {
-                channelname: this.channelCreateName,
+                channelname: this.channelCreateName, //作るチャンネルの名前
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
                 }
             });
 
-            socket.emit("getInfoList", {
-            target: "channel",
-            reqSender: {
-                userid: Userinfo.value.userid, //ユーザーID
-                sessionid: Userinfo.value.sessionid //セッションID
-            }
-        });
+        },
+
+        //チャンネル削除
+        channelRemove(cid) {
+            //チャンネル消したい!
+            socket.emit("channelRemove", {
+                channelid: cid, //消すチャンネルのID
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
+
         }
     },
 
     mounted() {
-        let U = dataUser();
-        //this.channelJoined = Userinfo.value.channelJoined;
-        // console.log("ChannelBrowser :: ユーザー情報をとろうとしている↓");
-        // console.log(dataUser().Userinfo);
-        // console.log(U.value);
-
         //チャンネルリストの取得
         socket.emit("getInfoList", {
             target: "channel",
@@ -131,7 +133,6 @@ export default {
             }
             
             this.channelList = dat.channelList; //リスト追加
-            //this.channelJoined = Userinfo.value.channelJoined;
 
             console.log("ChannelBrwoser :: infoList : dat ↓ ");
             console.log(dat);
@@ -142,7 +143,7 @@ export default {
 
     unmounted() {
         //通信重複防止
-        //socket.off("infoResult");
+        socket.off("infoList");
 
     }
 
@@ -197,11 +198,20 @@ export default {
                 style="padding:0;"
             >
                 <v-card variant="tonal" class="rounded-lg" style="padding:2% 2%; margin-top:16px;">
+                    
                     <p class="text-h6">
+
                         {{ c[1].name }}
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
-                        <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" style="float: right" variant="tonal">参加</v-btn>
-                        <v-btn v-else @click="channelLeave(c[0])" style="float:right" variant="outlined">退出</v-btn>
+
+                        <div style="float:right">
+                            <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
+                                <span class="mdi mdi-delete-forever"></span>
+                            </v-btn>
+                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal">参加</v-btn>
+                            <v-btn v-else @click="channelLeave(c[0])" variant="outlined">退出</v-btn>
+                        </div>
+
                     </p>
                     <p style="padding:1%">{{ c[1].description }}</p>
                 </v-card>

@@ -24,12 +24,14 @@ export default {
     },
 
     watch: {
+        //ユーザー情報の監視
         Userinfo: {
+            //変更を検知したら表示名を変更
             handler(U) {
-                this.nameDisplaying = U.username;
+                this.nameDisplaying = U.username; //表示名を更新
 
             },
-            deep: true
+            deep: true //階層ごと監視するため
         }
     },
     
@@ -43,18 +45,17 @@ export default {
 
         //名前更新
         updateName() {
-            let nameUpdating = this.nameDisplaying;
+            let nameUpdating = this.nameDisplaying; //更新する名前
+
             //名前更新
             socket.emit("changeProfile", {
-                name: nameUpdating,
-                reqSender: {
+                name: nameUpdating, //更新する名前
+                reqSender: { //セッション認証に必要な情報送信
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
                 }
             });
-            this.nameEditing = false;
-            //this.nameDisplaying = nameUpdating;
-            //this.$forceUpdate();
+            this.nameEditing = false; //編集モードを閉じる
 
             console.log("名前更新します -> " + this.nameDisplaying);
 
@@ -63,22 +64,15 @@ export default {
         //編集しているかどうかを切り替えする
         toggleEditing() {
             this.nameDisplaying = Userinfo.value.username;
-            this.nameEditing = !this.nameEditing;
+            this.nameEditing = !this.nameEditing; //編集モード
 
         }
     },
 
     mounted() {
-        this.nameDisplaying = Userinfo.value.username;
-        console.log("User :: mounted : Userinfo");
-        console.log(Userinfo.value);
-        //console.log(userinfo);
+        this.nameDisplaying = Userinfo.value.username; //名前更新
 
     },
-
-    created() {
-        //this.nameDisplaying = Userinfo.username;
-    }
 
 }
 </script>
