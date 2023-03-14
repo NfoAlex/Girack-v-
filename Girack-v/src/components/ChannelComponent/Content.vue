@@ -111,6 +111,9 @@ export default {
                 case "smirk":
                     return "😏";
 
+                case "cold_sweat":
+                    return "😰";
+
                 default:
                     return reaction;
 
@@ -338,6 +341,9 @@ export default {
                         </v-btn>
                         <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             🤔
+                        </v-btn>
+                        <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                            😰
                         </v-btn>
                         <!-- 削除ボタン -->
                         <v-btn v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
