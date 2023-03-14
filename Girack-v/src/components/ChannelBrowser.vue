@@ -4,10 +4,7 @@ import { getSocket, dataUser } from '../socket.js';
 
 <script>
 const socket = getSocket();
-const { Userinfo } = dataUser();
-
-console.log("ChannelBrowser :: Userinfo");
-console.log(Userinfo);
+const { Userinfo } = dataUser(); //自分のユーザー情報をインポート
 
 export default {
 
