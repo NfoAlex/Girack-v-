@@ -16,11 +16,7 @@ export default {
 
     data() {
         return {
-            msgDB: {},
-            userIndex: {}, //ユーザー情報
             uri: backendURI, //バックエンドのURI
-
-            NotAtBottom: true, //一番下にスクロールしたかどうか
 
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
