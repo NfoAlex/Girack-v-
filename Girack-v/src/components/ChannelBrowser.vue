@@ -16,8 +16,17 @@ export default {
             channelList: {},
             channelJoined: [],
 
+            overlayChannelRemove: false, //チャンネル消去オーバーレイ
             overlayChannelCreate: false, //チャンネル作成オーバーレイ
+
+            //チャンネル作成用変数群
             channelCreateName: "", //作りたいチャンネルの名前
+            channelCreateDescription: "テキストチャンネル。",
+            channelCreatePrivate: false, //作りたいチャンネルの公開設定
+
+            //チャンネル削除用変数群
+            channelRemovingId: "", //消そうとしているチャンネルのID
+            channelRemovingName: "" //消そうとしているチャンネルの名前
         }
     },
 
@@ -91,6 +100,8 @@ export default {
             //チャンネル作りたい!
             socket.emit("channelCreate", {
                 channelname: this.channelCreateName, //作るチャンネルの名前
+                description: this.channelCreateDescription, //作るチャンネルの概要
+                scope: ( this.channelCreatePrivate?"private":"public" ), //作るチャンネルの公開範囲
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -99,8 +110,21 @@ export default {
 
         },
 
-        //チャンネル削除
+        //チャンネル削除の確認
         channelRemove(cid) {
+            //チャンネル消したい!
+            this.channelRemovingId = cid; //これから消すID
+            this.channelRemovingName = this.channelList[cid].name; //名前設定
+            this.overlayChannelRemove = true; //ダイアログ表示
+
+        },
+
+        //チャンネル削除する
+        channelRemoveConfirm(cid) {
+            this.overlayChannelRemove = false; //ダイアログ非表示
+            this.channelRemovingName = ""; //変数内の名前初期化
+            this.channelRemovingId = ""; //変数内のチャンネルID初期化
+
             //チャンネル消したい!
             socket.emit("channelRemove", {
                 channelid: cid, //消すチャンネルのID
@@ -151,30 +175,64 @@ export default {
 </script>
 
 <template>
-    <v-overlay
+    <v-dialog
         v-model="overlayChannelCreate"
         class="align-center justify-center"
-        contained
+        style="width:40%"
     >
-        <v-card style="width:65%; height:60%">
+        <v-card class="rounded-lg" style="padding:5%;">
 
             <p class="text-h5">チャンネル作成</p>
 
             <v-divider />
+
+            <br>
 
             <p style="float:left">チャンネル名</p>
             <br>
             <v-text-field variant="outlined" v-model="channelCreateName">
             </v-text-field>
 
+            <p style="float:left">概要</p>
             <br>
+            <v-textarea variant="outlined" aria-placeholder="yeah" v-model="channelCreateDescription">
+            </v-textarea>
 
-            <v-btn @click="channelCreate">
+            <v-checkbox
+                v-model="channelCreatePrivate"
+                label="プライベートチャンネル"
+            ></v-checkbox>
+
+            <v-btn variant="outlined" @click="channelCreate">
                 作成!
             </v-btn>
 
         </v-card>
-    </v-overlay>
+    </v-dialog>
+
+    <v-dialog
+        v-model="overlayChannelRemove"
+        class="align-center justify-center"
+        style="width:40%"
+    >
+        <v-card class="rounded-lg" style="padding:5%;">
+
+            <v-card-title class="text-h6 text-center">
+                チャンネル削除していいの？
+            </v-card-title>
+
+            <p style="margin:24px 0 8px 0;" class="text-h4 text-center">
+                {{ channelRemovingName }}
+            </p>
+
+            <br>
+
+            <v-btn variant="outlined" color="red" @click="channelRemoveConfirm(channelRemovingId)">
+                削除
+            </v-btn>
+
+        </v-card>
+    </v-dialog>
 
     <div style="margin:3% auto; width:85%; height:94%;">
         <div class="d-flex justify-space-around bg-surface-variant">
