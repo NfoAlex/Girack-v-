@@ -37,15 +37,15 @@ export var serverinfo = {
 };
 
 //チャンネル情報 (ToDo削除)
-export var channelIndex = {
-    /*
-    "001": {
-        channelname: "random",
-        description: "Hello, Girack",
-        scope: "open"
-    }
-    */
-};
+// export var channelIndex = {
+//     /*
+//     "001": {
+//         channelname: "random",
+//         description: "Hello, Girack",
+//         scope: "open"
+//     }
+//     */
+// };
 
 //チャンネル情報
 const ChannelIndex = ref({
@@ -395,16 +395,11 @@ socket.on("infoResult", (dat) => {
 socket.on("infoChannel", (dat) => {
     console.log("socket :: infoChannel : チャンネル情報更新");
 
-    channelIndex[dat.channelid] = {
-        channelname: dat.channelname, //チャンネル名
-        description: dat.description, //チャンネル概要
-        scope: dat.scope //チャンネルの公開範囲
-    };
-
     ChannelIndex.value[dat.channelid] = {
         channelname: dat.channelname, //チャンネル名
         description: dat.description, //チャンネル概要
-        scope: dat.scope //チャンネルの公開範囲
+        scope: dat.scope, //チャンネルの公開範囲
+        historyReadCount: 0 //すでに読んだ履歴の数
     };
 
 
@@ -538,24 +533,29 @@ socket.on("messageHistory", (history) => {
     let index = 0; //チャンネル参照インデックス変数
     
     //履歴の長さ分DBへ追加
-    for ( index in history ) {
-        //配列が存在してなかったら新しく作って配置する
-        try {
-            //msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
-            //msgDBbackup[channelid] = history; //履歴DBを更新
-            MsgDB.value[channelid] = history;
-            // console.log("socket :: messageHistory : MsgDB");
-            // console.log(MsgDB.value[channelid][0].messageid);
-        }
-        catch(e) {
-            //msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
-            MsgDB.value[channelid] = [history[index]];
-            console.log("socket :: messageHistory : MsgDB");
-            console.log(MsgDB.value);
+    // for ( index in history ) {
+    //     //配列が存在してなかったら新しく作って配置する
+    //     try {
+    //         //msgDBbackup[channelid].push(history[index]); //履歴DBの配列へプッシュ
+    //         //msgDBbackup[channelid] = history; //履歴DBを更新
+    //         MsgDB.value[channelid] = history;
+    //         ChannelIndex.value[channelid].historyReadCount += history.length;
+    //         // console.log("socket :: messageHistory : MsgDB");
+    //         // console.log(MsgDB.value[channelid][0].messageid);
+    //     }
+    //     catch(e) {
+    //         //msgDBbackup[channelid] = [history[index]]; //新しい配列として保存
+    //         MsgDB.value[channelid] = [history[index]];
+    //         ChannelIndex.value[channelid].historyReadCount += history.length;
+    //         console.log("socket :: messageHistory : MsgDB");
+    //         console.log(MsgDB.value);
 
-        }
+    //     }
 
-    }
+    // }
+
+    MsgDB.value[channelid] = history;
+    ChannelIndex.value[channelid].historyReadCount += history.length;
 
 });
 

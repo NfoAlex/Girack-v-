@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, channelIndex, dataChannel, dataUser, backendURI } from "./socket.js";
+import { getSocket, dataChannel, dataUser, backendURI } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
 //REFとしてインポート

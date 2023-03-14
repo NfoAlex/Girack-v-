@@ -1,10 +1,11 @@
 <script setup>
-import { dataUser, channelIndex, getSocket } from '../../socket.js';
+import { dataUser, dataChannel, getSocket } from '../../socket.js';
 </script>
 
 <script>
 const socket = getSocket();
 const { Userinfo } = dataUser();
+const { ChannelIndex } = dataChannel();
 
 export default {
     
@@ -46,7 +47,7 @@ export default {
         //チャンネル名を取得するだけ
         getChannelname() {
             try {
-                return channelIndex[this.getPath].channelname; //チャンネル名取得、返す
+                return ChannelIndex[this.getPath].channelname; //チャンネル名取得、返す
             }
             catch (e) { //読み込めなかったらとりあえず返す
                 return "テキストチャンネル";
