@@ -1,8 +1,5 @@
-
-
 <script>
-import { getSocket, dataMsg, dataUser, backendURI } from "../../socket.js";
-import { ref, watch } from "vue";
+import { getSocket, dataMsg, dataUser, backendURI, getMessage } from "../../socket.js";
 const socket = getSocket();
 // const { Userinfo } = dataUser(); //ユーザー情報
 // const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
@@ -52,6 +49,18 @@ export default {
 
             },
             deep: true //階層ごと監視するため
+        },
+
+        //チャンネルの移動を監視
+        $route: { //URLパスの変更監視
+            handler() {
+                //レンダーを待ってからスクロール
+                this.$nextTick(() => {
+                    this.scrollIt(); //スクロールする
+                    
+                });
+
+            }
         }
     },
 
@@ -74,7 +83,7 @@ export default {
 
             });
             this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
-            this.setScrollState(true); //スクロール状態を"した"状態にする
+            //this.setScrollState(true); //スクロール状態を"した"状態にする
 
         });
 
@@ -143,18 +152,6 @@ export default {
             }
             catch(e) {
                 return true; //最初だったりするときはとにかく表示する
-
-            }
-
-        },
-
-        //メッセージが存在しているかどうか
-        isMsgAvailable() {
-            if ( this.MsgDB[getPath] === undefined ) {
-                return false;
-
-            } else {
-                return true;
 
             }
 
