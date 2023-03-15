@@ -45,8 +45,8 @@ export default {
         </v-card>
         <v-card v-if="mode==='ChannelIndex'" style="padding:3%; margin-top:8px;" variant="outlined" v-for="d in Object.entries(ChannelIndex)">
                 {{ d[0] }}
-                <v-card variant="tonal" style="padding:1%; margin-top:8px;" v-for="m in d[1]">
-                    {{ JSON.stringify(m, null, 4) }}
+                <v-card variant="tonal" style="padding:1%; margin-top:8px;">
+                    {{ d[1] }}
                 </v-card>
         </v-card>
     </div>
