@@ -104,6 +104,7 @@ export default {
                     sessionid: Userinfo.value.sessionid
                 }
             });
+            this.overlayChannelCreate = false; //チャンネル作成ダイアログを非表示
 
         },
 
