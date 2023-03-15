@@ -13,13 +13,5 @@ html {
 a
 {
   text-decoration: none;
-  color: "#90A4AE";
   transition: 0.4s;
-  text-decoration: none;
-}
-
-@media (hover: hover) {
-  a:hover {
-    color: whitesmoke;
-  }
 }

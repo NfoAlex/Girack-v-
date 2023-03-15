@@ -319,6 +319,10 @@ export default {
                     >
                         {{ getRole(m.userid) }}
                     </v-chip>
+
+                    <span style="margin-right:12px" class="text-body-2 font-italic">
+                        {{ printDate(m.time) }}
+                    </span>
                     
                 </div>
                 
@@ -385,12 +389,12 @@ export default {
     height: 4vmax;
     max-height: 5vh;
 
-    background-color: gray;
+    background-color: rgb(var(--v-theme-secondary));
 }
 
 .hovered
 {
-    background: #333333;
+    background-color: rgb(var(--v-theme-secondary));
 }
 
 </style>

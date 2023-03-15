@@ -4,6 +4,7 @@ import router from './router'
 
 // Vuetify
 import 'vuetify/styles'
+import colors from 'vuetify/lib/util/colors'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -16,23 +17,27 @@ import '@fortawesome/fontawesome-free/css/all.css'
 const vuetify = createVuetify({
     theme: {
         themes: {
-            light: {
+            thelight: {
                 dark: false,
                 colors: {
-                    background: "#FAFAFA",
+                    background: "#ECEFF1",
+                    surface: "#CFD8DC",
                     primary: "#607D8B", // #E53935
-                    secondary: "#ECEFF1", // #FFCDD2
+                    secondary: "#B0BEC5", // #FFCDD2
                 }
             },
-            dark: {
+            thedark: {
                 dark: true,
                 colors: {
-                    background: "#212121",
+                    background: "white",
+                    accent: '#37474F',
+                    surface: "#212121",
                     primary: "#263238", // #E53935
+                    secondary: "#546E7A"
                 }
             },
         },
-        defaultTheme: "dark"
+        defaultTheme: "thedark"
     },
     icons: {
         defaultSet: "fa",

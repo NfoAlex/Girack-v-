@@ -106,7 +106,7 @@ export default {
                 <hr style="margin:5% 0">
 
                 <!-- ここからチャンネルボタン描写  -->
-                <div style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
+                <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
                         <v-btn :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                             <span style="width:100%; text-align:left !important; float:left !important">
@@ -141,8 +141,7 @@ export default {
 
     box-sizing: border-box;
     border-right: 0.1px #424242 solid;
-
-    background-color: #263238;
+    background: rgb(var(--v-theme-background));
 }
 
 .main
@@ -153,8 +152,28 @@ export default {
 
     width: 80vw;
     height: 100vh;
-    
-    background-color: #212121;
+    background: rgb(var(--v-theme-background));
+}
+
+</style>
+
+<style>
+
+html
+{
+    background: rgb(var(--v-theme-background));
+}
+
+a
+{
+  text-decoration: none;
+  transition: 0.4s;
+}
+
+a:visited
+{
+  text-decoration: none;
+  background-color: rgb(var(--v-theme-accent));
 }
 
 </style>
