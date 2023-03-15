@@ -12,7 +12,7 @@ export default {
     data() {
         return {
             txt: "",
-            channelid: ""
+            channelid: "",
         }
     },
 
@@ -47,7 +47,7 @@ export default {
         //チャンネル名を取得するだけ
         getChannelname() {
             try {
-                return ChannelIndex[this.getPath].channelname; //チャンネル名取得、返す
+                return ChannelIndex.value[this.$route.params.id].channelname; //チャンネル名取得、返す
             }
             catch (e) { //読み込めなかったらとりあえず返す
                 return "テキストチャンネル";
