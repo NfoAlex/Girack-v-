@@ -378,7 +378,7 @@ export default {
 {
     position: absolute;
     right: 1vw;
-    bottom: 3vh;
+    bottom: 10vh;
 
     width: 4vmax;
     max-width: 5vh;

@@ -14,6 +14,11 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 
 const vuetify = createVuetify({
+    defaults: {
+        VCard: {
+            variant: "tonal"
+        }
+    },
     theme: {
         themes: {
             thelight: {
