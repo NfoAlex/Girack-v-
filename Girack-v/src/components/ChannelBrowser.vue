@@ -248,7 +248,7 @@ export default {
             </v-btn>
         </div>
         <br>
-        <v-list class="channelList" style="height:94%; width:100%; overflow-y:auto;">
+        <div class="channelList" style="height:94%; width:100%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
                 style="padding:0;"
@@ -272,7 +272,7 @@ export default {
                     <p style="padding:1%">{{ c[1].description }}</p>
                 </v-card>
             </v-list-item>
-        </v-list>
+        </div>
     </div>
 </template>
 
