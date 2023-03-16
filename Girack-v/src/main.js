@@ -29,7 +29,7 @@ const vuetify = createVuetify({
             thedark: {
                 dark: true,
                 colors: {
-                    background: "white",
+                    background: "#ffffff",
                     accent: '#37474F',
                     surface: "#212121",
                     primary: "#263238", // #E53935

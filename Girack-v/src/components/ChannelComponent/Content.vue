@@ -350,9 +350,7 @@ export default {
                             😰
                         </v-btn>
                         <!-- 削除ボタン -->
-                        <v-btn v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                            <span style="font-size:0.8vmax" class="mdi mdi-delete-forever">
-                            </span>
+                        <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             削除
                         </v-btn>
                     </span>
@@ -370,8 +368,7 @@ export default {
         </div>
     </div>
     <!-- 一番下にスクロールするボタン -->
-    <v-btn v-if="!StateScrolled" style="padding:0" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
-        <span width="100%" style="font-size:2vmax;" class="mdi mdi-arrow-down-bold"></span>
+    <v-btn v-if="!StateScrolled" icon="mdi:mdi-arrow-down-thick" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
     </v-btn>
 </template>
 

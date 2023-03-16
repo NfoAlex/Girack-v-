@@ -89,16 +89,16 @@ export default {
             
             <nav style="margin:5% auto; width:90%;">
                 <RouterLink :to="'/jsonviewer'">
-                    <v-btn :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                    <v-btn class="overflow-x-hidden" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
                             JSONviewer(debug)
                         </span>
                     </v-btn>
                 </RouterLink>
                 <RouterLink :to="'/browser'">
-                    <v-btn :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                    <v-btn class="overflow-x-hidden" prepend-icon="mdi:mdi-text-search" :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
-                            <span class="mdi mdi-text-search">チャンネルブラウザ</span>
+                            チャンネルブラウザ
                         </span>
                     </v-btn>
                 </RouterLink>
@@ -108,9 +108,9 @@ export default {
                 <!-- ここからチャンネルボタン描写  -->
                 <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
-                        <v-btn :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                        <v-btn prepend-icon="mdi:mdi-pound" :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                             <span style="width:100%; text-align:left !important; float:left !important">
-                                <span class="mdi mdi-pound ">{{ ChannelIndex[l[0]].channelname }}</span>
+                                {{ ChannelIndex[l[0]].channelname }}
                             </span>
                         </v-btn>
                     </RouterLink>

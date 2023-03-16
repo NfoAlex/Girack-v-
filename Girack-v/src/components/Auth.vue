@@ -147,20 +147,21 @@ export default {
                     <v-alert
                         v-if="!Connected"
                         style="margin: 3% auto"
+                        icon="mdi:mdi-alert-circle"
                         type="error"
-                        title="🤔"
-                        text="サーバーつながってなくない?"
+                        text="🤔サーバーつながってなくない?"
                     ></v-alert>
 
                     <p>パスワード</p>
                     <v-text-field
                         style="width:100%"
                         v-model="pwForAuth"
+                        prepend-inner-icon="mdi:mdi-lock"
                         clearable
                         :disabled="!Connected"
                         hint="乱数のやつ"
                     >
-                        <span style="margin-right:6px" class="mdi mdi-lock"></span>
+                        <v-icon icon="mdi:mid-lock" />
                     </v-text-field>
                     <br>
                     <v-btn :disabled="!Connected" @click="requestAuth" color="primary">認証</v-btn>
@@ -177,6 +178,7 @@ export default {
                     <v-alert
                         v-if="error"
                         style="width:100%; margin: 3% auto"
+                        icon="mdi:mdi-alert-circle"
                         type="error"
                         title="エラー"
                         text="ログイン失敗、パスワードを確認してね（またはBANされてそう）"
@@ -196,6 +198,7 @@ export default {
                     <v-alert
                         v-if="!Connected"
                         style="margin: 3% auto"
+                        icon="mdi:mdi-alert-circle"
                         type="error"
                         title="🤔"
                         text="サーバーつながってなくない?"
@@ -230,6 +233,7 @@ export default {
                         <v-alert
                         v-if="registerResult===-1"
                         style="width:100%; margin: 3% auto"
+                        icon="mdi:mdi-alert-circle"
                         type="error"
                         title="エラー"
                         text="登録失敗、招待コード合ってる?"

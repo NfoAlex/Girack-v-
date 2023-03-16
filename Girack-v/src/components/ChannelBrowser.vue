@@ -236,8 +236,8 @@ export default {
         <div class="d-flex justify-space-around bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" variant="tonal" icon="" class="rounded-lg">
-                <v-icon size="large">
-                    <span class="mdi mdi-plus-box"></span>
+                <!-- ???????-->
+                <v-icon icon="mdi:mdi-plus">
                 </v-icon>
                 <v-tooltip
                     activator="parent"
@@ -262,7 +262,7 @@ export default {
 
                         <div style="float:right">
                             <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
-                                <span class="mdi mdi-delete-forever"></span>
+                                <v-icon icon="mdi:mdi-delete-forever"></v-icon>
                             </v-btn>
                             <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal">参加</v-btn>
                             <v-btn v-else @click="channelLeave(c[0])" variant="outlined">退出</v-btn>
