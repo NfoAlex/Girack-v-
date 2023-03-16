@@ -386,12 +386,12 @@ export default {
     height: 4vmax;
     max-height: 5vh;
 
-    background-color: rgb(var(--v-theme-secondary));
+    background-color: #49454F;
 }
 
 .hovered
 {
-    background-color: rgb(var(--v-theme-secondary));
+    background-color: #49454F;
 }
 
 </style>

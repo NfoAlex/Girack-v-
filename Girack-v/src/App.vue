@@ -3,15 +3,23 @@ import { RouterLink, RouterView } from 'vue-router';
 import { getSocket, dataChannel, dataUser, backendURI } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
+
 //REFとしてインポート
 const { Userinfo } = dataUser();
 const { ChannelIndex } = dataChannel();
+
 </script>
 
 <script>
+
+import { useTheme } from 'vuetify';
 const socket = getSocket();
 
 export default {
+    setup() {
+        const theme = useTheme();
+        return { theme };
+    },
     
     data() {
         return {
@@ -39,6 +47,7 @@ export default {
     },
 
     mounted() {
+        //console.log("vuetify :: global theme theme -> " + theme.global.name.value);
         socket.emit("getInitInfo"); //サーバーの情報を取得
 
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
@@ -61,6 +70,7 @@ export default {
             
             <v-card
                 class="mx-auto rounded-lg"
+                color="#D0BCFF"
                 width="80%"
                 variant="tonal"
             >
@@ -91,7 +101,7 @@ export default {
                 <RouterLink :to="'/jsonviewer'">
                     <v-btn class="overflow-x-hidden" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
-                            JSONviewer(debug)
+                            JSONviewer
                         </span>
                     </v-btn>
                 </RouterLink>
@@ -141,7 +151,6 @@ export default {
 
     box-sizing: border-box;
     border-right: 0.1px #424242 solid;
-    background: rgb(var(--v-theme-background));
 }
 
 .main
@@ -152,7 +161,6 @@ export default {
 
     width: 80vw;
     height: 100vh;
-    background: rgb(var(--v-theme-background));
 }
 
 </style>
@@ -161,19 +169,20 @@ export default {
 
 html
 {
-    background: rgb(var(--v-theme-background));
+    background: #1C1B1F
 }
 
 a
 {
   text-decoration: none;
   transition: 0.4s;
+  color: #EADDFF;
 }
 
 a:visited
 {
   text-decoration: none;
-  background-color: rgb(var(--v-theme-accent));
+  color: #EADDFF;
 }
 
 </style>

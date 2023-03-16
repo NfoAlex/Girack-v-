@@ -93,7 +93,7 @@ export default {
                             # {{ Userinfo.userid }}
                         </p>
                         <p v-if="!nameEditing" @dblclick="toggleEditing" class="text-h4 text-left" >
-                            {{ Userinfo.username }} <v-btn icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
+                            {{ Userinfo.username }} <v-btn variant="tonal" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
                         </p>
                         <v-text-field
                             v-if="nameEditing"
