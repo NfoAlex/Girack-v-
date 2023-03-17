@@ -20,7 +20,7 @@ export default {
             console.log("getChannelInfo :: ");
             console.log(ChannelIndex.value[this.getPath]);
             try {
-                //チャンネルインデックスから情報を返す、データなければホームに返す
+                //チャンネルインデックスから情報を返す、データなければ仮データを返す
                 if ( ChannelIndex.value[this.getPath] !== undefined ) {
                     return ChannelIndex.value[this.getPath];
 

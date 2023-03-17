@@ -14,11 +14,6 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 
 const vuetify = createVuetify({
-    defaults: {
-        VCard: {
-            variant: "tonal"
-        }
-    },
     theme: {
         themes: {
             thelight: {
@@ -39,7 +34,6 @@ const vuetify = createVuetify({
                         accent: "#9c27b0",
                         error: "#601410",
                         warning: "#4caf50",
-                        info: "#009688",
                         success: "#8bc34a",
                 }
             },
