@@ -78,7 +78,7 @@ export default {
 </script>
 
 <template>
-    <div style="width:90%;" class="mx-auto d-flex justify-space-between">
+    <div style="width:90%;" class="mx-auto d-flex justify-center ">
         <div class="" style="width:90%">
             <v-text-field
                 ref="inp"
@@ -94,7 +94,7 @@ export default {
         </div>
 
 
-        <v-btn icon="" size="small" class="rounded-lg" style="margin-right:1vw;" elevation="0" @click="msgSend" color="primary">
+        <v-btn icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" @click="msgSend" color="primary">
             <v-icon icon="mdi:mdi-send-outline"></v-icon>
             <v-tooltip
                 activator="parent"
