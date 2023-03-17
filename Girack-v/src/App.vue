@@ -176,13 +176,13 @@ a
 {
   text-decoration: none;
   transition: 0.4s;
-  color: #EADDFF;
+  color: #ede7f6;
 }
 
 a:visited
 {
   text-decoration: none;
-  color: #EADDFF;
+  color: #ede7f6;
 }
 
 </style>
