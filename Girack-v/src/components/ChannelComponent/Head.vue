@@ -59,12 +59,12 @@ export default {
 </script>
 
 <template>
-    <div style="padding: 1% 32px; float:left;">
-        <div :class="'text-h4'">
+    <div style="padding: 0 32px; float:left;">
+        <div style="font-size:3vh">
             <span v-if="getChannelInfo().scope==='private'" class="mdi mdi-lock"></span>
             {{ getChannelInfo().channelname }}
         </div>
-        <p>{{ getChannelInfo().description }}</p>
+        <p style="font-size:2vh">{{ getChannelInfo().description }}</p>
     </div>
     <div style="width:40%; float:right; padding-top:1%;" class="d-flex flex-row-reverse">
         <!-- <v-chip>Funky</v-chip> -->
