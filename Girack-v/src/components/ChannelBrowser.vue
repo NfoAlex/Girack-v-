@@ -232,7 +232,7 @@ export default {
         </v-card>
     </v-dialog>
 
-    <div style="margin:3% auto; width:85%; height:94%;">
+    <div style="margin:3% auto; width:85%; height:95%;">
         <div class="d-flex justify-space-around bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" variant="tonal" icon="" class="rounded-lg">
@@ -248,7 +248,7 @@ export default {
             </v-btn>
         </div>
         <br>
-        <div class="channelList" style="height:94%; width:100%; overflow-y:auto;">
+        <div class="channelList" style="height:90%; width:100%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
                 style="padding:0;"
