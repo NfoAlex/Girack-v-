@@ -58,7 +58,9 @@ export default {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     this.scrollIt(); //スクロールする
-                    this.MsgReadTime[this.getPath].new = 0; //新着メッセージ数を0に
+                    this.MsgReadTime[this.getPath] = {
+                        new: 0 //新着メッセージ数を0に
+                    };
 
                 });
 
@@ -188,6 +190,20 @@ export default {
 
         },
 
+        //新着メッセージ数を返す
+        checkReadTime(channelid) {
+            console.log("App :: checkReadTime");
+            console.log(this.MsgReadTime[channelid]);
+            try {
+                console.log("できたわ");
+                return this.MsgReadTime[channelid].new; //データ返す
+            }
+            catch(e) {
+                console.log("普通にエラー")
+                return null;
+            }
+        },
+
         //スクロールさせるだけの関数
         scrollIt() {
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
@@ -255,7 +271,9 @@ export default {
             //一番下？
             if ( s || channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
                 this.StateScrolled = true; //スクロールしきったと保存
-                this.MsgReadTime[this.getPath].new = 0; //新着メッセージ数を0に
+                this.MsgReadTime[this.getPath] = {
+                    new: 0 //新着メッセージ数を0に
+                };
 
             } else {
                 this.StateScrolled = false; //スクロールしきってないと保存
@@ -401,14 +419,14 @@ export default {
     <!-- 一番下にスクロールするボタン -->
     <v-btn style="padding:0" v-if="!StateScrolled" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
         <v-badge
-            v-if="MsgReadTime[getPath].new!==0"
+            v-if="checkReadTime(getPath)!==0"
             color=""
-            :content="MsgReadTime[getPath].new"
+            :content="checkReadTime(getPath)"
             inline
         >
         </v-badge>
         <v-icon 
-            v-if="MsgReadTime[getPath].new===0"
+            v-if="!checkReadTime(getPath)"
             icon="mdi:mdi-arrow-down-thick"
         >
         mdi:mdi-arrow-down-thick
