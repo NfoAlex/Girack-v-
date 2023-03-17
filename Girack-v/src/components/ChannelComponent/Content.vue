@@ -292,10 +292,12 @@ export default {
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         
+        <!-- 履歴が空なら -->
         <div style="padding:10%" v-if="MsgDB[getPath]===undefined||MsgDB[getPath].length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
+        <!-- 履歴読み込みボタン -->
         <div v-if="MsgDB[getPath]!==undefined" style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
             <v-btn size="small" @click="getHistory" variant="text">↑過去を読み込む</v-btn>
         </div>
@@ -309,6 +311,7 @@ export default {
             <!-- メッセージ本体 -->
             <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                 
+                <!-- ユーザー名 -->
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
@@ -317,9 +320,10 @@ export default {
                         size="x-small"
                         :elevation="6"
                     >
-                        {{ getRole(m.userid) }}
+                        <!-- ここはロール ⇒⇒⇒ -->{{ getRole(m.userid) }}
                     </v-chip>
 
+                    <!-- タイムスタンプ -->
                     <span style="margin-right:12px" class="text-body-2 font-italic">
                         {{ printDate(m.time) }}
                     </span>
