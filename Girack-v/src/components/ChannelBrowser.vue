@@ -236,7 +236,6 @@ export default {
         <div class="d-flex justify-space-around bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" variant="tonal" icon="" class="rounded-lg">
-                <!-- ???????-->
                 <v-icon icon="mdi:mdi-plus">
                 </v-icon>
                 <v-tooltip
@@ -257,7 +256,7 @@ export default {
                     
                     <p class="text-h6">
 
-                        {{ c[1].name }}
+                        <v-icon icon="mdi:mdi-pound"></v-icon>{{ c[1].name }}
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
 
                         <div style="float:right">
