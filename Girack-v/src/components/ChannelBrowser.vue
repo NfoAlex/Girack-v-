@@ -256,7 +256,7 @@ export default {
                     
                     <p class="text-h6">
 
-                        <v-icon icon="mdi:mdi-pound"></v-icon>{{ c[1].name }}
+                        <v-icon icon="mdi:mdi-pound"></v-icon>  {{ c[1].name }}
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
 
                         <div style="float:right">
