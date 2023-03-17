@@ -194,7 +194,8 @@ export default {
 
 html
 {
-    background: #1C1B1F
+    background: #1C1B1F;
+    overflow-y: hidden !important;
 }
 
 a
