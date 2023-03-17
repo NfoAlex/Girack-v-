@@ -7,10 +7,10 @@ const socket = getSocket();
 export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
-        const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
+        const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
         const { ChannelIndex } = dataChannel();
 
-        return { Userinfo, MsgDB, UserIndex, StateScrolled, DoScroll, ChannelIndex };
+        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex };
 
     },
 
@@ -35,6 +35,10 @@ export default {
                 //もしスクロールしきった状態なら
                 if ( this.StateScrolled ) {
                     console.log("Content :: watch : trueだわ");
+
+                    //新着のメッセージ数を0に
+                    this.MsgReadTime[this.getPath].new = 0;
+
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
@@ -54,6 +58,7 @@ export default {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     this.scrollIt(); //スクロールする
+                    this.MsgReadTime[this.getPath].new = 0; //新着メッセージ数を0に
 
                 });
 
@@ -163,6 +168,26 @@ export default {
 
         },
 
+        //一つ前の履歴から日付が変わっているかどうかを返す
+        checkDataDifference(index) {
+            try {
+                //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
+                if ( this.MsgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                    return false; //同じだから表示しない
+
+                } else {
+                    return true; //違うから表示する
+
+                }
+
+            }
+            catch(e) {
+                return true; //最初だったりするときはとにかく表示する
+
+            }
+
+        },
+
         //スクロールさせるだけの関数
         scrollIt() {
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
@@ -225,11 +250,12 @@ export default {
         },
 
         //スクロール位置によって一番下に行くボタンの表示切り替えをする
-        setScrollState(s) {
+        setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
             //一番下？
             if ( s || channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
                 this.StateScrolled = true; //スクロールしきったと保存
+                this.MsgReadTime[this.getPath].new = 0; //新着メッセージ数を0に
 
             } else {
                 this.StateScrolled = false; //スクロールしきってないと保存
@@ -292,16 +318,19 @@ export default {
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         
+        <!-- 履歴が空なら -->
         <div style="padding:10%" v-if="MsgDB[getPath]===undefined||MsgDB[getPath].length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
+        <!-- 履歴読み込みボタン -->
         <div v-if="MsgDB[getPath]!==undefined" style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
             <v-btn size="small" @click="getHistory" variant="text">↑過去を読み込む</v-btn>
         </div>
 
-        <div style="display:flex; margin:8px 0; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">
-            
+        <!-- こっからメッセージボディ -->
+        <div style="display:flex; margin:8px 8px; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">
+            <!-- アバター -->
             <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
@@ -309,6 +338,7 @@ export default {
             <!-- メッセージ本体 -->
             <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                 
+                <!-- ユーザー名 -->
                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
@@ -317,8 +347,13 @@ export default {
                         size="x-small"
                         :elevation="6"
                     >
-                        {{ getRole(m.userid) }}
+                        <!-- ここはロール ⇒⇒⇒ -->{{ getRole(m.userid) }}
                     </v-chip>
+
+                    <!-- タイムスタンプ -->
+                    <span style="margin-right:12px" class="text-body-2 font-italic">
+                        {{ printDate(m.time) }}
+                    </span>
                     
                 </div>
                 
@@ -346,9 +381,7 @@ export default {
                             😰
                         </v-btn>
                         <!-- 削除ボタン -->
-                        <v-btn v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                            <span style="font-size:0.8vmax" class="mdi mdi-delete-forever">
-                            </span>
+                        <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                             削除
                         </v-btn>
                     </span>
@@ -366,8 +399,21 @@ export default {
         </div>
     </div>
     <!-- 一番下にスクロールするボタン -->
-    <v-btn v-if="!StateScrolled" style="padding:0" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
-        <span width="100%" style="font-size:2vmax;" class="mdi mdi-arrow-down-bold"></span>
+    <v-btn style="padding:0" v-if="!StateScrolled" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+        <v-badge
+            v-if="MsgReadTime[getPath].new!==0"
+            color=""
+            :content="MsgReadTime[getPath].new"
+            inline
+        >
+        </v-badge>
+        <v-icon 
+            v-if="MsgReadTime[getPath].new===0"
+            icon="mdi:mdi-arrow-down-thick"
+        >
+        mdi:mdi-arrow-down-thick
+        </v-icon>
+        
     </v-btn>
 </template>
 
@@ -377,7 +423,7 @@ export default {
 {
     position: absolute;
     right: 1vw;
-    bottom: 3vh;
+    bottom: 10vh;
 
     width: 4vmax;
     max-width: 5vh;
@@ -385,12 +431,12 @@ export default {
     height: 4vmax;
     max-height: 5vh;
 
-    background-color: gray;
+    background-color: #49454F;
 }
 
 .hovered
 {
-    background: #333333;
+    background-color: #49454F;
 }
 
 </style>

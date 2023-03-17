@@ -91,6 +91,14 @@ const MsgDB = ref({
     // ]
 });
 
+//ユーザーが最後に読んだ時間リスト
+const MsgReadTime = ref({
+    "0001": {
+        time: "202301011210938424",
+        new: 0,
+    }
+});
+
 //ユーザー情報(名前とかロールとか)
 const UserIndex = ref({
 
@@ -100,7 +108,7 @@ const StateScrolled = ref(false); //スクロールしきっているかどう�
 
 //履歴DB返すだけ
 export function dataMsg() {
-    return { MsgDB, UserIndex, StateScrolled };
+    return { MsgDB, UserIndex, StateScrolled, MsgReadTime };
 
 }
 
@@ -144,6 +152,18 @@ socket.on("messageReceive", (msg) => {
                 content: msg.content,
                 reaction: msg.reaction
             }];
+
+        }
+
+        //新着メッセージ数を更新
+        if ( MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
+            MsgReadTime.value[msg.channelid] = {
+                time: msg.time, //最後に読んだ時間
+                new: 1
+            };
+
+        } else { //すでにあるなら加算
+            MsgReadTime.value[msg.channelid].new++;
 
         }
 

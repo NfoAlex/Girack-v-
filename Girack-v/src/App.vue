@@ -1,17 +1,27 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, dataChannel, dataUser, backendURI } from "./socket.js";
+import { getSocket, dataChannel, dataUser, dataMsg, backendURI } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
+
 //REFとしてインポート
-const { Userinfo } = dataUser();
+
 const { ChannelIndex } = dataChannel();
+
 </script>
 
 <script>
+
+const { Userinfo } = dataUser();
+const { MsgReadTime } = dataMsg();
+import { useTheme } from 'vuetify';
 const socket = getSocket();
 
 export default {
+    setup() {
+        const theme = useTheme();
+        return { theme };
+    },
     
     data() {
         return {
@@ -38,7 +48,24 @@ export default {
         },
     },
 
+    methods: {
+        //新着メッセージ数を返す
+        checkReadTime(channelid) {
+            console.log("App :: checkReadTime");
+            console.log(MsgReadTime.value[channelid]);
+            try {
+                console.log("できたわ");
+                return MsgReadTime.value[channelid].new; //データ返す
+            }
+            catch(e) {
+                console.log("普通にエラー")
+                return null;
+            }
+        }
+    },
+
     mounted() {
+        //console.log("vuetify :: global theme theme -> " + theme.global.name.value);
         socket.emit("getInitInfo"); //サーバーの情報を取得
 
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
@@ -61,6 +88,7 @@ export default {
             
             <v-card
                 class="mx-auto rounded-lg"
+                color="#D0BCFF"
                 width="80%"
                 variant="tonal"
             >
@@ -89,16 +117,16 @@ export default {
             
             <nav style="margin:5% auto; width:90%;">
                 <RouterLink :to="'/jsonviewer'">
-                    <v-btn :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                    <v-btn class="overflow-x-hidden" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
-                            JSONviewer(debug)
+                            JSONviewer
                         </span>
                     </v-btn>
                 </RouterLink>
                 <RouterLink :to="'/browser'">
-                    <v-btn :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                    <v-btn class="overflow-x-hidden" prepend-icon="mdi:mdi-text-search" :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
-                            <span class="mdi mdi-text-search">チャンネルブラウザ</span>
+                            チャンネルブラウザ
                         </span>
                     </v-btn>
                 </RouterLink>
@@ -106,12 +134,19 @@ export default {
                 <hr style="margin:5% 0">
 
                 <!-- ここからチャンネルボタン描写  -->
-                <div style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
+                <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
-                        <v-btn :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
-                            <span style="width:100%; text-align:left !important; float:left !important">
-                                <span class="mdi mdi-pound ">{{ ChannelIndex[l[0]].channelname }}</span>
+                        <v-btn prepend-icon="mdi:mdi-pound" :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                            <span style="text-align:left !important; float:left !important">
+                                {{ ChannelIndex[l[0]].channelname }}
                             </span>
+                            <template v-slot:append>
+                                <v-badge
+                                    v-if="checkReadTime(l[0])"
+                                    :content="checkReadTime(l[0])"
+                                    inline
+                                ></v-badge>
+                            </template>
                         </v-btn>
                     </RouterLink>
                     <br>
@@ -141,8 +176,6 @@ export default {
 
     box-sizing: border-box;
     border-right: 0.1px #424242 solid;
-
-    background-color: #263238;
 }
 
 .main
@@ -153,8 +186,28 @@ export default {
 
     width: 80vw;
     height: 100vh;
-    
-    background-color: #212121;
+}
+
+</style>
+
+<style>
+
+html
+{
+    background: #1C1B1F
+}
+
+a
+{
+  text-decoration: none;
+  transition: 0.4s;
+  color: #ede7f6;
+}
+
+a:visited
+{
+  text-decoration: none;
+  color: #ede7f6;
 }
 
 </style>

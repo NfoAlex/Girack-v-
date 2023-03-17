@@ -16,23 +16,29 @@ import '@fortawesome/fontawesome-free/css/all.css'
 const vuetify = createVuetify({
     theme: {
         themes: {
-            light: {
+            thelight: {
                 dark: false,
                 colors: {
-                    background: "#FAFAFA",
+                    background: "#212121",
+                    surface: "#CFD8DC",
                     primary: "#607D8B", // #E53935
-                    secondary: "#ECEFF1", // #FFCDD2
+                    secondary: "#B0BEC5", // #FFCDD2
                 }
             },
-            dark: {
+            thedark: {
                 dark: true,
                 colors: {
-                    background: "#212121",
-                    primary: "#263238", // #E53935
+                        primary: "#381E72",
+                        secondary: "#332D41",
+                        surface: "#19181b",
+                        accent: "#9c27b0",
+                        error: "#601410",
+                        warning: "#4caf50",
+                        success: "#8bc34a",
                 }
             },
         },
-        defaultTheme: "dark"
+        defaultTheme: "thedark"
     },
     icons: {
         defaultSet: "fa",
@@ -46,11 +52,11 @@ const vuetify = createVuetify({
     directives,
 })
 
-import './assets/main.css'
-
 const app = createApp(App)
 
 app.use(vuetify)
+export default vuetify;
+
 app.use(router)
 
 app.mount('#app')

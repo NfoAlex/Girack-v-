@@ -78,18 +78,24 @@ export default {
 </script>
 
 <template>
-    <div class="d-flex flex-row bg-surface-variant">
+    <div style="width:90%;" class="mx-auto d-flex justify-space-between">
+        <div class="" style="width:90%">
+            <v-text-field
+                ref="inp"
+                :placeholder="getChannelname() + 'へ送信'"
+                variant="solo"
+                density="compact"
+                clearable
+                v-model="txt"
+            >
+                
+            </v-text-field>
 
-        <v-text-field
-            ref="inp"
-            :placeholder="getChannelname() + 'へ送信'"
-            variant="solo"
-            style="margin:0 2% 0 5%;"
-            clearable
-            v-model="txt"
-        ></v-text-field>
+        </div>
 
-        <v-btn class="rounded-lg mdi mdi-send-outline" style="margin-right:1vw;" elevation="0" icon="" @click="msgSend" color="primary">
+
+        <v-btn icon="" size="small" class="rounded-lg" style="margin-right:1vw;" elevation="0" @click="msgSend" color="primary">
+            <v-icon icon="mdi:mdi-send-outline"></v-icon>
             <v-tooltip
                 activator="parent"
                 location="top"
@@ -97,6 +103,9 @@ export default {
                 送信!
             </v-tooltip>
         </v-btn>
+        
+        
+        
 
     </div>
 
