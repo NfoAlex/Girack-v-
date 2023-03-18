@@ -1,5 +1,5 @@
 <script setup>
-import { setCookie, getSocket, dataUser } from '../socket.js';
+import { setCookie, getSocket, dataUser, backendURI } from '../socket.js';
 
 //const { Userinfo } = dataUser();
 
@@ -83,7 +83,7 @@ export default {
             <v-row no-gutters>
                 <v-col cols="2">
                     <v-card variant="tonal" :class="cd" style="padding:0">
-                        <v-img class="rounded-lg" :alt="Userinfo.userid" :src="'http://localhost:33333/img/' + Userinfo.userid + '.jpeg'"></v-img>
+                        <v-img class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
                     </v-card>
                 </v-col>
                 <v-col>
