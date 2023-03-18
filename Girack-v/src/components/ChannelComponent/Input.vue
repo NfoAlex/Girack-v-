@@ -18,7 +18,10 @@ export default {
 
     methods: {
         //メッセージを送信する
-        msgSend() {
+        msgSend( event ) {
+            //変換中のEnter検知を外す
+            if ( event.keyCode !== 13 ) return;
+
             //送信ｨﾝ!
             socket.emit("msgSend", {
                 userid: Userinfo.value.userid, //名前
@@ -29,18 +32,6 @@ export default {
             
             this.txt = ""; //入力欄を空に
             console.log("--- msg sent ---");
-
-        },
-
-        //Enterキー押されたときの処理
-        funcEnter( event ) {
-            let ref = this; //refsのエラー対策
-
-            //入力欄にフォーカスされている中でEnterキーが押された時に送信する
-            if ( event.key === "Enter" && ref.$refs.inp.focused === true ) {
-                this.msgSend(); //送信処理
-
-            }
 
         },
         
@@ -63,17 +54,6 @@ export default {
         }
     },
 
-    mounted() {
-        //送信(Enter)のためのキーボード入力の監視
-        document.addEventListener("keydown", this.funcEnter, false);
-
-    },
-
-    unmounted() {
-        //送信(Enter)のためのキーボードの入力監視をオフ
-        document.removeEventListener("keydown", this.funcEnter);
-
-    }
 }
 </script>
 
@@ -83,6 +63,7 @@ export default {
             <v-text-field
                 ref="inp"
                 :placeholder="getChannelname() + 'へ送信'"
+                @keydown.enter="msgSend"
                 variant="solo"
                 density="compact"
                 clearable
