@@ -89,9 +89,10 @@ export default {
                 variant="tonal"
             >
 
-                <div class="mx-auto" style="width:fit-content; margin-top:10%">
+                <div class="mx-auto" style="width:fit-content; margin-top:10%;">
+                    
                     <RouterLink to="/menu/profile">
-                        <v-avatar style=" width:4vmax;height:auto;">
+                        <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
                             <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
                         </v-avatar>
                         <v-tooltip
@@ -101,6 +102,18 @@ export default {
                             プロフィール
                         </v-tooltip>
                     </RouterLink>
+
+                    <br>
+
+                    <v-chip
+                        v-if="Userinfo.role!=='Member'"
+                        :color="Userinfo.role==='Admin'?'purple':'gray'"
+                        size="x-small"
+                        :elevation="6"
+                    >
+                        <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
+                    </v-chip>
+
                 </div>
 
                 <v-card-text class="text-subtitle-1 text-center mx-auto">
