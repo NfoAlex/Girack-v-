@@ -4,7 +4,7 @@
 import { io } from 'socket.io-client'; //ウェブソケット通信用
 import { ref } from "vue";
 
-//FOR DEVELOPMENT
+//Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI, { transports : ['websocket'] });
 
