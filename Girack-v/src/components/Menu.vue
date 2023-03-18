@@ -55,7 +55,7 @@ export default {
                 </v-card>
             </RouterLink>
             <RouterLink to="/menu/serversettings">
-                <v-card @click="" class="menu-card" variant="tonal">
+                <v-card v-if="Userinfo.role==='Admin'" @click="" class="menu-card" variant="tonal">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-server
                     </v-icon>
