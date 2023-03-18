@@ -99,20 +99,24 @@ export default {
                     設定
                 </v-card>
             </RouterLink>
-            <v-card class="menu-card" variant="tonal">
-                <v-icon size="large" style="margin:0 auto;">
-                    mdi:mdi-security
-                </v-icon>
-                <br>
-                監査ログ
-            </v-card>
-            <v-card class="menu-card" variant="tonal">
-                <v-icon size="large" style="margin:0 auto;">
-                    mdi:mdi-server
-                </v-icon>
-                <br>
-                サーバー設定
-            </v-card>
+            <RouterLink to="/menu/modlog">
+                <v-card @click="" class="menu-card" variant="tonal">
+                    <v-icon size="large" style="margin:0 auto;">
+                        mdi:mdi-security
+                    </v-icon>
+                    <br>
+                    監査ログ
+                </v-card>
+            </RouterLink>
+            <RouterLink to="/menu/serversettings">
+                <v-card @click="" class="menu-card" variant="tonal">
+                    <v-icon size="large" style="margin:0 auto;">
+                        mdi:mdi-server
+                    </v-icon>
+                    <br>
+                    サーバー設定
+                </v-card>
+            </RouterLink>
         </div>
         <router-view style="float:right; width:80%; margin-top:5%; height:90%; overflow-y:auto;"></router-view>
         <!-- <div style="float:right; width:80%; margin-top:5%; height:90%; overflow-y:auto;">

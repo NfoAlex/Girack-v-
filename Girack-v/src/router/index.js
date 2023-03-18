@@ -32,8 +32,15 @@ const router = createRouter({
         {
           path: "settings",
           component: () => import('../components/MenuComponent/Settings.vue'),
-        }
-      ]
+        },
+        {
+          path: "modlog",
+          component: () => import('../components/MenuComponent/Modlog.vue'),
+        },
+        {
+          path: "serversettings",
+          component: () => import('../components/MenuComponent/ServerSettings.vue'),
+        },      ]
     },
     { //チャンネルブラウザ
       path: '/browser',
