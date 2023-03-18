@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 //FOR DEVELOPMENT
 export const backendURI = "http://" + location.hostname + ":33333";
-const socket = io(backendURI);
+const socket = io(backendURI, { transports : ['websocket'] });
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 //ユーザー(自分)情報

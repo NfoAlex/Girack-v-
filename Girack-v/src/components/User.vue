@@ -78,7 +78,6 @@ export default {
 </script>
 
 <template>
-    <p>ToDo</p>
     <div class="mx-auto" style="width:90%; margin-top:5%; height:90%; overflow-y:auto;">
         <v-container class="bg-surface-variant">
             <v-row no-gutters>
