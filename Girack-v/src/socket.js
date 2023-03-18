@@ -114,7 +114,9 @@ export function dataMsg() {
 
 //メッセージ受け取り、出力
 socket.on("messageReceive", (msg) => {
+    //ログインしていないなら
     if ( !Userinfo.value.loggedin ) return;
+
     console.log("socket :: msgReceive : ↓");
     console.log(msg);
 
