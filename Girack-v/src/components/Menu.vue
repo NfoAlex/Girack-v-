@@ -114,7 +114,7 @@ export default {
                         mdi:mdi-server
                     </v-icon>
                     <br>
-                    サーバー設定
+                    サーバー管理
                 </v-card>
             </RouterLink>
         </div>

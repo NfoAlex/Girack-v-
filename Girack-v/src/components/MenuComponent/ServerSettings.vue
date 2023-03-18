@@ -2,5 +2,5 @@
 </script>
 
 <template>
-    asdf
+    サーバーいじれるぜ
 </template>
