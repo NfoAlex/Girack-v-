@@ -18,12 +18,22 @@ const router = createRouter({
       component: () => import('../components/Auth.vue')
     },
     {
-      path: '/user',
+      path: '/menu/',
       name: 'User Page',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../components/User.vue')
+      component: () => import('../components/Menu.vue'),
+      children: [
+        {
+          path: "profile",
+          component: () => import('../components/MenuComponent/Profile.vue'),
+        },
+        {
+          path: "settings",
+          component: () => import('../components/MenuComponent/Settings.vue'),
+        }
+      ]
     },
     { //チャンネルブラウザ
       path: '/browser',

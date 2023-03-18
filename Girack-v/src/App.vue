@@ -90,7 +90,7 @@ export default {
             >
 
                 <div class="mx-auto" style="width:fit-content; margin-top:10%">
-                    <RouterLink to="/user">
+                    <RouterLink to="/menu/profile">
                         <v-avatar style=" width:4vmax;height:auto;">
                             <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
                         </v-avatar>
