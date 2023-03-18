@@ -51,14 +51,10 @@ export default {
     methods: {
         //新着メッセージ数を返す
         checkReadTime(channelid) {
-            console.log("App :: checkReadTime");
-            console.log(MsgReadTime.value[channelid]);
             try {
-                console.log("できたわ");
                 return MsgReadTime.value[channelid].new; //データ返す
             }
             catch(e) {
-                console.log("普通にエラー")
                 return null;
             }
         }

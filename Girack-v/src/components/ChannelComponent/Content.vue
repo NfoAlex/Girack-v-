@@ -31,11 +31,8 @@ export default {
         MsgDB: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
-                console.log("Content :: watch : メッセージ更新された");
                 //もしスクロールしきった状態なら
                 if ( this.StateScrolled ) {
-                    console.log("Content :: watch : trueだわ");
-
                     //新着のメッセージ数を0に
                     this.MsgReadTime[this.getPath].new = 0;
 
@@ -192,14 +189,10 @@ export default {
 
         //新着メッセージ数を返す
         checkReadTime(channelid) {
-            console.log("App :: checkReadTime");
-            console.log(this.MsgReadTime[channelid]);
             try {
-                console.log("できたわ");
                 return this.MsgReadTime[channelid].new; //データ返す
             }
             catch(e) {
-                console.log("普通にエラー")
                 return null;
             }
         },
