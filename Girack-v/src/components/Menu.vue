@@ -16,9 +16,20 @@ export default {
             cd: ["card-default","rounded-lg"], //CSS用クラス名
         }
     },
-    
+
     methods: {
-        
+        //今いるページが指定のアドレスのものかどうか
+        isThisActive(p) {
+            //現在のパスを取得して引数を含めているか調べる
+            if ( this.$route.path.includes(p) ) {
+                return true;
+
+            } else {
+                return false;
+
+            }
+
+        },
     },
 
 }
@@ -28,7 +39,7 @@ export default {
     <div class="d-flex bg-surface-variant">
         <div style="width:20%; max-width:200px; height:100%; overflow-y:auto;">
             <RouterLink to="/menu/profile">
-                <v-card @click="" class="menu-card" variant="tonal">
+                <v-card @click="" class="menu-card" :color="isThisActive('profile')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-account
                     </v-icon>
@@ -37,7 +48,7 @@ export default {
                 </v-card>
             </RouterLink>
             <RouterLink to="/menu/settings">
-                <v-card @click="" class="menu-card" variant="tonal">
+                <v-card @click="" class="menu-card" :color="isThisActive('/settings')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-cog
                     </v-icon>
@@ -46,7 +57,7 @@ export default {
                 </v-card>
             </RouterLink>
             <RouterLink to="/menu/modlog">
-                <v-card @click="" class="menu-card" variant="tonal">
+                <v-card @click="" class="menu-card" :color="isThisActive('modlog')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-security
                     </v-icon>
@@ -55,7 +66,7 @@ export default {
                 </v-card>
             </RouterLink>
             <RouterLink to="/menu/members">
-                <v-card @click="" class="menu-card" variant="tonal">
+                <v-card @click="" class="menu-card" :color="isThisActive('members')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-account-group
                     </v-icon>
@@ -64,7 +75,7 @@ export default {
                 </v-card>
             </RouterLink>
             <RouterLink to="/menu/serversettings">
-                <v-card v-if="Userinfo.role==='Admin'" @click="" class="menu-card" variant="tonal">
+                <v-card v-if="Userinfo.role==='Admin'" @click="" class="menu-card" :color="isThisActive('serversettings')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-server
                     </v-icon>
