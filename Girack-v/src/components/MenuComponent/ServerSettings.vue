@@ -134,7 +134,15 @@ export default {
 
         <br>
         <div class="mx-auto" style="width:fit-content">
-            <v-btn :disabled="!changed" @click="updateServerSettings" class="rounded-lg ma-1" size="large" color="green">設定を保存</v-btn>
+            <v-btn
+                :disabled="!changed"
+                @click="updateServerSettings"
+                class="rounded-lg ma-1"
+                size="large"
+                color="success"
+            >
+            設定を保存
+            </v-btn>
             <v-btn :disabled="!changed" @click="restoreDefault" class="rounded-lg ma-1" size="large" color="grey">元に戻す</v-btn>
         </div>
         

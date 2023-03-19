@@ -34,7 +34,8 @@ const vuetify = createVuetify({
                         accent: "#9c27b0",
                         error: "#601410",
                         warning: "#4caf50",
-                        success: "#8bc34a",
+                        success: "#1B5E20",
+                        "grey": "#263238"
                 }
             },
         },

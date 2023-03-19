@@ -66,7 +66,7 @@ export default {
         <v-card class="mx-auto text-center pa-5 rounded-lg" style="width:50%">
             <p class="text-h5">{{ txt }}</p>
             <p v-if="gameStarted" class="text-h3">{{ guessNum }}</p>
-            <v-btn @click="start" v-if="!gameStarted">
+            <v-btn @click="start" v-if="!gameStarted" color="primary">
                 ゲーム開始
             </v-btn>
             <br>

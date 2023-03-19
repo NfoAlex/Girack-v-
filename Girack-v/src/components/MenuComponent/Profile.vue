@@ -17,7 +17,7 @@ export default {
             nameEditing: false, //名前編集しているかどうか
         }
     },
-    
+
     watch: {
         //ユーザー情報の監視
         Userinfo: {
@@ -76,7 +76,8 @@ export default {
                                 # {{ Userinfo.userid }}
                             </p>
                             <p v-if="!nameEditing" @dblclick="toggleEditing" class="text-h4 text-left" >
-                                {{ Userinfo.username }} <v-btn variant="tonal" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
+                                {{ Userinfo.username }}
+                                <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
                             </p>
                             <v-text-field
                                 v-if="nameEditing"
@@ -84,9 +85,9 @@ export default {
                                 variant="solo"
                             >
                                 <template v-slot:append-inner>
-                                    <v-btn @click="updateName" size="x-small" variant="tonal" icon="mdi:mdi-check-bold" class="rounded-lg" style="margin:0 4px 0 8px; float:right">
+                                    <v-btn @click="updateName" color="secondary" size="x-small" icon="mdi:mdi-check-bold" class="rounded-lg" style="margin:0 4px 0 8px; float:right">
                                     </v-btn>
-                                    <v-btn @click="toggleEditing" size="x-small" variant="tonal" icon="mdi:mdi-window-close" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
+                                    <v-btn @click="toggleEditing" color="secondary" size="x-small" icon="mdi:mdi-window-close" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
                                     </v-btn>
                                 </template>
                             </v-text-field>
@@ -97,7 +98,7 @@ export default {
             <v-container class="bg-surface-variant">
                 <v-row no-gutters>
                     <v-card variant="tonal" :class="cd" style="width:100%; ">
-                        <v-btn prepend-icon="mdi:mdi-logout" color="red" block @click="snackbar=true">Logout</v-btn>
+                        <v-btn prepend-icon="mdi:mdi-logout" color="error" block @click="snackbar=true">Logout</v-btn>
                         <v-snackbar
                             v-model="snackbar"
                         >
