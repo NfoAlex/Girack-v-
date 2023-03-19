@@ -150,7 +150,7 @@ export default {
         <v-card class="card mx-auto rounded-lg">
             <p class="text-h6 ma-2">登録</p>
             <v-card color="#222" class="rounded-lg cardInner">
-                <v-checkbox v-model="displaySettings.registerAvailable" color="orange" label="登録を受け付ける"></v-checkbox>
+                <v-checkbox v-model="displaySettings.registerAvailable" color="primary" label="登録を受け付ける"></v-checkbox>
                 <v-checkbox
                     :disabled="!displaySettings.registerAvailable"
                     v-model="displaySettings.inviteOnly"
