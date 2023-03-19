@@ -51,9 +51,9 @@ export default {
         //初期設定に戻す
         restoreDefault() {
             this.displayServername = this.currentSettings.servername;
-            this.displaySettings.registerAvailable = this.currentSettings.registerAvailable;
-            this.displaySettings.inviteOnly = this.currentSettings.invite.inviteOnly;
-            this.displaySettings.inviteCode = this.currentSettings.invite.inviteCode;
+            this.displaySettings.registerAvailable = this.currentSettings.registration.available;
+            this.displaySettings.inviteOnly = this.currentSettings.registration.invite.inviteOnly;
+            this.displaySettings.inviteCode = this.currentSettings.registration.invite.inviteCode;
 
             this.changed = false; //変更状況をリセット
 
