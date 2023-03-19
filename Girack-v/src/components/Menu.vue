@@ -54,6 +54,15 @@ export default {
                     監査ログ
                 </v-card>
             </RouterLink>
+            <RouterLink to="/menu/members">
+                <v-card @click="" class="menu-card" variant="tonal">
+                    <v-icon size="large" style="margin:0 auto;">
+                        mdi:mdi-account-group
+                    </v-icon>
+                    <br>
+                    メンバー
+                </v-card>
+            </RouterLink>
             <RouterLink to="/menu/serversettings">
                 <v-card v-if="Userinfo.role==='Admin'" @click="" class="menu-card" variant="tonal">
                     <v-icon size="large" style="margin:0 auto;">

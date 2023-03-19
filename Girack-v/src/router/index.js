@@ -41,6 +41,10 @@ const router = createRouter({
           path: "serversettings",
           component: () => import('../components/MenuComponent/ServerSettings.vue'),
         },
+        {
+          path: "members",
+          component: () => import('../components/MenuComponent/Members.vue'),
+        },
       ]
     },
     { //チャンネルブラウザ
