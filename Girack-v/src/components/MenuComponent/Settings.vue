@@ -54,7 +54,7 @@ export default {
 </script>
 
 <template>
-    <div class="ma-2 pa-5" style="width:85%">
+    <div class="pa-5" style="width:75%">
         <div style="width:75%">
             まあまてや
             <br>
