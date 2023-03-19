@@ -89,6 +89,7 @@ export default {
                 variant="tonal"
             >
 
+                 <!-- アイコン-->
                 <div class="mx-auto" style="width:fit-content; margin-top:10%;">
                     
                     <RouterLink to="/menu/profile">
@@ -103,8 +104,10 @@ export default {
                         </v-tooltip>
                     </RouterLink>
 
-                    <br>
+                </div>
 
+                <!-- ロールバッジ-->
+                <div style="width:fit-content" class="mx-auto">
                     <v-chip
                         v-if="Userinfo.role!=='Member'"
                         :color="Userinfo.role==='Admin'?'purple':'gray'"
@@ -113,9 +116,9 @@ export default {
                     >
                         <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
                     </v-chip>
-
                 </div>
 
+                <!-- ユーザー名-->
                 <v-card-text class="text-subtitle-1 text-center mx-auto">
                     <span>
                         {{ Userinfo.username }}
