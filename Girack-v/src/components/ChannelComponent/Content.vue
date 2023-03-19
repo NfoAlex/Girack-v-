@@ -32,7 +32,10 @@ export default {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
-                if ( this.StateScrolled || this.MsgDB[this.getPath][ this.MsgDB[this.getPath].length-1 ].userid === this.Userinfo.userid ) {
+                if (
+                    this.StateScrolled ||
+                    this.MsgDB[this.getPath][ this.MsgDB[this.getPath].length-1 ].userid === this.Userinfo.userid
+                ) {
                     //新着のメッセージ数を0に
                     this.MsgReadTime[this.getPath].new = 0;
 

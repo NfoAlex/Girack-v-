@@ -40,7 +40,8 @@ const router = createRouter({
         {
           path: "serversettings",
           component: () => import('../components/MenuComponent/ServerSettings.vue'),
-        },      ]
+        },
+      ]
     },
     { //チャンネルブラウザ
       path: '/browser',
