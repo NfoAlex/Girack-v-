@@ -6,5 +6,6 @@
         <p class="text-h4">
             愉快なメンバーたち
         </p>
+        <p>ToDo</p>
     </div>
 </template>
