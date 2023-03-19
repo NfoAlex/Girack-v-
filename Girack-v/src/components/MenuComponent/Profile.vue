@@ -17,6 +17,7 @@ export default {
             nameEditing: false, //名前編集しているかどうか
         }
     },
+    
     watch: {
         //ユーザー情報の監視
         Userinfo: {
