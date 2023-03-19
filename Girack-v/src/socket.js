@@ -30,11 +30,11 @@ export function dataUser() {
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
 //サーバー(インスタンス)情報 (ToDo削除)
-export var serverinfo = {
+export const Serverinfo = ref({
     servername: "...",
     registerAvailable: null,
     inviteOnly: null
-};
+});
 
 //チャンネル情報 (ToDo削除)
 // export var channelIndex = {
@@ -279,7 +279,7 @@ socket.on("serverinfo", (dat) => {
     console.log(dat);
 
     //サーバーの基本情報の更新
-    serverinfo = {
+    Serverinfo.value = {
         servername: dat.servername, //サーバーの名前
         registerAvailable: dat.registerAvailable, //登録できるかどうか
         inviteOnly: dat.inviteOnly //招待オンリーかどうか
@@ -310,7 +310,7 @@ socket.on("infoResult", (dat) => {
     //データがサーバー用なら
     if ( dat.type === "server" ) {
         //サーバーの基本情報の更新
-        serverinfo = {
+        Serverinfo.value = {
             servername: dat.servername, //サーバーの名前
             registerAvailable: dat.registerAvailable, //登録できるかどうか
             inviteOnly: dat.inviteOnly //招待オンリーかどうか

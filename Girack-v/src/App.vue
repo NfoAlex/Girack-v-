@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, dataChannel, dataUser, dataMsg, backendURI } from "./socket.js";
+import { getSocket, dataChannel, dataUser, dataMsg, backendURI, Serverinfo } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
 
@@ -79,7 +79,7 @@ export default {
     <!-- ログイン後(Main) -->
     <div v-if="loggedin">
         <div :class="channelBar">
-            <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ servername || "..." }}</h2>
+            <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ Serverinfo.servername || "..." }}</h2>
             <br>
             
             <v-card
