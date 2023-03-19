@@ -173,6 +173,7 @@ export default {
 </script>
 
 <template>
+    <!-- チャンネル作成用ダイアログ -->
     <v-dialog
         v-model="overlayChannelCreate"
         class="align-center justify-center"
@@ -208,6 +209,7 @@ export default {
         </v-card>
     </v-dialog>
 
+    <!-- チャンネル削除用ダイアログ -->
     <v-dialog
         v-model="overlayChannelRemove"
         class="align-center justify-center"
@@ -232,6 +234,7 @@ export default {
         </v-card>
     </v-dialog>
 
+    <!-- ここから表示部分 -->
     <div style="margin:3% auto; width:85%; height:95%;">
         <div class="d-flex justify-space-around bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
