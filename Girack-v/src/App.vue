@@ -99,7 +99,7 @@ export default {
                             activator="parent"
                             location="top"
                         >
-                            プロフィール
+                            メニュー
                         </v-tooltip>
                     </RouterLink>
 
