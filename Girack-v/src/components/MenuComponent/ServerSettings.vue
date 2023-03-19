@@ -48,7 +48,7 @@ export default {
     },
 
     methods: {
-        //初期設定に戻す
+        //設定の値を初期設定に戻す
         restoreDefault() {
             this.displayServername = this.currentSettings.servername;
             this.displaySettings.registerAvailable = this.currentSettings.registration.available;
