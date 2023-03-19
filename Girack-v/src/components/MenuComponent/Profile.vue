@@ -1,71 +1,63 @@
 <script setup>
 import { setCookie, getSocket, dataUser, backendURI } from '../../socket.js';
-import { RouterView } from 'vue-router';
-
 //const { Userinfo } = dataUser();
-
 </script>
 
 <script>
-
 const socket = getSocket();
 const { Userinfo } = dataUser();
 export default {
-    setup() {
-        const theme = useTheme();
-        return { theme };
-    },
     
     data() {
         return {
-            //css用クラス
-            channelBar: "channelBar", //左のチャンネルバーとか
-            main: "main", //右のチャンネル表示するところ
-
-            servername: "",
-            displayusername: "Null",
-
-            path: "",
-            loggedin: false,
-            channelJoined: [],
-            uri: backendURI,
+            snackbar: false, //ログアウトアラート出力用
+            cd: ["card-default","rounded-lg"], //CSS用クラス名
+            okayIcon: '',
+            nameDisplaying: "...",
+            nameEditing: false, //名前編集しているかどうか
         }
-
     },
-
     watch: {
-        //URLの変更を検知
-        $route(r) {
-            this.path = r.path; //変数へ取り込む
-
-        },
-    },
-
-    methods: {
-        //新着メッセージ数を返す
-        checkReadTime(channelid) {
-            try {
-                return MsgReadTime.value[channelid].new; //データ返す
-            }
-            catch(e) {
-                return null;
-            }
+        //ユーザー情報の監視
+        Userinfo: {
+            //変更を検知したら表示名を変更
+            handler(U) {
+                this.nameDisplaying = U.username; //表示名を更新
+            },
+            deep: true //階層ごと監視するため
         }
     },
-
+    
+    methods: {
+        //ログアウト処理
+        logout() {
+            setCookie("sessionid", "", 0); //クッキー削除
+            location.reload(); //ページリロード
+        },
+        //名前更新
+        updateName() {
+            let nameUpdating = this.nameDisplaying; //更新する名前
+            //名前更新
+            socket.emit("changeProfile", {
+                name: nameUpdating, //更新する名前
+                reqSender: { //セッション認証に必要な情報送信
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
+            this.nameEditing = false; //編集モードを閉じる
+            console.log("名前更新します -> " + this.nameDisplaying);
+        },
+        //編集しているかどうかを切り替えする
+        toggleEditing() {
+            this.nameDisplaying = Userinfo.value.username;
+            this.nameEditing = !this.nameEditing; //編集モード
+        }
+    },
     mounted() {
-        //console.log("vuetify :: global theme theme -> " + theme.global.name.value);
-        socket.emit("getInitInfo"); //サーバーの情報を取得
-
-        socket.on("serverinfo", (dat) => { //サーバー情報きたら
-            this.servername = dat.servername; //表示する名前を変更
-            
-        });
-
-    }
-
+        this.nameDisplaying = Userinfo.value.username; //名前更新
+    },
 }
-
 </script>
 
 <template>
