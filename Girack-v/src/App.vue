@@ -84,9 +84,8 @@ export default {
             
             <v-card
                 class="mx-auto rounded-lg"
-                color="#D0BCFF"
+                color="secondary"
                 width="80%"
-                variant="tonal"
             >
 
                  <!-- アイコン-->
@@ -127,16 +126,18 @@ export default {
 
             </v-card>
             
+            <!-- FOR DEBUGGING ONLY -->
             <nav style="margin:5% auto; width:90%;">
                 <RouterLink :to="'/jsonviewer'">
-                    <v-btn class="overflow-x-hidden" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                    <v-btn class="overflow-x-hidden rounded-pill" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
                             JSONviewer
                         </span>
                     </v-btn>
                 </RouterLink>
+
                 <RouterLink :to="'/browser'">
-                    <v-btn class="overflow-x-hidden" prepend-icon="mdi:mdi-text-search" :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                    <v-btn class="overflow-x-hidden rounded-lg" prepend-icon="mdi:mdi-text-search" :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
                             チャンネルブラウザ
                         </span>
@@ -148,7 +149,7 @@ export default {
                 <!-- ここからチャンネルボタン描写  -->
                 <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
-                        <v-btn prepend-icon="mdi:mdi-pound" :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
+                        <v-btn class="rounded-lg" prepend-icon="mdi:mdi-pound" :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                             <span style="text-align:left !important; float:left !important">
                                 {{ ChannelIndex[l[0]].channelname }}
                             </span>
