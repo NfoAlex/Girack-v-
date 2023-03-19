@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, dataChannel, dataUser, dataMsg, backendURI } from "./socket.js";
+import { getSocket, dataChannel, dataUser, dataMsg, backendURI, Serverinfo } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
 
@@ -51,14 +51,10 @@ export default {
     methods: {
         //新着メッセージ数を返す
         checkReadTime(channelid) {
-            console.log("App :: checkReadTime");
-            console.log(MsgReadTime.value[channelid]);
             try {
-                console.log("できたわ");
                 return MsgReadTime.value[channelid].new; //データ返す
             }
             catch(e) {
-                console.log("普通にエラー")
                 return null;
             }
         }
@@ -83,7 +79,7 @@ export default {
     <!-- ログイン後(Main) -->
     <div v-if="loggedin">
         <div :class="channelBar">
-            <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ servername || "..." }}</h2>
+            <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ Serverinfo.servername || "..." }}</h2>
             <br>
             
             <v-card
@@ -93,20 +89,36 @@ export default {
                 variant="tonal"
             >
 
-                <div class="mx-auto" style="width:fit-content; margin-top:10%">
-                    <RouterLink to="/user">
-                        <v-avatar style=" width:4vmax;height:auto;">
+                 <!-- アイコン-->
+                <div class="mx-auto" style="width:fit-content; margin-top:10%;">
+                    
+                    <RouterLink to="/menu/profile">
+                        <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
                             <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
                         </v-avatar>
                         <v-tooltip
                             activator="parent"
                             location="top"
                         >
-                            プロフィール
+                            メニュー
                         </v-tooltip>
                     </RouterLink>
+
                 </div>
 
+                <!-- ロールバッジ-->
+                <div style="width:fit-content" class="mx-auto">
+                    <v-chip
+                        v-if="Userinfo.role!=='Member'"
+                        :color="Userinfo.role==='Admin'?'purple':'gray'"
+                        size="x-small"
+                        :elevation="6"
+                    >
+                        <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
+                    </v-chip>
+                </div>
+
+                <!-- ユーザー名-->
                 <v-card-text class="text-subtitle-1 text-center mx-auto">
                     <span>
                         {{ Userinfo.username }}
@@ -194,7 +206,8 @@ export default {
 
 html
 {
-    background: #1C1B1F
+    background: #1C1B1F;
+    overflow-y: hidden !important;
 }
 
 a

@@ -31,11 +31,8 @@ export default {
         MsgDB: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
-                console.log("Content :: watch : メッセージ更新された");
-                //もしスクロールしきった状態なら
+                //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
-                    console.log("Content :: watch : trueだわ");
-
                     //新着のメッセージ数を0に
                     this.MsgReadTime[this.getPath].new = 0;
 
@@ -58,7 +55,9 @@ export default {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     this.scrollIt(); //スクロールする
-                    this.MsgReadTime[this.getPath].new = 0; //新着メッセージ数を0に
+                    this.MsgReadTime[this.getPath] = {
+                        new: 0 //新着メッセージ数を0に
+                    };
 
                 });
 
@@ -188,6 +187,16 @@ export default {
 
         },
 
+        //新着メッセージ数を返す
+        checkReadTime(channelid) {
+            try {
+                return this.MsgReadTime[channelid].new; //データ返す
+            }
+            catch(e) {
+                return 0;
+            }
+        },
+
         //スクロールさせるだけの関数
         scrollIt() {
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
@@ -255,7 +264,9 @@ export default {
             //一番下？
             if ( s || channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
                 this.StateScrolled = true; //スクロールしきったと保存
-                this.MsgReadTime[this.getPath].new = 0; //新着メッセージ数を0に
+                this.MsgReadTime[this.getPath] = {
+                    new: 0 //新着メッセージ数を0に
+                };
 
             } else {
                 this.StateScrolled = false; //スクロールしきってないと保存
@@ -401,14 +412,14 @@ export default {
     <!-- 一番下にスクロールするボタン -->
     <v-btn style="padding:0" v-if="!StateScrolled" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
         <v-badge
-            v-if="MsgReadTime[getPath].new!==0"
+            v-if="checkReadTime(getPath)!==0"
             color=""
-            :content="MsgReadTime[getPath].new"
+            :content="checkReadTime(getPath)"
             inline
         >
         </v-badge>
         <v-icon 
-            v-if="MsgReadTime[getPath].new===0"
+            v-if="!checkReadTime(getPath)"
             icon="mdi:mdi-arrow-down-thick"
         >
         mdi:mdi-arrow-down-thick

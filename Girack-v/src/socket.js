@@ -4,9 +4,9 @@
 import { io } from 'socket.io-client'; //ウェブソケット通信用
 import { ref } from "vue";
 
-//FOR DEVELOPMENT
+//Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
-const socket = io(backendURI);
+const socket = io(backendURI, { transports : ['websocket'] });
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 //ユーザー(自分)情報
@@ -30,11 +30,11 @@ export function dataUser() {
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
 //サーバー(インスタンス)情報 (ToDo削除)
-export var serverinfo = {
+export const Serverinfo = ref({
     servername: "...",
     registerAvailable: null,
     inviteOnly: null
-};
+});
 
 //チャンネル情報 (ToDo削除)
 // export var channelIndex = {
@@ -114,6 +114,9 @@ export function dataMsg() {
 
 //メッセージ受け取り、出力
 socket.on("messageReceive", (msg) => {
+    //ログインしていないなら
+    if ( !Userinfo.value.loggedin ) return;
+
     console.log("socket :: msgReceive : ↓");
     console.log(msg);
 
@@ -276,7 +279,7 @@ socket.on("serverinfo", (dat) => {
     console.log(dat);
 
     //サーバーの基本情報の更新
-    serverinfo = {
+    Serverinfo.value = {
         servername: dat.servername, //サーバーの名前
         registerAvailable: dat.registerAvailable, //登録できるかどうか
         inviteOnly: dat.inviteOnly //招待オンリーかどうか
@@ -307,7 +310,7 @@ socket.on("infoResult", (dat) => {
     //データがサーバー用なら
     if ( dat.type === "server" ) {
         //サーバーの基本情報の更新
-        serverinfo = {
+        Serverinfo.value = {
             servername: dat.servername, //サーバーの名前
             registerAvailable: dat.registerAvailable, //登録できるかどうか
             inviteOnly: dat.inviteOnly //招待オンリーかどうか

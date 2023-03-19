@@ -32,9 +32,10 @@ const vuetify = createVuetify({
                         secondary: "#332D41",
                         surface: "#19181b",
                         accent: "#9c27b0",
-                        error: "#601410",
+                        error: "#B71C1C",
                         warning: "#4caf50",
-                        success: "#8bc34a",
+                        success: "#1B5E20",
+                        "grey": "#263238"
                 }
             },
         },

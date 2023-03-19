@@ -121,7 +121,7 @@ export default {
 </script>
 
 <template>
-    <p class="text-h4" style="margin:5% auto; text-align:center">
+    <p class="text-h4" style="margin:2% auto; text-align:center">
         {{ serverinfoLoaded.servername }}
     </p>
     <v-card :class="authWindow" variant="tonal">

@@ -173,6 +173,7 @@ export default {
 </script>
 
 <template>
+    <!-- チャンネル作成用ダイアログ -->
     <v-dialog
         v-model="overlayChannelCreate"
         class="align-center justify-center"
@@ -208,6 +209,7 @@ export default {
         </v-card>
     </v-dialog>
 
+    <!-- チャンネル削除用ダイアログ -->
     <v-dialog
         v-model="overlayChannelRemove"
         class="align-center justify-center"
@@ -232,11 +234,11 @@ export default {
         </v-card>
     </v-dialog>
 
-    <div style="margin:3% auto; width:85%; height:94%;">
+    <!-- ここから表示部分 -->
+    <div style="margin:3% auto; width:85%; height:95%;">
         <div class="d-flex justify-space-around bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" variant="tonal" icon="" class="rounded-lg">
-                <!-- ???????-->
                 <v-icon icon="mdi:mdi-plus">
                 </v-icon>
                 <v-tooltip
@@ -248,7 +250,7 @@ export default {
             </v-btn>
         </div>
         <br>
-        <div class="channelList" style="height:94%; width:100%; overflow-y:auto;">
+        <div class="channelList" style="height:90%; width:100%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
                 style="padding:0;"
@@ -257,7 +259,7 @@ export default {
                     
                     <p class="text-h6">
 
-                        {{ c[1].name }}
+                        <v-icon icon="mdi:mdi-pound"></v-icon>  {{ c[1].name }}
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
 
                         <div style="float:right">

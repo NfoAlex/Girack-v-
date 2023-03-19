@@ -57,7 +57,7 @@ export default {
 
 .input
 {
-    height: 8vh;
+    height: 7vh;
 }
 
 </style>
