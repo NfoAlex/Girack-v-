@@ -193,7 +193,7 @@ export default {
                 return this.MsgReadTime[channelid].new; //データ返す
             }
             catch(e) {
-                return null;
+                return 0;
             }
         },
 
