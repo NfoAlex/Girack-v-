@@ -1,8 +1,6 @@
 <script setup>
-import { getSocket, dataUser } from '../socket.js';
+import { dataUser } from '../socket.js';
 import { RouterView } from 'vue-router';
-
-//const { Userinfo } = dataUser();
 
 </script>
 

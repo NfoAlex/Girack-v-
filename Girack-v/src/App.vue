@@ -3,9 +3,6 @@ import { RouterLink, RouterView } from 'vue-router';
 import { getSocket, dataChannel, dataUser, dataMsg, backendURI, Serverinfo } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
-
-//REFとしてインポート
-
 const { ChannelIndex } = dataChannel();
 
 </script>
