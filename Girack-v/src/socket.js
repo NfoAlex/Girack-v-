@@ -426,15 +426,17 @@ socket.on("infoUser", (dat) => {
 
     UserIndex.value[userid] = {};
 
+    console.log("socket :: infoUser : 情報北");
+    console.log(dat);
+
     //ユーザーインデックス更新
     UserIndex.value[userid].username = username; //名前
     UserIndex.value[userid].role = role; //ロール
     UserIndex.value[userid].banned = dat.banned; //BANされているかどうか
+    UserIndex.value[userid].channelJoined = dat.channelJoined; //参加しているチャンネル
 
     //自分の情報の更新にだけ使うから
     if ( dat.userid !== Userinfo.value.userid ) { return; }
-
-    console.log("socket :: infoUser : プロフィール更新");
 
     //参加しているチャンネルリストの長さを比較をして減ったり増えたりしたチャンネルのデータを処理
     if ( dat.channelJoined.length !== Userinfo.value.channelJoined.length ) {
@@ -491,25 +493,6 @@ socket.on("infoUser", (dat) => {
         }
 
     }
-
-    //個人情報更新
-    // userinfo = {
-    //     username: dat.username,
-    //     userid: userinfo.userid, //ユーザーID
-    //     role: dat.role, //ロール
-    //     loggedin: true, //ログイン状態はそのまま
-    //     sessionid: userinfo.sessionid, //セッションIDはそのまま
-    //     channelJoined: dat.channelJoined, //参加しているチャンネル
-    // }
-
-    // userinfo = {
-    //     username: dat.username,
-    //     userid: Userinfo.value.userid, //ユーザーID
-    //     role: dat.role, //ロール
-    //     loggedin: true, //ログイン状態はそのまま
-    //     sessionid: userinfo.sessionid, //セッションIDはそのまま
-    //     channelJoined: dat.channelJoined, //参加しているチャンネル
-    // }
 
     Userinfo.value = {
         username: dat.username,
