@@ -4,7 +4,6 @@ import { getSocket, backendURI, dataMsg, dataUser } from '../socket.js';
 
 const socket = getSocket();
 
-
 export default {
     props: ["userid"],
     setup() {
@@ -34,10 +33,11 @@ export default {
         //ロール選択の監視
         targetUserRole: {
             handler() {
+                //もし今のロールと同じならスルー
                 if ( this.UserIndex[this.userid].role === this.targetUserRole ) {
                     console.log("Userpage :: watch : targetUserRole 同じだから変更ナシ");
 
-                } else {
+                } else { //変わった瞬間ロール更新を送信
                     //ロールの更新を通知
                     socket.emit("mod", {
                         targetid: this.userid,
@@ -60,12 +60,12 @@ export default {
     methods: {
         //BANする関数
         banUser() {
-            //BANする
+            //BANトリガーを送信
             socket.emit("mod", {
                 targetid: this.userid,
                 action: {
                     change: "ban",
-                    value: this.UserIndex[this.userid].banned?false:true
+                    value: this.UserIndex[this.userid].banned?false:true //true=>BANする、false=>解除
                 },
                 reqSender: {
                     userid: this.Userinfo.userid,
@@ -76,14 +76,16 @@ export default {
     },
 
     mounted() {
-        if ( this.Userinfo.role === "Admin" ) {
+        //自分のロールに合わせて選べるロールの範囲を設定
+        if ( this.Userinfo.role === "Admin" ) { //Adminなら全員選べるようにする
             this.roleList = ["Admin", "Moderator", "Member"];
 
-        } else if ( this.Userinfo.role === "Moderator" ) {
+        } else if ( this.Userinfo.role === "Moderator" ) { //ModeratorならModerator以下
             this.roleList = ["Moderator", "Member"];
 
         }
 
+        //ユーザーのデフォルト情報を取得し変数へ保存しておく
         this.targetUserRole = dataMsg().UserIndex.value[this.userid].role;
         this.targetUserBanned = dataMsg().UserIndex.value[this.userid].banned;
 
@@ -123,14 +125,17 @@ export default {
         <!-- タブの中身 -->
         <v-window v-model="tab">
 
+            <!-- 参加しているチャンネル -->
             <v-window-item value="channel" class="ma-5">
                 <p>参加チャンネル</p>
                 <p>参加チャンネル</p>
                 <p>参加チャンネル</p>
             </v-window-item>
 
+            <!-- ユーザー管理タブ -->
             <v-window-item value="mod" class="ma-5">
 
+                <!-- ロール選択 -->
                 <v-select
                     class="mx-auto"
                     v-model="targetUserRole"
@@ -140,6 +145,7 @@ export default {
                     :items="roleList"
                 ></v-select>
 
+                <!-- BANボタン -->
                 <v-btn @click="banUser" v-if="!UserIndex[userid].banned" color="error">
                     BAN
                 </v-btn>
