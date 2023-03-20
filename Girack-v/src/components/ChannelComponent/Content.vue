@@ -150,9 +150,28 @@ export default {
         //アバターを表示するかどうか
         checkShowAvatar(userid, index) {
             try {
+                //分(min)差計算
+                let msgTimeMinBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(10,12));
+                let msgTimeMinThis = parseInt(this.MsgDB[this.getPath][index].time.slice(10,12));
+                    //分差計算
+                let timeMinDifference = msgTimeMinThis - msgTimeMinBefore;
+
+                //時(h)差計算
+                let msgTimeHourBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(8,10));
+                let msgTimeHourThis = parseInt(this.MsgDB[this.getPath][index].time.slice(8,10));
+                    //時差計算
+                let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
+
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
                 if ( this.MsgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
-                    return false; //同じだから表示しない
+                    //条件でアバターを見せるか見せないか決める
+                    if ( timeMinDifference < -55 || timeMinDifference > 4 || timeHourDifference !== 0 ) {
+                        return true;
+
+                    } else {
+                        return false;
+
+                    }
 
                 } else {
                     return true; //違うから表示する
@@ -347,7 +366,7 @@ export default {
         <!-- こっからメッセージdiv -->
         <div style="display:flex; margin:8px 8px; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">
             <!-- アバター -->
-            <v-avatar v-if="checkShowAvatar(m.userid, index)||checkDateDifference(index)" class="mx-auto" size="48">
+            <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
                 <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
             </v-avatar>
 
@@ -355,7 +374,7 @@ export default {
             <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                 
                 <!-- ユーザー名と時間表記 -->
-                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)||checkDateDifference(index)">
+                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                     {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                     <v-chip
                         v-if="getRole(m.userid)!=='Member'"
