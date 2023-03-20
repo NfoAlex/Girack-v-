@@ -155,6 +155,7 @@ export default {
                     <p>パスワード</p>
                     <v-text-field
                         style="width:100%"
+                        type="password"
                         v-model="pwForAuth"
                         prepend-inner-icon="mdi:mdi-lock"
                         clearable
