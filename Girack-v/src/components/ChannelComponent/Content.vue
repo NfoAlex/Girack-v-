@@ -97,17 +97,32 @@ export default {
     },
 
     methods: {
-        //ロールを取得するだけ
-        getRole(userid) {
-            try {
-                return this.UserIndex[userid].role;
+        //ユーザーの情報取得するだけ
+        getUserStats(userid, category) {
+            switch(category) {
+                //ロールを返す
+                case "role":
+                    try {
+                        return this.UserIndex[userid].role;
+                    }
+                    catch(e){
+                        return "Member";
+                    }
+                
+                //BANされたかどうかを返す
+                case "banned":
+                    try {
+                        return this.UserIndex[userid].banned;
+                    }
+                    catch(e){
+                        return false;
+                    }
+
+                //変なエラー避け
+                default:
+                    return null;
 
             }
-            catch(e) {
-                return "Member";
-
-            }
-
         },
 
         //絵文字を取得するだけ(ToDo:別コンポーネントとして独立)
@@ -154,8 +169,8 @@ export default {
 
         //もし人のやつほしくなったら
         needUserIndex(userid) {
-            socket.emit("getInfo", {
-                target: "user",
+
+            socket.emit("getInfoUser", {
                 targetid: userid,
                 reqSender: {
                     userid: this.Userinfo.userid, //ユーザーID
@@ -411,21 +426,22 @@ export default {
                     
                     <!-- ユーザー名と時間表記 -->
                     <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
+                        <!-- ユーザー名 -->
                         {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                         
                         <!-- ロールバッジ -->
                         <v-chip
-                            v-if="getRole(m.userid)!=='Member'"
-                            :color="getRole(m.userid)==='Admin'?'purple':'blue'"
+                            v-if="getUserStats(m.userid, 'role')!=='Member'"
+                            :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
                             size="x-small"
                             :elevation="6"
                         >
-                            {{ getRole(m.userid) }}
+                            {{ getUserStats(m.userid, 'role') }}
                         </v-chip>
 
                         <!-- BANされたバッジ -->
                         <v-chip
-                            v-if="UserIndex[m.userid].banned"
+                            v-if="getUserStats(m.userid, 'banned')"
                             color="red"
                             size="x-small"
                             :elevation="6"
