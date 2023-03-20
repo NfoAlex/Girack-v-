@@ -125,10 +125,23 @@ export default {
 
         },
 
-        //さらに過去の履歴を取得する
+        //さらに過去の履歴(10件)を取得する
         getHistory() {
             console.log("履歴ほしいね :  path -> " + this.getPath + ", hrcount -> " + this.ChannelIndex[this.getPath].historyReadCount);
             getMessage(this.getPath, 10, this.ChannelIndex[this.getPath].historyReadCount);
+
+        },
+
+        //指定された履歴の日付を取得
+        getHistoryDate(index){
+            let time = this.MsgDB[this.getPath][index].time;
+            let timestamp = "";
+
+            timestamp += time.slice(0,4) + "/";
+            timestamp += time.slice(4,6) + "/";
+            timestamp += time.slice(6,8);
+
+            return timestamp;
 
         },
 
@@ -186,28 +199,25 @@ export default {
 
         },
 
-        //一つ前の履歴から一定の時間が空くとアバターと時間を表示するように
+        //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
         checkDateDifference(index) {
-            //分(min)差計算
-            let msgTimeMinBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(10,12));
-            let msgTimeMinThis = parseInt(this.MsgDB[this.getPath][index].time.slice(10,12));
-                //分差計算
-            let timeMinDifference = msgTimeMinThis - msgTimeMinBefore;
+            try {
+                //日を取得
+                let msgDateBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(6,8));
+                let msgDateThis = parseInt(this.MsgDB[this.getPath][index].time.slice(6,8));
+                //日付の差を計算
+                let dateDifference = msgDateBefore - msgDateThis;
 
-            //時(h)差計算
-            let msgTimeHourBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(8,10));
-            let msgTimeHourThis = parseInt(this.MsgDB[this.getPath][index].time.slice(8,10));
-                //時差計算
-            let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
+                //条件で日付線出すか決める
+                if ( dateDifference !== 0 ) {
+                    return true; //表示する
 
-            //条件でアバターを見せるか見せないか決める
-            if ( timeMinDifference < -55 || timeMinDifference > 4 || timeHourDifference !== 0 ) {
-                return true;
+                } else {
+                    return false; //表示しない
 
-            } else {
-                return false;
-
+                }
             }
+            catch(e) {}
 
         },
 
@@ -363,73 +373,84 @@ export default {
             <v-btn size="small" @click="getHistory" variant="text">↑過去を読み込む</v-btn>
         </div>
 
-        <!-- こっからメッセージdiv -->
-        <div style="display:flex; margin:8px 8px; flex-direction:row; justify-content:flex-end;" v-for="(m, index) in MsgDB[$route.params.id]">
-            <!-- アバター -->
-            <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
-                <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
-            </v-avatar>
+        <!-- こっからメッセージ表示 -->
+        <div v-for="(m, index) in MsgDB[$route.params.id]">
 
-            <!-- メッセージ本体 -->
-            <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
-                
-                <!-- ユーザー名と時間表記 -->
-                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
-                    {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
-                    <v-chip
-                        v-if="getRole(m.userid)!=='Member'"
-                        :color="getRole(m.userid)==='Admin'?'purple':'gray'"
-                        size="x-small"
-                        :elevation="6"
-                    >
-                        <!-- ここはロール ⇒⇒⇒ -->{{ getRole(m.userid) }}
-                    </v-chip>
+            <!-- 日付線 -->
+            <div v-if="checkDateDifference(index)" style="width:100%">
+                <v-divider></v-divider>
+                <p class="text-center text-subtitle-2">{{ getHistoryDate(index) }}</p>
+            </div>
 
-                    <!-- タイムスタンプ -->
-                    <span style="margin-right:12px" class="text-body-2 font-italic">
-                        {{ printDate(m.time) }}
-                    </span>
+            <!-- ここからflexで表示するもの-->
+            <div style="display:flex; margin:8px 8px; flex-direction:row; justify-content:flex-end;">
+            
+                <!-- アバター -->
+                <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
+                    <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
+                </v-avatar>
+
+                <!-- メッセージ本体 -->
+                <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                     
-                </div>
-                
-                <!-- ToDo:ここのフォントサイズの調整 -->
-                <p
-                    @mouseover="mouseOverMsg(m.messageid, 'on')"
-                    @mouseleave="mouseOverMsg(m.messageid, 'off')"
-                    style="font-size:16px"
-                >
+                    <!-- ユーザー名と時間表記 -->
+                    <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
+                        {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
+                        <v-chip
+                            v-if="getRole(m.userid)!=='Member'"
+                            :color="getRole(m.userid)==='Admin'?'purple':'gray'"
+                            size="x-small"
+                            :elevation="6"
+                        >
+                            <!-- ここはロール ⇒⇒⇒ -->{{ getRole(m.userid) }}
+                        </v-chip>
 
-                    {{ m.content }}
-
-                    <!-- コンポーネント化予定 -->
-                    <span v-if="msgHovered && ( msgIdHovering === m.messageid )" style="float:right">
-                        <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === m.messageid )">
+                        <!-- タイムスタンプ -->
+                        <span style="margin-right:12px" class="text-body-2 font-italic">
                             {{ printDate(m.time) }}
                         </span>
-                        <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                            😀
-                        </v-btn>
-                        <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                            🤔
-                        </v-btn>
-                        <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                            😰
-                        </v-btn>
-                        <!-- 削除ボタン -->
-                        <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                            削除
-                        </v-btn>
-                    </span>
+                        
+                    </div>
+                    
+                    <!-- ToDo:ここのフォントサイズの調整 -->
+                    <p
+                        @mouseover="mouseOverMsg(m.messageid, 'on')"
+                        @mouseleave="mouseOverMsg(m.messageid, 'off')"
+                        style="font-size:16px"
+                    >
 
-                    <br v-if="m.reaction">
-                    <!-- リアクション -->
-                    <v-chip style="margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
-                        {{ getReaction(r[0]) }} {{ r[1] }}
-                    </v-chip>
+                        {{ m.content }}
 
-                </p>
+                        <!-- コンポーネント化予定 -->
+                        <span v-if="msgHovered && ( msgIdHovering === m.messageid )" style="float:right">
+                            <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === m.messageid )">
+                                {{ printDate(m.time) }}
+                            </span>
+                            <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                😀
+                            </v-btn>
+                            <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                🤔
+                            </v-btn>
+                            <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                😰
+                            </v-btn>
+                            <!-- 削除ボタン -->
+                            <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                削除
+                            </v-btn>
+                        </span>
 
-            </span>
+                        <br v-if="m.reaction">
+                        <!-- リアクション -->
+                        <v-chip style="margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                            {{ getReaction(r[0]) }} {{ r[1] }}
+                        </v-chip>
+
+                    </p>
+
+                </span>
+            </div>
 
         </div>
     </div>
