@@ -1,7 +1,7 @@
 /********************************************************
 
 THIS PAGE IS ONLY FOR DEBUGGING
-DELETE OR HIDE ON HOSTING
+DELETE OR HIDE ON HOSTING TO PUBLIC
 
 ********************************************************/
 
@@ -10,7 +10,7 @@ import { dataChannel, dataMsg } from '../socket';
 </script>
 
 <script>
-const { MsgDB, MsgReadTime } = dataMsg();
+const { MsgDB, MsgReadTime, UserIndex } = dataMsg();
 const { ChannelIndex } = dataChannel();
 
 export default {
@@ -39,6 +39,7 @@ export default {
         <v-btn @click="setMode('MsgDB')">MsgDB</v-btn>
         <v-btn @click="setMode('ChannelIndex')">ChannelIndex</v-btn>
         <v-btn @click="setMode('MsgReadTime')">MsgReadTime</v-btn>
+        <v-btn @click="setMode('UserIndex')">UserIndex</v-btn>
 
         <v-card v-if="mode==='MsgDB'" style="padding:3%; margin-top:8px;" variant="outlined" v-for="d in Object.entries(MsgDB)">
                 {{ d[0] }}
@@ -55,6 +56,13 @@ export default {
         </v-card>
 
         <v-card v-if="mode==='MsgReadTime'" style="padding:3%; margin-top:8px;" variant="outlined" v-for="d in Object.entries(MsgReadTime)">
+                {{ d[0] }}
+                <v-card variant="tonal" style="padding:1%; margin-top:8px;">
+                    {{ d[1] }}
+                </v-card>
+        </v-card>
+
+        <v-card v-if="mode==='UserIndex'" style="padding:3%; margin-top:8px;" variant="outlined" v-for="d in Object.entries(UserIndex)">
                 {{ d[0] }}
                 <v-card variant="tonal" style="padding:1%; margin-top:8px;">
                     {{ d[1] }}
