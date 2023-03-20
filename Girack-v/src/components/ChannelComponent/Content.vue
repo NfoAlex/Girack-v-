@@ -412,13 +412,25 @@ export default {
                     <!-- ユーザー名と時間表記 -->
                     <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                         {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
+                        
+                        <!-- ロールバッジ -->
                         <v-chip
                             v-if="getRole(m.userid)!=='Member'"
                             :color="getRole(m.userid)==='Admin'?'purple':'blue'"
                             size="x-small"
                             :elevation="6"
                         >
-                            <!-- ここはロール ⇒⇒⇒ -->{{ getRole(m.userid) }}
+                            {{ getRole(m.userid) }}
+                        </v-chip>
+
+                        <!-- BANされたバッジ -->
+                        <v-chip
+                            v-if="UserIndex[m.userid].banned"
+                            color="red"
+                            size="x-small"
+                            :elevation="6"
+                        >
+                            BANNED
                         </v-chip>
 
                         <!-- タイムスタンプ -->
