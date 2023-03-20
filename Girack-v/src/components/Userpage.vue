@@ -73,6 +73,22 @@ export default {
                     sessionid: this.Userinfo.sessionid
                 }
             })
+        },
+
+        //ロールの色を返す
+        getRoleColor(role) {
+            switch(role) {
+                case "Admin":
+                    return "purple";
+                
+                case "Moderator":
+                    return "blue";
+
+                case "Member":
+                    return "white";
+
+            }
+
         }
     },
 
@@ -92,7 +108,7 @@ export default {
 
         //もし対象のユーザーがAdminなら管理操作できないようにする
         if ( dataMsg().UserIndex.value[this.userid].role === "Admin" || this.Userinfo.userid === this.userid ) {
-            this.manageDisabled = true;
+            this.manageDisabled = true; //管理を無効化
 
         }
 
@@ -111,7 +127,7 @@ export default {
             <div class="ma-3">
                 <v-chip v-if="UserIndex[userid].banned" color="red" size="small">BANされています</v-chip>
                 <p class="text-overline"># {{ userid }}</p>
-                <v-chip size="small">{{ UserIndex[userid].role }}</v-chip>
+                <v-chip :color="getRoleColor(UserIndex[userid].role)" size="small">{{ UserIndex[userid].role }}</v-chip>
                 <p class="text-h5">{{ UserIndex[userid].username }}</p>
             </div>
         </v-card>

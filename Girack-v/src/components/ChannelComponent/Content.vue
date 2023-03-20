@@ -414,7 +414,7 @@ export default {
                         {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                         <v-chip
                             v-if="getRole(m.userid)!=='Member'"
-                            :color="getRole(m.userid)==='Admin'?'purple':'gray'"
+                            :color="getRole(m.userid)==='Admin'?'purple':'blue'"
                             size="x-small"
                             :elevation="6"
                         >

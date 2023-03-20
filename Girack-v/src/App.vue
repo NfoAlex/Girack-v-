@@ -106,7 +106,7 @@ export default {
                 <div style="width:fit-content" class="mx-auto">
                     <v-chip
                         v-if="Userinfo.role!=='Member'"
-                        :color="Userinfo.role==='Admin'?'purple':'gray'"
+                        :color="Userinfo.role==='Admin'?'purple':'blue'"
                         size="x-small"
                         :elevation="6"
                     >
