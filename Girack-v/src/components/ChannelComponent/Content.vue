@@ -1,5 +1,6 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel } from "../../socket.js";
+import Userpage from "../Userpage.vue";
 const socket = getSocket();
 // const { Userinfo } = dataUser(); //ユーザー情報
 // const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
@@ -14,6 +15,8 @@ export default {
 
     },
 
+    components: { Userpage },
+
     data() {
         return {
             uri: backendURI, //バックエンドのURI
@@ -21,6 +24,10 @@ export default {
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
             msgIdHovering: 0, //ホバーされたメッセージのID
+
+            //ユーザーページ用
+            userDialogShow: false,
+            userDialogUserid : "00000001",
 
             goBottom: "goBottom" //下に行くボタン用CSSクラス
         }
@@ -362,7 +369,16 @@ export default {
 
 <template>
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
-        
+        <!-- ユーザーページ用 -->
+        <div>
+            <v-dialog
+                v-model="userDialogShow"
+                width="30vw"
+            >
+                <Userpage :userid="userDialogUserid" />
+            </v-dialog>
+        </div>
+
         <!-- 履歴が空なら -->
         <div style="padding:10%" v-if="MsgDB[getPath]===undefined||MsgDB[getPath].length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
@@ -387,7 +403,7 @@ export default {
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
-                    <v-img :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
+                    <v-img @click="()=>{userDialogShow=true; userDialogUserid=m.userid}" :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
