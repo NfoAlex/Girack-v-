@@ -36,17 +36,6 @@ export const Serverinfo = ref({
     inviteOnly: null
 });
 
-//チャンネル情報 (ToDo削除)
-// export var channelIndex = {
-//     /*
-//     "001": {
-//         channelname: "random",
-//         description: "Hello, Girack",
-//         scope: "open"
-//     }
-//     */
-// };
-
 //チャンネル情報
 const ChannelIndex = ref({
     /*
