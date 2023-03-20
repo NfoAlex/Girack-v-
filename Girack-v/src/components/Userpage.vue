@@ -91,7 +91,7 @@ export default {
         this.targetUserBanned = dataMsg().UserIndex.value[this.userid].banned;
 
         //もし対象のユーザーがAdminなら管理操作できないようにする
-        if ( dataMsg().UserIndex.value[this.userid].role === "Admin" ) {
+        if ( dataMsg().UserIndex.value[this.userid].role === "Admin" || this.Userinfo.userid === this.userid ) {
             this.manageDisabled = true;
 
         }
