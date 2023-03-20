@@ -429,6 +429,7 @@ socket.on("infoUser", (dat) => {
     //ユーザーインデックス更新
     UserIndex.value[userid].username = username; //名前
     UserIndex.value[userid].role = role; //ロール
+    UserIndex.value[userid].banned = dat.banned; //BANされているかどうか
 
     //自分の情報の更新にだけ使うから
     if ( dat.userid !== Userinfo.value.userid ) { return; }
