@@ -22,6 +22,7 @@ export default {
             //そのユーザーの情報
             targetUserRole: "Member",
             targetUserBanned: false,
+            manageDisabled: false,
 
             //ユーザーページ下のタブ用
             tab: ""
@@ -89,6 +90,13 @@ export default {
         this.targetUserRole = dataMsg().UserIndex.value[this.userid].role;
         this.targetUserBanned = dataMsg().UserIndex.value[this.userid].banned;
 
+        //もし対象のユーザーがAdminなら管理操作できないようにする
+        if ( dataMsg().UserIndex.value[this.userid].role === "Admin" ) {
+            this.manageDisabled = true;
+
+        }
+
+
     }
 
 }
@@ -117,7 +125,7 @@ export default {
             <v-tab value="channel">
                 チャンネル
             </v-tab>
-            <v-tab v-if="Userinfo.role!=='Member'" value="mod">
+            <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
                 管理
             </v-tab>
         </v-tabs>
