@@ -67,7 +67,7 @@ export default {
             transition="fade-transition"
         >
             <v-list
-                style="width:85%; height:90%; margin-top:16px; overflow-y:auto;"
+                style="width:90%; height:90%; margin-top:16px; overflow-y:auto;"
                 class="mx-auto rounded-lg"
                 :items="userList"
                 item-title="name"
