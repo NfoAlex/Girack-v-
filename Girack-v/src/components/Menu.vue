@@ -1,8 +1,6 @@
 <script setup>
-import { getSocket, dataUser } from '../socket.js';
+import { dataUser } from '../socket.js';
 import { RouterView } from 'vue-router';
-
-//const { Userinfo } = dataUser();
 
 </script>
 
@@ -81,6 +79,15 @@ export default {
                     </v-icon>
                     <br>
                     サーバー管理
+                </v-card>
+            </RouterLink>
+            <RouterLink to="/menu/aboutgirack">
+                <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('aboutgirack')?'primary':'secondary'">
+                    <v-icon size="large" style="margin:0 auto;">
+                        mdi:mdi-information
+                    </v-icon>
+                    <br>
+                    Girackとは
                 </v-card>
             </RouterLink>
         </div>

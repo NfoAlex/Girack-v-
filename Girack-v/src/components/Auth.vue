@@ -124,7 +124,7 @@ export default {
     <p class="text-h4" style="margin:2% auto; text-align:center">
         {{ serverinfoLoaded.servername }}
     </p>
-    <v-card :class="authWindow" variant="tonal">
+    <v-card :class="[authWindow, 'rounded-lg']" variant="tonal">
         <v-tabs
             v-model="tab"
             bg-color="primary"
@@ -146,6 +146,7 @@ export default {
                 >
                     <v-alert
                         v-if="!Connected"
+                        class="rounded-lg"
                         style="margin: 3% auto"
                         icon="mdi:mdi-alert-circle"
                         type="error"
@@ -155,6 +156,7 @@ export default {
                     <p>パスワード</p>
                     <v-text-field
                         style="width:100%"
+                        type="password"
                         v-model="pwForAuth"
                         prepend-inner-icon="mdi:mdi-lock"
                         clearable
@@ -164,11 +166,12 @@ export default {
                         <v-icon icon="mdi:mid-lock" />
                     </v-text-field>
                     <br>
-                    <v-btn :disabled="!Connected" @click="requestAuth" color="primary">認証</v-btn>
+                    <v-btn :disabled="!Connected" @click="requestAuth" class="rounded-lg" color="primary">認証</v-btn>
                     <br>
 
                     <v-alert
                         v-if="success"
+                        class="rounded-lg"
                         style="width:100%; margin: 3% auto"
                         type="success"
                         title="ログイン成功"
@@ -177,6 +180,7 @@ export default {
 
                     <v-alert
                         v-if="error"
+                        class="rounded-lg"
                         style="width:100%; margin: 3% auto"
                         icon="mdi:mdi-alert-circle"
                         type="error"
@@ -227,7 +231,7 @@ export default {
                         </div>
 
                         <br>
-                        <v-btn :disabled="!Connected && serverinfo.registerAvailable" @click="requestRegister" color="primary">登録</v-btn>
+                        <v-btn :disabled="!Connected && serverinfo.registerAvailable" @click="requestRegister" class="rounded-lg mx-auto" color="primary" block>登録</v-btn>
                         <br>
 
                         <v-alert

@@ -35,6 +35,7 @@ export default {
             setCookie("sessionid", "", 0); //クッキー削除
             location.reload(); //ページリロード
         },
+
         //名前更新
         updateName() {
             let nameUpdating = this.nameDisplaying; //更新する名前
@@ -49,12 +50,15 @@ export default {
             this.nameEditing = false; //編集モードを閉じる
             console.log("名前更新します -> " + this.nameDisplaying);
         },
+
         //編集しているかどうかを切り替えする
         toggleEditing() {
             this.nameDisplaying = Userinfo.value.username;
             this.nameEditing = !this.nameEditing; //編集モード
         }
+
     },
+    
     mounted() {
         this.nameDisplaying = Userinfo.value.username; //名前更新
     },

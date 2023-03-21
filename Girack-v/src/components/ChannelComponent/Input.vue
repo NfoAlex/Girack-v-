@@ -18,9 +18,13 @@ export default {
 
     methods: {
         //メッセージを送信する
-        msgSend( event ) {
-            //変換中のEnter検知を外す
-            if ( event.keyCode !== 13 ) return;
+        msgSend( event, btn ) {
+            //送信の初期判定
+            if ( btn !== "byBtn" ) { //ボタンからの送信？
+                //変換中のEnter検知を外す
+                if ( event.keyCode !== 13 ) return; //変換中のEnterなら処理させない
+
+            }
 
             //送信ｨﾝ!
             socket.emit("msgSend", {
@@ -75,7 +79,7 @@ export default {
         </div>
 
 
-        <v-btn icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" @click="msgSend" color="primary">
+        <v-btn @click="msgSend(null,'byBtn')" icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
             <v-icon icon="mdi:mdi-send-outline"></v-icon>
             <v-tooltip
                 activator="parent"

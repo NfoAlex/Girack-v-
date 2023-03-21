@@ -19,7 +19,7 @@ const router = createRouter({
     },
     {
       path: '/menu/',
-      name: 'User Page',
+      name: 'Menu',
       component: () => import('../components/Menu.vue'),
       children: [
         {
@@ -41,6 +41,10 @@ const router = createRouter({
         {
           path: "members",
           component: () => import('../components/MenuComponent/Members.vue'),
+        },
+        {
+          path: "aboutgirack",
+          component: () => import('../components/MenuComponent/AboutGirack.vue'),
         },
       ]
     },
