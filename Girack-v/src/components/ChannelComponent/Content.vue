@@ -480,7 +480,7 @@ export default {
                                 😰
                             </v-btn>
                             <!-- 削除ボタン -->
-                            <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                            <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||(getUserStats(m.userid, 'role')!=='Admin'&&Userinfo.role==='Moderator')||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                                 削除
                             </v-btn>
                         </span>
