@@ -317,8 +317,13 @@ export default {
         //スクロール位置によって一番下に行くボタンの表示切り替えをする
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
+
             //一番下？
-            if ( s || channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
+            if (
+                s || //そもそも引数でtrueと渡されているなら
+                channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight || //スクロール位置を計算
+                channelWindow.offsetHeight <= channelWindow.scrollHeight //もし縦幅がそもそも画面におさまっているなら
+            ) {
                 this.StateScrolled = true; //スクロールしきったと保存
                 this.MsgReadTime[this.getPath] = {
                     new: 0 //新着メッセージ数を0に
