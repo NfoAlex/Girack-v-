@@ -108,7 +108,7 @@ export default {
         <v-window v-model="tab" class="ma-5">
             
             <v-window-item value="userJoined" style="height:300px; overflow-y:auto;">
-                <v-card @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}" class="mx-auto text-left pa-1" style="width:75%; margin-top:8px;" variant="tonal" v-for="u in channelJoinedUser">
+                <v-card @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}" class="mx-auto text-left pa-1 rounded-lg" style="width:75%; margin-top:8px;" variant="tonal" v-for="u in channelJoinedUser">
                     <v-avatar style="margin-left:64px; float:left" size="32" :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
                     <span style="margin-left:16px;" class="text-center">{{ u.username }}</span>
                 </v-card>
