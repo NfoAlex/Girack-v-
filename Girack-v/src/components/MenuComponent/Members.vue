@@ -74,7 +74,7 @@ export default {
 </script>
 
 <template>
-    <div style="margin:3% auto;">
+    <div style="margin:0 auto; height:90vh;">
         <!-- ユーザーページ用 -->
         <div>
             <v-dialog
@@ -85,16 +85,18 @@ export default {
             </v-dialog>
         </div>
 
-        <p class="text-h4">
-            愉快なメンバーたち
-        </p>
+        <div style="height:10%">
+            <p class="text-h4">
+                愉快なメンバーたち
+            </p>
+        </div>
 
         <v-lazy
             :options="{'threshold':0.5}"
             transition="fade-transition"
-            style="height:90vh"
+            style="height:80vh"
         >
-        <div style="height:100%; width:95%; overflow-y:auto;">
+        <div style="height:100%; overflow-y:auto;">
             <v-card
                 color="grey"
                 @click="()=>{userDialogShow=true; userDialogUserid=user.userid}"
