@@ -214,8 +214,7 @@ socket.on("messageUpdate", (dat) => {
 
         //リアクションをつける
         case "reaction":
-            console.log("Content :: これからリアクション");
-            console.log(dat);
+            //メッセージIDで探索して更新
             for ( let index in MsgDB.value[dat.channelid] ) {
                 if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
                     MsgDB.value[dat.channelid][index].reaction = dat.reaction; //リアクション更新
