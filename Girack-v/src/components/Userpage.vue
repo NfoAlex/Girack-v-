@@ -65,7 +65,7 @@ export default {
                 targetid: this.userid,
                 action: {
                     change: "ban",
-                    value: this.UserIndex[this.userid].banned?false:true //true=>BANする、false=>解除
+                    value: this.targetinfo.banned?false:true //true=>BANする、false=>解除
                 },
                 reqSender: {
                     userid: this.Userinfo.userid,
