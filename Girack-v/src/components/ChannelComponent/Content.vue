@@ -15,7 +15,7 @@ export default {
 
     },
 
-    components: { Userpage },
+    components: { Userpage }, //ユーザーページ用
 
     data() {
         return {
