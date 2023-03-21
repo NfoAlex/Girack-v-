@@ -56,7 +56,6 @@ export function dataChannel() {
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-//ref テスト用 メッセージDB（履歴）
 
 //メッセージ履歴DB
 const MsgDB = ref({
