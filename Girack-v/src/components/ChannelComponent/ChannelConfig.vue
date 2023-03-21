@@ -133,7 +133,24 @@ export default {
             <p class="text-h4">
                 <v-icon v-if="scopeText==='private'" size="x-small">mdi:mdi-lock</v-icon>
                 <br>
-                {{ channelnameText }}
+                <p @dblclick="switchEditing('channelname',true)" v-if="!channelnameEditing">
+                    <v-tooltip
+                        activator="parent"
+                        location="top"
+                    >
+                        ダブルクリックでチャンネル名を変更
+                    </v-tooltip>
+                    {{ channelnameText }}
+                </p>
+                <v-text-field
+                    v-else
+                    v-model="channelnameText"
+                >
+                    <template v-slot:append-inner>
+                        <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
+                        <v-icon @click="switchEditing('channelname',false)">mdi:mdi-window-close</v-icon>
+                    </template>
+                </v-text-field>
             </p>
         </div>
 
