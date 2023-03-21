@@ -17,17 +17,68 @@ export default {
             channelTargetInfo: {}, //表示するチャンネル情報
             channelJoinedUser: [],
 
+            //ユーザーページ用
             userDialogShow: false,
             userDialogUserid: "00000001",
+
+            //名前と概要の編集用
+            descriptionEditing : false,
+            descriptionText: "...",
+            channelnameEditing: false,
+            channelnameText: "...",
+            scopeText: "public",
 
             tab: "", //タブの移動用
             imgsrc: backendURI + "/img/"
         }
     },
 
+    methods: {
+        switchEditing(cat, mode) {
+            switch(cat) {
+                //概要欄の編集切り替え
+                case "desc":
+                    if ( !mode ) { this.descriptionEditing = false; }
+                    else { this.descriptionEditing = true; }
+                    break;
+
+                //チャンネル名の編集切り替え
+                case "channelname":
+                    if ( !mode ) { this.channelnameEditing = false; }
+                    else { this.channelnameEditing = true; }
+                    break;
+
+            }
+
+        },
+
+        //チャンネルの更新をする
+        updateChannel() {
+            //チャンネル設定の更新
+            socket.emit("changeChannelSettings", {
+                targetid: this.channelid,
+                channelname: this.channelnameText,
+                description: this.descriptionText,
+                scope: this.scopeText,
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
+
+            //編集を閉じる
+            this.switchEditing('desc', false);
+            this.switchEditing('channelname', false);
+
+        }
+    },
+
     mounted() {
         //表示するデータをチャンネル情報から取得して設定
         this.channelTargetInfo = ChannelIndex.value[this.channelid];
+        this.channelnameText = ChannelIndex.value[this.channelid].channelname;
+        this.descriptionText = ChannelIndex.value[this.channelid].description;
+        this.scopeText = ChannelIndex.value[this.channelid].scope;
 
         //チャンネル参加者リストを受信
         socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
@@ -76,19 +127,36 @@ export default {
     </v-dialog>
     
 
-    <v-card class="text-center rounded-lg pa-4" style="max-height:650px">
+    <v-card class="text-center rounded-lg pa-3" style="max-height:650px">
         <!-- チャンネル名とバッジ -->
         <div class="ma-5">
             <p class="text-h4">
-                <v-icon v-if="channelTargetInfo.scope==='private'" size="x-small">mdi:mdi-lock</v-icon>
+                <v-icon v-if="scopeText==='private'" size="x-small">mdi:mdi-lock</v-icon>
                 <br>
-                {{ channelTargetInfo.channelname }}
+                {{ channelnameText }}
             </p>
         </div>
 
         <!-- チャンネル概要 -->
-        <v-card class="pa-3 ma-2 mx-auto rounded-lg" width="85%" color="secondary">
-            {{ channelTargetInfo.description }}
+        <v-card @dblclick="switchEditing('desc',true)" class="pa-3 ma-2 mx-auto rounded-lg" width="85%" color="secondary">
+            <div v-if="!descriptionEditing">
+                {{ descriptionText }}
+                <p class="text-caption" style="margin-top:-2px; color:#555">ダブルクリックで編集</p>
+            </div>
+            <div v-if="descriptionEditing">
+                <v-textarea
+                    no-resize
+                    rows="3"
+                    v-model="descriptionText"
+                    label="概要"
+                    @click:append-inner=""
+                >
+                <template v-slot:append-inner>
+                    <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
+                    <v-icon @click="switchEditing('desc',false)">mdi:mdi-window-close</v-icon>
+                </template>
+                </v-textarea>
+            </div>
         </v-card>
         
         <v-divider class="ma-3 mx-auto" style="width:85%" :thickness="0"></v-divider>

@@ -6,6 +6,7 @@ import { setCookie, getSocket, dataUser, backendURI } from '../../socket.js';
 <script>
 const socket = getSocket();
 const { Userinfo } = dataUser();
+
 export default {
     
     data() {
