@@ -73,7 +73,7 @@ export default {
 
     <v-dialog
         v-model="channelDialogShow"
-        width="50vw"
+        style="width:50vw; max-width:650px;"
     >
         <ChannelConfig :channelid="channelDialogId" />
     </v-dialog>
