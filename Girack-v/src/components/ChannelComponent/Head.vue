@@ -1,5 +1,6 @@
 <script setup>
 import { dataChannel, dataUser } from '../../socket';
+import ChannelConfig from "./ChannelConfig.vue";
 </script>
 
 <script>
@@ -7,8 +8,18 @@ const { ChannelIndex } = dataChannel(); //チャンネル情報
 
 export default {
 
+    components: { ChannelConfig },
+
+    data() {
+        return {
+            channelDialogShow: false,
+            channelDialogId: "0001"
+        }
+    },
+
     computed: {
         getPath() {
+            this.channelDialogId = this.$route.params.id;
             return this.$route.params.id;
 
         }
@@ -59,6 +70,14 @@ export default {
 </script>
 
 <template>
+
+    <v-dialog
+        v-model="channelDialogShow"
+        width="50vw"
+    >
+        <ChannelConfig :channelid="channelDialogId" />
+    </v-dialog>
+
     <div style="padding: 0 32px; float:left;">
         <div style="font-size:3vh">
             <span v-if="getChannelInfo().scope==='private'" class="mdi mdi-lock"></span>
@@ -66,8 +85,10 @@ export default {
         </div>
         <p style="font-size:2vh">{{ getChannelInfo().description }}</p>
     </div>
-    <div style="width:40%; float:right; padding-top:1%;" class="d-flex flex-row-reverse">
-        <!-- <v-chip>Funky</v-chip> -->
+    <div style="width:40%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row-reverse">
+        <v-btn @click="()=>channelDialogShow=!channelDialogShow" size="large" icon="" class="rounded-lg" color="secondary">
+            <v-icon>mdi:mdi-menu</v-icon>
+        </v-btn>
     </div>
     
 </template>
