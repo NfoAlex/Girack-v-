@@ -86,6 +86,9 @@ export default {
                     color="secondary"
                     width="80%"
                 >
+                    <div style="width:fit-content" class="mx-auto">
+                        <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
+                    </div>
                     <v-tooltip
                         activator="parent"
                         location="top"
@@ -118,6 +121,8 @@ export default {
                             {{ Userinfo.username }}
                         </span>
                     </v-card-text>
+
+                    
 
                 </v-card>
             </RouterLink>
