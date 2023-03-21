@@ -123,7 +123,7 @@ export default {
             </RouterLink>
             
             <!-- FOR DEBUGGING ONLY -->
-            <nav style="margin:5% auto; width:90%;">
+            <nav style="margin:2% auto; width:98%;">
                 <RouterLink :to="'/jsonviewer'">
                     <v-btn class="overflow-x-hidden rounded-pill" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
