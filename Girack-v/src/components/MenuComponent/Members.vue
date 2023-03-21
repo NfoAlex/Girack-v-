@@ -67,7 +67,18 @@ export default {
             //型がユーザーリストだったらデータを登録
             if ( dat.type === "user" ) {
                 this.userList = dat.userList; //ユーザーリストを設定
-                this.userListDisplay = dat.userList; //表示用の配列
+
+                //ソートして表示用の配列へ追加
+                this.userListDisplay = dat.userList.sort((u1, u2) => {
+                    if ( u1.name < u2.name ) {
+                        return -1;
+
+                    } else {
+                        return 1;
+
+                    }
+
+                });
 
             }
             
