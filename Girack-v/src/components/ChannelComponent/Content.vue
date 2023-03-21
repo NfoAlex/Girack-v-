@@ -322,7 +322,7 @@ export default {
             if (
                 s || //そもそも引数でtrueと渡されているなら
                 channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight || //スクロール位置を計算
-                channelWindow.offsetHeight <= channelWindow.scrollHeight //もし縦幅がそもそも画面におさまっているなら
+                channelWindow.offsetHeight >= channelWindow.scrollHeight //もし縦幅がそもそも画面におさまっているなら
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
                 this.MsgReadTime[this.getPath] = {
