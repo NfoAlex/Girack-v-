@@ -12,8 +12,12 @@ export default {
 
     data() {
         return {
-            userList: [],
+            userList: [], //ユーザーリストそのもの用の配列
+            userListDisplay: [], //表示する用の配列
             imgsrc: backendURI + "/img/",
+
+            //検索用
+            nameSearchText: "",
 
             //ユーザーページ用
             userDialogShow: false,
@@ -38,6 +42,22 @@ export default {
 
                 }
             }
+        },
+        //名前検索の入力テキストの監視
+        nameSearchText: {
+            handler() {
+                //もし検索する名前の名前が２文字以上なら
+                if ( this.nameSearchText.length > 1 ) {
+                    //表示用配列をユーザーリストをフィルターして設定
+                    this.userListDisplay = this.userList.filter((u) => u.name.includes(this.nameSearchText));
+
+                } else {
+                    //表示配列の初期化
+                    this.userListDisplay = this.userList;
+
+                }
+
+            }
         }
     },
 
@@ -46,7 +66,8 @@ export default {
         socket.on("infoList", (dat) => {
             //型がユーザーリストだったらデータを登録
             if ( dat.type === "user" ) {
-                this.userList = dat.userList;
+                this.userList = dat.userList; //ユーザーリストを設定
+                this.userListDisplay = dat.userList; //表示用の配列
 
             }
             
@@ -91,17 +112,28 @@ export default {
             </p>
         </div>
 
+        <div class="mx-auto" style="width:50%">
+            <v-text-field
+                v-model="nameSearchText"
+                density="compact"
+                variant="solo"
+                prepend-icon="mdi:mdi-search"
+                placeholder="名前検索"
+            >
+            </v-text-field>
+        </div>
+
         <v-lazy
             :options="{'threshold':0.5}"
             transition="fade-transition"
-            style="height:80vh"
+            style="height:70vh"
         >
         <div style="height:100%; overflow-y:auto;">
             <v-card
                 color="grey"
                 @click="()=>{userDialogShow=true; userDialogUserid=user.userid}"
                 class="pa-3 ma-3 rounded-lg"
-                v-for="user in userList"
+                v-for="user in userListDisplay"
                 :key="user.userid"
             >
                 <v-avatar :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
