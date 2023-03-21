@@ -171,10 +171,10 @@ export default {
 
                 <!-- BANボタン -->
                 <v-btn @click="banUser" v-if="!UserIndex[userid].banned" color="error">
-                    BAN
+                    <v-icon>mdi:mdi-account-cancel</v-icon> BAN
                 </v-btn>
                 <v-btn @click="banUser" v-if="UserIndex[userid].banned" color="info">
-                    BANを解除
+                    <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
                 </v-btn>
 
             </v-window-item>
