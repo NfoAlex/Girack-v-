@@ -143,6 +143,7 @@ export default {
                 <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
                 <p class="text-overline"># {{ userid }}</p>
                 <v-chip :color="getRoleColor(targetinfo.role)" size="small">{{ targetinfo.role }}</v-chip>
+                <p><v-chip v-if="userid===Userinfo.userid" color="green" size="small">あなた</v-chip></p>
                 <p class="text-h5">{{ targetinfo.username }}</p>
             </div>
         </v-card>
