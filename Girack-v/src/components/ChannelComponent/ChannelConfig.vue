@@ -31,7 +31,17 @@ export default {
 
         //チャンネル参加者リストを受信
         socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
-            this.channelJoinedUser = channelJoinedUserList;
+            //ユーザー名でソートして追加
+            this.channelJoinedUser = channelJoinedUserList.sort((u1, u2) => {
+                if ( u1.username > u2.username ) {
+                    return 1;
+
+                } else {
+                    return -1;
+
+                }
+
+            });
 
         });
 
