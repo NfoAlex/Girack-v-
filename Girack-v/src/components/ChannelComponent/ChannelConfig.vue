@@ -131,8 +131,12 @@ export default {
         <!-- チャンネル名とバッジ -->
         <div class="ma-5">
             <p class="text-h4">
+
                 <v-icon v-if="scopeText==='private'" size="x-small">mdi:mdi-lock</v-icon>
+                
                 <br>
+
+                <!-- チャンネル名 -->
                 <p @dblclick="switchEditing('channelname',true)" v-if="!channelnameEditing">
                     <v-tooltip
                         activator="parent"
@@ -142,24 +146,32 @@ export default {
                     </v-tooltip>
                     {{ channelnameText }}
                 </p>
+
+                <!-- 編集中のチャンネル名 -->
                 <v-text-field
                     v-else
                     v-model="channelnameText"
                 >
+                    <!-- 確定とキャンセルのアイコン -->
                     <template v-slot:append-inner>
                         <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
                         <v-icon @click="switchEditing('channelname',false)">mdi:mdi-window-close</v-icon>
                     </template>
                 </v-text-field>
+
             </p>
         </div>
 
         <!-- チャンネル概要 -->
         <v-card @dblclick="switchEditing('desc',true)" class="pa-3 ma-2 mx-auto rounded-lg" width="85%" color="secondary">
+            
+            <!-- 概要欄 -->
             <div v-if="!descriptionEditing">
                 {{ descriptionText }}
                 <p class="text-caption" style="margin-top:-2px; color:#555">ダブルクリックで編集</p>
             </div>
+
+            <!-- 編集中の概要欄 -->
             <div v-if="descriptionEditing">
                 <v-textarea
                     no-resize
@@ -168,6 +180,7 @@ export default {
                     label="概要"
                     @click:append-inner=""
                 >
+                <!-- 確定とキャンセルのアイコン -->
                 <template v-slot:append-inner>
                     <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
                     <v-icon @click="switchEditing('desc',false)">mdi:mdi-window-close</v-icon>
@@ -191,7 +204,7 @@ export default {
 
         <!-- タブの中身を知りたくて─────────── -->
         <v-window v-model="tab" class="ma-5">
-            
+            <!-- チャンネル参加者リスト -->
             <v-window-item value="userJoined" style="height:300px; overflow-y:auto;">
                 <v-card @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}" class="mx-auto text-left pa-1 rounded-lg" style="width:75%; margin-top:8px;" variant="tonal" v-for="u in channelJoinedUser">
                     <v-avatar style="margin-left:64px; float:left" size="32" :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
