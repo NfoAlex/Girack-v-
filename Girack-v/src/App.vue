@@ -154,7 +154,8 @@ export default {
                 <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
                         <v-btn class="rounded-lg" prepend-icon="mdi:mdi-pound" :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%;">
-                            {{ ChannelIndex[l[0]].channelname }}
+                            {{ l[1].channelname }}
+                            <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
                             <template v-slot:append>
                                 <v-badge
                                     v-if="checkReadTime(l[0])"
