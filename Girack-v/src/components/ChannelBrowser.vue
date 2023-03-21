@@ -238,7 +238,7 @@ export default {
     <div style="margin:3% auto; width:85%; height:95%;">
         <div class="d-flex justify-space-around bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
-            <v-btn @click="overlayChannelCreate=true" variant="tonal" icon="" class="rounded-lg">
+            <v-btn @click="overlayChannelCreate=true" color="primary" icon="" class="rounded-lg">
                 <v-icon icon="mdi:mdi-plus">
                 </v-icon>
                 <v-tooltip
