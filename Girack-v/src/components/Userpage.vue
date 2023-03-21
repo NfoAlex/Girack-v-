@@ -7,15 +7,14 @@ const socket = getSocket();
 export default {
     props: ["userid"],
     setup() {
-        const { UserIndex } = dataMsg();
         const { Userinfo } = dataUser();
-
-        return { UserIndex, Userinfo };
+        return { Userinfo };
 
     },
 
     data() {
         return {
+            targetinfo: {},
             imgsrc: backendURI + "/img/",
             roleList: [],
 
@@ -35,7 +34,7 @@ export default {
         targetUserRole: {
             handler() {
                 //もし今のロールと同じならスルー
-                if ( this.UserIndex[this.userid].role === this.targetUserRole ) {
+                if ( this.targetinfo.role === this.targetUserRole ) {
                     console.log("Userpage :: watch : targetUserRole 同じだから変更ナシ");
 
                 } else { //変わった瞬間ロール更新を送信
@@ -102,15 +101,31 @@ export default {
 
         }
 
-        //ユーザーのデフォルト情報を取得し変数へ保存しておく
-        this.targetUserRole = dataMsg().UserIndex.value[this.userid].role;
-        this.targetUserBanned = dataMsg().UserIndex.value[this.userid].banned;
+        socket.on("infoUser", (dat) => {
+            //受信した情報がこいつのなら
+            if ( dat.userid === this.userid ) {
+                this.targetinfo = dat; //表示する情報に設定
 
-        //もし対象のユーザーがAdminなら管理操作できないようにする
-        if ( dataMsg().UserIndex.value[this.userid].role === "Admin" || this.Userinfo.userid === this.userid ) {
-            this.manageDisabled = true; //管理を無効化
+                this.targetUserRole = this.targetinfo.role;
+                this.targetUserBanned = this.targetinfo.banned;
 
-        }
+                if ( this.targetinfo.role === "Admin" || this.Userinfo.userid === this.userid ) {
+                    this.manageDisabled = true; //管理を無効化
+
+                }
+
+            }
+
+        });
+
+        //情報取得
+        socket.emit("getInfoUser", {
+            targetid: this.userid,
+            reqSender: {
+                userid: dataUser().Userinfo.value.userid,
+                sessionid: dataUser().Userinfo.value.sessionid
+            }
+        });
 
 
     }
@@ -125,10 +140,10 @@ export default {
         <v-card color="secondary" width="70%" style="max-width:300px;" class="mx-auto boxProfile rounded-lg">
             <v-avatar style="margin-top:16px;" size="75" :image="imgsrc + userid + '.jpeg'"></v-avatar>
             <div class="ma-3">
-                <v-chip v-if="UserIndex[userid].banned" color="red" size="small">BANされています</v-chip>
+                <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
                 <p class="text-overline"># {{ userid }}</p>
-                <v-chip :color="getRoleColor(UserIndex[userid].role)" size="small">{{ UserIndex[userid].role }}</v-chip>
-                <p class="text-h5">{{ UserIndex[userid].username }}</p>
+                <v-chip :color="getRoleColor(targetinfo.role)" size="small">{{ targetinfo.role }}</v-chip>
+                <p class="text-h5">{{ targetinfo.username }}</p>
             </div>
         </v-card>
 
@@ -170,10 +185,10 @@ export default {
                 ></v-select>
 
                 <!-- BANボタン -->
-                <v-btn @click="banUser" v-if="!UserIndex[userid].banned" color="error">
+                <v-btn @click="banUser" v-if="!targetinfo.banned" color="error">
                     <v-icon>mdi:mdi-account-cancel</v-icon> BAN
                 </v-btn>
-                <v-btn @click="banUser" v-if="UserIndex[userid].banned" color="info">
+                <v-btn @click="banUser" v-if="targetinfo.banned" color="info">
                     <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
                 </v-btn>
 
