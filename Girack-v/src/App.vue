@@ -79,49 +79,48 @@ export default {
             <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ Serverinfo.servername || "..." }}</h2>
             <br>
             
-            <v-card
-                class="mx-auto rounded-lg"
-                color="secondary"
-                width="80%"
-            >
-
-                 <!-- アイコン-->
-                <div class="mx-auto" style="width:fit-content; margin-top:10%;">
-                    
-                    <RouterLink to="/menu/profile">
-                        <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
-                            <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
-                        </v-avatar>
-                        <v-tooltip
-                            activator="parent"
-                            location="top"
-                        >
-                            メニュー
-                        </v-tooltip>
-                    </RouterLink>
-
-                </div>
-
-                <!-- ロールバッジ-->
-                <div style="width:fit-content" class="mx-auto">
-                    <v-chip
-                        v-if="Userinfo.role!=='Member'"
-                        :color="Userinfo.role==='Admin'?'purple':'blue'"
-                        size="x-small"
-                        :elevation="6"
+            <RouterLink to="/menu/profile">
+                <v-card
+                    @click=""
+                    class="mx-auto rounded-lg"
+                    color="secondary"
+                    width="80%"
+                >
+                    <v-tooltip
+                        activator="parent"
+                        location="top"
                     >
-                        <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
-                    </v-chip>
-                </div>
+                        メニュー
+                    </v-tooltip>
 
-                <!-- ユーザー名-->
-                <v-card-text class="text-subtitle-1 text-center mx-auto">
-                    <span>
-                        {{ Userinfo.username }}
-                    </span>
-                </v-card-text>
+                    <!-- アイコン-->
+                    <div class="mx-auto" style="width:fit-content; margin-top:10%;">
+                            <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
+                                <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
+                            </v-avatar>
+                    </div>
 
-            </v-card>
+                    <!-- ロールバッジ-->
+                    <div style="width:fit-content" class="mx-auto">
+                        <v-chip
+                            v-if="Userinfo.role!=='Member'"
+                            :color="Userinfo.role==='Admin'?'purple':'blue'"
+                            size="x-small"
+                            :elevation="6"
+                        >
+                            <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
+                        </v-chip>
+                    </div>
+
+                    <!-- ユーザー名-->
+                    <v-card-text class="text-subtitle-1 text-center mx-auto">
+                        <span>
+                            {{ Userinfo.username }}
+                        </span>
+                    </v-card-text>
+
+                </v-card>
+            </RouterLink>
             
             <!-- FOR DEBUGGING ONLY -->
             <nav style="margin:5% auto; width:90%;">
