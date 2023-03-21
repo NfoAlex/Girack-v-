@@ -246,7 +246,7 @@ export default {
                     location="bottom"
                 >
                     チャンネル作成
-            </v-tooltip>
+                </v-tooltip>
             </v-btn>
         </div>
         <br>
