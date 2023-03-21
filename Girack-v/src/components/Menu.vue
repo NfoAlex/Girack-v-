@@ -81,6 +81,15 @@ export default {
                     サーバー管理
                 </v-card>
             </RouterLink>
+            <RouterLink to="/menu/aboutgirack">
+                <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('aboutgirack')?'primary':'secondary'">
+                    <v-icon size="large" style="margin:0 auto;">
+                        mdi:mdi-information
+                    </v-icon>
+                    <br>
+                    Girackとは
+                </v-card>
+            </RouterLink>
         </div>
         <router-view style="float:right; width:80%; margin-top:5%; height:90%; overflow-y:auto;"></router-view>
     </div>

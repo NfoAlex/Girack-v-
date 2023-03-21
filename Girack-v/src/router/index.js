@@ -42,6 +42,10 @@ const router = createRouter({
           path: "members",
           component: () => import('../components/MenuComponent/Members.vue'),
         },
+        {
+          path: "aboutgirack",
+          component: () => import('../components/MenuComponent/AboutGirack.vue'),
+        },
       ]
     },
     { //チャンネルブラウザ
