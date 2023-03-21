@@ -71,6 +71,7 @@ export default {
             </v-btn>
             <br>
             <v-text-field
+                v-if="gameStarted"
                 v-model="input"
                 class="mx-auto"
                 label="予想!"
