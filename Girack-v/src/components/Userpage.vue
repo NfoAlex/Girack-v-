@@ -135,9 +135,9 @@ export default {
 </script>
 
 <template>
-    <v-card class="mx-auto pa-1 userpage text-center rounded-lg">
+    <v-card elevation="6" class="mx-auto pa-1 userpage text-center rounded-lg">
 
-        <v-card color="secondary" width="70%" style="max-width:300px;" class="mx-auto boxProfile rounded-lg">
+        <v-card color="secondary" elevation="12" width="70%" style="max-width:300px;" class="mx-auto boxProfile rounded-lg">
             <v-avatar style="margin-top:16px;" size="75" :image="imgsrc + userid + '.jpeg'"></v-avatar>
             <div class="ma-3">
                 <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
