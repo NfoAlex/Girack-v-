@@ -19,7 +19,7 @@ const router = createRouter({
     },
     {
       path: '/menu/',
-      name: 'User Page',
+      name: 'Menu',
       component: () => import('../components/Menu.vue'),
       children: [
         {
