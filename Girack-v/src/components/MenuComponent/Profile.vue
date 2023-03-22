@@ -1,6 +1,8 @@
-<script>
-
+<script setup>
 import { setCookie, getSocket, dataUser, backendURI } from '../../socket.js';
+</script>
+
+<script>
 const socket = getSocket();
 const { Userinfo } = dataUser();
 
