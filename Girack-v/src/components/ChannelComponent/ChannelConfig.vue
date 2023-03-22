@@ -22,14 +22,14 @@ export default {
             userDialogUserid: "00000001",
 
             //名前と概要の編集用
-            descriptionEditing : false,
-            descriptionText: "...",
-            channelnameEditing: false,
-            channelnameText: "...",
-            scopeText: "public",
+            descriptionEditing : false, //チャンネル概要の編集状態
+            descriptionText: "...", //チャンネル概要
+            channelnameEditing: false, //チャンネルの編集状態
+            channelnameText: "...", //チャンネルの名前
+            scopeIsPrivate: false, //チャンネルがプレイベートかどうか
 
             tab: "", //タブの移動用
-            imgsrc: backendURI + "/img/"
+            imgsrc: backendURI + "/img/" //アイコン用
         }
     },
 
@@ -59,7 +59,7 @@ export default {
                 targetid: this.channelid,
                 channelname: this.channelnameText,
                 description: this.descriptionText,
-                scope: this.scopeText,
+                scope: (this.scopeIsPrivate?"private":"public"),
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -78,7 +78,7 @@ export default {
         this.channelTargetInfo = ChannelIndex.value[this.channelid];
         this.channelnameText = ChannelIndex.value[this.channelid].channelname;
         this.descriptionText = ChannelIndex.value[this.channelid].description;
-        this.scopeText = ChannelIndex.value[this.channelid].scope;
+        this.scopeIsPrivate = (ChannelIndex.value[this.channelid].scope==="private"?true:false);
 
         //チャンネル参加者リストを受信
         socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
@@ -132,7 +132,8 @@ export default {
         <div class="ma-5">
             <p class="text-h4">
 
-                <v-icon v-if="scopeText==='private'" size="x-small">mdi:mdi-lock</v-icon>
+                <!-- プライベートチャンネル用アイコン -->
+                <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
                 
                 <br>
 
@@ -212,8 +213,14 @@ export default {
                 </v-card>
             </v-window-item>
 
-            <v-window-item value="manage" style="height:300px; overflow-y:auto;">
-                チャンネル管理するぜ
+            <v-window-item value="manage" class="mx-auto" style="height:300px; overflow-y:auto;">
+                <v-checkbox
+                    @click="updateChannel"
+                    v-model="scopeIsPrivate"
+                    color="grey"
+                    label="プライベートチャンネル"
+                >
+                </v-checkbox>
             </v-window-item>
 
         </v-window>
