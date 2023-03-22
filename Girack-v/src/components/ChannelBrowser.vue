@@ -52,6 +52,7 @@ export default {
             socket.emit("channelAction", {
                 action: "join",
                 channelid: channelid, //参加するチャンネルのid
+                userid: Userinfo.value.userid, //参加する人のユーザーID(この場合自分)
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -75,6 +76,7 @@ export default {
             socket.emit("channelAction", {
                 action: "leave",
                 channelid: channelid, //抜けるチャンネルのID
+                userid: Userinfo.value.userid, //抜ける人のユーザーID(この場合自分)
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
