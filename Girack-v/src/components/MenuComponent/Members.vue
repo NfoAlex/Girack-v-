@@ -129,7 +129,7 @@ export default {
                 density="compact"
                 variant="solo"
                 prepend-icon="mdi:mdi-search"
-                placeholder="名前検索"
+                placeholder="名前検索(Aa 区別有り)"
             >
             </v-text-field>
         </div>

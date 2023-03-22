@@ -256,7 +256,7 @@ export default {
                 v-for="c in Object.entries(channelList)"
                 style="padding:0;"
             >
-                <v-card variant="tonal" class="rounded-lg" style="padding:2% 2%; margin-top:16px;">
+                <v-card variant="tonal" class="rounded-lg" style="padding:8px 16px; margin-top:16px;">
                     
                     <p class="text-h6">
 
