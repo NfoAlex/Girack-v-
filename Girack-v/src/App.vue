@@ -153,9 +153,16 @@ export default {
                 <!-- ここからチャンネルボタン描写  -->
                 <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
-                        <v-btn class="rounded-lg" prepend-icon="mdi:mdi-pound" :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%;">
-                            {{ l[1].channelname }}
+                        <v-btn
+                            class="rounded-lg"
+                            prepend-icon="mdi:mdi-pound"
+                            :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
+                            style="width:100%; font-size:1.35vb"
+                        >
+
+                            {{ l[1].channelname.length>15?l[1].channelname.substring(0,13)+"...":l[1].channelname }}
                             <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
+                            
                             <template v-slot:append>
                                 <v-badge
                                     v-if="checkReadTime(l[0])"
@@ -163,6 +170,7 @@ export default {
                                     inline
                                 ></v-badge>
                             </template>
+
                         </v-btn>
                     </RouterLink>
                 </div>

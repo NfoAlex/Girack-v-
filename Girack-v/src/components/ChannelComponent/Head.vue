@@ -78,14 +78,14 @@ export default {
         <ChannelConfig :channelid="channelDialogId" />
     </v-dialog>
 
-    <div style="padding: 0 32px; float:left;">
-        <div style="font-size:3vh">
+    <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
+        <div class="overflow-x-hidden" style="font-size:3vh;" >
             <span v-if="getChannelInfo().scope==='private'" class="mdi mdi-lock"></span>
-            {{ getChannelInfo().channelname }}
+            {{ (getChannelInfo().channelname.length>17) ? getChannelInfo().channelname.substring(0,18)+"..." : getChannelInfo().channelname }}
         </div>
         <p style="font-size:2vh">{{ getChannelInfo().description }}</p>
     </div>
-    <div style="width:40%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row-reverse">
+    <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row-reverse">
         <v-btn @click="()=>channelDialogShow=!channelDialogShow" size="large" icon="" class="rounded-lg" color="secondary">
             <v-icon>mdi:mdi-menu</v-icon>
         </v-btn>
