@@ -37,7 +37,7 @@ export default {
         //チャンネルの公開設定が変わったときを更新、チャンネル設定を反映
         scopeIsPrivate: {
             handler(scpe) {
-                this.updateChannel();
+                this.updateChannel(); //更新させる
 
             }
         }
