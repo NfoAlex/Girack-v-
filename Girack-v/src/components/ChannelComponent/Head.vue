@@ -28,8 +28,6 @@ export default {
     methods: {
         //チャンネル情報を取得するだけ
         getChannelInfo() {
-            console.log("getChannelInfo :: ");
-            console.log(ChannelIndex.value[this.getPath]);
             try {
                 //チャンネルインデックスから情報を返す、データなければ仮データを返す
                 if ( ChannelIndex.value[this.getPath] !== undefined ) {
