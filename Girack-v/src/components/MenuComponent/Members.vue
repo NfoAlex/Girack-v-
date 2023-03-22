@@ -123,7 +123,7 @@ export default {
             </p>
         </div>
 
-        <div class="mx-auto" style="width:50%">
+        <div class="mx-auto" style="width:50%; margin-top:3%">
             <v-text-field
                 v-model="nameSearchText"
                 density="compact"
