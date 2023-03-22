@@ -86,6 +86,11 @@ export default {
                     color="secondary"
                     width="80%"
                 >
+                    <!-- 三点メニューアイコン -->
+                    <div style="width:fit-content" class="mx-auto">
+                        <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
+                    </div>
+                    <!-- ホバーしたら表示するテキスト -->
                     <v-tooltip
                         activator="parent"
                         location="top"
@@ -119,11 +124,14 @@ export default {
                         </span>
                     </v-card-text>
 
+                    
+
                 </v-card>
             </RouterLink>
             
-            <!-- FOR DEBUGGING ONLY -->
+            <!-- ここからボタン群 -->
             <nav style="margin:2% auto; width:98%;">
+                <!-- FOR DEBUGGING ONLY -->
                 <RouterLink :to="'/jsonviewer'">
                     <v-btn class="overflow-x-hidden rounded-pill" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
                         <span style="width:100%; text-align:left !important; float:left !important">
@@ -145,10 +153,16 @@ export default {
                 <!-- ここからチャンネルボタン描写  -->
                 <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
-                        <v-btn class="rounded-lg" prepend-icon="mdi:mdi-pound" :variant=" path.indexOf(l[0])!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
-                            <span style="text-align:left !important; float:left !important">
-                                {{ ChannelIndex[l[0]].channelname }}
-                            </span>
+                        <v-btn
+                            class="rounded-lg"
+                            prepend-icon="mdi:mdi-pound"
+                            :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
+                            style="width:100%; font-size:1.35vb"
+                        >
+
+                            {{ l[1].channelname.length>15?l[1].channelname.substring(0,13)+"...":l[1].channelname }}
+                            <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
+                            
                             <template v-slot:append>
                                 <v-badge
                                     v-if="checkReadTime(l[0])"
@@ -156,9 +170,9 @@ export default {
                                     inline
                                 ></v-badge>
                             </template>
+
                         </v-btn>
                     </RouterLink>
-                    <br>
                 </div>
 
             </nav>
