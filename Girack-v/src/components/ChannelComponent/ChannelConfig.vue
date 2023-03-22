@@ -33,6 +33,16 @@ export default {
         }
     },
 
+    watch: {
+        //チャンネルの公開設定が変わったときを更新、チャンネル設定を反映
+        scopeIsPrivate: {
+            handler(scpe) {
+                this.updateChannel();
+
+            }
+        }
+    },
+
     methods: {
         switchEditing(cat, mode) {
             switch(cat) {
@@ -215,7 +225,6 @@ export default {
 
             <v-window-item value="manage" class="mx-auto" style="height:300px; overflow-y:auto;">
                 <v-checkbox
-                    @click="updateChannel"
                     v-model="scopeIsPrivate"
                     color="grey"
                     label="プライベートチャンネル"
