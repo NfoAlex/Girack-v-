@@ -21,6 +21,11 @@ export default {
             userDialogShow: false,
             userDialogUserid: "00000001",
 
+            //ユーザー招待時の検索用
+            userSearchShow: false,
+            userSearchQuery: "",
+            userSearchResult: [],
+
             //名前と概要の編集用
             descriptionEditing : false, //チャンネル概要の編集状態
             descriptionText: "...", //チャンネル概要
@@ -38,6 +43,32 @@ export default {
         scopeIsPrivate: {
             handler(scpe) {
                 this.updateChannel(); //更新させる
+
+            }
+        },
+
+        //ユーザー検索ダイアログ
+        userSearchQuery: {
+            handler(query) {
+                //もし検索画面を開いてるなら
+                if ( this.userSearchShow ) {
+                    //検索文字列が１文字以上なら
+                    if ( this.userSearchQuery.length >= 1 ) {
+                        //検索クエリーを送信
+                        socket.emit("searchUserDynamic", {
+                            query: this.userSearchQuery,
+                            reqSender: {
+                                userid: Userinfo.value.userid,
+                                sessionid: Userinfo.value.sessionid
+                            }
+                        })
+
+                    } else { //もし文字列が０文字なら
+                        this.userSearchResult = []; //検索結果を初期化
+
+                    }
+
+                }
 
             }
         }
@@ -106,6 +137,12 @@ export default {
 
         });
 
+        //ユーザー名検索の結果受け取り用
+        socket.on("infoSearchUser", (result) => {
+            this.userSearchResult = result;
+
+        });
+
         //チャンネルに参加しているユーザーリストを取得
         socket.emit("getInfoChannelJoinedUserList", {
             targetid: this.channelid,
@@ -129,11 +166,28 @@ export default {
 
 <template>
 
+    <!-- ユーザーページ用 -->
     <v-dialog
         v-model="userDialogShow"
         width="30vw"
     >
         <Userpage :userid="userDialogUserid" />
+    </v-dialog>
+
+    <!-- チャンネルへユーザーを招待するときのユーザー検索画面 -->
+    <v-dialog
+        v-model="userSearchShow"
+        width="30vw"
+    >
+        <v-text-field variant="solo" placeholder="ユーザー名で検索" v-model="userSearchQuery">
+        </v-text-field>
+        <!-- 検索結果 -->
+        <div style="height:50vh; max-height:650px; overflow-y:auto;">
+            <v-card v-for="user in userSearchResult" style="padding:16px 0; margin-top:8px;" class="text-left rounded-lg d-flex flex-row">
+                <v-avatar style="margin-left:32px; float:left" size="32" :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
+                <span class="text-center align-self-center" style="margin-left:16px;">{{ user.username }}</span>
+            </v-card>
+        </div>
     </v-dialog>
     
 
@@ -189,7 +243,6 @@ export default {
                     rows="3"
                     v-model="descriptionText"
                     label="概要"
-                    @click:append-inner=""
                 >
                 <!-- 確定とキャンセルのアイコン -->
                 <template v-slot:append-inner>
@@ -215,12 +268,19 @@ export default {
 
         <!-- タブの中身を知りたくて─────────── -->
         <v-window v-model="tab" class="ma-5">
+
             <!-- チャンネル参加者リスト -->
             <v-window-item value="userJoined" style="height:300px; overflow-y:auto;">
+                <span>
+                    <v-btn @click="()=>{userSearchShow=!userSearchShow;}" style="width:75%" icon="" variant="solo" class="rounded-lg">
+                        <v-icon>mdi:mdi-account-plus</v-icon>
+                    </v-btn>
+                </span>
                 <v-card @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}" class="mx-auto text-left pa-1 rounded-lg" style="width:75%; margin-top:8px;" variant="tonal" v-for="u in channelJoinedUser">
                     <v-avatar style="margin-left:64px; float:left" size="32" :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
                     <span style="margin-left:16px;" class="text-center">{{ u.username }}</span>
                 </v-card>
+                
             </v-window-item>
 
             <v-window-item value="manage" class="mx-auto" style="height:300px; overflow-y:auto;">
