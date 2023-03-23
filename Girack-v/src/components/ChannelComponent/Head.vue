@@ -49,7 +49,7 @@ export default {
                     return { //とりあえず仮データ返す
                         channelname: "ロード中...",
                         description: "",
-                        scope: "open"
+                        scope: "public"
                     }
 
                 }
@@ -58,7 +58,7 @@ export default {
                 return { //とりあえず仮データ返す
                     channelname: "ロード中...",
                     description: "",
-                    scope: "open"
+                    scope: "public"
                 }
             }
 
