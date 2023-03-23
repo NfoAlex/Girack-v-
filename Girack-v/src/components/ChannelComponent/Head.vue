@@ -77,9 +77,9 @@ export default {
     </v-dialog>
 
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
-        <div class="overflow-x-hidden" style="font-size:3vh;" >
+        <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
             <span v-if="getChannelInfo().scope==='private'" class="mdi mdi-lock"></span>
-            {{ (getChannelInfo().channelname.length>17) ? getChannelInfo().channelname.substring(0,18)+"..." : getChannelInfo().channelname }}
+            {{ getChannelInfo().channelname }}
         </div>
         <p style="font-size:2vh">{{ getChannelInfo().description }}</p>
     </div>
