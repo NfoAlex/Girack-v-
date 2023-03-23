@@ -196,7 +196,7 @@ export default {
     unmounted() {
         //通信重複防止
         socket.off("infoChannelJoinedUserList");
-        socket.on("infoSearchUser");
+        socket.off("infoSearchUser");
 
     }
 
