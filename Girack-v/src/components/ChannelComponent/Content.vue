@@ -22,7 +22,7 @@ export default {
             uri: backendURI, //バックエンドのURI
             
             //URL検出用
-            URLRegex: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
+            URLRegex: /((https|http)?:\/\/[^\s]+)/g,
             XSSRegex: /<(|\/|[^>\/bi]|\/[^>bi]|[^\/>][^>]+|\/[^>][^>]+)>/g,
             URLstyle: "color:#607D8B",
         
