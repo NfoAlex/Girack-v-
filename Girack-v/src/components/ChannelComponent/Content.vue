@@ -507,7 +507,7 @@ export default {
 
                                 <!-- URLプレビュー用 -->
                                 <v-card
-                                    v-if="m.urlData"
+                                    v-if="m.hasUrl"
                                     class="rounded-lg"
                                     style="height:fit-content; width:65%; padding: 16px 32px; margin-top:8px;"
                                     color="#222"

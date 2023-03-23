@@ -124,56 +124,29 @@ socket.on("messageReceive", (msg) => {
     try{
         //DB配列に追加
         if ( MsgDB.value[msg.channelid] !== undefined ) {
-            //もしURLがあるならそのデータも含める
-            if ( msg.urlData !== undefined ) {
-                MsgDB.value[msg.channelid].push({
-                    messageid: msg.messageid,
-                    userid: msg.userid,
-                    channelid: msg.channelid,
-                    time: msg.time,
-                    content: msg.content,
-                    urlData: msg.urlData,
-                    reaction: msg.reaction
-                });
-
-            } else {
-                //ローカルDBに追加
-                MsgDB.value[msg.channelid].push({
-                    messageid: msg.messageid,
-                    userid: msg.userid,
-                    channelid: msg.channelid,
-                    time: msg.time,
-                    content: msg.content,
-                    reaction: msg.reaction
-                });
-
-            }
+            MsgDB.value[msg.channelid].push({
+                messageid: msg.messageid,
+                userid: msg.userid,
+                channelid: msg.channelid,
+                time: msg.time,
+                content: msg.content,
+                hasUrl : msg.hasUrl,
+                urlData: msg.urlData,
+                reaction: msg.reaction
+            });
             
 
         } else { //配列が空なら新しく作成、配置
-            //もしURLがあるならそのデータも含める
-            if ( msg.urlData !== undefined ) {
-                MsgDB.value[msg.channelid] = [{
-                    messageid: msg.messageid,
-                    userid: msg.userid,
-                    channelid: msg.channelid,
-                    time: msg.time,
-                    content: msg.content,
-                    urlData: msg.urlData,
-                    reaction: msg.reaction
-                }];
-            
-            } else {
-                MsgDB.value[msg.channelid] = [{
-                    messageid: msg.messageid,
-                    userid: msg.userid,
-                    channelid: msg.channelid,
-                    time: msg.time,
-                    content: msg.content,
-                    reaction: msg.reaction
-                }];
-
-            }
+            MsgDB.value[msg.channelid] = [{
+                messageid: msg.messageid,
+                userid: msg.userid,
+                channelid: msg.channelid,
+                time: msg.time,
+                content: msg.content,
+                hasUrl : msg.hasUrl,
+                urlData: msg.urlData,
+                reaction: msg.reaction
+            }];
 
         }
 
@@ -555,6 +528,9 @@ socket.on("messageHistory", (history) => {
         return;
     
     }
+
+    console.log("socket :: messageHistory : history -> ");
+    console.log(history);
 
     let channelid = ""; //履歴を入れるチャンネルID
 
