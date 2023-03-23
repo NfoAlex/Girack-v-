@@ -140,7 +140,7 @@ export default {
                 }
             });
 
-            //チャンネルに参加しているユーザーリストを取得
+            //チャンネルに参加しているユーザーリストを取得、更新する
             socket.emit("getInfoChannelJoinedUserList", {
                 targetid: this.channelid,
                 reqSender: {
