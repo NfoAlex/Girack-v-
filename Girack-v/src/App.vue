@@ -148,7 +148,7 @@ export default {
                     </v-btn>
                 </RouterLink>
 
-                <hr style="margin:5% 0">
+                <v-divider style="margin:5% 0"></v-divider>
 
                 <!-- ここからチャンネルボタン描写  -->
                 <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
