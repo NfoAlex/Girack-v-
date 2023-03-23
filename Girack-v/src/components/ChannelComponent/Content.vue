@@ -449,7 +449,7 @@ export default {
                 <!-- メッセージ本体 -->
                 <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
                     <!-- メッセージ本体 -->
-                    <!-- v-menuはホバーメニュー用 -->
+                      <!-- v-menuはホバーメニュー用 -->
                     <v-menu
                         open-on-hover
                         open-delay="0"
@@ -497,26 +497,20 @@ export default {
                                     
                                 </div>
 
-                                <div
-                                    style="font-size:16px"
-                                    width="100%"
+                                <!-- メッセージ本文 -->
+                                <span
+                                    style="width:100%; height:5px; margin:5px 0; padding:0"
+                                    class="overflow-x-visible"
+                                    v-html="formatMessage(m.content)"
                                 >
+                                </span>
 
-                                    <!-- メッセージ本文 -->
-                                    <span
-                                        style="width:100%; height:5px; margin:5px 0; padding:0"
-                                        class="overflow-x-visible"
-                                        v-html="formatMessage(m.content)"
-                                    >
-                                    </span>
+                                <br v-if="m.reaction">
+                                <!-- リアクション -->
+                                <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                                    {{ getReaction(r[0]) }} {{ r[1] }}
+                                </v-chip>
 
-                                    <br v-if="m.reaction">
-                                    <!-- リアクション -->
-                                    <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
-                                        {{ getReaction(r[0]) }} {{ r[1] }}
-                                    </v-chip>
-
-                                </div>
                             </div>
                         </template>
                         <!-- ここからホバーメニュー -->
