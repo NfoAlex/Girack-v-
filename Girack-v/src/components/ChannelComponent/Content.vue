@@ -457,9 +457,9 @@ export default {
                         :close-on-content-click="false"
                         location="end top"
                         origin="overlap"
-                        style="width:100%"
                     >
                         <template v-slot:activator="{ props }">
+                            <div v-bind="props">
                             <!-- ユーザー名と時間表記 -->
                             <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                                 <!-- ユーザー名 -->
@@ -496,7 +496,6 @@ export default {
                                 @mouseover="mouseOverMsg(m.messageid, 'on')"
                                 @mouseleave="mouseOverMsg(m.messageid, 'off')"
                                 style="font-size:16px"
-                                v-bind="props"
                                 width="100%"
                             >
 
@@ -515,9 +514,10 @@ export default {
                                 </v-chip>
 
                             </div>
+                        </div>
                         </template>
                         <!-- ここからホバーメニュー -->
-                        <v-card class="pa-3 rounded-lg" color="#222" style="width:fit-content; max-width:500px;">
+                        <v-card class="pa-2 rounded-lg" color="#222" style="width:fit-content; margin-top:-16px; max-width:500px;">
                             
                             <!-- ここからホバーメニュー -->
                               <!-- コンポーネント化予定 -->
