@@ -459,62 +459,63 @@ export default {
                         origin="overlap"
                     >
                         <template v-slot:activator="{ props }">
+                            <!-- ホバーで反応する範囲 -->
                             <div v-bind="props">
-                            <!-- ユーザー名と時間表記 -->
-                            <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
-                                <!-- ユーザー名 -->
-                                {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
-                                
-                                <!-- ロールバッジ -->
-                                <v-chip
-                                    v-if="getUserStats(m.userid, 'role')!=='Member'"
-                                    :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
-                                    size="x-small"
-                                    :elevation="6"
-                                >
-                                    {{ getUserStats(m.userid, 'role') }}
-                                </v-chip>
+                                <!-- ユーザー名と時間表記 -->
+                                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
+                                    <!-- ユーザー名 -->
+                                    {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
+                                    
+                                    <!-- ロールバッジ -->
+                                    <v-chip
+                                        v-if="getUserStats(m.userid, 'role')!=='Member'"
+                                        :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
+                                        size="x-small"
+                                        :elevation="6"
+                                    >
+                                        {{ getUserStats(m.userid, 'role') }}
+                                    </v-chip>
 
-                                <!-- BANされたバッジ -->
-                                <v-chip
-                                    v-if="getUserStats(m.userid, 'banned')"
-                                    color="red"
-                                    size="x-small"
-                                    :elevation="6"
-                                >
-                                    BANNED
-                                </v-chip>
+                                    <!-- BANされたバッジ -->
+                                    <v-chip
+                                        v-if="getUserStats(m.userid, 'banned')"
+                                        color="red"
+                                        size="x-small"
+                                        :elevation="6"
+                                    >
+                                        BANNED
+                                    </v-chip>
 
-                                <!-- タイムスタンプ -->
-                                <span style="margin-right:12px" class="text-body-2 font-italic">
-                                    {{ printDate(m.time) }}
-                                </span>
-                                
+                                    <!-- タイムスタンプ -->
+                                    <span style="margin-right:12px" class="text-body-2 font-italic">
+                                        {{ printDate(m.time) }}
+                                    </span>
+                                    
+                                </div>
+
+                                <div
+                                    @mouseover="mouseOverMsg(m.messageid, 'on')"
+                                    @mouseleave="mouseOverMsg(m.messageid, 'off')"
+                                    style="font-size:16px"
+                                    width="100%"
+                                >
+
+                                    <!-- メッセージ本文 -->
+                                    <span
+                                        style="width:100%; height:5px; margin:5px 0; padding:0"
+                                        class="overflow-x-visible"
+                                        v-html="formatMessage(m.content)"
+                                    >
+                                    </span>
+
+                                    <br v-if="m.reaction">
+                                    <!-- リアクション -->
+                                    <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                                        {{ getReaction(r[0]) }} {{ r[1] }}
+                                    </v-chip>
+
+                                </div>
                             </div>
-
-                            <div
-                                @mouseover="mouseOverMsg(m.messageid, 'on')"
-                                @mouseleave="mouseOverMsg(m.messageid, 'off')"
-                                style="font-size:16px"
-                                width="100%"
-                            >
-
-                                <!-- メッセージ本文 -->
-                                <span
-                                    style="width:100%; height:5px; margin:5px 0; padding:0"
-                                    class="overflow-x-visible"
-                                    v-html="formatMessage(m.content)"
-                                >
-                                </span>
-
-                                <br v-if="m.reaction">
-                                <!-- リアクション -->
-                                <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
-                                    {{ getReaction(r[0]) }} {{ r[1] }}
-                                </v-chip>
-
-                            </div>
-                        </div>
                         </template>
                         <!-- ここからホバーメニュー -->
                         <v-card class="pa-2 rounded-lg" color="#222" style="width:fit-content; margin-top:-16px; max-width:500px;">
