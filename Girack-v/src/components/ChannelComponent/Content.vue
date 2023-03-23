@@ -23,6 +23,7 @@ export default {
             
             //URL検出用
             URLRegex: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
+            XSSRegex: /<(|\/|[^>\/bi]|\/[^>bi]|[^\/>][^>]+|\/[^>][^>]+)>/g,
             URLstyle: "color:#607D8B",
         
             //ホバー処理用
@@ -103,7 +104,13 @@ export default {
     methods: {
         //テキストからURLを検出して置き換える
         formatMessage(msg) {
-            return msg.replace(this.URLRegex, (url) => {
+            //XSS対策用
+            let msgCleaned = String(msg).replace(this.XSSRegex, function(c){
+                return '&#'+c.charCodeAt(0)+';';
+                
+            });
+
+            return msgCleaned.replace(this.URLRegex, (url) => {
                 return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
 
             });
