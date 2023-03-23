@@ -34,7 +34,16 @@ export default {
                     return ChannelIndex.value[this.getPath];
 
                 } else {
-                    setTimeout(() => {this.$forceUpdate()}, 1000); //レンダーまた更新させる
+                    //どのチャンネルにも入ってなかったら
+                    if ( Object.entries(ChannelIndex.value).length < 1 ) { 
+                        this.$router.push({ path: "/browser" });
+                        return;
+
+                    } else {
+                        this.$router.push({ path: "/c/" +  Object.entries(ChannelIndex.value)[0][0] });
+
+                    }
+                    
                     return { //とりあえず仮データ返す
                         channelname: "ロード中...",
                         description: "",

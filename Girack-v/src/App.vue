@@ -18,6 +18,7 @@ export default {
     setup() {
         const theme = useTheme();
         return { theme };
+        
     },
     
     data() {
