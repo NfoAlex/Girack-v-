@@ -12,25 +12,30 @@ export default {
 
     data() {
         return {
+            //チャンネルメニューダイアログ用
             channelDialogShow: false,
-            channelDialogId: "0001"
+            channelDialogId: "0001",
+
+            ChannelDisplayname: "...",
+            ChannelDisplayDescription: "...",
+            ChannelScope: "public",
         }
     },
 
     computed: {
+        //今いるパス(チャンネルID)を取得するだけ
         getPath() {
             this.channelDialogId = this.$route.params.id;
             return this.$route.params.id;
 
-        }
-    },
+        },
 
-    methods: {
         //チャンネル情報を取得するだけ
         getChannelInfo() {
             try {
                 //チャンネルインデックスから情報を返す、データなければ仮データを返す
                 if ( ChannelIndex.value[this.getPath] !== undefined ) {
+                    console.log("データを返そうとしている");
                     return ChannelIndex.value[this.getPath];
 
                 } else {
@@ -38,7 +43,6 @@ export default {
                     if ( Object.entries(ChannelIndex.value).length < 1 ) {
                         //チャンネルブラウザへ移動
                         this.$router.push({ path: "/browser" });
-                        return;
 
                     } else {
                         //別のチャンネルへ移動
@@ -48,16 +52,17 @@ export default {
                     
                     return { //とりあえず仮データ返す
                         channelname: "ロード中...",
-                        description: "",
+                        description: "...",
                         scope: "public"
                     }
 
                 }
             }
             catch(e) {
+                console.log("Head :: getChannelInfo : エラー");
                 return { //とりあえず仮データ返す
                     channelname: "ロード中...",
-                    description: "",
+                    description: "...",
                     scope: "public"
                 }
             }
@@ -89,10 +94,10 @@ export default {
 
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
         <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
-            <span v-if="getChannelInfo().scope==='private'" class="mdi mdi-lock"></span>
-            {{ getChannelInfo().channelname }}
+            <span v-if="getChannelInfo.scope==='private'" class="mdi mdi-lock"></span>
+            {{ getChannelInfo.channelname }}
         </div>
-        <p style="font-size:2vh">{{ getChannelInfo().description }}</p>
+        <p style="font-size:2vh">{{ getChannelInfo.description }}</p>
     </div>
     <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row-reverse">
         <v-btn @click="()=>channelDialogShow=!channelDialogShow" size="large" icon="" class="rounded-lg" color="secondary">
