@@ -505,11 +505,8 @@ socket.on("infoUser", (dat) => {
 
 //メッセージの履歴受け取り
 socket.on("messageHistory", (history) => {
-    console.log("messageResult :: history ↓");
-    console.log(history);
-
+    //履歴がそもそも空なら何もしない
     if ( history === 0 ) {
-        console.log("このチャンネル履歴空だわ");
         return;
     
     }
@@ -529,11 +526,14 @@ socket.on("messageHistory", (history) => {
 
     //履歴がすでに存在するなら履歴を頭から追加
     if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
+        //データの追加順的に逆だからここでソートしておく
         history = history.reverse();
+        //履歴を追加
         for ( index in history ) {
             MsgDB.value[channelid].unshift(history[index]);
 
         }
+        //履歴の長さを計算
         ChannelIndex.value[channelid].historyReadCount += history.length;
 
     } else { //存在しないなら新しく追加
