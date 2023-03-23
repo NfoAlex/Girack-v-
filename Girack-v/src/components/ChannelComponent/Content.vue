@@ -20,7 +20,11 @@ export default {
     data() {
         return {
             uri: backendURI, //バックエンドのURI
-
+            
+            //URL検出用
+            URLRegex: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
+            URLstyle: "color:#607D8B",
+        
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
             msgIdHovering: 0, //ホバーされたメッセージのID
@@ -97,6 +101,15 @@ export default {
     },
 
     methods: {
+        //テキストからURLを検出して置き換える
+        formatMessage(msg) {
+            return msg.replace(this.URLRegex, (url) => {
+                return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
+
+            });
+
+        },
+
         //ユーザーの情報取得するだけ
         getUserStats(userid, category) {
             switch(category) {
@@ -468,7 +481,10 @@ export default {
                         style="font-size:16px"
                     >
 
-                        {{ m.content }}
+                        <!-- メッセージ本体 -->
+                        <span v-html="formatMessage(m.content)">
+                        </span>
+                        
 
                         <!-- コンポーネント化予定 -->
                         <span v-if="msgHovered && ( msgIdHovering === m.messageid )" style="float:right">
