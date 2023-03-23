@@ -111,7 +111,46 @@ export default {
             this.switchEditing('desc', false);
             this.switchEditing('channelname', false);
 
+        },
+
+        //検索するユーザーがチャンネルに参加しているかどうかを調べる
+        checkUserJoined(userid) {
+            for ( let index in this.channelJoinedUser ) {
+                if ( this.channelJoinedUser[index].userid === userid ) {
+                    return true;
+
+                }
+
+            }
+
+            return false;
+
+        },
+
+        //チャンネルへユーザーを追加
+        inviteUser(targetUserid) {
+            //チャンネルに参加させる
+            socket.emit("channelAction", {
+                action: "join",
+                channelid: this.channelid,
+                userid: targetUserid,
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
+
+            //チャンネルに参加しているユーザーリストを取得
+            socket.emit("getInfoChannelJoinedUserList", {
+                targetid: this.channelid,
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
+
         }
+
     },
 
     mounted() {
@@ -178,15 +217,53 @@ export default {
     <!-- チャンネルへユーザーを招待するときのユーザー検索画面 -->
     <v-dialog
         v-model="userSearchShow"
-        width="30vw"
+        width="35vw"
+        style="max-width:600px;"
     >
+    
         <v-text-field variant="solo" placeholder="ユーザー名で検索" v-model="userSearchQuery">
         </v-text-field>
+
         <!-- 検索結果 -->
         <div style="height:50vh; max-height:650px; overflow-y:auto;">
-            <v-card v-for="user in userSearchResult" style="padding:16px 0; margin-top:8px;" class="text-left rounded-lg d-flex flex-row">
-                <v-avatar style="margin-left:32px; float:left" size="32" :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
-                <span class="text-center align-self-center" style="margin-left:16px;">{{ user.username }}</span>
+            <v-card
+                v-for="user in userSearchResult"
+                style="padding:16px 0; margin-top:8px;"
+                class="text-left rounded-lg d-flex flex-row align-center"
+            >
+
+                <!-- アバター -->
+                <v-avatar
+                    style="margin-left:32px; float:left"
+                    size="32"
+                    :image="imgsrc + user.userid + '.jpeg'"
+                >
+                </v-avatar>
+
+                <!-- ユーザー名 -->
+                <span class="text-center me-auto" style="margin-left:16px;">
+                    {{ user.username }}
+                </span>
+
+                <!-- ユーザーを追加するボタン -->
+                <span style="margin-right:5%;">
+                    <v-btn
+                        @click="inviteUser(user.userid)"
+                        v-if="!checkUserJoined(user.userid)"
+                        icon="mdi:mdi-account-plus"
+                        class="rounded-lg"
+                        variant="solo"
+                    >
+                    </v-btn>
+                    <v-btn
+                        v-else
+                        icon="mdi:mdi-account-check"
+                        class="rounded-lg"
+                        variant="solo"
+                    >
+                    </v-btn>
+                </span>
+
             </v-card>
         </div>
     </v-dialog>
@@ -277,7 +354,13 @@ export default {
                         <v-icon>mdi:mdi-account-plus</v-icon>
                     </v-btn>
                 </span>
-                <v-card @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}" class="mx-auto text-left pa-1 rounded-lg" style="width:75%; margin-top:8px;" variant="tonal" v-for="u in channelJoinedUser">
+                <v-card
+                    @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}"
+                    class="mx-auto text-left pa-1 rounded-lg"
+                    style="width:75%; margin-top:8px;"
+                    variant="tonal"
+                    v-for="u in channelJoinedUser"
+                >
                     <v-avatar style="margin-left:64px; float:left" size="32" :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
                     <span style="margin-left:16px;" class="text-center">{{ u.username }}</span>
                 </v-card>
