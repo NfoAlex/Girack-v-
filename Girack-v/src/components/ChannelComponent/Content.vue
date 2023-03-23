@@ -460,7 +460,11 @@ export default {
                     >
                         <template v-slot:activator="{ props }">
                             <!-- ホバーで反応する範囲 -->
-                            <div v-bind="props">
+                            <div 
+                                v-bind="props"
+                                @mouseover="mouseOverMsg(m.messageid, 'on')"
+                                @mouseleave="mouseOverMsg(m.messageid, 'off')"
+                            >
                                 <!-- ユーザー名と時間表記 -->
                                 <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
@@ -494,8 +498,6 @@ export default {
                                 </div>
 
                                 <div
-                                    @mouseover="mouseOverMsg(m.messageid, 'on')"
-                                    @mouseleave="mouseOverMsg(m.messageid, 'off')"
                                     style="font-size:16px"
                                     width="100%"
                                 >
