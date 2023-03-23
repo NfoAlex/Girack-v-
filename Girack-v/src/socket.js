@@ -425,8 +425,8 @@ socket.on("infoUser", (dat) => {
 
     UserIndex.value[userid] = {};
 
-    console.log("socket :: infoUser : 情報北");
-    console.log(dat);
+    // console.log("socket :: infoUser : 情報北");
+    // console.log(dat);
 
     //ユーザーインデックス更新
     UserIndex.value[userid].username = username; //名前
