@@ -103,7 +103,7 @@ export default {
 
     methods: {
         //テキストからURLを検出して置き換える
-        formatMessage(msg) {
+        formatMessage(msg, msgIndex) {
             //XSS対策用
             let msgCleaned = String(msg).replace(this.XSSRegex, function(c){
                 return '&#'+c.charCodeAt(0)+';';
@@ -501,9 +501,19 @@ export default {
                                 <span
                                     style="width:100%; height:5px; margin:5px 0; padding:0"
                                     class="overflow-x-visible"
-                                    v-html="formatMessage(m.content)"
+                                    v-html="formatMessage(m.content, index)"
                                 >
                                 </span>
+
+                                <v-card
+                                    v-if="m.urlData"
+                                    class="pa-3 rounded-lg"
+                                    style="height:fit-content; width:65%; margin:8px 0 4px 0;"
+                                    color="#222"
+                                    elevation="6"
+                                >
+                                    urlありますね
+                                </v-card>
 
                                 <br v-if="m.reaction">
                                 <!-- リアクション -->

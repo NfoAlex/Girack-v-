@@ -124,25 +124,56 @@ socket.on("messageReceive", (msg) => {
     try{
         //DB配列に追加
         if ( MsgDB.value[msg.channelid] !== undefined ) {
-            //ローカルDBに追加
-            MsgDB.value[msg.channelid].push({
-                messageid: msg.messageid,
-                userid: msg.userid,
-                channelid: msg.channelid,
-                time: msg.time,
-                content: msg.content,
-                reaction: msg.reaction
-            });
+            //もしURLがあるならそのデータも含める
+            if ( msg.urlData !== undefined ) {
+                MsgDB.value[msg.channelid].push({
+                    messageid: msg.messageid,
+                    userid: msg.userid,
+                    channelid: msg.channelid,
+                    time: msg.time,
+                    content: msg.content,
+                    urlData: msg.urlData,
+                    reaction: msg.reaction
+                });
+
+            } else {
+                //ローカルDBに追加
+                MsgDB.value[msg.channelid].push({
+                    messageid: msg.messageid,
+                    userid: msg.userid,
+                    channelid: msg.channelid,
+                    time: msg.time,
+                    content: msg.content,
+                    reaction: msg.reaction
+                });
+
+            }
+            
 
         } else { //配列が空なら新しく作成、配置
-            MsgDB.value[msg.channelid] = [{
-                messageid: msg.messageid,
-                userid: msg.userid,
-                channelid: msg.channelid,
-                time: msg.time,
-                content: msg.content,
-                reaction: msg.reaction
-            }];
+            //もしURLがあるならそのデータも含める
+            if ( msg.urlData !== undefined ) {
+                MsgDB.value[msg.channelid] = [{
+                    messageid: msg.messageid,
+                    userid: msg.userid,
+                    channelid: msg.channelid,
+                    time: msg.time,
+                    content: msg.content,
+                    urlData: msg.urlData,
+                    reaction: msg.reaction
+                }];
+            
+            } else {
+                MsgDB.value[msg.channelid] = [{
+                    messageid: msg.messageid,
+                    userid: msg.userid,
+                    channelid: msg.channelid,
+                    time: msg.time,
+                    content: msg.content,
+                    reaction: msg.reaction
+                }];
+
+            }
 
         }
 
@@ -217,6 +248,18 @@ socket.on("messageUpdate", (dat) => {
             for ( let index in MsgDB.value[dat.channelid] ) {
                 if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
                     MsgDB.value[dat.channelid][index].reaction = dat.reaction; //リアクション更新
+
+                }
+
+            }
+            break;
+
+        //URLプレビュー用のデータを追加
+        case "urlData":
+            //メッセージIDで探索して更新
+            for ( let index in MsgDB.value[dat.channelid] ) {
+                if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
+                    MsgDB.value[dat.channelid][index].urlData = dat.urlData; //リアクション更新
 
                 }
 
