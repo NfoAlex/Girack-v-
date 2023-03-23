@@ -34,12 +34,14 @@ export default {
                     return ChannelIndex.value[this.getPath];
 
                 } else {
-                    //どのチャンネルにも入ってなかったら
-                    if ( Object.entries(ChannelIndex.value).length < 1 ) { 
+                    //どのチャンネルにも参加していないのなら
+                    if ( Object.entries(ChannelIndex.value).length < 1 ) {
+                        //チャンネルブラウザへ移動
                         this.$router.push({ path: "/browser" });
                         return;
 
                     } else {
+                        //別のチャンネルへ移動
                         this.$router.push({ path: "/c/" +  Object.entries(ChannelIndex.value)[0][0] });
 
                     }
