@@ -406,6 +406,7 @@ socket.on("infoResult", (dat) => {
 socket.on("infoChannel", (dat) => {
     console.log("socket :: infoChannel : チャンネル情報更新");
 
+    //チャンネルデータを更新
     ChannelIndex.value[dat.channelid] = {
         channelname: dat.channelname, //チャンネル名
         description: dat.description, //チャンネル概要
