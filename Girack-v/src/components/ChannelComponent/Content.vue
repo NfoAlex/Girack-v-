@@ -107,7 +107,7 @@ export default {
             //XSS対策用
             let msgCleaned = String(msg).replace(this.XSSRegex, function(c){
                 return '&#'+c.charCodeAt(0)+';';
-                
+
             });
 
             return msgCleaned.replace(this.URLRegex, (url) => {
@@ -482,44 +482,70 @@ export default {
                     </div>
                     
                     <!-- ToDo:ここのフォントサイズの調整 -->
-                    <p
+                    <div
                         @mouseover="mouseOverMsg(m.messageid, 'on')"
                         @mouseleave="mouseOverMsg(m.messageid, 'off')"
                         style="font-size:16px"
+                        width="100%"
                     >
 
                         <!-- メッセージ本体 -->
-                        <span v-html="formatMessage(m.content)">
-                        </span>
-                        
+                          <!-- v-menuはホバーメニュー用 -->
+                        <v-menu
+                            open-on-hover
+                            open-delay="0"
+                            close-delay="0"
+                            :close-on-content-click="false"
+                            location="top"
+                            style="width:100%"
+                        >
 
-                        <!-- コンポーネント化予定 -->
-                        <span v-if="msgHovered && ( msgIdHovering === m.messageid )" style="float:right">
-                            <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === m.messageid )">
-                                {{ printDate(m.time) }}
-                            </span>
-                            <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                😀
-                            </v-btn>
-                            <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                🤔
-                            </v-btn>
-                            <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                😰
-                            </v-btn>
-                            <!-- 削除ボタン -->
-                            <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||(getUserStats(m.userid, 'role')!=='Admin'&&Userinfo.role==='Moderator')||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                削除
-                            </v-btn>
-                        </span>
+                            <!-- メッセージ本文 -->
+                            <template width="100%" v-slot:activator="{ props }">
+                                <span width="100%" v-bind="props">
+                                    <span
+                                        style="width:100%; height:5px; margin:5px 0; padding:0"
+                                        class="overflow-x-visible"
+                                        v-html="formatMessage(m.content)"
+                                    >
+                                    </span>
+                                </span>
+                            </template>
+
+                            <v-card class="pa-3 rounded-lg" color="#222" style="width:fit-content; max-width:500px;">
+                                
+                                <!-- ここからホバーメニュー -->
+                                  <!-- コンポーネント化予定 -->
+                                <span style="position:relative; float:right;">
+                                    <span style="margin-right:12px;" class="text-body-2 font-italic">
+                                        {{ printDate(m.time) }}
+                                    </span>
+                                    <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                        😀
+                                    </v-btn>
+                                    <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                        🤔
+                                    </v-btn>
+                                    <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                        😰
+                                    </v-btn>
+                                    <!-- 削除ボタン -->
+                                    <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||(getUserStats(m.userid, 'role')!=='Admin'&&Userinfo.role==='Moderator')||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                        削除
+                                    </v-btn>
+                                </span>
+
+                            </v-card>
+
+                        </v-menu>
 
                         <br v-if="m.reaction">
                         <!-- リアクション -->
-                        <v-chip style="margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                        <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
                             {{ getReaction(r[0]) }} {{ r[1] }}
                         </v-chip>
 
-                    </p>
+                    </div>
 
                 </span>
             </div>
