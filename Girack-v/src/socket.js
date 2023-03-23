@@ -221,6 +221,7 @@ socket.on("messageUpdate", (dat) => {
                 }
 
             }
+            break;
 
         default:
             break;
