@@ -4,13 +4,18 @@ import { getSocket, dataChannel, dataUser, backendURI } from '../../socket';
 import Userpage from "../Userpage.vue";
 
 const socket = getSocket();
-const { Userinfo } = dataUser();
 const { ChannelIndex } = dataChannel();
 
 export default {
 
     props: ["channelid"],
     components: { Userpage },
+
+    setup() {
+        const { Userinfo } = dataUser();
+        return { Userinfo };
+
+    },
 
     data() {
         return {
@@ -58,8 +63,8 @@ export default {
                         socket.emit("searchUserDynamic", {
                             query: this.userSearchQuery,
                             reqSender: {
-                                userid: Userinfo.value.userid,
-                                sessionid: Userinfo.value.sessionid
+                                userid: this.Userinfo.userid,
+                                sessionid: this.Userinfo.sessionid
                             }
                         })
 
@@ -102,8 +107,8 @@ export default {
                 description: this.descriptionText,
                 scope: (this.scopeIsPrivate?"private":"public"),
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
 
@@ -135,8 +140,8 @@ export default {
                 channelid: this.channelid,
                 userid: targetUserid,
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
 
@@ -144,8 +149,34 @@ export default {
             socket.emit("getInfoChannelJoinedUserList", {
                 targetid: this.channelid,
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
+
+        },
+
+        //チャンネルから特定のユーザーを蹴る
+        kickUser(targetUserid) {
+            console.log("ChannelConfig :: kickUser : kicking user -> " + targetUserid);
+
+            //チャンネルからキック
+            socket.emit("channelAction", {
+                action: "leave",
+                channelid: this.channelid,
+                userid: targetUserid,
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
+
+            //チャンネルに参加しているユーザーリストを取得、更新する
+            socket.emit("getInfoChannelJoinedUserList", {
+                targetid: this.channelid,
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
 
@@ -186,8 +217,8 @@ export default {
         socket.emit("getInfoChannelJoinedUserList", {
             targetid: this.channelid,
             reqSender: {
-                userid: Userinfo.value.userid,
-                sessionid: Userinfo.value.sessionid
+                userid: this.Userinfo.userid,
+                sessionid: this.Userinfo.sessionid
             }
         });
 
@@ -363,6 +394,16 @@ export default {
                 >
                     <v-avatar style="margin-left:64px; float:left" size="32" :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
                     <span style="margin-left:16px;" class="text-center">{{ u.username }}</span>
+                    <span v-if="Userinfo.role!=='Member'" style="float:right" class="text-center">
+                        <v-btn
+                            @click.stop="kickUser(u.userid)"
+                            size="small"
+                            class="rounded-lg"
+                            variant="solo"
+                            icon="mdi:mdi-karate"
+                        >
+                        </v-btn>
+                    </span>
                 </v-card>
                 
             </v-window-item>
