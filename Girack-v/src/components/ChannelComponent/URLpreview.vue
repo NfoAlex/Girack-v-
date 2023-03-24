@@ -22,7 +22,32 @@ export default {
 
         <!-- ウェブサイト用 -->
         <v-card
-            v-if="(link.mediaType==='website' || link.mediaType==='article') && (link.title!=='')"
+            v-if="link.mediaType==='website' && (link.title!=='')"
+            style="width:100%; overflow-y:scroll;"
+            color="#222"
+            class="pa-3 rounded-lg"
+        >
+            <div class="d-flex flex-row align-center">
+                <v-avatar style="margin:16px 4px; float:left;" :image="link.favicon" size="32">
+                </v-avatar>
+                
+                <!-- 記事のタイトル -->
+                <p class="text-subtitle-1">
+                    <a :href="link.url" target="_blank">
+                        {{ link.title }}
+                    </a>
+                </p>
+            </div>
+
+            <!-- 記事の概要 -->
+            <p v-if="link.description" class="text-subtitle-2 ma-3 text-medium-emphasis">
+                {{ link.description }}
+            </p>
+        </v-card>
+
+        <!-- 記事あるいは画像メインの何か用 -->
+        <v-card
+            v-if="link.mediaType==='article' && (link.title!=='')"
             style="width:100%; overflow-y:scroll;"
             color="#222"
             class="pa-3 rounded-lg"
