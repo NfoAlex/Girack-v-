@@ -194,11 +194,13 @@ socket.on("messageUpdate", (dat) => {
     //メッセージ消したりリアクションされたり
     /*
     {
-        action: "delete"|"reaction",
+        action: "delete"|"reaction|"urlData",
         channelid: dat.channelid,
         messageid: dat.messageid,
         ["reaction"だったら]
         reaction: dat.reaction
+        ["urlData"だったら]
+        urlData: dat.urlData
     }
     */
 

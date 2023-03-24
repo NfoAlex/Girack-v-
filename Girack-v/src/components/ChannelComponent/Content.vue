@@ -512,9 +512,10 @@ export default {
                                     style="height:fit-content; width:65%; padding: 16px 32px; margin-top:8px;"
                                     color="#222"
                                     elevation="6"
+                                    v-for="link in m.urlData.data"
                                 >
-                                    <p class="text-h6">{{ m.urlData.data.title }}</p>
-                                    <p class="text-subtitle-2">{{ m.urlData.data.description }}</p>
+                                    <p class="text-h6">{{ link.title }}</p>
+                                    <p class="text-subtitle-2">{{ link.description }}</p>
                                 </v-card>
 
                                 <br v-if="m.reaction">
