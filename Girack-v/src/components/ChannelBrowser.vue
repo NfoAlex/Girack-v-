@@ -52,6 +52,7 @@ export default {
             socket.emit("channelAction", {
                 action: "join",
                 channelid: channelid, //参加するチャンネルのid
+                userid: Userinfo.value.userid, //参加する人のユーザーID(この場合自分)
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -75,6 +76,7 @@ export default {
             socket.emit("channelAction", {
                 action: "leave",
                 channelid: channelid, //抜けるチャンネルのID
+                userid: Userinfo.value.userid, //抜ける人のユーザーID(この場合自分)
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
@@ -198,11 +200,12 @@ export default {
             </v-textarea>
 
             <v-checkbox
+                class="mx-auto"
                 v-model="channelCreatePrivate"
                 label="プライベートチャンネル"
             ></v-checkbox>
 
-            <v-btn variant="outlined" @click="channelCreate">
+            <v-btn color="primary" @click="channelCreate">
                 作成!
             </v-btn>
 
@@ -221,13 +224,13 @@ export default {
                 チャンネル削除していいの？
             </v-card-title>
 
-            <p style="margin:24px 0 8px 0;" class="text-h4 text-center">
+            <p style="margin:24px 0 24px 0;" class="text-h4 text-center">
                 {{ channelRemovingName }}
             </p>
 
             <br>
 
-            <v-btn variant="outlined" color="red" @click="channelRemoveConfirm(channelRemovingId)">
+            <v-btn color="red" @click="channelRemoveConfirm(channelRemovingId)">
                 削除
             </v-btn>
 
@@ -246,7 +249,7 @@ export default {
                     location="bottom"
                 >
                     チャンネル作成
-            </v-tooltip>
+                </v-tooltip>
             </v-btn>
         </div>
         <br>
@@ -255,7 +258,7 @@ export default {
                 v-for="c in Object.entries(channelList)"
                 style="padding:0;"
             >
-                <v-card variant="tonal" class="rounded-lg" style="padding:2% 2%; margin-top:16px;">
+                <v-card variant="tonal" class="rounded-lg" style="padding:8px 16px; margin-top:16px;">
                     
                     <p class="text-h6">
 

@@ -1,11 +1,11 @@
 <script setup>
 import { setCookie, getSocket, dataUser, backendURI } from '../../socket.js';
-//const { Userinfo } = dataUser();
 </script>
 
 <script>
 const socket = getSocket();
 const { Userinfo } = dataUser();
+
 export default {
     
     data() {

@@ -1,5 +1,6 @@
 <script setup>
 import { dataChannel, dataUser } from '../../socket';
+import ChannelConfig from "./ChannelConfig.vue";
 </script>
 
 <script>
@@ -7,38 +8,62 @@ const { ChannelIndex } = dataChannel(); //チャンネル情報
 
 export default {
 
-    computed: {
-        getPath() {
-            return this.$route.params.id;
+    components: { ChannelConfig },
 
+    data() {
+        return {
+            //チャンネルメニューダイアログ用
+            channelDialogShow: false,
+            channelDialogId: "0001",
+
+            ChannelDisplayname: "...",
+            ChannelDisplayDescription: "...",
+            ChannelScope: "public",
         }
     },
 
-    methods: {
+    computed: {
+        //今いるパス(チャンネルID)を取得するだけ
+        getPath() {
+            this.channelDialogId = this.$route.params.id;
+            return this.$route.params.id;
+
+        },
+
         //チャンネル情報を取得するだけ
         getChannelInfo() {
-            console.log("getChannelInfo :: ");
-            console.log(ChannelIndex.value[this.getPath]);
             try {
                 //チャンネルインデックスから情報を返す、データなければ仮データを返す
                 if ( ChannelIndex.value[this.getPath] !== undefined ) {
+                    console.log("データを返そうとしている");
                     return ChannelIndex.value[this.getPath];
 
                 } else {
-                    setTimeout(() => {this.$forceUpdate()}, 1000); //レンダーまた更新させる
+                    //どのチャンネルにも参加していないのなら
+                    if ( Object.entries(ChannelIndex.value).length < 1 ) {
+                        //チャンネルブラウザへ移動
+                        this.$router.push({ path: "/browser" });
+
+                    } else {
+                        //別のチャンネルへ移動
+                        this.$router.push({ path: "/c/" +  Object.entries(ChannelIndex.value)[0][0] });
+
+                    }
+                    
                     return { //とりあえず仮データ返す
                         channelname: "ロード中...",
-                        description: "",
-                        scope: "open"
+                        description: "...",
+                        scope: "public"
                     }
 
                 }
             }
             catch(e) {
+                console.log("Head :: getChannelInfo : エラー");
                 return { //とりあえず仮データ返す
                     channelname: "ロード中...",
-                    description: "",
-                    scope: "open"
+                    description: "...",
+                    scope: "public"
                 }
             }
 
@@ -59,15 +84,25 @@ export default {
 </script>
 
 <template>
-    <div style="padding: 0 32px; float:left;">
-        <div style="font-size:3vh">
-            <span v-if="getChannelInfo().scope==='private'" class="mdi mdi-lock"></span>
-            {{ getChannelInfo().channelname }}
+
+    <v-dialog
+        v-model="channelDialogShow"
+        style="width:50vw; max-width:650px;"
+    >
+        <ChannelConfig :channelid="channelDialogId" />
+    </v-dialog>
+
+    <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
+        <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
+            <span v-if="getChannelInfo.scope==='private'" class="mdi mdi-lock"></span>
+            {{ getChannelInfo.channelname }}
         </div>
-        <p style="font-size:2vh">{{ getChannelInfo().description }}</p>
+        <p style="font-size:2vh">{{ getChannelInfo.description }}</p>
     </div>
-    <div style="width:40%; float:right; padding-top:1%;" class="d-flex flex-row-reverse">
-        <!-- <v-chip>Funky</v-chip> -->
+    <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row-reverse">
+        <v-btn @click="()=>channelDialogShow=!channelDialogShow" size="large" icon="" class="rounded-lg" color="secondary">
+            <v-icon>mdi:mdi-menu</v-icon>
+        </v-btn>
     </div>
     
 </template>

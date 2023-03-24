@@ -1,6 +1,7 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel } from "../../socket.js";
 import Userpage from "../Userpage.vue";
+import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
 // const { Userinfo } = dataUser(); //ユーザー情報
 // const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
@@ -15,12 +16,17 @@ export default {
 
     },
 
-    components: { Userpage }, //ユーザーページ用
+    components: { Userpage, URLpreview }, //ユーザーページ用
 
     data() {
         return {
             uri: backendURI, //バックエンドのURI
-
+            
+            //URL検出用
+            URLRegex: /((https|http)?:\/\/[^\s]+)/g,
+            XSSRegex: /<(|\/|[^>\/bi]|\/[^>bi]|[^\/>][^>]+|\/[^>][^>]+)>/g,
+            URLstyle: "color:#607D8B",
+        
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
             msgIdHovering: 0, //ホバーされたメッセージのID
@@ -97,6 +103,21 @@ export default {
     },
 
     methods: {
+        //テキストからURLを検出して置き換える
+        formatMessage(msg) {
+            //XSS対策用
+            let msgCleaned = String(msg).replace(this.XSSRegex, function(c){
+                return '&#'+c.charCodeAt(0)+';';
+
+            });
+
+            return msgCleaned.replace(this.URLRegex, (url) => {
+                return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
+
+            });
+
+        },
+
         //ユーザーの情報取得するだけ
         getUserStats(userid, category) {
             switch(category) {
@@ -317,8 +338,13 @@ export default {
         //スクロール位置によって一番下に行くボタンの表示切り替えをする
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
+
             //一番下？
-            if ( s || channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight ) {
+            if (
+                s || //そもそも引数でtrueと渡されているなら
+                channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight || //スクロール位置を計算
+                channelWindow.offsetHeight >= channelWindow.scrollHeight //もし縦幅がそもそも画面におさまっているなら
+            ) {
                 this.StateScrolled = true; //スクロールしきったと保存
                 this.MsgReadTime[this.getPath] = {
                     new: 0 //新着メッセージ数を0に
@@ -423,77 +449,103 @@ export default {
 
                 <!-- メッセージ本体 -->
                 <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
-                    
-                    <!-- ユーザー名と時間表記 -->
-                    <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
-                        <!-- ユーザー名 -->
-                        {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
-                        
-                        <!-- ロールバッジ -->
-                        <v-chip
-                            v-if="getUserStats(m.userid, 'role')!=='Member'"
-                            :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
-                            size="x-small"
-                            :elevation="6"
-                        >
-                            {{ getUserStats(m.userid, 'role') }}
-                        </v-chip>
-
-                        <!-- BANされたバッジ -->
-                        <v-chip
-                            v-if="getUserStats(m.userid, 'banned')"
-                            color="red"
-                            size="x-small"
-                            :elevation="6"
-                        >
-                            BANNED
-                        </v-chip>
-
-                        <!-- タイムスタンプ -->
-                        <span style="margin-right:12px" class="text-body-2 font-italic">
-                            {{ printDate(m.time) }}
-                        </span>
-                        
-                    </div>
-                    
-                    <!-- ToDo:ここのフォントサイズの調整 -->
-                    <p
-                        @mouseover="mouseOverMsg(m.messageid, 'on')"
-                        @mouseleave="mouseOverMsg(m.messageid, 'off')"
-                        style="font-size:16px"
+                    <!-- メッセージ本体 -->
+                      <!-- v-menuはホバーメニュー用 -->
+                    <v-menu
+                        open-on-hover
+                        open-delay="0"
+                        close-delay="0"
+                        :close-on-content-click="false"
+                        location="end top"
+                        origin="overlap"
                     >
+                        <template v-slot:activator="{ props }">
+                            <!-- ホバーで反応する範囲 -->
+                            <div 
+                                v-bind="props"
+                                @mouseover="mouseOverMsg(m.messageid, 'on')"
+                                @mouseleave="mouseOverMsg(m.messageid, 'off')"
+                            >
+                                <!-- ユーザー名と時間表記 -->
+                                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
+                                    <!-- ユーザー名 -->
+                                    {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
+                                    
+                                    <!-- ロールバッジ -->
+                                    <v-chip
+                                        v-if="getUserStats(m.userid, 'role')!=='Member'"
+                                        :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
+                                        size="x-small"
+                                        :elevation="6"
+                                    >
+                                        {{ getUserStats(m.userid, 'role') }}
+                                    </v-chip>
 
-                        {{ m.content }}
+                                    <!-- BANされたバッジ -->
+                                    <v-chip
+                                        v-if="getUserStats(m.userid, 'banned')"
+                                        color="red"
+                                        size="x-small"
+                                        :elevation="6"
+                                    >
+                                        BANNED
+                                    </v-chip>
 
-                        <!-- コンポーネント化予定 -->
-                        <span v-if="msgHovered && ( msgIdHovering === m.messageid )" style="float:right">
-                            <span style="margin-right:12px" class="text-body-2 font-italic" v-if="msgHovered && ( msgIdHovering === m.messageid )">
-                                {{ printDate(m.time) }}
+                                    <!-- タイムスタンプ -->
+                                    <span style="margin-right:12px" class="text-body-2 font-italic">
+                                        {{ printDate(m.time) }}
+                                    </span>
+                                    
+                                </div>
+
+                                <!-- メッセージ本文 -->
+                                <span
+                                    style="width:100%; height:5px; margin:5px 0; padding:0"
+                                    class="overflow-x-visible"
+                                    v-html="formatMessage(m.content)"
+                                >
+                                </span>
+
+                                <!-- URLプレビュー用 -->
+                                <URLpreview v-if="m.hasUrl" :urlData="m.urlData" />
+
+                                <br v-if="m.reaction">
+                                <!-- リアクション -->
+                                <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                                    {{ getReaction(r[0]) }} {{ r[1] }}
+                                </v-chip>
+
+                            </div>
+                        </template>
+                        <!-- ここからホバーメニュー -->
+                        <v-card class="pa-2 rounded-lg" color="#222" style="width:fit-content; margin-top:-16px; max-width:500px;">
+                            
+                            <!-- ここからホバーメニュー -->
+                              <!-- コンポーネント化予定 -->
+                            <span style="position:relative; float:right;">
+                                <span style="margin-right:12px;" class="text-body-2 font-italic">
+                                    {{ printDate(m.time) }}
+                                </span>
+                                <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                    😀
+                                </v-btn>
+                                <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                    🤔
+                                </v-btn>
+                                <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                    😰
+                                </v-btn>
+                                <!-- 削除ボタン -->
+                                <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||(getUserStats(m.userid, 'role')!=='Admin'&&Userinfo.role==='Moderator')||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
+                                    削除
+                                </v-btn>
                             </span>
-                            <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                😀
-                            </v-btn>
-                            <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                🤔
-                            </v-btn>
-                            <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                😰
-                            </v-btn>
-                            <!-- 削除ボタン -->
-                            <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||(getUserStats(m.userid, 'role')!=='Admin'&&Userinfo.role==='Moderator')||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                削除
-                            </v-btn>
-                        </span>
 
-                        <br v-if="m.reaction">
-                        <!-- リアクション -->
-                        <v-chip style="margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
-                            {{ getReaction(r[0]) }} {{ r[1] }}
-                        </v-chip>
-
-                    </p>
-
+                        </v-card>
+                    </v-menu>
+                
                 </span>
+                
             </div>
 
         </div>

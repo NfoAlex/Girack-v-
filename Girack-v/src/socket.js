@@ -56,7 +56,6 @@ export function dataChannel() {
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-//ref テスト用 メッセージDB（履歴）
 
 //メッセージ履歴DB
 const MsgDB = ref({
@@ -125,15 +124,17 @@ socket.on("messageReceive", (msg) => {
     try{
         //DB配列に追加
         if ( MsgDB.value[msg.channelid] !== undefined ) {
-            //ローカルDBに追加
             MsgDB.value[msg.channelid].push({
                 messageid: msg.messageid,
                 userid: msg.userid,
                 channelid: msg.channelid,
                 time: msg.time,
                 content: msg.content,
+                hasUrl : msg.hasUrl,
+                urlData: msg.urlData,
                 reaction: msg.reaction
             });
+            
 
         } else { //配列が空なら新しく作成、配置
             MsgDB.value[msg.channelid] = [{
@@ -142,6 +143,8 @@ socket.on("messageReceive", (msg) => {
                 channelid: msg.channelid,
                 time: msg.time,
                 content: msg.content,
+                hasUrl : msg.hasUrl,
+                urlData: msg.urlData,
                 reaction: msg.reaction
             }];
 
@@ -191,11 +194,13 @@ socket.on("messageUpdate", (dat) => {
     //メッセージ消したりリアクションされたり
     /*
     {
-        action: "delete"|"reaction",
+        action: "delete"|"reaction|"urlData",
         channelid: dat.channelid,
         messageid: dat.messageid,
         ["reaction"だったら]
         reaction: dat.reaction
+        ["urlData"だったら]
+        urlData: dat.urlData
     }
     */
 
@@ -214,8 +219,7 @@ socket.on("messageUpdate", (dat) => {
 
         //リアクションをつける
         case "reaction":
-            console.log("Content :: これからリアクション");
-            console.log(dat);
+            //メッセージIDで探索して更新
             for ( let index in MsgDB.value[dat.channelid] ) {
                 if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
                     MsgDB.value[dat.channelid][index].reaction = dat.reaction; //リアクション更新
@@ -223,6 +227,19 @@ socket.on("messageUpdate", (dat) => {
                 }
 
             }
+            break;
+
+        //URLプレビュー用のデータを追加
+        case "urlData":
+            //メッセージIDで探索して更新
+            for ( let index in MsgDB.value[dat.channelid] ) {
+                if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
+                    MsgDB.value[dat.channelid][index].urlData = dat.urlData; //リアクション更新
+
+                }
+
+            }
+            break;
 
         default:
             break;
@@ -408,6 +425,7 @@ socket.on("infoResult", (dat) => {
 socket.on("infoChannel", (dat) => {
     console.log("socket :: infoChannel : チャンネル情報更新");
 
+    //チャンネルデータを更新
     ChannelIndex.value[dat.channelid] = {
         channelname: dat.channelname, //チャンネル名
         description: dat.description, //チャンネル概要
@@ -426,8 +444,8 @@ socket.on("infoUser", (dat) => {
 
     UserIndex.value[userid] = {};
 
-    console.log("socket :: infoUser : 情報北");
-    console.log(dat);
+    // console.log("socket :: infoUser : 情報北");
+    // console.log(dat);
 
     //ユーザーインデックス更新
     UserIndex.value[userid].username = username; //名前
@@ -507,14 +525,14 @@ socket.on("infoUser", (dat) => {
 
 //メッセージの履歴受け取り
 socket.on("messageHistory", (history) => {
-    console.log("messageResult :: history ↓");
-    console.log(history);
-
+    //履歴がそもそも空なら何もしない
     if ( history === 0 ) {
-        console.log("このチャンネル履歴空だわ");
         return;
     
     }
+
+    console.log("socket :: messageHistory : history -> ");
+    console.log(history);
 
     let channelid = ""; //履歴を入れるチャンネルID
 
@@ -531,11 +549,14 @@ socket.on("messageHistory", (history) => {
 
     //履歴がすでに存在するなら履歴を頭から追加
     if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
+        //データの追加順的に逆だからここでソートしておく
         history = history.reverse();
+        //履歴を追加
         for ( index in history ) {
             MsgDB.value[channelid].unshift(history[index]);
 
         }
+        //履歴の長さを計算
         ChannelIndex.value[channelid].historyReadCount += history.length;
 
     } else { //存在しないなら新しく追加
