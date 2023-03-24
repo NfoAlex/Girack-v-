@@ -10,21 +10,37 @@ export default {
 
 <template>
     <div
-        style="height:fit-content; max-height:500px; max-width:500px; width:80%; margin-top:8px;"
+        style="height:fit-content; max-height:450px; max-width:800px; width:65%; margin-top:8px; overflow-y:scroll"
         color="#222"
-        elevation="6"
+        class="overflow-y-hidden d-flex flex-row"
         v-for="link in urlData.data"
     >
 
-        <v-card v-if="link.mediaType==='website'" style="width:100%" class="pa-3 rounded-lg">
-            <p class="text-h6">{{ link.title }}</p>
-            <p class="text-subtitle-2">{{ link.description }}</p>
+        <v-card
+            v-if="link.mediaType==='website' || link.mediaType==='article'"
+            style="width:100%; overflow-y:scroll;"
+            color="#222"
+            class="pa-3 rounded-lg"
+        >
+            <v-img v-if="link.img" :src="link.img">
+            </v-img>
+
+            <v-avatar style="margin:16px 4px;" :image="link.favicon" size="32"></v-avatar>
+
+            <p class="text-h6">
+                <a :href="link.url" target="_blank">
+                    {{ link.title }}
+                </a>
+            </p>
+
+            <p class="text-subtitle-2 ma-3 text-medium-emphasis">{{ link.description }}</p>
         </v-card>
 
 
         <v-card
             v-if="link.mediaType==='image'"
             class="rounded-lg pa-2"
+            color="#222"
             style="width:fit-content;"
         >
             <div class="mx-auto">
