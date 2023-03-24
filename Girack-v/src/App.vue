@@ -160,7 +160,6 @@ export default {
                             :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
                             style="width:100%; font-size:1.35vb"
                         >
-
                             {{ l[1].channelname.length>15?l[1].channelname.substring(0,13)+"...":l[1].channelname }}
                             <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
                             
