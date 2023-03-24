@@ -28,7 +28,7 @@ export default {
             class="pa-3 rounded-lg"
         >
             <div class="d-flex flex-row align-center">
-                <v-avatar style="margin:16px 4px; float:left;" :image="link.favicon" size="32">
+                <v-avatar class="rounded-lg" style="margin:16px 4px; float:left;" :image="link.favicon" size="32">
                 </v-avatar>
                 
                 <!-- 記事のタイトル -->
@@ -55,7 +55,7 @@ export default {
             <v-img v-if="link.img" :src="link.img">
             </v-img>
 
-            <v-avatar style="margin:16px 4px;" :image="link.favicon" size="32"></v-avatar>
+            <v-avatar class="rounded-lg" style="margin:16px 4px;" :image="link.favicon" size="32"></v-avatar>
 
             <!-- 記事のタイトル -->
             <p class="text-subtitle-1">
