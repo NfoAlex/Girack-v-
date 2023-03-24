@@ -73,7 +73,7 @@ export default {
                     <!-- 記事のタイトル -->
                     <p class="text-subtitle-2">
                         <a :href="link.url" target="_blank">
-                            {{ link.title }}
+                            {{ link.title.length>100 ? link.title.substring(0,100)+"..." : link.title }}
                         </a>
                     </p>
 
