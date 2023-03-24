@@ -509,11 +509,12 @@ export default {
                                 <!-- URLプレビュー用 -->
                                 <URLpreview v-if="m.hasUrl" :urlData="m.urlData" />
 
-                                <br v-if="m.reaction">
                                 <!-- リアクション -->
-                                <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
-                                    {{ getReaction(r[0]) }} {{ r[1] }}
-                                </v-chip>
+                                <div>
+                                    <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                                        {{ getReaction(r[0]) }} {{ r[1] }}
+                                    </v-chip>
+                                </div>
 
                             </div>
                         </template>
