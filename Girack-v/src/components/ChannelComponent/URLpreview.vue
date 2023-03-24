@@ -4,6 +4,10 @@ export default {
 
     props: ["urlData"],
 
+    mounted() {
+
+    }
+
 }
 
 </script>
@@ -27,7 +31,7 @@ export default {
 
             <v-avatar style="margin:16px 4px;" :image="link.favicon" size="32"></v-avatar>
 
-            <p class="text-h6">
+            <p class="text-subtitle-1">
                 <a :href="link.url" target="_blank">
                     {{ link.title }}
                 </a>
