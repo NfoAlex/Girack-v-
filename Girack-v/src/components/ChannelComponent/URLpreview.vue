@@ -15,7 +15,7 @@ export default {
 <template>
     <div v-for="link in urlData.data">
         <div
-            style="height:fit-content; max-height:400px; max-width:800px; width:95%; margin-top:8px; overflow-y:scroll"
+            style="height:fit-content; max-height:400px; max-width:800px; width:95%; margin:8px 0; overflow-y:scroll"
             color="#222"
             class="overflow-y-hidden d-flex flex-row"
             v-if="link.title!==''"
