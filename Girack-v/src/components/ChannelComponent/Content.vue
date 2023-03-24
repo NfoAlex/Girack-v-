@@ -1,6 +1,7 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel } from "../../socket.js";
 import Userpage from "../Userpage.vue";
+import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
 // const { Userinfo } = dataUser(); //ユーザー情報
 // const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
@@ -15,7 +16,7 @@ export default {
 
     },
 
-    components: { Userpage }, //ユーザーページ用
+    components: { Userpage, URLpreview }, //ユーザーページ用
 
     data() {
         return {
@@ -506,24 +507,7 @@ export default {
                                 </span>
 
                                 <!-- URLプレビュー用 -->
-                                <div
-                                    v-if="m.hasUrl"
-                                    style="height:fit-content; max-height:500px; max-width:500px; width:80%; margin-top:8px;"
-                                    color="#222"
-                                    elevation="6"
-                                    v-for="link in m.urlData.data"
-                                >
-                                    <v-card v-if="link.mediaType==='website'" style="width:100%" class="pa-3 rounded-lg">
-                                        <p class="text-h6">{{ link.title }}</p>
-                                        <p class="text-subtitle-2">{{ link.description }}</p>
-                                    </v-card>
-                                    <v-card v-if="link.mediaType==='image'" class="rounded-lg">
-                                        <div class="mx-auto">
-                                            <v-img style="margin:8px 4px; width:auto; max-height:300px;" :src="link.url">
-                                            </v-img>
-                                        </div>
-                                    </v-card>
-                                </div>
+                                <URLpreview v-if="m.hasUrl" :urlData="m.urlData" />
 
                                 <br v-if="m.reaction">
                                 <!-- リアクション -->
