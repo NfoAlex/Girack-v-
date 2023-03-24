@@ -506,17 +506,24 @@ export default {
                                 </span>
 
                                 <!-- URLプレビュー用 -->
-                                <v-card
+                                <div
                                     v-if="m.hasUrl"
-                                    class="rounded-lg"
-                                    style="height:fit-content; width:65%; padding: 16px 32px; margin-top:8px;"
+                                    style="height:fit-content; max-height:500px; max-width:500px; width:80%; margin-top:8px;"
                                     color="#222"
                                     elevation="6"
                                     v-for="link in m.urlData.data"
                                 >
-                                    <p class="text-h6">{{ link.title }}</p>
-                                    <p class="text-subtitle-2">{{ link.description }}</p>
-                                </v-card>
+                                    <v-card v-if="link.mediaType==='website'" style="width:100%" class="pa-3 rounded-lg">
+                                        <p class="text-h6">{{ link.title }}</p>
+                                        <p class="text-subtitle-2">{{ link.description }}</p>
+                                    </v-card>
+                                    <v-card v-if="link.mediaType==='image'" class="rounded-lg">
+                                        <div class="mx-auto">
+                                            <v-img style="margin:8px 4px; width:auto; max-height:300px;" :src="link.url">
+                                            </v-img>
+                                        </div>
+                                    </v-card>
+                                </div>
 
                                 <br v-if="m.reaction">
                                 <!-- リアクション -->
