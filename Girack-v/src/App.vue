@@ -247,7 +247,7 @@ html
 {
     background: #1C1B1F;
     overflow-y: hidden !important;
-    font-family: "BIZ UDPGothic" !important;
+    font-family: "Noto Sans CJK JP", "BIZ UDPGothic" !important;
 }
 
 a
