@@ -134,44 +134,61 @@ export default {
             <nav style="margin:2% auto; width:98%;">
                 <!-- FOR DEBUGGING ONLY -->
                 <RouterLink :to="'/jsonviewer'">
-                    <v-btn class="overflow-x-hidden rounded-pill" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
-                        <span style="width:100%; text-align:left !important; float:left !important">
+                    <v-card
+                        class="d-flex pa-2 justify-center align-center rounded-pill"
+                        @click=""
+                        :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text'"
+                        style="font-size:1.35vb;"
+                    >
+                        <v-icon>mdi:mdi-shield-bug</v-icon>
+                        <span class="text-truncate">
                             JSONviewer
                         </span>
-                    </v-btn>
+                    </v-card>
                 </RouterLink>
 
                 <RouterLink :to="'/browser'">
-                    <v-btn class="overflow-x-hidden rounded-lg" prepend-icon="mdi:mdi-text-search" :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
-                        <span style="width:100%; text-align:left !important; float:left !important">
+                    <v-card
+                        class="d-flex pa-2 justify-center align-center rounded-lg"
+                        @click=""
+                        :variant=" path.indexOf('browser')!==-1?'tonal':'text'"
+                        style="font-size:1.35vb;"
+                    >
+                        <v-icon>mdi:mdi-text-search</v-icon>
+                        <span class="text-truncate">
                             チャンネルブラウザ
                         </span>
-                    </v-btn>
+                    </v-card>
                 </RouterLink>
 
                 <v-divider style="margin:5% 0"></v-divider>
 
                 <!-- ここからチャンネルボタン描写  -->
-                <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
+                <div class="overflow-x-hidden" style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
-                        <v-btn
-                            class="rounded-lg"
-                            prepend-icon="mdi:mdi-pound"
+                        <v-card
+                            class="rounded-lg pa-2 d-flex align-center"
                             :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
-                            style="width:100%; font-size:1.35vb"
+                            @click=""
+                            style="font-size:1.35vb;"
                         >
-                            {{ l[1].channelname.length>15?l[1].channelname.substring(0,13)+"...":l[1].channelname }}
+                            <div class="flex-shrink-1">
+                                <v-icon class="">mdi:mdi-pound</v-icon>
+                            </div>
+
+                            <div class="me-auto text-truncate">
+                                {{ l[1].channelname }}
+                            </div>
+
                             <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
                             
-                            <template v-slot:append>
-                                <v-badge
-                                    v-if="checkReadTime(l[0])"
-                                    :content="checkReadTime(l[0])"
-                                    inline
-                                ></v-badge>
-                            </template>
+                            <v-badge
+                                v-if="checkReadTime(l[0])"
+                                :content="checkReadTime(l[0])"
+                                inline
+                            ></v-badge>
 
-                        </v-btn>
+                        </v-card>
                     </RouterLink>
                 </div>
 
