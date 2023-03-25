@@ -238,8 +238,8 @@ export default {
     </v-dialog>
 
     <!-- ここから表示部分 -->
-    <div style="margin:3% auto; width:85%; height:95%;">
-        <div class="d-flex justify-space-around bg-surface-variant">
+    <div style="margin:2% auto; width:85%; height:97.5%;">
+        <div style="height:10%;" class="d-flex justify-space-around align-center bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" color="primary" icon="" class="rounded-lg">
                 <v-icon icon="mdi:mdi-plus">
@@ -252,11 +252,10 @@ export default {
                 </v-tooltip>
             </v-btn>
         </div>
-        <br>
-        <div class="channelList" style="height:90%; width:100%; overflow-y:auto;">
+        <div class="channelList ma-1" style="height:85%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
-                style="padding:0;"
+                style="padding:0; margin:0 8px;"
             >
                 <v-card variant="tonal" class="rounded-lg" style="padding:8px 16px; margin-top:16px;">
                     
@@ -289,7 +288,15 @@ export default {
 }
 .channelList::-webkit-scrollbar
 {
-    display:none; /* Chrome用 */
+    width: 5px;
+}
+
+.channelList::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0);
+}
+
+.channelList::-webkit-scrollbar-thumb {
+    background-color: #666;
 }
 
 </style>

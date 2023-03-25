@@ -592,4 +592,16 @@ export default {
     background-color: #49454F;
 }
 
+#channelWindow::-webkit-scrollbar {
+    width: 5px;
+}
+
+#channelWindow::-webkit-scrollbar-track {
+    background-color: #333;
+}
+
+#channelWindow::-webkit-scrollbar-thumb {
+    background-color: #666;
+}
+
 </style>

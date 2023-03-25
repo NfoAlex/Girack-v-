@@ -107,7 +107,7 @@ export default {
 
 <style scoped>
 
-.previewContainer::-webkit-scrollbar{
+.previewContainer::-webkit-scrollbar {
     display: none;
 }
 
