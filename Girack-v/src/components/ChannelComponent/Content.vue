@@ -500,7 +500,7 @@ export default {
 
                                 <!-- メッセージ本文 -->
                                 <span
-                                    style="width:100%; height:5px; margin:5px 0; padding:0"
+                                    style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
                                     class="overflow-x-visible"
                                     v-html="formatMessage(m.content)"
                                 >
