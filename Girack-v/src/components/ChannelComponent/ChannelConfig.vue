@@ -463,6 +463,7 @@ export default {
     background-color: #666;
 }
 
+/* ユーザー検索用 */
 .channelScrollbarDarker::-webkit-scrollbar-thumb {
     background-color: #333;
 }

@@ -467,7 +467,7 @@ export default {
                                 @mouseleave="mouseOverMsg(m.messageid, 'off')"
                             >
                                 <!-- ユーザー名と時間表記 -->
-                                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
+                                <div class="text-h6" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
                                     {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                                     
@@ -492,8 +492,11 @@ export default {
                                     </v-chip>
 
                                     <!-- タイムスタンプ -->
-                                    <span style="margin-right:12px" class="text-body-2 font-italic">
-                                        {{ printDate(m.time) }}
+                                    <span
+                                        class="text-caption"
+                                        
+                                    >
+                                        <span style="color:#999">{{ printDate(m.time) }}</span>
                                     </span>
                                     
                                 </div>
@@ -501,7 +504,6 @@ export default {
                                 <!-- メッセージ本文 -->
                                 <span
                                     style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
-                                    class="overflow-x-visible"
                                     v-html="formatMessage(m.content)"
                                 >
                                 </span>
@@ -524,6 +526,7 @@ export default {
                             <!-- ここからホバーメニュー -->
                               <!-- コンポーネント化予定 -->
                             <span style="position:relative; float:right;">
+                                <!-- 時間表示 -->
                                 <span style="margin-right:12px;" class="text-body-2 font-italic">
                                     {{ printDate(m.time) }}
                                 </span>
