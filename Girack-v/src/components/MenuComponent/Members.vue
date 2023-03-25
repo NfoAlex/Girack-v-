@@ -133,12 +133,8 @@ export default {
                 </v-text-field>
             </div>
 
-            <v-lazy
-                :options="{'threshold':0.5}"
-                transition="fade-transition"
-                style="height:70vh;"
-            >
-                <div style="height:100%; overflow-y:auto;">
+            <!-- ToDoスクロール挙動の改善(指定しなければスクロールされるようになっている) -->
+            <div style="height:70vh; overflow-y:auto;">
                     <v-card
                         color="grey"
                         @click="()=>{userDialogShow=true; userDialogUserid=user.userid}"
@@ -167,8 +163,7 @@ export default {
                             <v-chip v-if="user.role==='Moderator'" size="small" color="blue">Moderator</v-chip>
                         </div>
                     </v-card>
-                </div>
-            </v-lazy>
+            </div>
         </div>
     </div>
 </template>
