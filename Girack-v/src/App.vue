@@ -247,6 +247,7 @@ html
 {
     background: #1C1B1F;
     overflow-y: hidden !important;
+    font-family: "BIZ UDPGothic" !important;
 }
 
 a
