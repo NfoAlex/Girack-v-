@@ -286,6 +286,7 @@ export default {
 {
     scrollbar-width: none; /* Firefox用 */
 }
+
 .channelList::-webkit-scrollbar
 {
     width: 5px;

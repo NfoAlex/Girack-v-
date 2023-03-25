@@ -311,7 +311,11 @@ export default {
                 <br>
 
                 <!-- チャンネル名 -->
-                <p @dblclick="switchEditing('channelname',true)" v-if="!channelnameEditing">
+                <p
+                    @dblclick="switchEditing('channelname',true)"
+                    v-if="!channelnameEditing"
+                    class="text-truncate"
+                >
                     <v-tooltip
                         activator="parent"
                         location="top"
@@ -337,7 +341,12 @@ export default {
         </div>
 
         <!-- チャンネル概要 -->
-        <v-card @dblclick="switchEditing('desc',true)" class="pa-3 ma-2 mx-auto rounded-lg" width="85%" color="secondary">
+        <v-card
+            @dblclick="switchEditing('desc',true)"
+            class="channelScrollbar pa-3 ma-2 mx-auto rounded-lg"
+            style="max-height:500px; min-height:75px; overflow-y:auto;"
+            width="85%"
+            color="secondary">
             
             <!-- 概要欄 -->
             <div v-if="!descriptionEditing">
@@ -368,7 +377,7 @@ export default {
         <v-tabs
             v-model="tab"
             class="mx-auto rounded-lg"
-            style="width:fit-content"
+            style="width:fit-content; min-height:30px;"
             bg-color="grey"
         >
             <v-tab value="userJoined">参加者</v-tab>
@@ -376,24 +385,37 @@ export default {
         </v-tabs>
 
         <!-- タブの中身を知りたくて─────────── -->
-        <v-window v-model="tab" class="ma-5">
+        <v-window v-model="tab" style="margin-top:5%">
 
             <!-- チャンネル参加者リスト -->
-            <v-window-item value="userJoined" style="height:300px; overflow-y:auto;">
+            <v-window-item value="userJoined" class="channelScrollbar" style="min-height:300px; height:5vh; overflow-y:auto;">
                 <span>
-                    <v-btn @click="()=>{userSearchShow=!userSearchShow;}" style="width:75%" icon="" variant="solo" class="rounded-lg">
+                    <v-btn
+                        @click="()=>{userSearchShow=!userSearchShow;}"
+                        style="width:75%"
+                        icon=""
+                        variant="solo"
+                        class="rounded-lg mx-auto"
+                    >
                         <v-icon>mdi:mdi-account-plus</v-icon>
                     </v-btn>
                 </span>
+
                 <v-card
                     @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}"
-                    class="mx-auto text-left pa-1 rounded-lg"
+                    class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
                     style="width:75%; margin-top:8px;"
                     variant="tonal"
                     v-for="u in channelJoinedUser"
                 >
-                    <v-avatar style="margin-left:64px; float:left" size="32" :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
-                    <span style="margin-left:16px;" class="text-center">{{ u.username }}</span>
+
+                    <v-avatar size="32" style="margin-left:10%;" :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
+                    <span
+                        style="margin-left:16px;"
+                        class="text-center me-auto"
+                    >
+                        {{ u.username }}
+                    </span>
                     <span v-if="Userinfo.role!=='Member'" style="float:right" class="text-center">
                         <v-btn
                             @click.stop="kickUser(u.userid)"
@@ -404,6 +426,7 @@ export default {
                         >
                         </v-btn>
                     </span>
+
                 </v-card>
                 
             </v-window-item>
@@ -421,6 +444,22 @@ export default {
 
         <br>
 
-        
     </v-card>
 </template>
+
+<style scoped>
+
+.channelScrollbar::-webkit-scrollbar
+{
+    width: 5px;
+}
+
+.channelScrollbar::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0);
+}
+
+.channelScrollbar::-webkit-scrollbar-thumb {
+    background-color: #666;
+}
+
+</style>
