@@ -494,9 +494,10 @@ export default {
                                     <!-- タイムスタンプ -->
                                     <span
                                         class="text-caption"
+                                        style="color:#999"
                                         
                                     >
-                                        <span style="color:#999">{{ printDate(m.time) }}</span>
+                                        {{ printDate(m.time) }}
                                     </span>
                                     
                                 </div>
