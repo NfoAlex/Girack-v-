@@ -77,8 +77,13 @@ export default {
     <!-- ログイン後(Main) -->
     <div v-if="loggedin">
         <div :class="channelBar">
-            <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ Serverinfo.servername || "..." }}</h2>
-            <br>
+            <!-- インスタンス名 -->
+            <p
+                style="text-align:center; margin:16px 0;"
+                class="mx-auto text-truncate text-h6"
+            >
+                {{ Serverinfo.servername || "..." }}
+            </p>
             
             <RouterLink to="/menu/profile">
                 <v-card
@@ -131,7 +136,7 @@ export default {
             </RouterLink>
             
             <!-- ここからボタン群 -->
-            <nav style="margin:2% auto; width:98%;">
+            <nav style="margin:2% auto; width:97%;">
                 <!-- FOR DEBUGGING ONLY -->
                 <RouterLink :to="'/jsonviewer'">
                     <v-card
