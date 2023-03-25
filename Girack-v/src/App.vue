@@ -74,140 +74,146 @@ export default {
 </script>
 
 <template>
-    <!-- ログイン後(Main) -->
-    <div v-if="loggedin">
-        <div :class="channelBar">
-            <!-- インスタンス名 -->
-            <p
-                style="text-align:center; margin:16px 0;"
-                class="mx-auto text-truncate text-h6"
-            >
-                {{ Serverinfo.servername || "..." }}
-            </p>
-            
-            <RouterLink to="/menu/profile">
-                <v-card
-                    @click=""
-                    class="mx-auto rounded-lg"
-                    color="secondary"
-                    width="80%"
-                >
-                    <!-- 三点メニューアイコン -->
-                    <div style="width:fit-content" class="mx-auto">
-                        <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
-                    </div>
-                    <!-- ホバーしたら表示するテキスト -->
-                    <v-tooltip
-                        activator="parent"
-                        location="top"
+    <div>
+
+        <!-- ログイン後(Main) -->
+        <div v-if="loggedin">
+            <div :class="channelBar">
+                <!-- インスタンス名 -->
+                <div style="margin:16px 0;">
+                    <p
+                        style="text-align:center;"
+                        class="mx-auto text-truncate text-h6"
                     >
-                        メニュー
-                    </v-tooltip>
-
-                    <!-- アイコン-->
-                    <div class="mx-auto" style="width:fit-content; margin-top:10%;">
-                            <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
-                                <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
-                            </v-avatar>
-                    </div>
-
-                    <!-- ロールバッジ-->
-                    <div style="width:fit-content" class="mx-auto">
-                        <v-chip
-                            v-if="Userinfo.role!=='Member'"
-                            :color="Userinfo.role==='Admin'?'purple':'blue'"
-                            size="x-small"
-                            :elevation="6"
+                        {{ Serverinfo.servername || "..." }}
+                    </p>
+                </div>
+                
+                <RouterLink to="/menu/profile">
+                    <v-card
+                        @click=""
+                        class="mx-auto rounded-lg"
+                        color="secondary"
+                        width="80%"
+                    >
+                        <!-- 三点メニューアイコン -->
+                        <div style="width:fit-content" class="mx-auto">
+                            <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
+                        </div>
+                        <!-- ホバーしたら表示するテキスト -->
+                        <v-tooltip
+                            activator="parent"
+                            location="top"
                         >
-                            <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
-                        </v-chip>
-                    </div>
+                            メニュー
+                        </v-tooltip>
 
-                    <!-- ユーザー名-->
-                    <v-card-text class="text-subtitle-1 text-center mx-auto">
-                        <span>
-                            {{ Userinfo.username }}
-                        </span>
-                    </v-card-text>
+                        <!-- アイコン-->
+                        <div class="mx-auto" style="width:fit-content; margin-top:10%;">
+                                <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
+                                    <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
+                                </v-avatar>
+                        </div>
 
-                    
+                        <!-- ロールバッジ-->
+                        <div style="width:fit-content" class="mx-auto">
+                            <v-chip
+                                v-if="Userinfo.role!=='Member'"
+                                :color="Userinfo.role==='Admin'?'purple':'blue'"
+                                size="x-small"
+                                :elevation="6"
+                            >
+                                <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
+                            </v-chip>
+                        </div>
 
-                </v-card>
-            </RouterLink>
-            
-            <!-- ここからボタン群 -->
-            <nav style="margin:2% auto; width:97%;">
-                <!-- FOR DEBUGGING ONLY -->
-                <RouterLink :to="'/jsonviewer'">
-                    <v-card
-                        class="d-flex pa-2 justify-center align-center rounded-pill"
-                        @click=""
-                        :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text'"
-                        style="font-size:1.35vb;"
-                    >
-                        <v-icon>mdi:mdi-shield-bug</v-icon>
-                        <span class="text-truncate">
-                            JSONviewer
-                        </span>
+                        <!-- ユーザー名-->
+                        <v-card-text class="text-subtitle-1 text-center mx-auto">
+                            <span>
+                                {{ Userinfo.username }}
+                            </span>
+                        </v-card-text>
+
+                        
+
                     </v-card>
                 </RouterLink>
-
-                <RouterLink :to="'/browser'">
-                    <v-card
-                        class="d-flex pa-2 justify-center align-center rounded-lg"
-                        @click=""
-                        :variant=" path.indexOf('browser')!==-1?'tonal':'text'"
-                        style="font-size:1.35vb;"
-                    >
-                        <v-icon>mdi:mdi-text-search</v-icon>
-                        <span class="text-truncate">
-                            チャンネルブラウザ
-                        </span>
-                    </v-card>
-                </RouterLink>
-
-                <v-divider style="margin:5% 0"></v-divider>
-
-                <!-- ここからチャンネルボタン描写  -->
-                <div class="overflow-x-hidden" style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
-                    <RouterLink :to="'/c/'+l[0]">
+                
+                <!-- ここからボタン群 -->
+                <nav style="margin:2% auto; width:97%;">
+                    <!-- FOR DEBUGGING ONLY -->
+                    <RouterLink :to="'/jsonviewer'">
                         <v-card
-                            class="rounded-lg pa-2 d-flex align-center"
-                            :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
+                            class="d-flex pa-2 justify-center align-center rounded-pill"
                             @click=""
+                            :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text'"
                             style="font-size:1.35vb;"
                         >
-                            <div class="flex-shrink-1">
-                                <v-icon class="">mdi:mdi-pound</v-icon>
-                            </div>
-
-                            <div class="me-auto text-truncate">
-                                {{ l[1].channelname }}
-                            </div>
-
-                            <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
-                            
-                            <v-badge
-                                v-if="checkReadTime(l[0])"
-                                :content="checkReadTime(l[0])"
-                                inline
-                            ></v-badge>
-
+                            <v-icon>mdi:mdi-shield-bug</v-icon>
+                            <span class="text-truncate">
+                                JSONviewer
+                            </span>
                         </v-card>
                     </RouterLink>
-                </div>
 
-            </nav>
+                    <RouterLink :to="'/browser'">
+                        <v-card
+                            class="d-flex pa-2 justify-center align-center rounded-lg"
+                            @click=""
+                            :variant=" path.indexOf('browser')!==-1?'tonal':'text'"
+                            style="font-size:1.35vb;"
+                        >
+                            <v-icon>mdi:mdi-text-search</v-icon>
+                            <span class="text-truncate">
+                                チャンネルブラウザ
+                            </span>
+                        </v-card>
+                    </RouterLink>
+
+                    <v-divider style="margin:5% 0"></v-divider>
+
+                    <!-- ここからチャンネルボタン描写  -->
+                    <div class="overflow-x-hidden" style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
+                        <RouterLink :to="'/c/'+l[0]">
+                            <v-card
+                                class="rounded-lg pa-2 d-flex align-center"
+                                :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
+                                @click=""
+                                style="font-size:1.35vb;"
+                            >
+                                <div class="flex-shrink-1">
+                                    <v-icon class="">mdi:mdi-pound</v-icon>
+                                </div>
+
+                                <div class="me-auto text-truncate">
+                                    {{ l[1].channelname }}
+                                </div>
+
+                                <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
+                                
+                                <v-badge
+                                    v-if="checkReadTime(l[0])"
+                                    :content="checkReadTime(l[0])"
+                                    inline
+                                ></v-badge>
+
+                            </v-card>
+                        </RouterLink>
+                    </div>
+
+                </nav>
+            </div>
+
+            <div :class="main">
+                <RouterView />
+            </div>
         </div>
 
-        <div :class="main">
-            <RouterView />
+        <!-- ログイン前 -->
+        <div v-else>
+            <Auth @login="() => loggedin = true" />
         </div>
-    </div>
 
-    <!-- ログイン前 -->
-    <div v-else>
-        <Auth @login="() => loggedin = true" />
     </div>
 
 </template>
