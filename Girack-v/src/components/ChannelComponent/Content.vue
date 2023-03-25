@@ -601,7 +601,7 @@ export default {
 }
 
 #channelWindow::-webkit-scrollbar-track {
-    background-color: #333;
+    background-color: rgba(0,0,0,0);
 }
 
 #channelWindow::-webkit-scrollbar-thumb {
