@@ -15,7 +15,7 @@ export default {
 <template>
     <div v-for="link in urlData.data">
         <div
-            style="height:fit-content; max-height:400px; max-width:800px; width:95%; margin:8px 0; overflow-y:scroll"
+            style="height:fit-content; max-height:400px; max-width:800px; width:95%; margin:8px 0;"
             color="#222"
             class="overflow-y-hidden d-flex flex-row"
             v-if="link.title!==''"
@@ -24,9 +24,9 @@ export default {
             <!-- ウェブサイト用 -->
             <v-card
                 v-if="link.mediaType==='website' && (link.title!=='')"
-                style="width:80%; overflow-y:scroll;"
+                style="width:80%; overflow-y:hidden;"
                 color="#222"
-                class="pa-3 rounded-lg"
+                class="previewContainer pa-3 rounded-lg"
             >
                 <div class="d-flex flex-row align-center">
                     <v-avatar class="rounded-lg" style="margin:8px 4px; float:left;" :image="link.favicon" size="32">
@@ -49,7 +49,6 @@ export default {
             <!-- 記事あるいは画像メインの何か用 -->
             <v-card
                 v-if="link.mediaType==='article' && (link.title!=='')"
-                style="width:100%; overflow-y:scroll;"
                 color="#222"
                 class="pa-3 rounded-lg d-flex flex-row"
             >
@@ -61,7 +60,7 @@ export default {
                 </v-img>
 
                 <div class="d-flex flex-column">
-                    <div style="margin-left: 16px;" class="d-flex flex-row align-center">
+                    <div style="margin-left:16px;" class="d-flex flex-row align-center">
 
                         <v-avatar
                             class="rounded-lg"
@@ -105,3 +104,11 @@ export default {
         </div>
     </div>
 </template>
+
+<style scoped>
+
+.previewContainer::-webkit-scrollbar{
+    display: none;
+}
+
+</style>
