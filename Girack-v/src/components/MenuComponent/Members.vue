@@ -123,6 +123,7 @@ export default {
                 </p>
             </div>
 
+            <!-- ユーザー検索バー -->
             <div class="mx-auto" style="width:90%; margin-top:3%">
                 <v-text-field
                     v-model="nameSearchText"
@@ -135,34 +136,34 @@ export default {
 
             <!-- ToDoスクロール挙動の改善(指定しなければスクロールされるようになっている) -->
             <div style="height:70vh; overflow-y:auto;">
-                    <v-card
-                        color="grey"
-                        @click="()=>{userDialogShow=true; userDialogUserid=user.userid}"
-                        class="pa-3 rounded-lg d-flex align-center"
-                        v-for="user in userListDisplay"
-                        style="margin-top:12px;"
-                        :key="user.userid"
-                    >
-                        <v-avatar :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
-                        
-                        <!-- ユーザー名 -->
-                        <span style="margin:0 12px;">
-                            {{ user.name }}
-                        </span>
+                <v-card
+                    color="grey"
+                    @click="()=>{userDialogShow=true; userDialogUserid=user.userid}"
+                    class="pa-3 rounded-lg d-flex align-center"
+                    v-for="user in userListDisplay"
+                    style="margin-top:12px;"
+                    :key="user.userid"
+                >
+                    <v-avatar :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
+                    
+                    <!-- ユーザー名 -->
+                    <span style="margin:0 12px;">
+                        {{ user.name }}
+                    </span>
 
-                        <!-- BANバッジ -->
-                        <div class="me-auto">
-                            <v-chip v-if="user.state.banned" size="small" color="red">
-                                BANNED
-                            </v-chip>
-                        </div>
-                        
-                        <!-- ロールバッジ -->
-                        <div>
-                            <v-chip v-if="user.role==='Admin'" size="small" color="purple">Admin</v-chip>
-                            <v-chip v-if="user.role==='Moderator'" size="small" color="blue">Moderator</v-chip>
-                        </div>
-                    </v-card>
+                    <!-- BANバッジ -->
+                    <div class="me-auto">
+                        <v-chip v-if="user.state.banned" size="small" color="red">
+                            BANNED
+                        </v-chip>
+                    </div>
+                    
+                    <!-- ロールバッジ -->
+                    <div>
+                        <v-chip v-if="user.role==='Admin'" size="small" color="purple">Admin</v-chip>
+                        <v-chip v-if="user.role==='Moderator'" size="small" color="blue">Moderator</v-chip>
+                    </div>
+                </v-card>
             </div>
         </div>
     </div>
