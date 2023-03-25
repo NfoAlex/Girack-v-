@@ -106,58 +106,65 @@ export default {
 </script>
 
 <template>
-    <div style="margin:0 auto; height:90vh;">
-        <!-- ユーザーページ用 -->
-        <div>
+    <!-- 一つ下のDIVのCSS適用するために囲んでいる -->
+    <div>
+        <div class="mx-auto" style="height:90%; width:90%;">
+            <!-- ユーザーページ用 -->
             <v-dialog
                 v-model="userDialogShow"
                 width="30vw"
             >
                 <Userpage :userid="userDialogUserid" />
             </v-dialog>
-        </div>
 
-        <div style="height:10%">
-            <p class="text-h4">
-                愉快なメンバーたち
-            </p>
-        </div>
+            <div>
+                <p class="text-h4">
+                    愉快なメンバーたち
+                </p>
+            </div>
 
-        <div class="mx-auto" style="width:50%; margin-top:3%">
-            <v-text-field
-                v-model="nameSearchText"
-                density="compact"
-                variant="solo"
-                prepend-icon="mdi:mdi-search"
-                placeholder="名前検索(Aa 区別有り)"
-            >
-            </v-text-field>
-        </div>
+            <!-- ユーザー検索バー -->
+            <div class="mx-auto" style="width:90%; margin-top:3%">
+                <v-text-field
+                    v-model="nameSearchText"
+                    density="compact"
+                    variant="solo"
+                    placeholder="名前検索(Aa 区別有り)"
+                >
+                </v-text-field>
+            </div>
 
-        <v-lazy
-            :options="{'threshold':0.5}"
-            transition="fade-transition"
-            style="height:70vh"
-        >
-        <div style="height:100%; overflow-y:auto;">
-            <v-card
-                color="grey"
-                @click="()=>{userDialogShow=true; userDialogUserid=user.userid}"
-                class="pa-3 ma-3 rounded-lg"
-                v-for="user in userListDisplay"
-                :key="user.userid"
-            >
-                <v-avatar :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
-                <!-- ユーザー名とBANバッジ -->
-                <span style="margin-left:16px;">{{ user.name }}</span>  <v-chip v-if="user.state.banned" size="small" color="red">BANNED</v-chip>
-                <!-- ロールバッジ -->
-                <div style="float:right">
-                    <v-chip v-if="user.role==='Admin'" size="small" color="purple">Admin</v-chip>
-                    <v-chip v-if="user.role==='Moderator'" size="small" color="blue">Moderator</v-chip>
+            <!-- ToDoスクロール挙動の改善(指定しなければスクロールされるようになっている) -->
+            <div style="height:70vh; overflow-y:auto;">
+                <v-card
+                    color="grey"
+                    @click="()=>{userDialogShow=true; userDialogUserid=user.userid}"
+                    class="pa-3 rounded-lg d-flex align-center"
+                    v-for="user in userListDisplay"
+                    style="margin-top:12px;"
+                    :key="user.userid"
+                >
+                    <v-avatar :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
                     
-                </div>
-            </v-card>
+                    <!-- ユーザー名 -->
+                    <span style="margin:0 12px;">
+                        {{ user.name }}
+                    </span>
+
+                    <!-- BANバッジ -->
+                    <div class="me-auto">
+                        <v-chip v-if="user.state.banned" size="small" color="red">
+                            BANNED
+                        </v-chip>
+                    </div>
+                    
+                    <!-- ロールバッジ -->
+                    <div>
+                        <v-chip v-if="user.role==='Admin'" size="small" color="purple">Admin</v-chip>
+                        <v-chip v-if="user.role==='Moderator'" size="small" color="blue">Moderator</v-chip>
+                    </div>
+                </v-card>
+            </div>
         </div>
-        </v-lazy>
     </div>
 </template>

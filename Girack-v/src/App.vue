@@ -74,118 +74,146 @@ export default {
 </script>
 
 <template>
-    <!-- ログイン後(Main) -->
-    <div v-if="loggedin">
-        <div :class="channelBar">
-            <h2 style="text-align:center; margin-top:0; padding-top:3%" class="mx-auto">{{ Serverinfo.servername || "..." }}</h2>
-            <br>
-            
-            <RouterLink to="/menu/profile">
-                <v-card
-                    @click=""
-                    class="mx-auto rounded-lg"
-                    color="secondary"
-                    width="80%"
-                >
-                    <!-- 三点メニューアイコン -->
-                    <div style="width:fit-content" class="mx-auto">
-                        <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
-                    </div>
-                    <!-- ホバーしたら表示するテキスト -->
-                    <v-tooltip
-                        activator="parent"
-                        location="top"
+    <div>
+
+        <!-- ログイン後(Main) -->
+        <div v-if="loggedin">
+            <div :class="channelBar">
+                <!-- インスタンス名 -->
+                <div style="margin:16px 0;">
+                    <p
+                        style="text-align:center;"
+                        class="mx-auto text-truncate text-h6"
                     >
-                        メニュー
-                    </v-tooltip>
-
-                    <!-- アイコン-->
-                    <div class="mx-auto" style="width:fit-content; margin-top:10%;">
-                            <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
-                                <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
-                            </v-avatar>
-                    </div>
-
-                    <!-- ロールバッジ-->
-                    <div style="width:fit-content" class="mx-auto">
-                        <v-chip
-                            v-if="Userinfo.role!=='Member'"
-                            :color="Userinfo.role==='Admin'?'purple':'blue'"
-                            size="x-small"
-                            :elevation="6"
+                        {{ Serverinfo.servername || "..." }}
+                    </p>
+                </div>
+                
+                <RouterLink to="/menu/profile">
+                    <v-card
+                        @click=""
+                        class="mx-auto rounded-lg"
+                        color="secondary"
+                        width="80%"
+                    >
+                        <!-- 三点メニューアイコン -->
+                        <div style="width:fit-content" class="mx-auto">
+                            <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
+                        </div>
+                        <!-- ホバーしたら表示するテキスト -->
+                        <v-tooltip
+                            activator="parent"
+                            location="top"
                         >
-                            <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
-                        </v-chip>
-                    </div>
+                            メニュー
+                        </v-tooltip>
 
-                    <!-- ユーザー名-->
-                    <v-card-text class="text-subtitle-1 text-center mx-auto">
-                        <span>
-                            {{ Userinfo.username }}
-                        </span>
-                    </v-card-text>
+                        <!-- アイコン-->
+                        <div class="mx-auto" style="width:fit-content; margin-top:10%;">
+                                <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
+                                    <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
+                                </v-avatar>
+                        </div>
 
-                    
+                        <!-- ロールバッジ-->
+                        <div style="width:fit-content" class="mx-auto">
+                            <v-chip
+                                v-if="Userinfo.role!=='Member'"
+                                :color="Userinfo.role==='Admin'?'purple':'blue'"
+                                size="x-small"
+                                :elevation="6"
+                            >
+                                <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
+                            </v-chip>
+                        </div>
 
-                </v-card>
-            </RouterLink>
-            
-            <!-- ここからボタン群 -->
-            <nav style="margin:2% auto; width:98%;">
-                <!-- FOR DEBUGGING ONLY -->
-                <RouterLink :to="'/jsonviewer'">
-                    <v-btn class="overflow-x-hidden rounded-pill" prepend-icon="mdi:mdi-shield-bug" :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
-                        <span style="width:100%; text-align:left !important; float:left !important">
-                            JSONviewer
-                        </span>
-                    </v-btn>
+                        <!-- ユーザー名-->
+                        <v-card-text class="text-subtitle-1 text-center mx-auto">
+                            <span>
+                                {{ Userinfo.username }}
+                            </span>
+                        </v-card-text>
+
+                        
+
+                    </v-card>
                 </RouterLink>
-
-                <RouterLink :to="'/browser'">
-                    <v-btn class="overflow-x-hidden rounded-lg" prepend-icon="mdi:mdi-text-search" :variant=" path.indexOf('browser')!==-1?'tonal':'text' " style="width:100%; text-align:left !important">
-                        <span style="width:100%; text-align:left !important; float:left !important">
-                            チャンネルブラウザ
-                        </span>
-                    </v-btn>
-                </RouterLink>
-
-                <v-divider style="margin:5% 0"></v-divider>
-
-                <!-- ここからチャンネルボタン描写  -->
-                <div class="overflow-x-hidden" style="margin-top:1%; padding:0" v-for="l in Object.entries(ChannelIndex)">
-                    <RouterLink :to="'/c/'+l[0]">
-                        <v-btn
-                            class="rounded-lg"
-                            prepend-icon="mdi:mdi-pound"
-                            :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
-                            style="width:100%; font-size:1.35vb"
+                
+                <!-- ここからボタン群 -->
+                <nav style="margin:2% auto; width:97%;">
+                    <!-- FOR DEBUGGING ONLY -->
+                    <RouterLink :to="'/jsonviewer'">
+                        <v-card
+                            class="d-flex pa-2 justify-center align-center rounded-pill"
+                            @click=""
+                            :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text'"
+                            style="font-size:1.35vb;"
                         >
-                            {{ l[1].channelname.length>15?l[1].channelname.substring(0,13)+"...":l[1].channelname }}
-                            <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
-                            
-                            <template v-slot:append>
+                            <v-icon>mdi:mdi-shield-bug</v-icon>
+                            <span class="text-truncate">
+                                JSONviewer
+                            </span>
+                        </v-card>
+                    </RouterLink>
+
+                    <RouterLink :to="'/browser'">
+                        <v-card
+                            class="d-flex pa-2 justify-center align-center rounded-lg"
+                            @click=""
+                            :variant=" path.indexOf('browser')!==-1?'tonal':'text'"
+                            style="font-size:1.35vb;"
+                        >
+                            <v-icon>mdi:mdi-text-search</v-icon>
+                            <span class="text-truncate">
+                                チャンネルブラウザ
+                            </span>
+                        </v-card>
+                    </RouterLink>
+
+                    <v-divider style="margin:5% 0"></v-divider>
+
+                    <!-- ここからチャンネルボタン描写  -->
+                    <div class="overflow-x-hidden" style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
+                        <RouterLink :to="'/c/'+l[0]">
+                            <v-card
+                                class="rounded-lg pa-2 d-flex align-center"
+                                :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
+                                @click=""
+                                style="font-size:1.35vb;"
+                            >
+                                <div class="flex-shrink-1">
+                                    <v-icon class="">mdi:mdi-pound</v-icon>
+                                </div>
+
+                                <div class="me-auto text-truncate">
+                                    {{ l[1].channelname }}
+                                </div>
+
+                                <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
+                                
                                 <v-badge
                                     v-if="checkReadTime(l[0])"
                                     :content="checkReadTime(l[0])"
                                     inline
                                 ></v-badge>
-                            </template>
 
-                        </v-btn>
-                    </RouterLink>
-                </div>
+                            </v-card>
+                        </RouterLink>
+                    </div>
 
-            </nav>
+                </nav>
+            </div>
+
+            <div :class="main">
+                <RouterView />
+            </div>
         </div>
 
-        <div :class="main">
-            <RouterView />
+        <!-- ログイン前 -->
+        <div v-else>
+            <Auth @login="() => loggedin = true" />
         </div>
-    </div>
 
-    <!-- ログイン前 -->
-    <div v-else>
-        <Auth @login="() => loggedin = true" />
     </div>
 
 </template>
@@ -219,6 +247,7 @@ html
 {
     background: #1C1B1F;
     overflow-y: hidden !important;
+    font-family: "BIZ UDPGothic" !important;
 }
 
 a

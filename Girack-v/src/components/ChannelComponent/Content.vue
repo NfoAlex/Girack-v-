@@ -467,7 +467,7 @@ export default {
                                 @mouseleave="mouseOverMsg(m.messageid, 'off')"
                             >
                                 <!-- ユーザー名と時間表記 -->
-                                <div :class="'text-h6'" v-if="checkShowAvatar(m.userid, index)">
+                                <div class="text-h6" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
                                     {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
                                     
@@ -492,7 +492,11 @@ export default {
                                     </v-chip>
 
                                     <!-- タイムスタンプ -->
-                                    <span style="margin-right:12px" class="text-body-2 font-italic">
+                                    <span
+                                        class="text-caption"
+                                        style="color:#999"
+                                        
+                                    >
                                         {{ printDate(m.time) }}
                                     </span>
                                     
@@ -500,8 +504,7 @@ export default {
 
                                 <!-- メッセージ本文 -->
                                 <span
-                                    style="width:100%; height:5px; margin:5px 0; padding:0"
-                                    class="overflow-x-visible"
+                                    style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
                                     v-html="formatMessage(m.content)"
                                 >
                                 </span>
@@ -524,6 +527,7 @@ export default {
                             <!-- ここからホバーメニュー -->
                               <!-- コンポーネント化予定 -->
                             <span style="position:relative; float:right;">
+                                <!-- 時間表示 -->
                                 <span style="margin-right:12px;" class="text-body-2 font-italic">
                                     {{ printDate(m.time) }}
                                 </span>
@@ -590,6 +594,18 @@ export default {
 .hovered
 {
     background-color: #49454F;
+}
+
+#channelWindow::-webkit-scrollbar {
+    width: 5px;
+}
+
+#channelWindow::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0);
+}
+
+#channelWindow::-webkit-scrollbar-thumb {
+    background-color: #666;
 }
 
 </style>
