@@ -256,11 +256,11 @@ export default {
         </v-text-field>
 
         <!-- 検索結果 -->
-        <div style="height:50vh; max-height:650px; overflow-y:auto;">
+        <div class="channelScrollbar channelScrollbarDarker" style="height:50vh; max-height:650px; overflow-y:auto;">
             <v-card
                 v-for="user in userSearchResult"
-                style="padding:16px 0; margin-top:8px;"
-                class="text-left rounded-lg d-flex flex-row align-center"
+                style="padding:16px 0; margin-top:8px; width:95%"
+                class="mx-auto text-left rounded-lg d-flex flex-row align-center"
             >
 
                 <!-- アバター -->
@@ -300,6 +300,7 @@ export default {
     </v-dialog>
     
 
+    <!-- チャンネルメニュー本体 -->
     <v-card class="text-center rounded-lg pa-3" style="max-height:650px">
         <!-- チャンネル名とバッジ -->
         <div class="ma-5">
@@ -460,6 +461,10 @@ export default {
 
 .channelScrollbar::-webkit-scrollbar-thumb {
     background-color: #666;
+}
+
+.channelScrollbarDarker::-webkit-scrollbar-thumb {
+    background-color: #333;
 }
 
 </style>
