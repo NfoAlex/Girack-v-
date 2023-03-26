@@ -176,38 +176,36 @@ export default {
 
                 <!-- ここからチャンネルボタン描写  -->
                 <div class="mx-auto" style="overflow-y:auto; width:97%; margin-bottom:8px;">
-                        <div style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
-                            <RouterLink :to="'/c/'+l[0]">
-                                <v-card
-                                    class="rounded-lg pa-2 d-flex align-center"
-                                    :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
-                                    @click=""
-                                    style="font-size:1.35vb;"
-                                >
-                                    <!-- # の部分 -->
-                                    <div class="flex-shrink-1">
-                                        <v-icon v-if="l[1].scope!=='private'" class="">mdi:mdi-pound</v-icon>
-                                    </div>
-                                    
-                                    <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
+                    <div style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
+                        <RouterLink :to="'/c/'+l[0]">
+                            <v-card
+                                class="rounded-lg pa-2 d-flex align-center"
+                                :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
+                                @click=""
+                                style="font-size:1.35vb;"
+                            >
+                                <!-- チャンネル名前の#の部分 -->
+                                <div class="flex-shrink-1">
+                                    <v-icon v-if="l[1].scope!=='private'">mdi:mdi-pound</v-icon>
+                                    <v-icon v-else>mdi:mdi-lock-outline</v-icon> <!-- プライベートチャンネル用鍵マーク -->
+                                </div>
+                                
+                                <!-- チャンネル名 -->
+                                <div style="margin-left:4px;" class="me-auto text-truncate">
+                                    {{ l[1].channelname }}
+                                </div>
 
-                                    <!-- チャンネル名 -->
-                                    <div style="margin-left:4px;" class="me-auto text-truncate">
-                                        {{ l[1].channelname }}
-                                    </div>
+                                <!-- 新着マーク -->
+                                <v-badge
+                                    v-if="checkReadTime(l[0])"
+                                    :content="checkReadTime(l[0])"
+                                    inline
+                                ></v-badge>
 
-                                    
-                                    
-                                    <v-badge
-                                        v-if="checkReadTime(l[0])"
-                                        :content="checkReadTime(l[0])"
-                                        inline
-                                    ></v-badge>
-
-                                </v-card>
-                            </RouterLink>
-                        </div>
+                            </v-card>
+                        </RouterLink>
                     </div>
+                </div>
             </div>
 
             <div :class="main">
