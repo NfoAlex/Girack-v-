@@ -7,12 +7,13 @@ export default {
     data() {
         return {
             //画像拡大ダイアログ用
-            imageDialogShow: false,
-            imageDialogUrls: []
+            imageDialogShow: false, //表示するかどうか
+            imageDialogUrls: [] //表示する画像用
         }
     },
 
     methods: {
+        //画像拡大ダイアログ操作用
         toggleImageDialog(index) {
             this.imageDialogUrls = []; //表示する画像配列を初期化
 
@@ -29,6 +30,7 @@ export default {
 
         },
 
+        //URLデータから画像を取得する
         getImage(img) {
             if ( typeof(img) === "object" ) {
                 return img[0]; //表示するものを設定
@@ -41,33 +43,32 @@ export default {
         }
     },
 
-    mounted() {
-        console.log("URLpreview :: mounted : img -> ");
-        console.log(this.urlData.data.img);
-
-    }
-
 }
 
 </script>
 
 <template>
+    <!-- 画像拡大ダイアログ -->
     <v-dialog
         v-model="imageDialogShow"
         style="max-width:90vw; "
     >
         <div style="overflow-y:auto;">
             <div @click="imageDialogShow=false" class="mx-auto" style="width:95%;">
+
                 <v-card
                     v-for="img in imageDialogUrls"
                     style="width:fit-content"
                     color="rgba(0,0,0,0.75)"
                     class="rounded-lg mx-auto"
                 >
-                    <v-img style="margin:8px 0; max-height:90vh;" :src="img"> <!-- 画像そのもの -->
+                    <!-- 画像そのもの -->
+                    <v-img style="margin:8px 0; max-height:90vh;" :src="img">
                     </v-img>
-                    <p class="ma-2 text-subtitle-2">{{ img }}</p> <!-- 画像URL -->
+                    <!-- 画像URL -->
+                    <p class="ma-2 text-subtitle-2">{{ img }}</p>
                 </v-card>
+
             </div>
         </div>
     </v-dialog>
@@ -98,6 +99,7 @@ export default {
                 <div class="d-flex flex-column">
                     <div style="margin-left:16px;" class="d-flex flex-row align-center">
 
+                        <!-- ウェブサイトのファビコン -->
                         <v-avatar
                             class="rounded-lg"
                             style="margin:4px 4px;" 
