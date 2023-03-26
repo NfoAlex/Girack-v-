@@ -102,8 +102,9 @@ export function dataMsg() {
 
 //メッセージ受け取り、出力
 socket.on("messageReceive", (msg) => {
-    //ログインしていないなら
+    //ログインあるいはチャンネルに参加していないなら
     if ( !Userinfo.value.loggedin ) return;
+    if ( !Userinfo.value.channelJoined.includes(msg.channelid) ) return;
 
     console.log("socket :: msgReceive : ↓");
     console.log(msg);
