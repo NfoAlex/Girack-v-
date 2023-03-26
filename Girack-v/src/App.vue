@@ -78,7 +78,7 @@ export default {
 
         <!-- ログイン後(Main) -->
         <div v-if="loggedin">
-            <div :class="channelBar">
+            <div class="d-flex flex-column" :class="channelBar">
                 <!-- インスタンス名 -->
                 <div class="mx-auto" style="margin:16px 0; width:90%;">
                     <p
@@ -89,6 +89,7 @@ export default {
                     </p>
                 </div>
                 
+                <!-- メニューボタン/プロフィールカード -->
                 <RouterLink to="/menu/profile">
                     <v-card
                         @click=""
@@ -171,37 +172,42 @@ export default {
                     </RouterLink>
 
                     <v-divider style="margin:5% 0"></v-divider>
-
-                    <!-- ここからチャンネルボタン描写  -->
-                    <div class="overflow-x-hidden" style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
-                        <RouterLink :to="'/c/'+l[0]">
-                            <v-card
-                                class="rounded-lg pa-2 d-flex align-center"
-                                :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
-                                @click=""
-                                style="font-size:1.35vb;"
-                            >
-                                <div class="flex-shrink-1">
-                                    <v-icon class="">mdi:mdi-pound</v-icon>
-                                </div>
-
-                                <div class="me-auto text-truncate">
-                                    {{ l[1].channelname }}
-                                </div>
-
-                                <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
-                                
-                                <v-badge
-                                    v-if="checkReadTime(l[0])"
-                                    :content="checkReadTime(l[0])"
-                                    inline
-                                ></v-badge>
-
-                            </v-card>
-                        </RouterLink>
-                    </div>
-
                 </nav>
+
+                <!-- ここからチャンネルボタン描写  -->
+                <div class="mx-auto" style="overflow-y:auto; width:97%; margin-bottom:8px;">
+                        <div style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
+                            <RouterLink :to="'/c/'+l[0]">
+                                <v-card
+                                    class="rounded-lg pa-2 d-flex align-center"
+                                    :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
+                                    @click=""
+                                    style="font-size:1.35vb;"
+                                >
+                                    <!-- # の部分 -->
+                                    <div class="flex-shrink-1">
+                                        <v-icon v-if="l[1].scope!=='private'" class="">mdi:mdi-pound</v-icon>
+                                    </div>
+                                    
+                                    <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
+
+                                    <!-- チャンネル名 -->
+                                    <div style="margin-left:4px;" class="me-auto text-truncate">
+                                        {{ l[1].channelname }}
+                                    </div>
+
+                                    
+                                    
+                                    <v-badge
+                                        v-if="checkReadTime(l[0])"
+                                        :content="checkReadTime(l[0])"
+                                        inline
+                                    ></v-badge>
+
+                                </v-card>
+                            </RouterLink>
+                        </div>
+                    </div>
             </div>
 
             <div :class="main">
