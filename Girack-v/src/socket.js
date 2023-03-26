@@ -234,11 +234,13 @@ socket.on("messageUpdate", (dat) => {
             //メッセージIDで探索して更新
             for ( let index in MsgDB.value[dat.channelid] ) {
                 if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
-                    MsgDB.value[dat.channelid][index].urlData = dat.urlData; //リアクション更新
+                    //URlプレビューデータを更新
+                    MsgDB.value[dat.channelid][index].urlData.data[dat.urlIndex] = dat.urlDataItem;
 
                 }
 
             }
+            
             break;
 
         default:
