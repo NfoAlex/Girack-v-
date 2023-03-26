@@ -596,6 +596,7 @@ export default {
     background-color: #49454F;
 }
 
+/* スクロールバー用 */
 #channelWindow::-webkit-scrollbar {
     width: 5px;
 }

@@ -78,9 +78,9 @@ export default {
 
         <!-- ログイン後(Main) -->
         <div v-if="loggedin">
-            <div :class="channelBar">
+            <div class="d-flex flex-column" :class="channelBar">
                 <!-- インスタンス名 -->
-                <div style="margin:16px 0;">
+                <div class="mx-auto" style="margin:16px 0; width:90%;">
                     <p
                         style="text-align:center;"
                         class="mx-auto text-truncate text-h6"
@@ -89,6 +89,7 @@ export default {
                     </p>
                 </div>
                 
+                <!-- メニューボタン/プロフィールカード -->
                 <RouterLink to="/menu/profile">
                     <v-card
                         @click=""
@@ -144,6 +145,7 @@ export default {
                     <!-- FOR DEBUGGING ONLY -->
                     <RouterLink :to="'/jsonviewer'">
                         <v-card
+                            v-if="Userinfo.role==='Admin'"
                             class="d-flex pa-2 justify-center align-center rounded-pill"
                             @click=""
                             :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text'"
@@ -171,9 +173,11 @@ export default {
                     </RouterLink>
 
                     <v-divider style="margin:5% 0"></v-divider>
+                </nav>
 
-                    <!-- ここからチャンネルボタン描写  -->
-                    <div class="overflow-x-hidden" style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
+                <!-- ここからチャンネルボタン描写  -->
+                <div class="mx-auto" style="overflow-y:auto; width:97%; margin-bottom:8px;">
+                    <div style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
                         <RouterLink :to="'/c/'+l[0]">
                             <v-card
                                 class="rounded-lg pa-2 d-flex align-center"
@@ -181,16 +185,18 @@ export default {
                                 @click=""
                                 style="font-size:1.35vb;"
                             >
+                                <!-- チャンネル名前の#の部分 -->
                                 <div class="flex-shrink-1">
-                                    <v-icon class="">mdi:mdi-pound</v-icon>
+                                    <v-icon v-if="l[1].scope!=='private'">mdi:mdi-pound</v-icon>
+                                    <v-icon v-else>mdi:mdi-lock-outline</v-icon> <!-- プライベートチャンネル用鍵マーク -->
                                 </div>
-
-                                <div class="me-auto text-truncate">
+                                
+                                <!-- チャンネル名 -->
+                                <div style="margin-left:4px;" class="me-auto text-truncate">
                                     {{ l[1].channelname }}
                                 </div>
 
-                                <v-icon v-if="l[1].scope==='private'" size="x-small">mdi:mdi-lock-outline</v-icon>
-                                
+                                <!-- 新着マーク -->
                                 <v-badge
                                     v-if="checkReadTime(l[0])"
                                     :content="checkReadTime(l[0])"
@@ -200,8 +206,7 @@ export default {
                             </v-card>
                         </RouterLink>
                     </div>
-
-                </nav>
+                </div>
             </div>
 
             <div :class="main">
