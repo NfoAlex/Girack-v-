@@ -145,6 +145,7 @@ export default {
                     <!-- FOR DEBUGGING ONLY -->
                     <RouterLink :to="'/jsonviewer'">
                         <v-card
+                            v-if="Userinfo.role==='Admin'"
                             class="d-flex pa-2 justify-center align-center rounded-pill"
                             @click=""
                             :variant=" path.indexOf('jsonviewer')!==-1?'tonal':'text'"
