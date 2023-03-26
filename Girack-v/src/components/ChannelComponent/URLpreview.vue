@@ -118,7 +118,7 @@ export default {
                     </div>
 
                     <!-- 記事の概要 -->
-                    <p class="text-body-2 ma-3 font-weight-light text-medium-emphasis">
+                    <p v-if="link.description" class="text-body-2 ma-3 font-weight-light text-medium-emphasis">
                         {{ link.description.length>135 ? link.description.substring(0,135)+"..." : link.description }}
                     </p>
 
