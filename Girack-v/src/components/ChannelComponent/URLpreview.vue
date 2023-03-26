@@ -80,39 +80,15 @@ export default {
             v-if="link.title!==''"
         >
 
-            <!-- ウェブサイト用 -->
+            <!-- ウェブ記事とかそこらへん用 -->
             <v-card
-                v-if="link.mediaType==='website' && (link.title!=='')"
-                style="overflow-y:hidden; height:150px;"
-                color="#222"
-                class="previewContainer pa-3 rounded-lg"
-            >
-                <div class="d-flex flex-row align-center">
-                    <v-avatar class="rounded-lg" style="margin:8px 4px; float:left;" :image="link.favicon" size="32">
-                    </v-avatar>
-                    
-                    <!-- 記事のタイトル -->
-                    <p class="text-subtitle-2">
-                        <a :href="link.url" target="_blank">
-                            {{ link.title.length>100 ? link.title.substring(0,100)+"..." : link.title }}
-                        </a>
-                    </p>
-                </div>
-
-                <!-- 記事の概要 -->
-                <p v-if="link.description" class="text-body-2 ma-1 font-weight-light text-medium-emphasis">
-                    {{ link.description.length>135 ? link.description.substring(0,135)+"..." : link.description }}
-                </p>
-            </v-card>
-
-            <!-- 記事あるいは画像メインの何か用 -->
-            <v-card
-                v-if="link.mediaType==='article' && (link.title!=='')"
+                v-if="link.mediaType!=='image' && (link.title!=='')"
                 color="#222"
                 class="pa-3 rounded-lg d-flex flex-row"
                 style="height:150px; min-width:45%; width:85%;"
             >
                 <v-img
+                    v-if="link.img!==undefined"
                     @click="toggleImageDialog(index)"
                     style="min-width:30%;"
                     :src="getImage(link.img)"
