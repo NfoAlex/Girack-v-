@@ -80,7 +80,7 @@ export default {
         <div v-if="loggedin">
             <div :class="channelBar">
                 <!-- インスタンス名 -->
-                <div style="margin:16px 0;">
+                <div class="mx-auto" style="margin:16px 0; width:90%;">
                     <p
                         style="text-align:center;"
                         class="mx-auto text-truncate text-h6"
