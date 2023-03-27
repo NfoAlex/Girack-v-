@@ -46,8 +46,13 @@ export default {
             handler() {
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
-                    //新着のメッセージ数を0に
-                    this.MsgReadTime[this.getPath].new = 0;
+                    //最新メッセージを取得するために長さ計算
+                    let msgDBCurrentLength = this.MsgDB[this.getPath].length;
+                    //最新メッセージを元に既読した時間を設定して新着数を0にする
+                    this.MsgReadTime[this.getPath] = {
+                        time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
+                        new: 0 //新着メッセージ数を0に
+                    };
 
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
@@ -335,18 +340,21 @@ export default {
 
         },
 
-        //スクロール位置によって一番下に行くボタンの表示切り替えをする
+        //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-            //一番下？
+            //一番下かどうか調べる？
             if (
                 s || //そもそも引数でtrueと渡されているなら
                 channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight || //スクロール位置を計算
                 channelWindow.offsetHeight >= channelWindow.scrollHeight //もし縦幅がそもそも画面におさまっているなら
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
+
+                let msgDBCurrentLength = this.MsgDB[this.getPath].length;
                 this.MsgReadTime[this.getPath] = {
+                    time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
                     new: 0 //新着メッセージ数を0に
                 };
 
