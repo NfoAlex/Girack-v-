@@ -81,6 +81,7 @@ export default {
     </v-dialog>
 
     <div v-for="(link, index) in urlData.data">
+
         <!-- Twitterリンク用 -->
         <div class="pa-3" v-if="link.url.includes('twitter.com')">
             <v-btn @click="embedTwitter=!embedTwitter" color="blue">
@@ -93,7 +94,7 @@ export default {
         <div v-if="embedTwitter">
             <Tweet
                 style="width:65%;"
-                :tweet-url="link.url"
+                :tweet-url="link.url.split('?s=')[0]"
                 theme="dark"
                 lang="ja"
                 :dnt="true"
