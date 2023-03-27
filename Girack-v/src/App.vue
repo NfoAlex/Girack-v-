@@ -29,6 +29,7 @@ export default {
 
             servername: "",
             displayusername: "Null",
+            sessionOnlineNum: 0,
 
             path: "",
             loggedin: false,
@@ -62,9 +63,16 @@ export default {
         //console.log("vuetify :: global theme theme -> " + theme.global.name.value);
         socket.emit("getInitInfo"); //サーバーの情報を取得
 
+        //サーバー情報の受信
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername; //表示する名前を変更
             
+        });
+
+        //オンラインユーザーの更新
+        socket.on("sessionOnlineUpdate", (num) => {
+            this.sessionOnlineNum = num;
+
         });
 
     }
@@ -139,6 +147,15 @@ export default {
 
                     </v-card>
                 </RouterLink>
+
+                <!-- オンライン人数表示 -->
+                <v-card
+                    style="font-size:1.15vb; margin-top:8px; width:80%"
+                    class="mx-auto text-center pa-1 rounded-lg"
+                    color="#222"
+                >
+                    {{ sessionOnlineNum }}人がオンライン
+                </v-card>
                 
                 <!-- ここからボタン群 -->
                 <nav style="margin:2% auto; width:97%;">
