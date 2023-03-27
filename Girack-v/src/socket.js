@@ -438,13 +438,16 @@ socket.on("messageHistory", (history) => {
 
     let index = 0; //チャンネル参照インデックス変数
 
-    //履歴を追加
+    //受信した履歴の中で新着のものかどうか調べる
     for ( index in history ) {
+        //既読状態がそもそも無ければやらない
+        if ( MsgReadTime.value[channelid] === undefined ) break;
+        
         //既読状態の時間から新着メッセージ数を加算
         if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
             console.log("socket :: messageHistory : 比較する時間, history -> " + history[index].time)
             console.log("                                     sgReadTime -> " + MsgReadTime.value[channelid].time)
-            MsgReadTime.value[channelid].new++;
+            MsgReadTime.value[channelid].new++; //新着数を加算
 
         }
 
