@@ -136,7 +136,6 @@ socket.on("messageReceive", (msg) => {
                 reaction: msg.reaction
             });
             
-
         } else { //配列が空なら新しく作成、配置
             MsgDB.value[msg.channelid] = [{
                 messageid: msg.messageid,

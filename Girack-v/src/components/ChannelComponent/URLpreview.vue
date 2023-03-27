@@ -1,14 +1,19 @@
 <script>
 
+import Tweet from "vue-tweet";
+
 export default {
 
     props: ["urlData"],
+    components: { Tweet },
 
     data() {
         return {
             //画像拡大ダイアログ用
             imageDialogShow: false, //表示するかどうか
-            imageDialogUrls: [] //表示する画像用
+            imageDialogUrls: [], //表示する画像用
+
+            embedTwitter :false //Twitter埋め込みを表示するかどうか
         }
     },
 
@@ -39,6 +44,18 @@ export default {
                 return img; //画像一つでも配列へ追加
 
             }
+
+        },
+
+        //TwitterのURLをプロキシものに置き換える
+        useProxyTwitter(index) {
+            this.urlData.data[index].url.replace("twitter.com","twitter.owacon.moe");
+
+        },
+
+        //TwitterのURLをプロキシものに置き換える
+        showEmbedTwitter(index) {
+            this.urlData.data[index].url.replace("twitter.com","twitter.owacon.moe");
 
         }
     },
@@ -75,6 +92,31 @@ export default {
     </v-dialog>
 
     <div v-for="(link, index) in urlData.data">
+        <!-- Twitterリンク用 -->
+        <div class="pa-3" v-if="link.url.includes('twitter.com')">
+            <v-btn @click="embedTwitter=!embedTwitter" color="blue">
+                <v-icon>mdi:mdi-twitter</v-icon>
+                <span v-if="!embedTwitter">埋め込みリンクを表示</span>
+                <span v-else>埋め込みを隠す<v-icon>mdi:mdi-window-close</v-icon></span>
+            </v-btn>
+        </div>
+        <div v-if="embedTwitter">
+            <Tweet
+                style="width:65%;"
+                :tweet-url="link.url"
+                theme="dark"
+                lang="ja"
+                :dnt="true"
+            >
+            <template v-slot:loading>
+                <span>Loading...</span>
+            </template>
+            <template v-slot:error>
+                <span>読み込みエラー</span>
+            </template>
+            </Tweet>
+        </div>
+
         <div
             style="height:fit-content; max-width:800px; width:95%; margin:8px 0;"
             color="#222"
@@ -84,7 +126,7 @@ export default {
 
             <!-- ウェブ記事とかそこらへん用 -->
             <v-card
-                v-if="link.mediaType!=='image' && (link.title!=='')"
+                v-if="link.mediaType!=='image'"
                 color="#222"
                 class="pa-3 rounded-lg d-flex flex-row"
                 style="max-height:150px; min-width:45%; width:85%;"
@@ -110,6 +152,7 @@ export default {
 
                 <!-- タイトル、概要 -->
                 <div class="d-flex flex-column">
+                    
                     <!-- ファビコンとタイトル用 -->
                     <div style="margin-left:16px;" class="d-flex flex-row align-center">
 
