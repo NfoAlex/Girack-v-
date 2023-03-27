@@ -89,7 +89,9 @@ export default {
             
         });
 
+        //登録ができたと受信したときの処理
         socket.on("registerEnd", (resultPassword) => {
+            //結果がダメならそう表示
             if ( resultPassword === -1 ) {
                 this.registerResult = -1;
                 return;
@@ -97,7 +99,7 @@ export default {
             }
 
             this.pwFromRegister = resultPassword; //パスワード更新
-            this.registerResult = 1;
+            this.registerResult = 1; //結果成功ととして表示
 
         });
 
