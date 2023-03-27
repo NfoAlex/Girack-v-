@@ -48,22 +48,23 @@ export default {
 </script>
 
 <template>
+
     <!-- 画像拡大ダイアログ -->
     <v-dialog
         v-model="imageDialogShow"
-        style="max-width:90vw; "
+        style="max-width:90vw;"
     >
         <div style="overflow-y:auto;">
             <div @click="imageDialogShow=false" class="mx-auto" style="width:95%;">
 
                 <v-card
                     v-for="img in imageDialogUrls"
-                    style="width:fit-content"
+                    style="width:fit-content; margin:64px 0;"
                     color="rgba(0,0,0,0.75)"
                     class="rounded-lg mx-auto"
                 >
                     <!-- 画像そのもの -->
-                    <v-img style="margin:8px 0; max-height:90vh;" :src="img">
+                    <v-img style="margin-bottom:8px; max-height:90vh;" :src="img">
                     </v-img>
                     <!-- 画像URL -->
                     <p class="ma-2 text-subtitle-2">{{ img }}</p>
