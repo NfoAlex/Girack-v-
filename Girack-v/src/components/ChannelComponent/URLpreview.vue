@@ -86,17 +86,21 @@ export default {
                 v-if="link.mediaType!=='image' && (link.title!=='')"
                 color="#222"
                 class="pa-3 rounded-lg d-flex flex-row"
-                style="height:150px; min-width:45%; width:85%;"
+                style="max-height:150px; min-width:45%; width:85%;"
+                
             >
                 <v-img
-                    v-if="link.img!==undefined"
+                    v-if="link.img!==undefined&&link.img.length!==0"
+                    class=""
                     @click="toggleImageDialog(index)"
                     style="min-width:30%;"
                     :src="getImage(link.img)"
                 >
                 </v-img>
 
+                <!-- タイトル、概要 -->
                 <div class="d-flex flex-column">
+                    <!-- ファビコンとタイトル用 -->
                     <div style="margin-left:16px;" class="d-flex flex-row align-center">
 
                         <!-- ウェブサイトのファビコン -->
