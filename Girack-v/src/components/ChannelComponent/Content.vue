@@ -1,5 +1,5 @@
 <script>
-import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel } from "../../socket.js";
+import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
@@ -53,6 +53,9 @@ export default {
                         time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
                         new: 0 //新着メッセージ数を0に
                     };
+
+                    //既読状態をCookieへ書き込み
+                    setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
 
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
