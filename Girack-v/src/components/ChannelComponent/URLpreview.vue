@@ -93,7 +93,8 @@ export default {
         <!-- Twitter埋め込み表示 -->
         <div v-if="embedTwitter">
             <Tweet
-                style="width:65%;"
+                style="max-width:550px; width:40%; background: black;"
+                width="550"
                 :tweet-url="link.url.split('?s=')[0]"
                 theme="dark"
                 lang="ja"
