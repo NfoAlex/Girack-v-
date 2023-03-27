@@ -126,6 +126,13 @@ export default {
                         <p class="text-subtitle-2">
                             <a :href="link.url" target="_blank">
                                 {{ link.title.length>60 ? link.title.substring(0,60)+"..." : link.title }}
+                                <v-tooltip
+                                    v-if="link.title.length>60"
+                                    activator="parent"
+                                    location="top"
+                                >
+                                    {{ link.title }}
+                                </v-tooltip>
                             </a>
                         </p>
 
