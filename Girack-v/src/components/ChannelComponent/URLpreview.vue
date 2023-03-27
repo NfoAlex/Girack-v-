@@ -96,6 +96,14 @@ export default {
                     style="min-width:30%;"
                     :src="getImage(link.img)"
                 >
+                    <v-tooltip
+                        v-if="typeof(link.img)==='object'&&link.img.length>=2"
+                        activator="parent"
+                        location="top center"
+                        origin="overlap"
+                    >
+                        {{ link.img.length }}枚の画像を表示
+                    </v-tooltip>
                 </v-img>
 
                 <!-- タイトル、概要 -->
@@ -111,6 +119,7 @@ export default {
                             size="24"
                         >
                         </v-avatar>
+                        
                         
                         <!-- 記事のタイトル -->
                         <p class="text-subtitle-2">
@@ -149,6 +158,7 @@ export default {
 
         </div>
     </div>
+
 </template>
 
 <style scoped>
