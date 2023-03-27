@@ -273,12 +273,6 @@ export function getMessage(channelid, readLength, startLength) {
 
 }
 
-//ユーザー情報返すだけ
-export function getUserinfo() {
-    return { userinfo };
-
-}
-
 //サーバー情報の受け取り
 socket.on("serverinfo", (dat) => {
     console.log("serverinfo :: ");
