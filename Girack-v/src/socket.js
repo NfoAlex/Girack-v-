@@ -438,15 +438,23 @@ socket.on("messageHistory", (history) => {
 
     let index = 0; //チャンネル参照インデックス変数
 
+    //履歴を追加
+    for ( index in history ) {
+        //既読状態の時間から新着メッセージ数を加算
+        if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
+            console.log("socket :: messageHistory : 比較する時間, history -> " + history[index].time)
+            console.log("                                     sgReadTime -> " + MsgReadTime.value[channelid].time)
+            MsgReadTime.value[channelid].new++;
+
+        }
+
+    }
+
     //履歴が存在しているなら履歴を頭から追加
     if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
         //データの追加順的に逆だからここでソートしておく
         history = history.reverse();
-        //履歴を追加
-        for ( index in history ) {
-            MsgDB.value[channelid].unshift(history[index]);
-
-        }
+        
         //履歴の長さを計算
         ChannelIndex.value[channelid].historyReadCount += history.length;
 
@@ -502,9 +510,14 @@ socket.on("authResult", (dat) => {
             channelJoined: dat.channelJoined
         };
 
-        //クッキーから既読状態を取得
-        let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
-        console.log("socket :: authResult : クッキーからのMsgReadTime ->", {COOKIE_MsgReadTime});
+        try {
+            //クッキーから既読状態を取得
+            let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
+            console.log("socket :: authResult : クッキーからのMsgReadTime ->", {COOKIE_MsgReadTime});
+            //既読状態をクッキーから取得
+            MsgReadTime.value = COOKIE_MsgReadTime;
+        }
+        catch(e) {}
 
         //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
@@ -515,8 +528,7 @@ socket.on("authResult", (dat) => {
             },
         });
 
-        //既読状態をクッキーから取得
-        MsgReadTime.value = COOKIE_MsgReadTime;
+        
 
         //クッキーにセッションIDを設定、寿命は15日
         setCookie("sessionid", dat.sessionid, 15);
