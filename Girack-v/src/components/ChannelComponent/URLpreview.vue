@@ -47,17 +47,6 @@ export default {
 
         },
 
-        //TwitterのURLをプロキシものに置き換える
-        useProxyTwitter(index) {
-            this.urlData.data[index].url.replace("twitter.com","twitter.owacon.moe");
-
-        },
-
-        //TwitterのURLをプロキシものに置き換える
-        showEmbedTwitter(index) {
-            this.urlData.data[index].url.replace("twitter.com","twitter.owacon.moe");
-
-        }
     },
 
 }
@@ -100,6 +89,7 @@ export default {
                 <span v-else>埋め込みを隠す<v-icon>mdi:mdi-window-close</v-icon></span>
             </v-btn>
         </div>
+        <!-- Twitter埋め込み表示 -->
         <div v-if="embedTwitter">
             <Tweet
                 style="width:65%;"
@@ -108,9 +98,11 @@ export default {
                 lang="ja"
                 :dnt="true"
             >
+            <!-- 読み込み中 -->
             <template v-slot:loading>
                 <span>Loading...</span>
             </template>
+            <!-- エラー -->
             <template v-slot:error>
                 <span>読み込みエラー</span>
             </template>
@@ -140,6 +132,7 @@ export default {
                     style="min-width:30%;"
                     :src="getImage(link.img)"
                 >
+                    <!-- 画像が２枚以上あるならホバーで表示 -->
                     <v-tooltip
                         v-if="typeof(link.img)==='object'&&link.img.length>=2"
                         activator="parent"
@@ -170,6 +163,7 @@ export default {
                         <p class="text-subtitle-2">
                             <a :href="link.url" target="_blank">
                                 {{ link.title.length>60 ? link.title.substring(0,60)+"..." : link.title }}
+                                <!-- タイトルが60文字以上ならホバーで表示 -->
                                 <v-tooltip
                                     v-if="link.title.length>60"
                                     activator="parent"
