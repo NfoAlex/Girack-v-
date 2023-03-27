@@ -301,7 +301,7 @@ export default {
     
 
     <!-- チャンネルメニュー本体 -->
-    <v-card class="text-center rounded-lg pa-3" style="max-height:650px">
+    <v-card class="text-center rounded-lg pa-3">
         <!-- チャンネル名とバッジ -->
         <div class="ma-5">
             <p class="text-h4">
@@ -386,10 +386,10 @@ export default {
         </v-tabs>
 
         <!-- タブの中身を知りたくて─────────── -->
-        <v-window v-model="tab" style="margin-top:5%">
+        <v-window v-model="tab" style="margin-top:8px">
 
             <!-- チャンネル参加者リスト -->
-            <v-window-item value="userJoined" class="channelScrollbar" style="min-height:300px; height:5vh; overflow-y:auto;">
+            <v-window-item value="userJoined" class="channelScrollbar" style="max-height:350px; overflow-y:auto;">
                 <span>
                     <v-btn
                         @click="()=>{userSearchShow=!userSearchShow;}"
@@ -432,7 +432,7 @@ export default {
                 
             </v-window-item>
 
-            <v-window-item value="manage" class="mx-auto" style="height:300px; overflow-y:auto;">
+            <v-window-item value="manage" class="mx-auto" style="min-height:300px; overflow-y:auto;">
                 <v-checkbox
                     v-model="scopeIsPrivate"
                     color="grey"
