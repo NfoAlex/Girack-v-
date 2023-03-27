@@ -90,6 +90,7 @@ export default {
                 style="max-height:150px; min-width:45%; width:85%;"
                 
             >
+                <!-- 画像 -->
                 <v-img
                     v-if="link.img!==undefined&&link.img.length!==0"
                     class=""
