@@ -84,7 +84,7 @@ export default {
 
         <!-- Twitterリンク用 -->
         <div class="pa-3" v-if="link.url.includes('twitter.com')">
-            <v-btn @click="embedTwitter=!embedTwitter" color="blue">
+            <v-btn class="rounded-lg" @click="embedTwitter=!embedTwitter" color="blue" size="small">
                 <v-icon>mdi:mdi-twitter</v-icon>
                 <span v-if="!embedTwitter">埋め込みリンクを表示</span>
                 <span v-else>埋め込みを隠す<v-icon>mdi:mdi-window-close</v-icon></span>
