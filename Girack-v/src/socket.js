@@ -171,13 +171,23 @@ socket.on("messageReceive", (msg) => {
             msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
             !location.pathname.includes(msg.channelid) //今いるチャンネルじゃない
         ) {
-            console.log("通知は有効化");
+            //すべてのメッセージを通知に出すようにしているなら通知
             if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {
-                console.log("通知送る " + location.pathname);
+                //通知を出す
                 new Notification(ChannelIndex.value[msg.channelid].channelname, {
                     body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
                     icon: backendURI + "/img/" + msg.userid + ".jpeg"
                 });
+
+            } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
+                if ( msg.content.includes("@" + Userinfo.value.username) ) {
+                    //通知を出す
+                    new Notification(ChannelIndex.value[msg.channelid].channelname, {
+                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                        icon: backendURI + "/img/" + msg.userid + ".jpeg"
+                    });
+
+                }
 
             }
 
