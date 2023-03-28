@@ -523,6 +523,12 @@ socket.on("messageHistory", (history) => {
     if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
         //データの追加順的に逆だからここでソートしておく
         history = history.reverse();
+
+        //履歴用配列の先頭から一つずつ履歴を追加
+        for ( let index in history ) {
+            MsgDB.value[channelid].unshift(history[index]);
+
+        }
         
         //履歴の長さを計算
         ChannelIndex.value[channelid].historyReadCount += history.length;
