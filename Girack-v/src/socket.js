@@ -177,7 +177,7 @@ socket.on("messageReceive", (msg) => {
         } else { //すでにあるなら加算
             //メンションならメンションを加算
             if ( msg.content.includes("@" + Userinfo.value.username) ) {
-                console.log("socket :: messageReceive : mention -> " + MsgReadTime.value[msg.channelid].mention);
+                
                 if ( MsgReadTime.value[msg.channelid].mention === null ) {
                     MsgReadTime.value[msg.channelid].mention = 0;
 
@@ -505,7 +505,15 @@ socket.on("messageHistory", (history) => {
         if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
             console.log("socket :: messageHistory : 比較する時間, history -> " + history[index].time)
             console.log("                                     sgReadTime -> " + MsgReadTime.value[channelid].time)
-            MsgReadTime.value[channelid].new++; //新着数を加算
+            
+            //メンションされていたかどうかにあわせて既読状態を更新
+            if ( history[index].content.includes("@" + Userinfo.value.username) ) {
+                MsgReadTime.value[channelid].mention++; //メンション数を加算
+
+            } else {
+                MsgReadTime.value[channelid].new++; //新着数を加算
+
+            }
 
         }
 
@@ -580,9 +588,10 @@ socket.on("authResult", (dat) => {
             
             //既読状態のJSONを配列化して使いやすくする
             let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
-            //既読状態の新着数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
+            //既読状態の新着数とメンション数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
             for ( let index in objCOOKIE_MsgReadTime ) {
                 COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
+                COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].mention = 0;
 
             }
             
