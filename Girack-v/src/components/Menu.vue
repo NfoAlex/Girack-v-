@@ -91,7 +91,7 @@ export default {
                 </v-card>
             </RouterLink>
         </div>
-        <router-view style="float:right; width:80%; margin-top:5%; height:90%; overflow-y:auto;"></router-view>
+        <router-view style="float:right; width:80%; overflow-y:auto;"></router-view>
     </div>
 </template>
 
