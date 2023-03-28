@@ -96,13 +96,21 @@ export default {
     mounted() {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
+        let channelWindow = document.querySelector("#channelWindow")
+
         //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
-            document.querySelector("#channelWindow").addEventListener("scroll", function (event) {
+            channelWindow.addEventListener("scroll", function (event) {
                 ref.setScrollState(); //確認開始
 
             });
             this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
+
+            //もしスクロールできない縦幅だったらスクロール状態をTrueにする
+            if ( channelWindow.scrollHeight <= channelWindow.clientHeight ) { //縦幅比較
+                this.setScrollState(true); //trueへ設定
+
+            }
 
         });
 
