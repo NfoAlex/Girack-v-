@@ -297,8 +297,12 @@ export default {
 
         //スクロールさせるだけの関数
         scrollIt() {
-            const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
-            channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+            //レンダーを待ってからスクロール
+            this.$nextTick(() => {
+                const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
+                channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+            });
 
         },
 
