@@ -87,6 +87,7 @@ const MsgReadTime = ref({
     "0001": {
         time: "202301011210938424",
         new: 0,
+        mention: 0
     }
 });
 
@@ -153,15 +154,42 @@ socket.on("messageReceive", (msg) => {
 
         }
 
+        if ( MsgReadTime.value[msg.channelid].mention === null ) MsgReadTime.value[msg.channelid].mention = 0;
+
         //新着メッセージ数を更新
         if ( MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
-            MsgReadTime.value[msg.channelid] = {
-                time: msg.time, //最後に読んだ時間
-                new: 1
-            };
+            if ( msg.content.includes("@" + Userinfo.value.username) ) {
+                MsgReadTime.value[msg.channelid] = {
+                    time: msg.time, //最後に読んだ時間
+                    new: 1,
+                    mention: 0
+                };
+
+            } else {
+                MsgReadTime.value[msg.channelid] = {
+                    time: msg.time, //最後に読んだ時間
+                    new: 0,
+                    mention: 1
+                };
+
+            }
 
         } else { //すでにあるなら加算
-            MsgReadTime.value[msg.channelid].new++;
+            //メンションならメンションを加算
+            if ( msg.content.includes("@" + Userinfo.value.username) ) {
+                console.log("socket :: messageReceive : mention -> " + MsgReadTime.value[msg.channelid].mention);
+                if ( MsgReadTime.value[msg.channelid].mention === null ) {
+                    MsgReadTime.value[msg.channelid].mention = 0;
+
+                } else {
+                    MsgReadTime.value[msg.channelid].mention++;
+
+                }
+
+            } else { //そうじゃないなら普通に通知を加算
+                MsgReadTime.value[msg.channelid].new++;
+
+            }
 
         }
 

@@ -52,7 +52,8 @@ export default {
                         //最新メッセージを元に既読した時間を設定して新着数を0にする
                         this.MsgReadTime[this.getPath] = {
                             time: latestTime,
-                            new: 0 //新着メッセージ数を0に
+                            new: 0, //新着メッセージ数を0に
+                            mention: 0
                         };
                     }
                     catch(e) {
@@ -380,7 +381,9 @@ export default {
                         //既読時間を最新メッセージの時間に設定
                         time: latestTime,
                         //新着メッセージ数を0に
-                        new: 0
+                        new: 0,
+                        //メンション数を0に
+                        mention: 0
                     };
                 }
                 catch(e) {
