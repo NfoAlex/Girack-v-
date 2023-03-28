@@ -3,13 +3,17 @@
 
 import { ref } from "vue";
 
-const CONFIG_CHANNEL = ref({
-    NOTIFICATION_ENABLE: true,
-    NOTIFICATION_NOTIFY_ALL: false,
-    NOTIFICATION_NOTIFY_MENTION: false
+const CONFIG_NOTIFICATION = ref({
+    ENABLE: true,
+    NOTIFY_ALL: false,
+    NOTIFY_MENTION: false
+});
+
+const CONFIG_DISPLAY = ref({
+
 });
 
 export function getCONFIG() {
-    return { CONFIG_CHANNEL };
+    return { CONFIG_NOTIFICATION };
 
 }
