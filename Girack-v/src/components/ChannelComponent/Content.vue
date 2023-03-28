@@ -459,7 +459,7 @@ export default {
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
-                <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
+                <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" style="width:90%; padding:0 1%;">
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
