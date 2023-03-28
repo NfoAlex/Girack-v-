@@ -4,6 +4,9 @@
 import { io } from 'socket.io-client'; //ウェブソケット通信用
 import { ref } from "vue";
 
+import { getCONFIG } from './config.js';
+const { CONFIG_NOTIFICATION } = getCONFIG();
+
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI, { transports : ['websocket'] });
@@ -12,7 +15,7 @@ const socket = io(backendURI, { transports : ['websocket'] });
 //ユーザー(自分)情報
 
 const Userinfo = ref({
-    username: "RefTesting", //名前
+    username: "User", //名前
     role: "Admin",
     userid: "001", //ユーザーID
     loggedin: false, //ログイン状態
@@ -159,6 +162,20 @@ socket.on("messageReceive", (msg) => {
 
         } else { //すでにあるなら加算
             MsgReadTime.value[msg.channelid].new++;
+
+        }
+
+        //新着のメッセージを通知
+        if ( CONFIG_NOTIFICATION.value.ENABLE ) {
+            console.log("通知は有効化");
+            if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {
+                console.log("通知送る " + location.pathname);
+                new Notification(ChannelIndex.value[msg.channelid].channelname, {
+                    body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                    icon: backendURI + "/img/" + msg.userid + ".jpeg"
+                });
+
+            }
 
         }
 
