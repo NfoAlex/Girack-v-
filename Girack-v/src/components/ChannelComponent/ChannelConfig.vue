@@ -45,12 +45,15 @@ export default {
 
     watch: {
         //チャンネルの公開設定が変わったときを更新、チャンネル設定を反映
-        scopeIsPrivate: {
-            handler(scpe) {
-                this.updateChannel(); //更新させる
+        // scopeIsPrivate: {
+        //     handler(scpe, scpeOLD) {
+        //         if ( scpe !== scpeOLD ) {
+        //             this.updateChannel(); //更新させる
 
-            }
-        },
+        //         }
+
+        //     }
+        // },
 
         //ユーザー検索ダイアログ
         userSearchQuery: {
@@ -437,6 +440,7 @@ export default {
             <v-window-item value="manage" class="mx-auto" style="min-height:300px; overflow-y:auto;">
                 <v-checkbox
                     v-model="scopeIsPrivate"
+                    @click="updateChannel"
                     color="grey"
                     label="プライベートチャンネル"
                 >
