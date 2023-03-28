@@ -3,8 +3,6 @@ import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setC
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
-// const { Userinfo } = dataUser(); //ユーザー情報
-// const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
 
 export default {
     setup() {
@@ -355,10 +353,14 @@ export default {
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
 
+                //最新のメッセージを取得するために履歴の長さを予め取得
                 let msgDBCurrentLength = this.MsgDB[this.getPath].length;
+                //既読状態をセット
                 this.MsgReadTime[this.getPath] = {
+                    //既読時間を最新メッセージの時間に設定
                     time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
-                    new: 0 //新着メッセージ数を0に
+                    //新着メッセージ数を0に
+                    new: 0
                 };
 
             } else {

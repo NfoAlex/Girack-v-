@@ -80,6 +80,7 @@ export default {
     },
 
     methods: {
+        //編集モードを切り替える
         switchEditing(cat, mode) {
             switch(cat) {
                 //概要欄の編集切り替え
