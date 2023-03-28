@@ -389,6 +389,7 @@ export default {
                 catch(e) {
                     console.log("Content :: setScrollState : 既読状態の更新できなかった");
                     this.MsgReadTime[this.getPath].new = 0;
+                    this.MsgReadTime[this.getPath].mention = 0;
                 }
 
                 //既読状態をCookieへ書き込み
