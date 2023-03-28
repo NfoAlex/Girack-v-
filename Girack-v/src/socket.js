@@ -4,6 +4,9 @@
 import { io } from 'socket.io-client'; //ウェブソケット通信用
 import { ref } from "vue";
 
+import { getCONFIG } from './config.js';
+const { CONFIG_NOTIFICATION } = getCONFIG();
+
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI, { transports : ['websocket'] });
@@ -12,7 +15,7 @@ const socket = io(backendURI, { transports : ['websocket'] });
 //ユーザー(自分)情報
 
 const Userinfo = ref({
-    username: "RefTesting", //名前
+    username: "User", //名前
     role: "Admin",
     userid: "001", //ユーザーID
     loggedin: false, //ログイン状態
@@ -84,6 +87,7 @@ const MsgReadTime = ref({
     "0001": {
         time: "202301011210938424",
         new: 0,
+        mention: 0
     }
 });
 
@@ -150,15 +154,70 @@ socket.on("messageReceive", (msg) => {
 
         }
 
+        if ( MsgReadTime.value[msg.channelid].mention === null ) MsgReadTime.value[msg.channelid].mention = 0;
+
         //新着メッセージ数を更新
         if ( MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
-            MsgReadTime.value[msg.channelid] = {
-                time: msg.time, //最後に読んだ時間
-                new: 1
-            };
+            if ( msg.content.includes("@" + Userinfo.value.username) ) {
+                MsgReadTime.value[msg.channelid] = {
+                    time: msg.time, //最後に読んだ時間
+                    new: 1,
+                    mention: 0
+                };
+
+            } else {
+                MsgReadTime.value[msg.channelid] = {
+                    time: msg.time, //最後に読んだ時間
+                    new: 0,
+                    mention: 1
+                };
+
+            }
 
         } else { //すでにあるなら加算
-            MsgReadTime.value[msg.channelid].new++;
+            //メンションならメンションを加算
+            if ( msg.content.includes("@" + Userinfo.value.username) ) {
+                
+                if ( MsgReadTime.value[msg.channelid].mention === null ) {
+                    MsgReadTime.value[msg.channelid].mention = 0;
+
+                } else {
+                    MsgReadTime.value[msg.channelid].mention++;
+
+                }
+
+            } else { //そうじゃないなら普通に通知を加算
+                MsgReadTime.value[msg.channelid].new++;
+
+            }
+
+        }
+
+        //新着のメッセージを通知
+        if (
+            CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
+            msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
+            !location.pathname.includes(msg.channelid) //今いるチャンネルじゃない
+        ) {
+            //すべてのメッセージを通知に出すようにしているなら通知
+            if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {
+                //通知を出す
+                new Notification(ChannelIndex.value[msg.channelid].channelname, {
+                    body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                    icon: backendURI + "/img/" + msg.userid + ".jpeg"
+                });
+
+            } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
+                if ( msg.content.includes("@" + Userinfo.value.username) ) {
+                    //通知を出す
+                    new Notification(ChannelIndex.value[msg.channelid].channelname, {
+                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                        icon: backendURI + "/img/" + msg.userid + ".jpeg"
+                    });
+
+                }
+
+            }
 
         }
 
@@ -444,9 +503,14 @@ socket.on("messageHistory", (history) => {
         
         //既読状態の時間から新着メッセージ数を加算
         if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
-            console.log("socket :: messageHistory : 比較する時間, history -> " + history[index].time)
-            console.log("                                     sgReadTime -> " + MsgReadTime.value[channelid].time)
-            MsgReadTime.value[channelid].new++; //新着数を加算
+            //メンションされていたかどうかにあわせて既読状態を更新
+            if ( history[index].content.includes("@" + Userinfo.value.username) ) {
+                MsgReadTime.value[channelid].mention++; //メンション数を加算
+
+            } else {
+                MsgReadTime.value[channelid].new++; //新着数を加算
+
+            }
 
         }
 
@@ -456,6 +520,12 @@ socket.on("messageHistory", (history) => {
     if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
         //データの追加順的に逆だからここでソートしておく
         history = history.reverse();
+
+        //履歴用配列の先頭から一つずつ履歴を追加
+        for ( let index in history ) {
+            MsgDB.value[channelid].unshift(history[index]);
+
+        }
         
         //履歴の長さを計算
         ChannelIndex.value[channelid].historyReadCount += history.length;
@@ -518,17 +588,24 @@ socket.on("authResult", (dat) => {
             console.log("socket :: authResult : クッキーからのMsgReadTime ->");
             console.log(Object.entries(COOKIE_MsgReadTime));
 
-            
             //既読状態のJSONを配列化して使いやすくする
             let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
-            //既読状態の新着数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
+            //既読状態の新着数とメンション数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
             for ( let index in objCOOKIE_MsgReadTime ) {
                 COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
+                COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].mention = 0;
 
             }
             
             //既読状態をクッキーから取得
             MsgReadTime.value = COOKIE_MsgReadTime;
+        }
+        catch(e) {}
+
+        try {
+            //クッキーから設定を読み込み
+            let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
+            CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
         }
         catch(e) {}
 
