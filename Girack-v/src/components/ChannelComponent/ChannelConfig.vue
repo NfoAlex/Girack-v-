@@ -44,17 +44,6 @@ export default {
     },
 
     watch: {
-        //チャンネルの公開設定が変わったときを更新、チャンネル設定を反映
-        // scopeIsPrivate: {
-        //     handler(scpe, scpeOLD) {
-        //         if ( scpe !== scpeOLD ) {
-        //             this.updateChannel(); //更新させる
-
-        //         }
-
-        //     }
-        // },
-
         //ユーザー検索ダイアログ
         userSearchQuery: {
             handler(query) {
