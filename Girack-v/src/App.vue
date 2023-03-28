@@ -49,9 +49,17 @@ export default {
 
     methods: {
         //新着メッセージ数を返す
-        checkReadTime(channelid) {
+        checkReadTime(channelid, term) { //term => ほしい値
             try {
-                return MsgReadTime.value[channelid].new; //データ返す
+                //termの値で返すものを選ぶ
+                switch(term) {
+                    case "new":
+                    return MsgReadTime.value[channelid].new; //新着数を返す
+
+                    case "mention":
+                        return MsgReadTime.value[channelid].mention; //メンション数を返す
+
+                }
             }
             catch(e) {
                 return null;
@@ -151,7 +159,7 @@ export default {
                 <!-- オンライン人数表示 -->
                 <v-card
                     style="font-size:1.15vb; margin-top:8px; width:80%"
-                    class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
+                    class="mx-auto pa-2 rounded-lg d-flex justify-center align-center"
                     color="#222"
                 >
                     <v-icon v-if="sessionOnlineNum>=2" style="margin-right:4px;" size="small" color="green">mdi:mdi-circle</v-icon>
@@ -215,10 +223,18 @@ export default {
                                     {{ l[1].channelname }}
                                 </div>
 
+                                <!-- メンションマーク -->
+                                <v-badge
+                                    v-if="checkReadTime(l[0], 'mention')"
+                                    :content="checkReadTime(l[0], 'mention')"
+                                    color="orange"
+                                    inline
+                                ></v-badge>
+
                                 <!-- 新着マーク -->
                                 <v-badge
-                                    v-if="checkReadTime(l[0])"
-                                    :content="checkReadTime(l[0])"
+                                    v-if="checkReadTime(l[0], 'new')"
+                                    :content="checkReadTime(l[0], 'new')"
                                     inline
                                 ></v-badge>
 

@@ -121,55 +121,57 @@ export default {
 </script>
 
 <template>
-    <div style="margin:3% auto; width:50%; height:95%;">
-        <p class="text-h4">
-            サーバー設定
-        </p>
-
-        <v-card class="card mx-auto rounded-lg">
-            <p class="text-h5">
-                サーバー名 : {{ currentSettings.servername }}
+    <div>
+        <div style="margin:3% auto; width:90%; height:95%;">
+            <p class="text-h4">
+                サーバー設定
             </p>
-        </v-card>
 
-        <br>
-        <div class="mx-auto" style="width:fit-content">
-            <v-btn
-                :disabled="!changed"
-                @click="updateServerSettings"
-                class="rounded-lg ma-1"
-                size="large"
-                color="success"
-            >
-            設定を保存
-            </v-btn>
-            <v-btn :disabled="!changed" @click="restoreDefault" class="rounded-lg ma-1" size="large" color="grey">元に戻す</v-btn>
-        </div>
-        
-
-        <v-card class="card mx-auto rounded-lg">
-            <p class="text-h6 ma-2">登録</p>
-            <v-card color="#222" class="rounded-lg cardInner">
-                <v-checkbox v-model="displaySettings.registerAvailable" color="primary" label="登録を受け付ける"></v-checkbox>
-                <v-checkbox
-                    :disabled="!displaySettings.registerAvailable"
-                    v-model="displaySettings.inviteOnly"
-                    label="招待制"
-                >
-                </v-checkbox>
-                <v-text-field
-                    :disabled="!displaySettings.inviteOnly||!displaySettings.registerAvailable"
-                    variant="outlined"
-                    label="招待コード"
-                    class="mx-auto"
-                    style="width:90%"
-                    v-model="displaySettings.inviteCode"
-                >
-                </v-text-field>
+            <v-card class="card mx-auto rounded-lg">
+                <p class="text-h5">
+                    サーバー名 : {{ currentSettings.servername }}
+                </p>
             </v-card>
 
-        </v-card>
+            <br>
+            <div class="mx-auto" style="width:fit-content">
+                <v-btn
+                    :disabled="!changed"
+                    @click="updateServerSettings"
+                    class="rounded-lg ma-1"
+                    size="large"
+                    color="success"
+                >
+                設定を保存
+                </v-btn>
+                <v-btn :disabled="!changed" @click="restoreDefault" class="rounded-lg ma-1" size="large" color="grey">元に戻す</v-btn>
+            </div>
+            
 
+            <v-card class="card mx-auto rounded-lg">
+                <p class="text-h6 ma-2">登録</p>
+                <v-card color="#222" class="rounded-lg cardInner">
+                    <v-checkbox v-model="displaySettings.registerAvailable" color="primary" label="登録を受け付ける"></v-checkbox>
+                    <v-checkbox
+                        :disabled="!displaySettings.registerAvailable"
+                        v-model="displaySettings.inviteOnly"
+                        label="招待制"
+                    >
+                    </v-checkbox>
+                    <v-text-field
+                        :disabled="!displaySettings.inviteOnly||!displaySettings.registerAvailable"
+                        variant="outlined"
+                        label="招待コード"
+                        class="mx-auto"
+                        style="width:90%"
+                        v-model="displaySettings.inviteCode"
+                    >
+                    </v-text-field>
+                </v-card>
+
+            </v-card>
+
+        </div>
     </div>
 </template>
 

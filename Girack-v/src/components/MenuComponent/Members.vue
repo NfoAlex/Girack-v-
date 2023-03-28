@@ -108,7 +108,7 @@ export default {
 <template>
     <!-- 一つ下のDIVのCSS適用するために囲んでいる -->
     <div>
-        <div class="mx-auto" style="height:90%; width:90%;">
+        <div class="mx-auto" style="margin-top:3%; height:90%; width:90%;">
             <!-- ユーザーページ用 -->
             <v-dialog
                 v-model="userDialogShow"

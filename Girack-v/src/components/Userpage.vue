@@ -109,7 +109,7 @@ export default {
                 this.targetUserRole = this.targetinfo.role;
                 this.targetUserBanned = this.targetinfo.banned;
 
-                if ( this.targetinfo.role === "Admin" || this.Userinfo.userid === this.userid ) {
+                if ( (this.targetinfo.role === "Admin" && this.Userinfo.role !== "Admin") || this.Userinfo.userid === this.userid ) {
                     this.manageDisabled = true; //管理を無効化
 
                 }

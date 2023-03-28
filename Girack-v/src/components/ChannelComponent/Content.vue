@@ -1,5 +1,6 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
+import { getCONFIG } from "../../config.js";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
@@ -7,6 +8,7 @@ const socket = getSocket();
 export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
+        const { CONFIG_NOTIFICATION } = getCONFIG();
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
         const { ChannelIndex } = dataChannel();
 
@@ -50,7 +52,8 @@ export default {
                         //最新メッセージを元に既読した時間を設定して新着数を0にする
                         this.MsgReadTime[this.getPath] = {
                             time: latestTime,
-                            new: 0 //新着メッセージ数を0に
+                            new: 0, //新着メッセージ数を0に
+                            mention: 0
                         };
                     }
                     catch(e) {
@@ -295,8 +298,12 @@ export default {
 
         //スクロールさせるだけの関数
         scrollIt() {
-            const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
-            channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+            //レンダーを待ってからスクロール
+            this.$nextTick(() => {
+                const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
+                channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+
+            });
 
         },
 
@@ -374,12 +381,15 @@ export default {
                         //既読時間を最新メッセージの時間に設定
                         time: latestTime,
                         //新着メッセージ数を0に
-                        new: 0
+                        new: 0,
+                        //メンション数を0に
+                        mention: 0
                     };
                 }
                 catch(e) {
                     console.log("Content :: setScrollState : 既読状態の更新できなかった");
                     this.MsgReadTime[this.getPath].new = 0;
+                    this.MsgReadTime[this.getPath].mention = 0;
                 }
 
                 //既読状態をCookieへ書き込み
