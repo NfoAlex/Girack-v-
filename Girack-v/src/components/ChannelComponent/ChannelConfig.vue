@@ -45,12 +45,15 @@ export default {
 
     watch: {
         //チャンネルの公開設定が変わったときを更新、チャンネル設定を反映
-        scopeIsPrivate: {
-            handler(scpe) {
-                this.updateChannel(); //更新させる
+        // scopeIsPrivate: {
+        //     handler(scpe, scpeOLD) {
+        //         if ( scpe !== scpeOLD ) {
+        //             this.updateChannel(); //更新させる
 
-            }
-        },
+        //         }
+
+        //     }
+        // },
 
         //ユーザー検索ダイアログ
         userSearchQuery: {
@@ -80,6 +83,7 @@ export default {
     },
 
     methods: {
+        //編集モードを切り替える
         switchEditing(cat, mode) {
             switch(cat) {
                 //概要欄の編集切り替え
@@ -105,7 +109,7 @@ export default {
                 targetid: this.channelid,
                 channelname: this.channelnameText,
                 description: this.descriptionText,
-                scope: (this.scopeIsPrivate?"private":"public"),
+                scope: (!this.scopeIsPrivate?"private":"public"),
                 reqSender: {
                     userid: this.Userinfo.userid,
                     sessionid: this.Userinfo.sessionid
@@ -134,6 +138,7 @@ export default {
 
         //チャンネルへユーザーを追加
         inviteUser(targetUserid) {
+            console.log("ChannelConfig :: inviteUser : が実行された");
             //チャンネルに参加させる
             socket.emit("channelAction", {
                 action: "join",
@@ -283,14 +288,14 @@ export default {
                         v-if="!checkUserJoined(user.userid)"
                         icon="mdi:mdi-account-plus"
                         class="rounded-lg"
-                        variant="solo"
+                        variant="text"
                     >
                     </v-btn>
                     <v-btn
                         v-else
                         icon="mdi:mdi-account-check"
                         class="rounded-lg"
-                        variant="solo"
+                        variant="text"
                     >
                     </v-btn>
                 </span>
@@ -395,7 +400,7 @@ export default {
                         @click="()=>{userSearchShow=!userSearchShow;}"
                         style="width:75%"
                         icon=""
-                        variant="solo"
+                        variant="text"
                         class="rounded-lg mx-auto"
                     >
                         <v-icon>mdi:mdi-account-plus</v-icon>
@@ -422,7 +427,7 @@ export default {
                             @click.stop="kickUser(u.userid)"
                             size="small"
                             class="rounded-lg"
-                            variant="solo"
+                            variant="text"
                             icon="mdi:mdi-karate"
                         >
                         </v-btn>
@@ -435,6 +440,7 @@ export default {
             <v-window-item value="manage" class="mx-auto" style="min-height:300px; overflow-y:auto;">
                 <v-checkbox
                     v-model="scopeIsPrivate"
+                    @click="updateChannel"
                     color="grey"
                     label="プライベートチャンネル"
                 >

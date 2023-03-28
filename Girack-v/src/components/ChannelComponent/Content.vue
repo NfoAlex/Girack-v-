@@ -1,10 +1,8 @@
 <script>
-import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel } from "../../socket.js";
+import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
-// const { Userinfo } = dataUser(); //ユーザー情報
-// const { MsgDB, UserIndex, StateScrolled, DoScroll } = dataMsg(); //履歴用DB
 
 export default {
     setup() {
@@ -46,8 +44,16 @@ export default {
             handler() {
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
-                    //新着のメッセージ数を0に
-                    this.MsgReadTime[this.getPath].new = 0;
+                    //最新メッセージを取得するために長さ計算
+                    let msgDBCurrentLength = this.MsgDB[this.getPath].length;
+                    //最新メッセージを元に既読した時間を設定して新着数を0にする
+                    this.MsgReadTime[this.getPath] = {
+                        time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
+                        new: 0 //新着メッセージ数を0に
+                    };
+
+                    //既読状態をCookieへ書き込み
+                    setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
 
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
@@ -90,13 +96,21 @@ export default {
     mounted() {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
+        let channelWindow = document.querySelector("#channelWindow")
+
         //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
-            document.querySelector("#channelWindow").addEventListener("scroll", function (event) {
+            channelWindow.addEventListener("scroll", function (event) {
                 ref.setScrollState(); //確認開始
 
             });
             this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
+
+            //もしスクロールできない縦幅だったらスクロール状態をTrueにする
+            if ( channelWindow.scrollHeight <= channelWindow.clientHeight ) { //縦幅比較
+                this.setScrollState(true); //trueへ設定
+
+            }
 
         });
 
@@ -335,20 +349,33 @@ export default {
 
         },
 
-        //スクロール位置によって一番下に行くボタンの表示切り替えをする
+        //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-            //一番下？
+            //一番下かどうか調べる？
             if (
                 s || //そもそも引数でtrueと渡されているなら
                 channelWindow.scrollTop + channelWindow.clientHeight + 32 >= channelWindow.scrollHeight || //スクロール位置を計算
-                channelWindow.offsetHeight >= channelWindow.scrollHeight //もし縦幅がそもそも画面におさまっているなら
+                channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
-                this.MsgReadTime[this.getPath] = {
-                    new: 0 //新着メッセージ数を0に
-                };
+
+                try {
+                    //最新のメッセージを取得するために履歴の長さを予め取得
+                    let msgDBCurrentLength = this.MsgDB[this.getPath].length;
+                    //既読状態をセット
+                    this.MsgReadTime[this.getPath] = {
+                        //既読時間を最新メッセージの時間に設定
+                        time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
+                        //新着メッセージ数を0に
+                        new: 0
+                    };
+                }
+                catch(e) {
+                    this.MsgReadTime[this.getPath].new = 0;
+                }
+                
 
             } else {
                 this.StateScrolled = false; //スクロールしきってないと保存
@@ -448,7 +475,7 @@ export default {
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
-                <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" variant="tonal" style="width:90%; padding:0 1%;">
+                <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" style="width:90%; padding:0 1%;">
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu

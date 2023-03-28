@@ -273,12 +273,6 @@ export function getMessage(channelid, readLength, startLength) {
 
 }
 
-//ユーザー情報返すだけ
-export function getUserinfo() {
-    return { userinfo };
-
-}
-
 //サーバー情報の受け取り
 socket.on("serverinfo", (dat) => {
     console.log("serverinfo :: ");
@@ -299,20 +293,6 @@ socket.on("infoResult", (dat) => {
     console.log("socket :: infoResult : 情報受け取り!");
     console.log(dat);
 
-    //データがチャンネル用なら
-    // if ( dat.type === "channel" ) {
-    //     console.log("channelIndexを更新します");
-    //     //チャンネル用情報JSONへ追加
-    //     channelIndex[dat.channelid] = {
-    //         channelname: dat.channelname, //チャンネル名
-    //         description: dat.description, //チャンネル概要
-    //         scope: dat.scope //チャンネルの公開範囲
-    //     };
-
-    //     updateState.channelinfo = true;
-
-    // }
-
     //データがサーバー用なら
     if ( dat.type === "server" ) {
         //サーバーの基本情報の更新
@@ -324,105 +304,16 @@ socket.on("infoResult", (dat) => {
 
     }
 
-    //データが自分の情報なら
-    // if ( dat.type === "user" ) {
-    //     //もし自分の情報だったら更新
-    //     if ( dat.userid === userinfo.userid ) {
-    //         // console.log("*******************");
-    //         // console.log("自分のや!");
-    //         // console.log(dat.channelJoined.length + " と " + userinfo.channelJoined.length);
-    //         // console.log(( dat.channelJoined.length > userinfo.channelJoined.length ));
-    //         // console.log("*******************");
-
-    //         if ( dat.channelJoined.length !== userinfo.channelJoined.length ) {
-    //             //チャンネル数が増えているなら
-    //             if ( dat.channelJoined.length > userinfo.channelJoined.length ) {
-    //                 let channelNew = (dat.channelJoined).filter( cid => !(userinfo.channelJoined).includes(cid) );
-                    
-    //                 console.log("socket :: チャンネル差 : ");
-    //                 console.log(channelNew);
-
-    //                 //チャンネル情報の取得
-    //                 for ( let c in channelNew ) {
-    //                     socket.emit("getInfo", { //リクエスト送信
-    //                         target: "channel",
-    //                         targetid: channelNew[c],
-    //                         reqSender: {
-    //                             userid: userinfo.userid, //ユーザーID
-    //                             sessionid: userinfo.sessionid //セッションID
-    //                         }
-    //                     });
-
-    //                 }
-
-    //             }
-
-    //             //チャンネル数が減っている（チャンネルを抜けた）なら
-    //             if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
-    //                 console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-    //                 dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
-
-    //                 console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
-    //                 //自分が抜けたチャンネル分channelIndexを削る
-    //                 for (let c=0; c<Object.keys(channelIndex).length; c++ ) {
-    //                     let channelid = Object.keys(channelIndex)[c];
-    //                     console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
-                        
-    //                     //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-    //                     if ( !dat.channelJoined.includes(channelid) ) {
-    //                         delete channelIndex[channelid]; //そのチャンネルIDのJSONを削除
-    //                         console.log("socket :: infoResult : 削除された!");
-    //                         break;
-
-    //                     }
-
-    //                 }
-
-    //             }
-
-    //             //=== REF版 ===
-    //             //チャンネル数が減っている（チャンネルを抜けた）なら
-    //             if ( dat.channelJoined.length < userinfo.channelJoined.length ) {
-    //                 console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-    //                 dat.channelid = userinfo.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
-
-    //                 console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
-    //                 //自分が抜けたチャンネル分channelIndexを削る
-    //                 for (let c=0; c<Object.keys(ChannelIndex.value).length; c++ ) {
-    //                     let channelid = Object.keys(ChannelIndex)[c];
-    //                     console.log("socket :: infoResult : 使うチャンネルID -> " + channelid);
-                        
-    //                     //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
-    //                     if ( !dat.channelJoined.includes(channelid) ) {
-    //                         delete ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
-    //                         console.log("socket :: infoResult : 削除された!");
-    //                         break;
-
-    //                     }
-
-    //                 }
-
-    //             }
-
-    //         }
-
-    //         userinfo = {
-    //             username: dat.username,
-    //             userid: userinfo.userid, //ユーザーID
-    //             role: dat.role, //ロール
-    //             loggedin: true, //ログイン状態はそのまま
-    //             sessionid: userinfo.sessionid, //セッションIDはそのまま
-    //             channelJoined: dat.channelJoined, //参加しているチャンネル
-    //         }
-
-    //     }
-
-    // }
-
 });
 
 //チャンネル情報の更新
 socket.on("infoChannel", (dat) => {
+    //参加していないチャンネルならスルー
+    if ( !Userinfo.value.channelJoined.includes(dat.channelid) ) {
+        return;
+
+    }
+
     console.log("socket :: infoChannel : チャンネル情報更新");
 
     //チャンネルデータを更新
@@ -432,7 +323,6 @@ socket.on("infoChannel", (dat) => {
         scope: dat.scope, //チャンネルの公開範囲
         historyReadCount: 0 //すでに読んだ履歴の数
     };
-
 
 });
 
@@ -547,15 +437,26 @@ socket.on("messageHistory", (history) => {
 
     let index = 0; //チャンネル参照インデックス変数
 
-    //履歴がすでに存在するなら履歴を頭から追加
+    //受信した履歴の中で新着のものかどうか調べる
+    for ( index in history ) {
+        //既読状態がそもそも無ければやらない
+        if ( MsgReadTime.value[channelid] === undefined ) break;
+        
+        //既読状態の時間から新着メッセージ数を加算
+        if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
+            console.log("socket :: messageHistory : 比較する時間, history -> " + history[index].time)
+            console.log("                                     sgReadTime -> " + MsgReadTime.value[channelid].time)
+            MsgReadTime.value[channelid].new++; //新着数を加算
+
+        }
+
+    }
+
+    //履歴が存在しているなら履歴を頭から追加
     if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
         //データの追加順的に逆だからここでソートしておく
         history = history.reverse();
-        //履歴を追加
-        for ( index in history ) {
-            MsgDB.value[channelid].unshift(history[index]);
-
-        }
+        
         //履歴の長さを計算
         ChannelIndex.value[channelid].historyReadCount += history.length;
 
@@ -610,6 +511,26 @@ socket.on("authResult", (dat) => {
             sessionid: dat.sessionid, //セッションID
             channelJoined: dat.channelJoined
         };
+
+        try {
+            //クッキーから既読状態を取得
+            let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
+            console.log("socket :: authResult : クッキーからのMsgReadTime ->");
+            console.log(Object.entries(COOKIE_MsgReadTime));
+
+            
+            //既読状態のJSONを配列化して使いやすくする
+            let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
+            //既読状態の新着数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
+            for ( let index in objCOOKIE_MsgReadTime ) {
+                COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
+
+            }
+            
+            //既読状態をクッキーから取得
+            MsgReadTime.value = COOKIE_MsgReadTime;
+        }
+        catch(e) {}
 
         //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
