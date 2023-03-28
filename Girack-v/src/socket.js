@@ -515,7 +515,18 @@ socket.on("authResult", (dat) => {
         try {
             //クッキーから既読状態を取得
             let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
-            console.log("socket :: authResult : クッキーからのMsgReadTime ->", {COOKIE_MsgReadTime});
+            console.log("socket :: authResult : クッキーからのMsgReadTime ->");
+            console.log(Object.entries(COOKIE_MsgReadTime));
+
+            
+            //既読状態のJSONを配列化して使いやすくする
+            let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
+            //既読状態の新着数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
+            for ( let index in objCOOKIE_MsgReadTime ) {
+                COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
+
+            }
+            
             //既読状態をクッキーから取得
             MsgReadTime.value = COOKIE_MsgReadTime;
         }
@@ -529,8 +540,6 @@ socket.on("authResult", (dat) => {
                 sessionid: dat.sessionid
             },
         });
-
-        
 
         //クッキーにセッションIDを設定、寿命は15日
         setCookie("sessionid", dat.sessionid, 15);
