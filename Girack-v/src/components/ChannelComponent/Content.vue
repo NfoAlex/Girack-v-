@@ -96,13 +96,21 @@ export default {
     mounted() {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
+        let channelWindow = document.querySelector("#channelWindow")
+
         //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
-            document.querySelector("#channelWindow").addEventListener("scroll", function (event) {
+            channelWindow.addEventListener("scroll", function (event) {
                 ref.setScrollState(); //確認開始
 
             });
             this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
+
+            //もしスクロールできない縦幅だったらスクロール状態をTrueにする
+            if ( channelWindow.scrollHeight <= channelWindow.clientHeight ) { //縦幅比較
+                this.setScrollState(true); //trueへ設定
+
+            }
 
         });
 
@@ -353,15 +361,21 @@ export default {
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
 
-                //最新のメッセージを取得するために履歴の長さを予め取得
-                let msgDBCurrentLength = this.MsgDB[this.getPath].length;
-                //既読状態をセット
-                this.MsgReadTime[this.getPath] = {
-                    //既読時間を最新メッセージの時間に設定
-                    time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
-                    //新着メッセージ数を0に
-                    new: 0
-                };
+                try {
+                    //最新のメッセージを取得するために履歴の長さを予め取得
+                    let msgDBCurrentLength = this.MsgDB[this.getPath].length;
+                    //既読状態をセット
+                    this.MsgReadTime[this.getPath] = {
+                        //既読時間を最新メッセージの時間に設定
+                        time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
+                        //新着メッセージ数を0に
+                        new: 0
+                    };
+                }
+                catch(e) {
+                    this.MsgReadTime[this.getPath].new = 0;
+                }
+                
 
             } else {
                 this.StateScrolled = false; //スクロールしきってないと保存
