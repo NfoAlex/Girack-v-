@@ -151,9 +151,11 @@ export default {
                 <!-- オンライン人数表示 -->
                 <v-card
                     style="font-size:1.15vb; margin-top:8px; width:80%"
-                    class="mx-auto text-center pa-1 rounded-lg"
+                    class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
                     color="#222"
                 >
+                    <v-icon v-if="sessionOnlineNum>=2" style="margin-right:4px;" size="small" color="green">mdi:mdi-circle</v-icon>
+                    <span v-else>🥲</span>
                     {{ sessionOnlineNum }}人がオンライン
                 </v-card>
                 
