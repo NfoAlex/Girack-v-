@@ -10,7 +10,7 @@ const CONFIG_NOTIFICATION = ref({
 });
 
 const CONFIG_DISPLAY = ref({
-
+    
 });
 
 export function getCONFIG() {

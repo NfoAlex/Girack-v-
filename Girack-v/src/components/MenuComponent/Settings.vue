@@ -111,7 +111,7 @@ export default {
             </div>
 
             <div style="height:80vh; overflow-y:auto">
-                <div class="mx-auto" style="width:90%; margin: 5% 0;">
+                <div class="mx-auto" style="width:100%; margin: 5% 0;">
                     <v-card class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
 
