@@ -152,7 +152,7 @@ export default {
                                 v-model="CONFIG_NOTIFICATION.NOTIFY_MENTION"
                                 label="メンションで通知する"
                                 density="compact"
-                                messages="@<あなたの名前>で通知"
+                                messages="'@<あなたの名前>'が含まれると通知"
                             >
                             </v-checkbox>
                         </v-card>
