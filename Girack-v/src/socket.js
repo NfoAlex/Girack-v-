@@ -308,6 +308,12 @@ socket.on("infoResult", (dat) => {
 
 //チャンネル情報の更新
 socket.on("infoChannel", (dat) => {
+    //参加していないチャンネルならスルー
+    if ( !Userinfo.value.channelJoined.includes(dat.channelid) ) {
+        return;
+
+    }
+
     console.log("socket :: infoChannel : チャンネル情報更新");
 
     //チャンネルデータを更新
@@ -317,7 +323,6 @@ socket.on("infoChannel", (dat) => {
         scope: dat.scope, //チャンネルの公開範囲
         historyReadCount: 0 //すでに読んだ履歴の数
     };
-
 
 });
 
