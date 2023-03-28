@@ -44,13 +44,17 @@ export default {
             handler() {
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
-                    //最新メッセージを取得するために長さ計算
-                    let msgDBCurrentLength = this.MsgDB[this.getPath].length;
-                    //最新メッセージを元に既読した時間を設定して新着数を0にする
-                    this.MsgReadTime[this.getPath] = {
-                        time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
-                        new: 0 //新着メッセージ数を0に
-                    };
+                    //既読状態が存在するなら設定
+                    try {
+                        //最新メッセージを取得するために長さ計算
+                        let msgDBCurrentLength = this.MsgDB[this.getPath].length;
+                        //最新メッセージを元に既読した時間を設定して新着数を0にする
+                        this.MsgReadTime[this.getPath] = {
+                            time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
+                            new: 0 //新着メッセージ数を0に
+                        };
+                    }
+                    catch(e) {}
 
                     //既読状態をCookieへ書き込み
                     setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
@@ -361,15 +365,21 @@ export default {
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
 
-                //最新のメッセージを取得するために履歴の長さを予め取得
-                let msgDBCurrentLength = this.MsgDB[this.getPath].length;
-                //既読状態をセット
-                this.MsgReadTime[this.getPath] = {
-                    //既読時間を最新メッセージの時間に設定
-                    time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
-                    //新着メッセージ数を0に
-                    new: 0
-                };
+                try {
+                    //最新のメッセージを取得するために履歴の長さを予め取得
+                    let msgDBCurrentLength = this.MsgDB[this.getPath].length;
+                    //既読状態をセット
+                    this.MsgReadTime[this.getPath] = {
+                        //既読時間を最新メッセージの時間に設定
+                        time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
+                        //新着メッセージ数を0に
+                        new: 0
+                    };
+                }
+                catch(e) {
+                    this.MsgReadTime[this.getPath].new = 0;
+                }
+                
 
             } else {
                 this.StateScrolled = false; //スクロールしきってないと保存
