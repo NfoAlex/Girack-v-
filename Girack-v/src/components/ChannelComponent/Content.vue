@@ -1,5 +1,6 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
+import { getCONFIG } from "../../config.js";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
@@ -7,6 +8,7 @@ const socket = getSocket();
 export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
+        const { CONFIG_NOTIFICATION } = getCONFIG();
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
         const { ChannelIndex } = dataChannel();
 
