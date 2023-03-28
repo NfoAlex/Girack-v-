@@ -166,7 +166,11 @@ socket.on("messageReceive", (msg) => {
         }
 
         //新着のメッセージを通知
-        if ( CONFIG_NOTIFICATION.value.ENABLE ) {
+        if (
+            CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
+            msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
+            !location.pathname.includes(msg.channelid) //今いるチャンネルじゃない
+        ) {
             console.log("通知は有効化");
             if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {
                 console.log("通知送る " + location.pathname);
