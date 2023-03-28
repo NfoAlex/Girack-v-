@@ -46,10 +46,10 @@ export default {
                 if ( this.StateScrolled ) {
                     try {
                         //最新メッセージを取得するために長さ計算
-                        let msgDBCurrentLength = this.MsgDB[this.getPath].length;
+                        let latestTime = this.MsgDB[this.getPath].slice(-1)[0].time;
                         //最新メッセージを元に既読した時間を設定して新着数を0にする
                         this.MsgReadTime[this.getPath] = {
-                            time: this.MsgDB[this.getPath][msgDBCurrentLength-1].time,
+                            time: latestTime,
                             new: 0 //新着メッセージ数を0に
                         };
                     }
@@ -368,7 +368,6 @@ export default {
 
                 try {
                     //最新のメッセージを取得するために履歴の長さを予め取得
-                    //let msgDBCurrentLength = this.MsgDB[this.getPath].length;
                     let latestTime = this.MsgDB[this.getPath].slice(-1)[0].time;
                     //既読状態をセット
                     this.MsgReadTime[this.getPath] = {
