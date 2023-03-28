@@ -1,5 +1,6 @@
 <script>
 import { getCONFIG } from "../../config.js";
+import { setCookie } from "../../socket.js";
 
 export default {
 
@@ -23,6 +24,17 @@ export default {
             CurrentConfig: {},
 
             dataConsent: true
+        }
+    },
+
+    watch: {
+        //設定の変更を検知してCookieへ書き込み
+        CONFIG_NOTIFICATION: {
+            handler() {
+                setCookie("configNotify", JSON.stringify(this.CONFIG_NOTIFICATION), 7);
+
+            },
+            deep:true
         }
     },
 
@@ -61,19 +73,6 @@ export default {
             }
 
         },
-
-        //設定を適用
-        // saveSettings(configTerm) { //configTerm => 設定を更新するやつ
-        //     switch(configTerm) {
-        //         case "Notification":
-        //             break;
-
-        //         default:
-        //             break;
-
-        //     }
-
-        // },
 
         //ブラウザの通知設定を確認
         checkNotificationPermission() {
