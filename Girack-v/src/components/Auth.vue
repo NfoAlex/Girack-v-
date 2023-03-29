@@ -55,7 +55,7 @@ export default {
         //this.$vuetify.theme.current.dark = false;
         //this.$vuetify.theme.set("light");
 
-        this.servername = this.serverinfoLoaded.servername;
+        //this.servername = this.serverinfoLoaded.servername;
         
         //サーバーに接続できるまでループでクッキーが存在するなら認証開始
         const checkCookie = setInterval( () => {
@@ -106,6 +106,7 @@ export default {
         //サーバー名表示用
         socket.on("serverinfo", (dat) => {
             this.serverinfoLoaded = dat; //サーバーの情報
+            document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
 
         });
 
