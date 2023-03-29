@@ -34,6 +34,7 @@ export default {
     },
 
     methods: {
+        //認証申請
         requestAuth() {
             socket.emit("auth", this.pwForAuth);
             this.success = false;
@@ -41,6 +42,7 @@ export default {
 
         },
 
+        //登録申請
         requestRegister() {
             socket.emit("register", [this.usernameForRegister,this.invcodeForRegister]);
             this.success = false;
@@ -50,13 +52,7 @@ export default {
         }
     },
 
-    mounted() {
-        //console.log(this.$vuetify.theme);
-        //this.$vuetify.theme.current.dark = false;
-        //this.$vuetify.theme.set("light");
-
-        //this.servername = this.serverinfoLoaded.servername;
-        
+    mounted() {        
         //サーバーに接続できるまでループでクッキーが存在するなら認証開始
         const checkCookie = setInterval( () => {
             if ( getCookie("sessionid") !== "" ) {

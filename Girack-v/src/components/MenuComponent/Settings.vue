@@ -5,6 +5,7 @@ import { setCookie } from "../../socket.js";
 export default {
 
     setup() {
+        //設定をインポート
         const { CONFIG_NOTIFICATION } = getCONFIG();
         return { CONFIG_NOTIFICATION };
         
