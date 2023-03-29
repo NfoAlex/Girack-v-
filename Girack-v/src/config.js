@@ -5,9 +5,12 @@ import { ref } from "vue";
 
 //通知設定
 const CONFIG_NOTIFICATION = ref({
-    ENABLE: true,
+    ENABLE: true, //ブラウザ通知
     NOTIFY_ALL: false,
-    NOTIFY_MENTION: false
+    NOTIFY_MENTION: false,
+
+    DISPLAY_TAB_NEW: false,
+    DISPLAY_TAB_MENTION: false,
 });
 
 //通知をミュートするチャンネルリスト
