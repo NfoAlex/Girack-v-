@@ -154,6 +154,7 @@ socket.on("messageReceive", (msg) => {
 
         }
 
+        //メンション数がデータになかったら新たに定義
         if ( MsgReadTime.value[msg.channelid].mention === null ) MsgReadTime.value[msg.channelid].mention = 0;
 
         //新着メッセージ数を更新
@@ -197,7 +198,7 @@ socket.on("messageReceive", (msg) => {
         if (
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
             msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
-            !location.pathname.includes(msg.channelid) //今いるチャンネルじゃない
+            (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、かつ違うタブなら
         ) {
             //すべてのメッセージを通知に出すようにしているなら通知
             if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {

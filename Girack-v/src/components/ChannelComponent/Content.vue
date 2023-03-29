@@ -89,6 +89,28 @@ export default {
                 });
 
             }
+        },
+
+        MsgReadTime: {
+            handler() {
+                let TotalNew = 0; //新着数のトータル
+                let TotalMention = 0; //メンション数のトータル
+
+                //新着とメンションを取り出すために配列化
+                let ObjMsgReadTime = Object.entries(this.MsgReadTime);
+
+                //配列の数分それぞれの合計を計算
+                for ( let index in ObjMsgReadTime ) {
+                    TotalNew += ObjMsgReadTime[index][1].new; //新着
+                    TotalMention += ObjMsgReadTime[index][1].mention; //メンション
+
+                }
+
+                //タブ名へ適用
+                document.title = (TotalMention>0?("[!" + TotalMention +"]"):"") + (TotalNew>0?("[" + TotalNew +"]"):"") + " #" + this.ChannelIndex[this.$route.params.id].channelname;
+
+            },
+            deep: true
         }
     },
 
@@ -127,12 +149,21 @@ export default {
     methods: {
         //テキストからURLを検出して置き換える
         formatMessage(msg) {
+            let msgCleaned = "";
+
             //XSS対策用
-            let msgCleaned = String(msg).replace(this.XSSRegex, function(c){
+            msgCleaned = String(msg).replace(this.XSSRegex, function(c){
                 return '&#'+c.charCodeAt(0)+';';
 
             });
 
+            //自分に対するメンションなら着色
+            msgCleaned = String(msg).replace(("@"+this.Userinfo.username), function(c){
+                return "<span style='color:orange'>" + c + "</span>";
+
+            });
+
+            //リンクをクリックできる形にする
             return msgCleaned.replace(this.URLRegex, (url) => {
                 return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
 

@@ -3,14 +3,13 @@ import { RouterLink, RouterView } from 'vue-router';
 import { getSocket, dataChannel, dataUser, dataMsg, backendURI, Serverinfo } from "./socket.js";
 import Auth from "./components/Auth.vue";
 
-const { ChannelIndex } = dataChannel();
-
 </script>
 
 <script>
 
 const { Userinfo } = dataUser();
 const { MsgReadTime } = dataMsg();
+const { ChannelIndex } = dataChannel();
 import { useTheme } from 'vuetify';
 const socket = getSocket();
 

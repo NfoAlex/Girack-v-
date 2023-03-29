@@ -163,6 +163,8 @@ export default {
 
         });
 
+        document.title = "チャンネルブラウザ"; //タブ名を変更
+
     },
 
     unmounted() {
