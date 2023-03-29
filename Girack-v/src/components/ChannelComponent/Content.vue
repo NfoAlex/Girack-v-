@@ -89,6 +89,28 @@ export default {
                 });
 
             }
+        },
+
+        MsgReadTime: {
+            handler() {
+                let TotalNew = 0; //新着数のトータル
+                let TotalMention = 0; //メンション数のトータル
+
+                //新着とメンションを取り出すために配列化
+                let ObjMsgReadTime = Object.entries(this.MsgReadTime);
+
+                //配列の数分それぞれの合計を計算
+                for ( let index in ObjMsgReadTime ) {
+                    TotalNew += ObjMsgReadTime[index][1].new; //新着
+                    TotalMention += ObjMsgReadTime[index][1].mention; //メンション
+
+                }
+
+                //タブ名へ適用
+                document.title = (TotalMention>0?("[!" + TotalMention +"]"):"") + (TotalNew>0?("[" + TotalNew +"]"):"") + " #" + this.ChannelIndex[this.$route.params.id].channelname;
+
+            },
+            deep: true
         }
     },
 
