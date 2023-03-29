@@ -149,12 +149,21 @@ export default {
     methods: {
         //テキストからURLを検出して置き換える
         formatMessage(msg) {
+            let msgCleaned = "";
+
             //XSS対策用
-            let msgCleaned = String(msg).replace(this.XSSRegex, function(c){
+            msgCleaned = String(msg).replace(this.XSSRegex, function(c){
                 return '&#'+c.charCodeAt(0)+';';
 
             });
 
+            //自分に対するメンションなら着色
+            msgCleaned = String(msg).replace(("@"+this.Userinfo.username), function(c){
+                return "<span style='color:orange'>" + c + "</span>";
+
+            });
+
+            //リンクをクリックできる形にする
             return msgCleaned.replace(this.URLRegex, (url) => {
                 return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
 
