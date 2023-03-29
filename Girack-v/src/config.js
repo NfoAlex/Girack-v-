@@ -5,7 +5,7 @@ import { ref } from "vue";
 
 //通知設定
 const CONFIG_NOTIFICATION = ref({
-    ENABLE: true, //ブラウザ通知
+    ENABLE: true,
     NOTIFY_ALL: false,
     NOTIFY_MENTION: true,
 
