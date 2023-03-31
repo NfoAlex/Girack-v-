@@ -27,6 +27,8 @@ export default {
             channelBar: "channelBar", //左のチャンネルバーとか
             main: "main", //右のチャンネル表示するところ
 
+            sessionOnlineNum: 0, //オンラインユーザー数
+
             path: "",
             loggedin: false,
         }
@@ -42,8 +44,13 @@ export default {
     },
 
     mounted() {
-        //console.log("vuetify :: global theme theme -> " + theme.global.name.value);
         socket.emit("getInitInfo"); //サーバーの情報を取得
+
+        //オンラインユーザーの更新
+        socket.on("sessionOnlineUpdate", (num) => {
+            this.sessionOnlineNum = num;
+
+        });
 
     }
 
@@ -56,7 +63,8 @@ export default {
 
         <!-- ログイン後(Main) -->
         <div v-if="loggedin">
-            <Sidebar />
+            <!-- サイドバー(オンラインユーザーの数を渡している) -->
+            <Sidebar :sessionOnlineNum="sessionOnlineNum" />
             <div :class="main">
                 <RouterView />
             </div>

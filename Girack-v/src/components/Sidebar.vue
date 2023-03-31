@@ -16,11 +16,12 @@ export default {
 
     },
 
+    props: ["sessionOnlineNum"], //オンライン人数用
+
     data() {
         return {
             servername: "",
             displayusername: "Null",
-            sessionOnlineNum: 0,
 
             path: "",
             loggedin: false,
