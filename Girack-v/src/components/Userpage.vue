@@ -150,7 +150,9 @@ export default {
     <v-card elevation="6" style="max-width:650px; max-height:550px;" class="mx-auto pa-1 userpage text-center rounded-lg">
 
         <v-card color="secondary" elevation="12" width="70%" style="max-width:300px;" class="mx-auto boxProfile rounded-lg">
-            <v-avatar style="margin-top:16px;" size="75" :image="imgsrc + userid + '.jpeg'"></v-avatar>
+            
+            <v-avatar style="margin-top:16px;" size="7vh" :image="imgsrc + userid + '.jpeg'"></v-avatar>
+            
             <div class="ma-3">
                 <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
                 <p class="text-overline"># {{ userid }}</p>
