@@ -1,6 +1,6 @@
 //Sidebar.vue
 <script>
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterLink } from 'vue-router';
 import { getSocket, dataChannel, dataUser, dataMsg, backendURI, Serverinfo } from "../socket.js";
 
 const socket = getSocket();
@@ -73,6 +73,7 @@ export default {
     },
 
     unmounted() {
+        //通信重複防止
         socket.off("sessionOnlineUpdate");
         socket.off("serverinfo");
         
@@ -235,6 +236,7 @@ export default {
                     </RouterLink>
                 </div>
             </div>
+            
         </div>
     </div>
 </template>
