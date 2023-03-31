@@ -1,6 +1,7 @@
 <script>
 
-import { dataUser, dataMsg, getSocket, backendURI } from '../socket';
+import { dataUser, getSocket, backendURI } from '../socket';
+import { VVirtualScroll } from "vuetify/labs/VVirtualScroll";
 
 const socket = getSocket();
 
@@ -8,11 +9,12 @@ export default {
     
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
-        //const { UserIndex } = dataMsg();
 
         return { Userinfo };
 
     },
+
+    components: {VVirtualScroll},
 
     data() {
         return {
@@ -108,19 +110,21 @@ export default {
 
 <template>
     <div class="mx-auto d-flex flex-column" style="width:95%; height:100vh;">
-        <div style="">
-            <p class="text-h4">オンラインユーザーリスト</p>
+        <div style="height:5vh">
+            <p style="font-size:4.5vh;" class="text-truncate">オンラインユーザーリスト</p>
         </div>
-        <div style="overflow-y:auto;">
-            <v-card
-                class="rounded-lg card pa-3"
-                v-if="userListReady&&OnlineSession"
-                v-for="u in getUsernameFromList()"
-                color="grey"
-            >
-                <v-avatar :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
-                {{ u.name }}
-            </v-card>
+        <div style="overflow-y:auto; margin-top:3vh;">
+            <VVirtualScroll height="90vh" :items="getUsernameFromList()">
+                <template v-slot:default="{ item }">
+                    <v-card
+                        class="rounded-lg card pa-3"
+                        color="grey"
+                    >
+                        <v-avatar style="margin:0 16px;" :image="imgsrc + item.userid + '.jpeg'"></v-avatar>
+                        {{ item.name }}
+                    </v-card>
+                </template>
+            </VVirtualScroll>
         </div>
     </div>
 </template>
