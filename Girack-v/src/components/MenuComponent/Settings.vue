@@ -115,7 +115,7 @@ export default {
                     <v-card class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
 
-                        <p>許可状況</p>
+                        <p><v-icon>mdi:mdi-bell-cog</v-icon>許可状況</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <p v-if="checkNotificationPermission()">
                                 <v-icon color="success">mdi:mdi-check-bold</v-icon>
@@ -133,7 +133,7 @@ export default {
 
                         <br>
 
-                        <p>通知する内容</p>
+                        <p><v-icon>mdi:mdi-bell</v-icon>通知する内容</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
                                 v-model="CONFIG_NOTIFICATION.ENABLE"
@@ -160,7 +160,7 @@ export default {
 
                         <br>
 
-                        <p>タブ名に表示する通知</p>
+                        <p><v-icon>mdi:mdi-tab</v-icon>タブ名に表示する通知</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
                                 v-model="CONFIG_NOTIFICATION.DISPLAY_TAB_NEW"
@@ -219,7 +219,7 @@ export default {
 
                     <v-card class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">プライバシー</p>
-                        <p>データ</p>
+                        <p><v-icon>mdi:mdi-radar</v-icon>データ</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
                                 v-model="dataConsent"

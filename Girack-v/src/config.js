@@ -8,7 +8,7 @@ const CONFIG_NOTIFICATION = ref({
     ENABLE: true, //ブラウザ通知
     NOTIFY_ALL: false, //すべてを通知する
     NOTIFY_MENTION: true, //メンションを通知する
-
+    
     DISPLAY_TAB_NEW: false, //タブに新着数を出す
     DISPLAY_TAB_MENTION: true, //タブにメンション数を出す
 });
