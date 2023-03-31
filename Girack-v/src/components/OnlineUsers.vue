@@ -107,9 +107,11 @@ export default {
 </script>
 
 <template>
-    <div class="mx-auto" style="width:95%;">
-        <p class="text-h4">オンラインユーザーリスト</p>
-        <div>
+    <div class="mx-auto d-flex flex-column" style="width:95%; height:100vh;">
+        <div style="">
+            <p class="text-h4">オンラインユーザーリスト</p>
+        </div>
+        <div style="overflow-y:auto;">
             <v-card
                 class="rounded-lg card pa-3"
                 v-if="userListReady&&OnlineSession"
