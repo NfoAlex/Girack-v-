@@ -59,12 +59,6 @@ export default {
     },
 
     mounted() {
-        //オンラインユーザーの更新
-        socket.on("sessionOnlineUpdate", (num) => {
-            this.sessionOnlineNum = num;
-
-        });
-
         //サーバー情報の受信
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername; //表示する名前を変更
@@ -152,7 +146,7 @@ export default {
             <RouterLink :to="'/onlineuser'">
                 <v-card
                     @click=""
-                    style="font-size:1.15vb; margin-top:8px; width:80%"
+                    style="font-size:calc(6px + 0.65vb); margin-top:8px; width:80%"
                     class="mx-auto pa-2 rounded-lg d-flex justify-center align-center"
                     color="#222"
                 >
@@ -171,7 +165,7 @@ export default {
                         class="d-flex pa-2 justify-center align-center rounded-pill"
                         @click=""
                         :variant="path.indexOf('jsonviewer')!==-1?'tonal':'text'"
-                        style="font-size:1.35vb;"
+                        style="font-size:calc(6px + 0.55vb);"
                     >
                         <v-icon>mdi:mdi-shield-bug</v-icon>
                         <span class="text-truncate">
@@ -185,7 +179,7 @@ export default {
                         class="d-flex pa-2 justify-center align-center rounded-lg"
                         @click=""
                         :variant="path.indexOf('browser')!==-1?'tonal':'text'"
-                        style="font-size:1.35vb;"
+                        style="font-size:calc(6px + 0.55vb);"
                     >
                         <v-icon>mdi:mdi-text-search</v-icon>
                         <span class="text-truncate">
@@ -205,7 +199,7 @@ export default {
                             class="rounded-lg pa-2 d-flex align-center"
                             :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
                             @click=""
-                            style="font-size:1.35vb;"
+                            style="font-size:calc(6px + 0.75vb);"
                         >
                             <!-- チャンネル名前の#の部分 -->
                             <div class="flex-shrink-1">
@@ -237,7 +231,7 @@ export default {
                     </RouterLink>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </template>
