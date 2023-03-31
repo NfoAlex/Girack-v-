@@ -1,6 +1,7 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
-import { getSocket, dataChannel, dataUser, dataMsg, backendURI, Serverinfo } from "./socket.js";
+import { RouterView } from 'vue-router';
+import { getSocket } from "./socket.js";
+
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
 
@@ -8,9 +9,6 @@ import Sidebar from "./components/Sidebar.vue";
 
 <script>
 
-const { Userinfo } = dataUser();
-const { MsgReadTime } = dataMsg();
-const { ChannelIndex } = dataChannel();
 import { useTheme } from 'vuetify';
 const socket = getSocket();
 
@@ -29,14 +27,8 @@ export default {
             channelBar: "channelBar", //左のチャンネルバーとか
             main: "main", //右のチャンネル表示するところ
 
-            servername: "",
-            displayusername: "Null",
-            sessionOnlineNum: 0,
-
             path: "",
             loggedin: false,
-            channelJoined: [],
-            uri: backendURI,
         }
 
     },
@@ -47,26 +39,6 @@ export default {
             this.path = r.path; //変数へ取り込む
 
         },
-    },
-
-    methods: {
-        //新着メッセージ数を返す
-        checkReadTime(channelid, term) { //term => ほしい値
-            try {
-                //termの値で返すものを選ぶ
-                switch(term) {
-                    case "new":
-                    return MsgReadTime.value[channelid].new; //新着数を返す
-
-                    case "mention":
-                        return MsgReadTime.value[channelid].mention; //メンション数を返す
-
-                }
-            }
-            catch(e) {
-                return null;
-            }
-        }
     },
 
     mounted() {
