@@ -1,7 +1,6 @@
 <script>
 
 import { dataUser, getSocket, backendURI } from '../socket';
-import { VVirtualScroll } from "vuetify/labs/VVirtualScroll";
 
 const socket = getSocket();
 let loopGetSessionOnline = null; //オンラインユーザー取得ループ用
@@ -119,26 +118,23 @@ export default {
             <p style="font-size:4.5vh;" class="text-truncate">オンラインユーザーリスト</p>
         </div>
         <div style="overflow-y:auto; margin-top:3vh;">
-            <VVirtualScroll height="90vh" :items="userListDisplay">
-                <template v-slot:default="{ item }">
-                    <v-card
-                        class="rounded-lg card pa-3 d-flex align-center"
-                        color="grey"
-                    >
-                        <v-avatar style="margin:0 16px;" :image="imgsrc + item.userid + '.jpeg'"></v-avatar>
-                        <span class="me-auto">
-                            {{ item.name }}
-                        </span>
+            <v-card
+                class="rounded-lg card pa-3 d-flex align-center"
+                color="grey"
+                v-for="user in userListDisplay"
+            >
+                <v-avatar style="margin:0 16px;" :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
+                <span class="me-auto">
+                    {{ user.name }}
+                </span>
 
-                        <span v-if="item.role!=='Member'" style="float:right;">
-                            <v-chip :color="item.role==='Admin'?'purple':'blue'">
-                                {{ item.role }}
-                            </v-chip>
-                        </span>
-                    
-                    </v-card>
-                </template>
-            </VVirtualScroll>
+                <span v-if="user.role!=='Member'" style="float:right;">
+                    <v-chip :color="user.role==='Admin'?'purple':'blue'">
+                        {{ user.role }}
+                    </v-chip>
+                </span>
+            
+            </v-card>
         </div>
     </div>
 </template>
