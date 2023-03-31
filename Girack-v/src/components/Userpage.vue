@@ -99,6 +99,9 @@ export default {
         } else if ( this.Userinfo.role === "Moderator" ) { //ModeratorならModerator以下
             this.roleList = ["Moderator", "Member"];
 
+        } else {
+            this.roleList = [];
+
         }
 
         socket.on("infoUser", (dat) => {
@@ -106,10 +109,19 @@ export default {
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
 
+                //ターゲットユーザーの情報を設定
                 this.targetUserRole = this.targetinfo.role;
                 this.targetUserBanned = this.targetinfo.banned;
 
-                if ( (this.targetinfo.role === "Admin" && this.Userinfo.role !== "Admin") || this.Userinfo.userid === this.userid ) {
+                //自分とターゲットのユーザーのロールによって管理を無効化
+                if (
+                    ( //自分がAdminではなく、かつターゲットのユーザーがAdminなら
+                        this.targetinfo.role === "Admin" &&
+                        this.Userinfo.role !== "Admin"
+                    ) ||
+                    this.Userinfo.userid === this.userid || //自分なら
+                    this.targetinfo.role === "Deleted" //消されたユーザーなら
+                ) {
                     this.manageDisabled = true; //管理を無効化
 
                 }
