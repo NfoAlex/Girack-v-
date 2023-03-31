@@ -62,6 +62,11 @@ const router = createRouter({
       path: '/jsonviewer/',
       name: 'JSON viewer',
       component: () => import('../components/JSONviewer.vue')
+    },
+    { //オンラインのユーザーリスト
+      path: '/onlineuser/',
+      name: 'Online User',
+      component: () => import('../components/OnlineUsers.vue')
     }
   ],
   scrollBehavior(to, from, savedPosition) { //スクロール位置の処理
