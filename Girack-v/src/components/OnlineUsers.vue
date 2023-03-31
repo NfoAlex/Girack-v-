@@ -13,8 +13,6 @@ export default {
 
     },
 
-    components: {VVirtualScroll},
-
     data() {
         return {
             OnlineSession: [],
