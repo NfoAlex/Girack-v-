@@ -45,10 +45,10 @@ export default {
                 //termの値で返すものを選ぶ
                 switch(term) {
                     case "new":
-                    return MsgReadTime.value[channelid].new; //新着数を返す
+                    return this.MsgReadTime[channelid].new; //新着数を返す
 
                     case "mention":
-                        return MsgReadTime.value[channelid].mention; //メンション数を返す
+                        return this.MsgReadTime[channelid].mention; //メンション数を返す
 
                 }
             }
