@@ -113,6 +113,59 @@ export default {
                 </p>
             </div>
 
+            <!-- 設定ページボタン -->
+            <div style="height:10vh; width:100%; padding-top:8px;">
+                <div class="d-flex align-center">
+                    <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto; overflow-y:hidden">
+                        <v-btn
+                            @click="configPage='notification'"
+                            size="large"
+                            :color="configPage==='notification'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            通知
+                        </v-btn>
+
+                        <v-btn
+                            @click="configPage='interface'"
+                            size="large"
+                            :color="configPage==='interface'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            表示
+                        </v-btn>
+
+                        <v-btn
+                            @click="configPage='privacy'"
+                            size="large"
+                            :color="configPage==='privacy'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            プライバシー
+                        </v-btn>
+
+                        <v-btn 
+                            disabled
+                            @click="configPage='channelview'"
+                            size="large"
+                            :color="configPage==='channelview'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            チャンネル表示
+                        </v-btn>
+
+                        <v-btn
+                            @click="configPage='game'"
+                            size="large"
+                            :color="configPage==='game'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            ?
+                        </v-btn>
+                    </div>
+                </div>
+            </div>
+
             <!-- 設定ページメイン -->
             <div class="scroll" style="height:75vh; width:100%; overflow-y:auto">
                 <div class="mx-auto" style="margin: 1% 0;">
@@ -262,59 +315,6 @@ export default {
 
                         <p>{{ record }}回目のトライ</p>
                     </v-card>
-                </div>
-            </div>
-
-            <!-- 設定ページボタン -->
-            <div style="height:15vh; width:100%; padding-top:8px;">
-                <div class="d-flex align-center">
-                    <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto; overflow-y:hidden">
-                        <v-btn
-                            @click="configPage='notification'"
-                            size="large"
-                            :color="configPage==='notification'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            通知
-                        </v-btn>
-
-                        <v-btn
-                            @click="configPage='interface'"
-                            size="large"
-                            :color="configPage==='interface'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            表示
-                        </v-btn>
-
-                        <v-btn
-                            @click="configPage='privacy'"
-                            size="large"
-                            :color="configPage==='privacy'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            プライバシー
-                        </v-btn>
-
-                        <v-btn 
-                            disabled
-                            @click="configPage='channelview'"
-                            size="large"
-                            :color="configPage==='channelview'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            チャンネル表示
-                        </v-btn>
-
-                        <v-btn
-                            @click="configPage='game'"
-                            size="large"
-                            :color="configPage==='game'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            ?
-                        </v-btn>
-                    </div>
                 </div>
             </div>
 
