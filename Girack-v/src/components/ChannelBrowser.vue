@@ -297,7 +297,7 @@ export default {
 
 .channelList
 {
-    scrollbar-width: none; /* Firefox用 */
+    scrollbar-width: 5px; /* Firefox用 */
 }
 
 .channelList::-webkit-scrollbar
