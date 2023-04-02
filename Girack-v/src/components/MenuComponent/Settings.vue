@@ -114,7 +114,7 @@ export default {
             </div>
 
             <!-- 設定ページメイン -->
-            <div style="height:75vh; width:100%; overflow-y:auto">
+            <div class="scroll" style="height:75vh; width:100%; overflow-y:auto">
                 <div class="mx-auto" style="margin: 1% 0;">
                     <v-card v-if="configPage===('notification'||'')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
@@ -268,7 +268,7 @@ export default {
             <!-- 設定ページボタン -->
             <div style="height:15vh; width:100%; padding-top:8px;">
                 <div class="d-flex align-center">
-                    <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto;">
+                    <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto; overflow-y:hidden">
                         <v-btn
                             @click="configPage='notification'"
                             size="large"
@@ -338,6 +338,19 @@ export default {
     margin-top: 16px;
 
     padding: 16px;
+}
+
+.scroll::-webkit-scrollbar
+{
+    width: 5px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0);
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background-color: #666;
 }
 
 </style>
