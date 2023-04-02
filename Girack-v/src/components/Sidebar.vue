@@ -192,7 +192,7 @@ export default {
             </nav>
 
             <!-- ここからチャンネルボタン描写  -->
-            <div class="mx-auto" style="overflow-y:auto; width:97%; margin-bottom:8px;">
+            <div class="mx-auto scroll" style="overflow-y:auto; width:97%; margin-bottom:8px;">
                 <div style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
                     <RouterLink :to="'/c/'+l[0]">
                         <v-card
@@ -245,6 +245,19 @@ export default {
 
     box-sizing: border-box;
     border-right: 0.1px #424242 solid;
+}
+
+.scroll::-webkit-scrollbar
+{
+    width: 5px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0);
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background-color: #666;
 }
 
 </style>
