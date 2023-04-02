@@ -1,6 +1,6 @@
 <script setup>
 import { getCONFIG } from "../../config.js";
-import { dataChannel, dataUser } from '../../socket';
+import { dataChannel, dataUser, setCookie } from '../../socket';
 import ChannelConfig from "./ChannelConfig.vue";
 </script>
 
@@ -88,6 +88,8 @@ export default {
                 LIST_NOTIFICATION_MUTE_CHANNEL.value.push(this.$route.params.id);
 
             }
+
+            setCookie("configListMute", (LIST_NOTIFICATION_MUTE_CHANNEL.value.join("::")), 7);
 
         }
     },

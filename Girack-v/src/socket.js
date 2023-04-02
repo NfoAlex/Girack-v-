@@ -584,6 +584,7 @@ socket.on("authResult", (dat) => {
             channelJoined: dat.channelJoined
         };
 
+        //既読状態をクッキーから取得して設定に適用
         try {
             //クッキーから既読状態を取得
             let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
@@ -604,8 +605,19 @@ socket.on("authResult", (dat) => {
         }
         catch(e) {}
 
+        //クッキーからチャンネルミュートリストを取得して設定に適用
         try {
-            //クッキーから設定を読み込み
+            //クッキーからチャンネルミュートリストを取得
+            let COOKIE_ListMute = getCookie("configListMute");
+
+            //チャンネルミュート知るとをクッキーから取得
+            LIST_NOTIFICATION_MUTE_CHANNEL.value = COOKIE_ListMute.split("::");
+        }
+        catch(e) {}
+
+        //クッキーから通知設定を取得して設定に適用
+        try {
+            //クッキーから通知設定を読み込み
             let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
             CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
         }
