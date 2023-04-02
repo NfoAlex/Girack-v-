@@ -83,14 +83,9 @@ export default {
                 //ミュートリストからチャンネルを削除
                 LIST_NOTIFICATION_MUTE_CHANNEL.value.splice( LIST_NOTIFICATION_MUTE_CHANNEL.value.indexOf(channelidHere),1 );
 
-                console.log("Head :: toggleMuteChannel : チャンネル虫リスト(消したはず) ->");
-                console.log(LIST_NOTIFICATION_MUTE_CHANNEL.value);
-
             } else {
                 //ミュートリストへ追加
                 LIST_NOTIFICATION_MUTE_CHANNEL.value.push(this.$route.params.id);
-                console.log("Head :: toggleMuteChannel : チャンネル虫リスト(追加したはず) ->");
-                console.log(LIST_NOTIFICATION_MUTE_CHANNEL.value);
 
             }
 
