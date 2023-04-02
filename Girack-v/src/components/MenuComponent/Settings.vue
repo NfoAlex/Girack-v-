@@ -113,6 +113,7 @@ export default {
                 </p>
             </div>
 
+            <!-- 設定ページメイン -->
             <div style="height:80vh; width:100%; overflow-y:auto">
                 <div class="mx-auto" style="margin: 5% 0;">
                     <v-card v-if="configPage===('notification'||'')" class="mx-auto rounded-lg card">
@@ -313,14 +314,7 @@ export default {
                 </v-btn>
 
             </div>
-
-            <!-- のちに使う -->
-            <div v-if="false" class="rounded-lg mx-auto" style="width:90%; height:10vh;">
-                <v-card class="pa-3 d-flex justify-center">
-                    <v-btn style="width:35%" class="rounded-lg ma-2" color="success">適用</v-btn>
-                    <v-btn style="width:35%" class="rounded-lg ma-2" color="grey">復元</v-btn>
-                </v-card>
-            </div>
+            
         </div>
     </div>
     
