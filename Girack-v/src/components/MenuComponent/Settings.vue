@@ -21,6 +21,9 @@ export default {
             input: "",
             record: 0,
 
+            //表示するページ
+            configPage: "notification",
+
             //復元用
             CurrentConfig: {},
 
@@ -112,7 +115,7 @@ export default {
 
             <div style="height:80vh; width:100%; overflow-y:auto">
                 <div class="mx-auto" style="margin: 5% 0;">
-                    <v-card class="mx-auto rounded-lg card">
+                    <v-card v-if="configPage===('notification'||'')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
 
                         <p><v-icon>mdi:mdi-bell-cog</v-icon>許可状況</p>
@@ -194,7 +197,7 @@ export default {
 
                     <br>
 
-                    <v-card class="mx-auto rounded-lg card">
+                    <v-card v-if="configPage===('interface')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">表示</p>
                         ここからToDo
                         <p>チャンネル</p>
@@ -217,7 +220,7 @@ export default {
 
                     <br>
 
-                    <v-card class="mx-auto rounded-lg card">
+                    <v-card v-if="configPage===('privacy')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">プライバシー</p>
                         <p><v-icon>mdi:mdi-radar</v-icon>データ</p>
                         <v-card class="cardInner pa-3 rounded-lg">
@@ -234,7 +237,7 @@ export default {
                     
                     <br>
 
-                    <v-card class="mx-auto text-center pa-5 rounded-lg" style="width:50%">
+                    <v-card v-if="configPage===('game')" class="mx-auto text-center pa-5 rounded-lg" style="width:50%">
                         <p class="text-h5">{{ txt }}</p>
                         <p v-if="gameStarted" class="text-h3">{{ guessNum }}</p>
                         <v-btn @click="start" v-if="!gameStarted" color="primary">
@@ -259,6 +262,56 @@ export default {
                         <p>{{ record }}回目のトライ</p>
                     </v-card>
                 </div>
+            </div>
+
+            <!-- 設定ページボタン -->
+            <div style="height:10vh; width:100%; overflow-x:auto;" class="d-flex align-center">
+                <v-btn
+                    @click="configPage='notification'"
+                    size="large"
+                    :color="configPage==='notification'?'secondary':'grey'"
+                    class="ma-1 rounded-pill"
+                >
+                    通知
+                </v-btn>
+
+                <v-btn
+                    @click="configPage='interface'"
+                    size="large"
+                    :color="configPage==='interface'?'secondary':'grey'"
+                    class="ma-1 rounded-pill"
+                >
+                    表示
+                </v-btn>
+
+                <v-btn
+                    @click="configPage='privacy'"
+                    size="large"
+                    :color="configPage==='privacy'?'secondary':'grey'"
+                    class="ma-1 rounded-pill"
+                >
+                    プライバシー
+                </v-btn>
+
+                <v-btn 
+                    disabled
+                    @click="configPage='channelview'"
+                    size="large"
+                    :color="configPage==='channelview'?'secondary':'grey'"
+                    class="ma-1 rounded-pill"
+                >
+                    チャンネル表示
+                </v-btn>
+
+                <v-btn
+                    @click="configPage='game'"
+                    size="large"
+                    :color="configPage==='game'?'secondary':'grey'"
+                    class="ma-1 rounded-pill"
+                >
+                    ?
+                </v-btn>
+
             </div>
 
             <!-- のちに使う -->
