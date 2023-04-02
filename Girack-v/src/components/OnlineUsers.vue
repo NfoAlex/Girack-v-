@@ -1,25 +1,34 @@
 <script>
 import { dataUser, getSocket, backendURI } from '../socket';
 import { VVirtualScroll } from "vuetify/labs/VVirtualScroll";
+
 const socket = getSocket();
 let loopGetSessionOnline = null; //オンラインユーザー取得ループ用
+
 export default {
     
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
         return { Userinfo };
     },
+
     components: {VVirtualScroll},
+
     data() {
         return {
-            OnlineSession: [],
-            OnlineSessionReady: false,
-            userList: [],
-            userListReady: false,
-            userListDisplay: [],
+            OnlineSession: [], //オンラインのユーザーが入る配列
+            OnlineSessionReady: false, //初期ロードできたかどうか
+
+            userList: [], //ユーザーリストが入る配列
+            userListReady: false, //ユーザーリストがロードできたかどうか
+
+            userListDisplay: [], //表示されるユーザーリスト
+
             imgsrc: backendURI + "/img/"
         }
+
     },
+
     methods: {
         //表示する用のリストを整形
         setUsernameFromList() {
@@ -27,16 +36,22 @@ export default {
             this.userListDisplay = this.userList.filter((u) => {
                 if ( this.OnlineSession.includes(u.userid) ) {
                     return u;
+
                 }
+
             });
+
         }
     },
+
     mounted() {
         //オンラインユーザーの受け取り
         socket.on("resultSessionOnline", (result) => {
             this.OnlineSession = result;
             this.OnlineSessionReady = true;
+
         });
+
         //ユーザーリストの受信用
         socket.on("infoList", (dat) => {
             //型がユーザーリストだったらデータを登録
@@ -45,14 +60,19 @@ export default {
                 this.userList = dat.userList.sort((u1, u2) => {
                     if ( u1.name < u2.name ) {
                         return -1;
+
                     } else {
                         return 1;
+
                     }
+
                 });
+
             }
             this.userListReady = true;
             
         });
+
         //ループしてオンラインユーザーを取得してユーザーリストから削るループ(0.5秒)
         loopGetSessionOnline = setInterval(() => {
             //オンラインユーザーリスト要請
@@ -62,9 +82,12 @@ export default {
                     sessionid: this.Userinfo.sessionid
                 }
             });
+
             //ユーザーリストからオンラインのユーザーだけ切り取る
             this.setUsernameFromList();
+
         }, 500);
+
         //ユーザーリストの情報取得
         socket.emit("getInfoList", {
             target: "user",
@@ -73,22 +96,25 @@ export default {
                 sessionid: this.Userinfo.sessionid
             }
         });
+
     },
+
     unmounted() {
         //通信重複防止
         socket.off("resultSessionOnline");
         socket.off("infoList");
         //ループ削除
         clearInterval(loopGetSessionOnline);
+
     }
     
 }
 </script>
 
 <template>
-    <div class="mx-auto d-flex flex-column" style="width:95%; height:100vh;">
+    <div class="mx-auto d-flex flex-column justify-space-evenly" style="width:95%; height:100vh;">
         <div style="height:5vh">
-            <p style="font-size:4.5vh;" class="text-truncate">オンラインユーザーリスト</p>
+            <p style="font-size:min(4vh,36px);" class="text-truncate">オンラインユーザーリスト</p>
         </div>
         <div style="overflow-y:auto; margin-top:3vh;">
             <VVirtualScroll height="90vh" :items="userListDisplay">
@@ -116,9 +142,11 @@ export default {
 </template>
 
 <style scoped>
+
 .card
 {
     width: 100%;
     margin: 16px 0;
 }
+
 </style>

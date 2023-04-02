@@ -263,7 +263,18 @@ export default {
                     
                     <p class="text-h6">
 
-                        <v-icon icon="mdi:mdi-pound"></v-icon>  {{ c[1].name }}
+                        <v-icon icon="mdi:mdi-pound"></v-icon>
+                        <span>
+                            {{ c[1].name.length>50?c[1].name.substring(60,0)+"...":c[1].name }}
+                            <v-tooltip
+                                v-if="c[1].name.length>50"
+                                activator="parent"
+                                location="start"
+                                class="overflow-x-hidden"
+                            >
+                                {{ c[1].name }}
+                            </v-tooltip>
+                        </span>
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
 
                         <div style="float:right">
@@ -286,7 +297,7 @@ export default {
 
 .channelList
 {
-    scrollbar-width: none; /* Firefox用 */
+    scrollbar-width: 5px; /* Firefox用 */
 }
 
 .channelList::-webkit-scrollbar

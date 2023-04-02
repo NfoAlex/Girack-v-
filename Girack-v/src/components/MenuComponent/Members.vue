@@ -2,13 +2,14 @@
 
 import { getSocket, dataUser, backendURI } from '../../socket';
 import Userpage from "../Userpage.vue";
+import { VVirtualScroll } from "vuetify/labs/VVirtualScroll";
 
 const socket = getSocket();
 const { Userinfo } = dataUser();
 
 export default {
 
-    components: { Userpage },
+    components: { Userpage, VVirtualScroll },
 
     data() {
         return {
@@ -108,7 +109,8 @@ export default {
 <template>
     <!-- 一つ下のDIVのCSS適用するために囲んでいる -->
     <div>
-        <div class="mx-auto" style="margin-top:3%; height:90%; width:90%;">
+        <div class="mx-auto d-flex flex-column justify-space-evenly" style="width:90%;">
+            
             <!-- ユーザーページ用 -->
             <v-dialog
                 v-model="userDialogShow"
@@ -117,54 +119,63 @@ export default {
                 <Userpage :userid="userDialogUserid" />
             </v-dialog>
 
-            <div>
-                <p class="text-h4">
-                    愉快なメンバーたち
-                </p>
+            <div style="height:8vh;">
+                <div>
+                    <p class="text-truncate" style="font-size:min(4vh,36px)">
+                        愉快なメンバーたち
+                    </p>
+                </div>
             </div>
 
-            <!-- ユーザー検索バー -->
-            <div class="mx-auto" style="width:90%; margin-top:3%">
-                <v-text-field
-                    v-model="nameSearchText"
-                    density="compact"
-                    variant="solo"
-                    placeholder="名前検索(Aa 区別有り)"
-                >
-                </v-text-field>
+            <div style="">
+                <!-- ユーザー検索バー -->
+                <div class="mx-auto" style="width:90%;">
+                    <v-text-field
+                        v-model="nameSearchText"
+                        density="compact"
+                        variant="solo"
+                        placeholder="名前検索(Aa 区別有り)"
+                    >
+                    </v-text-field>
+                </div>
             </div>
 
             <!-- ToDoスクロール挙動の改善(指定しなければスクロールされるようになっている) -->
-            <div style="height:70vh; overflow-y:auto;">
-                <v-card
-                    color="grey"
-                    @click="()=>{userDialogShow=true; userDialogUserid=user.userid}"
-                    class="pa-3 rounded-lg d-flex align-center"
-                    v-for="user in userListDisplay"
-                    style="margin-top:12px;"
-                    :key="user.userid"
-                >
-                    <v-avatar :image="imgsrc + user.userid + '.jpeg'"></v-avatar>
-                    
-                    <!-- ユーザー名 -->
-                    <span style="margin:0 12px;">
-                        {{ user.name }}
-                    </span>
+            
 
-                    <!-- BANバッジ -->
-                    <div class="me-auto">
-                        <v-chip v-if="user.state.banned" size="small" color="red">
-                            BANNED
-                        </v-chip>
-                    </div>
-                    
-                    <!-- ロールバッジ -->
-                    <div>
-                        <v-chip v-if="user.role==='Admin'" size="small" color="purple">Admin</v-chip>
-                        <v-chip v-if="user.role==='Moderator'" size="small" color="blue">Moderator</v-chip>
-                    </div>
-                </v-card>
-            </div>
+            <VVirtualScroll
+                height="80vh"
+                :items="userListDisplay"
+            >
+                <template v-slot:default="{ item }">
+                    <v-card
+                        color="grey"
+                        @click="()=>{userDialogShow=true; userDialogUserid=item.userid}"
+                        class="pa-3 rounded-lg d-flex align-center"
+                        style="margin-top:12px;"
+                    >
+                        <v-avatar :image="imgsrc + item.userid + '.jpeg'"></v-avatar>
+                        
+                        <!-- ユーザー名 -->
+                        <span style="margin:0 12px;">
+                            {{ item.name }}
+                        </span>
+
+                        <!-- BANバッジ -->
+                        <div class="me-auto">
+                            <v-chip v-if="item.state.banned" size="small" color="red">
+                                BANNED
+                            </v-chip>
+                        </div>
+                        
+                        <!-- ロールバッジ -->
+                        <div>
+                            <v-chip v-if="item.role==='Admin'" size="small" color="purple">Admin</v-chip>
+                            <v-chip v-if="item.role==='Moderator'" size="small" color="blue">Moderator</v-chip>
+                        </div>
+                    </v-card>
+                </template>
+            </VVirtualScroll>
         </div>
     </div>
 </template>

@@ -21,6 +21,9 @@ export default {
             input: "",
             record: 0,
 
+            //表示するページ
+            configPage: "notification",
+
             //復元用
             CurrentConfig: {},
 
@@ -105,14 +108,15 @@ export default {
     <div>
         <div style="height:100vh; width:90%;" class="d-flex align-center flex-column">
             <div style="height:10vh; width:90%; padding-top:3%" class="text-left align-center">
-                <p class="text-h4 text-left">
+                <p class="text-left" style="font-size:min(4vh,36px)">
                     設定
                 </p>
             </div>
 
-            <div style="height:80vh; width:100%; overflow-y:auto">
-                <div class="mx-auto" style="margin: 5% 0;">
-                    <v-card class="mx-auto rounded-lg card">
+            <!-- 設定ページメイン -->
+            <div class="scroll" style="height:75vh; width:100%; overflow-y:auto">
+                <div class="mx-auto" style="margin: 1% 0;">
+                    <v-card v-if="configPage===('notification'||'')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
 
                         <p><v-icon>mdi:mdi-bell-cog</v-icon>許可状況</p>
@@ -194,7 +198,7 @@ export default {
 
                     <br>
 
-                    <v-card class="mx-auto rounded-lg card">
+                    <v-card v-if="configPage===('interface')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">表示</p>
                         ここからToDo
                         <p>チャンネル</p>
@@ -217,7 +221,7 @@ export default {
 
                     <br>
 
-                    <v-card class="mx-auto rounded-lg card">
+                    <v-card v-if="configPage===('privacy')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">プライバシー</p>
                         <p><v-icon>mdi:mdi-radar</v-icon>データ</p>
                         <v-card class="cardInner pa-3 rounded-lg">
@@ -234,7 +238,7 @@ export default {
                     
                     <br>
 
-                    <v-card class="mx-auto text-center pa-5 rounded-lg" style="width:50%">
+                    <v-card v-if="configPage===('game')" class="mx-auto text-center pa-5 rounded-lg" style="width:50%">
                         <p class="text-h5">{{ txt }}</p>
                         <p v-if="gameStarted" class="text-h3">{{ guessNum }}</p>
                         <v-btn @click="start" v-if="!gameStarted" color="primary">
@@ -261,13 +265,59 @@ export default {
                 </div>
             </div>
 
-            <!-- のちに使う -->
-            <div v-if="false" class="rounded-lg mx-auto" style="width:90%; height:10vh;">
-                <v-card class="pa-3 d-flex justify-center">
-                    <v-btn style="width:35%" class="rounded-lg ma-2" color="success">適用</v-btn>
-                    <v-btn style="width:35%" class="rounded-lg ma-2" color="grey">復元</v-btn>
-                </v-card>
+            <!-- 設定ページボタン -->
+            <div style="height:15vh; width:100%; padding-top:8px;">
+                <div class="d-flex align-center">
+                    <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto; overflow-y:hidden">
+                        <v-btn
+                            @click="configPage='notification'"
+                            size="large"
+                            :color="configPage==='notification'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            通知
+                        </v-btn>
+
+                        <v-btn
+                            @click="configPage='interface'"
+                            size="large"
+                            :color="configPage==='interface'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            表示
+                        </v-btn>
+
+                        <v-btn
+                            @click="configPage='privacy'"
+                            size="large"
+                            :color="configPage==='privacy'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            プライバシー
+                        </v-btn>
+
+                        <v-btn 
+                            disabled
+                            @click="configPage='channelview'"
+                            size="large"
+                            :color="configPage==='channelview'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            チャンネル表示
+                        </v-btn>
+
+                        <v-btn
+                            @click="configPage='game'"
+                            size="large"
+                            :color="configPage==='game'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            ?
+                        </v-btn>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
     
@@ -288,6 +338,19 @@ export default {
     margin-top: 16px;
 
     padding: 16px;
+}
+
+.scroll::-webkit-scrollbar
+{
+    width: 5px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background-color: rgba(0,0,0,0);
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background-color: #666;
 }
 
 </style>

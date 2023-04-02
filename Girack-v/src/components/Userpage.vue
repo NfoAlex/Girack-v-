@@ -99,6 +99,9 @@ export default {
         } else if ( this.Userinfo.role === "Moderator" ) { //ModeratorならModerator以下
             this.roleList = ["Moderator", "Member"];
 
+        } else {
+            this.roleList = [];
+
         }
 
         socket.on("infoUser", (dat) => {
@@ -106,10 +109,19 @@ export default {
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
 
+                //ターゲットユーザーの情報を設定
                 this.targetUserRole = this.targetinfo.role;
                 this.targetUserBanned = this.targetinfo.banned;
 
-                if ( (this.targetinfo.role === "Admin" && this.Userinfo.role !== "Admin") || this.Userinfo.userid === this.userid ) {
+                //自分とターゲットのユーザーのロールによって管理を無効化
+                if (
+                    ( //自分がAdminではなく、かつターゲットのユーザーがAdminなら
+                        this.targetinfo.role === "Admin" &&
+                        this.Userinfo.role !== "Admin"
+                    ) ||
+                    this.Userinfo.userid === this.userid || //自分なら
+                    this.targetinfo.role === "Deleted" //消されたユーザーなら
+                ) {
                     this.manageDisabled = true; //管理を無効化
 
                 }
@@ -138,7 +150,9 @@ export default {
     <v-card elevation="6" style="max-width:650px; max-height:550px;" class="mx-auto pa-1 userpage text-center rounded-lg">
 
         <v-card color="secondary" elevation="12" width="70%" style="max-width:300px;" class="mx-auto boxProfile rounded-lg">
-            <v-avatar style="margin-top:16px;" size="75" :image="imgsrc + userid + '.jpeg'"></v-avatar>
+            
+            <v-avatar style="margin-top:16px;" size="7vh" :image="imgsrc + userid + '.jpeg'"></v-avatar>
+            
             <div class="ma-3">
                 <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
                 <p class="text-overline"># {{ userid }}</p>
