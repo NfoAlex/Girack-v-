@@ -108,7 +108,7 @@ export default {
     <div>
         <div style="height:100vh; width:90%;" class="d-flex align-center flex-column">
             <div style="height:10vh; width:90%; padding-top:3%" class="text-left align-center">
-                <p class="text-left" >
+                <p class="text-left" style="font-size:min(4vh,36px)">
                     設定
                 </p>
             </div>
@@ -268,7 +268,7 @@ export default {
             <!-- 設定ページボタン -->
             <div style="height:15vh; width:100%; padding-top:8px;">
                 <div class="d-flex align-center">
-                    <v-card class="ma-1 mx-auto rounded-lg d-flex align-center" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto;">
+                    <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto;">
                         <v-btn
                             @click="configPage='notification'"
                             size="large"
@@ -314,7 +314,7 @@ export default {
                         >
                             ?
                         </v-btn>
-                    </v-card>
+                    </div>
                 </div>
             </div>
 
