@@ -108,14 +108,14 @@ export default {
     <div>
         <div style="height:100vh; width:90%;" class="d-flex align-center flex-column">
             <div style="height:10vh; width:90%; padding-top:3%" class="text-left align-center">
-                <p class="text-h4 text-left">
+                <p class="text-left" >
                     設定
                 </p>
             </div>
 
             <!-- 設定ページメイン -->
-            <div style="height:80vh; width:100%; overflow-y:auto">
-                <div class="mx-auto" style="margin: 5% 0;">
+            <div style="height:75vh; width:100%; overflow-y:auto">
+                <div class="mx-auto" style="margin: 1% 0;">
                     <v-card v-if="configPage===('notification'||'')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
 
@@ -266,55 +266,58 @@ export default {
             </div>
 
             <!-- 設定ページボタン -->
-            <div style="height:10vh; width:100%; overflow-x:auto;" class="d-flex align-center">
-                <v-btn
-                    @click="configPage='notification'"
-                    size="large"
-                    :color="configPage==='notification'?'secondary':'grey'"
-                    class="ma-1 rounded-pill"
-                >
-                    通知
-                </v-btn>
+            <div style="height:15vh; width:100%; padding-top:8px;">
+                <div class="d-flex align-center">
+                    <v-card class="ma-1 mx-auto rounded-lg d-flex align-center" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto;">
+                        <v-btn
+                            @click="configPage='notification'"
+                            size="large"
+                            :color="configPage==='notification'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            通知
+                        </v-btn>
 
-                <v-btn
-                    @click="configPage='interface'"
-                    size="large"
-                    :color="configPage==='interface'?'secondary':'grey'"
-                    class="ma-1 rounded-pill"
-                >
-                    表示
-                </v-btn>
+                        <v-btn
+                            @click="configPage='interface'"
+                            size="large"
+                            :color="configPage==='interface'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            表示
+                        </v-btn>
 
-                <v-btn
-                    @click="configPage='privacy'"
-                    size="large"
-                    :color="configPage==='privacy'?'secondary':'grey'"
-                    class="ma-1 rounded-pill"
-                >
-                    プライバシー
-                </v-btn>
+                        <v-btn
+                            @click="configPage='privacy'"
+                            size="large"
+                            :color="configPage==='privacy'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            プライバシー
+                        </v-btn>
 
-                <v-btn 
-                    disabled
-                    @click="configPage='channelview'"
-                    size="large"
-                    :color="configPage==='channelview'?'secondary':'grey'"
-                    class="ma-1 rounded-pill"
-                >
-                    チャンネル表示
-                </v-btn>
+                        <v-btn 
+                            disabled
+                            @click="configPage='channelview'"
+                            size="large"
+                            :color="configPage==='channelview'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            チャンネル表示
+                        </v-btn>
 
-                <v-btn
-                    @click="configPage='game'"
-                    size="large"
-                    :color="configPage==='game'?'secondary':'grey'"
-                    class="ma-1 rounded-pill"
-                >
-                    ?
-                </v-btn>
-
+                        <v-btn
+                            @click="configPage='game'"
+                            size="large"
+                            :color="configPage==='game'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            ?
+                        </v-btn>
+                    </v-card>
+                </div>
             </div>
-            
+
         </div>
     </div>
     
