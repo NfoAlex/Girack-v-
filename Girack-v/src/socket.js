@@ -5,7 +5,7 @@ import { io } from 'socket.io-client'; //ウェブソケット通信用
 import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
-const { CONFIG_NOTIFICATION } = getCONFIG();
+const { CONFIG_NOTIFICATION, LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
 
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
@@ -155,7 +155,7 @@ socket.on("messageReceive", (msg) => {
         }
 
         //メンション数がデータになかったら新たに定義
-        if ( MsgReadTime.value[msg.channelid].mention === null ) MsgReadTime.value[msg.channelid].mention = 0;
+        if ( MsgReadTime.value[msg.channelid] === null ) MsgReadTime.value[msg.channelid].mention = 0;
 
         //新着メッセージ数を更新
         if ( MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
@@ -198,6 +198,7 @@ socket.on("messageReceive", (msg) => {
         if (
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
             msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
+            !LIST_NOTIFICATION_MUTE_CHANNEL.value.includes(msg.channelid) && //ミュートリストにチャンネルが入っていない
             (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、かつ違うタブなら
         ) {
             //すべてのメッセージを通知に出すようにしているなら通知

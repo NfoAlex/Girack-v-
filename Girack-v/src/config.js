@@ -13,7 +13,7 @@ const CONFIG_NOTIFICATION = ref({
     DISPLAY_TAB_MENTION: true, //タブにメンション数を出す
 });
 
-//通知をミュートするチャンネルリスト
+//通知をミュートするチャンネルとユーザーリスト
 const LIST_NOTIFICATION_MUTE_CHANNEL = ref([]);
 const LIST_NOTIFICATION_MUTE_USER = ref([]);
 
