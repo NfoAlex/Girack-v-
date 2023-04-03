@@ -261,7 +261,7 @@ export default {
                 <v-avatar
                     style="margin-left:32px; float:left"
                     size="32"
-                    :image="imgsrc + user.userid + '.jpeg'"
+                    :image="imgsrc + user.userid"
                 >
                 </v-avatar>
 
