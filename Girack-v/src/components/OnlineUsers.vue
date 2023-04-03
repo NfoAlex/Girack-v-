@@ -123,7 +123,7 @@ export default {
                         class="rounded-lg card pa-3 d-flex align-center"
                         color="grey"
                     >
-                        <v-avatar style="margin:0 16px;" :image="imgsrc + item.userid + '.jpeg'"></v-avatar>
+                        <v-avatar style="margin:0 16px;" :image="imgsrc + item.userid"></v-avatar>
                         <span class="me-auto">
                             {{ item.name }}
                         </span>

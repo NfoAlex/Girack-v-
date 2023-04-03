@@ -114,7 +114,7 @@ export default {
                     <!-- アイコン-->
                     <div class="mx-auto" style="width:fit-content; margin-top:10%;">
                             <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
-                                <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
+                                <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid"></v-img>
                             </v-avatar>
                     </div>
 

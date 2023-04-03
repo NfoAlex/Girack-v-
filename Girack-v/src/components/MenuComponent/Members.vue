@@ -154,7 +154,8 @@ export default {
                         class="pa-3 rounded-lg d-flex align-center"
                         style="margin-top:12px;"
                     >
-                        <v-avatar :image="imgsrc + item.userid + '.jpeg'"></v-avatar>
+                        <!-- アバター -->
+                        <v-avatar :image="imgsrc + item.userid"></v-avatar>
                         
                         <!-- ユーザー名 -->
                         <span style="margin:0 12px;">

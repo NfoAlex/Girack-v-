@@ -37,7 +37,6 @@ export default {
             try {
                 //チャンネルインデックスから情報を返す、データなければ仮データを返す
                 if ( ChannelIndex.value[this.getPath] !== undefined ) {
-                    //console.log("データを返そうとしている");
                     return ChannelIndex.value[this.getPath];
 
                 } else {

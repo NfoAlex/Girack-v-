@@ -519,7 +519,7 @@ export default {
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
-                    <v-img @click="()=>{userDialogShow=true; userDialogUserid=m.userid}" :alt="m.userid" :src="uri + '/img/' + m.userid + '.jpeg'"></v-img>
+                    <v-img @click="()=>{userDialogShow=true; userDialogUserid=m.userid}" :alt="m.userid" :src="uri + '/img/' + m.userid"></v-img>
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
