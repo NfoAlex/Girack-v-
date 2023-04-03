@@ -107,14 +107,14 @@ export default {
 <template>
     <div>
         <div style="height:100vh; width:90%;" class="d-flex align-center flex-column">
-            <div style="height:10vh; width:90%; padding-top:3%" class="text-left align-center">
+            <div style="width:90%; padding-top:3%" class="text-left align-center">
                 <p class="text-left" style="font-size:min(4vh,36px)">
                     設定
                 </p>
             </div>
 
             <!-- 設定ページボタン -->
-            <div style="height:10vh; width:100%; padding-top:8px;">
+            <div style="width:100%; padding-top:8px;">
                 <div class="d-flex align-center">
                     <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto; overflow-y:hidden">
                         <v-btn
@@ -167,7 +167,7 @@ export default {
             </div>
 
             <!-- 設定ページメイン -->
-            <div class="scroll" style="height:75vh; width:100%; overflow-y:auto">
+            <div class="scroll" style="width:100%; overflow-y:auto">
                 <div class="mx-auto" style="margin: 1% 0;">
                     <v-card v-if="configPage===('notification'||'')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
