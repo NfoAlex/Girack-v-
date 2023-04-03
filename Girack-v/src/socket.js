@@ -5,7 +5,7 @@ import { io } from 'socket.io-client'; //ウェブソケット通信用
 import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
-const { CONFIG_NOTIFICATION } = getCONFIG();
+const { CONFIG_NOTIFICATION, LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
 
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
@@ -155,7 +155,7 @@ socket.on("messageReceive", (msg) => {
         }
 
         //メンション数がデータになかったら新たに定義
-        if ( MsgReadTime.value[msg.channelid].mention === null ) MsgReadTime.value[msg.channelid].mention = 0;
+        if ( MsgReadTime.value[msg.channelid] === null ) MsgReadTime.value[msg.channelid].mention = 0;
 
         //新着メッセージ数を更新
         if ( MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
@@ -198,6 +198,7 @@ socket.on("messageReceive", (msg) => {
         if (
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
             msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
+            !LIST_NOTIFICATION_MUTE_CHANNEL.value.includes(msg.channelid) && //ミュートリストにチャンネルが入っていない
             (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、かつ違うタブなら
         ) {
             //すべてのメッセージを通知に出すようにしているなら通知
@@ -583,6 +584,7 @@ socket.on("authResult", (dat) => {
             channelJoined: dat.channelJoined
         };
 
+        //既読状態をクッキーから取得して設定に適用
         try {
             //クッキーから既読状態を取得
             let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
@@ -603,8 +605,19 @@ socket.on("authResult", (dat) => {
         }
         catch(e) {}
 
+        //クッキーからチャンネルミュートリストを取得して設定に適用
         try {
-            //クッキーから設定を読み込み
+            //クッキーからチャンネルミュートリストを取得
+            let COOKIE_ListMute = getCookie("configListMute");
+
+            //チャンネルミュート知るとをクッキーから取得
+            LIST_NOTIFICATION_MUTE_CHANNEL.value = COOKIE_ListMute.split("::");
+        }
+        catch(e) {}
+
+        //クッキーから通知設定を取得して設定に適用
+        try {
+            //クッキーから通知設定を読み込み
             let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
             CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
         }

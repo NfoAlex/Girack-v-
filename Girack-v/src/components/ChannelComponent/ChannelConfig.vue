@@ -404,7 +404,7 @@ export default {
                     v-for="u in channelJoinedUser"
                 >
 
-                    <v-avatar size="32" style="margin-left:10%;" :image="imgsrc + u.userid + '.jpeg'"></v-avatar>
+                    <v-avatar size="32" style="margin-left:10%;" :image="imgsrc + u.userid"></v-avatar>
                     <span
                         style="margin-left:16px;"
                         class="text-center me-auto"

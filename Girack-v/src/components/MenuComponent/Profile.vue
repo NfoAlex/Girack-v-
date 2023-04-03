@@ -13,8 +13,18 @@ export default {
             snackbar: false, //ログアウトアラート出力用
             cd: ["card-default","rounded-lg"], //CSS用クラス名
             okayIcon: '',
+
             nameDisplaying: "...",
             nameEditing: false, //名前編集しているかどうか
+
+            iconUploadDialog: false, //アイコンアップロード用ダイアログの表示
+            iconUploadRule: [ //アイコンをアップロードするためのルール
+                value => {
+                    return !value || !value.length || value[0].size < 1024000 || '画像は1MB以下にしてください!'
+                }
+            ],
+            iconUploadFile: null, //アイコン用画像のデータ
+            iconUploadDone: false, //アイコンがアップロードされた状態
         }
     },
 
@@ -55,23 +65,130 @@ export default {
         toggleEditing() {
             this.nameDisplaying = Userinfo.value.username;
             this.nameEditing = !this.nameEditing; //編集モード
+        },
+
+        //アイコンの画像アップロード
+        uploadIcon() {
+            console.log("Profile :: uploadIcon : iconData ->", this.iconUploadFile);
+            //return;
+
+            //アイコンデータを送信
+            socket.emit("changeProfileIcon", {
+                fileData: {
+                    name: this.iconUploadFile[0].name,
+                    size: this.iconUploadFile[0].size,
+                    type: this.iconUploadFile[0].type,
+                    buffer: this.iconUploadFile[0],
+                },
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            },
+            (status) => {
+                console.log("Profile :: uploadIcon : 結果->", status);
+                console.log(this.iconUploadFile[0]);
+
+            });
+
+            //アイコンをアップロードできた状態にする
+            this.iconUploadDone = true;
+
+        },
+
+        //ページをリロードするだけ
+        reloadPage() {
+            window.location.reload();
+
         }
 
     },
     
     mounted() {
         this.nameDisplaying = Userinfo.value.username; //名前更新
+
     },
 }
 </script>
 
 <template>
-    <div style="float:right; width:80%; margin-top:5%; height:90%; overflow-y:auto;">
+
+    <!-- 画像アップロード用ダイアログ -->
+    <v-dialog
+        v-model="iconUploadDialog"
+        width="50vh"
+    >
+        <v-card v-if="!iconUploadDone" class="rounded-lg pa-6">
+
+            <v-card-title>
+                アイコンアップロード
+            </v-card-title>
+
+            <v-alert
+                title="注意"
+                type="info"
+                class="ma-1 rounded-lg"
+            >
+                <p class="text-subtitle-2">
+                    現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
+                    表示がおかしくります。だから予め自分でクロップしてね
+                </p>
+            </v-alert>
+
+            <div style="margin-top:32px;">
+                <v-file-input
+                    accept="image/jpeg, image/gif"
+                    :rules="iconUploadRule"
+                    v-model="iconUploadFile"
+                    class="ma-3"
+                    label="アイコン用画像(1MB以下)"
+                    show-size
+                ></v-file-input>
+            </div>
+
+            <v-btn @click="uploadIcon" class="rounded-lg" color="primary">
+                更新
+            </v-btn>
+
+        </v-card>
+
+        <v-card v-if="iconUploadDone" class="rounded-lg">
+
+            <v-card-title>
+                アイコンアップロード
+            </v-card-title>
+
+            <div style="margin-top:32px;">
+                <p class="text-h4 text-center">🖼️</p>
+                <p class="text-center ma-4">
+                    アイコンを更新しました!<br>
+                    更新を確認するにはリロードしてみてね
+                </p>
+                <div class="mx-auto pa-1" style="width:fit-content">
+                    <v-btn class="ma-2 rounded-lg" @click="reloadPage" color="secondary">
+                        <v-icon>
+                            mdi:mdi-reload
+                        </v-icon>
+                        リロード
+                    </v-btn>
+                    <v-btn class="ma-2 rounded-lg" @click="iconUploadDialog=false;" color="grey">
+                        <v-icon>
+                            mdi:mdi-close-box
+                        </v-icon>
+                        閉じる
+                    </v-btn>
+                </div>
+            </div>
+
+        </v-card>
+    </v-dialog>
+
+    <div style="width:80%; margin-top:5%; height:90%;">
             <v-container class="bg-surface-variant">
                 <v-row no-gutters>
                     <v-col cols="2">
                         <v-card variant="tonal" :class="cd" style="padding:0">
-                            <v-img class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid + '.jpeg'"></v-img>
+                            <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid"></v-img>
                         </v-card>
                     </v-col>
                     <v-col>
