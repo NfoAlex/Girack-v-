@@ -94,6 +94,12 @@ export default {
             //アイコンをアップロードできた状態にする
             this.iconUploadDone = true;
 
+        },
+
+        //ページをリロードするだけ
+        reloadPage() {
+            window.location.reload();
+
         }
 
     },
@@ -158,6 +164,20 @@ export default {
                     アイコンを更新しました!<br>
                     更新を確認するにはリロードしてみてね
                 </p>
+                <div class="mx-auto pa-1" style="width:fit-content">
+                    <v-btn class="ma-2 rounded-lg" @click="reloadPage" color="secondary">
+                        <v-icon>
+                            mdi:mdi-reload
+                        </v-icon>
+                        リロード
+                    </v-btn>
+                    <v-btn class="ma-2 rounded-lg" @click="iconUploadDialog=false;" color="grey">
+                        <v-icon>
+                            mdi:mdi-close-box
+                        </v-icon>
+                        閉じる
+                    </v-btn>
+                </div>
             </div>
 
         </v-card>
