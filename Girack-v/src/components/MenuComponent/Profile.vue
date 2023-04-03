@@ -23,7 +23,8 @@ export default {
                     return !value || !value.length || value[0].size < 1024000 || '画像は1MB以下にしてください!'
                 }
             ],
-            iconUploadFile: null //アイコン用画像のデータ
+            iconUploadFile: null, //アイコン用画像のデータ
+            iconUploadDone: false, //アイコンがアップロードされた状態
         }
     },
 
@@ -71,6 +72,7 @@ export default {
             console.log("Profile :: uploadIcon : iconData ->", this.iconUploadFile);
             //return;
 
+            //アイコンデータを送信
             socket.emit("changeProfileIcon", {
                 fileData: {
                     name: this.iconUploadFile[0].name,
@@ -89,12 +91,16 @@ export default {
 
             });
 
+            //アイコンをアップロードできた状態にする
+            this.iconUploadDone = true;
+
         }
 
     },
     
     mounted() {
         this.nameDisplaying = Userinfo.value.username; //名前更新
+
     },
 }
 </script>
@@ -106,7 +112,7 @@ export default {
         v-model="iconUploadDialog"
         width="50vh"
     >
-        <v-card class="rounded-lg pa-6">
+        <v-card v-if="!iconUploadDone" class="rounded-lg pa-6">
 
             <v-card-title>
                 アイコンアップロード
@@ -137,6 +143,22 @@ export default {
             <v-btn @click="uploadIcon" class="rounded-lg" color="primary">
                 更新
             </v-btn>
+
+        </v-card>
+
+        <v-card v-if="iconUploadDone" class="rounded-lg">
+
+            <v-card-title>
+                アイコンアップロード
+            </v-card-title>
+
+            <div style="margin-top:32px;">
+                <p class="text-h4 text-center">🖼️</p>
+                <p class="text-center ma-4">
+                    アイコンを更新しました!<br>
+                    更新を確認するにはリロードしてみてね
+                </p>
+            </div>
 
         </v-card>
     </v-dialog>
