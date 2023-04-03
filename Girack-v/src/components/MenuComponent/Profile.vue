@@ -189,8 +189,16 @@ export default {
 
                     <v-col cols="2">
                         <!-- アバター -->
-                        <v-card variant="tonal" :class="cd" style="padding:0">
-                            <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid"></v-img>
+                        <v-card @click="" variant="tonal" :class="cd" style="padding:0">
+                            <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid">
+                                <v-tooltip
+                                    activator="parent"
+                                    location="top center"
+                                    origin="overlap"
+                                >
+                                    アイコンを変更
+                                </v-tooltip>
+                            </v-img>
                         </v-card>
                     </v-col>
 
@@ -229,7 +237,7 @@ export default {
             <v-container class="bg-surface-variant">
                 <!-- ログアウトボタン -->
                 <v-row no-gutters>
-                    
+
                     <v-card variant="tonal" :class="cd" style="width:100%; ">
                         <v-btn prepend-icon="mdi:mdi-logout" color="error" block @click="snackbar=true">Logout</v-btn>
                         <v-snackbar
