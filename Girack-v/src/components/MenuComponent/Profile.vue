@@ -186,20 +186,27 @@ export default {
     <div style="width:80%; margin-top:5%; height:90%;">
             <v-container class="bg-surface-variant">
                 <v-row no-gutters>
+
                     <v-col cols="2">
+                        <!-- アバター -->
                         <v-card variant="tonal" :class="cd" style="padding:0">
                             <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid"></v-img>
                         </v-card>
                     </v-col>
+
                     <v-col>
+                        <!-- ユーザー名の部分 -->
                         <div variant="tonal" :class="cd" style="padding:1% 10% ">
+                            <!-- ユーザーID -->
                             <p class="text-left text-h6">
                                 # {{ Userinfo.userid }}
                             </p>
+                            <!-- ユーザー名 -->
                             <p v-if="!nameEditing" @dblclick="toggleEditing" class="text-h4 text-left" >
                                 {{ Userinfo.username }}
                                 <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
                             </p>
+                            <!-- ユーザー名編集時 -->
                             <v-text-field
                                 v-if="nameEditing"
                                 v-model="nameDisplaying"
@@ -213,11 +220,16 @@ export default {
                                 </template>
                             </v-text-field>
                         </div>
+
                     </v-col>
+
                 </v-row>
             </v-container>
+
             <v-container class="bg-surface-variant">
+                <!-- ログアウトボタン -->
                 <v-row no-gutters>
+                    
                     <v-card variant="tonal" :class="cd" style="width:100%; ">
                         <v-btn prepend-icon="mdi:mdi-logout" color="error" block @click="snackbar=true">Logout</v-btn>
                         <v-snackbar
@@ -236,8 +248,10 @@ export default {
                         </template>
                         </v-snackbar>
                     </v-card>
+
                 </v-row>
             </v-container>
+
         </div>
 </template>
 
