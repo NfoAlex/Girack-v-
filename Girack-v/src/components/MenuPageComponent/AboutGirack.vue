@@ -5,8 +5,8 @@
     <div class="text-center pa-5" style="width:80%">
         <p class="text-h3">Girack</p>
         <br>
-        <p class="text-h5">Icon</p>
-        <p>ビルド : alpha_20230403_1</p>
+        <p class="text-h5">Flex</p>
+        <p>ビルド : alpha_20230404</p>
         <br>
         <p>それ以外書くことな</p>
     </div>
