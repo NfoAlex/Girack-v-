@@ -515,7 +515,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div style="display:flex; margin:8px 8px; flex-direction:row; justify-content:flex-end;">
+            <div class="d-flex justify-end" style="margin:8px 8px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
@@ -542,13 +542,16 @@ export default {
                                 @mouseleave="mouseOverMsg(m.messageid, 'off')"
                             >
                                 <!-- ユーザー名と時間表記 -->
-                                <div class="text-h6" v-if="checkShowAvatar(m.userid, index)">
+                                <div class="text-h6 d-flex align-center" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
-                                    {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
-                                    
+                                    <span class="text-truncate">
+                                        {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
+                                    </span>
+
                                     <!-- ロールバッジ -->
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'role')!=='Member'"
+                                        style="margin-left:8px;"
                                         :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
                                         size="x-small"
                                         :elevation="6"
@@ -560,6 +563,7 @@ export default {
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'banned')"
                                         color="red"
+                                        style="margin-left:8px;"
                                         size="x-small"
                                         :elevation="6"
                                     >
@@ -569,8 +573,7 @@ export default {
                                     <!-- タイムスタンプ -->
                                     <span
                                         class="text-caption"
-                                        style="color:#999"
-                                        
+                                        style="margin-left:8px; color:#999"
                                     >
                                         {{ printDate(m.time) }}
                                     </span>
@@ -589,7 +592,7 @@ export default {
 
                                 <!-- リアクション -->
                                 <div>
-                                    <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                                    <v-chip @click="messageAction(m.messageid, 'reaction', r[0])" style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
                                         {{ getReaction(r[0]) }} {{ r[1] }}
                                     </v-chip>
                                 </div>
@@ -600,7 +603,7 @@ export default {
                         <v-card class="pa-2 rounded-lg" color="#222" style="width:fit-content; margin-top:-16px; max-width:500px;">
                             
                             <!-- ここからホバーメニュー -->
-                              <!-- コンポーネント化予定 -->
+                              <!-- ToDo::コンポーネント化 -->
                             <span style="position:relative; float:right;">
                                 <!-- 時間表示 -->
                                 <span style="margin-right:12px;" class="text-body-2 font-italic">

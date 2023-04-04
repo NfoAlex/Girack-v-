@@ -124,7 +124,7 @@ export default {
                         color="grey"
                     >
                         <v-avatar style="margin:0 16px;" :image="imgsrc + item.userid"></v-avatar>
-                        <span class="me-auto">
+                        <span class="me-auto text-truncate">
                             {{ item.name }}
                         </span>
 

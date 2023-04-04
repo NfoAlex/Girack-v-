@@ -259,14 +259,14 @@ export default {
 
                 <!-- アバター -->
                 <v-avatar
-                    style="margin-left:32px; float:left"
+                    style="margin-left:32px;"
                     size="32"
                     :image="imgsrc + user.userid"
                 >
                 </v-avatar>
 
                 <!-- ユーザー名 -->
-                <span class="text-center me-auto" style="margin-left:16px;">
+                <span class="text-center text-truncate flex-shrink-1 flex-grow-0 me-auto" style="margin-left:16px;">
                     {{ user.username }}
                 </span>
 
@@ -295,7 +295,7 @@ export default {
     
 
     <!-- チャンネルメニュー本体 -->
-    <v-card class="text-center rounded-lg pa-3">
+    <v-card class="text-center d-flex rounded-lg pa-3">
         <!-- チャンネル名とバッジ -->
         <div class="ma-5">
             <p class="text-h4">
@@ -323,6 +323,8 @@ export default {
                 <!-- 編集中のチャンネル名 -->
                 <v-text-field
                     v-else
+                    counter
+                    maxlength="32"
                     v-model="channelnameText"
                 >
                     <!-- 確定とキャンセルのアイコン -->
@@ -353,13 +355,15 @@ export default {
             <div v-if="descriptionEditing">
                 <v-textarea
                     no-resize
+                    counter
+                    maxlength="128"
                     rows="3"
                     v-model="descriptionText"
                     label="概要"
                 >
                 <!-- 確定とキャンセルのアイコン -->
                 <template v-slot:append-inner>
-                    <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
+                    <v-icon @click="updateChannel" :disabled="descriptionText.length>=128">mdi:mdi-check-bold</v-icon>
                     <v-icon @click="switchEditing('desc',false)">mdi:mdi-window-close</v-icon>
                 </template>
                 </v-textarea>
@@ -384,6 +388,7 @@ export default {
 
             <!-- チャンネル参加者リスト -->
             <v-window-item value="userJoined" class="channelScrollbar" style="max-height:350px; overflow-y:auto;">
+                <!-- ユーザー招待ボタン -->
                 <span>
                     <v-btn
                         @click="()=>{userSearchShow=!userSearchShow;}"
@@ -396,6 +401,7 @@ export default {
                     </v-btn>
                 </span>
 
+                <!-- チャンネル参加者 -->
                 <v-card
                     @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}"
                     class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
@@ -407,7 +413,7 @@ export default {
                     <v-avatar size="32" style="margin-left:10%;" :image="imgsrc + u.userid"></v-avatar>
                     <span
                         style="margin-left:16px;"
-                        class="text-center me-auto"
+                        class="text-center text-truncate me-auto"
                     >
                         {{ u.username }}
                     </span>

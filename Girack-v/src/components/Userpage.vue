@@ -151,14 +151,22 @@ export default {
 
         <v-card color="secondary" elevation="12" width="70%" style="max-width:300px;" class="mx-auto boxProfile rounded-lg">
             
+            <!-- アバター -->
             <v-avatar style="margin-top:16px;" size="7vh" :image="imgsrc + userid"></v-avatar>
             
+            <!-- ユーザー情報 -->
             <div class="ma-3">
                 <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
                 <p class="text-overline"># {{ userid }}</p>
-                <v-chip :color="getRoleColor(targetinfo.role)" size="small">{{ targetinfo.role }}</v-chip>
-                <p><v-chip v-if="userid===Userinfo.userid" color="green" size="small">あなた</v-chip></p>
-                <p class="text-h5">{{ targetinfo.username }}</p>
+                <v-chip :color="getRoleColor(targetinfo.role)" size="small">
+                    {{ targetinfo.role }}
+                </v-chip>
+                <p>
+                    <v-chip v-if="userid===Userinfo.userid" color="green" size="small">
+                        あなた
+                    </v-chip>
+                </p>
+                <p class="text-h5 text-truncate">{{ targetinfo.username }}</p>
             </div>
         </v-card>
 
@@ -168,12 +176,14 @@ export default {
             class="mx-auto rounded-lg"
             v-model="tab"
         >
+
             <v-tab value="channel">
                 チャンネル
             </v-tab>
             <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
                 管理
             </v-tab>
+
         </v-tabs>
         
         <!-- タブの中身 -->

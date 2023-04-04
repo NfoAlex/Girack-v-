@@ -264,6 +264,7 @@ export default {
                     <p class="text-h6">
 
                         <v-icon icon="mdi:mdi-pound"></v-icon>
+                        <!-- チャンネル名 -->
                         <span>
                             {{ c[1].name.length>50?c[1].name.substring(60,0)+"...":c[1].name }}
                             <v-tooltip
@@ -277,6 +278,7 @@ export default {
                         </span>
                         <span v-if="c[1].scope==='private'" class="mdi mdi-lock"></span>
 
+                        <!-- ボタン群 -->
                         <div style="float:right">
                             <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
                                 <v-icon icon="mdi:mdi-delete-forever"></v-icon>
@@ -286,7 +288,9 @@ export default {
                         </div>
 
                     </p>
-                    <p style="padding:1%">{{ c[1].description }}</p>
+
+                    <!-- 概要 -->
+                    <p style="padding:1% 2.5%">{{ c[1].description.length>150?c[1].description.substring(150,0)+"...":c[1].description }}</p>
                 </v-card>
             </v-list-item>
         </div>
