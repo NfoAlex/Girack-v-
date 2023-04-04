@@ -515,7 +515,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div style="display:flex; margin:8px 8px; flex-direction:row; justify-content:flex-end;">
+            <div class="d-flex justify-end" style="margin:8px 8px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
@@ -542,7 +542,7 @@ export default {
                                 @mouseleave="mouseOverMsg(m.messageid, 'off')"
                             >
                                 <!-- ユーザー名と時間表記 -->
-                                <div class="text-h6 d-flex" v-if="checkShowAvatar(m.userid, index)">
+                                <div class="text-h6 d-flex align-center" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
                                     <span class="text-truncate">
                                         {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
