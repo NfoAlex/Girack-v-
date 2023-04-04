@@ -158,19 +158,19 @@ export default {
                         <v-avatar :image="imgsrc + item.userid"></v-avatar>
                         
                         <!-- ユーザー名 -->
-                        <span style="margin:0 12px;">
-                            {{ item.name }}
+                        <span class="text-truncate flex-shrink-1 flex-grow-0" style="margin:0 12px;">
+                                {{ item.name }}
                         </span>
 
                         <!-- BANバッジ -->
-                        <div class="me-auto">
+                        <div class="me-auto flex-grow-0">
                             <v-chip v-if="item.state.banned" size="small" color="red">
                                 BANNED
                             </v-chip>
                         </div>
                         
                         <!-- ロールバッジ -->
-                        <div>
+                        <div class="flex-grow-0 flex-shrink-1">
                             <v-chip v-if="item.role==='Admin'" size="small" color="purple">Admin</v-chip>
                             <v-chip v-if="item.role==='Moderator'" size="small" color="blue">Moderator</v-chip>
                         </div>
