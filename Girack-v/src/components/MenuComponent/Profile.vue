@@ -218,10 +218,20 @@ export default {
                             <v-text-field
                                 v-if="nameEditing"
                                 v-model="nameDisplaying"
+                                counter
+                                maxlength="32"
                                 variant="solo"
                             >
                                 <template v-slot:append-inner>
-                                    <v-btn @click="updateName" color="secondary" size="x-small" icon="mdi:mdi-check-bold" class="rounded-lg" style="margin:0 4px 0 8px; float:right">
+                                    <v-btn
+                                        @click="updateName"
+                                        :disabled="nameDisplaying.length>=32"
+                                        color="secondary"
+                                        size="x-small"
+                                        icon="mdi:mdi-check-bold"
+                                        class="rounded-lg"
+                                        style="margin:0 4px 0 8px; float:right"
+                                    >
                                     </v-btn>
                                     <v-btn @click="toggleEditing" color="secondary" size="x-small" icon="mdi:mdi-window-close" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
                                     </v-btn>
