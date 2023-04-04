@@ -551,6 +551,7 @@ export default {
                                     <!-- ロールバッジ -->
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'role')!=='Member'"
+                                        style="margin-left:8px;"
                                         :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
                                         size="x-small"
                                         :elevation="6"
@@ -562,6 +563,7 @@ export default {
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'banned')"
                                         color="red"
+                                        style="margin-left:8px;"
                                         size="x-small"
                                         :elevation="6"
                                     >
@@ -571,8 +573,7 @@ export default {
                                     <!-- タイムスタンプ -->
                                     <span
                                         class="text-caption"
-                                        style="color:#999"
-                                        
+                                        style="margin-left:8px; color:#999"
                                     >
                                         {{ printDate(m.time) }}
                                     </span>
