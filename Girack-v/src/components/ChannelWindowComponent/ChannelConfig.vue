@@ -323,6 +323,8 @@ export default {
                 <!-- 編集中のチャンネル名 -->
                 <v-text-field
                     v-else
+                    counter
+                    maxlength="32"
                     v-model="channelnameText"
                 >
                     <!-- 確定とキャンセルのアイコン -->
