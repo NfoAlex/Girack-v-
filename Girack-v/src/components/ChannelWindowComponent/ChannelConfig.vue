@@ -295,7 +295,7 @@ export default {
     
 
     <!-- チャンネルメニュー本体 -->
-    <v-card class="text-center rounded-lg pa-3">
+    <v-card class="text-center d-flex rounded-lg pa-3">
         <!-- チャンネル名とバッジ -->
         <div class="ma-5">
             <p class="text-h4">
@@ -353,13 +353,15 @@ export default {
             <div v-if="descriptionEditing">
                 <v-textarea
                     no-resize
+                    counter
+                    maxlength="128"
                     rows="3"
                     v-model="descriptionText"
                     label="概要"
                 >
                 <!-- 確定とキャンセルのアイコン -->
                 <template v-slot:append-inner>
-                    <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
+                    <v-icon @click="updateChannel" :disabled="descriptionText.length>=128">mdi:mdi-check-bold</v-icon>
                     <v-icon @click="switchEditing('desc',false)">mdi:mdi-window-close</v-icon>
                 </template>
                 </v-textarea>
