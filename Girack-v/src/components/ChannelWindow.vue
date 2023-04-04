@@ -1,7 +1,7 @@
 <script>
-import Content from "./ChannelComponent/Content.vue";
-import Head from "./ChannelComponent/Head.vue";
-import Input from "./ChannelComponent/Input.vue";
+import Content from "./ChannelWindowComponent/Content.vue";
+import Head from "./ChannelWindowComponent/Head.vue";
+import Input from "./ChannelWindowComponent/Input.vue";
 
 export default {
     components: {

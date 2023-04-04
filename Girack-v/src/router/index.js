@@ -24,27 +24,27 @@ const router = createRouter({
       children: [
         {
           path: "profile",
-          component: () => import('../components/MenuComponent/Profile.vue'),
+          component: () => import('../components/MenuPageComponent/Profile.vue'),
         },
         {
           path: "settings",
-          component: () => import('../components/MenuComponent/Settings.vue'),
+          component: () => import('../components/MenuPageComponent/Settings.vue'),
         },
         {
           path: "modlog",
-          component: () => import('../components/MenuComponent/Modlog.vue'),
+          component: () => import('../components/MenuPageComponent/Modlog.vue'),
         },
         {
           path: "serversettings",
-          component: () => import('../components/MenuComponent/ServerSettings.vue'),
+          component: () => import('../components/MenuPageComponent/ServerSettings.vue'),
         },
         {
           path: "members",
-          component: () => import('../components/MenuComponent/Members.vue'),
+          component: () => import('../components/MenuPageComponent/Members.vue'),
         },
         {
           path: "aboutgirack",
-          component: () => import('../components/MenuComponent/AboutGirack.vue'),
+          component: () => import('../components/MenuPageComponent/AboutGirack.vue'),
         },
       ]
     },
