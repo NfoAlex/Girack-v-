@@ -542,10 +542,12 @@ export default {
                                 @mouseleave="mouseOverMsg(m.messageid, 'off')"
                             >
                                 <!-- ユーザー名と時間表記 -->
-                                <div class="text-h6" v-if="checkShowAvatar(m.userid, index)">
+                                <div class="text-h6 d-flex" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
-                                    {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
-                                    
+                                    <span class="text-truncate">
+                                        {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
+                                    </span>
+
                                     <!-- ロールバッジ -->
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'role')!=='Member'"
@@ -600,7 +602,7 @@ export default {
                         <v-card class="pa-2 rounded-lg" color="#222" style="width:fit-content; margin-top:-16px; max-width:500px;">
                             
                             <!-- ここからホバーメニュー -->
-                              <!-- コンポーネント化予定 -->
+                              <!-- ToDo::コンポーネント化 -->
                             <span style="position:relative; float:right;">
                                 <!-- 時間表示 -->
                                 <span style="margin-right:12px;" class="text-body-2 font-italic">
