@@ -592,7 +592,7 @@ export default {
 
                                 <!-- リアクション -->
                                 <div>
-                                    <v-chip style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                                    <v-chip @click="messageAction(m.messageid, 'reaction', r[0])" style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
                                         {{ getReaction(r[0]) }} {{ r[1] }}
                                     </v-chip>
                                 </div>
