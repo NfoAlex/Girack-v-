@@ -9,7 +9,12 @@ const { CONFIG_NOTIFICATION, LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
 
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
-const socket = io(backendURI, { transports : ['websocket'] });
+const socket = io(backendURI, {
+    transports : ['websocket'],
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 2000,
+});
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 //ユーザー(自分)情報
