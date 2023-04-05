@@ -5,7 +5,12 @@ import { io } from 'socket.io-client'; //ウェブソケット通信用
 import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
-const { CONFIG_NOTIFICATION, LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
+
+const {
+    CONFIG_NOTIFICATION,
+    LIST_NOTIFICATION_MUTE_CHANNEL,
+    CONFIG_DISPLAY 
+} = getCONFIG(); //設定
 
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
@@ -627,7 +632,7 @@ socket.on("authResult", (dat) => {
 
 });
 
-//クッキーから設定を読み込む
+//初回処理用のクッキーから設定を読み込む
 function loadConfigFromCookie() {
     //既読状態をクッキーから取得して設定に適用
     try {
@@ -654,17 +659,23 @@ function loadConfigFromCookie() {
     try {
         //クッキーからチャンネルミュートリストを取得
         let COOKIE_ListMute = getCookie("configListMute");
-
-        //チャンネルミュート知るとをクッキーから取得
         LIST_NOTIFICATION_MUTE_CHANNEL.value = COOKIE_ListMute.split("::");
     }
     catch(e) {}
 
-    //クッキーから通知設定を取得して設定に適用
+    //クッキーから通知設定を取得して適用
     try {
         //クッキーから通知設定を読み込み
         let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
         CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
+    }
+    catch(e) {}
+
+    //クッキーから表示設定を取得して適用
+    try {
+        //クッキーから通知設定を読み込み
+        let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
+        CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
     }
     catch(e) {}
 

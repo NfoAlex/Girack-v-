@@ -39,6 +39,12 @@ export default {
 
             },
             deep:true
+        },
+        CONFIG_DISPLAY: {
+            handler() {
+                setCookie("configDisplay", JSON.stringify(this.CONFIG_DISPLAY), 7);
+            },
+            deep: true
         }
     },
 
