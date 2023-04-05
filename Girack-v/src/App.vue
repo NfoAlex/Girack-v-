@@ -94,6 +94,7 @@ export default {
             class="rounded-lg"
             color="error"
             location="top"
+            timeout="-1"
         >
             サーバーから切断されました...(再接続中)
             <template v-slot:actions>
@@ -102,7 +103,9 @@ export default {
                     variant="text"
                     @click="disconnectSnackbar=false;"
                 >
-                    閉じる
+                    <v-icon>
+                        mdi:mdi-close
+                    </v-icon>
                 </v-btn>
             </template>
         </v-snackbar>
@@ -120,7 +123,9 @@ export default {
                     variant="text"
                     @click="reconnectedSnackbar=false;"
                 >
-                    閉じる
+                    <v-icon>
+                        mdi:mdi-close
+                    </v-icon>
                 </v-btn>
             </template>
         </v-snackbar>
