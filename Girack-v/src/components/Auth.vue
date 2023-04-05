@@ -58,6 +58,7 @@ export default {
             //クッキーに認証情報があるか確認
             if ( getCookie("sessionid") !== "" ) {
                 socket.emit("authByCookie", getCookie("sessionid"));
+                return;
 
             }
 
