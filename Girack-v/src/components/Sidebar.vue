@@ -84,7 +84,7 @@ export default {
                     let U1 = u1.channelname.toLowerCase();
                     let U2 = u2.channelname.toLowerCase();
 
-                    return U1<U2 ?-1:U1>U2?1:0;
+                    return U1<U2?-1:U1>U2?0:1;
 
                 });
 
