@@ -6,8 +6,8 @@ export default {
 
     setup() {
         //設定をインポート
-        const { CONFIG_NOTIFICATION } = getCONFIG();
-        return { CONFIG_NOTIFICATION };
+        const { CONFIG_NOTIFICATION, CONFIG_DISPLAY } = getCONFIG();
+        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY };
         
     },
 
@@ -257,17 +257,11 @@ export default {
                         <p>チャンネル</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
+                                v-model="CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                 label="ユーザー名の横にロールを表示"
                                 density="compact"
                             >
                             </v-checkbox>
-                        </v-card>
-
-                        <br>
-
-                        <p>JSON</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
-                            ToDo
                         </v-card>
 
                     </v-card>

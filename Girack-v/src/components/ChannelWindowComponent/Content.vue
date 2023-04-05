@@ -10,8 +10,9 @@ export default {
         const { Userinfo } = dataUser(); //ユーザー情報
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
         const { ChannelIndex } = dataChannel();
+        const { CONFIG_DISPLAY } = getCONFIG();
 
-        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex };
+        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, CONFIG_DISPLAY };
 
     },
 
@@ -550,7 +551,7 @@ export default {
 
                                     <!-- ロールバッジ -->
                                     <v-chip
-                                        v-if="getUserStats(m.userid, 'role')!=='Member'"
+                                        v-if="getUserStats(m.userid, 'role')!=='Member'&&CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                         style="margin-left:8px;"
                                         :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
                                         size="x-small"

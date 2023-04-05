@@ -19,7 +19,7 @@ const LIST_NOTIFICATION_MUTE_USER = ref([]);
 
 //UIに関する設定
 const CONFIG_DISPLAY = ref({
-
+    CONTENT_SHOW_ROLE: true
 });
 
 //設定とデータを返す
@@ -27,7 +27,8 @@ export function getCONFIG() {
     return {
         CONFIG_NOTIFICATION,
         LIST_NOTIFICATION_MUTE_CHANNEL,
-        LIST_NOTIFICATION_MUTE_USER
+        LIST_NOTIFICATION_MUTE_USER,
+        CONFIG_DISPLAY
     };
 
 }
