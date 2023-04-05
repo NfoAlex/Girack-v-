@@ -150,16 +150,6 @@ export default {
                             プライバシー
                         </v-btn>
 
-                        <v-btn 
-                            disabled
-                            @click="configPage='channelview'"
-                            size="large"
-                            :color="configPage==='channelview'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            チャンネル表示
-                        </v-btn>
-
                         <v-btn
                             @click="configPage='game'"
                             size="large"

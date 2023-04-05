@@ -667,7 +667,10 @@ function loadConfigFromCookie() {
     try {
         //クッキーから通知設定を読み込み
         let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
-        CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
+        if ( Object.keys(COOKIE_ConfigNotify).length === Object.keys(CONFIG_NOTIFICATION.value).nelgth ) {
+            CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
+
+        }
     }
     catch(e) {}
 
@@ -675,9 +678,16 @@ function loadConfigFromCookie() {
     try {
         //クッキーから通知設定を読み込み
         let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
-        CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
+        console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(COOKIE_ConfigDisplay).length);
+        console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(CONFIG_DISPLAY.value).length);
+        if ( Object.keys(COOKIE_ConfigDisplay).length === Object.keys(CONFIG_DISPLAY.value).length ) {
+            CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
+        
+        }
     }
-    catch(e) {}
+    catch(e) {
+        console.log("エラーだな");
+    }
 
 }
 
