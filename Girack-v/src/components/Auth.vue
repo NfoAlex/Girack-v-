@@ -63,11 +63,11 @@ export default {
             }
 
             //Socketの接続が確認できていたらループ削除
-            if ( socket.connected ) { //接続できているかどうか
-                this.Connected = true; //接続していると保存
-                return;
+            // if ( socket.connected ) { //接続できているかどうか
+            //     this.Connected = true; //接続していると保存
+            //     return;
 
-            }
+            // }
 
             setInterval(checkStatus, 1000); //ループさせる
 
@@ -81,7 +81,7 @@ export default {
             //ログインできたらページ移動
             if ( dat.result ) {
                 this.success = true; //成功を表示
-                setTimeout(() => this.$emit("login"), 0); //1.5秒待ってから遷移
+                setTimeout(() => this.$emit("login"), 10); //画面遷移
 
             } else {
                 this.error = true; //エラーを表示
@@ -108,6 +108,12 @@ export default {
         socket.on("serverinfo", (dat) => {
             this.serverinfoLoaded = dat; //サーバーの情報
             document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
+
+        });
+
+        //接続確認できたら接続できた状態にする
+        socket.on("connect", () => {
+            this.Connected = true;
 
         });
 
