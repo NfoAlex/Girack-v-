@@ -158,7 +158,7 @@ export default {
             });
 
             //自分に対するメンションなら着色
-            msgCleaned = String(msg).replace(("@"+this.Userinfo.username), function(c){
+            msgCleaned = msgCleaned.replace(("@"+this.Userinfo.username), function(c){
                 return "<span style='color:orange'>" + c + "</span>";
 
             });
@@ -270,6 +270,9 @@ export default {
                 let msgTimeHourThis = parseInt(this.MsgDB[this.getPath][index].time.slice(8,10));
                     //時差計算
                 let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
+
+                //日付がそもそも違うなら見せる
+                if ( this.checkDateDifference(index) ) return true;
 
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
                 if ( this.MsgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
@@ -584,6 +587,7 @@ export default {
                                 <!-- メッセージ本文 -->
                                 <span
                                     style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
+                                    class="text-disabled"
                                     v-html="formatMessage(m.content)"
                                 >
                                 </span>
