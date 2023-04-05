@@ -39,9 +39,11 @@ export default {
             deep: true //階層ごと監視するため
         },
 
+        //ファイルのアップロード状態を監視してアップロードできるかどうかを設定
         iconUploadFile: {
             handler() {
                 try {
+                //ファイルサイズが1MB以上なら無効化
                 if ( this.iconUploadFile[0].size > 1024000 ) {
                     this.iconUploadable = false;
 
