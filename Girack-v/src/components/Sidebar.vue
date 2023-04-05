@@ -23,6 +23,8 @@ export default {
             servername: "",
             displayusername: "Null",
 
+            disconnected: false,
+
             path: "",
             loggedin: false,
             channelJoined: [],
@@ -44,9 +46,11 @@ export default {
             try {
                 //termの値で返すものを選ぶ
                 switch(term) {
+                    //新着数
                     case "new":
                     return this.MsgReadTime[channelid].new; //新着数を返す
 
+                    //メンション数
                     case "mention":
                         return this.MsgReadTime[channelid].mention; //メンション数を返す
 
@@ -63,6 +67,18 @@ export default {
         socket.on("serverinfo", (dat) => { //サーバー情報きたら
             this.servername = dat.servername; //表示する名前を変更
             
+        });
+
+        //サーバー切断時
+        socket.on("disconnect", (dat) => {
+            this.disconnected = true;
+
+        });
+
+        //サーバーの再接続時
+        socket.on("connect", () => {
+            this.disconnected = false;
+
         });
 
     },
@@ -150,9 +166,10 @@ export default {
                     class="mx-auto pa-2 rounded-lg d-flex justify-center align-center"
                     color="#222"
                 >
-                    <v-icon v-if="sessionOnlineNum>=2" style="margin-right:4px;" size="small" color="green">mdi:mdi-circle</v-icon>
+                    <v-icon v-if="sessionOnlineNum>=2" style="margin-right:4px;" size="small" :color="disconnected?'red':'green'">mdi:mdi-circle</v-icon>
                     <span v-else>🥲</span>
-                    {{ sessionOnlineNum }}人がオンライン
+                    <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
+                    <span v-else>サーバーオフライン</span>
                 </v-card>
             </RouterLink>
             

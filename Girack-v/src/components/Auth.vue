@@ -114,7 +114,7 @@ export default {
     },
 
     unmounted() {
-        //通信初期化用
+        //通信の重複防止
         socket.off("authResult");
         socket.off("serverinfo");
 
