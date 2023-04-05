@@ -208,7 +208,11 @@ export default {
                             </div>
                             
                             <!-- チャンネル名 -->
-                            <div style="margin-left:4px;" class="me-auto text-truncate">
+                            <div
+                                style="margin-left:4px;"
+                                class="me-auto text-truncate"
+                                :class="(checkReadTime(l[0], 'new')||checkReadTime(l[0], 'mention')||path.indexOf(l[0])!==-1)?'text-high-emphasis':'text-disabled'"
+                            >
                                 {{ l[1].channelname }}
                             </div>
 
