@@ -589,44 +589,8 @@ socket.on("authResult", (dat) => {
             channelJoined: dat.channelJoined
         };
 
-        //既読状態をクッキーから取得して設定に適用
-        try {
-            //クッキーから既読状態を取得
-            let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
-            console.log("socket :: authResult : クッキーからのMsgReadTime ->");
-            console.log(Object.entries(COOKIE_MsgReadTime));
-
-            //既読状態のJSONを配列化して使いやすくする
-            let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
-            //既読状態の新着数とメンション数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
-            for ( let index in objCOOKIE_MsgReadTime ) {
-                COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
-                COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].mention = 0;
-
-            }
-            
-            //既読状態をクッキーから取得
-            MsgReadTime.value = COOKIE_MsgReadTime;
-        }
-        catch(e) {}
-
-        //クッキーからチャンネルミュートリストを取得して設定に適用
-        try {
-            //クッキーからチャンネルミュートリストを取得
-            let COOKIE_ListMute = getCookie("configListMute");
-
-            //チャンネルミュート知るとをクッキーから取得
-            LIST_NOTIFICATION_MUTE_CHANNEL.value = COOKIE_ListMute.split("::");
-        }
-        catch(e) {}
-
-        //クッキーから通知設定を取得して設定に適用
-        try {
-            //クッキーから通知設定を読み込み
-            let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
-            CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
-        }
-        catch(e) {}
+        //クッキーから設定を読み込み
+        loadConfigFromCookie();
 
         //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
@@ -662,6 +626,49 @@ socket.on("authResult", (dat) => {
     }
 
 });
+
+//クッキーから設定を読み込む
+function loadConfigFromCookie() {
+    //既読状態をクッキーから取得して設定に適用
+    try {
+        //クッキーから既読状態を取得
+        let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
+        console.log("socket :: authResult : クッキーからのMsgReadTime ->");
+        console.log(Object.entries(COOKIE_MsgReadTime));
+
+        //既読状態のJSONを配列化して使いやすくする
+        let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
+        //既読状態の新着数とメンション数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
+        for ( let index in objCOOKIE_MsgReadTime ) {
+            COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
+            COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].mention = 0;
+
+        }
+        
+        //既読状態をクッキーから取得
+        MsgReadTime.value = COOKIE_MsgReadTime;
+    }
+    catch(e) {}
+
+    //クッキーからチャンネルミュートリストを取得して設定に適用
+    try {
+        //クッキーからチャンネルミュートリストを取得
+        let COOKIE_ListMute = getCookie("configListMute");
+
+        //チャンネルミュート知るとをクッキーから取得
+        LIST_NOTIFICATION_MUTE_CHANNEL.value = COOKIE_ListMute.split("::");
+    }
+    catch(e) {}
+
+    //クッキーから通知設定を取得して設定に適用
+    try {
+        //クッキーから通知設定を読み込み
+        let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
+        CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
+    }
+    catch(e) {}
+
+}
 
 //クッキー設定するやつ(MDNから参考)
 export function setCookie(cname, cvalue, exdays) {
