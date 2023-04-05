@@ -252,7 +252,8 @@ export default {
 
                     <v-card v-if="configPage===('interface')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">表示</p>
-                        <p>チャンネル</p>
+
+                        <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
                                 v-model="CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
@@ -268,6 +269,7 @@ export default {
 
                     <v-card v-if="configPage===('privacy')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">プライバシー</p>
+
                         <p><v-icon>mdi:mdi-radar</v-icon>データ</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
