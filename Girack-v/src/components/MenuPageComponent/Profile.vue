@@ -24,6 +24,7 @@ export default {
                 }
             ],
             iconUploadFile: null, //アイコン用画像のデータ
+            iconUploadable: false, //アイコンをアップロードできる状態かどうか
             iconUploadDone: false, //アイコンがアップロードされた状態
         }
     },
@@ -36,6 +37,23 @@ export default {
                 this.nameDisplaying = U.username; //表示名を更新
             },
             deep: true //階層ごと監視するため
+        },
+
+        iconUploadFile: {
+            handler() {
+                try {
+                if ( this.iconUploadFile[0].size > 1024000 ) {
+                    this.iconUploadable = false;
+
+                } else {
+                    this.iconUploadable = true;
+
+                }
+                }
+                catch(e) {
+                    this.iconUploadable = false;
+                }
+            }
         }
     },
     
@@ -65,6 +83,11 @@ export default {
         toggleEditing() {
             this.nameDisplaying = Userinfo.value.username;
             this.nameEditing = !this.nameEditing; //編集モード
+        },
+
+        checkFileIsOverLimit() {
+            
+
         },
 
         //アイコンの画像アップロード
@@ -146,7 +169,7 @@ export default {
                 ></v-file-input>
             </div>
 
-            <v-btn @click="uploadIcon" class="rounded-lg" color="primary">
+            <v-btn :disabled="!iconUploadable" @click="uploadIcon" class="rounded-lg" color="primary">
                 更新
             </v-btn>
 
