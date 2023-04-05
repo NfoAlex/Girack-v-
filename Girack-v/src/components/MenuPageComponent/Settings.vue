@@ -240,20 +240,12 @@ export default {
                             </p>
                         </v-card>
 
-                        <br>
-
-                        <p>JSON</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
-                            {{ CONFIG_NOTIFICATION }}
-                        </v-card>
-
                     </v-card>
 
                     <br>
 
                     <v-card v-if="configPage===('interface')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">表示</p>
-                        ここからToDo
                         <p>チャンネル</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
