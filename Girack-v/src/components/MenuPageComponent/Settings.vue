@@ -150,16 +150,6 @@ export default {
                             プライバシー
                         </v-btn>
 
-                        <v-btn 
-                            disabled
-                            @click="configPage='channelview'"
-                            size="large"
-                            :color="configPage==='channelview'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            チャンネル表示
-                        </v-btn>
-
                         <v-btn
                             @click="configPage='game'"
                             size="large"
@@ -261,6 +251,18 @@ export default {
                                 density="compact"
                             >
                             </v-checkbox>
+                        </v-card>
+
+                        <br>
+
+                        <p><v-icon>mdi:mdi-format-list-group</v-icon>サイドバー</p>
+                        <v-card class="cardInner pa-3 rounded-lg">
+                            <p class="pa-1">チャンネルの表示順番</p>
+                            <v-select
+                                v-model="CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY"
+                                :items="['alphabetical','id']"
+                            >
+                            </v-select>
                         </v-card>
 
                     </v-card>

@@ -2,6 +2,7 @@
 <script>
 import { RouterLink } from 'vue-router';
 import { getSocket, dataChannel, dataUser, dataMsg, backendURI, Serverinfo } from "../socket.js";
+import { getCONFIG } from "../config.js";
 
 const socket = getSocket();
 
@@ -11,8 +12,9 @@ export default {
         const { Userinfo } = dataUser();
         const { MsgReadTime } = dataMsg();
         const { ChannelIndex } = dataChannel();
+        const { CONFIG_DISPLAY } = getCONFIG();
 
-        return { Userinfo, MsgReadTime, ChannelIndex, Serverinfo };
+        return { Userinfo, MsgReadTime, ChannelIndex, Serverinfo, CONFIG_DISPLAY };
 
     },
 
@@ -28,6 +30,7 @@ export default {
             path: "",
             loggedin: false,
             channelJoined: [],
+            displaychannelList: [],
             uri: backendURI,
         }
     },
@@ -38,6 +41,73 @@ export default {
             this.path = r.path; //変数へ取り込む
 
         },
+
+        //チャンネル情報の変化を監視
+        ChannelIndex: {
+            handler() {
+                //ソート
+                this.sortChannelList;
+
+            },
+            deep: true
+        },
+
+        //チャンネルの表示設定を監視
+        "CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY": {
+            handler() {
+                //ソート
+                this.sortChannelList;
+
+            }
+        }
+    },
+
+    computed: {
+        //チャンネルボタンの表示をソートする
+        sortChannelList() {
+            let nameList = [];
+            let objChannelIndex = Object.entries(this.ChannelIndex); //一度JSONを配列化
+
+            //チャンネルの情報を表示するための配列にする
+            for ( let index in objChannelIndex ) {
+                nameList.push ({
+                    channelname: objChannelIndex[index][1].channelname,
+                    id: objChannelIndex[index][0],
+                    scope: objChannelIndex[index][1].scope
+                });
+
+            }
+            
+            //設定に合わせてソート
+            if ( this.CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY === "alphabetical" ) { //名前順(?)
+                //表示するチャンネルリストをソート
+                this.displaychannelList = nameList.sort((u1,u2) => {
+                    let U1 = u1.channelname.toLowerCase();
+                    let U2 = u2.channelname.toLowerCase();
+
+                    //絵文字があるなら削る
+                    if ( /\p{Extended_Pictographic}/u.test(U1) ) {
+                        U1 = U1.substring(2);
+
+                    }
+
+                    //絵文字があるなら削る
+                    if ( /\p{Extended_Pictographic}/u.test(U2) ) {
+                        U2 = U2.substring(2);
+                        
+                    }
+
+                    //ソート
+                    return U1<U2?-1:U1>U2?1:0;
+
+                });
+
+            } else if ( this.CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY === "id" ) { //ID順
+                this.displaychannelList = nameList;
+
+            }
+
+        }
     },
 
     methods: {
@@ -59,7 +129,7 @@ export default {
             catch(e) {
                 return null;
             }
-        }
+        },
     },
 
     mounted() {
@@ -210,17 +280,17 @@ export default {
 
             <!-- ここからチャンネルボタン描写  -->
             <div class="mx-auto scroll" style="overflow-y:auto; width:97%; margin-bottom:8px;">
-                <div style="margin-top:1%;" v-for="l in Object.entries(ChannelIndex)">
-                    <RouterLink :to="'/c/'+l[0]">
+                <div style="margin-top:1%;" v-for="l in displaychannelList">
+                    <RouterLink :to="'/c/'+l.id">
                         <v-card
                             class="rounded-lg pa-2 d-flex align-center"
-                            :variant="path.indexOf(l[0])!==-1?'tonal':'text'"
+                            :variant="path.indexOf(l.id)!==-1?'tonal':'text'"
                             @click=""
                             style="font-size:calc(6px + 0.75vb);"
                         >
                             <!-- チャンネル名前の#の部分 -->
                             <div class="flex-shrink-1">
-                                <v-icon v-if="l[1].scope!=='private'">mdi:mdi-pound</v-icon>
+                                <v-icon v-if="l.scope!=='private'">mdi:mdi-pound</v-icon>
                                 <v-icon v-else>mdi:mdi-lock-outline</v-icon> <!-- プライベートチャンネル用鍵マーク -->
                             </div>
                             
@@ -228,23 +298,23 @@ export default {
                             <div
                                 style="margin-left:4px;"
                                 class="me-auto text-truncate"
-                                :class="(checkReadTime(l[0], 'new')||checkReadTime(l[0], 'mention')||path.indexOf(l[0])!==-1)?'text-high-emphasis':'text-disabled'"
+                                :class="(checkReadTime(l.id, 'new')||checkReadTime(l.id, 'mention')||path.indexOf(l.id)!==-1)?'text-high-emphasis':'text-disabled'"
                             >
-                                {{ l[1].channelname }}
+                                {{ l.channelname }}
                             </div>
 
                             <!-- メンションマーク -->
                             <v-badge
-                                v-if="checkReadTime(l[0], 'mention')"
-                                :content="checkReadTime(l[0], 'mention')"
+                                v-if="checkReadTime(l.id, 'mention')"
+                                :content="checkReadTime(l.id, 'mention')"
                                 color="orange"
                                 inline
                             ></v-badge>
 
                             <!-- 新着マーク -->
                             <v-badge
-                                v-if="checkReadTime(l[0], 'new')"
-                                :content="checkReadTime(l[0], 'new')"
+                                v-if="checkReadTime(l.id, 'new')"
+                                :content="checkReadTime(l.id, 'new')"
                                 inline
                             ></v-badge>
 
