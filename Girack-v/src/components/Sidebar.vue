@@ -63,6 +63,7 @@ export default {
     },
 
     computed: {
+        //チャンネルボタンの表示をソートする
         sortChannelList() {
             let nameList = [];
             let objChannelIndex = Object.entries(this.ChannelIndex); //一度JSONを配列化
@@ -297,7 +298,7 @@ export default {
                             <div
                                 style="margin-left:4px;"
                                 class="me-auto text-truncate"
-                                :class="(checkReadTime(l.id, 'new')||checkReadTime(l.id, 'mention')||path.indexOf(l)!==-1)?'text-high-emphasis':'text-disabled'"
+                                :class="(checkReadTime(l.id, 'new')||checkReadTime(l.id, 'mention')||path.indexOf(l.id)!==-1)?'text-high-emphasis':'text-disabled'"
                             >
                                 {{ l.channelname }}
                             </div>
