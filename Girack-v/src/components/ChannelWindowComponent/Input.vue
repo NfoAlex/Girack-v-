@@ -1,11 +1,23 @@
 <script setup>
 import { dataUser, dataChannel, getSocket } from '../../socket.js';
+import { ref } from "vue";
 </script>
 
 <script>
 const socket = getSocket();
 const { Userinfo } = dataUser();
 const { ChannelIndex } = dataChannel();
+
+//返信モード
+const ReplyState = ref({
+    isReplying: false,
+    id: "0"
+});
+
+export function getReplyState() {
+    return { ReplyState };
+
+}
 
 export default {
     
@@ -31,6 +43,7 @@ export default {
                 userid: Userinfo.value.userid, //名前
                 channelid: this.getPath, //チャンネルID
                 sessionid: Userinfo.value.sessionid, //セッションID);
+                isReply: false,
                 content: this.txt //メッセージの本文
             });
             
