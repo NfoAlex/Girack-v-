@@ -1,21 +1,18 @@
-<script setup>
+<script>
 import { RouterView } from 'vue-router';
-import { getSocket } from "./socket.js";
+import { getSocket, dataUser } from "./socket.js";
 
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
-
-</script>
-
-<script>
-
 import { useTheme } from 'vuetify';
 const socket = getSocket();
 
 export default {
     setup() {
         const theme = useTheme();
-        return { theme };
+        const { Userinfo } = dataUser();
+
+        return { theme, Userinfo };
         
     },
 
@@ -28,9 +25,12 @@ export default {
             main: "main", //右のチャンネル表示するところ
 
             sessionOnlineNum: 0, //オンラインユーザー数
+            disconnectSnackbar: false, //切断された表示
+            reconnectedSnackbar: false,
+            disconnected: false,
 
-            path: "",
-            loggedin: false,
+            path: "", //現在のチャンネルID
+            loggedin: false, //ログインしているかの状態
         }
 
     },
@@ -52,6 +52,35 @@ export default {
 
         });
 
+        //切断されたときにエラーを表示する
+        socket.on("disconnect", () => {
+            this.disconnectSnackbar = true;
+            this.disconnected = true;
+
+        });
+
+        //再接続できたら接続できたと表示
+        socket.on("connect", () => {
+            if ( this.disconnected ) {
+                this.disconnectSnackbar = false,
+                this.reconnectedSnackbar = true;
+                console.log("App :: connection : サーバーに接続されました!");
+
+                //オンラインとして加算してもらう
+                socket.emit("countmeAsOnline", {
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+
+                //切断状態をオフ
+                this.disconnected = false;
+
+            }
+
+        });
+
     }
 
 }
@@ -60,6 +89,46 @@ export default {
 
 <template>
     <div>
+        <v-snackbar
+            v-model="disconnectSnackbar"
+            class="rounded-lg"
+            color="error"
+            location="top"
+            timeout="-1"
+        >
+            サーバーから切断されました...(再接続中)
+            <template v-slot:actions>
+                <v-btn
+                    class="rounded-lg"
+                    variant="text"
+                    @click="disconnectSnackbar=false;"
+                >
+                    <v-icon>
+                        mdi:mdi-close
+                    </v-icon>
+                </v-btn>
+            </template>
+        </v-snackbar>
+
+        <v-snackbar
+            v-model="reconnectedSnackbar"
+            class="rounded-lg"
+            color="success"
+            location="top"
+        >
+            接続されました!
+            <template v-slot:actions>
+                <v-btn
+                    class="rounded-lg"
+                    variant="text"
+                    @click="reconnectedSnackbar=false;"
+                >
+                    <v-icon>
+                        mdi:mdi-close
+                    </v-icon>
+                </v-btn>
+            </template>
+        </v-snackbar>
 
         <!-- ログイン後(Main) -->
         <div v-if="loggedin">

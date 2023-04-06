@@ -24,6 +24,7 @@ export default {
                 }
             ],
             iconUploadFile: null, //アイコン用画像のデータ
+            iconUploadable: false, //アイコンをアップロードできる状態かどうか
             iconUploadDone: false, //アイコンがアップロードされた状態
         }
     },
@@ -36,6 +37,25 @@ export default {
                 this.nameDisplaying = U.username; //表示名を更新
             },
             deep: true //階層ごと監視するため
+        },
+
+        //ファイルのアップロード状態を監視してアップロードできるかどうかを設定
+        iconUploadFile: {
+            handler() {
+                try {
+                //ファイルサイズが1MB以上なら無効化
+                if ( this.iconUploadFile[0].size > 1024000 ) {
+                    this.iconUploadable = false;
+
+                } else {
+                    this.iconUploadable = true;
+
+                }
+                }
+                catch(e) {
+                    this.iconUploadable = false;
+                }
+            }
         }
     },
     
@@ -65,6 +85,11 @@ export default {
         toggleEditing() {
             this.nameDisplaying = Userinfo.value.username;
             this.nameEditing = !this.nameEditing; //編集モード
+        },
+
+        checkFileIsOverLimit() {
+            
+
         },
 
         //アイコンの画像アップロード
@@ -146,7 +171,7 @@ export default {
                 ></v-file-input>
             </div>
 
-            <v-btn @click="uploadIcon" class="rounded-lg" color="primary">
+            <v-btn :disabled="!iconUploadable" @click="uploadIcon" class="rounded-lg" color="primary">
                 更新
             </v-btn>
 
@@ -210,10 +235,14 @@ export default {
                                 # {{ Userinfo.userid }}
                             </p>
                             <!-- ユーザー名 -->
-                            <p v-if="!nameEditing" @dblclick="toggleEditing" class="text-h4 text-left" >
+                            <p
+                                v-if="!nameEditing"
+                                @dblclick="toggleEditing"
+                                class="text-h4 text-left text-truncate"
+                            >
                                 {{ Userinfo.username }}
-                                <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
                             </p>
+                            <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
                             <!-- ユーザー名編集時 -->
                             <v-text-field
                                 v-if="nameEditing"

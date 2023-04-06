@@ -52,31 +52,36 @@ export default {
         }
     },
 
-    mounted() {        
-        //サーバーに接続できるまでループでクッキーが存在するなら認証開始
-        const checkCookie = setInterval( () => {
+    mounted() {
+        //接続とクッキーを確認するための関数
+        function checkStatus() {
+            //クッキーに認証情報があるか確認
             if ( getCookie("sessionid") !== "" ) {
                 socket.emit("authByCookie", getCookie("sessionid"));
-                //console.log("checkCookie :: 認証リクエスト送信");
-                clearInterval(checkCookie); //ループ削除
+                return;
 
             }
 
             //Socketの接続が確認できていたらループ削除
-            if ( socket.connected ) { //接続できているかどうか
-                clearInterval(checkCookie); //ループ削除
-                this.Connected = true;
+            // if ( socket.connected ) { //接続できているかどうか
+            //     this.Connected = true; //接続していると保存
+            //     return;
 
-            }
+            // }
 
-        }, 1000);
+            setInterval(checkStatus, 1000); //ループさせる
+
+        };
+
+        //接続とクッキーを確認するための関数を実行
+        checkStatus();
 
         //認証結果の受け取りと処理
         socket.on("authResult", (dat) => {
             //ログインできたらページ移動
             if ( dat.result ) {
                 this.success = true; //成功を表示
-                setTimeout(() => this.$emit("login"), 0); //1.5秒待ってから遷移
+                setTimeout(() => this.$emit("login"), 10); //画面遷移
 
             } else {
                 this.error = true; //エラーを表示
@@ -106,10 +111,16 @@ export default {
 
         });
 
+        //接続確認できたら接続できた状態にする
+        socket.on("connect", () => {
+            this.Connected = true;
+
+        });
+
     },
 
     unmounted() {
-        //通信初期化用
+        //通信の重複防止
         socket.off("authResult");
         socket.off("serverinfo");
 

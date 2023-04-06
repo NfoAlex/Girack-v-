@@ -5,11 +5,21 @@ import { io } from 'socket.io-client'; //ウェブソケット通信用
 import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
-const { CONFIG_NOTIFICATION, LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
+
+const {
+    CONFIG_NOTIFICATION,
+    LIST_NOTIFICATION_MUTE_CHANNEL,
+    CONFIG_DISPLAY 
+} = getCONFIG(); //設定
 
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
-const socket = io(backendURI, { transports : ['websocket'] });
+const socket = io(backendURI, {
+    transports : ['websocket'],
+    reconnection: true,
+    reconnectionDelay: 10,
+    reconnectionDelayMax: 1000,
+});
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 //ユーザー(自分)情報
@@ -584,44 +594,8 @@ socket.on("authResult", (dat) => {
             channelJoined: dat.channelJoined
         };
 
-        //既読状態をクッキーから取得して設定に適用
-        try {
-            //クッキーから既読状態を取得
-            let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
-            console.log("socket :: authResult : クッキーからのMsgReadTime ->");
-            console.log(Object.entries(COOKIE_MsgReadTime));
-
-            //既読状態のJSONを配列化して使いやすくする
-            let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
-            //既読状態の新着数とメンション数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
-            for ( let index in objCOOKIE_MsgReadTime ) {
-                COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
-                COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].mention = 0;
-
-            }
-            
-            //既読状態をクッキーから取得
-            MsgReadTime.value = COOKIE_MsgReadTime;
-        }
-        catch(e) {}
-
-        //クッキーからチャンネルミュートリストを取得して設定に適用
-        try {
-            //クッキーからチャンネルミュートリストを取得
-            let COOKIE_ListMute = getCookie("configListMute");
-
-            //チャンネルミュート知るとをクッキーから取得
-            LIST_NOTIFICATION_MUTE_CHANNEL.value = COOKIE_ListMute.split("::");
-        }
-        catch(e) {}
-
-        //クッキーから通知設定を取得して設定に適用
-        try {
-            //クッキーから通知設定を読み込み
-            let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
-            CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
-        }
-        catch(e) {}
+        //クッキーから設定を読み込み
+        loadConfigFromCookie();
 
         //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
@@ -657,6 +631,67 @@ socket.on("authResult", (dat) => {
     }
 
 });
+
+//初回処理用のクッキーから設定を読み込む
+function loadConfigFromCookie() {
+    //既読状態をクッキーから取得して設定に適用
+    try {
+        //クッキーから既読状態を取得
+        let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
+        console.log("socket :: authResult : クッキーからのMsgReadTime ->");
+        console.log(Object.entries(COOKIE_MsgReadTime));
+
+        //既読状態のJSONを配列化して使いやすくする
+        let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
+        //既読状態の新着数とメンション数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
+        for ( let index in objCOOKIE_MsgReadTime ) {
+            COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
+            COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].mention = 0;
+
+        }
+        
+        //既読状態をクッキーから取得
+        MsgReadTime.value = COOKIE_MsgReadTime;
+    }
+    catch(e) {}
+
+    //クッキーからチャンネルミュートリストを取得して設定に適用
+    try {
+        //クッキーからチャンネルミュートリストを取得
+        let COOKIE_ListMute = getCookie("configListMute");
+        LIST_NOTIFICATION_MUTE_CHANNEL.value = COOKIE_ListMute.split("::");
+    }
+    catch(e) {}
+
+    //クッキーから通知設定を取得して適用
+    try {
+        //クッキーから通知設定を読み込み
+        let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
+        //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
+        if ( Object.keys(COOKIE_ConfigNotify).length === Object.keys(CONFIG_NOTIFICATION.value).nelgth ) {
+            CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
+
+        }
+    }
+    catch(e) {}
+
+    //クッキーから表示設定を取得して適用
+    try {
+        //クッキーから通知設定を読み込み
+        let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
+        console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(COOKIE_ConfigDisplay).length);
+        console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(CONFIG_DISPLAY.value).length);
+        //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
+        if ( Object.keys(COOKIE_ConfigDisplay).length === Object.keys(CONFIG_DISPLAY.value).length ) {
+            CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
+        
+        }
+    }
+    catch(e) {
+        console.log("エラーだな");
+    }
+
+}
 
 //クッキー設定するやつ(MDNから参考)
 export function setCookie(cname, cvalue, exdays) {

@@ -10,8 +10,9 @@ export default {
         const { Userinfo } = dataUser(); //ユーザー情報
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
         const { ChannelIndex } = dataChannel();
+        const { CONFIG_DISPLAY } = getCONFIG();
 
-        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex };
+        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, CONFIG_DISPLAY };
 
     },
 
@@ -157,7 +158,7 @@ export default {
             });
 
             //自分に対するメンションなら着色
-            msgCleaned = String(msg).replace(("@"+this.Userinfo.username), function(c){
+            msgCleaned = msgCleaned.replace(("@"+this.Userinfo.username), function(c){
                 return "<span style='color:orange'>" + c + "</span>";
 
             });
@@ -269,6 +270,9 @@ export default {
                 let msgTimeHourThis = parseInt(this.MsgDB[this.getPath][index].time.slice(8,10));
                     //時差計算
                 let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
+
+                //日付がそもそも違うなら見せる
+                if ( this.checkDateDifference(index) ) return true;
 
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
                 if ( this.MsgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
@@ -550,7 +554,7 @@ export default {
 
                                     <!-- ロールバッジ -->
                                     <v-chip
-                                        v-if="getUserStats(m.userid, 'role')!=='Member'"
+                                        v-if="getUserStats(m.userid, 'role')!=='Member'&&CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                         style="margin-left:8px;"
                                         :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
                                         size="x-small"
@@ -583,6 +587,7 @@ export default {
                                 <!-- メッセージ本文 -->
                                 <span
                                     style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
+                                    class="text-disabled"
                                     v-html="formatMessage(m.content)"
                                 >
                                 </span>
@@ -592,7 +597,13 @@ export default {
 
                                 <!-- リアクション -->
                                 <div>
-                                    <v-chip @click="messageAction(m.messageid, 'reaction', r[0])" style="margin-top:4px; margin-right:8px; margin-bottom:4px;" size="small" color="white" v-for="r in Object.entries(m.reaction)">
+                                    <v-chip
+                                        @click="messageAction(m.messageid, 'reaction', r[0])"
+                                        style="margin-top:4px; margin-right:8px; margin-bottom:4px; user-select: none; -webkit-user-select: none;"
+                                        size="small"
+                                        color="white"
+                                        v-for="r in Object.entries(m.reaction)"
+                                    >
                                         {{ getReaction(r[0]) }} {{ r[1] }}
                                     </v-chip>
                                 </div>

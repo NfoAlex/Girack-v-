@@ -6,8 +6,8 @@ export default {
 
     setup() {
         //設定をインポート
-        const { CONFIG_NOTIFICATION } = getCONFIG();
-        return { CONFIG_NOTIFICATION };
+        const { CONFIG_NOTIFICATION, CONFIG_DISPLAY } = getCONFIG();
+        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY };
         
     },
 
@@ -39,6 +39,12 @@ export default {
 
             },
             deep:true
+        },
+        CONFIG_DISPLAY: {
+            handler() {
+                setCookie("configDisplay", JSON.stringify(this.CONFIG_DISPLAY), 7);
+            },
+            deep: true
         }
     },
 
@@ -144,16 +150,6 @@ export default {
                             プライバシー
                         </v-btn>
 
-                        <v-btn 
-                            disabled
-                            @click="configPage='channelview'"
-                            size="large"
-                            :color="configPage==='channelview'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            チャンネル表示
-                        </v-btn>
-
                         <v-btn
                             @click="configPage='game'"
                             size="large"
@@ -240,23 +236,17 @@ export default {
                             </p>
                         </v-card>
 
-                        <br>
-
-                        <p>JSON</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
-                            {{ CONFIG_NOTIFICATION }}
-                        </v-card>
-
                     </v-card>
 
                     <br>
 
                     <v-card v-if="configPage===('interface')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">表示</p>
-                        ここからToDo
-                        <p>チャンネル</p>
+
+                        <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
+                                v-model="CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                 label="ユーザー名の横にロールを表示"
                                 density="compact"
                             >
@@ -265,9 +255,14 @@ export default {
 
                         <br>
 
-                        <p>JSON</p>
+                        <p><v-icon>mdi:mdi-format-list-group</v-icon>サイドバー</p>
                         <v-card class="cardInner pa-3 rounded-lg">
-                            ToDo
+                            <p class="pa-1">チャンネルの表示順番</p>
+                            <v-select
+                                v-model="CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY"
+                                :items="['alphabetical','id']"
+                            >
+                            </v-select>
                         </v-card>
 
                     </v-card>
@@ -276,6 +271,7 @@ export default {
 
                     <v-card v-if="configPage===('privacy')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">プライバシー</p>
+
                         <p><v-icon>mdi:mdi-radar</v-icon>データ</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox

@@ -9,7 +9,7 @@ const CONFIG_NOTIFICATION = ref({
     NOTIFY_ALL: false, //すべてを通知する
     NOTIFY_MENTION: true, //メンションを通知する
     
-    DISPLAY_TAB_NEW: false, //タブに新着数を出す
+    DISPLAY_TAB_NEW: true, //タブに新着数を出す
     DISPLAY_TAB_MENTION: true, //タブにメンション数を出す
 });
 
@@ -19,7 +19,8 @@ const LIST_NOTIFICATION_MUTE_USER = ref([]);
 
 //UIに関する設定
 const CONFIG_DISPLAY = ref({
-
+    CONTENT_SHOW_ROLE: true,
+    SIDEBAR_CHANNEL_ORDERBY: "alphabetical", //"id","alphabetical"
 });
 
 //設定とデータを返す
@@ -27,7 +28,8 @@ export function getCONFIG() {
     return {
         CONFIG_NOTIFICATION,
         LIST_NOTIFICATION_MUTE_CHANNEL,
-        LIST_NOTIFICATION_MUTE_USER
+        LIST_NOTIFICATION_MUTE_USER,
+        CONFIG_DISPLAY
     };
 
 }
