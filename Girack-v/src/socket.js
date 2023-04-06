@@ -667,6 +667,7 @@ function loadConfigFromCookie() {
     try {
         //クッキーから通知設定を読み込み
         let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
+        //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
         if ( Object.keys(COOKIE_ConfigNotify).length === Object.keys(CONFIG_NOTIFICATION.value).nelgth ) {
             CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
 
@@ -680,6 +681,7 @@ function loadConfigFromCookie() {
         let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
         console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(COOKIE_ConfigDisplay).length);
         console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(CONFIG_DISPLAY.value).length);
+        //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
         if ( Object.keys(COOKIE_ConfigDisplay).length === Object.keys(CONFIG_DISPLAY.value).length ) {
             CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
         

@@ -151,6 +151,12 @@ export default {
 
         });
 
+        //初回レンダー終わったら一度ソートする
+        this.$nextTick(() => {
+            this.sortChannelList;
+
+        });
+
     },
 
     unmounted() {
