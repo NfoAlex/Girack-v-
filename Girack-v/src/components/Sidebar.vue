@@ -30,7 +30,7 @@ export default {
             path: "",
             loggedin: false,
             channelJoined: [],
-            channelDisplayList: [],
+            displaychannelList: [],
             uri: backendURI,
         }
     },
@@ -41,6 +41,72 @@ export default {
             this.path = r.path; //変数へ取り込む
 
         },
+
+        //チャンネル情報の変化を監視
+        ChannelIndex: {
+            handler() {
+                //ソート
+                this.sortChannelList;
+
+            },
+            deep: true
+        },
+
+        //チャンネルの表示設定を監視
+        "CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY": {
+            handler() {
+                //ソート
+                this.sortChannelList;
+
+            }
+        }
+    },
+
+    computed: {
+        sortChannelList() {
+            let nameList = [];
+            let objChannelIndex = Object.entries(this.ChannelIndex); //一度JSONを配列化
+
+            //チャンネルの情報を表示するための配列にする
+            for ( let index in objChannelIndex ) {
+                nameList.push ({
+                    channelname: objChannelIndex[index][1].channelname,
+                    id: objChannelIndex[index][0],
+                    scope: objChannelIndex[index][1].scope
+                });
+
+            }
+            
+            //設定に合わせてソート
+            if ( this.CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY === "alphabetical" ) { //名前順(?)
+                //表示するチャンネルリストをソート
+                this.displaychannelList = nameList.sort((u1,u2) => {
+                    let U1 = u1.channelname.toLowerCase();
+                    let U2 = u2.channelname.toLowerCase();
+
+                    //絵文字があるなら削る
+                    if ( /\p{Extended_Pictographic}/u.test(U1) ) {
+                        U1 = U1.substring(2);
+
+                    }
+
+                    //絵文字があるなら削る
+                    if ( /\p{Extended_Pictographic}/u.test(U2) ) {
+                        U2 = U2.substring(2);
+                        
+                    }
+
+                    //ソート
+                    return U1<U2?-1:U1>U2?1:0;
+
+                });
+
+            } else if ( this.CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY === "id" ) { //ID順
+                this.displaychannelList = nameList;
+
+            }
+
+        }
     },
 
     methods: {
@@ -63,39 +129,6 @@ export default {
                 return null;
             }
         },
-
-        sortChannelList() {
-            let nameList = [];
-            let objChannelIndex = Object.entries(this.ChannelIndex);
-
-            console.log("Sidebar :: sortChannelList : objChannelIndex", objChannelIndex);
-
-            for ( let index in objChannelIndex ) {
-                nameList.push ({
-                    channelname: objChannelIndex[index][1].channelname,
-                    id: objChannelIndex[index][0],
-                    scope: objChannelIndex[index][1].scope
-                });
-
-            }
-            if ( this.CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY === "alphabetical" ) {
-                //表示するチャンネルリストをソート
-                this.channelDisplayList = nameList.sort((u1,u2) => {
-                    let U1 = u1.channelname.toLowerCase();
-                    let U2 = u2.channelname.toLowerCase();
-
-                    return U1<U2?-1:U1>U2?0:1;
-
-                });
-
-            } else if ( this.CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY === "id" ) {
-                this.channelDisplayList = nameList;
-
-            }
-
-            return this.channelDisplayList;
-
-        }
     },
 
     mounted() {
@@ -246,7 +279,7 @@ export default {
 
             <!-- ここからチャンネルボタン描写  -->
             <div class="mx-auto scroll" style="overflow-y:auto; width:97%; margin-bottom:8px;">
-                <div style="margin-top:1%;" v-for="l in sortChannelList()">
+                <div style="margin-top:1%;" v-for="l in displaychannelList">
                     <RouterLink :to="'/c/'+l.id">
                         <v-card
                             class="rounded-lg pa-2 d-flex align-center"
