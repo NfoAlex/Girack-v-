@@ -235,10 +235,14 @@ export default {
                                 # {{ Userinfo.userid }}
                             </p>
                             <!-- ユーザー名 -->
-                            <p v-if="!nameEditing" @dblclick="toggleEditing" class="text-h4 text-left" >
+                            <p
+                                v-if="!nameEditing"
+                                @dblclick="toggleEditing"
+                                class="text-h4 text-left text-truncate"
+                            >
                                 {{ Userinfo.username }}
-                                <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
                             </p>
+                            <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
                             <!-- ユーザー名編集時 -->
                             <v-text-field
                                 v-if="nameEditing"
