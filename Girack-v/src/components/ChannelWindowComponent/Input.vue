@@ -64,6 +64,7 @@ export default {
 <template>
     <div>
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
+            
             <v-container fill-height fluid class="d-flex">
                 <v-text-field
                     style="height:fit-content"
@@ -78,21 +79,18 @@ export default {
                 >
                 </v-text-field>
             
-
-
-            <v-btn @click="msgSend(null,'byBtn')" icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
-                <v-icon icon="mdi:mdi-send-outline"></v-icon>
-                <v-tooltip
-                    activator="parent"
-                    location="top"
-                >
-                    送信!
-                </v-tooltip>
-            </v-btn>
+                <v-btn @click="msgSend(null,'byBtn')" icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
+                    <v-icon icon="mdi:mdi-send-outline"></v-icon>
+                    <v-tooltip
+                        activator="parent"
+                        location="top"
+                    >
+                        送信!
+                    </v-tooltip>
+                </v-btn>
+        
+            </v-container>
             
-        </v-container>
-            
-
         </div>
     </div>
 

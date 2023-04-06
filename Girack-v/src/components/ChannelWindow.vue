@@ -24,16 +24,17 @@ export default {
 </script>
 
 <template>
-    <div :class="[w,head]">
-        <Head />
+    <div style="height:100vh;" class="d-flex mb-2 flex-column">
+        <div :class="[w,head]" class="flex-grow-0 flex-shrink-0">
+            <Head />
+        </div>
+        <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
+            <Content />
+        </div>
+        <div :class="[w]" class="flex-grow-0 flex-shrink-1">
+            <Input />
+        </div>
     </div>
-    <div :class="[w,content]">
-        <Content />
-    </div>
-    <div :class="[w,input]">
-        <Input />
-    </div>
-    
 </template>
 
 <style scoped>
@@ -48,16 +49,6 @@ export default {
 {
     height: 10vh;
     border-bottom: solid 0.1px #424242;
-}
-
-.content
-{
-    height: 82vh;
-}
-
-.input
-{
-    height: 7vh;
 }
 
 </style>
