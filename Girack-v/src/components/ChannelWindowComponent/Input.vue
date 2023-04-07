@@ -11,7 +11,7 @@ const { ChannelIndex } = dataChannel();
 //返信モード
 const ReplyState = ref({
     isReplying: false,
-    id: "0"
+    messageid: "0"
 });
 
 export function getReplyState() {
@@ -25,6 +25,13 @@ export default {
         return {
             txt: "",
             channelid: "",
+        }
+    },
+
+    computed: {
+        //現在のパスからチャンネルのID返すだけ
+        getPath() {
+            return this.$route.params.id; //パス
         }
     },
 
@@ -61,8 +68,11 @@ export default {
                 return "テキストチャンネル";
             }
 
-        }
-    },
+        },
+
+        resetReply() {
+            ReplyState.value.isReplying = false;
+            ReplyState.value.messageid = "0";
 
     computed: {
         //現在のパスからチャンネルのID返すだけ
@@ -76,8 +86,12 @@ export default {
 
 <template>
     <div>
+        <div v-if="ReplyState.isReplying">
+                返信する先 : {{ ReplyState.messageid }}
+                <v-btn @click="resetReply">X</v-btn>
+            </div>
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
-            
+
             <v-container fill-height fluid class="d-flex">
                 <v-text-field
                     style="height:fit-content"
