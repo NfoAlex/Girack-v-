@@ -1,7 +1,6 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
 import { getCONFIG } from "../../config.js";
-import { getReplyState } from "./Input.vue";
 import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
@@ -13,7 +12,7 @@ export default {
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
         const { ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
-        const { ReplyState } = getReplyState();
+        
 
         return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, CONFIG_DISPLAY };
 

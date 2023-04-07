@@ -1,14 +1,16 @@
 <script>
 
 import { getSocket, dataUser } from '../../socket';
+import { getReplyState } from "./Input.vue";
 
 const socket = getSocket();
 
 export default {
     setup() {
         const { Userinfo } = dataUser();
+        const { ReplyState } = getReplyState();
 
-        return { Userinfo };
+        return { Userinfo, ReplyState };
 
     },
 
