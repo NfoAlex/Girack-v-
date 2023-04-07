@@ -74,10 +74,6 @@ export default {
             ReplyState.value.isReplying = false;
             ReplyState.value.messageid = "0";
 
-    computed: {
-        //現在のパスからチャンネルのID返すだけ
-        getPath() {
-            return this.$route.params.id; //パス
         }
     },
 

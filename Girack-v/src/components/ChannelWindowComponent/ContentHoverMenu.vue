@@ -18,7 +18,9 @@ export default {
 
     methods: {
         //メッセージの時間を出力する関数
-        printDate(time) {
+        printDate() {
+            let time = this.m.time;
+
             let t = new Date(); //時間取得用
             let y = t.getFullYear().toString(); //今年 (４桁)
             let m = (t.getMonth()+1).toString().padStart(2,0); //月 (0も含めて２桁に)
@@ -97,6 +99,14 @@ export default {
             }
 
         },
+
+        //返信する関数
+        reply() {
+            this.ReplyState.isReplying = true; //返信状態をつける
+            this.ReplyState.messageid = this.m.messageid; //返信するメッセージのID
+
+        }
+
     }
 }
 
@@ -109,7 +119,7 @@ export default {
         <span style="position:relative; float:right;">
             <!-- 時間表示 -->
             <span style="margin-right:12px;" class="text-body-2 font-italic">
-                {{ printDate(m.time) }}
+                {{ printDate() }}
             </span>
             <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                 😀
@@ -120,7 +130,9 @@ export default {
             <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                 😰
             </v-btn>
+            <!-- 返信 -->
             <v-btn
+                @click="reply"
                 style="margin-right:3px"
                 variant="tonal"
                 rounded="pill"
