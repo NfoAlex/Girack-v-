@@ -88,6 +88,19 @@ export default {
 
             }
 
+        },
+
+        //メンバーページから開かれたものか確認
+        checkOpenedFromMemberPage() {
+            //メンバーページから開かれたものなら
+            if ( this.$route.path === "/menu/members" ) {
+                return true;
+
+            } else {
+                return false;
+
+            }
+
         }
     },
 
@@ -122,7 +135,11 @@ export default {
                     ) ||
                     this.targetinfo.role === "Deleted" //消されたユーザーなら
                 ) {
-                    this.manageDisabled = true; //管理を無効化
+                    //条件にひっかかっても自分だったらスルー
+                    if ( this.Userinfo.userid !== this.targetinfo.userid ) {
+                        this.manageDisabled = true; //管理を無効化
+
+                    }
 
                 }
 
@@ -138,6 +155,8 @@ export default {
                 sessionid: dataUser().Userinfo.value.sessionid
             }
         });
+
+        console.log("Userpage :: path",this.$route.path);
 
 
     }
@@ -182,6 +201,9 @@ export default {
             </v-tab>
             <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
                 管理
+            </v-tab>
+            <v-tab v-if="Userinfo.role!=='Member'&&checkOpenedFromMemberPage()" value="mod">
+                <p style="color:pink">削除</p>
             </v-tab>
 
         </v-tabs>
