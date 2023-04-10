@@ -302,12 +302,18 @@ export default {
 
         //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
         checkMsgPosition(userid, index) {
-            if ( index === 0 && this.MsgDB[this.getPath].length-1 === index ) return "msgBackgroundSingle"; //もし履歴が一つだけだったら
-            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid === userid ) return "msgBackgroundTop"; //もし一番最初で、次も同じ人の発言だったら
-            
             //アバターを見せる必要があるかどうかを次の分まで調べておく
             let AvatarNeedToShow = this.checkShowAvatar(userid, index);
             let AvatarNeedToShowNext = this.checkShowAvatar(userid, index+1);
+
+            //最初のメッセージ分だけを調べる
+            if (
+                index === 0 &&
+                AvatarNeedToShowNext
+            ) return "msgBackgroundSingle";
+
+            if ( index === 0 && this.MsgDB[this.getPath].length-1 === index ) return "msgBackgroundSingle"; //もし履歴が一つだけだったら
+            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid === userid ) return "msgBackgroundTop"; //もし一番最初で、次も同じ人の発言だったら
 
             //メッセージの最後になる部分
             if ( this.MsgDB[this.getPath][index-1].userid === userid && index === this.MsgDB[this.getPath].length-1 ) {
