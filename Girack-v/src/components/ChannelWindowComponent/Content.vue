@@ -302,21 +302,39 @@ export default {
 
         //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
         checkMsgPosition(userid, index) {
-            if ( index === 0 && this.MsgDB[this.getPath].length-1 === index ) return "msgBackgroundSingle";
-            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid === userid ) return "msgBackgroundTop";
-            if ( this.MsgDB[this.getPath][index-1].userid === userid && index === this.MsgDB[this.getPath].length-1 ) return "msgBackgroundEnd";
-            if ( this.MsgDB[this.getPath][index-1].userid !== userid && index === this.MsgDB[this.getPath].length-1 ) return "msgBackgroundSingle";
+            if ( index === 0 && this.MsgDB[this.getPath].length-1 === index ) return "msgBackgroundSingle"; //もし履歴が一つだけだったら
+            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid === userid ) return "msgBackgroundTop"; //もし一番最初で、次も同じ人の発言だったら
+            
+            //アバターを見せる必要があるかどうかを次の分まで調べておく
+            let AvatarNeedToShow = this.checkShowAvatar(userid, index);
+            let AvatarNeedToShowNext = this.checkShowAvatar(userid, index+1);
 
-            //アバターを見せる必要があるかどうか
-            let AvaterNeedToShow = this.checkShowAvatar(userid, index);
-            let AvaterNeedToShowNext = this.checkShowAvatar(userid, index+1);
+            //メッセージの最後になる部分
+            if ( this.MsgDB[this.getPath][index-1].userid === userid && index === this.MsgDB[this.getPath].length-1 ) {
+                //アバター表示が必要なら
+                if ( !AvatarNeedToShow ) {
+                    return "msgBackgroundEnd";
+                    
+                } else {
+                    return "msgBackgroundSingle"
 
+                }
+            
+            }
+
+            if (
+                this.MsgDB[this.getPath][index-1].userid !== userid &&
+                index === this.MsgDB[this.getPath].length-1
+            ) return "msgBackgroundSingle";
+
+            //一番上になる部分かどうか
             try {
                 if (
-                    AvaterNeedToShow &&
+                    AvatarNeedToShow &&
                     this.MsgDB[this.getPath][index+1].userid === userid
                 ) {
-                    if ( AvaterNeedToShowNext ) {
+                    //次にアバターを表示する必要があるなら独立して表示
+                    if ( AvatarNeedToShowNext ) {
                         return "msgBackgroundSingle";
 
                     } else {
@@ -333,7 +351,13 @@ export default {
                     this.MsgDB[this.getPath][index-1].userid === userid &&
                     this.MsgDB[this.getPath][index+1].userid === userid
                 ) {
-                    return "msgBackgroundMid";
+                    if ( AvatarNeedToShowNext ) {
+                        return "msgBackgroundEnd";
+
+                    } else {
+                        return "msgBackgroundMid";
+
+                    }
 
                 }
             }
@@ -376,6 +400,28 @@ export default {
 
         //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
         checkDateDifference(index) {
+            try {
+                //日を取得
+                let msgDateBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(6,8));
+                let msgDateThis = parseInt(this.MsgDB[this.getPath][index].time.slice(6,8));
+                //日付の差を計算
+                let dateDifference = msgDateBefore - msgDateThis;
+
+                //条件で日付線出すか決める
+                if ( dateDifference !== 0 ) {
+                    return true; //表示する
+
+                } else {
+                    return false; //表示しない
+
+                }
+            }
+            catch(e) {}
+
+        },
+
+        //一つ前の履歴から時間が空いているかどうかを計算
+        checkTimeDifference(index) {
             try {
                 //日を取得
                 let msgDateBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(6,8));
