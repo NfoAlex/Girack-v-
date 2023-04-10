@@ -387,6 +387,19 @@ socket.on("infoChannel", (dat) => {
 
     console.log("socket :: infoChannel : チャンネル情報更新");
 
+    //削除されているならスキップ
+    if ( dat.scope === "deleted" ) {
+        //もしすでにデータを持っているなら削除
+        if ( ChannelIndex.value[dat.channelid] !== undefined ) {
+            delete ChannelIndex.value[dat.channelid]; //削除
+
+        }
+
+        //スキップ
+        return;
+
+    }
+
     //チャンネルデータを更新
     ChannelIndex.value[dat.channelid] = {
         channelname: dat.channelname, //チャンネル名
