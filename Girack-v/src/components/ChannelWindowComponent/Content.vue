@@ -772,13 +772,13 @@ export default {
 
 .hovered
 {
-    background-color: #555 !important;
+    background-color: #444 !important;
 }
 
 .msgBackgroundMid
 {
     border-radius: 0px;
-    background-color: #444;
+    background-color: #333;
 
     padding-top: 2px !important;
     padding-bottom: 2px !important;
@@ -788,7 +788,7 @@ export default {
 {
     border-top-right-radius: 12px;
     border-top-left-radius: 12px;
-    background-color: #444;
+    background-color: #333;
 
     margin-top: 6px;
     padding-top: 8px !important;
@@ -799,7 +799,7 @@ export default {
 {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
-    background-color: #444;
+    background-color: #333;
 
     margin-bottom: 6px;
     padding-bottom: 8px !important;
@@ -809,7 +809,7 @@ export default {
 .msgBackgroundSingle
 {
     border-radius: 12px;
-    background-color: #444;
+    background-color: #333;
 
     margin: 6px 0;
     padding-top: 8px;
