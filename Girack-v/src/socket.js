@@ -395,6 +395,17 @@ socket.on("infoChannel", (dat) => {
 
         }
 
+        //チャンネルから抜けさせる
+        socket.emit("channelAction", {
+            action: "leave",
+            channelid: dat.channelid,
+            userid: Userinfo.value.userid,
+            reqSender: {
+                userid: Userinfo.value.userid,
+                sessionid: Userinfo.value.sessionid
+            }
+        });
+
         //スキップ
         return;
 
