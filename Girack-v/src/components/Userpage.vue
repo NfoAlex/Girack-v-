@@ -92,6 +92,9 @@ export default {
                 }
             });
 
+            //ユーザーページを閉じる
+            this.$emit("closeUserpage");
+
         },
 
         //ロールの色を返す
