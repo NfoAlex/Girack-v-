@@ -690,7 +690,7 @@ export default {
 .msgBackgroundMid
 {
     border-radius: 0px;
-    background-color: #444 !important;
+    background-color: #444;
 }
 
 .msgBackgroundTop
