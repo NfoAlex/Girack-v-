@@ -436,6 +436,25 @@ export default {
 
         },
 
+        //削除したりリアクションしたり編集(ToDo)したり
+        messageAction(msgId, act, reaction) {
+            //リアクションする
+            if ( act === "reaction" ) {
+                //リアクションしたことを送信
+                socket.emit("actMessage", {
+                    action: "reaction",
+                    channelid: this.getPath,
+                    messageid: msgId,
+                    reaction: reaction, //送るリアクション
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+            }
+
+        },
+
         //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
