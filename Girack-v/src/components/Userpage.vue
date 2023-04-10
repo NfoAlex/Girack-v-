@@ -6,6 +6,7 @@ const socket = getSocket();
 
 export default {
     props: ["userid"],
+
     setup() {
         const { Userinfo } = dataUser();
         return { Userinfo };
@@ -22,6 +23,9 @@ export default {
             targetUserRole: "Member",
             targetUserBanned: false,
             manageDisabled: false,
+
+            //削除確認表示
+            deleteConfirmCheckDisplay: false,
 
             //ユーザーページ下のタブ用
             tab: ""
@@ -74,6 +78,22 @@ export default {
             })
         },
 
+        //ユーザーを削除する関数
+        deleteUser() {
+            //削除すると送信
+            socket.emit("mod", {
+                targetid: this.userid,
+                action: {
+                    change: "delete",
+                },
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
+
+        },
+
         //ロールの色を返す
         getRoleColor(role) {
             switch(role) {
@@ -93,7 +113,7 @@ export default {
         //メンバーページから開かれたものか確認
         checkOpenedFromMemberPage() {
             //メンバーページから開かれたものなら
-            if ( this.$route.path === "/menu/members" ) {
+            if ( this.$route.path === "/menu/members" && this.Userinfo.userid !== this.userid ) {
                 return true;
 
             } else {
@@ -202,7 +222,7 @@ export default {
             <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
                 管理
             </v-tab>
-            <v-tab v-if="Userinfo.role!=='Member'&&checkOpenedFromMemberPage()" value="mod">
+            <v-tab v-if="Userinfo.role!=='Member'&&checkOpenedFromMemberPage()" value="delete">
                 <p style="color:pink">削除</p>
             </v-tab>
 
@@ -238,6 +258,31 @@ export default {
                 </v-btn>
                 <v-btn @click="banUser" v-if="targetinfo.banned" color="info">
                     <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
+                </v-btn>
+
+            </v-window-item>
+
+            <!-- ユーザー削除タブ(メンバーページからだけ) -->
+            <v-window-item value="delete" class="ma-5">
+                <v-btn
+                    v-if="!deleteConfirmCheckDisplay"
+                    @click="deleteConfirmCheckDisplay=true;"
+                    class="rounded-lg"
+                    color="error"
+                    size="large"
+                    variant="tonal"
+                >
+                    このユーザーを削除
+                </v-btn>
+                <v-btn
+                    v-if="deleteConfirmCheckDisplay"
+                    @click="deleteUser()"
+                    class="rounded-lg"
+                    color="error"
+                    size="large"
+                    elevation="12"
+                >
+                    本当にいいの?
                 </v-btn>
 
             </v-window-item>
