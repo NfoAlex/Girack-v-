@@ -104,8 +104,9 @@ export default {
 
         }
 
+        //ユーザーの情報受け取り
         socket.on("infoUser", (dat) => {
-            //受信した情報がこいつのなら
+            //受信した情報がこいつのと確認して処理
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
 
@@ -119,7 +120,6 @@ export default {
                         this.targetinfo.role === "Admin" &&
                         this.Userinfo.role !== "Admin"
                     ) ||
-                    this.Userinfo.userid === this.userid || //自分なら
                     this.targetinfo.role === "Deleted" //消されたユーザーなら
                 ) {
                     this.manageDisabled = true; //管理を無効化
@@ -130,7 +130,7 @@ export default {
 
         });
 
-        //情報取得
+        //ユーザー情報取得
         socket.emit("getInfoUser", {
             targetid: this.userid,
             reqSender: {
@@ -191,6 +191,7 @@ export default {
 
             <!-- 参加しているチャンネル -->
             <v-window-item value="channel" class="ma-5">
+                <!-- ToDo -->
                 <p>参加チャンネル</p>
                 <p>参加チャンネル</p>
                 <p>参加チャンネル</p>
