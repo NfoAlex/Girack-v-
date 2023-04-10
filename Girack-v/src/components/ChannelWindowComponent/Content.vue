@@ -553,8 +553,7 @@ export default {
 
                                 <!-- メッセージ本文 -->
                                 <span
-                                    style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
-                                    class="text-disabled"
+                                    style="width:100%; word-wrap:break-word"
                                     v-html="formatMessage(m.content)"
                                 >
                                 </span>
@@ -578,7 +577,6 @@ export default {
                             </div>
                         </template>
                         <!-- ここからホバーメニュー -->
-                        
                         <ContentHoverMenu
                             :m="m"
                             :userrole="getUserStats(m.userid, 'role')"
