@@ -98,7 +98,7 @@ export default {
                 targetid: this.channelid,
                 channelname: this.channelnameText,
                 description: this.descriptionText,
-                scope: (!this.scopeIsPrivate?"private":"public"),
+                scope: (this.scopeIsPrivate?"private":"public"),
                 reqSender: {
                     userid: this.Userinfo.userid,
                     sessionid: this.Userinfo.sessionid
@@ -437,7 +437,7 @@ export default {
             <v-window-item value="manage" class="mx-auto" style="min-height:300px; overflow-y:auto;">
                 <v-checkbox
                     v-model="scopeIsPrivate"
-                    @click="updateChannel"
+                    @click="scopeIsPrivate=!scopeIsPrivate;updateChannel();"
                     color="grey"
                     label="プライベートチャンネル"
                 >
