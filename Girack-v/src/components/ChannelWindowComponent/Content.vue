@@ -760,6 +760,9 @@ export default {
 {
     border-radius: 0px;
     background-color: #444;
+
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
 }
 
 .msgBackgroundTop
@@ -770,6 +773,7 @@ export default {
 
     margin-top: 6px;
     padding-top: 8px !important;
+    padding-bottom: 2px !important;
 }
 
 .msgBackgroundEnd
@@ -780,6 +784,7 @@ export default {
 
     margin-bottom: 6px;
     padding-bottom: 8px !important;
+    padding-top: 2px !important;
 }
 
 .msgBackgroundSingle
