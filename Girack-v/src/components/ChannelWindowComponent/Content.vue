@@ -302,12 +302,16 @@ export default {
 
         //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
         checkMsgPosition(userid, index) {
-            //console.log("Content :: checkMsgPosition : 引数 -> ", userid, index);
-            //console.log("Content :: checkMsgPosition : 使うMsgDBのアイテム -> ", this.MsgDB[this.getPath]);
-            
+            try {
             //そもそも履歴DBの始めのメッセージなら
+            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid !== userid ) return "msgBackgroundSingle";
             if ( index === 0 ) return "msgBackgroundTop";
+            }
+            catch(e) {
+                if ( index === 0 ) return "msgBackgroundTop";
+            }
 
+            //もし前の送信者と後の送信者がどっちも違ったら
             try {
             if (
                 this.MsgDB[this.getPath][index-1].userid !== userid &&
@@ -321,6 +325,7 @@ export default {
                 }
             }
 
+            //前もあとも同じなら
             try {
             if ( 
                 this.MsgDB[this.getPath][index-1].userid === userid &&
@@ -329,6 +334,7 @@ export default {
             }
             catch(e) {return "msgBackgroundMid";}
 
+            //前が自分だけど後が違うなら
             try {
             if ( this.MsgDB[this.getPath][index+1].userid !== userid ) {
                 return "msgBackgroundEnd";
@@ -337,6 +343,9 @@ export default {
             }
             catch(e) { return "msgBackgroundEnd"; }
 
+            if ( this.checkShowAvatar(userid, index) ) { return "msgBackgroundTop"; }
+
+            //前が違うなら
             try {
             if ( this.MsgDB[this.getPath][index-1].userid !== userid ) {
                 return "msgBackgroundTop";
@@ -675,7 +684,7 @@ export default {
 
 .hovered
 {
-    background-color: #888;
+    background-color: #555 !important;
 }
 
 .msgBackgroundMid
@@ -686,8 +695,8 @@ export default {
 
 .msgBackgroundTop
 {
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
     background-color: #444;
 
     margin-top: 6px;
@@ -696,8 +705,8 @@ export default {
 
 .msgBackgroundEnd
 {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
     background-color: #444;
 
     margin-bottom: 6px;
@@ -706,7 +715,7 @@ export default {
 
 .msgBackgroundSingle
 {
-    border-radius: 8px;
+    border-radius: 12px;
     background-color: #444;
 
     margin: 6px 0;
