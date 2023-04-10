@@ -302,57 +302,75 @@ export default {
 
         //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
         checkMsgPosition(userid, index) {
-            try {
-            //そもそも履歴DBの始めのメッセージなら
-            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid !== userid ) return "msgBackgroundSingle";
-            if ( index === 0 ) return "msgBackgroundTop";
-            }
-            catch(e) {
-                if ( index === 0 ) return "msgBackgroundTop";
-            }
+            if ( index === 0 && this.MsgDB[this.getPath].length-1 === index ) return "msgBackgroundSingle";
+            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid === userid ) return "msgBackgroundTop";
+            if ( this.MsgDB[this.getPath][index-1].userid === userid && index === this.MsgDB[this.getPath].length-1 ) return "msgBackgroundEnd";
+            if ( this.MsgDB[this.getPath][index-1].userid !== userid && index === this.MsgDB[this.getPath].length-1 ) return "msgBackgroundSingle";
 
-            //もし前の送信者と後の送信者がどっちも違ったら
+            //アバターを見せる必要があるかどうか
+            let AvaterNeedToShow = this.checkShowAvatar(userid, index);
+            let AvaterNeedToShowNext = this.checkShowAvatar(userid, index+1);
+
             try {
-            if (
-                this.MsgDB[this.getPath][index-1].userid !== userid &&
-                this.MsgDB[this.getPath][index+1].userid !== userid
-            ) return "msgBackgroundSingle";
+                if (
+                    AvaterNeedToShow &&
+                    this.MsgDB[this.getPath][index+1].userid === userid
+                ) {
+                    if ( AvaterNeedToShowNext ) {
+                        return "msgBackgroundSingle";
+
+                    } else {
+                        return "msgBackgroundTop";
+
+                    }
+
+                }
             }
-            catch(e){
-                if ( this.MsgDB[this.getPath][index-1].userid !== userid && this.MsgDB[this.getPath].length-1 === index ) {
+            catch(e) {}
+
+            try {
+                if (
+                    this.MsgDB[this.getPath][index-1].userid === userid &&
+                    this.MsgDB[this.getPath][index+1].userid === userid
+                ) {
+                    return "msgBackgroundMid";
+
+                }
+            }
+            catch(e) {}
+
+            try {
+                if (
+                    this.MsgDB[this.getPath][index-1].userid !== userid &&
+                    this.MsgDB[this.getPath][index+1].userid !== userid
+                ) {
                     return "msgBackgroundSingle";
 
                 }
             }
+            catch(e) {}
 
-            //前もあとも同じなら
             try {
-            if ( 
-                this.MsgDB[this.getPath][index-1].userid === userid &&
-                this.MsgDB[this.getPath][index+1].userid === userid
-             ) return "msgBackgroundMid";
-            }
-            catch(e) {return "msgBackgroundMid";}
+                if (
+                    this.MsgDB[this.getPath][index-1].userid !== userid &&
+                    this.MsgDB[this.getPath][index+1].userid === userid
+                ) {
+                    return "msgBackgroundTop";
 
-            //前が自分だけど後が違うなら
+                }
+            }
+            catch(e) {}
+
             try {
-            if ( this.MsgDB[this.getPath][index+1].userid !== userid ) {
-                return "msgBackgroundEnd";
+                if (
+                    this.MsgDB[this.getPath][index-1].userid === userid &&
+                    this.MsgDB[this.getPath][index+1].userid !== userid
+                ) {
+                    return "msgBackgroundEnd";
 
+                }
             }
-            }
-            catch(e) { return "msgBackgroundEnd"; }
-
-            if ( this.checkShowAvatar(userid, index) ) { return "msgBackgroundTop"; }
-
-            //前が違うなら
-            try {
-            if ( this.MsgDB[this.getPath][index-1].userid !== userid ) {
-                return "msgBackgroundTop";
-
-            }
-            }
-            catch(e) { return "msgBackgroundTop"; }
+            catch(e) {}
 
         },
 
