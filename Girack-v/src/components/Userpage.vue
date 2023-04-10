@@ -229,7 +229,7 @@ export default {
 .userpage
 {
     width: 100%;
-    height:50vh;
+    height:70vh;
 }
 
 .boxProfile
