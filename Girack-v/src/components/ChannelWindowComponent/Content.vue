@@ -312,8 +312,7 @@ export default {
               //前
             try {
                 AvatarNeedToShowBefore = this.checkShowAvatar(this.MsgDB[this.getPath][index-1].userid, index-1);
-            }
-            catch(e){}
+            } catch(e){}
 
               //今の位置
             try {
@@ -413,6 +412,9 @@ export default {
                 } else {
                     if ( SameWithNext ) {
                         return "msgBackgroundMid";
+
+                    } else if ( SameWithBefore ) {
+                        return "msgBackgroundEnd";
 
                     } else {
                         return "msgBackgroundSingle";
