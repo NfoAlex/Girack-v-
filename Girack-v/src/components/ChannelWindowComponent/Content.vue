@@ -302,107 +302,126 @@ export default {
 
         //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
         checkMsgPosition(userid, index) {
-            //アバターを見せる必要があるかどうかを次の分まで調べておく
-            let AvatarNeedToShow = this.checkShowAvatar(userid, index);
-            let AvatarNeedToShowNext = this.checkShowAvatar(userid, index+1);
+            if ( this.MsgDB[this.getPath] === undefined || this.MsgDB[this.getPath].length <= 0 ) return;
 
-            if ( index === 0 && AvatarNeedToShowNext ) return "msgBackgroundSingle"; //最初のメッセージ分だけを調べる
-            if ( index === 0 && this.MsgDB[this.getPath].length-1 === index ) return "msgBackgroundSingle"; //もし履歴が一つだけだったら
-            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid === userid ) return "msgBackgroundTop"; //もし一番最初で、次も同じ人の発言だったら
+            let AvatarNeedToShowBefore = false;
+            let AvatarNeedToShow = false;
+            let AvatarNeedToShowNext = false;
 
-            //メッセージの最後になる部分
-            if ( this.MsgDB[this.getPath][index-1].userid === userid && index === this.MsgDB[this.getPath].length-1 ) {
-                //アバター表示が必要なら
-                if ( !AvatarNeedToShow ) {
-                    return "msgBackgroundEnd"; //終わりと表示
-                    
-                } else {
-                    return "msgBackgroundSingle" //独立して表示
+            //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
+              //前
+            try {
+                AvatarNeedToShowBefore = this.checkShowAvatar(this.MsgDB[this.getPath][index-1].userid, index-1);
+            }
+            catch(e){}
+
+              //今の位置
+            try {
+                AvatarNeedToShow = this.checkShowAvatar(userid, index);
+            } catch(e){}
+
+              //次
+            try {
+                AvatarNeedToShowNext = this.checkShowAvatar(this.MsgDB[this.getPath][index+1].userid, index+1);
+            } catch(e){}
+
+            let SameWithBefore = false; //ひとつ前と送信者が同じかどうか
+            let SameWithNext = false; //次と送信者同じかどうか
+
+            //一つ前と送信者が今のと同じならそう記録
+            try {
+                if ( this.MsgDB[this.getPath][index-1].userid === userid ) {
+                    SameWithBefore = true;
 
                 }
-            
             }
+            catch(e) {}
 
-            //最後のメッセージで、前の送信者と違うなら
-            if (
-                this.MsgDB[this.getPath][index-1].userid !== userid &&
-                index === this.MsgDB[this.getPath].length-1
-            ) return "msgBackgroundSingle";
-
-            //一番上になる部分かどうか
+            //次の送信者が今のと同じならそう記録
             try {
-                if (
-                    AvatarNeedToShow &&
-                    this.MsgDB[this.getPath][index+1].userid === userid
-                ) {
-                    //次にアバターを表示する必要があるなら独立して表示
-                    if ( AvatarNeedToShowNext ) {
+                if ( this.MsgDB[this.getPath][index+1].userid === userid ) {
+                    SameWithNext = true;
+
+                }
+            }
+            catch(e) {}
+
+            //ここから条件処理
+            if ( AvatarNeedToShowBefore ) {
+                if ( AvatarNeedToShow ) {
+                    if ( SameWithNext ) {
+                        if ( AvatarNeedToShowNext ) {
+                            return "msgBackgroundSingle";
+
+                        } else {
+                            return "msgBackgroundTop";
+
+                        }
+
+                    } else {
                         return "msgBackgroundSingle";
 
+                    }
+
+                } else {
+                    if ( AvatarNeedToShowNext ) {
+                        return "msgBackgroundEnd";
+
+                    }
+
+                    if ( SameWithBefore ) {
+                        if ( SameWithNext ) {
+                            return "msgBackgroundMid";
+
+                        } else {
+                            return "msgBackgroundEnd";
+
+                        }
+
+                    } else {
+                        return "msgBackgroundEnd";
+
+                    }
+
+                }
+
+            } else if ( AvatarNeedToShowNext ) {
+                if ( AvatarNeedToShow ) {
+                    if ( AvatarNeedToShowNext ) {
+                        return "msgBackgroundSingle";
+                        
                     } else {
                         return "msgBackgroundTop";
 
                     }
 
-                }
-            }
-            catch(e) {}
+                } else {
+                    return "msgBackgroundEnd";
 
-            //前も次も同じなら
-            try {
-                if (
-                    this.MsgDB[this.getPath][index-1].userid === userid &&
-                    this.MsgDB[this.getPath][index+1].userid === userid
-                ) {
-                    //次でアバターを見せる必要があるかどうか
-                    if ( AvatarNeedToShowNext ) {
-                        return "msgBackgroundEnd"; //あるなら終わりとして表示
+                }
+
+            } else {
+                if ( AvatarNeedToShow ) {
+                    if ( SameWithNext ) {
+                        return "msgBackgroundTop";
 
                     } else {
-                        return "msgBackgroundMid"; //ないなら中間として表示
+                        return "msgBackgroundSingle";
+
+                    }
+                    
+                } else {
+                    if ( SameWithNext ) {
+                        return "msgBackgroundMid";
+
+                    } else {
+                        return "msgBackgroundSingle";
 
                     }
 
                 }
+
             }
-            catch(e) {}
-
-            //前も次も違うなら
-            try {
-                if (
-                    this.MsgDB[this.getPath][index-1].userid !== userid &&
-                    this.MsgDB[this.getPath][index+1].userid !== userid
-                ) {
-                    return "msgBackgroundSingle"; //独立して表示
-
-                }
-            }
-            catch(e) {}
-
-            //前が違うけど次が同じなら
-            try {
-                if (
-                    this.MsgDB[this.getPath][index-1].userid !== userid &&
-                    this.MsgDB[this.getPath][index+1].userid === userid
-                ) {
-                    return "msgBackgroundTop"; //メッセージの始まりとして表示
-
-                }
-            }
-            catch(e) {}
-
-            //前がと同じだけど次が違うなら
-            try {
-                if (
-                    this.MsgDB[this.getPath][index-1].userid === userid &&
-                    this.MsgDB[this.getPath][index+1].userid !== userid
-                ) {
-                    console.log("Content :: checkMsgPosition : 一番最後の条件文");
-                    return "msgBackgroundEnd"; //終わりとして表示
-
-                }
-            }
-            catch(e) {}
 
         },
 
