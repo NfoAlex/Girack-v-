@@ -574,38 +574,6 @@ socket.on("messageHistory", (history) => {
 
 });
 
-//メッセージの更新
-// socket.on("messageUpdate", (dat) => {
-//     //メッセージ消したりリアクションされたり
-//     /*
-//     {
-//         action: "delete"|"reaction",
-//         channelid: dat.channelid,
-//         messageid: dat.messageid,
-//         ["reaction"だったら]
-//         reaction: dat.reaction
-//     }
-//     */
-
-//     switch( dat.action ) {
-//         //削除する
-//         case "delete":
-//             //ループでIDが一致するメッセージを探す
-//             for ( let index in msgDBbackup[dat.channelid] ) {
-//                 if ( msgDBbackup[dat.channelid][index].messageid === dat.messageid ) {
-//                     msgDBbackup[dat.channelid].splice(index,1); //削除
-
-//                 }
-
-//             }
-
-//         default:
-//             break;
-
-//     }
-
-// });
-
 //認証結果
 socket.on("authResult", (dat) => {
     //ユーザーデータの更新

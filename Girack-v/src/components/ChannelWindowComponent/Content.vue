@@ -300,8 +300,136 @@ export default {
 
         },
 
+        //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
+        checkMsgPosition(userid, index) {
+            //アバターを見せる必要があるかどうかを次の分まで調べておく
+            let AvatarNeedToShow = this.checkShowAvatar(userid, index);
+            let AvatarNeedToShowNext = this.checkShowAvatar(userid, index+1);
+
+            if ( index === 0 && AvatarNeedToShowNext ) return "msgBackgroundSingle"; //最初のメッセージ分だけを調べる
+            if ( index === 0 && this.MsgDB[this.getPath].length-1 === index ) return "msgBackgroundSingle"; //もし履歴が一つだけだったら
+            if ( index === 0 && this.MsgDB[this.getPath][index+1].userid === userid ) return "msgBackgroundTop"; //もし一番最初で、次も同じ人の発言だったら
+
+            //メッセージの最後になる部分
+            if ( this.MsgDB[this.getPath][index-1].userid === userid && index === this.MsgDB[this.getPath].length-1 ) {
+                //アバター表示が必要なら
+                if ( !AvatarNeedToShow ) {
+                    return "msgBackgroundEnd"; //終わりと表示
+                    
+                } else {
+                    return "msgBackgroundSingle" //独立して表示
+
+                }
+            
+            }
+
+            //最後のメッセージで、前の送信者と違うなら
+            if (
+                this.MsgDB[this.getPath][index-1].userid !== userid &&
+                index === this.MsgDB[this.getPath].length-1
+            ) return "msgBackgroundSingle";
+
+            //一番上になる部分かどうか
+            try {
+                if (
+                    AvatarNeedToShow &&
+                    this.MsgDB[this.getPath][index+1].userid === userid
+                ) {
+                    //次にアバターを表示する必要があるなら独立して表示
+                    if ( AvatarNeedToShowNext ) {
+                        return "msgBackgroundSingle";
+
+                    } else {
+                        return "msgBackgroundTop";
+
+                    }
+
+                }
+            }
+            catch(e) {}
+
+            //前も次も同じなら
+            try {
+                if (
+                    this.MsgDB[this.getPath][index-1].userid === userid &&
+                    this.MsgDB[this.getPath][index+1].userid === userid
+                ) {
+                    //次でアバターを見せる必要があるかどうか
+                    if ( AvatarNeedToShowNext ) {
+                        return "msgBackgroundEnd"; //あるなら終わりとして表示
+
+                    } else {
+                        return "msgBackgroundMid"; //ないなら中間として表示
+
+                    }
+
+                }
+            }
+            catch(e) {}
+
+            //前も次も違うなら
+            try {
+                if (
+                    this.MsgDB[this.getPath][index-1].userid !== userid &&
+                    this.MsgDB[this.getPath][index+1].userid !== userid
+                ) {
+                    return "msgBackgroundSingle"; //独立して表示
+
+                }
+            }
+            catch(e) {}
+
+            //前が違うけど次が同じなら
+            try {
+                if (
+                    this.MsgDB[this.getPath][index-1].userid !== userid &&
+                    this.MsgDB[this.getPath][index+1].userid === userid
+                ) {
+                    return "msgBackgroundTop"; //メッセージの始まりとして表示
+
+                }
+            }
+            catch(e) {}
+
+            //前がと同じだけど次が違うなら
+            try {
+                if (
+                    this.MsgDB[this.getPath][index-1].userid === userid &&
+                    this.MsgDB[this.getPath][index+1].userid !== userid
+                ) {
+                    console.log("Content :: checkMsgPosition : 一番最後の条件文");
+                    return "msgBackgroundEnd"; //終わりとして表示
+
+                }
+            }
+            catch(e) {}
+
+        },
+
         //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
         checkDateDifference(index) {
+            try {
+                //日を取得
+                let msgDateBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(6,8));
+                let msgDateThis = parseInt(this.MsgDB[this.getPath][index].time.slice(6,8));
+                //日付の差を計算
+                let dateDifference = msgDateBefore - msgDateThis;
+
+                //条件で日付線出すか決める
+                if ( dateDifference !== 0 ) {
+                    return true; //表示する
+
+                } else {
+                    return false; //表示しない
+
+                }
+            }
+            catch(e) {}
+
+        },
+
+        //一つ前の履歴から時間が空いているかどうかを計算
+        checkTimeDifference(index) {
             try {
                 //日を取得
                 let msgDateBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(6,8));
@@ -359,6 +487,25 @@ export default {
             }
     
             //console.log("mouseOverMsg :: hovered on -> " + this.msgIdHovering);
+
+        },
+
+        //削除したりリアクションしたり編集(ToDo)したり
+        messageAction(msgId, act, reaction) {
+            //リアクションする
+            if ( act === "reaction" ) {
+                //リアクションしたことを送信
+                socket.emit("actMessage", {
+                    action: "reaction",
+                    channelid: this.getPath,
+                    messageid: msgId,
+                    reaction: reaction, //送るリアクション
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+            }
 
         },
 
@@ -486,7 +633,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div class="d-flex justify-end" style="margin:8px 8px;">
+            <div class="d-flex justify-end" style="margin:0px 8px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
@@ -494,7 +641,7 @@ export default {
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
-                <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" style="width:90%; padding:0 1%;">
+                <span :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]" style="width:90%; padding-left:1.5%; padding-right:1.5%">
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
@@ -553,8 +700,7 @@ export default {
 
                                 <!-- メッセージ本文 -->
                                 <span
-                                    style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
-                                    class="text-disabled"
+                                    style="width:100%; word-wrap:break-word"
                                     v-html="formatMessage(m.content)"
                                 >
                                 </span>
@@ -578,7 +724,6 @@ export default {
                             </div>
                         </template>
                         <!-- ここからホバーメニュー -->
-                        
                         <ContentHoverMenu
                             :m="m"
                             :userrole="getUserStats(m.userid, 'role')"
@@ -630,7 +775,43 @@ export default {
 
 .hovered
 {
-    background-color: #49454F;
+    background-color: #555 !important;
+}
+
+.msgBackgroundMid
+{
+    border-radius: 0px;
+    background-color: #444;
+}
+
+.msgBackgroundTop
+{
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    background-color: #444;
+
+    margin-top: 6px;
+    padding-top: 8px !important;
+}
+
+.msgBackgroundEnd
+{
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background-color: #444;
+
+    margin-bottom: 6px;
+    padding-bottom: 8px !important;
+}
+
+.msgBackgroundSingle
+{
+    border-radius: 12px;
+    background-color: #444;
+
+    margin: 6px 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 /* スクロールバー用 */
