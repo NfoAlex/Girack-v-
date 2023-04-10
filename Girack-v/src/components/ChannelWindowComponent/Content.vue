@@ -428,28 +428,6 @@ export default {
 
         },
 
-        //一つ前の履歴から時間が空いているかどうかを計算
-        checkTimeDifference(index) {
-            try {
-                //日を取得
-                let msgDateBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(6,8));
-                let msgDateThis = parseInt(this.MsgDB[this.getPath][index].time.slice(6,8));
-                //日付の差を計算
-                let dateDifference = msgDateBefore - msgDateThis;
-
-                //条件で日付線出すか決める
-                if ( dateDifference !== 0 ) {
-                    return true; //表示する
-
-                } else {
-                    return false; //表示しない
-
-                }
-            }
-            catch(e) {}
-
-        },
-
         //新着メッセージ数を返す
         checkReadTime(channelid) {
             try {
