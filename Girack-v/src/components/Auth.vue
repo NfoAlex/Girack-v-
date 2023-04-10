@@ -53,8 +53,12 @@ export default {
     },
 
     mounted() {
+        let checkStatusCount = 0;
         //接続とクッキーを確認するための関数
         function checkStatus() {
+
+            if ( checkStatusCount > 10 ) return;
+
             //クッキーに認証情報があるか確認
             if ( getCookie("sessionid") !== "" ) {
                 socket.emit("authByCookie", getCookie("sessionid"));
@@ -62,13 +66,7 @@ export default {
 
             }
 
-            //Socketの接続が確認できていたらループ削除
-            // if ( socket.connected ) { //接続できているかどうか
-            //     this.Connected = true; //接続していると保存
-            //     return;
-
-            // }
-
+            checkStatusCount++;
             setInterval(checkStatus, 1000); //ループさせる
 
         };
