@@ -45,4 +45,5 @@ export default {
     height: 10vh;
     border-bottom: solid 0.1px #424242;
 }
+
 </style>

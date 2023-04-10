@@ -1,6 +1,7 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
 import { getCONFIG } from "../../config.js";
+import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
@@ -11,12 +12,13 @@ export default {
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
         const { ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
+        
 
         return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, CONFIG_DISPLAY };
 
     },
 
-    components: { Userpage, URLpreview }, //ユーザーページ用
+    components: { Userpage, URLpreview, ContentHoverMenu }, //ユーザーページ用
 
     data() {
         return {
@@ -360,41 +362,6 @@ export default {
 
         },
 
-        //削除したりリアクションしたり編集(ToDo)したり
-        messageAction(msgId, act, reaction) {
-            //削除する
-            if ( act === "delete" ) {
-                console.log("messageAction :: 削除します");
-                //削除要請を送信
-                socket.emit("actMessage", {
-                    action: "delete",
-                    channelid: this.getPath,
-                    messageid: msgId,
-                    reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
-                    }
-                });
-
-            }
-
-            //リアクションする
-            if ( act === "reaction" ) {
-                //リアクションしたことを送信
-                socket.emit("actMessage", {
-                    action: "reaction",
-                    channelid: this.getPath,
-                    messageid: msgId,
-                    reaction: reaction, //送るリアクション
-                    reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
-                    }
-                });
-            }
-
-        },
-
         //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
@@ -611,31 +578,12 @@ export default {
                             </div>
                         </template>
                         <!-- ここからホバーメニュー -->
-                        <v-card class="pa-2 rounded-lg" color="#222" style="width:fit-content; margin-top:-16px; max-width:500px;">
-                            
-                            <!-- ここからホバーメニュー -->
-                              <!-- ToDo::コンポーネント化 -->
-                            <span style="position:relative; float:right;">
-                                <!-- 時間表示 -->
-                                <span style="margin-right:12px;" class="text-body-2 font-italic">
-                                    {{ printDate(m.time) }}
-                                </span>
-                                <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                    😀
-                                </v-btn>
-                                <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                    🤔
-                                </v-btn>
-                                <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                    😰
-                                </v-btn>
-                                <!-- 削除ボタン -->
-                                <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||(getUserStats(m.userid, 'role')!=='Admin'&&Userinfo.role==='Moderator')||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                    削除
-                                </v-btn>
-                            </span>
-
-                        </v-card>
+                        
+                        <ContentHoverMenu
+                            :m="m"
+                            :userrole="getUserStats(m.userid, 'role')"
+                            :channelid="getPath"
+                        />
                     </v-menu>
                 
                 </span>
