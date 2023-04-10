@@ -141,7 +141,7 @@ export default {
     <!-- 画像アップロード用ダイアログ -->
     <v-dialog
         v-model="iconUploadDialog"
-        width="50vh"
+        style="min-width:650px; width:50vh;"
     >
         <v-card v-if="!iconUploadDone" class="rounded-lg pa-6">
 

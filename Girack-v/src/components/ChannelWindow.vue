@@ -2,14 +2,12 @@
 import Content from "./ChannelWindowComponent/Content.vue";
 import Head from "./ChannelWindowComponent/Head.vue";
 import Input from "./ChannelWindowComponent/Input.vue";
-
 export default {
     components: {
         Content,
         Head,
         Input
     },
-
     data() {
         return {
             w: "w",
@@ -18,9 +16,7 @@ export default {
             input: "input"
         }
     }
-
 }
-
 </script>
 
 <template>
@@ -38,7 +34,6 @@ export default {
 </template>
 
 <style scoped>
-
 .w
 {
     width: 100%;

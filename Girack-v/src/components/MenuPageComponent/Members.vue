@@ -116,7 +116,7 @@ export default {
                 v-model="userDialogShow"
                 width="30vw"
             >
-                <Userpage :userid="userDialogUserid" />
+                <Userpage @closeUserpage="userDialogShow=false;" :userid="userDialogUserid" />
             </v-dialog>
 
             <div style="height:8vh;">
@@ -139,9 +139,6 @@ export default {
                     </v-text-field>
                 </div>
             </div>
-
-            <!-- ToDoスクロール挙動の改善(指定しなければスクロールされるようになっている) -->
-            
 
             <VVirtualScroll
                 height="80vh"
