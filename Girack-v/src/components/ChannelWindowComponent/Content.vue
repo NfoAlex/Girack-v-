@@ -300,6 +300,53 @@ export default {
 
         },
 
+        //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
+        checkMsgPosition(userid, index) {
+            //console.log("Content :: checkMsgPosition : 引数 -> ", userid, index);
+            //console.log("Content :: checkMsgPosition : 使うMsgDBのアイテム -> ", this.MsgDB[this.getPath]);
+            
+            //そもそも履歴DBの始めのメッセージなら
+            if ( index === 0 ) return "msgBackgroundTop";
+
+            try {
+            if (
+                this.MsgDB[this.getPath][index-1].userid !== userid &&
+                this.MsgDB[this.getPath][index+1].userid !== userid
+            ) return "msgBackgroundSingle";
+            }
+            catch(e){
+                if ( this.MsgDB[this.getPath][index-1].userid !== userid && this.MsgDB[this.getPath].length-1 === index ) {
+                    return "msgBackgroundSingle";
+
+                }
+            }
+
+            try {
+            if ( 
+                this.MsgDB[this.getPath][index-1].userid === userid &&
+                this.MsgDB[this.getPath][index+1].userid === userid
+             ) return "msgBackgroundMid";
+            }
+            catch(e) {return "msgBackgroundMid";}
+
+            try {
+            if ( this.MsgDB[this.getPath][index+1].userid !== userid ) {
+                return "msgBackgroundEnd";
+
+            }
+            }
+            catch(e) { return "msgBackgroundEnd"; }
+
+            try {
+            if ( this.MsgDB[this.getPath][index-1].userid !== userid ) {
+                return "msgBackgroundTop";
+
+            }
+            }
+            catch(e) { return "msgBackgroundTop"; }
+
+        },
+
         //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
         checkDateDifference(index) {
             try {
@@ -486,7 +533,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div class="d-flex justify-end" style="margin:8px 8px;">
+            <div class="d-flex justify-end" style="margin:0px 8px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
@@ -494,7 +541,7 @@ export default {
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
-                <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" style="width:90%; padding:0 1%;">
+                <span :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]" style="width:90%; padding-left:1.5%; padding-right:1.5%">
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
@@ -628,7 +675,43 @@ export default {
 
 .hovered
 {
-    background-color: #49454F;
+    background-color: #888;
+}
+
+.msgBackgroundMid
+{
+    border-radius: 0px;
+    background-color: #444 !important;
+}
+
+.msgBackgroundTop
+{
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    background-color: #444;
+
+    margin-top: 6px;
+    padding-top: 8px !important;
+}
+
+.msgBackgroundEnd
+{
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: #444;
+
+    margin-bottom: 6px;
+    padding-bottom: 8px !important;
+}
+
+.msgBackgroundSingle
+{
+    border-radius: 8px;
+    background-color: #444;
+
+    margin: 6px 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 /* スクロールバー用 */
