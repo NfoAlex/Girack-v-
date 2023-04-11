@@ -559,7 +559,7 @@ export default {
 
                                 <!-- メッセージ本文 -->
                                 <span
-                                    style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
+                                    style="width:100%; word-wrap: break-word; height:5px; margin-top:5px; padding:0"
                                     class="text-disabled"
                                     v-html="formatMessage(m.content)"
                                 >
