@@ -211,7 +211,7 @@ socket.on("messageReceive", (msg) => {
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
             msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
             !LIST_NOTIFICATION_MUTE_CHANNEL.value.includes(msg.channelid) && //ミュートリストにチャンネルが入っていない
-            (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、かつ違うタブなら
+            (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、または違うタブなら
         ) {
             //すべてのメッセージを通知に出すようにしているなら通知
             if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {
