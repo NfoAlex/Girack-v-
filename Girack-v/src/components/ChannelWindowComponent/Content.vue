@@ -551,9 +551,10 @@ export default {
                                     
                                 </div>
 
-                                <p v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
+                                <!-- 返信データ -->
+                                <p class="text-truncate ma-1" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
                                     <v-icon>mdi:mdi-reply</v-icon>
-                                    {{ m.replyData }}
+                                    <v-chip size="small" color="grey" variant="flat">{{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}</v-chip> :: {{ m.replyData.content }}
                                 </p>
 
                                 <!-- メッセージ本文 -->
