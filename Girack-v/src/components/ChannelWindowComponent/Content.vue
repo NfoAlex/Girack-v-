@@ -626,7 +626,7 @@ export default {
         <div v-for="(m, index) in MsgDB[$route.params.id]">
 
             <!-- 日付線 -->
-            <div v-if="checkDateDifference(index)" style="width:100%">
+            <div v-if="checkDateDifference(index)" style="width:100%; padding:6px 0;">
                 <v-divider></v-divider>
                 <p class="text-center text-subtitle-2">{{ getHistoryDate(index) }}</p>
             </div>
@@ -696,6 +696,12 @@ export default {
                                     </span>
                                     
                                 </div>
+
+                                <!-- 返信データ -->
+                                <p class="text-truncate ma-1" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
+                                    <v-icon>mdi:mdi-reply</v-icon>
+                                    <v-chip size="small" color="grey" variant="flat">{{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}</v-chip> :: {{ m.replyData.content }}
+                                </p>
 
                                 <!-- メッセージ本文 -->
                                 <span

@@ -1,12 +1,10 @@
-<script setup>
-import { dataUser, dataChannel, getSocket } from '../../socket.js';
-import { ref } from "vue";
-</script>
-
 <script>
+
+import { dataUser, dataMsg, dataChannel, getSocket, getMessage } from '../../socket.js';
+import { ref } from "vue";
+
 const socket = getSocket();
-const { Userinfo } = dataUser();
-const { ChannelIndex } = dataChannel();
+
 
 //返信モード
 const ReplyState = ref({
@@ -20,11 +18,56 @@ export function getReplyState() {
 }
 
 export default {
+
+    setup() {
+        const { ReplyState } = getReplyState();
+        const { Userinfo } = dataUser();
+        const { ChannelIndex } = dataChannel();
+        const { MsgDB, UserIndex } = dataMsg();
+
+        return { ReplyState, Userinfo, ChannelIndex, MsgDB, UserIndex };
+
+    },
     
     data() {
         return {
             txt: "",
             channelid: "",
+
+            dialogChannelMove: false, //チャンネル移動確認ダイアログ
+            confirmingChannelMove: false, //チャンネル移動中に待つ時用
+            channelidBefore: "", //一つ前のチャンネルID
+
+            //返信情報として表示する部分
+            contentDisplay: {
+                username: "",
+                content: ""
+            }
+        }
+    },
+
+    watch: {
+        //返信状態が変わったらメッセージの取得を開始
+        ReplyState: {
+            handler() {
+                console.log("Input :: watch(ReplyState) : うおお", ReplyState.value);
+                this.getMessage();
+
+            },
+            deep: true
+        },
+        $route: {
+            handler(newPage, oldPage) {
+                console.log("Input :: watch($route) : チャンネル変えてそう", newPage.params.id, oldPage.params.id);
+
+                //返信中であり、移動中ではないのなら移動の確認ダイアログを出す
+                if ( ReplyState.value.isReplying && newPage.params.id !== this.channelidBefore ) {
+                    this.channelidBefore = oldPage.params.id; //ひとつ前のチャンネルを設定
+                    this.dialogChannelMove = true; //確認ダイアログを表示
+
+                }
+
+            }
         }
     },
 
@@ -47,15 +90,20 @@ export default {
 
             //送信ｨﾝ!
             socket.emit("msgSend", {
-                userid: Userinfo.value.userid, //名前
+                userid: this.Userinfo.userid, //名前
                 channelid: this.getPath, //チャンネルID
-                sessionid: Userinfo.value.sessionid, //セッションID);
-                isReply: false,
+                sessionid: this.Userinfo.sessionid, //セッションID);
+                replyData: { //返信データ
+                    isReplying: ReplyState.value.isReplying, //これは返信かどうか
+                    messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null, //返信先のメッセージID
+                },
                 content: this.txt //メッセージの本文
             });
             
             this.txt = ""; //入力欄を空に
             console.log("--- msg sent ---");
+
+            this.resetReply(); //返信状態を初期化
 
         },
         
@@ -70,22 +118,101 @@ export default {
 
         },
 
+        //返信状態を初期化して閉じる
         resetReply() {
             ReplyState.value.isReplying = false;
             ReplyState.value.messageid = "0";
 
+        },
+
+        //一つ前のチャンネルに戻る
+        goBackToPreviousChannel() {
+            this.$router.push({ path: "/c/" + this.channelidBefore }); //一つ前のチャンネルへ移動
+            this.dialogChannelMove = false; //ダイアログを閉じた状態にする
+
+        },
+        
+        //履歴からメッセージを取得
+        getMessage() {
+            //今いるチャンネルの履歴を取得
+            let MsgDBHere = this.MsgDB[this.getPath];
+
+            console.log("Input getMessage : using ", MsgDBHere);
+
+            //履歴から一致するメッセージIDのものを探す
+            for ( let index in MsgDBHere ) {
+                //一致していたら表示用変数へ取り込む
+                if ( MsgDBHere[index].messageid === ReplyState.value.messageid ) {
+                    this.contentDisplay = {
+                        username: this.UserIndex[MsgDBHere[index].userid].username, //名前
+                        content: MsgDBHere[index].content //メッセージ本文
+                    };
+                    break;
+
+                }
+
+            }
+
         }
     },
+
+    unmounted() {
+        //メニューページなどにいったら返信状態をリセット
+        this.resetReply();
+
+    }
 
 }
 </script>
 
 <template>
     <div>
-        <div v-if="ReplyState.isReplying">
-                返信する先 : {{ ReplyState.messageid }}
-                <v-btn @click="resetReply">X</v-btn>
-            </div>
+
+        <v-dialog
+            v-model="dialogChannelMove"
+            width="40vh"
+        >
+            <v-card class="rounded-lg pa-5">
+                <v-card-title>
+                    確認
+                </v-card-title>
+                <p class="ma-2">まだ返信が終えていません。チャンネル移動していいの？</p>
+                <div style="margin-top:10%">
+                    <v-btn
+                        @click="resetReply();dialogChannelMove=false;"
+                        class="rounded-lg ma-1"
+                        color="secondary"
+                        block
+                    >
+                        いいよ
+                    </v-btn>
+                    <v-btn
+                        @click="goBackToPreviousChannel()"
+                        class="rounded-lg ma-1"
+                        variant="text"
+                        block
+                    >
+                        だめ
+                    </v-btn>
+                </div>
+            </v-card>
+        </v-dialog>
+
+        <!-- 返信部分 -->
+        <div class="d-flex align-center" style="margin:0 10%; margin-top:1%; width:90%;" v-if="ReplyState.isReplying">
+            <v-icon class="ma-2">
+                mdi:mdi-reply
+            </v-icon>
+            <p class="text-truncate">
+                {{ contentDisplay.username }} :: {{ contentDisplay.content }}
+            </p>
+            <v-btn style="margin-left:8px;" class="rounded-lg" icon="" color="orange" size="x-small" @click="resetReply">
+                <v-icon>
+                    mdi:mdi-close
+                </v-icon>
+            </v-btn>
+        </div>
+
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
 
             <v-container fill-height fluid class="d-flex">

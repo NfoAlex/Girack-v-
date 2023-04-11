@@ -189,7 +189,7 @@ export default {
 </script>
 
 <template>
-    <v-card elevation="6" style="max-width:650px; max-height:550px;" class="mx-auto pa-1 userpage text-center rounded-lg">
+    <v-card elevation="6" style="max-width:700px; max-height:550px;" class="mx-auto pa-1 userpage text-center rounded-lg">
 
         <v-card color="secondary" elevation="12" width="70%" style="max-width:300px; overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
             
@@ -216,6 +216,7 @@ export default {
         <v-tabs
             bg-color="grey"
             class="mx-auto rounded-lg"
+            center-active
             v-model="tab"
         >
 
@@ -225,7 +226,7 @@ export default {
             <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
                 管理
             </v-tab>
-            <v-tab v-if="Userinfo.role!=='Member'&&checkOpenedFromMemberPage()" value="delete">
+            <v-tab v-if="Userinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
                 <p style="color:pink">削除</p>
             </v-tab>
 
