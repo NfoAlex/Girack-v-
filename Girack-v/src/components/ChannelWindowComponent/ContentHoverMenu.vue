@@ -131,7 +131,7 @@ export default {
                 😰
             </v-btn>
             <!-- 返信 -->
-            <v-btn
+            <!-- <v-btn
                 @click="reply"
                 style="margin-right:3px"
                 variant="tonal"
@@ -141,7 +141,7 @@ export default {
                 <v-icon>
                     mdi:mdi-reply
                 </v-icon>
-            </v-btn>
+            </v-btn> -->
             <!-- 削除ボタン -->
             <v-btn
                 prepend-icon="mdi:mdi-delete-forever"
