@@ -74,9 +74,9 @@ export default {
                 userid: this.Userinfo.userid, //名前
                 channelid: this.getPath, //チャンネルID
                 sessionid: this.Userinfo.sessionid, //セッションID);
-                replyData: {
-                    isReplying: ReplyState.value.isReplying,
-                    messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null,
+                replyData: { //返信データ
+                    isReplying: ReplyState.value.isReplying, //これは返信かどうか
+                    messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null, //返信先のメッセージID
                 },
                 content: this.txt //メッセージの本文
             });
@@ -99,6 +99,7 @@ export default {
 
         },
 
+        //返信状態を初期化して閉じる
         resetReply() {
             ReplyState.value.isReplying = false;
             ReplyState.value.messageid = "0";
@@ -107,27 +108,24 @@ export default {
         
         //履歴からメッセージを取得
         getMessage() {
+            //今いるチャンネルの履歴を取得
             let MsgDBHere = this.MsgDB[this.getPath];
 
             console.log("Input getMessage : using ", MsgDBHere);
 
+            //履歴から一致するメッセージIDのものを探す
             for ( let index in MsgDBHere ) {
-                if ( index % 3 == 0 ) {
-                    console.log("Input :: getMessage : messageid ", MsgDBHere[index].messageid, ReplyState.value.messageid );
-                }
-
+                //一致していたら表示用変数へ取り込む
                 if ( MsgDBHere[index].messageid === ReplyState.value.messageid ) {
                     this.contentDisplay = {
-                        username: this.UserIndex[MsgDBHere[index].userid].username,
-                        content: MsgDBHere[index].content
+                        username: this.UserIndex[MsgDBHere[index].userid].username, //名前
+                        content: MsgDBHere[index].content //メッセージ本文
                     };
                     break;
 
                 }
 
             }
-
-            console.log("Input :: getMessage : contentDisplay ", this.contentDisplay);
 
         }
     },
@@ -138,11 +136,14 @@ export default {
 <template>
     <div>
 
-        <div class="d-flex align-center" style="margin-left:10%; margin-top:1%; width:90%;" v-if="ReplyState.isReplying">
+        <!-- 返信部分 -->
+        <div class="d-flex align-center" style="margin:0 10%; margin-top:1%; width:90%;" v-if="ReplyState.isReplying">
             <v-icon class="ma-2">
                 mdi:mdi-reply
             </v-icon>
-            {{ contentDisplay.username }} :: {{ contentDisplay.content }}
+            <p class="text-truncate">
+                {{ contentDisplay.username }} :: {{ contentDisplay.content }}
+            </p>
             <v-btn style="margin-left:8px;" class="rounded-lg" icon="" color="orange" size="x-small" @click="resetReply">
                 <v-icon>
                     mdi:mdi-close
