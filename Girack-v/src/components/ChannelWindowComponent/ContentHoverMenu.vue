@@ -130,8 +130,9 @@ export default {
             <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
                 😰
             </v-btn>
+            
             <!-- 返信 -->
-            <!-- <v-btn
+            <v-btn
                 @click="reply"
                 style="margin-right:3px"
                 variant="tonal"
@@ -141,7 +142,8 @@ export default {
                 <v-icon>
                     mdi:mdi-reply
                 </v-icon>
-            </v-btn> -->
+            </v-btn>
+
             <!-- 削除ボタン -->
             <v-btn
                 prepend-icon="mdi:mdi-delete-forever"
