@@ -480,7 +480,7 @@ export default {
         <div v-for="(m, index) in MsgDB[$route.params.id]">
 
             <!-- 日付線 -->
-            <div v-if="checkDateDifference(index)" style="width:100%">
+            <div v-if="checkDateDifference(index)" style="width:100%; padding:6px 0;">
                 <v-divider></v-divider>
                 <p class="text-center text-subtitle-2">{{ getHistoryDate(index) }}</p>
             </div>

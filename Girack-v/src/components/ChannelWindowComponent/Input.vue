@@ -1,12 +1,10 @@
-<script setup>
-import { dataUser, dataChannel, getSocket } from '../../socket.js';
-import { ref } from "vue";
-</script>
-
 <script>
+
+import { dataUser, dataMsg, dataChannel, getSocket, getMessage } from '../../socket.js';
+import { ref } from "vue";
+
 const socket = getSocket();
-const { Userinfo } = dataUser();
-const { ChannelIndex } = dataChannel();
+
 
 //返信モード
 const ReplyState = ref({
@@ -20,11 +18,37 @@ export function getReplyState() {
 }
 
 export default {
+
+    setup() {
+        const { ReplyState } = getReplyState();
+        const { Userinfo } = dataUser();
+        const { ChannelIndex } = dataChannel();
+        const { MsgDB, UserIndex } = dataMsg();
+
+        return { ReplyState, Userinfo, ChannelIndex, MsgDB, UserIndex };
+
+    },
     
     data() {
         return {
             txt: "",
             channelid: "",
+
+            contentDisplay: {
+                username: "",
+                content: ""
+            }
+        }
+    },
+
+    watch: {
+        ReplyState: {
+            handler() {
+                console.log("Input :: watch(ReplyState) : うおお", ReplyState.value);
+                this.getMessage();
+
+            },
+            deep: true
         }
     },
 
@@ -47,10 +71,13 @@ export default {
 
             //送信ｨﾝ!
             socket.emit("msgSend", {
-                userid: Userinfo.value.userid, //名前
+                userid: this.Userinfo.userid, //名前
                 channelid: this.getPath, //チャンネルID
-                sessionid: Userinfo.value.sessionid, //セッションID);
-                isReply: false,
+                sessionid: this.Userinfo.sessionid, //セッションID);
+                replyData: {
+                    isReplying: ReplyState.value.isReplying,
+                    messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null,
+                },
                 content: this.txt //メッセージの本文
             });
             
@@ -74,6 +101,32 @@ export default {
             ReplyState.value.isReplying = false;
             ReplyState.value.messageid = "0";
 
+        },
+        
+        //履歴からメッセージを取得
+        getMessage() {
+            let MsgDBHere = this.MsgDB[this.getPath];
+
+            console.log("Input getMessage : using ", MsgDBHere);
+
+            for ( let index in MsgDBHere ) {
+                if ( index % 3 == 0 ) {
+                    console.log("Input :: getMessage : messageid ", MsgDBHere[index].messageid, ReplyState.value.messageid );
+                }
+
+                if ( MsgDBHere[index].messageid === ReplyState.value.messageid ) {
+                    this.contentDisplay = {
+                        username: this.UserIndex[MsgDBHere[index].userid].username,
+                        content: MsgDBHere[index].content
+                    };
+                    break;
+
+                }
+
+            }
+
+            console.log("Input :: getMessage : contentDisplay ", this.contentDisplay);
+
         }
     },
 
@@ -82,10 +135,19 @@ export default {
 
 <template>
     <div>
-        <div v-if="ReplyState.isReplying">
-                返信する先 : {{ ReplyState.messageid }}
-                <v-btn @click="resetReply">X</v-btn>
-            </div>
+
+        <div class="d-flex align-center" style="margin-left:10%; margin-top:1%; width:90%;" v-if="ReplyState.isReplying">
+            <v-icon class="ma-2">
+                mdi:mdi-reply
+            </v-icon>
+            {{ contentDisplay.username }} :: {{ contentDisplay.content }}
+            <v-btn style="margin-left:8px;" class="rounded-lg" icon="" color="orange" size="x-small" @click="resetReply">
+                <v-icon>
+                    mdi:mdi-close
+                </v-icon>
+            </v-btn>
+        </div>
+
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
 
             <v-container fill-height fluid class="d-flex">
