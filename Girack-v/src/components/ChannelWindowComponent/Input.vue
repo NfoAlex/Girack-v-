@@ -170,24 +170,31 @@ export default {
 
         <v-dialog
             v-model="dialogChannelMove"
-            width="30vh"
+            width="40vh"
         >
-            <v-card>
-                チャンネル移動していいの？
-                <v-btn
-                    @click="resetReply();dialogChannelMove=false;"
-                    class="rounded-lg"
-                    color="secondary"
-                >
-                    いいよ
-                </v-btn>
-                <v-btn
-                    @click="goBackToPreviousChannel()"
-                    class="rounded-lg"
-                    variant="text"
-                >
-                    だめ
-                </v-btn>
+            <v-card class="rounded-lg pa-5">
+                <v-card-title>
+                    確認
+                </v-card-title>
+                <p class="ma-2">まだ返信が終えていません。チャンネル移動していいの？</p>
+                <div style="margin-top:10%">
+                    <v-btn
+                        @click="resetReply();dialogChannelMove=false;"
+                        class="rounded-lg ma-1"
+                        color="secondary"
+                        block
+                    >
+                        いいよ
+                    </v-btn>
+                    <v-btn
+                        @click="goBackToPreviousChannel()"
+                        class="rounded-lg ma-1"
+                        variant="text"
+                        block
+                    >
+                        だめ
+                    </v-btn>
+                </div>
             </v-card>
         </v-dialog>
 
