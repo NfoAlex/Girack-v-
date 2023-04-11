@@ -84,6 +84,8 @@ export default {
             this.txt = ""; //入力欄を空に
             console.log("--- msg sent ---");
 
+            this.resetReply(); //返信状態を初期化
+
         },
         
         //チャンネル名を取得するだけ

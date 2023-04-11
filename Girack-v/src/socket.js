@@ -145,6 +145,7 @@ socket.on("messageReceive", (msg) => {
                 channelid: msg.channelid,
                 time: msg.time,
                 content: msg.content,
+                replyData: msg.replyData,
                 hasUrl : msg.hasUrl,
                 urlData: msg.urlData,
                 reaction: msg.reaction
@@ -157,6 +158,7 @@ socket.on("messageReceive", (msg) => {
                 channelid: msg.channelid,
                 time: msg.time,
                 content: msg.content,
+                replyData: msg.replyData,
                 hasUrl : msg.hasUrl,
                 urlData: msg.urlData,
                 reaction: msg.reaction
