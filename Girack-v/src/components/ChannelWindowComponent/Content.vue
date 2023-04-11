@@ -551,6 +551,11 @@ export default {
                                     
                                 </div>
 
+                                <p v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
+                                    <v-icon>mdi:mdi-reply</v-icon>
+                                    {{ m.replyData }}
+                                </p>
+
                                 <!-- メッセージ本文 -->
                                 <span
                                     style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
