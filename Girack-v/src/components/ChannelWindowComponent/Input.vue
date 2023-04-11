@@ -34,6 +34,11 @@ export default {
             txt: "",
             channelid: "",
 
+            dialogChannelMove: false, //チャンネル移動確認ダイアログ
+            confirmingChannelMove: false, //チャンネル移動中に待つ時用
+            channelidBefore: "", //一つ前のチャンネルID
+
+            //返信情報として表示する部分
             contentDisplay: {
                 username: "",
                 content: ""
@@ -42,6 +47,7 @@ export default {
     },
 
     watch: {
+        //返信状態が変わったらメッセージの取得を開始
         ReplyState: {
             handler() {
                 console.log("Input :: watch(ReplyState) : うおお", ReplyState.value);
@@ -49,6 +55,19 @@ export default {
 
             },
             deep: true
+        },
+        $route: {
+            handler(newPage, oldPage) {
+                console.log("Input :: watch($route) : チャンネル変えてそう", newPage.params.id, oldPage.params.id);
+
+                //返信中であり、移動中ではないのなら移動の確認ダイアログを出す
+                if ( ReplyState.value.isReplying && newPage.params.id !== this.channelidBefore ) {
+                    this.channelidBefore = oldPage.params.id; //ひとつ前のチャンネルを設定
+                    this.dialogChannelMove = true; //確認ダイアログを表示
+
+                }
+
+            }
         }
     },
 
@@ -105,6 +124,13 @@ export default {
             ReplyState.value.messageid = "0";
 
         },
+
+        //一つ前のチャンネルに戻る
+        goBackToPreviousChannel() {
+            this.$router.push({ path: "/c/" + this.channelidBefore }); //一つ前のチャンネルへ移動
+            this.dialogChannelMove = false; //ダイアログを閉じた状態にする
+
+        },
         
         //履歴からメッセージを取得
         getMessage() {
@@ -130,11 +156,40 @@ export default {
         }
     },
 
+    unmounted() {
+        //メニューページなどにいったら返信状態をリセット
+        this.resetReply();
+
+    }
+
 }
 </script>
 
 <template>
     <div>
+
+        <v-dialog
+            v-model="dialogChannelMove"
+            width="30vh"
+        >
+            <v-card>
+                チャンネル移動していいの？
+                <v-btn
+                    @click="resetReply();dialogChannelMove=false;"
+                    class="rounded-lg"
+                    color="secondary"
+                >
+                    いいよ
+                </v-btn>
+                <v-btn
+                    @click="goBackToPreviousChannel()"
+                    class="rounded-lg"
+                    variant="text"
+                >
+                    だめ
+                </v-btn>
+            </v-card>
+        </v-dialog>
 
         <!-- 返信部分 -->
         <div class="d-flex align-center" style="margin:0 10%; margin-top:1%; width:90%;" v-if="ReplyState.isReplying">
