@@ -151,6 +151,11 @@ export default {
                         class="pa-3 rounded-lg d-flex align-center"
                         style="margin-top:12px;"
                     >
+                        <!-- オンライン状態 -->
+                        <v-icon style="margin-right:8px;" :color="item.loggedin?'green':'grey'">
+                            mdi:mdi-circle-medium
+                        </v-icon>
+
                         <!-- アバター -->
                         <v-avatar :image="imgsrc + item.userid"></v-avatar>
                         
