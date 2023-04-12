@@ -45,8 +45,24 @@ export default {
 
             searchMode: {
                 enabled: false, //検索モードに入っているかどうか
-                searchingTerm: "", //検索するもの("user" |
-            }
+                searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
+            },
+
+            searchDisplayArray: [], //検索するときに表示する配列
+            searchDemoArray : [
+                {
+                    name: "Alex",
+                    role: "Admin"
+                }, 
+                {
+                    name: 'guest',
+                    role: "Admin"
+                },
+                {
+                    name: "guy",
+                    role: "Member"
+                }
+            ] //ToDo::検索機能用デモ配列
         }
     },
 
@@ -85,7 +101,7 @@ export default {
 
             }
 
-            //スペースが入力されたら検索モードを終了
+            //スペースが入力された、あるいは文字が空になったら検索モードを終了
             if ( this.txt[this.txt.length-1] === " " || this.txt[this.txt.length-1] === "　" || this.txt.length === 0 ) {
                 this.searchMode.enabled = false;
 
@@ -97,6 +113,17 @@ export default {
                 let searchQuery = this.txt.substring(this.searchMode.indexStarting+1);
 
                 console.log("Input :: watch(txt) : 検索する文字列 -> ", searchQuery);
+
+                //検索語で配列をフィルターして標示用の配列へ設定
+                this.searchDisplayArray = this.searchDemoArray.filter((u)=> {
+                    if ( (u.name).includes(searchQuery) ) {
+                        return u.name;
+
+                    }
+
+                });
+
+                console.log("Input :: watch(txt) : 検索結果 -> ", this.searchDisplayArray);
 
             }
 
@@ -275,9 +302,9 @@ export default {
                     <!-- ユーザー検索候補の表示 -->
                     <v-list v-if="searchMode.enabled">
                         <v-list-item
-                            v-for="i in ['alex', 'guest', 'guy']"
+                            v-for="i in searchDisplayArray"
                         >
-                            {{ i }}
+                            {{ i.name }}
                         </v-list-item>
                     </v-list>
                 </v-menu>
