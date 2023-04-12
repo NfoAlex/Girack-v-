@@ -32,15 +32,8 @@ export default {
     methods: {
         //表示する用のリストを整形
         setUsernameFromList() {
-            //取得したユーザーリストのユーザーIDがオンラインのリストに入ってるかどうかで配列を削る
-            this.userListDisplay = this.userList.filter((u) => {
-                if ( this.OnlineSession.includes(u.userid) ) {
-                    return u;
-
-                }
-
-            });
-
+            this.userListDisplay = this.userList.filter((u) => u.loggedin===true?u:null);
+            
         }
     },
 
@@ -68,27 +61,14 @@ export default {
 
                 });
 
+                this.setUsernameFromList();
+
             }
             this.userListReady = true;
             
         });
 
-        //ループしてオンラインユーザーを取得してユーザーリストから削るループ(0.5秒)
-        loopGetSessionOnline = setInterval(() => {
-            //オンラインユーザーリスト要請
-            socket.emit("getSessionOnline", {
-                reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
-                }
-            });
-
-            //ユーザーリストからオンラインのユーザーだけ切り取る
-            this.setUsernameFromList();
-
-        }, 500);
-
-        //ユーザーリストの情報取得
+        //初回でユーザーリストを取得
         socket.emit("getInfoList", {
             target: "user",
             reqSender: {
@@ -96,6 +76,17 @@ export default {
                 sessionid: this.Userinfo.sessionid
             }
         });
+
+        //ユーザーリストの情報取得
+        loopGetSessionOnline = setInterval(() => {
+            socket.emit("getInfoList", {
+                target: "user",
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
+        }, 500);
 
     },
 

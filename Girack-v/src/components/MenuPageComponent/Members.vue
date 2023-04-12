@@ -69,15 +69,12 @@ export default {
             if ( dat.type === "user" ) {
                 this.userList = dat.userList; //ユーザーリストを設定
 
-                //ソートして表示用の配列へ追加
+                //名前順でソートして表示用の配列へ追加
                 this.userListDisplay = dat.userList.sort((u1, u2) => {
-                    if ( u1.name < u2.name ) {
-                        return -1;
+                    let U1 = u1.name.toLowerCase();
+                    let U2 = u2.name.toLowerCase();
 
-                    } else {
-                        return 1;
-
-                    }
+                    return U1<U2?-1:U1>U2?1:0;
 
                 });
 
@@ -151,11 +148,17 @@ export default {
                         class="pa-3 rounded-lg d-flex align-center"
                         style="margin-top:12px;"
                     >
+
                         <!-- アバター -->
                         <v-avatar :image="imgsrc + item.userid"></v-avatar>
                         
+                        <!-- オンライン状態 -->
+                        <v-icon style="margin-left:2%;" :color="item.loggedin?'green':'grey'">
+                                mdi:mdi-circle-medium
+                        </v-icon>
+
                         <!-- ユーザー名 -->
-                        <span class="text-truncate flex-shrink-1 flex-grow-0" style="margin:0 12px;">
+                        <span class="text-truncate flex-shrink-1 flex-grow-0" style="margin:0 6px;">
                                 {{ item.name }}
                         </span>
 
