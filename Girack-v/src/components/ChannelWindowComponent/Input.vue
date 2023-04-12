@@ -86,7 +86,7 @@ export default {
             }
 
             //スペースが入力されたら検索モードを終了
-            if ( this.txt[this.txt.length-1] === " " || this.txt[this.txt.length-1] === "　" ) {
+            if ( this.txt[this.txt.length-1] === " " || this.txt[this.txt.length-1] === "　" || this.txt.length === 0 ) {
                 this.searchMode.enabled = false;
 
             }
@@ -235,9 +235,11 @@ export default {
             <v-icon class="ma-2">
                 mdi:mdi-reply
             </v-icon>
+            <!-- 返信先 -->
             <p class="text-truncate">
                 {{ contentDisplay.username }} :: {{ contentDisplay.content }}
             </p>
+            <!-- 返信キャンセルボタン -->
             <v-btn style="margin-left:8px;" class="rounded-lg" icon="" color="grey" size="x-small" @click="resetReply">
                 <v-icon>
                     mdi:mdi-close
@@ -254,6 +256,7 @@ export default {
                     location="top"
                 >
                     <template v-slot:activator="{ props }">
+                        <!-- 入力部分 -->
                         <v-text-field
                             style="height:fit-content"
                             ref="inp"
