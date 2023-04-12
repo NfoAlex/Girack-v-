@@ -202,7 +202,7 @@ export default {
                 <p class="text-overline"># {{ userid }}</p>
 
                 <p v-if="targetinfo.loggedin&&userid!==Userinfo.userid">
-                    <v-chip class="ma-1" color="green" size="x-small">
+                    <v-chip class="ma-1" variant="flat" color="success" size="x-small">
                         オンライン
                     </v-chip>
                 </p>
