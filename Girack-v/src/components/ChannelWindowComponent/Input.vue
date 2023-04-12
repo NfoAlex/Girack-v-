@@ -5,7 +5,6 @@ import { ref } from "vue";
 
 const socket = getSocket();
 
-
 //返信モード
 const ReplyState = ref({
     isReplying: false,
@@ -42,7 +41,7 @@ export default {
             contentDisplay: {
                 username: "",
                 content: ""
-            }
+            },
 
             searchMode: {
                 enabled: false, //検索モードに入っているかどうか
@@ -61,6 +60,8 @@ export default {
             },
             deep: true
         },
+
+        //ページの変更を監視
         $route: {
             handler(newPage, oldPage) {
                 console.log("Input :: watch($route) : チャンネル変えてそう", newPage.params.id, oldPage.params.id);
@@ -73,16 +74,9 @@ export default {
                 }
 
             }
-        }
-    },
-
-    computed: {
-        //現在のパスからチャンネルのID返すだけ
-        getPath() {
-            return this.$route.params.id; //パス
         },
 
-        //入力したテキストを監視して
+        //入力したテキストを監視してユーザー名を検索しようとしているか調べる
         txt() {
             //@が入力されたら検索モードに入る
             if ( this.txt[this.txt.length-1] === "@" ) {
@@ -109,6 +103,13 @@ export default {
         }
     },
 
+    computed: {
+        //現在のパスからチャンネルのID返すだけ
+        getPath() {
+            return this.$route.params.id; //パス
+        },
+    },
+
     methods: {
         //メッセージを送信する
         msgSend( event, btn ) {
@@ -128,8 +129,6 @@ export default {
                     isReplying: ReplyState.value.isReplying, //これは返信かどうか
                     messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null, //返信先のメッセージID
                 },
-                sessionid: Userinfo.value.sessionid, //セッションID);
-                isReply: false,
                 content: this.txt //メッセージの本文
             });
             
@@ -270,6 +269,7 @@ export default {
                         </v-text-field>
                     </template>
 
+                    <!-- ユーザー検索候補の表示 -->
                     <v-list v-if="searchMode.enabled">
                         <v-list-item
                             v-for="i in ['alex', 'guest', 'guy']"
