@@ -1,6 +1,6 @@
 <script>
 
-import { dataUser, dataMsg, dataChannel, getSocket, getMessage } from '../../socket.js';
+import { dataUser, dataMsg, dataChannel, getSocket, getMessage, backendURI } from '../../socket.js';
 import { ref } from "vue";
 
 const socket = getSocket();
@@ -30,6 +30,7 @@ export default {
     
     data() {
         return {
+            uri: backendURI,
             txt: "",
             channelid: "",
 
@@ -49,17 +50,18 @@ export default {
             },
 
             searchDisplayArray: [], //検索するときに表示する配列
+            userHereArray: [], //このチャンネルに参加しているユーザー配列
             searchDemoArray : [
                 {
-                    name: "Alex",
+                    username: "Alex",
                     role: "Admin"
                 }, 
                 {
-                    name: 'guest',
+                    username: 'guest',
                     role: "Admin"
                 },
                 {
-                    name: "guy",
+                    username: "guy",
                     role: "Member"
                 }
             ] //ToDo::検索機能用デモ配列
@@ -115,9 +117,10 @@ export default {
                 console.log("Input :: watch(txt) : 検索する文字列 -> ", searchQuery);
 
                 //検索語で配列をフィルターして標示用の配列へ設定
-                this.searchDisplayArray = this.searchDemoArray.filter((u)=> {
-                    if ( (u.name).includes(searchQuery) ) {
-                        return u.name;
+                this.searchDisplayArray = this.channelJoinedUserArray.filter((u)=> {
+                    //ユーザー名に検索語が含まれていたら出力
+                    if ( (u.username).includes(searchQuery) ) {
+                        return u.username;
 
                     }
 
@@ -215,6 +218,23 @@ export default {
         }
     },
 
+    mounted() {
+        socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
+            this.channelJoinedUserArray = channelJoinedUserList;
+
+        });
+
+        //ここに参加している人リストを取得
+        socket.emit("getInfoChannelJoinedUserList", {
+            targetid: this.getPath,
+            reqSender: {
+                userid: this.Userinfo.userid,
+                sessionid: this.Userinfo.sessionid
+            }
+        });
+
+    },
+
     unmounted() {
         //メニューページなどにいったら返信状態をリセット
         this.resetReply();
@@ -304,7 +324,8 @@ export default {
                         <v-list-item
                             v-for="i in searchDisplayArray"
                         >
-                            {{ i.name }}
+                            <v-icon :src="uri + '/img/' + i.userid"></v-icon>
+                            {{ i.username }}
                         </v-list-item>
                     </v-list>
                 </v-menu>
