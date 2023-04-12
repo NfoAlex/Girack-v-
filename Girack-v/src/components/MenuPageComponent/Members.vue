@@ -151,16 +151,17 @@ export default {
                         class="pa-3 rounded-lg d-flex align-center"
                         style="margin-top:12px;"
                     >
-                        <!-- オンライン状態 -->
-                        <v-icon style="margin-right:8px;" :color="item.loggedin?'green':'grey'">
-                            mdi:mdi-circle-medium
-                        </v-icon>
 
                         <!-- アバター -->
                         <v-avatar :image="imgsrc + item.userid"></v-avatar>
                         
+                        <!-- オンライン状態 -->
+                        <v-icon style="margin-left:2%;" :color="item.loggedin?'green':'grey'">
+                                mdi:mdi-circle-medium
+                        </v-icon>
+
                         <!-- ユーザー名 -->
-                        <span class="text-truncate flex-shrink-1 flex-grow-0" style="margin:0 12px;">
+                        <span class="text-truncate flex-shrink-1 flex-grow-0" style="margin:0 6px;">
                                 {{ item.name }}
                         </span>
 
