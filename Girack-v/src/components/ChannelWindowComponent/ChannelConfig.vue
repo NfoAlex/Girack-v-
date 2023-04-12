@@ -98,7 +98,7 @@ export default {
                 targetid: this.channelid,
                 channelname: this.channelnameText,
                 description: this.descriptionText,
-                scope: (!this.scopeIsPrivate?"private":"public"),
+                scope: (this.scopeIsPrivate?"private":"public"),
                 reqSender: {
                     userid: this.Userinfo.userid,
                     sessionid: this.Userinfo.sessionid
@@ -111,9 +111,11 @@ export default {
 
         },
 
-        //検索するユーザーがチャンネルに参加しているかどうかを調べる
+        //検索するユーザーがすでにチャンネルに参加しているかどうかを調べる
         checkUserJoined(userid) {
+            //チャンネルに参加しているユーザーリストから調べる
             for ( let index in this.channelJoinedUser ) {
+                //検索されたユーザーのユーザーIDが参加リストにあるか
                 if ( this.channelJoinedUser[index].userid === userid ) {
                     return true;
 
@@ -121,7 +123,7 @@ export default {
 
             }
 
-            return false;
+            return false; //なかったらないで
 
         },
 
@@ -242,7 +244,7 @@ export default {
     <!-- チャンネルへユーザーを招待するときのユーザー検索画面 -->
     <v-dialog
         v-model="userSearchShow"
-        width="35vw"
+        width="55vw"
         style="max-width:600px;"
     >
     
@@ -250,7 +252,7 @@ export default {
         </v-text-field>
 
         <!-- 検索結果 -->
-        <div class="channelScrollbar channelScrollbarDarker" style="height:50vh; max-height:650px; overflow-y:auto;">
+        <div class="channelScrollbar channelScrollbarDarker" style="height:60vh; max-height:650px; max-width:910px; overflow-y:auto;">
             <v-card
                 v-for="user in userSearchResult"
                 style="padding:16px 0; margin-top:8px; width:95%"
@@ -435,7 +437,7 @@ export default {
             <v-window-item value="manage" class="mx-auto" style="min-height:300px; overflow-y:auto;">
                 <v-checkbox
                     v-model="scopeIsPrivate"
-                    @click="updateChannel"
+                    @click="scopeIsPrivate=!scopeIsPrivate;updateChannel();"
                     color="grey"
                     label="プライベートチャンネル"
                 >

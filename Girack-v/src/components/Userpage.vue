@@ -6,6 +6,7 @@ const socket = getSocket();
 
 export default {
     props: ["userid"],
+
     setup() {
         const { Userinfo } = dataUser();
         return { Userinfo };
@@ -22,6 +23,9 @@ export default {
             targetUserRole: "Member",
             targetUserBanned: false,
             manageDisabled: false,
+
+            //削除確認表示
+            deleteConfirmCheckDisplay: false,
 
             //ユーザーページ下のタブ用
             tab: ""
@@ -74,6 +78,25 @@ export default {
             })
         },
 
+        //ユーザーを削除する関数
+        deleteUser() {
+            //削除すると送信
+            socket.emit("mod", {
+                targetid: this.userid,
+                action: {
+                    change: "delete",
+                },
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
+
+            //ユーザーページを閉じる
+            this.$emit("closeUserpage");
+
+        },
+
         //ロールの色を返す
         getRoleColor(role) {
             switch(role) {
@@ -85,6 +108,19 @@ export default {
 
                 case "Member":
                     return "white";
+
+            }
+
+        },
+
+        //メンバーページから開かれたものか確認
+        checkOpenedFromMemberPage() {
+            //メンバーページから開かれたものなら
+            if ( this.$route.path === "/menu/members" && this.Userinfo.userid !== this.userid ) {
+                return true;
+
+            } else {
+                return false;
 
             }
 
@@ -104,8 +140,9 @@ export default {
 
         }
 
+        //ユーザーの情報受け取り
         socket.on("infoUser", (dat) => {
-            //受信した情報がこいつのなら
+            //受信した情報がこいつのと確認して処理
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
 
@@ -119,10 +156,13 @@ export default {
                         this.targetinfo.role === "Admin" &&
                         this.Userinfo.role !== "Admin"
                     ) ||
-                    this.Userinfo.userid === this.userid || //自分なら
                     this.targetinfo.role === "Deleted" //消されたユーザーなら
                 ) {
-                    this.manageDisabled = true; //管理を無効化
+                    //条件にひっかかっても自分だったらスルー
+                    if ( this.Userinfo.userid !== this.targetinfo.userid ) {
+                        this.manageDisabled = true; //管理を無効化
+
+                    }
 
                 }
 
@@ -130,7 +170,7 @@ export default {
 
         });
 
-        //情報取得
+        //ユーザー情報取得
         socket.emit("getInfoUser", {
             targetid: this.userid,
             reqSender: {
@@ -138,6 +178,8 @@ export default {
                 sessionid: dataUser().Userinfo.value.sessionid
             }
         });
+
+        console.log("Userpage :: path",this.$route.path);
 
 
     }
@@ -147,9 +189,9 @@ export default {
 </script>
 
 <template>
-    <v-card elevation="6" style="max-width:650px; max-height:550px;" class="mx-auto pa-1 userpage text-center rounded-lg">
+    <v-card elevation="6" style="max-width:700px; max-height:550px;" class="mx-auto pa-1 userpage text-center rounded-lg">
 
-        <v-card color="secondary" elevation="12" width="70%" style="max-width:300px;" class="mx-auto boxProfile rounded-lg">
+        <v-card color="secondary" elevation="12" width="70%" style="max-width:300px; overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
             
             <!-- アバター -->
             <v-avatar style="margin-top:16px;" size="7vh" :image="imgsrc + userid"></v-avatar>
@@ -174,6 +216,7 @@ export default {
         <v-tabs
             bg-color="grey"
             class="mx-auto rounded-lg"
+            center-active
             v-model="tab"
         >
 
@@ -183,6 +226,9 @@ export default {
             <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
                 管理
             </v-tab>
+            <v-tab v-if="Userinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
+                <p style="color:pink">削除</p>
+            </v-tab>
 
         </v-tabs>
         
@@ -191,6 +237,7 @@ export default {
 
             <!-- 参加しているチャンネル -->
             <v-window-item value="channel" class="ma-5">
+                <!-- ToDo -->
                 <p>参加チャンネル</p>
                 <p>参加チャンネル</p>
                 <p>参加チャンネル</p>
@@ -219,6 +266,31 @@ export default {
 
             </v-window-item>
 
+            <!-- ユーザー削除タブ(メンバーページからだけ) -->
+            <v-window-item value="delete" class="ma-5">
+                <v-btn
+                    v-if="!deleteConfirmCheckDisplay"
+                    @click="deleteConfirmCheckDisplay=true;"
+                    class="rounded-lg"
+                    color="error"
+                    size="large"
+                    variant="tonal"
+                >
+                    このユーザーを削除
+                </v-btn>
+                <v-btn
+                    v-if="deleteConfirmCheckDisplay"
+                    @click="deleteUser()"
+                    class="rounded-lg"
+                    color="error"
+                    size="large"
+                    elevation="12"
+                >
+                    本当にいいの?
+                </v-btn>
+
+            </v-window-item>
+
         </v-window>
         
     </v-card>
@@ -229,7 +301,7 @@ export default {
 .userpage
 {
     width: 100%;
-    height:50vh;
+    height:70vh;
 }
 
 .boxProfile

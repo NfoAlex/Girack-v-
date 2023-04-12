@@ -1,6 +1,7 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
 import { getCONFIG } from "../../config.js";
+import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
 const socket = getSocket();
@@ -11,12 +12,13 @@ export default {
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
         const { ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
+        
 
         return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, CONFIG_DISPLAY };
 
     },
 
-    components: { Userpage, URLpreview }, //ユーザーページ用
+    components: { Userpage, URLpreview, ContentHoverMenu }, //ユーザーページ用
 
     data() {
         return {
@@ -298,6 +300,133 @@ export default {
 
         },
 
+        //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
+        checkMsgPosition(userid, index) {
+            if ( this.MsgDB[this.getPath] === undefined || this.MsgDB[this.getPath].length <= 0 ) return;
+
+            let AvatarNeedToShowBefore = false;
+            let AvatarNeedToShow = false;
+            let AvatarNeedToShowNext = false;
+
+            //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
+              //前
+            try {
+                AvatarNeedToShowBefore = this.checkShowAvatar(this.MsgDB[this.getPath][index-1].userid, index-1);
+            } catch(e){}
+
+              //今の位置
+            try {
+                AvatarNeedToShow = this.checkShowAvatar(userid, index);
+            } catch(e){}
+
+              //次
+            try {
+                AvatarNeedToShowNext = this.checkShowAvatar(this.MsgDB[this.getPath][index+1].userid, index+1);
+            } catch(e){}
+
+            let SameWithBefore = false; //ひとつ前と送信者が同じかどうか
+            let SameWithNext = false; //次と送信者同じかどうか
+
+            //一つ前と送信者が今のと同じならそう記録
+            try {
+                if ( this.MsgDB[this.getPath][index-1].userid === userid ) {
+                    SameWithBefore = true;
+
+                }
+            }
+            catch(e) {}
+
+            //次の送信者が今のと同じならそう記録
+            try {
+                if ( this.MsgDB[this.getPath][index+1].userid === userid ) {
+                    SameWithNext = true;
+
+                }
+            }
+            catch(e) {}
+
+            //ここから条件処理
+            if ( AvatarNeedToShowBefore ) {
+                if ( AvatarNeedToShow ) {
+                    if ( SameWithNext ) {
+                        if ( AvatarNeedToShowNext ) {
+                            return "msgBackgroundSingle";
+
+                        } else {
+                            return "msgBackgroundTop";
+
+                        }
+
+                    } else {
+                        return "msgBackgroundSingle";
+
+                    }
+
+                } else {
+                    if ( AvatarNeedToShowNext ) {
+                        return "msgBackgroundEnd";
+
+                    }
+
+                    if ( SameWithBefore ) {
+                        if ( SameWithNext ) {
+                            return "msgBackgroundMid";
+
+                        } else {
+                            return "msgBackgroundEnd";
+
+                        }
+
+                    } else {
+                        return "msgBackgroundEnd";
+
+                    }
+
+                }
+
+            } else if ( AvatarNeedToShowNext ) {
+                if ( AvatarNeedToShow ) {
+                    if ( AvatarNeedToShowNext ) {
+                        return "msgBackgroundSingle";
+                        
+                    } else {
+                        return "msgBackgroundTop";
+
+                    }
+
+                } else {
+                    return "msgBackgroundEnd";
+
+                }
+
+            } else {
+                if ( AvatarNeedToShow ) {
+                    if ( SameWithNext ) {
+                        return "msgBackgroundTop";
+
+                    } else {
+                        return "msgBackgroundSingle";
+
+                    }
+                    
+                } else {
+                    if ( SameWithNext ) {
+                        return "msgBackgroundMid";
+
+                    } else if ( SameWithBefore ) {
+                        return "msgBackgroundEnd";
+
+                    } else {
+                        return "msgBackgroundSingle";
+
+                    }
+
+                }
+
+            }
+
+        },
+
         //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
         checkDateDifference(index) {
             try {
@@ -362,22 +491,6 @@ export default {
 
         //削除したりリアクションしたり編集(ToDo)したり
         messageAction(msgId, act, reaction) {
-            //削除する
-            if ( act === "delete" ) {
-                console.log("messageAction :: 削除します");
-                //削除要請を送信
-                socket.emit("actMessage", {
-                    action: "delete",
-                    channelid: this.getPath,
-                    messageid: msgId,
-                    reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
-                    }
-                });
-
-            }
-
             //リアクションする
             if ( act === "reaction" ) {
                 //リアクションしたことを送信
@@ -513,13 +626,13 @@ export default {
         <div v-for="(m, index) in MsgDB[$route.params.id]">
 
             <!-- 日付線 -->
-            <div v-if="checkDateDifference(index)" style="width:100%">
+            <div v-if="checkDateDifference(index)" style="width:100%; padding:6px 0;">
                 <v-divider></v-divider>
                 <p class="text-center text-subtitle-2">{{ getHistoryDate(index) }}</p>
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div class="d-flex justify-end" style="margin:8px 8px;">
+            <div class="d-flex justify-end" style="margin:0px 8px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
@@ -527,7 +640,7 @@ export default {
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
-                <span :class="['rounded-lg', msgHovered&&(msgIdHovering===m.messageid)?'hovered':null]" style="width:90%; padding:0 1%;">
+                <span :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]" style="width:90%; padding-left:1.5%; padding-right:1.5%">
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
@@ -584,10 +697,15 @@ export default {
                                     
                                 </div>
 
+                                <!-- 返信データ -->
+                                <p class="text-truncate ma-1" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
+                                    <v-icon>mdi:mdi-reply</v-icon>
+                                    <v-chip size="small" color="grey" variant="flat">{{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}</v-chip> : {{ m.replyData.content }}
+                                </p>
+
                                 <!-- メッセージ本文 -->
                                 <span
-                                    style="width:100%; word-wrap: break-word; height:5px; margin:5px 0; padding:0"
-                                    class="text-disabled"
+                                    style="width:100%; word-wrap:break-word"
                                     v-html="formatMessage(m.content)"
                                 >
                                 </span>
@@ -611,31 +729,11 @@ export default {
                             </div>
                         </template>
                         <!-- ここからホバーメニュー -->
-                        <v-card class="pa-2 rounded-lg" color="#222" style="width:fit-content; margin-top:-16px; max-width:500px;">
-                            
-                            <!-- ここからホバーメニュー -->
-                              <!-- ToDo::コンポーネント化 -->
-                            <span style="position:relative; float:right;">
-                                <!-- 時間表示 -->
-                                <span style="margin-right:12px;" class="text-body-2 font-italic">
-                                    {{ printDate(m.time) }}
-                                </span>
-                                <v-btn @click="messageAction(m.messageid, 'reaction', 'smile')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                    😀
-                                </v-btn>
-                                <v-btn @click="messageAction(m.messageid, 'reaction', 'thinking_face')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                    🤔
-                                </v-btn>
-                                <v-btn @click="messageAction(m.messageid, 'reaction', 'cold_sweat')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                    😰
-                                </v-btn>
-                                <!-- 削除ボタン -->
-                                <v-btn prepend-icon="mdi:mdi-delete-forever" v-if="Userinfo.role==='Admin'||(getUserStats(m.userid, 'role')!=='Admin'&&Userinfo.role==='Moderator')||m.userid===Userinfo.userid" @click="messageAction(m.messageid, 'delete')" style="margin-right:3px" variant="tonal" rounded="pill" size="x-small">
-                                    削除
-                                </v-btn>
-                            </span>
-
-                        </v-card>
+                        <ContentHoverMenu
+                            :m="m"
+                            :userrole="getUserStats(m.userid, 'role')"
+                            :channelid="getPath"
+                        />
                     </v-menu>
                 
                 </span>
@@ -682,7 +780,48 @@ export default {
 
 .hovered
 {
-    background-color: #49454F;
+    background-color: #444 !important;
+}
+
+.msgBackgroundMid
+{
+    border-radius: 0px;
+    background-color: #333;
+
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+
+.msgBackgroundTop
+{
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    background-color: #333;
+
+    margin-top: 6px;
+    padding-top: 8px !important;
+    padding-bottom: 2px !important;
+}
+
+.msgBackgroundEnd
+{
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background-color: #333;
+
+    margin-bottom: 6px;
+    padding-bottom: 8px !important;
+    padding-top: 2px !important;
+}
+
+.msgBackgroundSingle
+{
+    border-radius: 12px;
+    background-color: #333;
+
+    margin: 6px 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 /* スクロールバー用 */

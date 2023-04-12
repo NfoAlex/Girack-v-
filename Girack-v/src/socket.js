@@ -145,6 +145,7 @@ socket.on("messageReceive", (msg) => {
                 channelid: msg.channelid,
                 time: msg.time,
                 content: msg.content,
+                replyData: msg.replyData,
                 hasUrl : msg.hasUrl,
                 urlData: msg.urlData,
                 reaction: msg.reaction
@@ -157,6 +158,7 @@ socket.on("messageReceive", (msg) => {
                 channelid: msg.channelid,
                 time: msg.time,
                 content: msg.content,
+                replyData: msg.replyData,
                 hasUrl : msg.hasUrl,
                 urlData: msg.urlData,
                 reaction: msg.reaction
@@ -186,9 +188,8 @@ socket.on("messageReceive", (msg) => {
             }
 
         } else { //すでにあるなら加算
-            //メンションならメンションを加算
-            if ( msg.content.includes("@" + Userinfo.value.username) ) {
-                
+            //メンションか自分への返信ならメンションを加算
+            if ( msg.content.includes("@" + Userinfo.value.username) || msg.replyData.userid === Userinfo.value.userid ) {
                 if ( MsgReadTime.value[msg.channelid].mention === null ) {
                     MsgReadTime.value[msg.channelid].mention = 0;
 
@@ -209,7 +210,7 @@ socket.on("messageReceive", (msg) => {
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
             msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
             !LIST_NOTIFICATION_MUTE_CHANNEL.value.includes(msg.channelid) && //ミュートリストにチャンネルが入っていない
-            (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、かつ違うタブなら
+            (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、または違うタブなら
         ) {
             //すべてのメッセージを通知に出すようにしているなら通知
             if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {
@@ -220,7 +221,18 @@ socket.on("messageReceive", (msg) => {
                 });
 
             } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
+                //メンションの条件である@<名前>が入っているか
                 if ( msg.content.includes("@" + Userinfo.value.username) ) {
+                    //通知を出す
+                    new Notification(ChannelIndex.value[msg.channelid].channelname, {
+                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                        icon: backendURI + "/img/" + msg.userid + ".jpeg"
+                    });
+
+                }
+
+                //自分宛の返信なら
+                if ( msg.replyData.userid === Userinfo.value.userid ) {
                     //通知を出す
                     new Notification(ChannelIndex.value[msg.channelid].channelname, {
                         body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
@@ -387,6 +399,30 @@ socket.on("infoChannel", (dat) => {
 
     console.log("socket :: infoChannel : チャンネル情報更新");
 
+    //削除されているならスキップ
+    if ( dat.scope === "deleted" ) {
+        //もしすでにデータを持っているなら削除
+        if ( ChannelIndex.value[dat.channelid] !== undefined ) {
+            delete ChannelIndex.value[dat.channelid]; //削除
+
+        }
+
+        //チャンネルから抜けさせる
+        socket.emit("channelAction", {
+            action: "leave",
+            channelid: dat.channelid,
+            userid: Userinfo.value.userid,
+            reqSender: {
+                userid: Userinfo.value.userid,
+                sessionid: Userinfo.value.sessionid
+            }
+        });
+
+        //スキップ
+        return;
+
+    }
+
     //チャンネルデータを更新
     ChannelIndex.value[dat.channelid] = {
         channelname: dat.channelname, //チャンネル名
@@ -549,38 +585,6 @@ socket.on("messageHistory", (history) => {
     }
 
 });
-
-//メッセージの更新
-// socket.on("messageUpdate", (dat) => {
-//     //メッセージ消したりリアクションされたり
-//     /*
-//     {
-//         action: "delete"|"reaction",
-//         channelid: dat.channelid,
-//         messageid: dat.messageid,
-//         ["reaction"だったら]
-//         reaction: dat.reaction
-//     }
-//     */
-
-//     switch( dat.action ) {
-//         //削除する
-//         case "delete":
-//             //ループでIDが一致するメッセージを探す
-//             for ( let index in msgDBbackup[dat.channelid] ) {
-//                 if ( msgDBbackup[dat.channelid][index].messageid === dat.messageid ) {
-//                     msgDBbackup[dat.channelid].splice(index,1); //削除
-
-//                 }
-
-//             }
-
-//         default:
-//             break;
-
-//     }
-
-// });
 
 //認証結果
 socket.on("authResult", (dat) => {
