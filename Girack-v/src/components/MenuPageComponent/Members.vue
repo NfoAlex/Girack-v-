@@ -69,15 +69,12 @@ export default {
             if ( dat.type === "user" ) {
                 this.userList = dat.userList; //ユーザーリストを設定
 
-                //ソートして表示用の配列へ追加
+                //名前順でソートして表示用の配列へ追加
                 this.userListDisplay = dat.userList.sort((u1, u2) => {
-                    if ( u1.name < u2.name ) {
-                        return -1;
+                    let U1 = u1.name.toLowerCase();
+                    let U2 = u2.name.toLowerCase();
 
-                    } else {
-                        return 1;
-
-                    }
+                    return U1<U2?-1:U1>U2?1:0;
 
                 });
 
