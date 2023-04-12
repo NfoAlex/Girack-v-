@@ -161,7 +161,7 @@ export default {
 
                         <!-- BANバッジ -->
                         <div class="me-auto flex-grow-0">
-                            <v-chip v-if="item.state.banned" size="small" color="red">
+                            <v-chip v-if="item.banned" size="small" color="red">
                                 BANNED
                             </v-chip>
                         </div>
