@@ -238,7 +238,7 @@ export default {
             <p class="text-truncate">
                 {{ contentDisplay.username }} :: {{ contentDisplay.content }}
             </p>
-            <v-btn style="margin-left:8px;" class="rounded-lg" icon="" color="orange" size="x-small" @click="resetReply">
+            <v-btn style="margin-left:8px;" class="rounded-lg" icon="" color="grey" size="x-small" @click="resetReply">
                 <v-icon>
                     mdi:mdi-close
                 </v-icon>
