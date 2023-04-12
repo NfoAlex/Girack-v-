@@ -200,15 +200,26 @@ export default {
             <div class="ma-3">
                 <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
                 <p class="text-overline"># {{ userid }}</p>
-                <v-chip :color="getRoleColor(targetinfo.role)" size="small">
-                    {{ targetinfo.role }}
-                </v-chip>
+
+                <p v-if="targetinfo.loggedin&&userid!==Userinfo.userid">
+                    <v-chip class="ma-1" color="green" size="x-small">
+                        オンライン
+                    </v-chip>
+                </p>
+
                 <p>
                     <v-chip v-if="userid===Userinfo.userid" color="green" size="small">
                         あなた
                     </v-chip>
                 </p>
-                <p class="text-h5 text-truncate">{{ targetinfo.username }}</p>
+
+                <v-chip :color="getRoleColor(targetinfo.role)" class="ma-1" size="small">
+                    {{ targetinfo.role }}
+                </v-chip>
+                
+                <p class="text-h5 text-truncate">
+                    {{ targetinfo.username }}
+                </p>
             </div>
         </v-card>
 
