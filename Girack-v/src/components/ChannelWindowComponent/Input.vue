@@ -159,7 +159,11 @@ export default {
                     isReplying: ReplyState.value.isReplying, //これは返信かどうか
                     messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null, //返信先のメッセージID
                 },
-                content: this.txt //メッセージの本文
+                content: this.txt, //メッセージの本文
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
             });
             
             this.txt = ""; //入力欄を空に
