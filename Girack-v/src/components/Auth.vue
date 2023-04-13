@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getCookie } from "../socket.js";
+import { getSocket, getCookie, CLIENT_VERSION } from "../socket.js";
 const socket = getSocket();
 
 export default {
@@ -61,7 +61,7 @@ export default {
 
             //クッキーに認証情報があるか確認
             if ( getCookie("sessionid") !== "" ) {
-                socket.emit("authByCookie", getCookie("sessionid"));
+                socket.emit("authByCookie", getCookie("sessionid"), CLIENT_VERSION);
                 return;
 
             }
