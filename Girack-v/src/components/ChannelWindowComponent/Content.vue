@@ -24,12 +24,6 @@ export default {
     data() {
         return {
             uri: backendURI, //バックエンドのURI
-            
-            //メッセージ文のコンパイル用
-            URLRegex: /((https|http)?:\/\/[^\s]+)/g,
-            mentionRegex: /@\/([0-9]*)\//g,
-            XSSRegex: /<(|\/|[^>\/bi]|\/[^>bi]|[^\/>][^>]+|\/[^>][^>]+)>/g,
-            URLstyle: "color:#607D8B",
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
