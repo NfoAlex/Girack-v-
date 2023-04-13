@@ -33,6 +33,7 @@ export default {
             uri: backendURI,
             txt: "",
             channelid: "",
+            channelname: "",
 
             dialogChannelMove: false, //チャンネル移動確認ダイアログ
             confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -87,6 +88,9 @@ export default {
                     }
                 });
 
+                //入力欄に表示するためのチャンネル名を取得
+                this.channelname = this.ChannelIndex[this.getPath].channelname;
+                
                 //チャンネルを移動するごとに入力欄へフォーカス
                 this.$el.querySelector("#inp").focus();
 
@@ -169,17 +173,6 @@ export default {
             console.log("--- msg sent ---");
 
             this.resetReply(); //返信状態を初期化
-
-        },
-        
-        //チャンネル名を取得するだけ
-        getChannelname() {
-            try {
-                return ChannelIndex.value[this.$route.params.id].channelname; //チャンネル名取得、返す
-            }
-            catch (e) { //読み込めなかったらとりあえず返す
-                return "テキストチャンネル";
-            }
 
         },
 
@@ -325,7 +318,7 @@ export default {
                             style="height:fit-content"
                             id="inp"
                             ref="inp"
-                            :placeholder="getChannelname() + 'へ送信'"
+                            :placeholder="channelname + 'へ送信'"
                             @keydown.enter="msgSend"
                             variant="solo"
                             density="compact"
