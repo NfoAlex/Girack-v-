@@ -27,6 +27,7 @@ export default {
     },
 
     methods: {
+        //メッセージ本文のメンションやURLの着色などをする
         formatMessage(msg) {
             let msgCleaned = "";
             let REF = this;

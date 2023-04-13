@@ -89,6 +89,7 @@ export default {
             }
         },
 
+        //新着数の変化を監視してタブ名に新着数を出す
         MsgReadTime: {
             handler() {
                 let TotalNew = 0; //新着数のトータル
