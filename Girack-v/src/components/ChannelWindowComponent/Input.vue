@@ -195,7 +195,7 @@ export default {
         //メンション用のユーザー検索時にクリックされたら名前を自動入力する部分
         replaceQueryWithName(targetUserid) {
             //入力テキストの名前部分をIDへ置き換え
-            this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@<"+targetUserid+"> ");
+            this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@/"+targetUserid+"/ ");
             
             //返信状態をオフに
             this.ReplyState.isReplying = false;
