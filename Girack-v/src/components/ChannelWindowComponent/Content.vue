@@ -4,6 +4,7 @@ import { getCONFIG } from "../../config.js";
 import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
+import ContentMessageRender from "./ContentMessageRender.vue";
 const socket = getSocket();
 
 export default {
@@ -18,7 +19,7 @@ export default {
 
     },
 
-    components: { Userpage, URLpreview, ContentHoverMenu }, //ユーザーページ用
+    components: { Userpage, URLpreview, ContentHoverMenu, ContentMessageRender }, //ユーザーページ用
 
     data() {
         return {
@@ -181,6 +182,8 @@ export default {
 
             });
             
+
+            console.log("Content :: formatMessage : レンダー回数");
 
             //リンクをクリックできる形にする
             return msgCleaned.replace(this.URLRegex, (url) => {
@@ -722,11 +725,7 @@ export default {
                                 </p>
 
                                 <!-- メッセージ本文 -->
-                                <span
-                                    style="width:100%; word-wrap:break-word"
-                                    v-html="formatMessage(m.content)"
-                                >
-                                </span>
+                                <ContentMessageRender :content="m.content" />
 
                                 <!-- URLプレビュー用 -->
                                 <URLpreview v-if="m.hasUrl" :urlData="m.urlData" />
