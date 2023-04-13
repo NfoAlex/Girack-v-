@@ -131,7 +131,7 @@ export default {
                     v-if="link.img!==undefined&&link.img.length!==0"
                     class=""
                     @click="toggleImageDialog(index)"
-                    style="min-width:30%;"
+                    style="min-width:30%; cursor:pointer;"
                     :src="getImage(link.img)"
                 >
                     <!-- 画像が２枚以上あるならホバーで表示 -->
@@ -197,7 +197,7 @@ export default {
                 <div class="mx-auto">
                     <v-img
                         @click="toggleImageDialog(index)"
-                        style="margin:8px 4px; width:auto; min-width:150px; max-height:300px;"
+                        style="margin:8px 4px; width:auto; min-width:150px; max-height:300px; cursor:pointer;"
                         :src="getImage(link.url)"
                     >
                     </v-img>
