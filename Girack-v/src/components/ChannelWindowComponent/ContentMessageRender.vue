@@ -60,10 +60,6 @@ export default {
 
                 });
 
-            
-
-            console.log("Content :: formatMessage : レンダー回数");
-
             //リンクをクリックできる形にする
             return msgCleaned.replace(this.URLRegex, (url) => {
                 return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
