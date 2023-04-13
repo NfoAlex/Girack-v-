@@ -151,48 +151,6 @@ export default {
     },
 
     methods: {
-        //テキストからURLを検出して置き換える
-        formatMessage(msg) {
-            let msgCleaned = "";
-            let REF = this;
-
-            //XSS対策用
-            msgCleaned = String(msg).replace(this.XSSRegex, function(c){
-                return '&#'+c.charCodeAt(0)+';';
-
-            });
-
-            //自分に対するメンションなら着色
-            msgCleaned = msgCleaned.replace(("@/"+this.Userinfo.userid + "/"), function(c){
-                return "<span style='color:orange'>@" + REF.Userinfo.username + "</span>";
-
-            });
-
-            //人のメンションならセカンダリーの色に着色
-            
-            msgCleaned = msgCleaned.replace(this.mentionRegex, function(c){
-                let userid = "";
-
-                //ユーザーIDを抽出
-                userid = c.substring(2);
-                userid = userid.substring(userid.length-1,0);
-
-                //IDをユーザー名に置き換えて出力
-                return "<span style='color:#7C96AB'>@" + ( REF.UserIndex[userid]!==undefined ? REF.UserIndex[userid].username : REF.needUserIndex(userid) ) + "</span>";
-
-            });
-            
-
-            console.log("Content :: formatMessage : レンダー回数");
-
-            //リンクをクリックできる形にする
-            return msgCleaned.replace(this.URLRegex, (url) => {
-                return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
-
-            });
-
-        },
-
         //ユーザーの情報取得するだけ
         getUserStats(userid, category) {
             switch(category) {
