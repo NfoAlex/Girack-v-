@@ -242,6 +242,9 @@ export default {
             }
         });
 
+        //入力欄に表示するためのチャンネル名を取得
+        this.channelname = this.ChannelIndex[this.getPath].channelname;
+
     },
 
     unmounted() {
