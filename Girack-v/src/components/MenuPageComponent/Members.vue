@@ -69,6 +69,8 @@ export default {
             if ( dat.type === "user" ) {
                 this.userList = dat.userList; //ユーザーリストを設定
 
+                console.log("Members :: mounted : データ受信 -> ", dat);
+
                 //名前順でソートして表示用の配列へ追加
                 this.userListDisplay = dat.userList.sort((u1, u2) => {
                     let U1 = u1.name.toLowerCase();
@@ -153,7 +155,7 @@ export default {
                         <v-avatar :image="imgsrc + item.userid"></v-avatar>
                         
                         <!-- オンライン状態 -->
-                        <v-icon style="margin-left:2%;" :color="item.loggedin?'green':'grey'">
+                        <v-icon style="margin-left:2%;" :color="item.state.loggedin?'green':'grey'">
                                 mdi:mdi-circle-medium
                         </v-icon>
 

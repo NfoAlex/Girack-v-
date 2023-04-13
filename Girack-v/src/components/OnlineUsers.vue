@@ -32,7 +32,7 @@ export default {
     methods: {
         //表示する用のリストを整形
         setUsernameFromList() {
-            this.userListDisplay = this.userList.filter((u) => u.loggedin===true?u:null);
+            this.userListDisplay = this.userList.filter((u) => u.state.loggedin===true?u:null);
             
         }
     },

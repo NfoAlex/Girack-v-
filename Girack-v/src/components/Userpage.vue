@@ -146,6 +146,8 @@ export default {
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
 
+                console.log("Userpage :: infoUser : data ", dat);
+
                 //ターゲットユーザーの情報を設定
                 this.targetUserRole = this.targetinfo.role;
                 this.targetUserBanned = this.targetinfo.banned;
