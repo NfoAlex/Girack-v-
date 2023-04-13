@@ -4,6 +4,7 @@ import { getCONFIG } from "../../config.js";
 import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import URLpreview from "./URLpreview.vue";
+import ContentMessageRender from "./ContentMessageRender.vue";
 const socket = getSocket();
 
 export default {
@@ -18,16 +19,11 @@ export default {
 
     },
 
-    components: { Userpage, URLpreview, ContentHoverMenu }, //ユーザーページ用
+    components: { Userpage, URLpreview, ContentHoverMenu, ContentMessageRender }, //ユーザーページ用
 
     data() {
         return {
             uri: backendURI, //バックエンドのURI
-            
-            //URL検出用
-            URLRegex: /((https|http)?:\/\/[^\s]+)/g,
-            XSSRegex: /<(|\/|[^>\/bi]|\/[^>bi]|[^\/>][^>]+|\/[^>][^>]+)>/g,
-            URLstyle: "color:#607D8B",
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -93,6 +89,7 @@ export default {
             }
         },
 
+        //新着数の変化を監視してタブ名に新着数を出す
         MsgReadTime: {
             handler() {
                 let TotalNew = 0; //新着数のトータル
@@ -149,30 +146,6 @@ export default {
     },
 
     methods: {
-        //テキストからURLを検出して置き換える
-        formatMessage(msg) {
-            let msgCleaned = "";
-
-            //XSS対策用
-            msgCleaned = String(msg).replace(this.XSSRegex, function(c){
-                return '&#'+c.charCodeAt(0)+';';
-
-            });
-
-            //自分に対するメンションなら着色
-            msgCleaned = msgCleaned.replace(("@"+this.Userinfo.username), function(c){
-                return "<span style='color:orange'>" + c + "</span>";
-
-            });
-
-            //リンクをクリックできる形にする
-            return msgCleaned.replace(this.URLRegex, (url) => {
-                return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
-
-            });
-
-        },
-
         //ユーザーの情報取得するだけ
         getUserStats(userid, category) {
             switch(category) {
@@ -196,6 +169,7 @@ export default {
 
                 //変なエラー避け
                 default:
+                    console.log("なにもないね");
                     return null;
 
             }
@@ -636,7 +610,7 @@ export default {
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
-                    <v-img @click="()=>{userDialogShow=true; userDialogUserid=m.userid}" :alt="m.userid" :src="uri + '/img/' + m.userid"></v-img>
+                    <v-img @click="()=>{userDialogShow=true; userDialogUserid=m.userid}" class="pointed" :alt="m.userid" :src="uri + '/img/' + m.userid"></v-img>
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
@@ -704,11 +678,7 @@ export default {
                                 </p>
 
                                 <!-- メッセージ本文 -->
-                                <span
-                                    style="width:100%; word-wrap:break-word"
-                                    v-html="formatMessage(m.content)"
-                                >
-                                </span>
+                                <ContentMessageRender :content="m.content" />
 
                                 <!-- URLプレビュー用 -->
                                 <URLpreview v-if="m.hasUrl" :urlData="m.urlData" />
@@ -781,6 +751,11 @@ export default {
 .hovered
 {
     background-color: #444 !important;
+}
+
+.pointed
+{
+    cursor: pointer;
 }
 
 .msgBackgroundMid

@@ -6,6 +6,8 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
+export const CLIENT_VERSION = "alpha_20230413";
+
 const {
     CONFIG_NOTIFICATION,
     LIST_NOTIFICATION_MUTE_CHANNEL,
@@ -14,6 +16,7 @@ const {
 
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
+
 const socket = io(backendURI, {
     transports : ['websocket'],
     reconnection: true,
@@ -189,7 +192,7 @@ socket.on("messageReceive", (msg) => {
 
         } else { //すでにあるなら加算
             //メンションか自分への返信ならメンションを加算
-            if ( msg.content.includes("@" + Userinfo.value.username) || msg.replyData.userid === Userinfo.value.userid ) {
+            if ( msg.content.includes("@/" + Userinfo.value.userid + "/") || msg.replyData.userid === Userinfo.value.userid ) {
                 if ( MsgReadTime.value[msg.channelid].mention === null ) {
                     MsgReadTime.value[msg.channelid].mention = 0;
 
@@ -222,10 +225,18 @@ socket.on("messageReceive", (msg) => {
 
             } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
                 //メンションの条件である@<名前>が入っているか
-                if ( msg.content.includes("@" + Userinfo.value.username) ) {
+                if ( msg.content.includes("@/" + Userinfo.value.userid + "/") ) {
+                    let contentToDisplay = msg.content.replace(/@\/([0-9]*)\//g,(mentionedId) => {
+                        if ( mentionedId.includes(Userinfo.value.userid) ) {
+                            return "@" + Userinfo.value.username;
+
+                        }
+
+                    });
+
                     //通知を出す
                     new Notification(ChannelIndex.value[msg.channelid].channelname, {
-                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + contentToDisplay,
                         icon: backendURI + "/img/" + msg.userid + ".jpeg"
                     });
 
@@ -365,7 +376,8 @@ socket.on("serverinfo", (dat) => {
     Serverinfo.value = {
         servername: dat.servername, //サーバーの名前
         registerAvailable: dat.registerAvailable, //登録できるかどうか
-        inviteOnly: dat.inviteOnly //招待オンリーかどうか
+        inviteOnly: dat.inviteOnly, //招待オンリーかどうか
+        serverVersion: dat.serverVersion //サーバー側のバージョン
     };
 
 });

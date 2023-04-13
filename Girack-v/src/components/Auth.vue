@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getCookie } from "../socket.js";
+import { getSocket, getCookie, CLIENT_VERSION } from "../socket.js";
 const socket = getSocket();
 
 export default {
@@ -19,6 +19,8 @@ export default {
             //見た目
             tab: null, //ログインと登録のタブ用
             Connected: false, //接続状況の保存用
+            clientVersion: CLIENT_VERSION, //クライアントのバージョン
+            clientVersionDifference: false, //サーバーとバージョンが違っていた時に見せるダイアログ
 
             //入力用
             usernameForRegister: "", //登録したいユーザー名
@@ -61,7 +63,7 @@ export default {
 
             //クッキーに認証情報があるか確認
             if ( getCookie("sessionid") !== "" ) {
-                socket.emit("authByCookie", getCookie("sessionid"));
+                socket.emit("authByCookie", getCookie("sessionid"), CLIENT_VERSION);
                 return;
 
             }
@@ -107,6 +109,12 @@ export default {
             this.serverinfoLoaded = dat; //サーバーの情報
             document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
 
+            //もしサーバーとクライアントがバージョンが違っていたら
+            if ( this.serverinfoLoaded.serverVersion !== CLIENT_VERSION ) {
+                this.clientVersionDifference = true;
+
+            }
+
         });
 
         //接続確認できたら接続できた状態にする
@@ -129,6 +137,24 @@ export default {
 </script>
 
 <template>
+    <v-dialog
+        v-model="clientVersionDifference"
+        style="width:50vw; min-width:400px; "
+        persistent
+    >
+        <v-card class="pa-2 rounded-lg">
+            <v-card-title>
+                注意
+            </v-card-title>
+            <p class="pa-3">
+                どうやらサーバーとクライアントでバージョンが違うようです
+            </p>
+            <v-card color="grey" class="pa-3 ma-4 rounded-lg flex-column d-flex justify-center align-center">
+                <p>サーバーのバージョン : <code>{{ serverinfoLoaded.serverVersion }}</code></p>
+                <p>クライアントのバージョン : <code>{{ clientVersion }}</code></p>
+            </v-card>
+        </v-card>
+    </v-dialog>
     <p class="text-h4" style="margin:2% auto; text-align:center">
         {{ serverinfoLoaded.servername }}
     </p>

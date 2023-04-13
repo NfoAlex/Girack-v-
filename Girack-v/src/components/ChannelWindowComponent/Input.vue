@@ -1,10 +1,9 @@
 <script>
 
-import { dataUser, dataMsg, dataChannel, getSocket, getMessage } from '../../socket.js';
+import { dataUser, dataMsg, dataChannel, getSocket, getMessage, backendURI } from '../../socket.js';
 import { ref } from "vue";
 
 const socket = getSocket();
-
 
 //返信モード
 const ReplyState = ref({
@@ -31,6 +30,7 @@ export default {
     
     data() {
         return {
+            uri: backendURI,
             txt: "",
             channelid: "",
 
@@ -42,7 +42,30 @@ export default {
             contentDisplay: {
                 username: "",
                 content: ""
-            }
+            },
+
+            searchMode: {
+                enabled: false, //検索モードに入っているかどうか
+                searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
+                searchingQuery: "" //検索してる文字列
+            },
+
+            searchDisplayArray: [], //検索するときに表示する配列
+            userHereArray: [], //このチャンネルに参加しているユーザー配列
+            searchDemoArray : [
+                {
+                    username: "Alex",
+                    role: "Admin"
+                }, 
+                {
+                    username: 'guest',
+                    role: "Admin"
+                },
+                {
+                    username: "guy",
+                    role: "Member"
+                }
+            ] //ToDo::検索機能用デモ配列
         }
     },
 
@@ -56,6 +79,8 @@ export default {
             },
             deep: true
         },
+
+        //ページの変更を監視
         $route: {
             handler(newPage, oldPage) {
                 console.log("Input :: watch($route) : チャンネル変えてそう", newPage.params.id, oldPage.params.id);
@@ -67,7 +92,54 @@ export default {
 
                 }
 
+                //ここに参加している人リストを取得
+                socket.emit("getInfoChannelJoinedUserList", {
+                    targetid: this.getPath,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+
             }
+        },
+
+        //(メンション用)入力したテキストを監視してユーザー名を検索しようとしているか調べる
+        txt() {
+            //@が入力されたら検索モードに入る
+            if ( this.txt[this.txt.length-1] === "@" ) {
+                this.searchMode.enabled = true;
+                this.searchMode.indexStarting = this.txt.length-1;
+
+            }
+
+            //スペースが入力された、あるいは文字が空になったら検索モードを終了
+            if ( this.txt[this.txt.length-1] === " " || this.txt[this.txt.length-1] === "　" || this.txt.length === 0 ) {
+                this.searchMode.enabled = false;
+
+            }
+
+            //検索モードに入っているなら検索する
+            if ( this.searchMode.enabled ) {
+                //検索文字列を取得
+                this.searchMode.searchingQuery = this.txt.substring(this.searchMode.indexStarting+1);
+
+                console.log("Input :: watch(txt) : 検索する文字列 -> ", this.searchMode.searchingQuery);
+
+                //検索語で配列をフィルターして標示用の配列へ設定
+                this.searchDisplayArray = this.channelJoinedUserArray.filter((u)=> {
+                    //ユーザー名に検索語が含まれていたら出力
+                    if ( (u.username).includes(this.searchMode.searchingQuery) ) {
+                        return u.username;
+
+                    }
+
+                });
+
+                console.log("Input :: watch(txt) : 検索結果 -> ", this.searchDisplayArray);
+
+            }
+
         }
     },
 
@@ -75,7 +147,7 @@ export default {
         //現在のパスからチャンネルのID返すだけ
         getPath() {
             return this.$route.params.id; //パス
-        }
+        },
     },
 
     methods: {
@@ -97,7 +169,11 @@ export default {
                     isReplying: ReplyState.value.isReplying, //これは返信かどうか
                     messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null, //返信先のメッセージID
                 },
-                content: this.txt //メッセージの本文
+                content: this.txt, //メッセージの本文
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
             });
             
             this.txt = ""; //入力欄を空に
@@ -122,6 +198,16 @@ export default {
         resetReply() {
             ReplyState.value.isReplying = false;
             ReplyState.value.messageid = "0";
+
+        },
+
+        //メンション用のユーザー検索時にクリックされたら名前を自動入力する部分
+        replaceQueryWithName(targetUserid) {
+            //入力テキストの名前部分をIDへ置き換え
+            this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@/"+targetUserid+"/ ");
+            
+            //返信状態をオフに
+            this.ReplyState.isReplying = false;
 
         },
 
@@ -154,6 +240,23 @@ export default {
             }
 
         }
+    },
+
+    mounted() {
+        socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
+            this.channelJoinedUserArray = channelJoinedUserList;
+
+        });
+
+        //ここに参加している人リストを取得
+        socket.emit("getInfoChannelJoinedUserList", {
+            targetid: this.getPath,
+            reqSender: {
+                userid: this.Userinfo.userid,
+                sessionid: this.Userinfo.sessionid
+            }
+        });
+
     },
 
     unmounted() {
@@ -203,10 +306,12 @@ export default {
             <v-icon class="ma-2">
                 mdi:mdi-reply
             </v-icon>
+            <!-- 返信先 -->
             <p class="text-truncate">
                 {{ contentDisplay.username }} :: {{ contentDisplay.content }}
             </p>
-            <v-btn style="margin-left:8px;" class="rounded-lg" icon="" color="orange" size="x-small" @click="resetReply">
+            <!-- 返信キャンセルボタン -->
+            <v-btn style="margin-left:8px;" class="rounded-lg" icon="" color="grey" size="x-small" @click="resetReply">
                 <v-icon>
                     mdi:mdi-close
                 </v-icon>
@@ -216,18 +321,41 @@ export default {
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
 
             <v-container fill-height fluid class="d-flex">
-                <v-text-field
-                    style="height:fit-content"
-                    ref="inp"
-                    :placeholder="getChannelname() + 'へ送信'"
-                    @keydown.enter="msgSend"
-                    variant="solo"
-                    density="compact"
-                    clearable
-                    v-model="txt"
-                    :single-line="true"
+
+                <v-menu
+                    label="list"
+                    location="top"
                 >
-                </v-text-field>
+                    <template v-slot:activator="{ props }">
+                        <!-- 入力部分 -->
+                        <v-text-field
+                            style="height:fit-content"
+                            ref="inp"
+                            :placeholder="getChannelname() + 'へ送信'"
+                            @keydown.enter="msgSend"
+                            variant="solo"
+                            density="compact"
+                            clearable
+                            v-model="txt"
+                            v-bind="props"
+                            :single-line="true"
+                        >
+                        </v-text-field>
+                    </template>
+
+                    <!-- ユーザー検索候補の表示 -->
+                    <v-list max-height="30vh" v-if="searchMode.enabled">
+                        <v-list-item
+                            v-for="i in searchDisplayArray"
+                        >
+                            <v-avatar size="3%">
+                                <v-img :src="uri + '/img/' + i.userid">
+                                </v-img>
+                            </v-avatar>
+                            <span style="margin-left:8px;" @click="replaceQueryWithName(i.userid)">{{ i.username }}</span>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
             
                 <v-btn @click="msgSend(null,'byBtn')" icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
                     <v-icon icon="mdi:mdi-send-outline"></v-icon>
