@@ -52,20 +52,6 @@ export default {
 
             searchDisplayArray: [], //検索するときに表示する配列
             userHereArray: [], //このチャンネルに参加しているユーザー配列
-            searchDemoArray : [
-                {
-                    username: "Alex",
-                    role: "Admin"
-                }, 
-                {
-                    username: 'guest',
-                    role: "Admin"
-                },
-                {
-                    username: "guy",
-                    role: "Member"
-                }
-            ] //ToDo::検索機能用デモ配列
         }
     },
 
@@ -100,6 +86,9 @@ export default {
                         sessionid: this.Userinfo.sessionid
                     }
                 });
+
+                //チャンネルを移動するごとに入力欄へフォーカス
+                this.$el.querySelector("#inp").focus();
 
             }
         },
@@ -209,6 +198,9 @@ export default {
             //返信状態をオフに
             this.ReplyState.isReplying = false;
 
+            //入力欄へフォーカスしなおす
+            this.$el.querySelector("#inp").focus();
+
         },
 
         //一つ前のチャンネルに戻る
@@ -271,6 +263,7 @@ export default {
 <template>
     <div>
 
+        <!-- 返信する前にチャンネル移動しようとしたときの警告 -->
         <v-dialog
             v-model="dialogChannelMove"
             width="40vh"
@@ -330,6 +323,7 @@ export default {
                         <!-- 入力部分 -->
                         <v-text-field
                             style="height:fit-content"
+                            id="inp"
                             ref="inp"
                             :placeholder="getChannelname() + 'へ送信'"
                             @keydown.enter="msgSend"
