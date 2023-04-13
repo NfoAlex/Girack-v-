@@ -226,9 +226,17 @@ socket.on("messageReceive", (msg) => {
             } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
                 //メンションの条件である@<名前>が入っているか
                 if ( msg.content.includes("@/" + Userinfo.value.userid + "/") ) {
+                    let contentToDisplay = msg.content.replace(/@\/([0-9]*)\//g,(mentionedId) => {
+                        if ( mentionedId.includes(Userinfo.value.userid) ) {
+                            return "@" + Userinfo.value.username;
+
+                        }
+
+                    });
+
                     //通知を出す
                     new Notification(ChannelIndex.value[msg.channelid].channelname, {
-                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + contentToDisplay,
                         icon: backendURI + "/img/" + msg.userid + ".jpeg"
                     });
 
