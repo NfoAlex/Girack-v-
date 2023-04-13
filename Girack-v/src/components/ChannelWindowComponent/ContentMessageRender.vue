@@ -1,6 +1,8 @@
 <script>
 
-import { dataMsg, dataUser } from "../../socket.js";
+import { getSocket, dataMsg, dataUser } from "../../socket.js";
+
+const socket = getSocket();
 
 export default {
 
@@ -68,11 +70,25 @@ export default {
             });
 
             } catch(e) {
-                
+                console.log("ContentMessageRender :: formatMessage : エラー -> ", e);
                 return "<span color='red'>レンダー中にエラー発生...</span>"
 
             }
             
+
+        },
+
+        //もし人のやつほしくなったら
+        needUserIndex(userid) {
+            socket.emit("getInfoUser", {
+                targetid: userid,
+                reqSender: {
+                    userid: this.Userinfo.userid, //ユーザーID
+                    sessionid: this.Userinfo.sessionid //セッションID
+                }
+            });
+
+            return userid;
 
         },
     }
