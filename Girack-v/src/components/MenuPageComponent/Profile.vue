@@ -137,169 +137,169 @@ export default {
 </script>
 
 <template>
+    <div>
+        <!-- 画像アップロード用ダイアログ -->
+        <v-dialog
+            v-model="iconUploadDialog"
+            style="min-width:650px; width:50vh;"
+        >
+            <v-card v-if="!iconUploadDone" class="rounded-lg pa-6">
 
-    <!-- 画像アップロード用ダイアログ -->
-    <v-dialog
-        v-model="iconUploadDialog"
-        style="min-width:650px; width:50vh;"
-    >
-        <v-card v-if="!iconUploadDone" class="rounded-lg pa-6">
+                <v-card-title>
+                    アイコンアップロード
+                </v-card-title>
 
-            <v-card-title>
-                アイコンアップロード
-            </v-card-title>
+                <v-alert
+                    title="注意"
+                    type="info"
+                    class="ma-1 rounded-lg"
+                >
+                    <p class="text-subtitle-2">
+                        現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
+                        表示がおかしくります。だから予め自分でクロップしてね
+                    </p>
+                </v-alert>
 
-            <v-alert
-                title="注意"
-                type="info"
-                class="ma-1 rounded-lg"
-            >
-                <p class="text-subtitle-2">
-                    現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
-                    表示がおかしくります。だから予め自分でクロップしてね
-                </p>
-            </v-alert>
-
-            <div style="margin-top:32px;">
-                <v-file-input
-                    accept="image/jpeg, image/gif"
-                    :rules="iconUploadRule"
-                    v-model="iconUploadFile"
-                    class="ma-3"
-                    label="アイコン用画像(1MB以下)"
-                    show-size
-                ></v-file-input>
-            </div>
-
-            <v-btn :disabled="!iconUploadable" @click="uploadIcon" class="rounded-lg" color="primary">
-                更新
-            </v-btn>
-
-        </v-card>
-
-        <v-card v-if="iconUploadDone" class="rounded-lg">
-
-            <v-card-title>
-                アイコンアップロード
-            </v-card-title>
-
-            <div style="margin-top:32px;">
-                <p class="text-h4 text-center">🖼️</p>
-                <p class="text-center ma-4">
-                    アイコンを更新しました!<br>
-                    更新を確認するにはリロードしてみてね
-                </p>
-                <div class="mx-auto pa-1" style="width:fit-content">
-                    <v-btn class="ma-2 rounded-lg" @click="reloadPage" color="secondary">
-                        <v-icon>
-                            mdi:mdi-reload
-                        </v-icon>
-                        リロード
-                    </v-btn>
-                    <v-btn class="ma-2 rounded-lg" @click="iconUploadDialog=false;" color="grey">
-                        <v-icon>
-                            mdi:mdi-close-box
-                        </v-icon>
-                        閉じる
-                    </v-btn>
+                <div style="margin-top:32px;">
+                    <v-file-input
+                        accept="image/jpeg, image/gif"
+                        :rules="iconUploadRule"
+                        v-model="iconUploadFile"
+                        class="ma-3"
+                        label="アイコン用画像(1MB以下)"
+                        show-size
+                    ></v-file-input>
                 </div>
-            </div>
 
-        </v-card>
-    </v-dialog>
+                <v-btn :disabled="!iconUploadable" @click="uploadIcon" class="rounded-lg" color="primary">
+                    更新
+                </v-btn>
 
-    <div style="width:80%; margin-top:5%; height:90%;">
-            <v-container class="bg-surface-variant">
-                <v-row no-gutters>
+            </v-card>
 
-                    <v-col cols="2">
-                        <!-- アバター -->
-                        <v-card @click="" variant="tonal" :class="cd" style="padding:0">
-                            <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid">
-                                <v-tooltip
-                                    activator="parent"
-                                    location="top center"
-                                    origin="overlap"
-                                >
-                                    アイコンを変更
-                                </v-tooltip>
-                            </v-img>
-                        </v-card>
-                    </v-col>
+            <v-card v-if="iconUploadDone" class="rounded-lg">
 
-                    <v-col>
-                        <!-- ユーザー名の部分 -->
-                        <div variant="tonal" :class="cd" style="padding:1% 10% ">
-                            <!-- ユーザーID -->
-                            <p class="text-left text-h6">
-                                # {{ Userinfo.userid }}
-                            </p>
-                            <!-- ユーザー名 -->
-                            <p
-                                v-if="!nameEditing"
-                                @dblclick="toggleEditing"
-                                class="text-h4 text-left text-truncate"
-                            >
-                                {{ Userinfo.username }}
-                            </p>
-                            <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
-                            <!-- ユーザー名編集時 -->
-                            <v-text-field
-                                v-if="nameEditing"
-                                v-model="nameDisplaying"
-                                counter
-                                maxlength="32"
-                                variant="solo"
-                            >
-                                <template v-slot:append-inner>
-                                    <v-btn
-                                        @click="updateName"
-                                        :disabled="nameDisplaying.length>=32"
-                                        color="secondary"
-                                        size="x-small"
-                                        icon="mdi:mdi-check-bold"
-                                        class="rounded-lg"
-                                        style="margin:0 4px 0 8px; float:right"
+                <v-card-title>
+                    アイコンアップロード
+                </v-card-title>
+
+                <div style="margin-top:32px;">
+                    <p class="text-h4 text-center">🖼️</p>
+                    <p class="text-center ma-4">
+                        アイコンを更新しました!<br>
+                        更新を確認するにはリロードしてみてね
+                    </p>
+                    <div class="mx-auto pa-1" style="width:fit-content">
+                        <v-btn class="ma-2 rounded-lg" @click="reloadPage" color="secondary">
+                            <v-icon>
+                                mdi:mdi-reload
+                            </v-icon>
+                            リロード
+                        </v-btn>
+                        <v-btn class="ma-2 rounded-lg" @click="iconUploadDialog=false;" color="grey">
+                            <v-icon>
+                                mdi:mdi-close-box
+                            </v-icon>
+                            閉じる
+                        </v-btn>
+                    </div>
+                </div>
+
+            </v-card>
+        </v-dialog>
+        <div style="margin-top:5%; height:90%;">
+                <v-container class="bg-surface-variant">
+                    <v-row no-gutters>
+
+                        <v-col cols="2">
+                            <!-- アバター -->
+                            <v-card @click="" variant="tonal" :class="cd" style="padding:0">
+                                <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid">
+                                    <v-tooltip
+                                        activator="parent"
+                                        location="top center"
+                                        origin="overlap"
                                     >
-                                    </v-btn>
-                                    <v-btn @click="toggleEditing" color="secondary" size="x-small" icon="mdi:mdi-window-close" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
-                                    </v-btn>
-                                </template>
-                            </v-text-field>
-                        </div>
+                                        アイコンを変更
+                                    </v-tooltip>
+                                </v-img>
+                            </v-card>
+                        </v-col>
 
-                    </v-col>
+                        <v-col>
+                            <!-- ユーザー名の部分 -->
+                            <div variant="tonal" :class="cd" style="padding:1% 10% ">
+                                <!-- ユーザーID -->
+                                <p class="text-left text-h6">
+                                    # {{ Userinfo.userid }}
+                                </p>
+                                <!-- ユーザー名 -->
+                                <p
+                                    v-if="!nameEditing"
+                                    @dblclick="toggleEditing"
+                                    class="text-h4 text-left text-truncate"
+                                >
+                                    {{ Userinfo.username }}
+                                </p>
+                                <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
+                                <!-- ユーザー名編集時 -->
+                                <v-text-field
+                                    v-if="nameEditing"
+                                    v-model="nameDisplaying"
+                                    counter
+                                    maxlength="32"
+                                    variant="solo"
+                                >
+                                    <template v-slot:append-inner>
+                                        <v-btn
+                                            @click="updateName"
+                                            :disabled="nameDisplaying.length>=32"
+                                            color="secondary"
+                                            size="x-small"
+                                            icon="mdi:mdi-check-bold"
+                                            class="rounded-lg"
+                                            style="margin:0 4px 0 8px; float:right"
+                                        >
+                                        </v-btn>
+                                        <v-btn @click="toggleEditing" color="secondary" size="x-small" icon="mdi:mdi-window-close" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
+                                        </v-btn>
+                                    </template>
+                                </v-text-field>
+                            </div>
 
-                </v-row>
-            </v-container>
+                        </v-col>
 
-            <v-container class="bg-surface-variant">
-                <!-- ログアウトボタン -->
-                <v-row no-gutters>
+                    </v-row>
+                </v-container>
 
-                    <v-card variant="tonal" :class="cd" style="width:100%; ">
-                        <v-btn prepend-icon="mdi:mdi-logout" color="error" block @click="snackbar=true">Logout</v-btn>
-                        <v-snackbar
-                            v-model="snackbar"
-                        >
-                        ログアウトしていいの？
+                <v-container class="bg-surface-variant">
+                    <!-- ログアウトボタン -->
+                    <v-row no-gutters>
 
-                        <template v-slot:actions>
-                            <v-btn
-                            color="pink"
-                            variant="text"
-                            @click="logout"
+                        <v-card variant="tonal" :class="cd" style="width:100%; ">
+                            <v-btn prepend-icon="mdi:mdi-logout" color="error" block @click="snackbar=true">Logout</v-btn>
+                            <v-snackbar
+                                v-model="snackbar"
                             >
-                            うん！
-                            </v-btn>
-                        </template>
-                        </v-snackbar>
-                    </v-card>
+                            ログアウトしていいの？
 
-                </v-row>
-            </v-container>
+                            <template v-slot:actions>
+                                <v-btn
+                                color="pink"
+                                variant="text"
+                                @click="logout"
+                                >
+                                うん！
+                                </v-btn>
+                            </template>
+                            </v-snackbar>
+                        </v-card>
+
+                    </v-row>
+                </v-container>
 
         </div>
+    </div>
 </template>
 
 <style scoped>
