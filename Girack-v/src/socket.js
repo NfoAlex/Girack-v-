@@ -368,7 +368,8 @@ socket.on("serverinfo", (dat) => {
     Serverinfo.value = {
         servername: dat.servername, //サーバーの名前
         registerAvailable: dat.registerAvailable, //登録できるかどうか
-        inviteOnly: dat.inviteOnly //招待オンリーかどうか
+        inviteOnly: dat.inviteOnly, //招待オンリーかどうか
+        serverVersion: dat.serverVersion //サーバー側のバージョン
     };
 
 });
