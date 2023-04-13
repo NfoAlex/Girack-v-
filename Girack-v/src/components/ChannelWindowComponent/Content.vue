@@ -162,8 +162,8 @@ export default {
             });
 
             //自分に対するメンションなら着色
-            msgCleaned = msgCleaned.replace(("@"+this.Userinfo.username), function(c){
-                return "<span style='color:orange'>" + c + "</span>";
+            msgCleaned = msgCleaned.replace(("@/"+this.Userinfo.userid + "/"), function(c){
+                return "<span style='color:orange'>@" + REF.Userinfo.username + "</span>";
 
             });
 
