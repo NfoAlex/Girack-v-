@@ -6,6 +6,8 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
+export const CLIENT_VERSION = "alpha_20230411";
+
 const {
     CONFIG_NOTIFICATION,
     LIST_NOTIFICATION_MUTE_CHANNEL,
@@ -14,6 +16,7 @@ const {
 
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
+
 const socket = io(backendURI, {
     transports : ['websocket'],
     reconnection: true,
