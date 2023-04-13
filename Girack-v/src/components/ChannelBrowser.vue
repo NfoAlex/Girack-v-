@@ -181,13 +181,10 @@ export default {
     <v-dialog
         v-model="overlayChannelCreate"
         class="align-center justify-center"
-        style="width:40%"
+        style="width:50%"
     >
         <v-card class="rounded-lg" style="padding:5%;">
-
-            <p class="text-h5">チャンネル作成</p>
-
-            <v-divider />
+            <p class="text-h6" style="margin:3% 0;">チャンネル作成</p>
 
             <br>
 
