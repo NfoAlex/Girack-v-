@@ -47,6 +47,7 @@ export default {
             searchMode: {
                 enabled: false, //検索モードに入っているかどうか
                 searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
+                searchingQuery: "" //検索してる文字列
             },
 
             searchDisplayArray: [], //検索するときに表示する配列
@@ -94,7 +95,7 @@ export default {
             }
         },
 
-        //入力したテキストを監視してユーザー名を検索しようとしているか調べる
+        //(メンション用)入力したテキストを監視してユーザー名を検索しようとしているか調べる
         txt() {
             //@が入力されたら検索モードに入る
             if ( this.txt[this.txt.length-1] === "@" ) {
@@ -112,14 +113,14 @@ export default {
             //検索モードに入っているなら検索する
             if ( this.searchMode.enabled ) {
                 //検索文字列を取得
-                let searchQuery = this.txt.substring(this.searchMode.indexStarting+1);
+                this.searchMode.searchingQuery = this.txt.substring(this.searchMode.indexStarting+1);
 
-                console.log("Input :: watch(txt) : 検索する文字列 -> ", searchQuery);
+                console.log("Input :: watch(txt) : 検索する文字列 -> ", this.searchMode.searchingQuery);
 
                 //検索語で配列をフィルターして標示用の配列へ設定
                 this.searchDisplayArray = this.channelJoinedUserArray.filter((u)=> {
                     //ユーザー名に検索語が含まれていたら出力
-                    if ( (u.username).includes(searchQuery) ) {
+                    if ( (u.username).includes(this.searchMode.searchingQuery) ) {
                         return u.username;
 
                     }
@@ -188,6 +189,16 @@ export default {
         resetReply() {
             ReplyState.value.isReplying = false;
             ReplyState.value.messageid = "0";
+
+        },
+
+        //メンション用のユーザー検索時にクリックされたら名前を自動入力する部分
+        replaceQueryWithName(targetUserid) {
+            //入力テキストの名前部分をIDへ置き換え
+            this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@<"+targetUserid+"> ");
+            
+            //返信状態をオフに
+            this.ReplyState.isReplying = false;
 
         },
 
@@ -324,12 +335,15 @@ export default {
                     </template>
 
                     <!-- ユーザー検索候補の表示 -->
-                    <v-list v-if="searchMode.enabled">
+                    <v-list max-height="30vh" v-if="searchMode.enabled">
                         <v-list-item
                             v-for="i in searchDisplayArray"
                         >
-                            <v-icon :src="uri + '/img/' + i.userid"></v-icon>
-                            {{ i.username }}
+                            <v-avatar size="3%">
+                                <v-img :src="uri + '/img/' + i.userid">
+                                </v-img>
+                            </v-avatar>
+                            <span style="margin-left:8px;" @click="replaceQueryWithName(i.userid)">{{ i.username }}</span>
                         </v-list-item>
                     </v-list>
                 </v-menu>
