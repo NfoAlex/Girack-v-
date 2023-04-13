@@ -92,6 +92,15 @@ export default {
 
                 }
 
+                //ここに参加している人リストを取得
+                socket.emit("getInfoChannelJoinedUserList", {
+                    targetid: this.getPath,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+
             }
         },
 
