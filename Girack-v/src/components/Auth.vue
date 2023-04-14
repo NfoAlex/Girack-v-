@@ -38,7 +38,7 @@ export default {
     methods: {
         //認証申請
         requestAuth() {
-            socket.emit("auth", this.pwForAuth);
+            socket.emit("auth", this.pwForAuth, CLIENT_VERSION);
             this.success = false;
             this.error = false;
 
