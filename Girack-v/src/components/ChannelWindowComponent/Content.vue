@@ -76,9 +76,14 @@ export default {
 
         //チャンネルの移動を監視
         $route: { //URLパスの変更監視
-            handler() {
+            handler(newPage, oldPage) {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
+                    //チャンネル以外の場合、以降の処理をスキップする
+                    if (!(newPage.path.startsWith('/c/'))) {
+                        return 0;
+                    }
+
                     this.scrollIt(); //スクロールする
                     this.MsgReadTime[this.getPath] = {
                         new: 0 //新着メッセージ数を0に

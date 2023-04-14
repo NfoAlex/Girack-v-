@@ -79,6 +79,11 @@ export default {
 
                 }
 
+                //チャンネル以外の場合、以降の処理をスキップする
+                if (!(newPage.path.startsWith('/c/'))) {
+                    return 0;
+                }
+
                 //ここに参加している人リストを取得
                 socket.emit("getInfoChannelJoinedUserList", {
                     targetid: this.getPath,
