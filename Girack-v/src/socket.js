@@ -382,25 +382,6 @@ socket.on("serverinfo", (dat) => {
 
 });
 
-//ToDo:削除
-//情報受け取り
-socket.on("infoResult", (dat) => {
-    console.log("socket :: infoResult : 情報受け取り!");
-    console.log(dat);
-
-    //データがサーバー用なら
-    if ( dat.type === "server" ) {
-        //サーバーの基本情報の更新
-        Serverinfo.value = {
-            servername: dat.servername, //サーバーの名前
-            registerAvailable: dat.registerAvailable, //登録できるかどうか
-            inviteOnly: dat.inviteOnly //招待オンリーかどうか
-        };
-
-    }
-
-});
-
 //チャンネル情報の更新
 socket.on("infoChannel", (dat) => {
     //参加していないチャンネルならスルー

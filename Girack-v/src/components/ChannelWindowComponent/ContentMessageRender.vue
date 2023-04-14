@@ -47,7 +47,6 @@ export default {
                 });
 
                 //人のメンションならセカンダリーの色に着色
-                
                 msgCleaned = msgCleaned.replace(this.mentionRegex, function(c){
                     let userid = "";
 
