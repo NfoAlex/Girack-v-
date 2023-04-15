@@ -615,7 +615,31 @@ export default {
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
-                    <v-img @click="()=>{userDialogShow=true; userDialogUserid=m.userid}" class="pointed" :alt="m.userid" :src="uri + '/img/' + m.userid"></v-img>
+                    <v-img
+                        v-if="getUserStats(m.userid, 'role')!=='Deleted'"
+                        @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
+                        class="pointed"
+                        :alt="m.userid"
+                        :src="uri + '/img/' + m.userid"
+                    >
+                    </v-img>
+
+                    <!-- 消去されているユーザーなら -->
+                    <v-img
+                        v-else
+                        :alt="m.userid"
+                        :src="uri + '/img/' + m.userid"
+                    >
+                    </v-img>
+                </v-avatar>
+
+                <!-- アバター -->
+                <v-avatar v-else class="mx-auto" size="48">
+                    <v-img
+                        v-if="getUserStats(m.userid, 'role')!=='Deleted'"
+                        height="0"
+                    >
+                    </v-img>
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
