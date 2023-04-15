@@ -619,7 +619,10 @@ export default {
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
-                <span :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]" style="width:90%; padding-left:1.5%; padding-right:1.5%">
+                <span
+                    :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
+                    style="width:90%; padding-left:1.5%; padding-right:1.5%"
+                >
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
@@ -648,7 +651,7 @@ export default {
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'role')!=='Member'&&CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                         style="margin-left:8px;"
-                                        :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
+                                        :color="getUserStats(m.userid, 'role')==='Admin'?'purple':(getUserStats(m.userid, 'role')==='Deleted'?'white':null)"
                                         size="x-small"
                                         :elevation="6"
                                     >
