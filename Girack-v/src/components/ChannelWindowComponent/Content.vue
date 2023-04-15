@@ -33,6 +33,14 @@ export default {
             userDialogShow: false,
             userDialogUserid : "00000001",
 
+            //ユーザーロールの色を返す
+            userRoleColor: {
+                "Admin": "purple",
+                "Moderator": "blue",
+                "Member": "white",
+                "Deleted": "black"
+            },
+
             goBottom: "goBottom" //下に行くボタン用CSSクラス
         }
     },
@@ -676,7 +684,7 @@ export default {
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'role')!=='Member'&&CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                         style="margin-left:8px;"
-                                        :color="getUserStats(m.userid, 'role')==='Admin'?'purple':(getUserStats(m.userid, 'role')==='Deleted'?'white':null)"
+                                        :color="this.userRoleColor[getUserStats(m.userid, 'role')]"
                                         size="x-small"
                                         :elevation="6"
                                     >
