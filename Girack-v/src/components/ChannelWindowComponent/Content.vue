@@ -611,7 +611,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div class="d-flex justify-end" style="margin:0px 8px;">
+            <div class="d-flex justify-space-around" style="margin:0px 8px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
@@ -644,6 +644,7 @@ export default {
 
                 <!-- メッセージ本体 -->
                 <span
+                    class="me-auto"
                     :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
                     style="width:90%; padding-left:1.5%; padding-right:1.5%"
                 >
@@ -705,6 +706,7 @@ export default {
 
                                 <!-- 返信データ -->
                                 <p class="text-truncate ma-1" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
+                                    <!-- 返信アイコン -->
                                     <v-icon>mdi:mdi-reply</v-icon>
                                     <!-- 返信する人の名前 -->
                                     <v-chip size="small" color="grey" variant="flat">
