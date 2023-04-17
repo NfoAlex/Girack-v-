@@ -11,6 +11,7 @@ const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
 export default {
 
     components: { ChannelConfig },
+    props: ["channelInfo"],
 
     data() {
         return {
@@ -29,44 +30,6 @@ export default {
         getPath() {
             this.channelDialogId = this.$route.params.id;
             return this.$route.params.id;
-
-        },
-
-        //チャンネル情報を取得するだけ
-        getChannelInfo() {
-            try {
-                //チャンネルインデックスから情報を返す、データなければ仮データを返す
-                if ( ChannelIndex.value[this.getPath] !== undefined ) {
-                    return ChannelIndex.value[this.getPath];
-
-                } else {
-                    //どのチャンネルにも参加していないのなら
-                    if ( Object.entries(ChannelIndex.value).length < 1 ) {
-                        //チャンネルブラウザへ移動
-                        this.$router.push({ path: "/browser" });
-
-                    } else {
-                        //別のチャンネルへ移動
-                        this.$router.push({ path: "/c/" +  Object.entries(ChannelIndex.value)[0][0] });
-
-                    }
-                    
-                    return { //とりあえず仮データ返す
-                        channelname: "ロード中...",
-                        description: "...",
-                        scope: "public"
-                    }
-
-                }
-            }
-            catch(e) {
-                console.log("Head :: getChannelInfo : エラー");
-                return { //とりあえず仮データ返す
-                    channelname: "ロード中...",
-                    description: "...",
-                    scope: "public"
-                }
-            }
 
         },
     },
@@ -117,10 +80,10 @@ export default {
 
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
         <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
-            <span v-if="getChannelInfo.scope==='private'" class="mdi mdi-lock"></span>
-            {{ getChannelInfo.channelname }}
+            <span v-if="channelInfo.scope==='private'" class="mdi mdi-lock"></span>
+            {{ channelInfo.channelname }}
         </div>
-        <p style="font-size:2vh">{{ getChannelInfo.description }}</p>
+        <p style="font-size:2vh">{{ channelInfo.description }}</p>
     </div>
     <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end ">
         <v-btn @click="toggleMuteChannel" size="large" icon="" class="rounded-lg ma-1" color="secondary">

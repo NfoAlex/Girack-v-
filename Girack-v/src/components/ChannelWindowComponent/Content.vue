@@ -14,7 +14,6 @@ export default {
         const { ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
         
-
         return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, CONFIG_DISPLAY };
 
     },

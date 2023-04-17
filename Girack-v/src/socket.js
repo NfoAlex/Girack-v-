@@ -64,8 +64,9 @@ const ChannelIndex = ref({
 });
 
 //チャンネルプレビュー用
-const PreviewData = ref({
+const PreviewChannelData = ref({
     /*
+    channelid: "0001",
     channelname: "random",
     description: "Hello Girack",
     scope: "public"
@@ -74,7 +75,7 @@ const PreviewData = ref({
 
 //チャンネル情報を返すだけ
 export function dataChannel() {
-    return { ChannelIndex, PreviewData };
+    return { ChannelIndex, PreviewChannelData };
 
 }
 
