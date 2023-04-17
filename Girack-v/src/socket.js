@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
-export const CLIENT_VERSION = "alpha_20230414";
+export const CLIENT_VERSION = "alpha_20230417";
 
 const {
     CONFIG_NOTIFICATION,
@@ -58,14 +58,23 @@ const ChannelIndex = ref({
     "0001": {
         channelname: "random",
         description: "Hello, Girack",
-        scope: "open"
+        scope: "public"
     }
+    */
+});
+
+//チャンネルプレビュー用
+const PreviewData = ref({
+    /*
+    channelname: "random",
+    description: "Hello Girack",
+    scope: "public"
     */
 });
 
 //チャンネル情報を返すだけ
 export function dataChannel() {
-    return { ChannelIndex };
+    return { ChannelIndex, PreviewData };
 
 }
 
