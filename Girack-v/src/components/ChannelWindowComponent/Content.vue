@@ -625,7 +625,7 @@ export default {
             <div class="d-flex justify-space-around" style="margin:0px 8px;">
             
                 <!-- アバター -->
-                <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
+                <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto ma-1 flex-shrink-1" size="7%" style="max-width:40px;">
                     <v-img
                         v-if="getUserStats(m.userid, 'role')!=='Deleted'"
                         @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
@@ -644,11 +644,21 @@ export default {
                     </v-img>
                 </v-avatar>
 
+                <v-avatar v-else class="mx-auto flex-shrink-1" size="7%" style="max-width:40px; height:0 !important;">
+                    <v-img
+                        v-if="getUserStats(m.userid, 'role')!=='Deleted'"
+                        @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
+                        class="pointed"
+                        :alt="m.userid"
+                    >
+                    </v-img>
+                </v-avatar>
+
                 <!-- メッセージ本体 -->
                 <span
-                    class="me-auto"
+                    class="me-auto flex-grow-1"
                     :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
-                    style="width:90%; padding-left:1.5%; padding-right:1.5%"
+                    style="margin-left:12px; padding-left:1.5%; padding-right:1.5%"
                 >
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
