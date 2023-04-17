@@ -30,27 +30,6 @@ export default {
         }
     },
 
-    watch: {
-        $route: {
-            handler() {
-                if ( this.ChannelIndex[this.$route.params.id] !== undefined ) {
-                    this.PreviewChannelData.channelid = this.$route.params.id;
-
-                } else {
-                    // socket.emit("getInfoChannel", {
-                    //     targetid: this.$route.params.id,
-                    //     reqSender: {
-                    //         userid: this.Userinfo.userid,
-                    //         sessionid: this.Userinfo.sessionid
-                    //     }
-                    // });
-
-                }
-
-            }
-        }
-    },
-
     methods: {
         //メッセージ履歴を返す
         getMsgDB() {
