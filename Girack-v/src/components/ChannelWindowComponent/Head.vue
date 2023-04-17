@@ -75,7 +75,7 @@ export default {
         v-model="channelDialogShow"
         style="width:50vw; max-width:650px;"
     >
-        <ChannelConfig :channelid="channelDialogId" />
+        <ChannelConfig :channelid="channelDialogId" :channelInfo="channelInfo" />
     </v-dialog>
 
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
@@ -86,6 +86,7 @@ export default {
         <p style="font-size:2vh">{{ channelInfo.description }}</p>
     </div>
 
+    <!-- ボタン群 -->
     <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end ">
         <v-btn @click="toggleMuteChannel" size="large" icon="" class="rounded-lg ma-1" color="secondary">
             <v-icon v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)">mdi:mdi-bell</v-icon>

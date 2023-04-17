@@ -8,8 +8,8 @@ const { ChannelIndex } = dataChannel();
 
 export default {
 
-    props: ["channelid"],
     components: { Userpage },
+    props: ["channelid", "channelInfo"],
 
     setup() {
         const { Userinfo } = dataUser();
@@ -182,10 +182,11 @@ export default {
 
     mounted() {
         //表示するデータをチャンネル情報から取得して設定
-        this.channelTargetInfo = ChannelIndex.value[this.channelid];
-        this.channelnameText = ChannelIndex.value[this.channelid].channelname;
-        this.descriptionText = ChannelIndex.value[this.channelid].description;
-        this.scopeIsPrivate = (ChannelIndex.value[this.channelid].scope==="private"?true:false);
+        this.channelTargetInfo = this.channelInfo;
+        this.channelnameText = this.channelInfo.channelname;
+        this.descriptionText = this.channelInfo.description;
+        this.scopeIsPrivate = (this.channelInfo.scope==="private"?true:false);
+
 
         //チャンネル参加者リストを受信
         socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
@@ -403,7 +404,7 @@ export default {
                     </v-btn>
                 </span>
 
-                <!-- チャンネル参加者 -->
+                <!-- ここからチャンネル参加者 -->
                 <v-card
                     @click="()=>{userDialogUserid=u.userid; userDialogShow=true;}"
                     class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
