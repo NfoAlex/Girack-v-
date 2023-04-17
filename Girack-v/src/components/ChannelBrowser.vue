@@ -299,7 +299,7 @@ export default {
 
                         <!-- ボタン群 -->
                         <div style="float:right">
-                            <v-btn @click="channelPreview(c[0])">
+                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelPreview(c[0])">
                                 プレビュー
                             </v-btn>
                             <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
