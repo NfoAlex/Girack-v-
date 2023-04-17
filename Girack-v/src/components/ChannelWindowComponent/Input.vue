@@ -71,6 +71,8 @@ export default {
         $route: {
             handler(newPage, oldPage) {
                 console.log("Input :: watch($route) : チャンネル変えてそう", newPage.params.id, oldPage.params.id);
+                //プレビュー中なら何もしない
+                if ( this.channelInfo.previewmode ) return -1;
 
                 //返信中であり、移動中ではないのなら移動の確認ダイアログを出す
                 if ( ReplyState.value.isReplying && newPage.params.id !== this.channelidBefore ) {
@@ -259,8 +261,7 @@ export default {
 </script>
 
 <template>
-    <div>
-
+    <div v-if="!channelInfo.previewmode">
         <!-- 返信する前にチャンネル移動しようとしたときの警告 -->
         <v-dialog
             v-model="dialogChannelMove"

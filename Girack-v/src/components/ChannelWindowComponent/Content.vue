@@ -11,15 +11,15 @@ export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
-        const { ChannelIndex } = dataChannel();
+        const { PreviewChannelData, ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
         
-        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, CONFIG_DISPLAY };
+        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
 
     },
 
     components: { Userpage, URLpreview, ContentHoverMenu, ContentMessageRender }, //ユーザーページ用
-    props: ["MsgDBActive"],
+    props: ["MsgDBActive", "channelInfo"],
 
     data() {
         return {
@@ -97,6 +97,9 @@ export default {
         //新着数の変化を監視してタブ名に新着数を出す
         MsgReadTime: {
             handler() {
+                console.log("Content :: watch(MsgReadtime) : ", this.channelInfo);
+                //プレビュー中なら停止
+                if ( this.channelInfo.previewmode ) return -1;
                 let TotalNew = 0; //新着数のトータル
                 let TotalMention = 0; //メンション数のトータル
 

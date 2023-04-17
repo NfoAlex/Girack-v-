@@ -394,6 +394,20 @@ socket.on("serverinfo", (dat) => {
 
 //チャンネル情報の更新
 socket.on("infoChannel", (dat) => {
+
+    console.log("socket :: infoChannel : ", PreviewChannelData.value.channelid, dat);
+
+    //もしプレビュー用のチャンネルの情報なら
+    if ( PreviewChannelData.value.channelid === dat.channelid ) {
+        console.log("socket :: infoChannel : preview用チャンネル情報取得 -> ", dat);
+        PreviewChannelData.value.channelname = dat.channelname;
+        PreviewChannelData.value.description = dat.description;
+        PreviewChannelData.value.scope = dat.scope;
+
+        return;
+
+    }
+
     //参加していないチャンネルならスルー
     if ( !Userinfo.value.channelJoined.includes(dat.channelid) ) {
         return;
@@ -547,7 +561,7 @@ socket.on("messageHistory", (history) => {
 
     let index = 0; //チャンネル参照インデックス変数
 
-    //受信した履歴の中で新着のものかどうか調べる
+    //受信した履歴の中で新着のものかどうか調べて新着数を加算
     for ( index in history ) {
         //既読状態がそもそも無ければやらない
         if ( MsgReadTime.value[channelid] === undefined ) break;
@@ -564,6 +578,12 @@ socket.on("messageHistory", (history) => {
             }
 
         }
+
+    }
+
+    if ( PreviewChannelData.value.channelid === channelid ) {
+        MsgDB.value[channelid] = history;
+        return;
 
     }
 

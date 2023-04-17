@@ -2,7 +2,9 @@
 import Content from "./ChannelWindowComponent/Content.vue";
 import Head from "./ChannelWindowComponent/Head.vue";
 import Input from "./ChannelWindowComponent/Input.vue";
-import { dataMsg, dataChannel } from "../socket.js";
+import { dataMsg, dataChannel, dataUser, getSocket } from "../socket.js";
+
+const socket = getSocket();
 
 export default {
     components: {
@@ -12,9 +14,10 @@ export default {
     },
 
     setup() {
+        const { Userinfo } = dataUser();
         const { MsgDB } = dataMsg();
         const { ChannelIndex, PreviewChannelData } = dataChannel();
-        return { MsgDB, ChannelIndex };
+        return { Userinfo, MsgDB, ChannelIndex, PreviewChannelData };
 
     },
 
@@ -24,10 +27,27 @@ export default {
             head: "head",
             content: "content",
             input: "input",
+        }
+    },
 
-            channelname: "...",
-            description: "...",
-            scope: "..."
+    watch: {
+        $route: {
+            handler() {
+                if ( this.ChannelIndex[this.$route.params.id] !== undefined ) {
+                    this.PreviewChannelData.channelid = this.$route.params.id;
+
+                } else {
+                    // socket.emit("getInfoChannel", {
+                    //     targetid: this.$route.params.id,
+                    //     reqSender: {
+                    //         userid: this.Userinfo.userid,
+                    //         sessionid: this.Userinfo.sessionid
+                    //     }
+                    // });
+
+                }
+
+            }
         }
     },
 
@@ -65,10 +85,19 @@ export default {
                     previewmode: true,
                 };
 
+            } else {
+                this.$router.push({ path: "/browser" });
+                return {
+                    channelname: "...",
+                    description: "...",
+                    scope: "public",
+                    previewmode: true,
+                };
+
             }
 
         }
-    }
+    },
 
 }
 
@@ -80,7 +109,7 @@ export default {
             <Head :channelInfo="getChannelInfo()" />
         </div>
         <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
-            <Content :MsgDBActive="getMsgDB()" />
+            <Content :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo()" />
         </div>
         <div :class="[w]" class="flex-grow-0 flex-shrink-1">
             <Input :channelInfo="getChannelInfo()" />
