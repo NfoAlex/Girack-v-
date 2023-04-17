@@ -383,7 +383,7 @@ export default {
             bg-color="grey"
         >
             <v-tab value="userJoined">参加者</v-tab>
-            <v-tab value="manage">管理</v-tab>
+            <v-tab v-if="!channelInfo.previewmode" value="manage">管理</v-tab>
         </v-tabs>
 
         <!-- タブの中身を知りたくて─────────── -->
@@ -394,6 +394,7 @@ export default {
                 <!-- ユーザー招待ボタン -->
                 <span>
                     <v-btn
+                        v-if="!channelInfo.previewmode"
                         @click="()=>{userSearchShow=!userSearchShow;}"
                         style="width:75%"
                         icon=""

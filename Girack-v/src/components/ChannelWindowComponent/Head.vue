@@ -88,7 +88,7 @@ export default {
 
     <!-- ボタン群 -->
     <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end ">
-        <v-btn @click="toggleMuteChannel" size="large" icon="" class="rounded-lg ma-1" color="secondary">
+        <v-btn v-if="!channelInfo.previewmode" @click="toggleMuteChannel" size="large" icon="" class="rounded-lg ma-1" color="secondary">
             <v-icon v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)">mdi:mdi-bell</v-icon>
             <v-icon v-else>mdi:mdi-bell-off</v-icon>
         </v-btn>
