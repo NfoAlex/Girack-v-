@@ -27,13 +27,13 @@ export default {
         return { ReplyState, Userinfo, ChannelIndex, MsgDB, UserIndex };
 
     },
+
+    props: ["channelInfo"],
     
     data() {
         return {
             uri: backendURI,
             txt: "",
-            channelid: "",
-            channelname: "",
 
             dialogChannelMove: false, //チャンネル移動確認ダイアログ
             confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -247,9 +247,6 @@ export default {
             }
         });
 
-        //入力欄に表示するためのチャンネル名を取得
-        this.channelname = this.ChannelIndex[this.getPath].channelname;
-
     },
 
     unmounted() {
@@ -326,7 +323,7 @@ export default {
                             style="height:fit-content"
                             id="inp"
                             ref="inp"
-                            :placeholder="channelname + 'へ送信'"
+                            :placeholder="channelInfo.channelname + 'へ送信'"
                             @keydown.enter="msgSend"
                             variant="solo"
                             density="compact"

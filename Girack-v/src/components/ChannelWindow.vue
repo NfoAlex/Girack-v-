@@ -83,7 +83,7 @@ export default {
             <Content :MsgDBActive="getMsgDB()" />
         </div>
         <div :class="[w]" class="flex-grow-0 flex-shrink-1">
-            <Input />
+            <Input :channelInfo="getChannelInfo()" />
         </div>
     </div>
 </template>
