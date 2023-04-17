@@ -299,12 +299,17 @@ export default {
 
                         <!-- ボタン群 -->
                         <div style="float:right">
-                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelPreview(c[0])">
-                                プレビュー
-                            </v-btn>
                             <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
                                 <v-icon icon="mdi:mdi-delete-forever"></v-icon>
                             </v-btn>
+
+                            <!-- プレビューボタン -->
+                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelPreview(c[0])" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
+                                <v-icon>
+                                    mdi:mdi-eye
+                                </v-icon>
+                            </v-btn>
+                            
                             <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal">参加</v-btn>
                             <v-btn v-else @click="channelLeave(c[0])" variant="outlined">退出</v-btn>
                         </div>
