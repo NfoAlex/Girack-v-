@@ -81,6 +81,7 @@ export default {
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
         <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
             <span v-if="channelInfo.scope==='private'" class="mdi mdi-lock"></span>
+            <v-chip v-if="channelInfo.previewmode" class="ma-1">プレビュー</v-chip>
             {{ channelInfo.channelname }}
         </div>
         <p style="font-size:2vh">{{ channelInfo.description }}</p>

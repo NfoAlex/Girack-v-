@@ -76,7 +76,9 @@ export default {
 
         //チャンネルのプレビューをする
         channelPreview(channelid) {
+            //プレビュー用のチャンネルIDの設定
             this.PreviewChannelData.channelid = channelid;
+            //チャンネル情報の取得
             socket.emit("getInfoChannel", {
                 targetid: channelid,
                 reqSender: {
@@ -86,7 +88,7 @@ export default {
             });
 
             getMessage(channelid, 25, 0); //履歴を取得
-            this.$router.push({ path: "/c/" + channelid });
+            this.$router.push({ path: "/c/" + channelid }); //そのページへ移動
 
         },
 
