@@ -33,6 +33,14 @@ export default {
             userDialogShow: false,
             userDialogUserid : "00000001",
 
+            //ユーザーロールの色を返す
+            userRoleColor: {
+                "Admin": "purple",
+                "Moderator": "blue",
+                "Member": "white",
+                "Deleted": "black"
+            },
+
             goBottom: "goBottom" //下に行くボタン用CSSクラス
         }
     },
@@ -614,10 +622,10 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div class="d-flex justify-end" style="margin:0px 8px;">
+            <div class="d-flex justify-space-evenly" style="margin:0px 8px;">
             
                 <!-- アバター -->
-                <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
+                <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:15%;">
                     <v-img
                         v-if="getUserStats(m.userid, 'role')!=='Deleted'"
                         @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
@@ -636,10 +644,21 @@ export default {
                     </v-img>
                 </v-avatar>
 
+                <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:15%; height:0 !important;">
+                    <v-img
+                        v-if="getUserStats(m.userid, 'role')!=='Deleted'"
+                        @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
+                        class="pointed"
+                        :alt="m.userid"
+                    >
+                    </v-img>
+                </v-avatar>
+
                 <!-- メッセージ本体 -->
                 <span
+                    class="me-auto flex-grow-1"
                     :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
-                    style="width:90%; padding-left:1.5%; padding-right:1.5%"
+                    style="margin-left:1vw; padding-left:1.5%; padding-right:1.5%"
                 >
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
@@ -669,7 +688,7 @@ export default {
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'role')!=='Member'&&CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                         style="margin-left:8px;"
-                                        :color="getUserStats(m.userid, 'role')==='Admin'?'purple':(getUserStats(m.userid, 'role')==='Deleted'?'white':null)"
+                                        :color="this.userRoleColor[getUserStats(m.userid, 'role')]"
                                         size="x-small"
                                         :elevation="6"
                                     >
@@ -699,6 +718,7 @@ export default {
 
                                 <!-- 返信データ -->
                                 <p class="text-truncate ma-1" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
+                                    <!-- 返信アイコン -->
                                     <v-icon>mdi:mdi-reply</v-icon>
                                     <!-- 返信する人の名前 -->
                                     <v-chip size="small" color="grey" variant="flat">
