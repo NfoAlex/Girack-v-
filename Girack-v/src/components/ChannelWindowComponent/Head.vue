@@ -11,6 +11,7 @@ const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
 export default {
 
     components: { ChannelConfig },
+    props: ["channelInfo"],
 
     data() {
         return {
@@ -29,44 +30,6 @@ export default {
         getPath() {
             this.channelDialogId = this.$route.params.id;
             return this.$route.params.id;
-
-        },
-
-        //チャンネル情報を取得するだけ
-        getChannelInfo() {
-            try {
-                //チャンネルインデックスから情報を返す、データなければ仮データを返す
-                if ( ChannelIndex.value[this.getPath] !== undefined ) {
-                    return ChannelIndex.value[this.getPath];
-
-                } else {
-                    //どのチャンネルにも参加していないのなら
-                    if ( Object.entries(ChannelIndex.value).length < 1 ) {
-                        //チャンネルブラウザへ移動
-                        this.$router.push({ path: "/browser" });
-
-                    } else {
-                        //別のチャンネルへ移動
-                        this.$router.push({ path: "/c/" +  Object.entries(ChannelIndex.value)[0][0] });
-
-                    }
-                    
-                    return { //とりあえず仮データ返す
-                        channelname: "ロード中...",
-                        description: "...",
-                        scope: "public"
-                    }
-
-                }
-            }
-            catch(e) {
-                console.log("Head :: getChannelInfo : エラー");
-                return { //とりあえず仮データ返す
-                    channelname: "ロード中...",
-                    description: "...",
-                    scope: "public"
-                }
-            }
 
         },
     },
@@ -112,22 +75,49 @@ export default {
         v-model="channelDialogShow"
         style="width:50vw; max-width:650px;"
     >
-        <ChannelConfig :channelid="channelDialogId" />
+        <ChannelConfig :channelid="channelDialogId" :channelInfo="channelInfo" />
     </v-dialog>
 
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
         <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
-            <span v-if="getChannelInfo.scope==='private'" class="mdi mdi-lock"></span>
-            {{ getChannelInfo.channelname }}
+            <span v-if="channelInfo.scope==='private'" class="mdi mdi-lock"></span>
+            <v-chip v-if="channelInfo.previewmode" class="ma-1">プレビュー</v-chip>
+            {{ channelInfo.channelname }}
         </div>
-        <p style="font-size:2vh">{{ getChannelInfo.description }}</p>
+        <p style="font-size:2vh">{{ channelInfo.description }}</p>
     </div>
-    <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end ">
-        <v-btn @click="toggleMuteChannel" size="large" icon="" class="rounded-lg ma-1" color="secondary">
+
+    <!-- ボタン群 -->
+    <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end align-center">
+        <v-btn
+            v-if="!channelInfo.previewmode"
+            @click="toggleMuteChannel"
+            size="large"
+            icon=""
+            class="rounded-lg ma-1"
+            color="secondary"
+        >
             <v-icon v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)">mdi:mdi-bell</v-icon>
             <v-icon v-else>mdi:mdi-bell-off</v-icon>
         </v-btn>
-        <v-btn @click="()=>channelDialogShow=!channelDialogShow" size="large" icon="" class="rounded-lg ma-1" color="secondary">
+
+        <v-btn
+            v-if="channelInfo.previewmode"
+            @click="this.$router.push({ path: '/browser'})"
+            size="large"
+            class="rounded-lg ma-1"
+            color="secondary"
+        >
+            ブラウザへ戻る
+        </v-btn>
+        
+        <v-btn
+            @click="()=>channelDialogShow=!channelDialogShow"
+            size="large"
+            icon=""
+            class="rounded-lg ma-1"
+            color="secondary"
+        >
             <v-icon>mdi:mdi-menu</v-icon>
         </v-btn>
     </div>

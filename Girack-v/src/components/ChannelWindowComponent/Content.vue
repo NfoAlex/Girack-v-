@@ -11,15 +11,15 @@ export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
         const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
-        const { ChannelIndex } = dataChannel();
+        const { PreviewChannelData, ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
         
-
-        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, CONFIG_DISPLAY };
+        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
 
     },
 
     components: { Userpage, URLpreview, ContentHoverMenu, ContentMessageRender }, //ユーザーページ用
+    props: ["MsgDBActive", "channelInfo"],
 
     data() {
         return {
@@ -39,14 +39,14 @@ export default {
 
     watch: {
         //メッセージの更新監視
-        MsgDB: {
+        MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
                     try {
                         //最新メッセージを取得するために長さ計算
-                        let latestTime = this.MsgDB[this.getPath].slice(-1)[0].time;
+                        let latestTime = this.MsgDBActive.slice(-1)[0].time;
                         //最新メッセージを元に既読した時間を設定して新着数を0にする
                         this.MsgReadTime[this.getPath] = {
                             time: latestTime,
@@ -97,6 +97,9 @@ export default {
         //新着数の変化を監視してタブ名に新着数を出す
         MsgReadTime: {
             handler() {
+                console.log("Content :: watch(MsgReadtime) : ", this.channelInfo);
+                //プレビュー中なら停止
+                if ( this.channelInfo.previewmode ) return -1;
                 let TotalNew = 0; //新着数のトータル
                 let TotalMention = 0; //メンション数のトータル
 
@@ -211,7 +214,7 @@ export default {
 
         //指定された履歴の日付を取得
         getHistoryDate(index){
-            let time = this.MsgDB[this.getPath][index].time;
+            let time = this.MsgDBActive[index].time;
             let timestamp = "";
 
             timestamp += time.slice(0,4) + "/";
@@ -241,14 +244,14 @@ export default {
         checkShowAvatar(userid, index) {
             try {
                 //分(min)差計算
-                let msgTimeMinBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(10,12));
-                let msgTimeMinThis = parseInt(this.MsgDB[this.getPath][index].time.slice(10,12));
+                let msgTimeMinBefore = parseInt(this.MsgDBActive[index-1].time.slice(10,12));
+                let msgTimeMinThis = parseInt(this.MsgDBActive[index].time.slice(10,12));
                     //分差計算
                 let timeMinDifference = msgTimeMinThis - msgTimeMinBefore;
 
                 //時(h)差計算
-                let msgTimeHourBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(8,10));
-                let msgTimeHourThis = parseInt(this.MsgDB[this.getPath][index].time.slice(8,10));
+                let msgTimeHourBefore = parseInt(this.MsgDBActive[index-1].time.slice(8,10));
+                let msgTimeHourThis = parseInt(this.MsgDBActive[index].time.slice(8,10));
                     //時差計算
                 let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
 
@@ -256,7 +259,7 @@ export default {
                 if ( this.checkDateDifference(index) ) return true;
 
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-                if ( this.MsgDB[this.getPath][index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                if ( this.MsgDBActive[index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
                     //条件でアバターを見せるか見せないか決める
                     if ( timeMinDifference < -55 || timeMinDifference > 4 || timeHourDifference !== 0 ) {
                         return true;
@@ -281,7 +284,7 @@ export default {
 
         //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
         checkMsgPosition(userid, index) {
-            if ( this.MsgDB[this.getPath] === undefined || this.MsgDB[this.getPath].length <= 0 ) return;
+            if ( this.MsgDBActive === undefined || this.MsgDBActive.length <= 0 ) return;
 
             let AvatarNeedToShowBefore = false;
             let AvatarNeedToShow = false;
@@ -290,7 +293,7 @@ export default {
             //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
               //前
             try {
-                AvatarNeedToShowBefore = this.checkShowAvatar(this.MsgDB[this.getPath][index-1].userid, index-1);
+                AvatarNeedToShowBefore = this.checkShowAvatar(this.MsgDBActive[index-1].userid, index-1);
             } catch(e){}
 
               //今の位置
@@ -300,7 +303,7 @@ export default {
 
               //次
             try {
-                AvatarNeedToShowNext = this.checkShowAvatar(this.MsgDB[this.getPath][index+1].userid, index+1);
+                AvatarNeedToShowNext = this.checkShowAvatar(this.MsgDBActive[index+1].userid, index+1);
             } catch(e){}
 
             let SameWithBefore = false; //ひとつ前と送信者が同じかどうか
@@ -308,7 +311,7 @@ export default {
 
             //一つ前と送信者が今のと同じならそう記録
             try {
-                if ( this.MsgDB[this.getPath][index-1].userid === userid ) {
+                if ( this.MsgDBActive[index-1].userid === userid ) {
                     SameWithBefore = true;
 
                 }
@@ -317,7 +320,7 @@ export default {
 
             //次の送信者が今のと同じならそう記録
             try {
-                if ( this.MsgDB[this.getPath][index+1].userid === userid ) {
+                if ( this.MsgDBActive[index+1].userid === userid ) {
                     SameWithNext = true;
 
                 }
@@ -410,8 +413,8 @@ export default {
         checkDateDifference(index) {
             try {
                 //日を取得
-                let msgDateBefore = parseInt(this.MsgDB[this.getPath][index-1].time.slice(6,8));
-                let msgDateThis = parseInt(this.MsgDB[this.getPath][index].time.slice(6,8));
+                let msgDateBefore = parseInt(this.MsgDBActive[index-1].time.slice(6,8));
+                let msgDateThis = parseInt(this.MsgDBActive[index].time.slice(6,8));
                 //日付の差を計算
                 let dateDifference = msgDateBefore - msgDateThis;
 
@@ -501,7 +504,7 @@ export default {
 
                 try {
                     //最新のメッセージを取得するために履歴の長さを予め取得
-                    let latestTime = this.MsgDB[this.getPath].slice(-1)[0].time;
+                    let latestTime = this.MsgDBActive.slice(-1)[0].time;
                     //既読状態をセット
                     this.MsgReadTime[this.getPath] = {
                         //既読時間を最新メッセージの時間に設定
@@ -592,17 +595,17 @@ export default {
         </div>
 
         <!-- 履歴が空なら -->
-        <div style="padding:10%" v-if="MsgDB[getPath]===undefined||MsgDB[getPath].length===0">
+        <div style="padding:10%" v-if="MsgDBActive===undefined||MsgDBActive.length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
         <!-- 履歴読み込みボタン -->
-        <div v-if="MsgDB[getPath]!==undefined" style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
+        <div v-if="MsgDBActive!==undefined" style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
             <v-btn size="small" @click="getHistory" variant="text">↑過去を読み込む</v-btn>
         </div>
 
         <!-- こっからメッセージ表示 -->
-        <div v-for="(m, index) in MsgDB[$route.params.id]">
+        <div v-for="(m, index) in MsgDBActive">
 
             <!-- 日付線 -->
             <div v-if="checkDateDifference(index)" style="width:100%; padding:6px 0;">
@@ -629,15 +632,6 @@ export default {
                         v-else
                         :alt="m.userid"
                         :src="uri + '/img/' + m.userid"
-                    >
-                    </v-img>
-                </v-avatar>
-
-                <!-- アバター -->
-                <v-avatar v-else class="mx-auto" size="48">
-                    <v-img
-                        v-if="getUserStats(m.userid, 'role')!=='Deleted'"
-                        height="0"
                     >
                     </v-img>
                 </v-avatar>

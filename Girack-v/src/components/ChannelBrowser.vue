@@ -1,12 +1,16 @@
-<script setup>
-import { getSocket, dataUser } from '../socket.js';
-</script>
-
 <script>
+import { getSocket, dataUser, dataChannel, getMessage } from '../socket.js';
+
 const socket = getSocket();
-const { Userinfo } = dataUser(); //自分のユーザー情報をインポート
 
 export default {
+
+    setup() {
+        const { Userinfo } = dataUser(); //自分のユーザー情報をインポート
+        const { PreviewChannelData } = dataChannel();
+        return { PreviewChannelData, Userinfo };
+
+    },
 
     data() {
         return {
@@ -61,12 +65,30 @@ export default {
 
             //チャンネルリストを再取得
             socket.emit("getInfoList", {
-            target: "channel",
-            reqSender: {
-                userid: Userinfo.value.userid, //ユーザーID
-                sessionid: Userinfo.value.sessionid //セッションID
-            }
-        });
+                target: "channel",
+                reqSender: {
+                    userid: Userinfo.value.userid, //ユーザーID
+                    sessionid: Userinfo.value.sessionid //セッションID
+                }
+            });
+
+        },
+
+        //チャンネルのプレビューをする
+        channelPreview(channelid) {
+            //プレビュー用のチャンネルIDの設定
+            this.PreviewChannelData.channelid = channelid;
+            //チャンネル情報の取得
+            socket.emit("getInfoChannel", {
+                targetid: channelid,
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
+
+            getMessage(channelid, 25, 0); //履歴を取得
+            this.$router.push({ path: "/c/" + channelid }); //そのページへ移動
 
         },
 
@@ -238,6 +260,7 @@ export default {
 
     <!-- ここから表示部分 -->
     <div style="margin:2% auto; width:85%; height:97.5%;">
+        
         <div style="height:10%;" class="d-flex justify-space-around align-center bg-surface-variant">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" color="primary" icon="" class="rounded-lg">
@@ -251,6 +274,7 @@ export default {
                 </v-tooltip>
             </v-btn>
         </div>
+
         <div class="channelList ma-1" style="height:85%; overflow-y:auto;">
             <v-list-item
                 v-for="c in Object.entries(channelList)"
@@ -280,6 +304,14 @@ export default {
                             <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
                                 <v-icon icon="mdi:mdi-delete-forever"></v-icon>
                             </v-btn>
+
+                            <!-- プレビューボタン -->
+                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelPreview(c[0])" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
+                                <v-icon>
+                                    mdi:mdi-eye
+                                </v-icon>
+                            </v-btn>
+                            
                             <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal">参加</v-btn>
                             <v-btn v-else @click="channelLeave(c[0])" variant="outlined">退出</v-btn>
                         </div>
@@ -291,6 +323,7 @@ export default {
                 </v-card>
             </v-list-item>
         </div>
+
     </div>
 </template>
 

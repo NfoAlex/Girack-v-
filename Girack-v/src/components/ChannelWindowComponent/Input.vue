@@ -27,13 +27,13 @@ export default {
         return { ReplyState, Userinfo, ChannelIndex, MsgDB, UserIndex };
 
     },
+
+    props: ["channelInfo"],
     
     data() {
         return {
             uri: backendURI,
             txt: "",
-            channelid: "",
-            channelname: "",
 
             dialogChannelMove: false, //チャンネル移動確認ダイアログ
             confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -71,6 +71,8 @@ export default {
         $route: {
             handler(newPage, oldPage) {
                 console.log("Input :: watch($route) : チャンネル変えてそう", newPage.params.id, oldPage.params.id);
+                //プレビュー中なら何もしない
+                if ( this.channelInfo.previewmode ) return -1;
 
                 //返信中であり、移動中ではないのなら移動の確認ダイアログを出す
                 if ( ReplyState.value.isReplying && newPage.params.id !== this.channelidBefore ) {
@@ -247,9 +249,6 @@ export default {
             }
         });
 
-        //入力欄に表示するためのチャンネル名を取得
-        this.channelname = this.ChannelIndex[this.getPath].channelname;
-
     },
 
     unmounted() {
@@ -262,8 +261,7 @@ export default {
 </script>
 
 <template>
-    <div>
-
+    <div v-if="!channelInfo.previewmode">
         <!-- 返信する前にチャンネル移動しようとしたときの警告 -->
         <v-dialog
             v-model="dialogChannelMove"
@@ -326,7 +324,7 @@ export default {
                             style="height:fit-content"
                             id="inp"
                             ref="inp"
-                            :placeholder="channelname + 'へ送信'"
+                            :placeholder="channelInfo.channelname + 'へ送信'"
                             @keydown.enter="msgSend"
                             variant="solo"
                             density="compact"
