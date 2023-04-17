@@ -76,9 +76,14 @@ export default {
 
         //チャンネルの移動を監視
         $route: { //URLパスの変更監視
-            handler() {
+            handler(newPage, oldPage) {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
+                    //チャンネル以外の場合、以降の処理をスキップする
+                    if (!(newPage.path.startsWith('/c/'))) {
+                        return 0;
+                    }
+
                     this.scrollIt(); //スクロールする
                     this.MsgReadTime[this.getPath] = {
                         new: 0 //新着メッセージ数を0に
@@ -610,11 +615,38 @@ export default {
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto" size="48">
-                    <v-img @click="()=>{userDialogShow=true; userDialogUserid=m.userid}" class="pointed" :alt="m.userid" :src="uri + '/img/' + m.userid"></v-img>
+                    <v-img
+                        v-if="getUserStats(m.userid, 'role')!=='Deleted'"
+                        @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
+                        class="pointed"
+                        :alt="m.userid"
+                        :src="uri + '/img/' + m.userid"
+                    >
+                    </v-img>
+
+                    <!-- 消去されているユーザーなら -->
+                    <v-img
+                        v-else
+                        :alt="m.userid"
+                        :src="uri + '/img/' + m.userid"
+                    >
+                    </v-img>
+                </v-avatar>
+
+                <!-- アバター -->
+                <v-avatar v-else class="mx-auto" size="48">
+                    <v-img
+                        v-if="getUserStats(m.userid, 'role')!=='Deleted'"
+                        height="0"
+                    >
+                    </v-img>
                 </v-avatar>
 
                 <!-- メッセージ本体 -->
-                <span :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]" style="width:90%; padding-left:1.5%; padding-right:1.5%">
+                <span
+                    :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
+                    style="width:90%; padding-left:1.5%; padding-right:1.5%"
+                >
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
@@ -643,7 +675,7 @@ export default {
                                     <v-chip
                                         v-if="getUserStats(m.userid, 'role')!=='Member'&&CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                         style="margin-left:8px;"
-                                        :color="getUserStats(m.userid, 'role')==='Admin'?'purple':'blue'"
+                                        :color="getUserStats(m.userid, 'role')==='Admin'?'purple':(getUserStats(m.userid, 'role')==='Deleted'?'white':null)"
                                         size="x-small"
                                         :elevation="6"
                                     >
@@ -674,7 +706,12 @@ export default {
                                 <!-- 返信データ -->
                                 <p class="text-truncate ma-1" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
                                     <v-icon>mdi:mdi-reply</v-icon>
-                                    <v-chip size="small" color="grey" variant="flat">{{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}</v-chip> : {{ m.replyData.content }}
+                                    <!-- 返信する人の名前 -->
+                                    <v-chip size="small" color="grey" variant="flat">
+                                        {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}
+                                    </v-chip>
+                                    <!-- 返信内容 -->
+                                    : {{ m.replyData.content }}
                                 </p>
 
                                 <!-- メッセージ本文 -->
