@@ -2,12 +2,22 @@
 import Content from "./ChannelWindowComponent/Content.vue";
 import Head from "./ChannelWindowComponent/Head.vue";
 import Input from "./ChannelWindowComponent/Input.vue";
+import { dataMsg, dataChannel } from "../socket.js";
+
 export default {
     components: {
         Content,
         Head,
         Input
     },
+
+    setup() {
+        const { MsgDB } = dataMsg();
+        const { ChannelIndex } = dataChannel();
+        return { MsgDB, ChannelIndex };
+
+    },
+
     data() {
         return {
             w: "w",
@@ -15,8 +25,23 @@ export default {
             content: "content",
             input: "input"
         }
+    },
+
+    methods: {
+        getMsgDB() {
+            if ( this.ChannelIndex[this.$route.params.id] !== undefined ) {
+                return this.MsgDB[this.$route.params.id];
+
+            } else {
+                this.$router.push({ path: "/browser" });
+
+            }
+
+        }
     }
+
 }
+
 </script>
 
 <template>
@@ -25,7 +50,7 @@ export default {
             <Head />
         </div>
         <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
-            <Content />
+            <Content :MsgDBActive="getMsgDB()" />
         </div>
         <div :class="[w]" class="flex-grow-0 flex-shrink-1">
             <Input />
