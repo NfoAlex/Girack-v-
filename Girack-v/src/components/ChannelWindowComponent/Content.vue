@@ -636,15 +636,6 @@ export default {
                     </v-img>
                 </v-avatar>
 
-                <!-- アバター -->
-                <v-avatar v-else class="mx-auto" size="48">
-                    <v-img
-                        v-if="getUserStats(m.userid, 'role')!=='Deleted'"
-                        height="0"
-                    >
-                    </v-img>
-                </v-avatar>
-
                 <!-- メッセージ本体 -->
                 <span
                     :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
