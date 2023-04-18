@@ -197,7 +197,7 @@ export default {
                 <div class="mx-auto">
                     <v-img
                         @click="toggleImageDialog(index)"
-                        style="margin:8px 4px; width:auto; min-width:150px; max-height:300px; cursor:pointer;"
+                        style="margin:8px 4px; width:auto; width:250px; cursor:pointer;"
                         :src="getImage(link.url)"
                     >
                     </v-img>
