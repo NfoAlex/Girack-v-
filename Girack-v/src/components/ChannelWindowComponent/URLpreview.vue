@@ -123,15 +123,15 @@ export default {
                 v-if="link.mediaType!=='image'"
                 color="#222"
                 class="pa-3 rounded-lg d-flex flex-row"
-                style="max-height:150px; min-width:45%; width:85%;"
+                style="height:150px; min-width:45%; width:85%;"
                 
             >
                 <!-- 画像 -->
                 <v-img
                     v-if="link.img!==undefined&&link.img.length!==0"
-                    class=""
+                    class="flex-shrink-1"
                     @click="toggleImageDialog(index)"
-                    style="min-width:30%; cursor:pointer;"
+                    style="min-width:30%; width:fit-content; cursor:pointer;"
                     :src="getImage(link.img)"
                 >
                     <!-- 画像が２枚以上あるならホバーで表示 -->
@@ -146,7 +146,7 @@ export default {
                 </v-img>
 
                 <!-- タイトル、概要 -->
-                <div class="d-flex flex-column">
+                <div class="d-flex flex-column flex-grow-1">
                     
                     <!-- ファビコンとタイトル用 -->
                     <div style="margin-left:16px;" class="d-flex flex-row align-center">
