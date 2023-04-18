@@ -188,21 +188,15 @@ export default {
             </v-card>
 
             <!-- 画像単体用 -->
-            <v-card
-                v-if="link.mediaType==='image'"
-                class="rounded-lg pa-2"
-                color="#222"
-                style="width:fit-content;"
-            >
-                <div class="mx-auto">
-                    <v-img
+                <div class="rounded-lg">
+                    <img
+                        v-if="link.mediaType==='image'"
                         @click="toggleImageDialog(index)"
-                        style="margin:8px 4px; width:auto; width:250px; cursor:pointer;"
+                        class="rounded-lg"
+                        style="margin:4px 8px; width:auto; max-height:200px; cursor:pointer;"
                         :src="getImage(link.url)"
                     >
-                    </v-img>
                 </div>
-            </v-card>
 
         </div>
     </div>
