@@ -123,8 +123,8 @@ export default {
                 v-if="link.mediaType!=='image'"
                 color="#222"
                 class="pa-3 rounded-lg d-flex flex-row"
-                style="height:150px; min-width:45%; width:85%;"
-                
+                style="min-width:45%; width:85%;"
+                :style="(link.img!==undefined&&link.img.length!==0)?'height:150px':'height:fit-content;'"
             >
                 <!-- 画像 -->
                 <v-img
