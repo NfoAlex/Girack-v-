@@ -194,7 +194,7 @@ export default {
 
                 <div style="margin-top:32px;">
                     <v-file-input
-                        accept="image/jpeg, image/gif"
+                        accept="image/jpeg, image/gif, image/png"
                         :rules="iconUploadRule"
                         v-model="iconUploadFile"
                         class="ma-3"
