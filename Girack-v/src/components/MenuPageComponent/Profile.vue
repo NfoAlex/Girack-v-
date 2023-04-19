@@ -22,6 +22,7 @@ export default {
 
             //パスワード変更用
             changePasswordDialog: false,
+            changePasswordResult: 0, //パスワードの変更結果=> 1=成功, -1=失敗
             currentPassword: "",
             newPassword: "",
             newPasswordCheck: "",
@@ -151,7 +152,19 @@ export default {
     mounted() {
         this.nameDisplaying = this.Userinfo.username; //名前更新
 
+        //結果の受け取り
+        socket.on("changePasswordResult", (result) => {
+            this.changePasswordResult = result;
+
+        });
+
     },
+
+    unmounted() {
+        //通信重複防止
+        socket.off("changePasswordResult");
+    }
+
 }
 </script>
 
@@ -233,7 +246,8 @@ export default {
             class="rounded-lg"
             style="min-width:650px; width:50vh;"
         >
-            <v-card class="rounded-lg pa-6">
+            <!-- 変更画面 -->
+            <v-card v-if="changePasswordResult!==1" class="rounded-lg pa-6">
 
                 <v-card-title>
                     パスワードを変更
@@ -283,10 +297,42 @@ export default {
                 <v-alert
                     v-if="newPasswordCheck.length>=1&&newPasswordCheck!==newPassword"
                     type="error"
+                    class="rounded-lg"
                     style="margin-top:2.5%"
                 >
-                    パスワードが一致しません
+                    確認用のパスワードが一致しません
                 </v-alert>
+
+                <v-alert
+                    v-if="changePasswordResult===-1"
+                    type="error"
+                    class="rounded-lg"
+                    style="margin-top:2.5%"
+                >
+                    現在のパスワードで認証ができませんでした
+                </v-alert>
+
+            </v-card>
+
+            <!-- 変更に成功した画面 -->
+            <v-card v-if="changePasswordResult===1" class="rounded-lg pa-6">
+
+                <v-card-title>
+                    パスワードを変更
+                </v-card-title>
+                <span class="d-flex flex-column align-center pa-1 ma-2">
+                    <p class="text-h4 pa-2">😏</p>
+                    <p>パスワードの変更ができました!</p>
+                </span>
+
+                <v-btn
+                    @click="changePasswordDialog=false;"
+                    class="rounded-lg ma-2"
+                    color="secondary"
+                    block
+                >
+                    あざ
+                </v-btn>
 
             </v-card>
         </v-dialog>
