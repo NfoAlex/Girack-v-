@@ -14,8 +14,15 @@ export default {
             cd: ["card-default","rounded-lg"], //CSS用クラス名
             okayIcon: '',
 
+            //ユーザー名
             nameDisplaying: "...",
             nameEditing: false, //名前編集しているかどうか
+
+            //パスワード変更用
+            changePasswordDialog: false,
+            currentPassword: "",
+            newPassword: "",
+            newPasswordCheck: "",
 
             iconUploadDialog: false, //アイコンアップロード用ダイアログの表示
             iconUploadRule: [ //アイコンをアップロードするためのルール
@@ -64,6 +71,20 @@ export default {
         logout() {
             setCookie("sessionid", "", 0); //クッキー削除
             location.reload(); //ページリロード
+        },
+
+        //パスワードを変更
+        changePassword(pw) {
+            //パスワードを変更申請
+            socket.emit("changePassword", {
+                currentPassword: this.currentPassword,
+                newPassword: this.newPassword,
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
+
         },
 
         //名前更新
@@ -203,12 +224,63 @@ export default {
             </v-card>
         </v-dialog>
 
+        <!-- パスワードを変えるためのダイアログ -->
         <v-dialog
             v-model="changePasswordDialog"
+            class="rounded-lg"
             style="min-width:650px; width:50vh;"
         >
             <v-card class="rounded-lg pa-6">
-                パスワードを変える
+
+                <v-card-title>
+                    パスワードを変更
+                </v-card-title>
+
+                <p>今のパスワード</p>
+                <v-text-field
+                    v-model="currentPassword"
+                    class="rounded-lg"
+                    variant="outlined"
+                    type="password"
+                >
+                </v-text-field>
+
+                <p>新しいパスワード</p>
+                <v-text-field
+                    v-model="newPassword"
+                    class="rounded-lg"
+                    variant="outlined"
+                    type="password"
+                >
+                </v-text-field>
+
+                <p>確認</p>
+                <v-text-field
+                    v-model="newPasswordCheck"
+                    class="rounded-lg"
+                    variant="outlined"
+                    type="password"
+                >
+                </v-text-field>
+
+                <v-btn
+                    @click="changePassword"
+                    color="secondary"
+                    class="rounded-lg"
+                    :disabled="newPasswordCheck!==newPassword"
+                    block
+                >
+                    パスワード変更
+                </v-btn>
+
+                <v-alert
+                    v-if="newPasswordCheck.length>=1&&newPasswordCheck!==newPassword"
+                    type="error"
+                    style="margin-top:2.5%"
+                >
+                    パスワードが一致しません
+                </v-alert>
+
             </v-card>
         </v-dialog>
 
@@ -216,8 +288,8 @@ export default {
                 <v-container class="bg-surface-variant">
                     <v-row no-gutters>
 
+                        <!-- アバター -->
                         <v-col cols="2">
-                            <!-- アバター -->
                             <v-card @click="" variant="tonal" :class="cd" style="padding:0">
                                 <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid">
                                     <v-tooltip
@@ -231,8 +303,8 @@ export default {
                             </v-card>
                         </v-col>
 
+                        <!-- ユーザー名の部分 -->
                         <v-col cols="10">
-                            <!-- ユーザー名の部分 -->
                             <div variant="tonal" :class="cd" style="padding:1% 10% ">
                                 <span class="d-flex flex-column" style="width:100%">
 
@@ -250,8 +322,6 @@ export default {
                                         {{ Userinfo.username }}
                                         <v-btn v-if="!nameEditing" color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg ma-5"></v-btn>
                                     </p>
-
-                                    
 
                                     <span class="auto" style="width:100%">
                                         <!-- ユーザー名編集時 -->
@@ -291,9 +361,28 @@ export default {
                 </v-container>
 
                 <v-container class="bg-surface-variant">
-                    <!-- ログアウトボタン -->
+                    <p class="text-h6">パスワード変更</p>
+                    <!-- パスワード変更 -->
                     <v-row no-gutters>
 
+                        <v-card variant="tonal" :class="cd" style="width:100%; ">
+                            <v-btn
+                                @click="changePasswordDialog=true;"
+                                class="rounded-lg"
+                                color="secondary"
+                                block
+                            >
+                                クソデカパスワード変更ボタン
+                            </v-btn>
+                        </v-card>
+
+                    </v-row>
+                </v-container>
+
+                <v-container class="bg-surface-variant">
+                    <!-- ログアウトボタン -->
+                    <v-row no-gutters>
+                        <p class="text-h6">ログアウト</p>
                         <v-card variant="tonal" :class="cd" style="width:100%; ">
                             <v-btn prepend-icon="mdi:mdi-logout" color="error" block @click="snackbar=true">Logout</v-btn>
                             <v-snackbar
