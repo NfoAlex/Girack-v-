@@ -1,12 +1,14 @@
-<script setup>
-import { setCookie, getSocket, dataUser, backendURI } from '../../socket.js';
-</script>
-
 <script>
+import { setCookie, getSocket, dataUser, backendURI } from '../../socket.js';
+
 const socket = getSocket();
-const { Userinfo } = dataUser();
 
 export default {
+
+    setup() {
+        const { Userinfo } = dataUser();
+        return { Userinfo, backendURI };
+    },
     
     data() {
         return {
@@ -80,8 +82,8 @@ export default {
                 currentPassword: this.currentPassword,
                 newPassword: this.newPassword,
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
 
@@ -146,7 +148,7 @@ export default {
     },
     
     mounted() {
-        this.nameDisplaying = Userinfo.value.username; //名前更新
+        this.nameDisplaying = this.Userinfo.username; //名前更新
 
     },
 }
