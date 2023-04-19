@@ -622,7 +622,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div class="d-flex justify-space-evenly" style="margin:0px 8px;">
+            <div class="d-flex justify-end" style="margin:0px 8px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:15%;">
@@ -656,9 +656,8 @@ export default {
 
                 <!-- メッセージ本体 -->
                 <span
-                    class="me-auto flex-grow-1"
                     :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
-                    style="margin-left:1vw; padding-left:1.5%; padding-right:1.5%"
+                    style=" width:92.5%; margin-left:0vw; padding-left:1.5%; padding-right:1.5%"
                 >
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
