@@ -299,13 +299,21 @@ export default {
                     type="error"
                     style="margin-top:2.5%"
                 >
-                    パスワードが一致しません
+                    確認用のパスワードが一致しません
+                </v-alert>
+
+                <v-alert
+                    v-if="changePasswordResult===-1"
+                    type="error"
+                    style="margin-top:2.5%"
+                >
+                    現在のパスワードで認証ができませんでした
                 </v-alert>
 
             </v-card>
 
             <!-- 変更に成功した画面 -->
-            <v-card v-else class="rounded-lg pa-6">
+            <v-card v-if="changePasswordResult===1" class="rounded-lg pa-6">
 
                 <v-card-title>
                     パスワードを変更
@@ -324,7 +332,7 @@ export default {
                     あざ
                 </v-btn>
 
-                </v-card>
+            </v-card>
         </v-dialog>
 
         <div style="margin-top:5%; height:90%;">
