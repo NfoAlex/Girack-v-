@@ -297,6 +297,7 @@ export default {
                 <v-alert
                     v-if="newPasswordCheck.length>=1&&newPasswordCheck!==newPassword"
                     type="error"
+                    class="rounded-lg"
                     style="margin-top:2.5%"
                 >
                     確認用のパスワードが一致しません
@@ -305,6 +306,7 @@ export default {
                 <v-alert
                     v-if="changePasswordResult===-1"
                     type="error"
+                    class="rounded-lg"
                     style="margin-top:2.5%"
                 >
                     現在のパスワードで認証ができませんでした
