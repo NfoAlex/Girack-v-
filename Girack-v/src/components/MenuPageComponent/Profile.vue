@@ -251,6 +251,9 @@ export default {
                     class="rounded-lg"
                     variant="outlined"
                     type="password"
+                    maxlength="128"
+                    hint="16文字以上"
+                    counter
                 >
                 </v-text-field>
 
@@ -260,6 +263,7 @@ export default {
                     class="rounded-lg"
                     variant="outlined"
                     type="password"
+                    maxlength="128"
                 >
                 </v-text-field>
 
@@ -267,7 +271,7 @@ export default {
                     @click="changePassword"
                     color="secondary"
                     class="rounded-lg"
-                    :disabled="newPasswordCheck!==newPassword"
+                    :disabled="newPasswordCheck!==newPassword||newPassword.length<16||currentPassword.length===0"
                     block
                 >
                     パスワード変更
