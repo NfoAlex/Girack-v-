@@ -30,7 +30,7 @@ export default {
             iconUploadDialog: false, //アイコンアップロード用ダイアログの表示
             iconUploadRule: [ //アイコンをアップロードするためのルール
                 value => {
-                    return !value || !value.length || value[0].size < 1024000 || '画像は1MB以下にしてください!'
+                    return !value || !value.length || value[0].size < 3072000 || '画像は3MB以下にしてください!'
                 }
             ],
             iconUploadFile: null, //アイコン用画像のデータ
@@ -53,8 +53,8 @@ export default {
         iconUploadFile: {
             handler() {
                 try {
-                //ファイルサイズが1MB以上なら無効化
-                if ( this.iconUploadFile[0].size > 1024000 ) {
+                //ファイルサイズが3MB以上なら無効化
+                if ( this.iconUploadFile[0].size > 3072000 ) {
                     this.iconUploadable = false;
 
                 } else {
@@ -194,11 +194,11 @@ export default {
 
                 <div style="margin-top:32px;">
                     <v-file-input
-                        accept="image/jpeg, image/gif"
+                        accept="image/jpeg, image/gif, image/png"
                         :rules="iconUploadRule"
                         v-model="iconUploadFile"
                         class="ma-3"
-                        label="アイコン用画像(1MB以下)"
+                        label="アイコン用画像(3MB以下)"
                         show-size
                     ></v-file-input>
                 </div>
@@ -337,6 +337,7 @@ export default {
             </v-card>
         </v-dialog>
 
+        <!-- プロフィールメイン画面 -->
         <div style="margin-top:5%; height:90%;">
                 <v-container class="bg-surface-variant">
                     <v-row no-gutters>
