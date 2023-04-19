@@ -207,6 +207,16 @@ export default {
 
             </v-card>
         </v-dialog>
+
+        <v-dialog
+            v-model="changePasswordDialog"
+            style="min-width:650px; width:50vh;"
+        >
+            <v-card class="rounded-lg pa-6">
+                パスワードを変える
+            </v-card>
+        </v-dialog>
+
         <div style="margin-top:5%; height:90%;">
                 <v-container class="bg-surface-variant">
                     <v-row no-gutters>
@@ -226,45 +236,58 @@ export default {
                             </v-card>
                         </v-col>
 
-                        <v-col>
+                        <v-col cols="10">
                             <!-- ユーザー名の部分 -->
                             <div variant="tonal" :class="cd" style="padding:1% 10% ">
-                                <!-- ユーザーID -->
-                                <p class="text-left text-h6">
-                                    # {{ Userinfo.userid }}
-                                </p>
-                                <!-- ユーザー名 -->
-                                <p
-                                    v-if="!nameEditing"
-                                    @dblclick="toggleEditing"
-                                    class="text-h4 text-left text-truncate"
-                                >
-                                    {{ Userinfo.username }}
-                                </p>
-                                <v-btn color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg"></v-btn>
-                                <!-- ユーザー名編集時 -->
-                                <v-text-field
-                                    v-if="nameEditing"
-                                    v-model="nameDisplaying"
-                                    counter
-                                    maxlength="32"
-                                    variant="solo"
-                                >
-                                    <template v-slot:append-inner>
-                                        <v-btn
-                                            @click="updateName"
-                                            :disabled="nameDisplaying.length>=32"
-                                            color="secondary"
-                                            size="x-small"
-                                            icon="mdi:mdi-check-bold"
-                                            class="rounded-lg"
-                                            style="margin:0 4px 0 8px; float:right"
+                                <span class="d-flex flex-column" style="width:100%">
+
+                                    <!-- ユーザーID -->
+                                    <p class="text-left text-h6">
+                                        # {{ Userinfo.userid }}
+                                    </p>
+
+                                    <!-- ユーザー名 -->
+                                    <p
+                                        v-if="!nameEditing"
+                                        @dblclick="toggleEditing"
+                                        class="text-h4 text-left text-truncate"
+                                    >
+                                        {{ Userinfo.username }}
+                                        <v-btn v-if="!nameEditing" color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg ma-5"></v-btn>
+                                    </p>
+
+                                    
+
+                                    <span class="auto" style="width:100%">
+                                        <!-- ユーザー名編集時 -->
+                                        <v-text-field
+                                            v-if="nameEditing"
+                                            style="width:100%"
+                                            class="me-auto"
+                                            v-model="nameDisplaying"
+                                            counter
+                                            maxlength="32"
+                                            variant="solo"
                                         >
-                                        </v-btn>
-                                        <v-btn @click="toggleEditing" color="secondary" size="x-small" icon="mdi:mdi-window-close" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
-                                        </v-btn>
-                                    </template>
-                                </v-text-field>
+                                            <template v-slot:append-inner>
+                                                <v-btn
+                                                    @click="updateName"
+                                                    :disabled="nameDisplaying.length>=32"
+                                                    color="secondary"
+                                                    size="x-small"
+                                                    icon="mdi:mdi-check-bold"
+                                                    class="rounded-lg"
+                                                    style="margin:0 4px 0 8px; float:right"
+                                                >
+                                                </v-btn>
+                                                <v-btn @click="toggleEditing" color="secondary" size="x-small" icon="mdi:mdi-window-close" class="rounded-lg" style="margin:0 8px 0 4px; float:right">
+                                                </v-btn>
+                                            </template>
+                                        </v-text-field>
+                                    </span>
+                                
+                                </span>
+                                
                             </div>
 
                         </v-col>
