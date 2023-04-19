@@ -30,7 +30,7 @@ export default {
             iconUploadDialog: false, //アイコンアップロード用ダイアログの表示
             iconUploadRule: [ //アイコンをアップロードするためのルール
                 value => {
-                    return !value || !value.length || value[0].size < 1024000 || '画像は1MB以下にしてください!'
+                    return !value || !value.length || value[0].size < 3072000 || '画像は3MB以下にしてください!'
                 }
             ],
             iconUploadFile: null, //アイコン用画像のデータ
@@ -198,7 +198,7 @@ export default {
                         :rules="iconUploadRule"
                         v-model="iconUploadFile"
                         class="ma-3"
-                        label="アイコン用画像(1MB以下)"
+                        label="アイコン用画像(3MB以下)"
                         show-size
                     ></v-file-input>
                 </div>
