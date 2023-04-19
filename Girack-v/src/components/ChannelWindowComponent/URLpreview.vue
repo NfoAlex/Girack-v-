@@ -127,6 +127,7 @@ export default {
                 :style="(link.img!==undefined&&link.img.length!==0)?'height:150px':'height:fit-content;'"
             >
                 <!-- 画像 -->
+                
                 <v-img
                     v-if="link.img!==undefined&&link.img.length!==0"
                     class="flex-shrink-1"
@@ -134,6 +135,7 @@ export default {
                     style="min-width:30%; width:fit-content; cursor:pointer;"
                     :src="getImage(link.img)"
                 >
+                
                     <!-- 画像が２枚以上あるならホバーで表示 -->
                     <v-tooltip
                         v-if="typeof(link.img)==='object'&&link.img.length>=2"
@@ -143,6 +145,13 @@ export default {
                     >
                         {{ link.img.length }}枚の画像を表示
                     </v-tooltip>
+                    <!-- 画像が2枚以上あった時の枚数表示 -->
+                    <v-badge
+                        v-if="typeof(link.img)==='object'&&link.img.length>=2"
+                        :content="link.img.length"
+                        inline
+                    >
+                    </v-badge>
                 </v-img>
 
                 <!-- タイトル、概要 -->
