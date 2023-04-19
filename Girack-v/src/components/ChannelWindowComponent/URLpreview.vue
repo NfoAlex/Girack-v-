@@ -123,17 +123,19 @@ export default {
                 v-if="link.mediaType!=='image'"
                 color="#222"
                 class="pa-3 rounded-lg d-flex flex-row"
-                style="max-height:150px; min-width:45%; width:85%;"
-                
+                style="min-width:45%; width:85%;"
+                :style="(link.img!==undefined&&link.img.length!==0)?'height:150px':'height:fit-content;'"
             >
                 <!-- 画像 -->
+                
                 <v-img
                     v-if="link.img!==undefined&&link.img.length!==0"
-                    class=""
+                    class="flex-shrink-1"
                     @click="toggleImageDialog(index)"
-                    style="min-width:30%; cursor:pointer;"
+                    style="min-width:30%; width:fit-content; cursor:pointer;"
                     :src="getImage(link.img)"
                 >
+                
                     <!-- 画像が２枚以上あるならホバーで表示 -->
                     <v-tooltip
                         v-if="typeof(link.img)==='object'&&link.img.length>=2"
@@ -143,10 +145,17 @@ export default {
                     >
                         {{ link.img.length }}枚の画像を表示
                     </v-tooltip>
+                    <!-- 画像が2枚以上あった時の枚数表示 -->
+                    <v-badge
+                        v-if="typeof(link.img)==='object'&&link.img.length>=2"
+                        :content="link.img.length"
+                        inline
+                    >
+                    </v-badge>
                 </v-img>
 
                 <!-- タイトル、概要 -->
-                <div class="d-flex flex-column">
+                <div class="d-flex flex-column flex-grow-1">
                     
                     <!-- ファビコンとタイトル用 -->
                     <div style="margin-left:16px;" class="d-flex flex-row align-center">
@@ -188,21 +197,15 @@ export default {
             </v-card>
 
             <!-- 画像単体用 -->
-            <v-card
-                v-if="link.mediaType==='image'"
-                class="rounded-lg pa-2"
-                color="#222"
-                style="width:fit-content;"
-            >
-                <div class="mx-auto">
-                    <v-img
+                <div class="rounded-lg">
+                    <img
+                        v-if="link.mediaType==='image'"
                         @click="toggleImageDialog(index)"
-                        style="margin:8px 4px; width:auto; min-width:150px; max-height:300px; cursor:pointer;"
+                        class="rounded-lg"
+                        style="margin:4px 8px; width:auto; max-height:200px; cursor:pointer;"
                         :src="getImage(link.url)"
                     >
-                    </v-img>
                 </div>
-            </v-card>
 
         </div>
     </div>
