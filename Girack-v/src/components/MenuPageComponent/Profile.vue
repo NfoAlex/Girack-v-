@@ -96,8 +96,8 @@ export default {
             socket.emit("changeProfile", {
                 name: nameUpdating, //更新する名前
                 reqSender: { //セッション認証に必要な情報送信
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
             this.nameEditing = false; //編集モードを閉じる
@@ -106,7 +106,7 @@ export default {
 
         //編集しているかどうかを切り替えする
         toggleEditing() {
-            this.nameDisplaying = Userinfo.value.username;
+            this.nameDisplaying = this.Userinfo.username;
             this.nameEditing = !this.nameEditing; //編集モード
         },
 
