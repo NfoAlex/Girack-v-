@@ -53,8 +53,8 @@ export default {
         iconUploadFile: {
             handler() {
                 try {
-                //ファイルサイズが1MB以上なら無効化
-                if ( this.iconUploadFile[0].size > 1024000 ) {
+                //ファイルサイズが3MB以上なら無効化
+                if ( this.iconUploadFile[0].size > 3072000 ) {
                     this.iconUploadable = false;
 
                 } else {
@@ -337,6 +337,7 @@ export default {
             </v-card>
         </v-dialog>
 
+        <!-- プロフィールメイン画面 -->
         <div style="margin-top:5%; height:90%;">
                 <v-container class="bg-surface-variant">
                     <v-row no-gutters>
