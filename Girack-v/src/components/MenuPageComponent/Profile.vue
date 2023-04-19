@@ -108,6 +108,7 @@ export default {
         toggleEditing() {
             this.nameDisplaying = this.Userinfo.username;
             this.nameEditing = !this.nameEditing; //編集モード
+
         },
 
         //アイコンの画像アップロード
@@ -124,8 +125,8 @@ export default {
                     buffer: this.iconUploadFile[0],
                 },
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             },
             (status) => {
