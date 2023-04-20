@@ -33,7 +33,8 @@ export default {
     data() {
         return {
             uri: backendURI,
-            txt: "",
+            txt: "", //入力した文字
+            uploadFileData: null, //アップロードするファイル
 
             dialogChannelMove: false, //チャンネル移動確認ダイアログ
             confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -262,6 +263,7 @@ export default {
 
 <template>
     <div v-if="!channelInfo.previewmode">
+
         <!-- 返信する前にチャンネル移動しようとしたときの警告 -->
         <v-dialog
             v-model="dialogChannelMove"
@@ -310,6 +312,8 @@ export default {
             </v-btn>
         </div>
 
+        <!-- ファイルアップロード部分 -->
+
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
 
             <v-container fill-height fluid class="d-flex">
@@ -333,6 +337,17 @@ export default {
                             v-bind="props"
                             :single-line="true"
                         >
+                        <template v-slot:prepend-inner>
+                            <v-btn
+                                color="white"
+                                variant="text"
+                                size="x-small"
+                                icon="mdi:mdi-upload"
+                                class="rounded-lg"
+                                style="margin:0 4px 0 8px; float:right"
+                            >
+                            </v-btn>
+                        </template>
                         </v-text-field>
                     </template>
 
