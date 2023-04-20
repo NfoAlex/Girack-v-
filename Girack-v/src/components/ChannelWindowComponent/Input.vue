@@ -34,7 +34,7 @@ export default {
         return {
             uri: backendURI,
             txt: "", //入力した文字
-            uploadFileData: null, //アップロードするファイル
+            fileInputData: null, //アップロードするファイル
 
             dialogChannelMove: false, //チャンネル移動確認ダイアログ
             confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -191,6 +191,21 @@ export default {
 
         },
 
+        //アップロードしたいファイルを入力
+        fileInputRef() {
+            console.log("Input :: fileInputRef : ファイルを入力");
+            console.log(this.$refs.fileInput);
+            this.$refs.fileInput.click();
+            
+        },
+
+        fileInput() {
+            console.log("ファイルがアップロードされた");
+            this.fileInputData = this.$refs.fileInput.files[0];
+            console.log(this.fileInputData);
+
+        },
+
         //メンション用のユーザー検索時にクリックされたら名前を自動入力する部分
         replaceQueryWithName(targetUserid) {
             //入力テキストの名前部分をIDへ置き換え
@@ -312,7 +327,26 @@ export default {
             </v-btn>
         </div>
 
-        <!-- ファイルアップロード部分 -->
+        <!-- ファイルアップロードデータの表示 -->
+        <div class="d-flex" style="margin:0 3%; margin-top:8px;">
+            <v-card
+                color="secondary"
+                class="pa-2 rounded-lg d-flex justify-space-between align-center"
+            >
+                <span>ファイル名</span>
+                <v-icon @click="" style="margin-left:8px">
+                    mdi:mdi-close-circle
+                </v-icon>
+            </v-card>
+        </div>
+
+        <!-- ファイル受け取り部分(非表示) -->
+        <input
+            @change="fileInput"
+            type="file"
+            ref="fileInput"
+            style="display:none"
+        >
 
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
 
@@ -337,8 +371,11 @@ export default {
                             v-bind="props"
                             :single-line="true"
                         >
+                        <!-- ファイルアップロード部分 -->
                         <template v-slot:prepend-inner>
+                            <!-- ファイルアップロードボタン -->
                             <v-btn
+                                @click="fileInputRef"
                                 color="white"
                                 variant="text"
                                 size="x-small"
