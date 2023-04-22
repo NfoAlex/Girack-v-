@@ -77,6 +77,12 @@ export default {
 
         //チャンネルのプレビューをする
         channelPreview(channelid) {
+            try {
+                //ひとつ前にプレビューしていた履歴を消す
+                delete this.MsgDB[this.PreviewChannelData.channelid];
+
+            } catch(e) {}
+
             //プレビュー用のチャンネルIDの設定
             this.PreviewChannelData.channelid = channelid;
             //チャンネル情報の取得
