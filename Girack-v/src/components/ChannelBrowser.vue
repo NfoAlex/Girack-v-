@@ -307,14 +307,14 @@ export default {
                             </v-btn>
 
                             <!-- プレビューボタン -->
-                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelPreview(c[0])" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
+                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelPreview(c[0])" icon="" size="small" style="margin-right:16px;" class="rounded-lg" variant="text">
                                 <v-icon>
                                     mdi:mdi-eye
                                 </v-icon>
                             </v-btn>
                             
-                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal">参加</v-btn>
-                            <v-btn v-else @click="channelLeave(c[0])" variant="outlined">退出</v-btn>
+                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal" class="rounded-lg">参加</v-btn>
+                            <v-btn v-else @click="channelLeave(c[0])" variant="outlined" class="rounded-lg">退出</v-btn>
                         </div>
 
                     </p>
