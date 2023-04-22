@@ -34,7 +34,7 @@ export default {
         return {
             uri: backendURI,
             txt: "", //入力した文字
-            fileInputData: null, //アップロードするファイル
+            fileInputData: [], //アップロードするファイル
 
             dialogChannelMove: false, //チャンネル移動確認ダイアログ
             confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -202,8 +202,9 @@ export default {
         //ファイル入力の受け取り
         fileInput() {
             console.log("ファイルがアップロードされた");
-            this.fileInputData = this.$refs.fileInput.files[0];
-            console.log(this.fileInputData);
+            this.fileInputData.push(this.$refs.fileInput.files[0]);
+            console.log("this.$refs.fileInput.files", this.$refs.fileInput.files)
+            console.log("this.fileInputData", this.fileInputData);
 
         },
 
@@ -333,7 +334,7 @@ export default {
             <v-card
                 color="secondary"
                 class="pa-2 rounded-lg d-flex justify-space-between align-center"
-                v-for="file in $refs.fileInput.files"
+                v-for="file in fileInputData"
             >
                 <span>{{ file.name }}</span>
                 <v-icon @click="" style="margin-left:8px">
