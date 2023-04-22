@@ -167,6 +167,9 @@ export default {
     },
 
     mounted() {
+        //プレビュー用のチャンネルIDを初期化
+        this.PreviewChannelData.channelid = null;
+
         //チャンネルリストの取得
         socket.emit("getInfoList", {
             target: "channel",
