@@ -103,7 +103,7 @@ export default {
 
         <v-btn
             v-if="channelInfo.previewmode"
-            @click="this.$router.push({ path: '/browser'})"
+            @click="$router.push({ path: '/browser'})"
             size="large"
             class="rounded-lg ma-1"
             color="secondary"
