@@ -311,7 +311,7 @@ export default {
 
                         <!-- ボタン群 -->
                         <div style="float:right">
-                            <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:8px;" class="rounded-lg">
+                            <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:4px;" class="rounded-lg">
                                 <v-icon icon="mdi:mdi-delete-forever"></v-icon>
                             </v-btn>
 
