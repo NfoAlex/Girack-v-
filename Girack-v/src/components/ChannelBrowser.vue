@@ -1,5 +1,5 @@
 <script>
-import { getSocket, dataUser, dataChannel, getMessage } from '../socket.js';
+import { getSocket, dataMsg, dataUser, dataChannel, getMessage } from '../socket.js';
 
 const socket = getSocket();
 
@@ -8,7 +8,8 @@ export default {
     setup() {
         const { Userinfo } = dataUser(); //自分のユーザー情報をインポート
         const { PreviewChannelData } = dataChannel();
-        return { PreviewChannelData, Userinfo };
+        const { MsgDB } = dataMsg();
+        return { PreviewChannelData, Userinfo, MsgDB };
 
     },
 
@@ -39,8 +40,8 @@ export default {
                 socket.emit("getInfoList", {
                     target: "channel",
                     reqSender: {
-                        userid: U.value.userid, //ユーザーID
-                        sessionid: U.value.sessionid //セッションID
+                        userid: U.userid, //ユーザーID
+                        sessionid: U.sessionid //セッションID
                     }
                 });
                 
@@ -56,10 +57,10 @@ export default {
             socket.emit("channelAction", {
                 action: "join",
                 channelid: channelid, //参加するチャンネルのid
-                userid: Userinfo.value.userid, //参加する人のユーザーID(この場合自分)
+                userid: this.Userinfo.userid, //参加する人のユーザーID(この場合自分)
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
 
@@ -67,8 +68,8 @@ export default {
             socket.emit("getInfoList", {
                 target: "channel",
                 reqSender: {
-                    userid: Userinfo.value.userid, //ユーザーID
-                    sessionid: Userinfo.value.sessionid //セッションID
+                    userid: this.Userinfo.userid, //ユーザーID
+                    sessionid: this.Userinfo.sessionid //セッションID
                 }
             });
 
@@ -98,10 +99,10 @@ export default {
             socket.emit("channelAction", {
                 action: "leave",
                 channelid: channelid, //抜けるチャンネルのID
-                userid: Userinfo.value.userid, //抜ける人のユーザーID(この場合自分)
+                userid: this.Userinfo.userid, //抜ける人のユーザーID(この場合自分)
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
 
@@ -109,8 +110,8 @@ export default {
             socket.emit("getInfoList", {
             target: "channel",
             reqSender: {
-                userid: Userinfo.value.userid, //ユーザーID
-                sessionid: Userinfo.value.sessionid //セッションID
+                userid: this.Userinfo.userid, //ユーザーID
+                sessionid: this.Userinfo.sessionid //セッションID
             }
         });
 
@@ -124,8 +125,8 @@ export default {
                 description: this.channelCreateDescription, //作るチャンネルの概要
                 scope: ( this.channelCreatePrivate?"private":"public" ), //作るチャンネルの公開範囲
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
             this.overlayChannelCreate = false; //チャンネル作成ダイアログを非表示
@@ -151,8 +152,8 @@ export default {
             socket.emit("channelRemove", {
                 channelid: cid, //消すチャンネルのID
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
                 }
             });
 
@@ -164,8 +165,8 @@ export default {
         socket.emit("getInfoList", {
             target: "channel",
             reqSender: {
-                userid: dataUser().Userinfo.value.userid, //ユーザーID
-                sessionid: dataUser().Userinfo.value.sessionid //セッションID
+                userid: this.Userinfo.userid, //ユーザーID
+                sessionid: this.Userinfo.sessionid //セッションID
             }
         });
 
