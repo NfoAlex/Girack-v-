@@ -510,6 +510,8 @@ export default {
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
 
+                if ( this.channelInfo.previewmode ) return -1;
+
                 try {
                     //最新のメッセージを取得するために履歴の長さを予め取得
                     let latestTime = this.MsgDBActive.slice(-1)[0].time;
