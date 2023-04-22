@@ -333,8 +333,9 @@ export default {
             <v-card
                 color="secondary"
                 class="pa-2 rounded-lg d-flex justify-space-between align-center"
+                v-for="file in $refs.fileInput.files"
             >
-                <span>ファイル名</span>
+                <span>{{ file.name }}</span>
                 <v-icon @click="" style="margin-left:8px">
                     mdi:mdi-close-circle
                 </v-icon>
