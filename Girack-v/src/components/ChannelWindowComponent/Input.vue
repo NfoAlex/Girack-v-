@@ -199,6 +199,7 @@ export default {
             
         },
 
+        //ファイル入力の受け取り
         fileInput() {
             console.log("ファイルがアップロードされた");
             this.fileInputData = this.$refs.fileInput.files[0];
@@ -379,9 +380,8 @@ export default {
                                 color="white"
                                 variant="text"
                                 size="x-small"
-                                icon="mdi:mdi-upload"
+                                icon="mdi:mdi-plus"
                                 class="rounded-lg"
-                                style="margin:0 4px 0 8px; float:right"
                             >
                             </v-btn>
                         </template>
