@@ -170,6 +170,10 @@ export default {
                     isReplying: ReplyState.value.isReplying, //これは返信かどうか
                     messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null, //返信先のメッセージID
                 },
+                fileData: { //ファイル添付データ
+                    isAttatched: (this.fileInputData.length!==0)?true:false, //添付しているかどうか
+                    attatchmentData: this.fileInputData //ファイルデータそのもの
+                },
                 content: this.txt, //メッセージの本文
                 reqSender: {
                     userid: this.Userinfo.userid,
@@ -195,14 +199,21 @@ export default {
         fileInputRef() {
             console.log("Input :: fileInputRef : ファイルを入力");
             console.log(this.$refs.fileInput);
-            this.$refs.fileInput.click();
+            this.$refs.fileInput.click(); //ファイルアップロードボタンを仮想的にクリック
             
         },
 
         //ファイル入力の受け取り
         fileInput() {
             console.log("ファイルがアップロードされた");
-            this.fileInputData.push(this.$refs.fileInput.files[0]);
+
+            //ファイルデータ用配列へファイルデータを追加
+            this.fileInputData.push({
+                name: this.$refs.fileInput.files[0].name,
+                size: this.$refs.fileInput.files[0].size,
+                type: this.$refs.fileInput.files[0].type,
+                buffer: this.$refs.fileInput.files[0]
+            });
             console.log("this.$refs.fileInput.files", this.$refs.fileInput.files)
             console.log("this.fileInputData", this.fileInputData);
 
@@ -334,10 +345,10 @@ export default {
             <v-card
                 color="secondary"
                 class="pa-2 rounded-lg d-flex justify-space-between align-center"
-                v-for="file in fileInputData"
+                v-for="(file,index) in fileInputData"
             >
                 <span>{{ file.name }}</span>
-                <v-icon @click="" style="margin-left:8px">
+                <v-icon @click="fileInputData.splice(index,1)" style="margin-left:8px">
                     mdi:mdi-close-circle
                 </v-icon>
             </v-card>
