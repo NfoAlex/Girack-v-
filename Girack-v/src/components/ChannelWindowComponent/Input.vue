@@ -227,7 +227,7 @@ export default {
 
             }
 
-            console.log("this.$refs.fileInput.files", this.$refs.fileInput.files)
+            console.log("this.$refs.fileInput.files", this.$refs.fileInput.files);
             console.log("this.fileInputData", this.fileInputData);
 
         },
@@ -425,19 +425,30 @@ export default {
                             v-bind="props"
                             :single-line="true"
                         >
-                        <!-- ファイルアップロード部分 -->
-                        <template v-slot:prepend-inner>
-                            <!-- ファイルアップロードボタン -->
-                            <v-btn
-                                @click="fileInputRef"
-                                color="white"
-                                variant="text"
-                                size="x-small"
-                                icon="mdi:mdi-plus"
-                                class="rounded-lg"
-                            >
-                            </v-btn>
-                        </template>
+
+                            <!-- ファイルアップロード部分 -->
+                            <template v-slot:prepend-inner>
+                                <!-- ファイルアップロードボタン -->
+                                <v-btn
+                                    @click="fileInputRef"
+                                    color="white"
+                                    variant="text"
+                                    size="x-small"
+                                    icon="mdi:mdi-plus"
+                                    class="rounded-lg"
+                                >
+                                    <v-icon>
+                                        mdi:mdi-plus
+                                    </v-icon>
+                                    <v-tooltip
+                                        activator="parent"
+                                        location="top"
+                                    >
+                                        100MBまで
+                                    </v-tooltip>
+                                </v-btn>
+                            </template>
+
                         </v-text-field>
                     </template>
 
