@@ -735,7 +735,11 @@ export default {
                                 <ContentMessageRender :content="m.content" />
 
                                 <!-- ファイル添付表示 -->
-                                <ContentAttatchmentRender v-if="m.fileData.isAttatched" :fileData="m.fileData" />
+                                <ContentAttatchmentRender
+                                    v-if="m.fileData"
+                                    :fileData="m.fileData"
+                                    :channelid="getPath"
+                                />
 
                                 <!-- URLプレビュー用 -->
                                 <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
