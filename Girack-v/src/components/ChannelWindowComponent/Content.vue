@@ -5,6 +5,7 @@ import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
+import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
 const socket = getSocket();
 
 export default {
@@ -732,6 +733,9 @@ export default {
 
                                 <!-- メッセージ本文 -->
                                 <ContentMessageRender :content="m.content" />
+
+                                <!-- ファイル添付表示 -->
+                                <ContentAttatchmentRender v-if="m.fileData.isAttatched" :fileData="m.fileData" />
 
                                 <!-- URLプレビュー用 -->
                                 <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
