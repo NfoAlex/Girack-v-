@@ -207,12 +207,15 @@ export default {
 
         //ファイル入力の受け取り
         fileInput() {
-            console.log("ファイルがアップロードされた");
-
+            //inputに入力されたファイルの数ぶん処理する
             for ( let index in this.$refs.fileInput.files ) {
                 //100MBよりもでかいならパス
-                if ( this.$refs.fileInput.files[index].size >= 100000000 ) {
-                    console.log("サイズでかい");
+                if (
+                    this.$refs.fileInput.files[index].size >= 100000000 ||
+                    this.$refs.fileInput.files[index].size < 1 ||
+                    this.$refs.fileInput.files[index].size === undefined
+                ) {
+                    console.log("アップロードエラー");
                 
                 } else {
                     //ファイルデータ用配列へファイルデータを追加
@@ -226,9 +229,6 @@ export default {
                 }
 
             }
-
-            console.log("this.$refs.fileInput.files", this.$refs.fileInput.files);
-            console.log("this.fileInputData", this.fileInputData);
 
         },
 
