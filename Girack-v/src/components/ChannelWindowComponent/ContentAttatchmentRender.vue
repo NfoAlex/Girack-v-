@@ -1,7 +1,16 @@
 <script>
 
+import { backendURI } from '../../socket';
+
 export default {
-    props: ["fileData"]
+    props: ["fileData", "channelid"],
+
+    data() {
+        return {
+            filesrc: backendURI + "/file/" + this.channelid + "/"
+        }
+    }
+
 }
 
 </script>
@@ -13,7 +22,7 @@ export default {
             style="max-width:50%; width:fit-content"
             v-for="file in fileData.attatchmentData"
         >
-            <p>{{ file.name }}</p>
+            <p><a target="_blank" :href="filesrc+file.fileid">{{ file.name }}</a></p>
             <p>サイズ: <v-chip size="small">{{ file.size }}</v-chip> | 種類: <v-chip size="small">{{ file.type }}</v-chip></p>
         </v-card>
     </div>
