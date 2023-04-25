@@ -3,8 +3,9 @@ import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setC
 import { getCONFIG } from "../../config.js";
 import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
-import URLpreview from "./URLpreview.vue";
+import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
+import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
 const socket = getSocket();
 
 export default {
@@ -18,7 +19,7 @@ export default {
 
     },
 
-    components: { Userpage, URLpreview, ContentHoverMenu, ContentMessageRender }, //ユーザーページ用
+    components: { Userpage, ContentURLpreview, ContentHoverMenu, ContentMessageRender, ContentAttatchmentRender }, //ユーザーページ用
     props: ["MsgDBActive", "channelInfo"],
 
     data() {
@@ -733,8 +734,15 @@ export default {
                                 <!-- メッセージ本文 -->
                                 <ContentMessageRender :content="m.content" />
 
+                                <!-- ファイル添付表示 -->
+                                <ContentAttatchmentRender
+                                    v-if="m.fileData"
+                                    :fileData="m.fileData"
+                                    :channelid="getPath"
+                                />
+
                                 <!-- URLプレビュー用 -->
-                                <URLpreview v-if="m.hasUrl" :urlData="m.urlData" />
+                                <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
 
                                 <!-- リアクション -->
                                 <div>

@@ -59,18 +59,19 @@ export default {
     <v-dialog
         v-model="imageDialogShow"
         style="max-width:90vw;"
+        @click="imageDialogShow=false"
     >
         <div style="overflow-y:auto;">
-            <div @click="imageDialogShow=false" class="mx-auto" style="width:95%;">
+            <div class="mx-auto">
 
                 <v-card
                     v-for="img in imageDialogUrls"
                     style="width:fit-content; margin:64px 0;"
                     color="rgba(0,0,0,0.75)"
-                    class="rounded-lg mx-auto"
+                    class="rounded-b-lg rounded-t-0 mx-auto"
                 >
                     <!-- 画像そのもの -->
-                    <v-img style="margin-bottom:8px; max-height:90vh;" :src="img">
+                    <v-img style="max-height:90vh; width:100%;" :src="img">
                     </v-img>
                     <!-- 画像URL -->
                     <p class="ma-2 text-subtitle-2">{{ img }}</p>
@@ -130,7 +131,7 @@ export default {
                 
                 <v-img
                     v-if="link.img!==undefined&&link.img.length!==0"
-                    class="flex-shrink-1"
+                    class="flex-shrink-1 rounded-lg"
                     @click="toggleImageDialog(index)"
                     style="min-width:30%; width:fit-content; cursor:pointer;"
                     :src="getImage(link.img)"

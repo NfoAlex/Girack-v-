@@ -90,7 +90,7 @@ export default {
         <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
             <Content :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo()" />
         </div>
-        <div :class="[w]" class="flex-grow-0 flex-shrink-1">
+        <div :class="[w]" class="input flex-grow-0 flex-shrink-1">
             <Input :channelInfo="getChannelInfo()" />
         </div>
     </div>
@@ -103,10 +103,16 @@ export default {
     margin: 0 0;
     box-sizing: border-box;
 }
+
 .head
 {
     height: 10vh;
     border-bottom: solid 0.1px #424242;
+}
+
+.input
+{
+    border-top: solid 0.1px #424242;
 }
 
 </style>

@@ -33,7 +33,8 @@ export default {
     data() {
         return {
             uri: backendURI,
-            txt: "",
+            txt: "", //入力した文字
+            fileInputData: [], //アップロードするファイル
 
             dialogChannelMove: false, //チャンネル移動確認ダイアログ
             confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -169,6 +170,10 @@ export default {
                     isReplying: ReplyState.value.isReplying, //これは返信かどうか
                     messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null, //返信先のメッセージID
                 },
+                fileData: { //ファイル添付データ
+                    isAttatched: (this.fileInputData.length!==0)?true:false, //添付しているかどうか
+                    attatchmentData: this.fileInputData //ファイルデータそのもの
+                },
                 content: this.txt, //メッセージの本文
                 reqSender: {
                     userid: this.Userinfo.userid,
@@ -177,6 +182,8 @@ export default {
             });
             
             this.txt = ""; //入力欄を空に
+            this.fileInputData = []; //ファイルを空に
+            
             console.log("--- msg sent ---");
 
             this.resetReply(); //返信状態を初期化
@@ -187,6 +194,41 @@ export default {
         resetReply() {
             ReplyState.value.isReplying = false;
             ReplyState.value.messageid = "0";
+
+        },
+
+        //アップロードしたいファイルを入力
+        fileInputRef() {
+            console.log("Input :: fileInputRef : ファイルを入力");
+            console.log(this.$refs.fileInput);
+            this.$refs.fileInput.click(); //ファイルアップロードボタンを仮想的にクリック
+            
+        },
+
+        //ファイル入力の受け取り
+        fileInput() {
+            console.log("ファイルがアップロードされた");
+
+            for ( let index in this.$refs.fileInput.files ) {
+                //100MBよりもでかいならパス
+                if ( this.$refs.fileInput.files[index].size >= 100000000 ) {
+                    console.log("サイズでかい");
+                
+                } else {
+                    //ファイルデータ用配列へファイルデータを追加
+                    this.fileInputData.push({
+                        name: this.$refs.fileInput.files[index].name,
+                        size: this.$refs.fileInput.files[index].size,
+                        type: this.$refs.fileInput.files[index].type,
+                        buffer: this.$refs.fileInput.files[index]
+                    });
+
+                }
+
+            }
+
+            console.log("this.$refs.fileInput.files", this.$refs.fileInput.files);
+            console.log("this.fileInputData", this.fileInputData);
 
         },
 
@@ -231,7 +273,31 @@ export default {
 
             }
 
+        },
+
+        //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
+        humanFileSize(bytes, si=false, dp=1) {
+            const thresh = si ? 1000 : 1024;
+
+            if (Math.abs(bytes) < thresh) {
+                return bytes + ' B';
+            }
+
+            const units = si 
+                ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+                : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+            let u = -1;
+            const r = 10**dp;
+
+            do {
+                bytes /= thresh;
+                ++u;
+            } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+            return bytes.toFixed(dp) + ' ' + units[u];
         }
+
     },
 
     mounted() {
@@ -262,6 +328,7 @@ export default {
 
 <template>
     <div v-if="!channelInfo.previewmode">
+
         <!-- 返信する前にチャンネル移動しようとしたときの警告 -->
         <v-dialog
             v-model="dialogChannelMove"
@@ -310,6 +377,31 @@ export default {
             </v-btn>
         </div>
 
+        <!-- ファイルアップロードデータの表示 -->
+        <div class="d-flex align-center" style="margin:0 3%; margin-top:8px;">
+            <v-card
+                color="secondary"
+                style="margin-right:8px;"
+                class="pa-2 rounded-lg d-flex justify-space-between align-center"
+                v-for="(file,index) in fileInputData"
+            >
+                <span class="text-truncate">{{ file.name }}</span>
+                <v-chip style="margin:0 4px;" size="small"> {{ humanFileSize(file.size) }} </v-chip>
+                <v-icon @click="fileInputData.splice(index,1)" style="margin-left:4px">
+                    mdi:mdi-close-circle
+                </v-icon>
+            </v-card>
+        </div>
+
+        <!-- ファイル受け取り部分(非表示) -->
+        <input
+            @change="fileInput"
+            type="file"
+            ref="fileInput"
+            style="display:none"
+            multiple
+        >
+
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
 
             <v-container fill-height fluid class="d-flex">
@@ -333,6 +425,30 @@ export default {
                             v-bind="props"
                             :single-line="true"
                         >
+
+                            <!-- ファイルアップロード部分 -->
+                            <template v-slot:prepend-inner>
+                                <!-- ファイルアップロードボタン -->
+                                <v-btn
+                                    @click="fileInputRef"
+                                    color="white"
+                                    variant="text"
+                                    size="x-small"
+                                    icon="mdi:mdi-plus"
+                                    class="rounded-lg"
+                                >
+                                    <v-icon>
+                                        mdi:mdi-plus
+                                    </v-icon>
+                                    <v-tooltip
+                                        activator="parent"
+                                        location="top"
+                                    >
+                                        100MBまで
+                                    </v-tooltip>
+                                </v-btn>
+                            </template>
+
                         </v-text-field>
                     </template>
 
