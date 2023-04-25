@@ -211,15 +211,19 @@ export default {
 
             for ( let index in this.$refs.fileInput.files ) {
                 //100MBよりもでかいならパス
-                if ( this.$refs.fileInput.files[index].size >= 100000000 ) { console.log("サイズでかい"); return -1; }
+                if ( this.$refs.fileInput.files[index].size >= 100000000 ) {
+                    console.log("サイズでかい");
                 
-                //ファイルデータ用配列へファイルデータを追加
-                this.fileInputData.push({
-                    name: this.$refs.fileInput.files[index].name,
-                    size: this.$refs.fileInput.files[index].size,
-                    type: this.$refs.fileInput.files[index].type,
-                    buffer: this.$refs.fileInput.files[index]
-                });
+                } else {
+                    //ファイルデータ用配列へファイルデータを追加
+                    this.fileInputData.push({
+                        name: this.$refs.fileInput.files[index].name,
+                        size: this.$refs.fileInput.files[index].size,
+                        type: this.$refs.fileInput.files[index].type,
+                        buffer: this.$refs.fileInput.files[index]
+                    });
+
+                }
 
             }
 
