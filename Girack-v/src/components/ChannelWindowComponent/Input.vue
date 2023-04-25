@@ -211,8 +211,12 @@ export default {
 
             for ( let index in this.$refs.fileInput.files ) {
                 //100MBよりもでかいならパス
-                if ( this.$refs.fileInput.files[index].size >= 100000000 ) {
-                    console.log("サイズでかい");
+                if (
+                    this.$refs.fileInput.files[index].size >= 100000000 ||
+                    this.$refs.fileInput.files[index].size < 1 ||
+                    this.$refs.fileInput.files[index].size === undefined
+                ) {
+                    console.log("アップロードエラー");
                 
                 } else {
                     //ファイルデータ用配列へファイルデータを追加
