@@ -210,6 +210,9 @@ export default {
             console.log("ファイルがアップロードされた");
 
             for ( let index in this.$refs.fileInput.files ) {
+                //100MBよりもでかいならパス
+                if ( this.$refs.fileInput.files[index].size >= 100000000 ) { console.log("サイズでかい"); return -1; }
+                
                 //ファイルデータ用配列へファイルデータを追加
                 this.fileInputData.push({
                     name: this.$refs.fileInput.files[index].name,
