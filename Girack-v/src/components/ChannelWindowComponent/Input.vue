@@ -207,8 +207,7 @@ export default {
 
         //ファイル入力の受け取り
         fileInput() {
-            console.log("ファイルがアップロードされた");
-
+            //inputに入力されたファイルの数ぶん処理する
             for ( let index in this.$refs.fileInput.files ) {
                 //100MBよりもでかいならパス
                 if (
@@ -230,9 +229,6 @@ export default {
                 }
 
             }
-
-            console.log("this.$refs.fileInput.files", this.$refs.fileInput.files);
-            console.log("this.fileInputData", this.fileInputData);
 
         },
 
