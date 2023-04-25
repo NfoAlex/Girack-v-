@@ -26,15 +26,15 @@ export default {
         @click="imageDialogShow=false"
     >
         <div style="overflow-y:auto;">
-            <div class="mx-auto" style="width:95%;">
+            <div class="mx-auto">
 
                 <v-card
                     style="width:fit-content; margin:64px 0;"
                     color="rgba(0,0,0,0.75)"
-                    class="rounded-lg mx-auto"
+                    class="rounded-b-lg rounded-t-0 mx-auto"
                 >
                     <!-- 画像そのもの -->
-                    <v-img style="margin-bottom:8px; max-height:90vh; cursor:pointer;" :src="imageDialogSrc">
+                    <v-img style="width:100%; max-height:90vh;" :src="imageDialogSrc">
                     </v-img>
                     <!-- 画像URL -->
                     <p class="ma-2 text-subtitle-2">{{ imageDialogSrc }}</p>
