@@ -59,7 +59,7 @@ export default {
                 <p class="text-subtitle-1">
                     <a target="_blank" :href="filesrc+file.fileid">{{ file.name }}</a>
                 </p>
-                <p>サイズ: <v-chip size="small">{{ file.size }}</v-chip> | 種類: <v-chip size="small">{{ file.type }}</v-chip></p>
+                <p class="text-medium-emphasis">サイズ: <v-chip size="small">{{ file.size }}</v-chip> | 種類: <v-chip size="small">{{ file.type }}</v-chip></p>
             </span>
 
         </v-card>
