@@ -23,9 +23,10 @@ export default {
     <v-dialog
         v-model="imageDialogShow"
         style="max-width:90vw;"
+        @click="imageDialogShow=false"
     >
         <div style="overflow-y:auto;">
-            <div @click="imageDialogShow=false" class="mx-auto" style="width:95%;">
+            <div class="mx-auto" style="width:95%;">
 
                 <v-card
                     style="width:fit-content; margin:64px 0;"
@@ -60,7 +61,7 @@ export default {
                 </p>
                 <p>サイズ: <v-chip size="small">{{ file.size }}</v-chip> | 種類: <v-chip size="small">{{ file.type }}</v-chip></p>
             </span>
-            
+
         </v-card>
     </div>
 </template>
