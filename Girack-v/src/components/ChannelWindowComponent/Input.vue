@@ -362,6 +362,7 @@ export default {
             type="file"
             ref="fileInput"
             style="display:none"
+            multiple
         >
 
         <div style="width:90%; height:fit-content;" class="mx-auto d-flex align-center">
