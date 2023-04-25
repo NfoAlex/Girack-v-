@@ -266,7 +266,31 @@ export default {
 
             }
 
+        },
+
+        //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
+        humanFileSize(bytes, si=false, dp=1) {
+            const thresh = si ? 1000 : 1024;
+
+            if (Math.abs(bytes) < thresh) {
+                return bytes + ' B';
+            }
+
+            const units = si 
+                ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+                : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+            let u = -1;
+            const r = 10**dp;
+
+            do {
+                bytes /= thresh;
+                ++u;
+            } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+            return bytes.toFixed(dp) + ' ' + units[u];
         }
+
     },
 
     mounted() {
@@ -347,14 +371,16 @@ export default {
         </div>
 
         <!-- ファイルアップロードデータの表示 -->
-        <div class="d-flex" style="margin:0 3%; margin-top:8px;">
+        <div class="d-flex align-center" style="margin:0 3%; margin-top:8px;">
             <v-card
                 color="secondary"
+                style="margin-right:8px;"
                 class="pa-2 rounded-lg d-flex justify-space-between align-center"
                 v-for="(file,index) in fileInputData"
             >
-                <span>{{ file.name }}</span>
-                <v-icon @click="fileInputData.splice(index,1)" style="margin-left:8px">
+                <span class="text-truncate">{{ file.name }}</span>
+                <v-chip style="margin:0 4px;" size="small"> {{ humanFileSize(file.size) }} </v-chip>
+                <v-icon @click="fileInputData.splice(index,1)" style="margin-left:4px">
                     mdi:mdi-close-circle
                 </v-icon>
             </v-card>
