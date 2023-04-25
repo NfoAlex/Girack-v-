@@ -209,13 +209,17 @@ export default {
         fileInput() {
             console.log("ファイルがアップロードされた");
 
-            //ファイルデータ用配列へファイルデータを追加
-            this.fileInputData.push({
-                name: this.$refs.fileInput.files[0].name,
-                size: this.$refs.fileInput.files[0].size,
-                type: this.$refs.fileInput.files[0].type,
-                buffer: this.$refs.fileInput.files[0]
-            });
+            for ( let index in this.$refs.fileInput.files ) {
+                //ファイルデータ用配列へファイルデータを追加
+                this.fileInputData.push({
+                    name: this.$refs.fileInput.files[index].name,
+                    size: this.$refs.fileInput.files[index].size,
+                    type: this.$refs.fileInput.files[index].type,
+                    buffer: this.$refs.fileInput.files[index]
+                });
+
+            }
+
             console.log("this.$refs.fileInput.files", this.$refs.fileInput.files)
             console.log("this.fileInputData", this.fileInputData);
 
