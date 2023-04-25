@@ -153,28 +153,12 @@ socket.on("messageReceive", (msg) => {
         //DB配列に追加
         if ( MsgDB.value[msg.channelid] !== undefined ) {
             MsgDB.value[msg.channelid].push({
-                messageid: msg.messageid,
-                userid: msg.userid,
-                channelid: msg.channelid,
-                time: msg.time,
-                content: msg.content,
-                replyData: msg.replyData,
-                hasUrl : msg.hasUrl,
-                urlData: msg.urlData,
-                reaction: msg.reaction
+                ...msg
             });
             
         } else { //配列が空なら新しく作成、配置
             MsgDB.value[msg.channelid] = [{
-                messageid: msg.messageid,
-                userid: msg.userid,
-                channelid: msg.channelid,
-                time: msg.time,
-                content: msg.content,
-                replyData: msg.replyData,
-                hasUrl : msg.hasUrl,
-                urlData: msg.urlData,
-                reaction: msg.reaction
+                ...msg
             }];
 
         }
