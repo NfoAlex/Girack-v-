@@ -118,7 +118,8 @@ export default {
                 switch(term) {
                     //新着数
                     case "new":
-                    return this.MsgReadTime[channelid].new; //新着数を返す
+                        if ( this.MsgReadTime[channelid].new > 20 ) return "+20";
+                        return this.MsgReadTime[channelid].new; //新着数を返す
 
                     //メンション数
                     case "mention":
