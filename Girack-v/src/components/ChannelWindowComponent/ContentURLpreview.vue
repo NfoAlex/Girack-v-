@@ -137,6 +137,7 @@ export default {
                     :src="getImage(link.img)"
                 >
 
+                    <!-- 画像をロード中の時のホルダー -->
                     <template v-slot:placeholder>
                         <span style="height:100%; width:150px;">
                             Loading...

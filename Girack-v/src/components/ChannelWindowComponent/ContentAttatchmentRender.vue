@@ -51,10 +51,9 @@ export default {
         @click="imageDialogShow=false"
     >
         <div style="overflow-y:auto;">
-            <div class="mx-auto">
 
                 <v-card
-                    style="width:fit-content; margin:64px 0;"
+                    style="width:fit-content; margin:32px 0; padding:0;"
                     color="rgba(0,0,0,0.75)"
                     class="rounded-b-lg rounded-t-0 mx-auto"
                 >
@@ -65,22 +64,34 @@ export default {
                     <p class="ma-2 text-subtitle-2">{{ imageDialogSrc }}</p>
                 </v-card>
 
-            </div>
         </div>
     </v-dialog>
 
     <div>
         <v-card
-            class="rounded-lg pa-3 ma-2 d-flex justify-space-between"
-            style="max-width:50%; width:fit-content"
+            class="rounded-lg pa-3 ma-2 d-flex align-center justify-space-between"
+            style="max-width:65%;"
             v-for="file in fileData.attatchmentData"
         >
+            <!-- <span v-if="file.type.includes('image/')"> -->
+                <v-img
+                    @click="imageDialogShow=true;imageDialogSrc=filesrc+file.fileid;"
+                    style="max-height:150px; height:100%; min-width:30%; cursor:pointer;"
+                    :src="filesrc+file.fileid"
+                >
+                    <template style="min-height:150px;" v-slot:error>
+                        <v-icon>
+                            mdi:mdi-file-image-remove
+                        </v-icon>
+                    </template>
 
-            <span v-if="file.type.includes('image/')">
-                <img @click="imageDialogShow=true;imageDialogSrc=filesrc+file.fileid;" style="max-height: 150px; cursor:pointer;" :src="filesrc+file.fileid">
-            </span>
+                    <template style="height:150px;" v-slot:placeholder>
+                        Loading...
+                    </template>
+                    
+                </v-img>
 
-            <span style="margin-left:16px;">
+            <span class="flex-shrink-1" style="margin-left:16px;">
                 <p class="text-subtitle-1">
                     <a target="_blank" :href="filesrc+file.fileid">{{ file.name }}</a>
                 </p>
