@@ -40,6 +40,13 @@ export default {
         //添付ファイルのアイコン表記
         attatchmentDisplayIcon(type) {
             console.log("ContentAttatchmentRender :: attachmentDisplayIcon : type", type);
+
+            //動画ファイルなら動画アイコンを返す
+            if ( type.includes("video/") ) return "file-video";
+
+            //音ファイルなら音楽アイコンを返す
+            if ( type.includes("audio/") ) return "file-music";
+
             //拡張子にあわせてアイコンの名前を返す
             switch(type) {
                 case "application/pdf":
@@ -53,6 +60,12 @@ export default {
 
                 case "application/x-msdownload":
                     return "application-brackets-outline";
+
+                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                    return "microsoft-excel";
+
+                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                    return "microsoft-word";
 
                 default:
                     return "file";
