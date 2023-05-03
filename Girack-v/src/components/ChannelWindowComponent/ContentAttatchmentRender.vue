@@ -47,6 +47,9 @@ export default {
             //音ファイルなら音楽アイコンを返す
             if ( type.includes("audio/") ) return "file-music";
 
+            //テキスト系のファイルならテキストアイコンを返す
+            if ( type.includes("text/") ) return "text-box-edit";
+
             //拡張子にあわせてアイコンの名前を返す
             switch(type) {
                 case "application/pdf":
