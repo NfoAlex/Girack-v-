@@ -84,7 +84,7 @@ export default {
     <div v-for="(link, index) in urlData.data">
 
         <!-- Twitterリンク用 -->
-        <div class="pa-3" v-if="link.url.includes('twitter.com')">
+        <div class="pa-3" v-if="link.url.includes('https://twitter.com/')&&link.url.includes('/status/')">
             <v-btn class="rounded-lg" @click="embedTwitter=!embedTwitter" color="blue" size="small">
                 <v-icon>mdi:mdi-twitter</v-icon>
                 <span v-if="!embedTwitter">埋め込みリンクを表示</span>
