@@ -35,6 +35,29 @@ export default {
 
 
             return bytes.toFixed(dp) + ' ' + units[u];
+        },
+
+        //添付ファイルのアイコン表記
+        attatchmentDisplayIcon(type) {
+            console.log("ContentAttatchmentRender :: attachmentDisplayIcon : type", type);
+            //拡張子にあわせてアイコンの名前を返す
+            switch(type) {
+                case "application/pdf":
+                    return "file-pdf-box";
+
+                case "text/x-python":
+                    return "language-python";
+
+                case "application/x-zip-compressed":
+                    return "zip-box";
+
+                case "application/x-msdownload":
+                    return "application-brackets-outline";
+
+                default:
+                    return "file";
+
+            }
         }
     }
 
@@ -73,6 +96,7 @@ export default {
             style="width:65%; max-width:800px;"
             v-for="file in fileData.attatchmentData"
         >
+            <!-- 画像ファイルだった時のプレビュー表示 -->
             <v-img
                 v-if="file.type.includes('image/')"
                 @click="imageDialogShow=true;imageDialogSrc=filesrc+file.fileid;"
@@ -96,6 +120,17 @@ export default {
 
             </v-img>
 
+            <!-- 添付ファイルのアイコン表記 -->
+            <span>
+                <v-icon
+                    v-if="!file.type.includes('image/')"
+                    style="margin:0 16px;"
+                >
+                    mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
+                </v-icon>
+            </span>
+
+            <!-- ファイル情報の表示 -->
             <span class="flex-grow-1" style="margin-left:16px;">
                 <p class="text-subtitle-1">
                     <a target="_blank" :href="filesrc+file.fileid">{{ file.name }}</a>
