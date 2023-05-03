@@ -35,6 +35,45 @@ export default {
 
 
             return bytes.toFixed(dp) + ' ' + units[u];
+        },
+
+        //添付ファイルのアイコン表記
+        attatchmentDisplayIcon(type) {
+            console.log("ContentAttatchmentRender :: attachmentDisplayIcon : type", type);
+
+            //動画ファイルなら動画アイコンを返す
+            if ( type.includes("video/") ) return "file-video";
+
+            //音ファイルなら音楽アイコンを返す
+            if ( type.includes("audio/") ) return "file-music";
+
+            //テキスト系のファイルならテキストアイコンを返す
+            if ( type.includes("text/") ) return "text-box-edit";
+
+            //拡張子にあわせてアイコンの名前を返す
+            switch(type) {
+                case "application/pdf":
+                    return "file-pdf-box";
+
+                case "text/x-python":
+                    return "language-python";
+
+                case "application/x-zip-compressed":
+                    return "zip-box";
+
+                case "application/x-msdownload": //exeファイル
+                    return "application-brackets-outline";
+
+                case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                    return "microsoft-excel";
+
+                case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                    return "microsoft-word";
+
+                default:
+                    return "file";
+
+            }
         }
     }
 
@@ -51,10 +90,9 @@ export default {
         @click="imageDialogShow=false"
     >
         <div style="overflow-y:auto;">
-            <div class="mx-auto">
 
                 <v-card
-                    style="width:fit-content; margin:64px 0;"
+                    style="width:fit-content; margin:32px 0; padding:0;"
                     color="rgba(0,0,0,0.75)"
                     class="rounded-b-lg rounded-t-0 mx-auto"
                 >
@@ -65,22 +103,51 @@ export default {
                     <p class="ma-2 text-subtitle-2">{{ imageDialogSrc }}</p>
                 </v-card>
 
-            </div>
         </div>
     </v-dialog>
 
     <div>
         <v-card
-            class="rounded-lg pa-3 ma-2 d-flex justify-space-between"
-            style="max-width:50%; width:fit-content"
+            class="rounded-lg pa-3 ma-2 d-flex align-center justify-space-between"
+            style="width:fit-content; max-width:800px;"
             v-for="file in fileData.attatchmentData"
         >
+            <!-- 画像ファイルだった時のプレビュー表示 -->
+            <v-img
+                v-if="file.type.includes('image/')"
+                @click="imageDialogShow=true;imageDialogSrc=filesrc+file.fileid;"
+                class="flex-shrink-1"
+                style="max-height:150px; min-height:30px; height:100%; min-width:30%; max-width:150px; cursor:pointer;"
+                :src="filesrc+file.fileid"
+            >
+                <template v-slot:error>
+                    <div class="mx-auto" style="width:fit-content; min-height:150px;">
+                        <v-icon size="large">
+                            mdi:mdi-file-image-remove
+                        </v-icon>
+                    </div>
+                </template>
 
-            <span v-if="file.type.includes('image/')">
-                <img @click="imageDialogShow=true;imageDialogSrc=filesrc+file.fileid;" style="max-height: 150px; cursor:pointer;" :src="filesrc+file.fileid">
+                <template v-slot:placeholder>
+                    <p style="height:150px !important; width:100%;">
+                        Loading...
+                    </p>
+                </template>
+
+            </v-img>
+
+            <!-- 添付ファイルのアイコン表記 -->
+            <span>
+                <v-icon
+                    v-if="!file.type.includes('image/')"
+                    style="margin:0 16px;"
+                >
+                    mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
+                </v-icon>
             </span>
 
-            <span style="margin-left:16px;">
+            <!-- ファイル情報の表示 -->
+            <span class="flex-grow-1" style="margin-left:16px;">
                 <p class="text-subtitle-1">
                     <a target="_blank" :href="filesrc+file.fileid">{{ file.name }}</a>
                 </p>
