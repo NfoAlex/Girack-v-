@@ -58,7 +58,7 @@ export default {
                 case "application/x-zip-compressed":
                     return "zip-box";
 
-                case "application/x-msdownload":
+                case "application/x-msdownload": //exeファイル
                     return "application-brackets-outline";
 
                 case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
@@ -106,7 +106,7 @@ export default {
     <div>
         <v-card
             class="rounded-lg pa-3 ma-2 d-flex align-center justify-space-between"
-            style="width:65%; max-width:800px;"
+            style="width:fit-content; max-width:800px;"
             v-for="file in fileData.attatchmentData"
         >
             <!-- 画像ファイルだった時のプレビュー表示 -->
