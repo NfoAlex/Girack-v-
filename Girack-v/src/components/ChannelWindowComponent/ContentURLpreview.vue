@@ -136,6 +136,12 @@ export default {
                     style="min-width:30%; width:fit-content; cursor:pointer;"
                     :src="getImage(link.img)"
                 >
+
+                    <template v-slot:placeholder>
+                        <span style="height:100%; width:150px;">
+                            Loading...
+                        </span>
+                    </template>
                 
                     <!-- 画像が２枚以上あるならホバーで表示 -->
                     <v-tooltip
