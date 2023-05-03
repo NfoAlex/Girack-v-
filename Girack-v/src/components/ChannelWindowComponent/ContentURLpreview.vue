@@ -91,6 +91,17 @@ export default {
                 <span v-else>埋め込みを隠す<v-icon>mdi:mdi-window-close</v-icon></span>
             </v-btn>
         </div>
+        
+        <!-- ツイートじゃないTwitterのリンクの場合 -->
+        <div class="pa-3" v-if="link.url.includes('https://twitter.com/')&&!link.url.includes('/status/')">
+            <a :href="link.url" target="_blank">
+                <v-btn class="rounded-lg" color="blue" size="small">
+                    <v-icon>mdi:mdi-open-in-new</v-icon>
+                    Twitterのページへ飛ぶ
+                </v-btn>
+            </a>
+        </div>
+
         <!-- Twitter埋め込み表示 -->
         <div v-if="embedTwitter">
             <Tweet
