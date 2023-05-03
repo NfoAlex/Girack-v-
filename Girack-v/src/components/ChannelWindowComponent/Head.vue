@@ -75,7 +75,7 @@ export default {
         v-model="channelDialogShow"
         style="width:50vw; max-width:650px;"
     >
-        <ChannelConfig :channelid="channelDialogId" :channelInfo="channelInfo" />
+        <ChannelConfig :channelid="getPath" :channelInfo="channelInfo" />
     </v-dialog>
 
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
