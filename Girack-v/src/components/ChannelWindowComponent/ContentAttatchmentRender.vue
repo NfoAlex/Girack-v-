@@ -70,28 +70,33 @@ export default {
     <div>
         <v-card
             class="rounded-lg pa-3 ma-2 d-flex align-center justify-space-between"
-            style="max-width:65%;"
+            style="width:65%; max-width:800px;"
             v-for="file in fileData.attatchmentData"
         >
-            <!-- <span v-if="file.type.includes('image/')"> -->
-                <v-img
-                    @click="imageDialogShow=true;imageDialogSrc=filesrc+file.fileid;"
-                    style="max-height:150px; height:100%; min-width:30%; cursor:pointer;"
-                    :src="filesrc+file.fileid"
-                >
-                    <template style="min-height:150px;" v-slot:error>
-                        <v-icon>
+            <v-img
+                v-if="file.type.includes('image/')"
+                @click="imageDialogShow=true;imageDialogSrc=filesrc+file.fileid;"
+                class="flex-shrink-1"
+                style="max-height:150px; min-height:30px; height:100%; min-width:30%; max-width:150px; cursor:pointer;"
+                :src="filesrc+file.fileid"
+            >
+                <template v-slot:error>
+                    <div class="mx-auto" style="width:fit-content; min-height:150px;">
+                        <v-icon size="large">
                             mdi:mdi-file-image-remove
                         </v-icon>
-                    </template>
+                    </div>
+                </template>
 
-                    <template style="height:150px;" v-slot:placeholder>
+                <template v-slot:placeholder>
+                    <p style="height:150px !important; width:100%;">
                         Loading...
-                    </template>
-                    
-                </v-img>
+                    </p>
+                </template>
 
-            <span class="flex-shrink-1" style="margin-left:16px;">
+            </v-img>
+
+            <span class="flex-grow-1" style="margin-left:16px;">
                 <p class="text-subtitle-1">
                     <a target="_blank" :href="filesrc+file.fileid">{{ file.name }}</a>
                 </p>
