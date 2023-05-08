@@ -105,7 +105,7 @@ export default {
         <!-- Twitter埋め込み表示 -->
         <div v-if="embedTwitter">
             <Tweet
-                style="max-width:550px; width:50%; background: black;"
+                style="max-width:350px; width:30%; background: black;"
                 width="550"
                 :tweet-url="link.url.split('?s=')[0]"
                 theme="dark"
@@ -114,7 +114,7 @@ export default {
             >
             <!-- 読み込み中 -->
             <template v-slot:loading>
-                <span>Loading...</span>
+                <v-chip>Loading...</v-chip>
             </template>
             <!-- エラー -->
             <template v-slot:error>
