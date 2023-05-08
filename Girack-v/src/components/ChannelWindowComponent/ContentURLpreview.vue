@@ -49,39 +49,12 @@ export default {
 
         },
 
-        //画像のID
-        generateImageFrameId() {
-
-        },
-
         //画像単体時での画像ロードが検知されたときのロードされたと設定
         imageAloneLoaded() {
             this.imageAloneLoadState = true; //ロードできた
             console.log("ContentURLpreview :: imageAloneLoaded : 画像ロードできたよ");
 
         },
-
-        //画像を読み込んでロード
-        startFetchAndDisplayImage(src) {
-            console.log(this.$refs.imageAloneFrame);
-
-            //表示するための画像データを作成
-            const img = new Image();
-
-            img.onload = this.imageAloneLoaded();
-            img.src =src;
-
-            try{
-                this.$nextTick(() => {
-                    console.log("画像の配置もした", this.$refs.imageAloneFrame[0]);
-                    this.$refs.imageAloneFrame[0].append(img);
-
-                });
-            } catch(e) {}
-
-            return "/loading.svg";
-
-        }
 
     },
 
@@ -252,14 +225,13 @@ export default {
             </v-card>
 
             <!-- 画像単体用 -->
-            <div ref="imageAlone" v-if="link.mediaType==='image'" class="rounded-lg" style="width:500px;">
+            <div v-if="link.mediaType==='image'" class="rounded-lg" style="width:500px;">
                 <img
                     @click="toggleImageDialog(index)"
                     class="rounded-lg previewSingleImage"
                     :src="link.img"
                     v-on:load="imageAloneLoaded()"
                 >
-                <span ref="imageAloneFrame"></span>
                 <img
                     style="height:150px;"
                     v-if="!imageAloneLoadState"
