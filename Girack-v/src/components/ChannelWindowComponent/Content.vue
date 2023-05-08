@@ -772,6 +772,18 @@ export default {
             </div>
 
         </div>
+        <div>
+        <div style="position:fixed; border:red solid 10px; margin:8px;">
+            asdf
+        </div></div>
+
+        <v-snackbar
+            v-model="StateScrolled"
+            :attach="true"
+        >
+            asdf
+        </v-snackbar>
+
     </div>
     <!-- 一番下にスクロールするボタン -->
     <v-btn style="padding:0" v-if="!StateScrolled" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
