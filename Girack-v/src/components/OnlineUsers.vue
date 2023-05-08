@@ -1,5 +1,6 @@
 <script>
 import { dataUser, getSocket, backendURI } from '../socket';
+import Userpage from "./Userpage.vue";
 import { VVirtualScroll } from "vuetify/labs/VVirtualScroll";
 
 const socket = getSocket();
@@ -12,13 +13,15 @@ export default {
         return { Userinfo };
     },
 
-    components: {VVirtualScroll},
+    components: { VVirtualScroll, Userpage },
 
     data() {
         return {
             OnlineSession: [], //オンラインのユーザーが入る配列
             OnlineSessionReady: false, //初期ロードできたかどうか
-
+            
+            userDialogShow: false, //ユーザーページのダイアログ
+            userDialogUserid: "", //ユーザーページ用に使うID
             userList: [], //ユーザーリストが入る配列
             userListReady: false, //ユーザーリストがロードできたかどうか
 
@@ -103,6 +106,15 @@ export default {
 </script>
 
 <template>
+
+    <!-- ユーザーページ用 -->
+    <v-dialog
+        v-model="userDialogShow"
+        width="30vw"
+    >
+        <Userpage @closeUserpage="userDialogShow=false;" :userid="userDialogUserid" />
+    </v-dialog>
+
     <div class="mx-auto d-flex flex-column justify-space-evenly" style="width:95%; height:100vh;">
         <div style="height:5vh">
             <p style="font-size:min(4vh,36px);" class="text-truncate">オンラインユーザーリスト</p>
@@ -111,6 +123,7 @@ export default {
             <VVirtualScroll height="90vh" :items="userListDisplay">
                 <template v-slot:default="{ item }">
                     <v-card
+                        @click="()=>{userDialogShow=true; userDialogUserid=item.userid}"
                         class="rounded-lg card pa-3 d-flex align-center"
                         color="grey"
                     >
