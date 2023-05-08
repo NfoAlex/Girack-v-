@@ -107,7 +107,7 @@ export default {
 
 <template>
 
-    <!-- ユーザーページ用 -->
+    <!-- ユーザーページ用ダイアログ -->
     <v-dialog
         v-model="userDialogShow"
         width="30vw"
@@ -115,10 +115,21 @@ export default {
         <Userpage @closeUserpage="userDialogShow=false;" :userid="userDialogUserid" />
     </v-dialog>
 
+    <!-- ユーザーリストここから -->
     <div class="mx-auto d-flex flex-column justify-space-evenly" style="width:95%; height:100vh;">
-        <div style="height:5vh">
-            <p style="font-size:min(4vh,36px);" class="text-truncate">オンラインユーザーリスト</p>
+        <!-- ページタイトル -->
+        <div class="d-flex align-center ma-5" style="height:5vh">
+            <p style="font-size:min(4vh,36px); margin-left:8px;" class="text-truncate me-auto">オンラインユーザーリスト</p>
+            <v-btn
+                @click="$router.push({ path: '/menu/members'})"
+                class="ma-3 rounded-lg"
+                size="large"
+                color="secondary"
+            >
+                全メンバーを見る
+            </v-btn>
         </div>
+        <!-- リスト表示 -->
         <div style="overflow-y:auto; margin-top:3vh;">
             <VVirtualScroll height="90vh" :items="userListDisplay">
                 <template v-slot:default="{ item }">
