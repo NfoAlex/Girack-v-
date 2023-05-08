@@ -138,12 +138,14 @@ export default {
 
             <!-- 添付ファイルのアイコン表記 -->
             <span>
-                <v-icon
-                    v-if="!file.type.includes('image/')"
-                    style="margin:0 16px;"
-                >
-                    mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
-                </v-icon>
+                <a target="_blank" :href="filesrc+file.fileid">
+                    <v-icon
+                        v-if="!file.type.includes('image/')"
+                        style="margin:0 16px;"
+                    >
+                        mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
+                    </v-icon>
+                </a>
             </span>
 
             <!-- ファイル情報の表示 -->
