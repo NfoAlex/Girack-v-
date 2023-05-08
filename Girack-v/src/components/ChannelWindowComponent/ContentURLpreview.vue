@@ -216,13 +216,12 @@ export default {
             </v-card>
 
             <!-- 画像単体用 -->
-                <div class="rounded-lg">
+                <div class="rounded-lg" style="width:500px;">
                     <img
                         v-if="link.mediaType==='image'"
                         @click="toggleImageDialog(index)"
-                        class="rounded-lg"
-                        style="margin:4px 8px; width:auto; max-height:200px; cursor:pointer;"
-                        :src="getImage(link.url)"
+                        class="rounded-lg previewSingleImage"
+                        :src="getImage(link.url)+'xxx'"
                     >
                 </div>
 
@@ -235,6 +234,25 @@ export default {
 
 .previewContainer::-webkit-scrollbar {
     display: none;
+}
+
+.previewSingleImage
+{
+    margin:4px 8px;
+
+    max-height:150px;
+    min-height:30px;
+    height:fit-content;
+
+    min-width:30%;
+    max-width:150px;
+    width:fit-content;
+
+    cursor:pointer;
+
+    background-image: url("/loading.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 </style>
