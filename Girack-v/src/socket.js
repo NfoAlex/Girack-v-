@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
-export const CLIENT_VERSION = "alpha_20230425";
+export const CLIENT_VERSION = "alpha_20230508";
 
 const {
     CONFIG_NOTIFICATION,
@@ -127,7 +127,7 @@ export function dataMsg() {
 
 }
 
-//メッセージ受け取り、出力
+//メッセージ受け取り、履歴の保存
 socket.on("messageReceive", (msg) => {
     //ログインあるいはチャンネルに参加していないなら
     if ( !Userinfo.value.loggedin ) return;

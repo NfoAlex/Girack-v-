@@ -13,6 +13,8 @@ export default {
             imageDialogShow: false, //表示するかどうか
             imageDialogUrls: [], //表示する画像用
 
+            imageAloneLoadState: false, //画像単体の時のロード状態
+
             embedTwitter :false //Twitter埋め込みを表示するかどうか
         }
     },
@@ -44,6 +46,13 @@ export default {
                 return img; //画像一つでも配列へ追加
 
             }
+
+        },
+
+        //画像単体時での画像ロードが検知されたときのロードされたと設定
+        imageAloneLoaded() {
+            this.imageAloneLoadState = true; //ロードできた
+            console.log("ContentURLpreview :: imageAloneLoaded : 画像ロードできたよ");
 
         },
 
@@ -84,17 +93,28 @@ export default {
     <div v-for="(link, index) in urlData.data">
 
         <!-- Twitterリンク用 -->
-        <div class="pa-3" v-if="link.url.includes('twitter.com')">
+        <div class="pa-3" v-if="link.url.includes('https://twitter.com/')&&link.url.includes('/status/')">
             <v-btn class="rounded-lg" @click="embedTwitter=!embedTwitter" color="blue" size="small">
                 <v-icon>mdi:mdi-twitter</v-icon>
                 <span v-if="!embedTwitter">埋め込みリンクを表示</span>
                 <span v-else>埋め込みを隠す<v-icon>mdi:mdi-window-close</v-icon></span>
             </v-btn>
         </div>
+        
+        <!-- ツイートじゃないTwitterのリンクの場合 -->
+        <div class="pa-3" v-if="link.url.includes('https://twitter.com/')&&!link.url.includes('/status/')">
+            <a :href="link.url" target="_blank">
+                <v-btn class="rounded-lg" color="blue" size="small">
+                    <v-icon>mdi:mdi-open-in-new</v-icon>
+                    Twitterのページへ飛ぶ
+                </v-btn>
+            </a>
+        </div>
+
         <!-- Twitter埋め込み表示 -->
         <div v-if="embedTwitter">
             <Tweet
-                style="max-width:550px; width:50%; background: black;"
+                style="max-width:350px; width:30%; background: black;"
                 width="550"
                 :tweet-url="link.url.split('?s=')[0]"
                 theme="dark"
@@ -103,7 +123,7 @@ export default {
             >
             <!-- 読み込み中 -->
             <template v-slot:loading>
-                <span>Loading...</span>
+                <v-chip>Loading...</v-chip>
             </template>
             <!-- エラー -->
             <template v-slot:error>
@@ -136,6 +156,13 @@ export default {
                     style="min-width:30%; width:fit-content; cursor:pointer;"
                     :src="getImage(link.img)"
                 >
+
+                    <!-- 画像をロード中の時のホルダー -->
+                    <template v-slot:placeholder>
+                        <span style="height:100%; width:150px;">
+                            Loading...
+                        </span>
+                    </template>
                 
                     <!-- 画像が２枚以上あるならホバーで表示 -->
                     <v-tooltip
@@ -198,15 +225,19 @@ export default {
             </v-card>
 
             <!-- 画像単体用 -->
-                <div class="rounded-lg">
-                    <img
-                        v-if="link.mediaType==='image'"
-                        @click="toggleImageDialog(index)"
-                        class="rounded-lg"
-                        style="margin:4px 8px; width:auto; max-height:200px; cursor:pointer;"
-                        :src="getImage(link.url)"
-                    >
-                </div>
+            <div v-if="link.mediaType==='image'" class="rounded-lg" style="width:500px;">
+                <img
+                    @click="toggleImageDialog(index)"
+                    class="rounded-lg previewSingleImage"
+                    :src="link.img"
+                    v-on:load="imageAloneLoaded()"
+                >
+                <img
+                    style="height:150px;"
+                    v-if="!imageAloneLoadState"
+                    src="/loading.svg"
+                >
+            </div>
 
         </div>
     </div>
@@ -217,6 +248,21 @@ export default {
 
 .previewContainer::-webkit-scrollbar {
     display: none;
+}
+
+.previewSingleImage
+{
+    margin:4px 8px;
+
+    max-height:150px;
+    min-height:30px;
+    height:fit-content;
+
+    min-width:30%;
+    max-width:150px;
+    width:fit-content;
+
+    cursor:pointer;
 }
 
 </style>

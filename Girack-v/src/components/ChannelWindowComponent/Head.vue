@@ -75,7 +75,7 @@ export default {
         v-model="channelDialogShow"
         style="width:50vw; max-width:650px;"
     >
-        <ChannelConfig :channelid="channelDialogId" :channelInfo="channelInfo" />
+        <ChannelConfig :channelid="getPath" :channelInfo="channelInfo" />
     </v-dialog>
 
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
@@ -92,7 +92,7 @@ export default {
         <v-btn
             v-if="!channelInfo.previewmode"
             @click="toggleMuteChannel"
-            size="large"
+            size="48"
             icon=""
             class="rounded-lg ma-1"
             color="secondary"
@@ -113,7 +113,7 @@ export default {
         
         <v-btn
             @click="()=>channelDialogShow=!channelDialogShow"
-            size="large"
+            size="48"
             icon=""
             class="rounded-lg ma-1"
             color="secondary"
