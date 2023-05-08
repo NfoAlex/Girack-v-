@@ -92,7 +92,7 @@ export default {
         <v-btn
             v-if="!channelInfo.previewmode"
             @click="toggleMuteChannel"
-            size="large"
+            size="48"
             icon=""
             class="rounded-lg ma-1"
             color="secondary"
@@ -113,7 +113,7 @@ export default {
         
         <v-btn
             @click="()=>channelDialogShow=!channelDialogShow"
-            size="large"
+            size="48"
             icon=""
             class="rounded-lg ma-1"
             color="secondary"
