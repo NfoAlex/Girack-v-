@@ -7,7 +7,7 @@ export default {
 
     data() {
         return {
-            filesrc: backendURI + "/file/" + this.channelid + "/",
+            filesrc: backendURI,
             imageDialogShow: false, //画像拡大ダイアログ用
             imageDialogSrc: ""
         }
@@ -115,10 +115,10 @@ export default {
             <!-- 画像ファイルだった時のプレビュー表示 -->
             <v-img
                 v-if="file.type.includes('image/')"
-                @click="imageDialogShow=true;imageDialogSrc=filesrc+file.fileid;"
+                @click="imageDialogShow=true;imageDialogSrc=filesrc+ '/file/' + this.$route.params.id + '/' + file.fileid;"
                 class="flex-shrink-1"
                 style="max-height:150px; min-height:30px; height:100%; min-width:30%; max-width:150px; cursor:pointer;"
-                :src="filesrc+file.fileid"
+                :src="filesrc+ '/file/' + this.$route.params.id + '/' + file.fileid"
             >
                 <template v-slot:error>
                     <div class="mx-auto" style="width:fit-content; min-height:150px;">
@@ -138,12 +138,14 @@ export default {
 
             <!-- 添付ファイルのアイコン表記 -->
             <span>
-                <v-icon
-                    v-if="!file.type.includes('image/')"
-                    style="margin:0 16px;"
-                >
-                    mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
-                </v-icon>
+                <a target="_blank" :href="filesrc+file.fileid">
+                    <v-icon
+                        v-if="!file.type.includes('image/')"
+                        style="margin:0 16px;"
+                    >
+                        mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
+                    </v-icon>
+                </a>
             </span>
 
             <!-- ファイル情報の表示 -->
