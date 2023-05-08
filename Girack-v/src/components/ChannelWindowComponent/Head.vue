@@ -32,6 +32,11 @@ export default {
             return this.$route.params.id;
 
         },
+
+        size () {
+            const size = {xs:'x-small',sm:'small',lg:'large',xl:'x-large'}[this.$vuetify.breakpoint.name];
+            return size ? { [size]: true } : {}
+        }
     },
 
     methods: {
@@ -53,7 +58,7 @@ export default {
 
             setCookie("configListMute", (LIST_NOTIFICATION_MUTE_CHANNEL.value.join("::")), 7);
 
-        }
+        },
     },
 
     mounted() {
@@ -113,7 +118,7 @@ export default {
         
         <v-btn
             @click="()=>channelDialogShow=!channelDialogShow"
-            size="48"
+            :size="size()"
             icon=""
             class="rounded-lg ma-1"
             color="secondary"
