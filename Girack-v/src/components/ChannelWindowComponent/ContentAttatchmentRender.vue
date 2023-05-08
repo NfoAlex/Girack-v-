@@ -7,7 +7,7 @@ export default {
 
     data() {
         return {
-            filesrc: backendURI + "/file/" + this.channelid + "/",
+            filesrc: backendURI + "/file/" + this.$route.params.id + "/",
             imageDialogShow: false, //画像拡大ダイアログ用
             imageDialogSrc: ""
         }
