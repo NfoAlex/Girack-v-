@@ -117,9 +117,11 @@ export default {
 
     <!-- ユーザーリストここから -->
     <div class="mx-auto d-flex flex-column justify-space-evenly" style="width:95%; height:100vh;">
-        <!-- ページタイトル -->
+        
+        <!-- ページヘッダ -->
         <div class="d-flex align-center ma-5" style="height:5vh">
             <p style="font-size:min(4vh,36px); margin-left:8px;" class="text-truncate me-auto">オンラインユーザーリスト</p>
+            <!-- メンバーページへ行くボタン -->
             <v-btn
                 @click="$router.push({ path: '/menu/members'})"
                 class="ma-3 rounded-lg"
@@ -129,6 +131,7 @@ export default {
                 全メンバーを見る
             </v-btn>
         </div>
+
         <!-- リスト表示 -->
         <div style="overflow-y:auto; margin-top:3vh;">
             <VVirtualScroll height="90vh" :items="userListDisplay">
@@ -153,6 +156,7 @@ export default {
                 </template>
             </VVirtualScroll>
         </div>
+        
     </div>
 </template>
 
