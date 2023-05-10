@@ -110,8 +110,8 @@ export default {
     </v-dialog>
 
     <!-- ヘッダの表示部分(メイン) -->
-    <div class="d-flex align-center" style="max-width:100%; height:100%;">
-        <v-card class="me-auto d-flex flex-column justify-start rounded-lg" style="margin:0 16px; padding:0 16px; max-width:75%;">
+    <div class="d-flex align-center justify-space-evenly" style="max-width:100%; height:100%;">
+        <v-card class="d-flex flex-column justify-start rounded-lg" style="margin:0 16px; padding:0 16px; width:100%;">
             <!-- チャンネル情報(チャンネル名、概要) -->
             <div style="white-space:nowrap;">
                 <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
@@ -130,10 +130,10 @@ export default {
 
         </v-card>
 
-        <v-divider style="margin-right:3%;" vertical inset></v-divider>
+        <v-divider style="" vertical inset></v-divider>
 
         <!-- ボタン群 -->
-        <div style="padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end align-center">
+        <div style="padding-top:1%; margin:0 16px;" class="d-flex flex-row justify-end align-center">
             <!-- チャンネルの通知オン/オフボタン -->
             <v-btn
                 v-if="!channelInfo.previewmode"
