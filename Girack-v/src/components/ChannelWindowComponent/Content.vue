@@ -766,6 +766,7 @@ export default {
                         </template>
                         <!-- ここからホバーメニュー -->
                         <ContentHoverMenu
+                            style="z-index:30;"
                             :m="m"
                             :userrole="getUserStats(m.userid, 'role')"
                             :channelid="getPath"
@@ -778,32 +779,34 @@ export default {
 
         </div>
 
+        <!-- 一番下にスクロールするボタン -->
+        <v-btn
+            v-if="!StateScrolled"
+            @click="scrollIt"
+            style="z-index:20; padding:0; position:sticky; left:100%; bottom:32px; margin-right:1.5% !important;"
+            icon=""
+            :elevation="6"
+            position="fixed"
+            class="rounded-lg mx-auto"
+        >
+            <v-badge
+                v-if="checkReadTime(getPath)!==0"
+                color=""
+                :content="checkReadTime(getPath)"
+                inline
+            >
+            </v-badge>
+            <v-icon 
+                v-if="!checkReadTime(getPath)"
+                icon="mdi:mdi-arrow-down-thick"
+            >
+            mdi:mdi-arrow-down-thick
+            </v-icon>
+            
+        </v-btn>
+
     </div>
-    <!-- 一番下にスクロールするボタン -->
-    <v-btn
-        v-if="!StateScrolled"
-        @click="scrollIt"
-        style="padding:0; bottom:20vh; right:16px;"
-        icon=""
-        :elevation="6"
-        position="fixed"
-        class="rounded-lg"
-    >
-        <v-badge
-            v-if="checkReadTime(getPath)!==0"
-            color=""
-            :content="checkReadTime(getPath)"
-            inline
-        >
-        </v-badge>
-        <v-icon 
-            v-if="!checkReadTime(getPath)"
-            icon="mdi:mdi-arrow-down-thick"
-        >
-        mdi:mdi-arrow-down-thick
-        </v-icon>
-        
-    </v-btn>
+
 </template>
 
 <style scoped>
