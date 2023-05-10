@@ -1,4 +1,5 @@
 <script setup>
+import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
 import { dataChannel, dataUser, setCookie } from '../../socket';
 import ChannelConfig from "./ChannelConfig.vue";
@@ -33,9 +34,31 @@ export default {
 
         },
 
-        size () {
-            const size = {xs:'x-small',sm:'small',lg:'large',xl:'x-large'}[this.$vuetify.breakpoint.name];
-            return size ? { [size]: true } : {}
+        //ディスプレイのサイズから表示するボタンの要素のサイズを取得
+        getDisplaySize() {
+            console.log("Head :: getDisplaySize : useDisplay().name.value", useDisplay().name.value);
+            switch (useDisplay().name.value) {
+                case "xs":
+                case "sm":
+                    return "small";
+
+                case "md":
+                    return "32";
+
+                case "lg":
+                    return "48";
+
+                case "xl":
+                    return "x-large";
+
+                case "xxl":
+                    return "96";
+
+                default:
+                    return "";
+
+            }
+
         }
     },
 
@@ -97,7 +120,7 @@ export default {
         <v-btn
             v-if="!channelInfo.previewmode"
             @click="toggleMuteChannel"
-            size="48"
+            :size="getDisplaySize"
             icon=""
             class="rounded-lg ma-1"
             color="secondary"
@@ -109,7 +132,7 @@ export default {
         <v-btn
             v-if="channelInfo.previewmode"
             @click="$router.push({ path: '/browser'})"
-            size="large"
+            :size="getDisplaySize"
             class="rounded-lg ma-1"
             color="secondary"
         >
@@ -118,7 +141,7 @@ export default {
         
         <v-btn
             @click="()=>channelDialogShow=!channelDialogShow"
-            :size="size()"
+            :size="getDisplaySize"
             icon=""
             class="rounded-lg ma-1"
             color="secondary"
