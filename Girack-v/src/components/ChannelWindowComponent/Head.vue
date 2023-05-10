@@ -99,6 +99,7 @@ export default {
 
 <template>
 
+    <!-- チャンネル設定ダイアログ -->
     <v-dialog
         v-model="channelDialogShow"
         style="width:50vw; max-width:650px;"
@@ -106,13 +107,16 @@ export default {
         <ChannelConfig :channelid="getPath" :channelInfo="channelInfo" />
     </v-dialog>
 
+    <!-- チャンネル情報(チャンネル名、概要) -->
     <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
         <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
             <span v-if="channelInfo.scope==='private'" class="mdi mdi-lock"></span>
             <v-chip v-if="channelInfo.previewmode" class="ma-1">プレビュー</v-chip>
             {{ channelInfo.channelname }}
         </div>
-        <p style="font-size:2vh">{{ channelInfo.description }}</p>
+        <v-card color="grey" style="padding:2px 8px;">
+            <p class="text-truncate" style="font-size:2vh">{{ channelInfo.description }}</p>
+        </v-card>
     </div>
 
     <!-- ボタン群 -->
