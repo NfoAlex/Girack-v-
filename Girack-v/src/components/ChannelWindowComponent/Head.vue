@@ -133,7 +133,7 @@ export default {
         <v-divider style="" vertical inset></v-divider>
 
         <!-- ボタン群 -->
-        <div style="padding-top:1%; margin:0 16px;" class="d-flex flex-row justify-end align-center">
+        <div style="margin:0 16px;" class="d-flex align-center">
             <!-- チャンネルの通知オン/オフボタン -->
             <v-btn
                 v-if="!channelInfo.previewmode"
