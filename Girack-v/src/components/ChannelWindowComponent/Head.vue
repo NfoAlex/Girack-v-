@@ -109,51 +109,60 @@ export default {
         <ChannelConfig :channelid="getPath" :channelInfo="channelInfo" />
     </v-dialog>
 
-    <!-- チャンネル情報(チャンネル名、概要) -->
-    <div class="overflow-x-hidden" style="padding: 0 32px; white-space:nowrap; float:left; max-width:60%">
-        <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
-            <span v-if="channelInfo.scope==='private'" class="mdi mdi-lock"></span>
-            <v-chip v-if="channelInfo.previewmode" class="ma-1">プレビュー</v-chip>
-            {{ channelInfo.channelname }}
-        </div>
-        <v-card color="grey" style="padding:2px 8px;">
-            <p class="text-truncate" style="font-size:2vh">{{ channelInfo.description }}</p>
+    <div class="d-flex align-center" style="max-width:100%; height:100%;">
+        <v-card class="flex-shrink-1 d-flex flex-column justify-start rounded-lg" style="margin:0 16px; padding:0 16px; max-width:75%;">
+            <!-- チャンネル情報(チャンネル名、概要) -->
+            <div style="white-space:nowrap;">
+                <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
+                    <span v-if="channelInfo.scope==='private'" class="mdi mdi-lock"></span>
+                    <v-chip v-if="channelInfo.previewmode" class="ma-1">プレビュー</v-chip>
+                    {{ channelInfo.channelname }}
+                </div>
+            </div>
+
+            <v-divider></v-divider>
+
+            <div color="grey" class="rounded-lg" style="padding:2px 16px;">
+                <p class="text-truncate" style="font-size:2vh">{{ channelInfo.description }}</p>
+            </div>
+
         </v-card>
-    </div>
 
-    <!-- ボタン群 -->
-    <div style="width:20%; float:right; padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end align-center">
-        <v-btn
-            v-if="!channelInfo.previewmode"
-            @click="toggleMuteChannel"
-            :size="getDisplaySize"
-            icon=""
-            class="rounded-lg ma-1"
-            color="secondary"
-        >
-            <v-icon v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)">mdi:mdi-bell</v-icon>
-            <v-icon v-else>mdi:mdi-bell-off</v-icon>
-        </v-btn>
+        <!-- ボタン群 -->
+        <div style="padding-top:1%; margin-right: 16px;" class="flex-grow-1 d-flex flex-row justify-end align-center">
+            <v-btn
+                v-if="!channelInfo.previewmode"
+                @click="toggleMuteChannel"
+                :size="getDisplaySize"
+                icon=""
+                class="rounded-lg ma-1"
+                color="secondary"
+            >
+                <v-icon v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)">mdi:mdi-bell</v-icon>
+                <v-icon v-else>mdi:mdi-bell-off</v-icon>
+            </v-btn>
 
-        <v-btn
-            v-if="channelInfo.previewmode"
-            @click="$router.push({ path: '/browser'})"
-            :size="getDisplaySize"
-            class="rounded-lg ma-1"
-            color="secondary"
-        >
-            ブラウザへ戻る
-        </v-btn>
-        
-        <v-btn
-            @click="()=>channelDialogShow=!channelDialogShow"
-            :size="getDisplaySize"
-            icon=""
-            class="rounded-lg ma-1"
-            color="secondary"
-        >
-            <v-icon>mdi:mdi-menu</v-icon>
-        </v-btn>
+            <v-btn
+                v-if="channelInfo.previewmode"
+                @click="$router.push({ path: '/browser'})"
+                :size="getDisplaySize"
+                class="rounded-lg ma-1"
+                color="secondary"
+            >
+                ブラウザへ戻る
+            </v-btn>
+            
+            <v-btn
+                @click="()=>channelDialogShow=!channelDialogShow"
+                :size="getDisplaySize"
+                icon=""
+                class="rounded-lg ma-1"
+                color="secondary"
+            >
+                <v-icon>mdi:mdi-menu</v-icon>
+            </v-btn>
+        </div>
+
     </div>
     
 </template>
