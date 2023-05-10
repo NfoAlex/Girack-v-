@@ -1,5 +1,6 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
+import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
 import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
@@ -137,12 +138,21 @@ export default {
 
         },
 
+        //デバイスのサイズ基準を出す(lgとかsmとか)
+        getDisplaySize() {
+            console.log("Content :: getDisplaySize : 返す->", useDisplay().name.value);
+            return useDisplay().name.value;
+
+        }
+
     },
 
     mounted() {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
         let channelWindow = document.querySelector("#channelWindow")
+
+        console.log("Content :: mounted : useDisplay", useDisplay().name.value);
 
         //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
@@ -606,7 +616,7 @@ export default {
         </div>
 
         <!-- 履歴が空なら -->
-        <div style="padding:10%" v-if="MsgDBActive===undefined||MsgDBActive.length===0">
+        <div id="rirekikara" style="padding:10%" v-if="MsgDBActive===undefined||MsgDBActive.length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
@@ -617,7 +627,7 @@ export default {
         </div>
 
         <!-- こっからメッセージ表示 -->
-        <div v-for="(m, index) in MsgDBActive">
+        <div style="z-index:1;" v-for="(m, index) in MsgDBActive">
 
             <!-- 日付線 -->
             <div v-if="checkDateDifference(index)" style="width:100%; padding:12px 0;">
@@ -762,6 +772,7 @@ export default {
                         </template>
                         <!-- ここからホバーメニュー -->
                         <ContentHoverMenu
+                            style="z-index:30;"
                             :m="m"
                             :userrole="getUserStats(m.userid, 'role')"
                             :channelid="getPath"
@@ -773,24 +784,36 @@ export default {
             </div>
 
         </div>
+
+        <!-- 一番下にスクロールするボタン -->
+        <v-btn
+            v-if="!StateScrolled"
+            @click="scrollIt"
+            style="z-index:20; padding:0; position:sticky; left:100%; bottom:32px; margin-right:1.5% !important;"
+            icon=""
+            :size="getDisplaySize==='xxl'?'128':'x-large'"
+            :elevation="6"
+            position="fixed"
+            class="rounded-lg mx-auto"
+        >
+            <v-badge
+                v-if="checkReadTime(getPath)!==0"
+                color=""
+                :content="checkReadTime(getPath)"
+                inline
+            >
+            </v-badge>
+            <v-icon 
+                v-if="!checkReadTime(getPath)"
+                icon="mdi:mdi-arrow-down-thick"
+            >
+            mdi:mdi-arrow-down-thick
+            </v-icon>
+            
+        </v-btn>
+
     </div>
-    <!-- 一番下にスクロールするボタン -->
-    <v-btn style="padding:0" v-if="!StateScrolled" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
-        <v-badge
-            v-if="checkReadTime(getPath)!==0"
-            color=""
-            :content="checkReadTime(getPath)"
-            inline
-        >
-        </v-badge>
-        <v-icon 
-            v-if="!checkReadTime(getPath)"
-            icon="mdi:mdi-arrow-down-thick"
-        >
-        mdi:mdi-arrow-down-thick
-        </v-icon>
-        
-    </v-btn>
+
 </template>
 
 <style scoped>
