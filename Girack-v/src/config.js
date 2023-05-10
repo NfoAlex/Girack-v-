@@ -20,6 +20,7 @@ const LIST_NOTIFICATION_MUTE_USER = ref([]);
 //UIに関する設定
 const CONFIG_DISPLAY = ref({
     CONTENT_SHOW_ROLE: true,
+    CONTENT_DATELINE_SHOWONLEFT: false,
     SIDEBAR_CHANNEL_ORDERBY: "alphabetical", //"id","alphabetical"
 });
 

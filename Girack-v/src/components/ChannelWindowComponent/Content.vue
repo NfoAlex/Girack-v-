@@ -620,16 +620,16 @@ export default {
         <div v-for="(m, index) in MsgDBActive">
 
             <!-- 日付線 -->
-            <div v-if="checkDateDifference(index)" style="width:100%; padding:6px 0;">
-                <v-divider></v-divider>
-                <p class="text-center text-subtitle-2">{{ getHistoryDate(index) }}</p>
+            <div v-if="checkDateDifference(index)" style="width:100%; padding:12px 0;">
+                <v-divider>asdf</v-divider>
+                <p class="text-subtitle-1" :class="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT?'text-left':'text-center'" style="margin-left:1.5%">{{ getHistoryDate(index) }}</p>
             </div>
 
             <!-- ここからflexで表示するもの-->
             <div class="d-flex justify-end" style="margin:0px 8px;">
             
                 <!-- アバター -->
-                <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:15%;">
+                <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%;">
                     <v-img
                         v-if="getUserStats(m.userid, 'role')!=='Deleted'"
                         @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
@@ -648,6 +648,7 @@ export default {
                     </v-img>
                 </v-avatar>
 
+                <!-- アバターを表示しないときの空欄ホルダー -->
                 <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:15%; height:0 !important;">
                     <v-img
                         v-if="getUserStats(m.userid, 'role')!=='Deleted'"
