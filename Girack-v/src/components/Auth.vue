@@ -77,8 +77,16 @@ export default {
 
         };
 
+        //クッキーに認証情報があるか確認
+        if ( getCookie("sessionid") !== "" ) {
+            console.log("Auth :: mounted : クッキーで認証します");
+            socket.emit("authByCookie", getCookie("sessionid"), CLIENT_VERSION);
+            //return;
+
+        }
+
         //接続とクッキーを確認するための関数を実行
-        checkStatus();
+        //checkStatus();
 
         //認証結果の受け取りと処理
         socket.on("authResult", (dat) => {
