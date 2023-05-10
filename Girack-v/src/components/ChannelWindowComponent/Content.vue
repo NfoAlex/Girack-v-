@@ -615,11 +615,6 @@ export default {
             </v-dialog>
         </div>
 
-        <v-banner style="z-index:100" v-if="!StateScrolled" lines="one" sticky>
-            あなたは過去を読んでいます...
-            <v-btn @click="scrollIt">戻る</v-btn>
-        </v-banner>
-
         <!-- 履歴が空なら -->
         <div id="rirekikara" style="padding:10%" v-if="MsgDBActive===undefined||MsgDBActive.length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
