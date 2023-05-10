@@ -109,6 +109,7 @@ export default {
         <ChannelConfig :channelid="getPath" :channelInfo="channelInfo" />
     </v-dialog>
 
+    <!-- ヘッダの表示部分(メイン) -->
     <div class="d-flex align-center" style="max-width:100%; height:100%;">
         <v-card class="me-auto d-flex flex-column justify-start rounded-lg" style="margin:0 16px; padding:0 16px; max-width:75%;">
             <!-- チャンネル情報(チャンネル名、概要) -->
@@ -122,6 +123,7 @@ export default {
 
             <v-divider></v-divider>
 
+            <!-- チャンネル概要 -->
             <div color="grey" class="rounded-lg" style="padding:2px 16px;">
                 <p class="text-truncate" style="font-size:2vh">{{ channelInfo.description }}</p>
             </div>
@@ -132,6 +134,7 @@ export default {
 
         <!-- ボタン群 -->
         <div style="padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end align-center">
+            <!-- チャンネルの通知オン/オフボタン -->
             <v-btn
                 v-if="!channelInfo.previewmode"
                 @click="toggleMuteChannel"
@@ -144,6 +147,7 @@ export default {
                 <v-icon v-else>mdi:mdi-bell-off</v-icon>
             </v-btn>
 
+            <!-- プレビュー時用のチャンネルブラウザに戻るボタン -->
             <v-btn
                 v-if="channelInfo.previewmode"
                 @click="$router.push({ path: '/browser'})"
@@ -154,6 +158,7 @@ export default {
                 ブラウザへ戻る
             </v-btn>
             
+            <!-- チャンネルメニューボタン -->
             <v-btn
                 @click="()=>channelDialogShow=!channelDialogShow"
                 :size="getDisplaySize"
