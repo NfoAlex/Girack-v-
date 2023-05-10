@@ -110,7 +110,7 @@ export default {
     </v-dialog>
 
     <div class="d-flex align-center" style="max-width:100%; height:100%;">
-        <v-card class="flex-shrink-1 d-flex flex-column justify-start rounded-lg" style="margin:0 16px; padding:0 16px; max-width:75%;">
+        <v-card class="me-auto d-flex flex-column justify-start rounded-lg" style="margin:0 16px; padding:0 16px; max-width:75%;">
             <!-- チャンネル情報(チャンネル名、概要) -->
             <div style="white-space:nowrap;">
                 <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
@@ -128,8 +128,10 @@ export default {
 
         </v-card>
 
+        <v-divider style="margin-right:3%;" vertical inset></v-divider>
+
         <!-- ボタン群 -->
-        <div style="padding-top:1%; margin-right: 16px;" class="flex-grow-1 d-flex flex-row justify-end align-center">
+        <div style="padding-top:1%; margin-right: 16px;" class="d-flex flex-row justify-end align-center">
             <v-btn
                 v-if="!channelInfo.previewmode"
                 @click="toggleMuteChannel"
