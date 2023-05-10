@@ -39,14 +39,16 @@ export default {
             console.log("Head :: getDisplaySize : useDisplay().name.value", useDisplay().name.value);
             switch (useDisplay().name.value) {
                 case "xs":
-                case "sm":
                     return "small";
 
+                case "sm":
+                    return "default";
+
                 case "md":
-                    return "32";
+                    return "48";
 
                 case "lg":
-                    return "48";
+                    return "64";
 
                 case "xl":
                     return "x-large";
