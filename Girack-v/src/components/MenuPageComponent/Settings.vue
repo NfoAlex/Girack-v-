@@ -165,6 +165,7 @@ export default {
             <!-- 設定ページメイン -->
             <div class="scroll" style="width:100%; overflow-y:auto">
                 <div class="mx-auto" style="margin: 1% 0;">
+                    <!-- 通知 -->
                     <v-card v-if="configPage===('notification'||'')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
 
@@ -240,6 +241,7 @@ export default {
 
                     <br>
 
+                    <!-- UI表示 -->
                     <v-card v-if="configPage===('interface')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">表示</p>
 
@@ -248,6 +250,12 @@ export default {
                             <v-checkbox
                                 v-model="CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                 label="ユーザー名の横にロールを表示"
+                                density="compact"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT"
+                                label="日付線の時間を左に表示"
                                 density="compact"
                             >
                             </v-checkbox>
@@ -269,6 +277,7 @@ export default {
 
                     <br>
 
+                    <!-- プライバシー(ネタ) -->
                     <v-card v-if="configPage===('privacy')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">プライバシー</p>
 

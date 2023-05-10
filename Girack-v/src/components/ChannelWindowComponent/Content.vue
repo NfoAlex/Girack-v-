@@ -622,7 +622,7 @@ export default {
             <!-- 日付線 -->
             <div v-if="checkDateDifference(index)" style="width:100%; padding:12px 0;">
                 <v-divider>asdf</v-divider>
-                <p class="text-left text-subtitle-1" style="margin-left:1.5%">{{ getHistoryDate(index) }}</p>
+                <p class="text-subtitle-1" :class="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT?'text-left':'text-center'" style="margin-left:1.5%">{{ getHistoryDate(index) }}</p>
             </div>
 
             <!-- ここからflexで表示するもの-->
