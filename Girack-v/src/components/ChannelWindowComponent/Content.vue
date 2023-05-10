@@ -605,8 +605,13 @@ export default {
             </v-dialog>
         </div>
 
+        <v-banner style="z-index:100" v-if="!StateScrolled" lines="one" sticky>
+            あなたは過去を読んでいます...
+            <v-btn @click="scrollIt">戻る</v-btn>
+        </v-banner>
+
         <!-- 履歴が空なら -->
-        <div style="padding:10%" v-if="MsgDBActive===undefined||MsgDBActive.length===0">
+        <div id="rirekikara" style="padding:10%" v-if="MsgDBActive===undefined||MsgDBActive.length===0">
             <p class="text-subtitle-1" style="text-align:center">あなたが最初!</p>
         </div>
 
@@ -617,7 +622,7 @@ export default {
         </div>
 
         <!-- こっからメッセージ表示 -->
-        <div v-for="(m, index) in MsgDBActive">
+        <div style="z-index:1;" v-for="(m, index) in MsgDBActive">
 
             <!-- 日付線 -->
             <div v-if="checkDateDifference(index)" style="width:100%; padding:6px 0;">
@@ -772,21 +777,18 @@ export default {
             </div>
 
         </div>
-        <div>
-        <div style="position:fixed; border:red solid 10px; margin:8px;">
-            asdf
-        </div></div>
-
-        <v-snackbar
-            v-model="StateScrolled"
-            :attach="true"
-        >
-            asdf
-        </v-snackbar>
 
     </div>
     <!-- 一番下にスクロールするボタン -->
-    <v-btn style="padding:0" v-if="!StateScrolled" icon="" :elevation="6" :class="[goBottom,'rounded-lg']" @click="scrollIt">
+    <v-btn
+        v-if="!StateScrolled"
+        @click="scrollIt"
+        style="padding:0; bottom:20vh; right:16px;"
+        icon=""
+        :elevation="6"
+        position="fixed"
+        class="rounded-lg"
+    >
         <v-badge
             v-if="checkReadTime(getPath)!==0"
             color=""
