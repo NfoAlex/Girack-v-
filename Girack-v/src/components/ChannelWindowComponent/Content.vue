@@ -1,5 +1,6 @@
 <script>
 import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
+import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
 import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
@@ -137,12 +138,21 @@ export default {
 
         },
 
+        //デバイスのサイズ基準を出す(lgとかsmとか)
+        getDisplaySize() {
+            console.log("Content :: getDisplaySize : 返す->", useDisplay().name.value);
+            return useDisplay().name.value;
+
+        }
+
     },
 
     mounted() {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
         let channelWindow = document.querySelector("#channelWindow")
+
+        console.log("Content :: mounted : useDisplay", useDisplay().name.value);
 
         //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
@@ -785,6 +795,7 @@ export default {
             @click="scrollIt"
             style="z-index:20; padding:0; position:sticky; left:100%; bottom:32px; margin-right:1.5% !important;"
             icon=""
+            :size="getDisplaySize==='xxl'?'128':'x-large'"
             :elevation="6"
             position="fixed"
             class="rounded-lg mx-auto"
