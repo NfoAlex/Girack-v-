@@ -620,7 +620,7 @@ export default {
         <div v-for="(m, index) in MsgDBActive">
 
             <!-- 日付線 -->
-            <div v-if="checkDateDifference(index)" style="width:100%; padding:6px 0;">
+            <div v-if="checkDateDifference(index)" style="width:100%; padding:12px 0;">
                 <v-divider>asdf</v-divider>
                 <p class="text-left text-subtitle-1" style="margin-left:1.5%">{{ getHistoryDate(index) }}</p>
             </div>
