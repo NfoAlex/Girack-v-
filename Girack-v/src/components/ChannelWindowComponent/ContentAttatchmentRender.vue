@@ -142,6 +142,7 @@ export default {
                     <v-icon
                         v-if="!file.type.includes('image/')"
                         style="margin:0 16px;"
+                        size="x-large"
                     >
                         mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
                     </v-icon>
