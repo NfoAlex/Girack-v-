@@ -55,6 +55,8 @@ export default {
     },
 
     mounted() {
+        socket.emit("getInitInfo"); //サーバーの情報を取得
+
         let checkStatusCount = 0;
         //接続とクッキーを確認するための関数
         function checkStatus() {
@@ -67,6 +69,8 @@ export default {
                 return;
 
             }
+
+            console.log("Auth :: checkStatus : 認証を試みています...");
 
             checkStatusCount++;
             setInterval(checkStatus, 1000); //ループさせる

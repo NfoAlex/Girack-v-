@@ -44,7 +44,7 @@ export default {
     },
 
     mounted() {
-        socket.emit("getInitInfo"); //サーバーの情報を取得
+        //socket.emit("getInitInfo"); //サーバーの情報を取得
 
         //オンラインユーザーの更新
         socket.on("sessionOnlineUpdate", (num) => {
