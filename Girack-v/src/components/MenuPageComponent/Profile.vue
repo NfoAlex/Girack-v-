@@ -73,6 +73,13 @@ export default {
         //ログアウト処理
         logout() {
             setCookie("sessionid", "", 0); //クッキー削除
+            //ログアウトするとサーバーへ通達
+            socket.emit("logout", {
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
             location.reload(); //ページリロード
         },
 
@@ -437,8 +444,8 @@ export default {
                     <!-- ログアウトボタン -->
                     <v-row no-gutters>
                         <p class="text-h6">ログアウト</p>
-                        <v-card variant="tonal" :class="cd" style="width:100%; ">
-                            <v-btn prepend-icon="mdi:mdi-logout" color="error" block @click="snackbar=true">Logout</v-btn>
+                        <v-card variant="tonal" :class="cd" class="rounded-lg" style="width:100%; ">
+                            <v-btn prepend-icon="mdi:mdi-logout" class="rounded-lg" color="error" block @click="snackbar=true">Logout</v-btn>
                             <v-snackbar
                                 v-model="snackbar"
                             >
