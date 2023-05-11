@@ -128,6 +128,7 @@ export default {
                 size="large"
                 color="secondary"
             >
+                <v-icon class="ma-1">mdi:mdi-account-group</v-icon>
                 全メンバーを見る
             </v-btn>
         </div>
@@ -138,7 +139,8 @@ export default {
                 <template v-slot:default="{ item }">
                     <v-card
                         @click="()=>{userDialogShow=true; userDialogUserid=item.userid}"
-                        class="rounded-lg card pa-3 d-flex align-center"
+                        class="rounded-lg card mx-auto pa-3 d-flex align-center"
+                        width="97.5%"
                         color="grey"
                     >
                         <v-avatar style="margin:0 16px;" :image="imgsrc + item.userid"></v-avatar>
