@@ -298,6 +298,12 @@ socket.on("messageUpdate", (dat) => {
             //ループでIDが一致するメッセージを探す
             for ( let index in MsgDB.value[dat.channelid] ) {
                 if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
+                    //もしまだ未読のものだったら新着数を減らす
+                    if ( MsgReadTime.value[dat.channelid].time <= MsgDB.value[dat.channelid][index].time ) {
+                        MsgReadTime.value[dat.channelid].new--;
+
+                    }
+
                     MsgDB.value[dat.channelid].splice(index,1); //削除
 
                 }
