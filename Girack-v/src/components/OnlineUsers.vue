@@ -128,6 +128,7 @@ export default {
                 size="large"
                 color="secondary"
             >
+                <v-icon class="ma-1">mdi:mdi-account-group</v-icon>
                 全メンバーを見る
             </v-btn>
         </div>
