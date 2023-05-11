@@ -301,12 +301,13 @@ export default {
     },
 
     mounted() {
+        //チャンネルへ参加している人リストの受信
         socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
             this.channelJoinedUserArray = channelJoinedUserList;
 
         });
 
-        //ここに参加している人リストを取得
+        //チャンネルに参加している人リストを取得
         socket.emit("getInfoChannelJoinedUserList", {
             targetid: this.getPath,
             reqSender: {
@@ -318,6 +319,8 @@ export default {
     },
 
     unmounted() {
+        //socketの重複防止
+        socket.off("infoChannelJoinedUserList");
         //メニューページなどにいったら返信状態をリセット
         this.resetReply();
 
