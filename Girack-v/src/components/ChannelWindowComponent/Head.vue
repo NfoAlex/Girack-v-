@@ -111,7 +111,11 @@ export default {
 
     <!-- ヘッダの表示部分(メイン) -->
     <div class="d-flex align-center justify-space-evenly" style="max-width:100%; height:100%;">
-        <v-card class="d-flex flex-column justify-start rounded-lg" style="margin:0 16px; padding:0 16px; width:100%;">
+        <v-card
+            class="d-flex flex-column justify-start rounded-lg"
+            color="#222"
+            style="margin:0 16px; padding:0 16px; width:100%;"
+        >
             <!-- チャンネル情報(チャンネル名、概要) -->
             <div style="white-space:nowrap;">
                 <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
