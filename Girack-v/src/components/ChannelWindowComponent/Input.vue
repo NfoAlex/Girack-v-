@@ -112,6 +112,15 @@ export default {
                 this.searchMode.enabled = true;
                 this.searchMode.indexStarting = this.txt.length-1;
 
+                //最新のチャンネルに参加している人リストを取得
+                socket.emit("getInfoChannelJoinedUserList", {
+                    targetid: this.getPath,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+
             }
 
             //スペースが入力された、あるいは文字が空になったら検索モードを終了
