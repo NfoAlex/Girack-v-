@@ -73,6 +73,13 @@ export default {
         //ログアウト処理
         logout() {
             setCookie("sessionid", "", 0); //クッキー削除
+            //ログアウトするとサーバーへ通達
+            socket.emit("logout", {
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
             location.reload(); //ページリロード
         },
 
