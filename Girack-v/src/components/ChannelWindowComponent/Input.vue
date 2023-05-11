@@ -112,6 +112,15 @@ export default {
                 this.searchMode.enabled = true;
                 this.searchMode.indexStarting = this.txt.length-1;
 
+                //最新のチャンネルに参加している人リストを取得
+                socket.emit("getInfoChannelJoinedUserList", {
+                    targetid: this.getPath,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+
             }
 
             //スペースが入力された、あるいは文字が空になったら検索モードを終了
@@ -301,12 +310,13 @@ export default {
     },
 
     mounted() {
+        //チャンネルへ参加している人リストの受信
         socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
             this.channelJoinedUserArray = channelJoinedUserList;
 
         });
 
-        //ここに参加している人リストを取得
+        //チャンネルに参加している人リストを取得
         socket.emit("getInfoChannelJoinedUserList", {
             targetid: this.getPath,
             reqSender: {
@@ -318,6 +328,8 @@ export default {
     },
 
     unmounted() {
+        //socketの重複防止
+        socket.off("infoChannelJoinedUserList");
         //メニューページなどにいったら返信状態をリセット
         this.resetReply();
 
