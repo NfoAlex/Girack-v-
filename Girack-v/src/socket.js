@@ -185,6 +185,9 @@ socket.on("messageReceive", (msg) => {
             }
 
         } else { //すでにあるなら加算
+            //最新の既読時間を設定
+            //MsgReadTime.value[msg.channelid].time = msg.time;
+
             //メンションか自分への返信ならメンションを加算
             if ( msg.content.includes("@/" + Userinfo.value.userid + "/") || msg.replyData.userid === Userinfo.value.userid ) {
                 if ( MsgReadTime.value[msg.channelid].mention === null ) {
@@ -298,9 +301,19 @@ socket.on("messageUpdate", (dat) => {
             //ループでIDが一致するメッセージを探す
             for ( let index in MsgDB.value[dat.channelid] ) {
                 if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
+                    console.log("socket :: messageUpdate : これから時間比較 既読時間:", MsgReadTime.value[dat.channelid].time, " これから消すmsgの時間:",MsgDB.value[dat.channelid][index].time);
                     //もしまだ未読のものだったら新着数を減らす
-                    if ( MsgReadTime.value[dat.channelid].time <= MsgDB.value[dat.channelid][index].time ) {
-                        MsgReadTime.value[dat.channelid].new--;
+                    if ( MsgReadTime.value[dat.channelid].time < MsgDB.value[dat.channelid][index].time ) {
+                        //メンションされているかどうかで減らす値を選ぶ
+                        if ( MsgDB.value[dat.channelid][index].content.includes("@/" + Userinfo.value.userid + "/") ) {
+                            //メンション数を減らす
+                            MsgReadTime.value[dat.channelid].mention--;
+
+                        } else {
+                            //新着数を減らす
+                            MsgReadTime.value[dat.channelid].new--;
+
+                        }
 
                     }
 
