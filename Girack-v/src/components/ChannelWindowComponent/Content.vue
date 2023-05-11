@@ -96,7 +96,9 @@ export default {
 
                     this.scrollIt(); //スクロールする
                     this.MsgReadTime[this.getPath] = {
-                        new: 0 //新着メッセージ数を0に
+                        //time: 
+                        new: 0, //新着メッセージ数を0に
+                        mention: 0
                     };
 
                 });
