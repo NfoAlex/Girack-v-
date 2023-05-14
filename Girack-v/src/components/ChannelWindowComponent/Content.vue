@@ -741,7 +741,8 @@ export default {
                                         {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}
                                     </v-chip>
                                     <!-- 返信内容 -->
-                                    : {{ m.replyData.content }}
+                                    : <ContentMessageRender :content="m.replyData.content" />
+
                                 </p>
 
                                 <!-- メッセージ本文 -->
