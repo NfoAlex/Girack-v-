@@ -734,14 +734,14 @@ export default {
 
                                 <!-- 返信データ -->
                                 <p class="text-truncate ma-0" style="margin-top:8px !important;" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
-                                    <!-- 返信アイコン -->
-                                    <v-icon>mdi:mdi-reply</v-icon>
-                                    <!-- 返信する人の名前 -->
-                                    <v-chip size="small" color="grey" variant="flat">
-                                        <a :href="'#'+m.replyData.messageid">
+                                    <a :href="'#'+m.replyData.messageid">
+                                        <!-- 返信アイコン -->
+                                        <v-icon>mdi:mdi-reply</v-icon>
+                                        <!-- 返信する人の名前 -->
+                                        <v-chip size="small" color="grey" variant="flat" style="cursor:pointer;">
                                             {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}
-                                        </a>
-                                    </v-chip>
+                                        </v-chip>
+                                    </a>
                                     <!-- 返信内容 -->
                                     : <ContentMessageRender :content="m.replyData.content" />
 
