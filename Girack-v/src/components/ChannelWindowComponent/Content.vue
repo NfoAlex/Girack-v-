@@ -733,7 +733,7 @@ export default {
                                 </div>
 
                                 <!-- 返信データ -->
-                                <p class="text-truncate ma-1" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
+                                <p class="text-truncate ma-0" style="margin-top:8px !important;" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
                                     <!-- 返信アイコン -->
                                     <v-icon>mdi:mdi-reply</v-icon>
                                     <!-- 返信する人の名前 -->
