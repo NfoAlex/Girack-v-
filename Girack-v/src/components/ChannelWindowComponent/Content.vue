@@ -638,7 +638,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div class="d-flex justify-end" style="margin:0px 8px;">
+            <div :id="m.messageid" class="d-flex justify-end" style="margin:0px 8px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%;">
@@ -733,15 +733,18 @@ export default {
                                 </div>
 
                                 <!-- 返信データ -->
-                                <p class="text-truncate ma-1" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
-                                    <!-- 返信アイコン -->
-                                    <v-icon>mdi:mdi-reply</v-icon>
-                                    <!-- 返信する人の名前 -->
-                                    <v-chip size="small" color="grey" variant="flat">
-                                        {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}
-                                    </v-chip>
+                                <p class="text-truncate ma-0" style="margin-top:8px !important;" v-if="(m.replyData!==undefined)?m.replyData.isReplying:false">
+                                    <a :href="'#'+m.replyData.messageid">
+                                        <!-- 返信アイコン -->
+                                        <v-icon>mdi:mdi-reply</v-icon>
+                                        <!-- 返信する人の名前 -->
+                                        <v-chip size="small" color="grey" variant="flat" style="cursor:pointer;">
+                                            {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}
+                                        </v-chip>
+                                    </a>
                                     <!-- 返信内容 -->
-                                    : {{ m.replyData.content }}
+                                    : <ContentMessageRender :content="m.replyData.content" />
+
                                 </p>
 
                                 <!-- メッセージ本文 -->
