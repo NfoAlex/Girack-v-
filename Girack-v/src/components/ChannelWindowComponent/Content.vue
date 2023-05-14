@@ -738,7 +738,9 @@ export default {
                                     <v-icon>mdi:mdi-reply</v-icon>
                                     <!-- 返信する人の名前 -->
                                     <v-chip size="small" color="grey" variant="flat">
-                                        {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}
+                                        <a :href="'#'+m.replyData.messageid">
+                                            {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}
+                                        </a>
                                     </v-chip>
                                     <!-- 返信内容 -->
                                     : <ContentMessageRender :content="m.replyData.content" />
