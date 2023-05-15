@@ -110,8 +110,9 @@ export default {
         txt() {
             //@が入力されたら検索モードに入る
             if ( this.txt[this.txt.length-1] === "@" ) {
-                this.searchMode.enabled = true;
-                this.searchMode.indexStarting = this.txt.length-1;
+                this.searchMode.enabled = true; //検索モードを有効化
+                this.searchMode.indexStarting = this.txt.length-1; //検索し始めた文字位置を記憶
+                this.searchMode.selectedIndex = 0; //ユーザー選択番号を0(初期化)
                 console.log("Input :: watch(txt) : 検索モードに入った", this.searchMode.enabled);
 
                 //最新のチャンネルに参加している人リストを取得
