@@ -253,6 +253,7 @@ export default {
 
         //メンション用のユーザー検索時にクリックされたら名前を自動入力する部分
         replaceQueryWithName(targetUserid) {
+            console.log("Input :: replaceQueryWithName : 置き換えるユーザーid", targetUserid);
             //入力テキストの名前部分をIDへ置き換え
             this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@/"+targetUserid+"/ ");
 
@@ -263,19 +264,20 @@ export default {
 
         //メンション用のユーザー検索の十字キーでのユーザー選択変更部分
         changeMentionUserSelect(e) {
+            //上下の十字キーの入力からのテキストのカーソル移動を防ぐ
             e.preventDefault();
 
+            //もしキー入力が下矢印で、かつ選択しているインデックス番号が(検索結果配列の長さ-1)未満なら
             if ( e.code === "ArrowDown" && this.searchDisplayArray.length-1 > this.searchMode.selectedIndex ) {
-                this.searchMode.selectedIndex += 1;
+                this.searchMode.selectedIndex += 1; //インデックスを進める
 
             }
 
+            //もしキー入力が上矢印で、かつ選択しているインデックス番号が0より上だったら
             if ( e.code === "ArrowUp" && this.searchMode.selectedIndex > 0 ) {
-                this.searchMode.selectedIndex -= 1;
+                this.searchMode.selectedIndex -= 1; //インデックスを戻す
                 
             }
-
-            console.log("Input :: changeMentionUserSelect : e", e);
 
         },
 
@@ -456,7 +458,7 @@ export default {
                             id="inp"
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
-                            @keydown.enter="msgSend"
+                            @keydown.enter="!searchMode.enabled?msgSend:replaceQueryWithName(searchDisplayArray[searchMode.selectedIndex].userid)"
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
                             variant="solo"
