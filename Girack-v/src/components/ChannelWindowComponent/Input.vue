@@ -49,6 +49,7 @@ export default {
             searchMode: {
                 enabled: false, //検索モードに入っているかどうか
                 selectedIndex: 0, //選択しているもの
+                searchStartingAt: 0, //検索モードに入った文字位置
                 searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
                 searchingQuery: "" //検索してる文字列
             },
@@ -111,7 +112,7 @@ export default {
             //@が入力されたら検索モードに入る
             if ( this.txt[this.txt.length-1] === "@" ) {
                 this.searchMode.enabled = true; //検索モードを有効化
-                this.searchMode.indexStarting = this.txt.length-1; //検索し始めた文字位置を記憶
+                this.searchMode.searchStartingAt = this.txt.length-1; //検索し始めた文字位置を記憶
                 this.searchMode.selectedIndex = 0; //ユーザー選択番号を0(初期化)
                 console.log("Input :: watch(txt) : 検索モードに入った", this.searchMode.enabled);
 
@@ -136,13 +137,13 @@ export default {
             //検索モードに入っているなら検索する
             if ( this.searchMode.enabled ) {
                 //検索文字列を取得
-                this.searchMode.searchingQuery = this.txt.substring(this.searchMode.indexStarting+1);
+                this.searchMode.searchingQuery = this.txt.substring(this.searchMode.searchStartingAt+1);
 
                 console.log("Input :: watch(txt) : 検索する文字列 -> ", this.searchMode.searchingQuery);
 
                 //検索語で配列をフィルターして標示用の配列へ設定
                 this.searchDisplayArray = this.channelJoinedUserArray.filter((u)=> {
-                    //ユーザー名に検索語が含まれていたら表示する配列へ含む
+                    //ユーザー名に検索語が含まれていたら表示する配列へ追加
                     if ( (u.username).includes(this.searchMode.searchingQuery) ) {
                         return u.username;
 
@@ -165,20 +166,26 @@ export default {
     },
 
     methods: {
+        //Enterキーのトリガー処理
+        EnterTrigger(event) {
+            if ( event.keyCode !== 13 ) return; //変換中のEnterなら処理させない
+
+            //もしメンションのゆーざー検索が有効ならメンション文を打ち込む、違うならメッセージ送信
+            if ( this.searchMode.enabled ) {
+                //メンション文打ち込み開始
+                this.replaceQueryWithName(this.searchDisplayArray[this.searchMode.selectedIndex].userid);
+
+            } else {
+                //メッセージ送信開始
+                this.msgSend(event);
+
+            }
+
+        },
+
         //メッセージを送信する
         msgSend( event, btn ) {
-            //送信の初期判定
-            if ( btn !== "byBtn" ) { //ボタンからの送信？
-                //変換中のEnter検知を外す
-                if ( event.keyCode !== 13 ) return; //変換中のEnterなら処理させない
-
-            }
-
-            //検索モードが有効なら処理させない
-            if ( this.searchMode.enabled ) {
-                return;
-
-            }
+            console.log("Input :: msgSend : 送信しようとしている");
 
             //送信ｨﾝ!
             socket.emit("msgSend", {
@@ -251,11 +258,12 @@ export default {
 
         },
 
-        //メンション用のユーザー検索時にクリックされたら名前を自動入力する部分
+        //メンション用のユーザー検索時にクリックされたらユーザーIDを自動入力する部分
         replaceQueryWithName(targetUserid) {
             console.log("Input :: replaceQueryWithName : 置き換えるユーザーid", targetUserid);
-            //入力テキストの名前部分をIDへ置き換え
-            this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@/"+targetUserid+"/ ");
+
+            //入力テキストの@部分をメンション文で代入
+            this.txt = this.txt.substring(0, this.searchMode.searchStartingAt) + ("@/"+targetUserid+"/ ") + this.txt.substring(this.searchMode.searchStartingAt);
 
             //入力欄へフォーカスしなおす
             this.$el.querySelector("#inp").focus();
@@ -458,7 +466,7 @@ export default {
                             id="inp"
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
-                            @keydown.enter="!searchMode.enabled?msgSend:replaceQueryWithName(searchDisplayArray[searchMode.selectedIndex].userid)"
+                            @keydown.enter="EnterTrigger"
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
                             variant="solo"
