@@ -173,6 +173,12 @@ export default {
 
             }
 
+            //検索モードが有効なら処理させない
+            if ( this.searchMode.enabled ) {
+                return;
+
+            }
+
             //送信ｨﾝ!
             socket.emit("msgSend", {
                 userid: this.Userinfo.userid, //名前
@@ -251,6 +257,24 @@ export default {
 
             //入力欄へフォーカスしなおす
             this.$el.querySelector("#inp").focus();
+
+        },
+
+        //メンション用のユーザー検索のユーザー選択変更部分
+        changeMentionUserSelect(e) {
+            e.preventDefault();
+
+            if ( e.code === "ArrowDown" ) {
+                this.searchMode.selectedIndex += 1;
+
+            }
+
+            if ( e.code === "ArrowUp" ) {
+                this.searchMode.selectedIndex -= 1;
+                
+            }
+
+            console.log("Input :: changeMentionUserSelect : e", e);
 
         },
 
@@ -432,6 +456,8 @@ export default {
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
                             @keydown.enter="msgSend"
+                            @keydown.up="changeMentionUserSelect"
+                            @keydown.down="changeMentionUserSelect"
                             variant="solo"
                             density="compact"
                             clearable
