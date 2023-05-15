@@ -89,7 +89,7 @@ export default {
         </div>
         <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
             <KeepAlive :max="10">
-                <Content :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo()" />
+                <component is="Content" :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo()" :key="$route.params.id" />
             </KeepAlive>
         </div>
         <div :class="[w]" class="input flex-grow-0 flex-shrink-1">
