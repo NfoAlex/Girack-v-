@@ -470,7 +470,12 @@ export default {
                                 <v-img :src="uri + '/img/' + i.userid">
                                 </v-img>
                             </v-avatar>
-                            <span style="margin-left:8px;" @click="replaceQueryWithName(i.userid)">{{ i.username }}</span>
+                            <span
+                                @click="replaceQueryWithName(i.userid)"
+                                style="margin-left:8px;"
+                            >
+                                {{ i.username }}
+                            </span>
                         </v-list-item>
                     </v-list>
                 </v-menu>
