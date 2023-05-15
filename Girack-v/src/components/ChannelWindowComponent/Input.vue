@@ -138,7 +138,7 @@ export default {
 
                 //検索語で配列をフィルターして標示用の配列へ設定
                 this.searchDisplayArray = this.channelJoinedUserArray.filter((u)=> {
-                    //ユーザー名に検索語が含まれていたら出力
+                    //ユーザー名に検索語が含まれていたら表示する配列へ含む
                     if ( (u.username).includes(this.searchMode.searchingQuery) ) {
                         return u.username;
 
@@ -245,9 +245,6 @@ export default {
         replaceQueryWithName(targetUserid) {
             //入力テキストの名前部分をIDへ置き換え
             this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@/"+targetUserid+"/ ");
-            
-            //返信状態をオフに
-            this.ReplyState.isReplying = false;
 
             //入力欄へフォーカスしなおす
             this.$el.querySelector("#inp").focus();
