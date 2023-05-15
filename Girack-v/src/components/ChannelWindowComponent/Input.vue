@@ -263,7 +263,7 @@ export default {
             console.log("Input :: replaceQueryWithName : 置き換えるユーザーid", targetUserid);
 
             //入力テキストの@部分をメンション文で代入
-            this.txt = this.txt.substring(0, this.searchMode.searchStartingAt) + ("@/"+targetUserid+"/ ") + this.txt.substring(this.searchMode.searchStartingAt);
+            this.txt = this.txt.substring(0, this.searchMode.searchStartingAt) + ("@/"+targetUserid+"/ ") + this.txt.substring(this.searchMode.searchStartingAt+1);
 
             //入力欄へフォーカスしなおす
             this.$el.querySelector("#inp").focus();
@@ -467,6 +467,7 @@ export default {
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
                             @keydown.enter="EnterTrigger"
+                            @keydown.@="searchMode.enabled=true;searchMode.searchStartingAt=txt.length;"
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
                             variant="solo"
