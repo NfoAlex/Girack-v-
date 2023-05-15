@@ -48,6 +48,7 @@ export default {
 
             searchMode: {
                 enabled: false, //検索モードに入っているかどうか
+                selectedIndex: 0, //選択しているもの
                 searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
                 searchingQuery: "" //検索してる文字列
             },
@@ -468,7 +469,7 @@ export default {
                     <!-- ユーザー検索候補の表示 -->
                     <v-list max-height="30vh" v-if="searchMode.enabled">
                         <v-list-item
-                            v-for="i in searchDisplayArray"
+                            v-for="(i,index) in searchDisplayArray"
                         >
                             <v-avatar size="3%">
                                 <v-img :src="uri + '/img/' + i.userid">
@@ -478,6 +479,7 @@ export default {
                                 @click="replaceQueryWithName(i.userid)"
                                 style="margin-left:8px;"
                             >
+                                <span v-if="index===searchMode.selectedIndex"> *** </span>
                                 {{ i.username }}
                             </span>
                         </v-list-item>
