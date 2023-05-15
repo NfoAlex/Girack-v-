@@ -260,16 +260,16 @@ export default {
 
         },
 
-        //メンション用のユーザー検索のユーザー選択変更部分
+        //メンション用のユーザー検索の十字キーでのユーザー選択変更部分
         changeMentionUserSelect(e) {
             e.preventDefault();
 
-            if ( e.code === "ArrowDown" ) {
+            if ( e.code === "ArrowDown" && this.searchDisplayArray.length-1 > this.searchMode.selectedIndex ) {
                 this.searchMode.selectedIndex += 1;
 
             }
 
-            if ( e.code === "ArrowUp" ) {
+            if ( e.code === "ArrowUp" && this.searchMode.selectedIndex > 0 ) {
                 this.searchMode.selectedIndex -= 1;
                 
             }
