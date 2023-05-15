@@ -111,6 +111,7 @@ export default {
             if ( this.txt[this.txt.length-1] === "@" ) {
                 this.searchMode.enabled = true;
                 this.searchMode.indexStarting = this.txt.length-1;
+                console.log("Input :: watch(txt) : 検索モードに入った", this.searchMode.enabled);
 
                 //最新のチャンネルに参加している人リストを取得
                 socket.emit("getInfoChannelJoinedUserList", {
@@ -126,6 +127,7 @@ export default {
             //スペースが入力された、あるいは文字が空になったら検索モードを終了
             if ( this.txt[this.txt.length-1] === " " || this.txt[this.txt.length-1] === "　" || this.txt.length === 0 ) {
                 this.searchMode.enabled = false;
+                console.log("Input :: watch(txt) : 検索モードから抜けた", this.searchMode.enabled);
 
             }
 
@@ -417,7 +419,9 @@ export default {
 
                 <v-menu
                     label="list"
+                    :v-model="true"
                     location="top"
+                    :close-on-content-click="false"
                 >
                     <template v-slot:activator="{ props }">
                         <!-- 入力部分 -->
