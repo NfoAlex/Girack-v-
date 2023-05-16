@@ -51,6 +51,7 @@ export default {
                 selectedIndex: 0, //選択しているもの
                 searchStartingAt: 0, //検索モードに入った文字位置
                 searchEndingAt: 100, //検索文字列の範囲終わり(文字列全体の長さ - searchStartingAt)
+                txtLengthWhenStartSearching: 0, //検索をし始めたときの文字列全体の長さ
                 searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
                 searchingQuery: "" //検索してる文字列
             },
@@ -138,10 +139,17 @@ export default {
             //検索モードに入っているなら検索する
             if ( this.searchMode.enabled ) {
                 //検索文字列の範囲終わりを取得
-                this.searchMode.searchEndingAt = this.txt.length - this.searchMode.searchStartingAt;
+                this.searchMode.searchEndingAt = this.txt.length - this.searchMode.txtLengthWhenStartSearching + this.searchMode.searchStartingAt;
+                //もし開始文字位置と検索範囲終わり位置が同じあるいはずれていたら
+                if ( this.searchMode.searchStartingAt+1 >= this.searchMode.searchEndingAt ) {
+                    this.searchMode.enabled = false;
+                    return;
+
+                }
                 //検索文字列を取得
                 this.searchMode.searchingQuery = this.txt.substring(this.searchMode.searchStartingAt+1, this.searchMode.searchEndingAt);
 
+                console.log("Input :: watch(txt) : 検索する範囲 -> ", this.searchMode.searchStartingAt, this.searchMode.searchEndingAt);
                 console.log("Input :: watch(txt) : 検索する文字列 -> ", this.searchMode.searchingQuery);
 
                 //検索語で配列をフィルターして標示用の配列へ設定
@@ -189,7 +197,9 @@ export default {
         //テキスト入力中の@押された時のトリガー処理
         AtsignTrigger() {
             this.searchMode.enabled = true;
+            this.searchMode.txtLengthWhenStartSearching = this.txt.length;
             this.searchMode.searchStartingAt = document.querySelector("#inp").selectionStart;
+            console.log("Input :: AtsignTrigger : @がおされた->", this.searchMode.searchStartingAt);
 
         },
 
