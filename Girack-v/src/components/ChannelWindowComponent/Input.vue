@@ -183,6 +183,13 @@ export default {
 
         },
 
+        //テキスト入力中の@押された時のトリガー処理
+        AtsignTrigger() {
+            this.searchMode.enabled = true;
+            this.searchMode.searchStartingAt = document.querySelector("#inp").selectionStart;
+
+        },
+
         //メッセージを送信する
         msgSend( event, btn ) {
             console.log("Input :: msgSend : 送信しようとしている");
@@ -260,10 +267,16 @@ export default {
 
         //メンション用のユーザー検索時にクリックされたらユーザーIDを自動入力する部分
         replaceQueryWithName(targetUserid) {
-            console.log("Input :: replaceQueryWithName : 置き換えるユーザーid", targetUserid);
+            console.log("Input :: replaceQueryWithName : 置き換えるユーザーid->", targetUserid, " 文字位置->", this.searchMode.searchStartingAt);
 
             //入力テキストの@部分をメンション文で代入
-            this.txt = this.txt.substring(0, this.searchMode.searchStartingAt) + ("@/"+targetUserid+"/ ") + this.txt.substring(this.searchMode.searchStartingAt+1);
+            if ( this.searchMode.searchingQuery === "" ) {
+                this.txt = this.txt.substring(0, this.searchMode.searchStartingAt) + ("@/"+targetUserid+"/ ") + this.txt.substring(this.searchMode.searchStartingAt+1);
+
+            } else {
+                this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@/"+targetUserid+"/ ");
+
+            }
 
             //入力欄へフォーカスしなおす
             this.$el.querySelector("#inp").focus();
@@ -467,7 +480,7 @@ export default {
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
                             @keydown.enter="EnterTrigger"
-                            @keydown.@="searchMode.enabled=true;searchMode.searchStartingAt=txt.length;"
+                            @keydown.@="AtsignTrigger"
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
                             variant="solo"
