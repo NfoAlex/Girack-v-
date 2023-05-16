@@ -24,7 +24,17 @@ export default {
         const { ChannelIndex } = dataChannel();
         const { MsgDB, UserIndex } = dataMsg();
 
-        return { ReplyState, Userinfo, ChannelIndex, MsgDB, UserIndex };
+        //メンションメンバーリストのフック
+        const MentionUserList = ref(null);
+
+        //メンションユーザー検索画面を無理やり出す関数
+        function OpenMentionUserList() {
+            console.log("Input :: setup : ", MentionUserList.value);
+            MentionUserList.value.isActive = true;
+
+        }
+
+        return { ReplyState, Userinfo, ChannelIndex, MsgDB, UserIndex, MentionUserList, OpenMentionUserList };
 
     },
 
@@ -198,6 +208,7 @@ export default {
         //テキスト入力中の@押された時のトリガー処理
         AtsignTrigger() {
             this.searchMode.enabled = true;
+            this.OpenMentionUserList();
             this.searchMode.txtLengthWhenStartSearching = this.txt.length;
             this.searchMode.searchStartingAt = document.querySelector("#inp").selectionStart;
             console.log("Input :: AtsignTrigger : @がおされた->", this.searchMode.searchStartingAt);
@@ -481,6 +492,7 @@ export default {
             <v-container fill-height fluid class="d-flex">
 
                 <v-menu
+                    ref="MentionUserList"
                     label="list"
                     :v-model="true"
                     location="top"
