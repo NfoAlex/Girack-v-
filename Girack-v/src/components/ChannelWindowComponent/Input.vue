@@ -140,12 +140,13 @@ export default {
             if ( this.searchMode.enabled ) {
                 //検索文字列の範囲終わりを取得
                 this.searchMode.searchEndingAt = this.txt.length - this.searchMode.txtLengthWhenStartSearching + this.searchMode.searchStartingAt;
-                //もし開始文字位置と検索範囲終わり位置が同じあるいはずれていたら
-                if ( this.searchMode.searchStartingAt+1 >= this.searchMode.searchEndingAt ) {
+                //もし開始文字位置と検索範囲終わり位置がかたよったら検索モードを無効化して関数を止める
+                if ( this.searchMode.searchStartingAt+1 > this.searchMode.searchEndingAt ) {
                     this.searchMode.enabled = false;
                     return;
 
                 }
+                
                 //検索文字列を取得
                 this.searchMode.searchingQuery = this.txt.substring(this.searchMode.searchStartingAt+1, this.searchMode.searchEndingAt);
 
