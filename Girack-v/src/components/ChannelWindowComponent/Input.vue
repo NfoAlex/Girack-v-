@@ -50,6 +50,7 @@ export default {
                 enabled: false, //検索モードに入っているかどうか
                 selectedIndex: 0, //選択しているもの
                 searchStartingAt: 0, //検索モードに入った文字位置
+                searchEndingAt: 100, //検索文字列の範囲終わり(文字列全体の長さ - searchStartingAt)
                 searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
                 searchingQuery: "" //検索してる文字列
             },
@@ -136,8 +137,10 @@ export default {
 
             //検索モードに入っているなら検索する
             if ( this.searchMode.enabled ) {
+                //検索文字列の範囲終わりを取得
+                this.searchMode.searchEndingAt = this.txt.length - this.searchMode.searchStartingAt;
                 //検索文字列を取得
-                this.searchMode.searchingQuery = this.txt.substring(this.searchMode.searchStartingAt+1);
+                this.searchMode.searchingQuery = this.txt.substring(this.searchMode.searchStartingAt+1, this.searchMode.searchEndingAt);
 
                 console.log("Input :: watch(txt) : 検索する文字列 -> ", this.searchMode.searchingQuery);
 
