@@ -146,7 +146,7 @@ export default {
                     return;
 
                 }
-                
+
                 //検索文字列を取得
                 this.searchMode.searchingQuery = this.txt.substring(this.searchMode.searchStartingAt+1, this.searchMode.searchEndingAt);
 
@@ -536,16 +536,22 @@ export default {
                         <v-list-item
                             v-for="(i,index) in searchDisplayArray"
                         >
-                            <v-avatar size="3%">
-                                <v-img :src="uri + '/img/' + i.userid">
-                                </v-img>
-                            </v-avatar>
-                            <span
-                                @click="replaceQueryWithName(i.userid)"
-                                style="margin-left:8px;"
-                            >
-                                <span v-if="index===searchMode.selectedIndex"> *** </span>
-                                {{ i.username }}
+                            <span @click="replaceQueryWithName(i.userid)" style="cursor:pointer;">
+                                
+                                <v-avatar size="3%">
+                                    <v-img :src="uri + '/img/' + i.userid">
+                                    </v-img>
+                                </v-avatar>
+
+                                <span
+                                    style="margin-left:8px;"
+                                >
+                                    <span v-if="index===searchMode.selectedIndex">
+                                        ⇒
+                                    </span>
+                                    {{ i.username }}
+                                </span>
+
                             </span>
                         </v-list-item>
                     </v-list>
