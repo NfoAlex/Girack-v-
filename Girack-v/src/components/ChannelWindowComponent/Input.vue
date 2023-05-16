@@ -48,6 +48,10 @@ export default {
 
             searchMode: {
                 enabled: false, //検索モードに入っているかどうか
+                selectedIndex: 0, //選択しているもの
+                searchStartingAt: 0, //検索モードに入った文字位置
+                searchEndingAt: 100, //検索文字列の範囲終わり(文字列全体の長さ - searchStartingAt)
+                txtLengthWhenStartSearching: 0, //検索をし始めたときの文字列全体の長さ
                 searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
                 searchingQuery: "" //検索してる文字列
             },
@@ -109,8 +113,10 @@ export default {
         txt() {
             //@が入力されたら検索モードに入る
             if ( this.txt[this.txt.length-1] === "@" ) {
-                this.searchMode.enabled = true;
-                this.searchMode.indexStarting = this.txt.length-1;
+                this.searchMode.enabled = true; //検索モードを有効化
+                this.searchMode.searchStartingAt = this.txt.length-1; //検索し始めた文字位置を記憶
+                this.searchMode.selectedIndex = 0; //ユーザー選択番号を0(初期化)
+                console.log("Input :: watch(txt) : 検索モードに入った", this.searchMode.enabled);
 
                 //最新のチャンネルに参加している人リストを取得
                 socket.emit("getInfoChannelJoinedUserList", {
@@ -126,19 +132,30 @@ export default {
             //スペースが入力された、あるいは文字が空になったら検索モードを終了
             if ( this.txt[this.txt.length-1] === " " || this.txt[this.txt.length-1] === "　" || this.txt.length === 0 ) {
                 this.searchMode.enabled = false;
+                console.log("Input :: watch(txt) : 検索モードから抜けた", this.searchMode.enabled);
 
             }
 
             //検索モードに入っているなら検索する
             if ( this.searchMode.enabled ) {
-                //検索文字列を取得
-                this.searchMode.searchingQuery = this.txt.substring(this.searchMode.indexStarting+1);
+                //検索文字列の範囲終わりを取得
+                this.searchMode.searchEndingAt = this.txt.length - this.searchMode.txtLengthWhenStartSearching + this.searchMode.searchStartingAt;
+                //もし開始文字位置と検索範囲終わり位置がかたよったら検索モードを無効化して関数を止める
+                if ( this.searchMode.searchStartingAt+1 > this.searchMode.searchEndingAt ) {
+                    this.searchMode.enabled = false;
+                    return;
 
+                }
+
+                //検索文字列を取得
+                this.searchMode.searchingQuery = this.txt.substring(this.searchMode.searchStartingAt+1, this.searchMode.searchEndingAt);
+
+                console.log("Input :: watch(txt) : 検索する範囲 -> ", this.searchMode.searchStartingAt, this.searchMode.searchEndingAt);
                 console.log("Input :: watch(txt) : 検索する文字列 -> ", this.searchMode.searchingQuery);
 
                 //検索語で配列をフィルターして標示用の配列へ設定
                 this.searchDisplayArray = this.channelJoinedUserArray.filter((u)=> {
-                    //ユーザー名に検索語が含まれていたら出力
+                    //ユーザー名に検索語が含まれていたら表示する配列へ追加
                     if ( (u.username).includes(this.searchMode.searchingQuery) ) {
                         return u.username;
 
@@ -161,14 +178,37 @@ export default {
     },
 
     methods: {
-        //メッセージを送信する
-        msgSend( event, btn ) {
-            //送信の初期判定
-            if ( btn !== "byBtn" ) { //ボタンからの送信？
-                //変換中のEnter検知を外す
-                if ( event.keyCode !== 13 ) return; //変換中のEnterなら処理させない
+        //Enterキーのトリガー処理
+        EnterTrigger(event) {
+            if ( event.keyCode !== 13 ) return; //変換中のEnterなら処理させない
+
+            //もしメンションのゆーざー検索が有効ならメンション文を打ち込む、違うならメッセージ送信
+            if ( this.searchMode.enabled ) {
+                //メンション文打ち込み開始
+                this.replaceQueryWithName(this.searchDisplayArray[this.searchMode.selectedIndex].userid);
+                //検索モードを終了
+                this.searchMode.enabled = false;
+
+            } else {
+                //メッセージ送信開始
+                this.msgSend(event);
 
             }
+
+        },
+
+        //テキスト入力中の@押された時のトリガー処理
+        AtsignTrigger() {
+            this.searchMode.enabled = true;
+            this.searchMode.txtLengthWhenStartSearching = this.txt.length;
+            this.searchMode.searchStartingAt = document.querySelector("#inp").selectionStart;
+            console.log("Input :: AtsignTrigger : @がおされた->", this.searchMode.searchStartingAt);
+
+        },
+
+        //メッセージを送信する
+        msgSend( event, btn ) {
+            console.log("Input :: msgSend : 送信しようとしている");
 
             //送信ｨﾝ!
             socket.emit("msgSend", {
@@ -241,16 +281,40 @@ export default {
 
         },
 
-        //メンション用のユーザー検索時にクリックされたら名前を自動入力する部分
+        //メンション用のユーザー検索時にクリックされたらユーザーIDを自動入力する部分
         replaceQueryWithName(targetUserid) {
-            //入力テキストの名前部分をIDへ置き換え
-            this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@/"+targetUserid+"/ ");
-            
-            //返信状態をオフに
-            this.ReplyState.isReplying = false;
+            console.log("Input :: replaceQueryWithName : 置き換えるユーザーid->", targetUserid, " 文字位置->", this.searchMode.searchStartingAt);
+
+            //入力テキストの@部分をメンション文で代入
+            if ( this.searchMode.searchingQuery === "" ) {
+                this.txt = this.txt.substring(0, this.searchMode.searchStartingAt) + ("@/"+targetUserid+"/ ") + this.txt.substring(this.searchMode.searchStartingAt+1);
+
+            } else {
+                this.txt = this.txt.replace("@"+this.searchMode.searchingQuery, "@/"+targetUserid+"/ ");
+
+            }
 
             //入力欄へフォーカスしなおす
             this.$el.querySelector("#inp").focus();
+
+        },
+
+        //メンション用のユーザー検索の十字キーでのユーザー選択変更部分
+        changeMentionUserSelect(e) {
+            //上下の十字キーの入力からのテキストのカーソル移動を防ぐ
+            e.preventDefault();
+
+            //もしキー入力が下矢印で、かつ選択しているインデックス番号が(検索結果配列の長さ-1)未満なら
+            if ( e.code === "ArrowDown" && this.searchDisplayArray.length-1 > this.searchMode.selectedIndex ) {
+                this.searchMode.selectedIndex += 1; //インデックスを進める
+
+            }
+
+            //もしキー入力が上矢印で、かつ選択しているインデックス番号が0より上だったら
+            if ( e.code === "ArrowUp" && this.searchMode.selectedIndex > 0 ) {
+                this.searchMode.selectedIndex -= 1; //インデックスを戻す
+                
+            }
 
         },
 
@@ -419,8 +483,10 @@ export default {
             <v-container fill-height fluid class="d-flex">
 
                 <v-menu
+                    ref="MentionUserList"
                     label="list"
                     location="top"
+                    :close-on-content-click="false"
                 >
                     <template v-slot:activator="{ props }">
                         <!-- 入力部分 -->
@@ -429,7 +495,10 @@ export default {
                             id="inp"
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
-                            @keydown.enter="msgSend"
+                            @keydown.enter="EnterTrigger"
+                            @keydown.@="AtsignTrigger"
+                            @keydown.up="changeMentionUserSelect"
+                            @keydown.down="changeMentionUserSelect"
                             variant="solo"
                             density="compact"
                             clearable
@@ -467,13 +536,25 @@ export default {
                     <!-- ユーザー検索候補の表示 -->
                     <v-list max-height="30vh" v-if="searchMode.enabled">
                         <v-list-item
-                            v-for="i in searchDisplayArray"
+                            v-for="(i,index) in searchDisplayArray"
                         >
-                            <v-avatar size="3%">
-                                <v-img :src="uri + '/img/' + i.userid">
-                                </v-img>
-                            </v-avatar>
-                            <span style="margin-left:8px;" @click="replaceQueryWithName(i.userid)">{{ i.username }}</span>
+                            <span @click="replaceQueryWithName(i.userid)" style="cursor:pointer;">
+                                
+                                <v-avatar size="3%">
+                                    <v-img :src="uri + '/img/' + i.userid">
+                                    </v-img>
+                                </v-avatar>
+
+                                <span
+                                    style="margin-left:8px;"
+                                >
+                                    <span v-if="index===searchMode.selectedIndex">
+                                        ⇒
+                                    </span>
+                                    {{ i.username }}
+                                </span>
+
+                            </span>
                         </v-list-item>
                     </v-list>
                 </v-menu>
