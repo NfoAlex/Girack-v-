@@ -88,7 +88,9 @@ export default {
             <Head :channelInfo="getChannelInfo()" />
         </div>
         <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
-            <Content :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo()" />
+            <KeepAlive :max="10">
+                <component is="Content" :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo()" :key="$route.params.id" />
+            </KeepAlive>
         </div>
         <div :class="[w]" class="input flex-grow-0 flex-shrink-1">
             <Input :channelInfo="getChannelInfo()" />
