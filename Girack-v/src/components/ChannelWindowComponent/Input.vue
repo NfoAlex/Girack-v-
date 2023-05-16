@@ -281,6 +281,39 @@ export default {
 
         },
 
+        //クリップボードからの貼り付けでのファイル受け取り
+        fileInputClipboard(event) {
+            const clipboardData = event.clipboardData;
+            console.log("Input :: fileInputClipboard : ファイル受け取り開始", event.clipboardData);
+
+            if ( clipboardData !== undefined ) {
+                const items = clipboardData.items;
+                //console.log("Input :: fileInputClipboard : file item -> ", items);
+
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    console.log("Input :: fileInputClipboard : これから読むファイル ->", item);
+                    //もしファイルなら
+                    if ( item.kind === 'file' ) {
+                        const blob = item.getAsFile();
+                        const fileReader = new FileReader();
+
+                        fileReader.onload = (e) => {
+                            const fileData = e.target.result;
+                            console.log("Input :: fileInputClipbard : ファイルを見た", fileData);
+
+                        }
+
+                        console.log("Input :: fileInputClipboard : ファイル読み込み結果 ", fileReader.readAsDataURL(blob));
+
+                    }
+
+                }
+
+            }
+            
+        },
+
         //メンション用のユーザー検索時にクリックされたらユーザーIDを自動入力する部分
         replaceQueryWithName(targetUserid) {
             console.log("Input :: replaceQueryWithName : 置き換えるユーザーid->", targetUserid, " 文字位置->", this.searchMode.searchStartingAt);
@@ -499,6 +532,7 @@ export default {
                             @keydown.@="AtsignTrigger"
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
+                            @paste="fileInputClipboard"
                             variant="solo"
                             density="compact"
                             clearable
@@ -559,6 +593,7 @@ export default {
                     </v-list>
                 </v-menu>
             
+                <!-- 送信ボタン -->
                 <v-btn @click="msgSend(null,'byBtn')" icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
                     <v-icon icon="mdi:mdi-send-outline"></v-icon>
                     <v-tooltip
