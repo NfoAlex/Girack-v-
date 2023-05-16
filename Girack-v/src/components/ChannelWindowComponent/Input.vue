@@ -196,6 +196,8 @@ export default {
             if ( this.searchMode.enabled ) {
                 //メンション文打ち込み開始
                 this.replaceQueryWithName(this.searchDisplayArray[this.searchMode.selectedIndex].userid);
+                //検索モードを終了
+                this.searchMode.enabled = false;
 
             } else {
                 //メッセージ送信開始
