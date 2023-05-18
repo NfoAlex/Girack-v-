@@ -715,6 +715,18 @@ function loadDataFromCookie() {
     }
     catch(e) {}
 
+    //もし同期設定がそもそも空だったら
+    if ( getCookie("configSync") === "" ) {
+        //サーバーから設定を取得
+        socket.emit("getUserSaveConfig", {
+            reqSender: {
+                userid: Userinfo.value.userid,
+                sessionid: Userinfo.value.sessionid
+            }
+        });
+
+    }
+
     //クッキーから表示設定を取得して適用
     try {
         //クッキーから通知設定を読み込み
