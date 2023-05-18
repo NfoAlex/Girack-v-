@@ -734,13 +734,13 @@ function loadDataFromCookie() {
         let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
         let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
 
+        //同期設定の上書き
         CONFIG_SYNC.value = Boolean(COOKIE_ConfigSync);
-        console.log("socket :: loadDataFromCookie : 現在の同期設定", CONFIG_SYNC.value);
-
-        console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(COOKIE_ConfigDisplay).length);
-        //console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(CONFIG_DISPLAY.value).length);
+        
+        
         //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
         if ( Object.keys(COOKIE_ConfigDisplay).length === Object.keys(CONFIG_DISPLAY.value).length ) {
+            //表示設定を上書き
             CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
         
         }
@@ -748,8 +748,10 @@ function loadDataFromCookie() {
         //通知設定を上書き
         CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
 
+        //もし同期設定がオンだったら設定を取得
         if ( COOKIE_ConfigSync ) {
             console.log("socket :: loadDataFromCookie : 設定を同期します");
+           //取得
             socket.emit("getUserSaveConfig", {
                 reqSender: {
                     userid: Userinfo.value.userid,
