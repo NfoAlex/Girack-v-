@@ -22,7 +22,7 @@ let initSocketConfig = () => {
 };
 
 //設定情報をサーバーと同期するかどうか
-const CONFIG_SYNC = ref(false);
+const CONFIG_SYNC = ref(true);
 
 //通知設定
 const CONFIG_NOTIFICATION = ref({
