@@ -722,15 +722,15 @@ function loadDataFromCookie() {
         } else {
             socket.emit("getUserSave", {
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
                 }
             });
 
         }
     }
     catch(e) {
-        console.log("エラーだな");
+        console.log("socket :: loadDataFromCookie : 設定読み取りエラー", e);
     }
 
 }
