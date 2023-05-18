@@ -708,18 +708,27 @@ function loadDataFromCookie() {
 
     //クッキーから表示設定を取得して適用
     try {
-        //設定データをサーバーと同期しいないのなら
-        if ( !CONFIG_SYNC ) {
-            //クッキーから通知設定を読み込み
-            let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
-            console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(COOKIE_ConfigDisplay).length);
-            console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(CONFIG_DISPLAY.value).length);
-            //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
-            if ( Object.keys(COOKIE_ConfigDisplay).length === Object.keys(CONFIG_DISPLAY.value).length ) {
-                CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
-            
-            }
-        } else {
+        //クッキーから通知設定を読み込み
+        let COOKIE_ConfigSync = getCookie("configSync");
+        let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
+        let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
+
+        CONFIG_SYNC.value = Boolean(COOKIE_ConfigSync);
+        console.log("socket :: loadDataFromCookie : 現在の同期設定", CONFIG_SYNC.value);
+
+        console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(COOKIE_ConfigDisplay).length);
+        //console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(CONFIG_DISPLAY.value).length);
+        //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
+        if ( Object.keys(COOKIE_ConfigDisplay).length === Object.keys(CONFIG_DISPLAY.value).length ) {
+            CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
+        
+        }
+
+        //通知設定を上書き
+        CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
+
+        if ( COOKIE_ConfigSync ) {
+            console.log("socket :: loadDataFromCookie : 設定を同期します");
             socket.emit("getUserSave", {
                 reqSender: {
                     userid: Userinfo.value.userid,
