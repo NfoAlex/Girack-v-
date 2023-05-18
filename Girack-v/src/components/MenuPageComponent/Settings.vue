@@ -96,7 +96,8 @@ export default {
             socket.emit("updateUserSaveConfig", {
                 config: {
                     CONFIG_DISPLAY: this.CONFIG_DISPLAY,
-                    CONFIG_NOTIFICATION: this.CONFIG_NOTIFICATION
+                    CONFIG_NOTIFICATION: this.CONFIG_NOTIFICATION,
+                    LIST_NOTIFICATION_MUTE_CHANNEL: this.LIST_NOTIFICATION_MUTE_CHANNEL
                 },
                 reqSender: {
                     userid: this.Userinfo.userid,
