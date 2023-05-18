@@ -6,25 +6,20 @@ import { getSocket} from "./socket.js";
 
 let socket = null;
 
-let initSocketConfig = new Promise(() => {
+let initSocketConfig = () => {
     try {
         socket = getSocket();
+        socket.on("infoUserSaveConfig", (userSaveConfig) => {
+            console.log("config :: initSocket : 設定受信");
+    
+            CONFIG_NOTIFICATION = userSave.config.CONFIG_NOTIFICATION;
+            CONFIG_DISPLAY = userSave.config.CONFIG_DISPLAY;
+            LIST_NOTIFICATION_MUTE_CHANNEL = userSave.config.LIST_NOTIFICATION_MUTE_CHANNEL;
+        });
     } catch(e) {
-        setTimeout(initSocket, 1000);
+        setTimeout(initSocketConfig, 1000);
     }
-});
-
-initSocketConfig.then(() => {
-    //ユーザーの個人用データを受信したときに設定を更新
-    socket.on("infoUserSaveConfig", (userSaveConfig) => {
-        console.log("config :: initSocket : 設定受信");
-
-        CONFIG_NOTIFICATION = userSave.config.CONFIG_NOTIFICATION;
-        CONFIG_DISPLAY = userSave.config.CONFIG_DISPLAY;
-        LIST_NOTIFICATION_MUTE_CHANNEL = userSave.config.LIST_NOTIFICATION_MUTE_CHANNEL;
-    });
-
-})
+};
 
 //設定情報をサーバーと同期するかどうか
 const CONFIG_SYNC = ref(false);
