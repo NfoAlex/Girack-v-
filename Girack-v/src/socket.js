@@ -663,6 +663,15 @@ socket.on("authResult", (dat) => {
 
 });
 
+//設定データの受け取り、適用
+socket.on("infoUserSaveConfig", (userSaveConfig) => {
+    console.log("socket :: infoUserSaveConfig : 設定受信", userSaveConfig);
+
+    CONFIG_NOTIFICATION.value = userSaveConfig.CONFIG_NOTIFICATION;
+    CONFIG_DISPLAY.value = userSaveConfig.CONFIG_DISPLAY;
+    LIST_NOTIFICATION_MUTE_CHANNEL.value = userSaveConfig.LIST_NOTIFICATION_MUTE_CHANNEL;
+});
+
 //初回処理用のクッキーから設定や既読状態を読み込む
 function loadDataFromCookie() {
     //既読状態をクッキーから取得して設定に適用

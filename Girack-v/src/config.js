@@ -2,24 +2,6 @@
 //設定保存用
 
 import { ref } from "vue";
-import { getSocket} from "./socket.js";
-
-let socket = null;
-
-let initSocketConfig = () => {
-    try {
-        socket = getSocket();
-        socket.on("infoUserSaveConfig", (userSaveConfig) => {
-            console.log("config :: initSocket : 設定受信");
-    
-            CONFIG_NOTIFICATION = userSave.config.CONFIG_NOTIFICATION;
-            CONFIG_DISPLAY = userSave.config.CONFIG_DISPLAY;
-            LIST_NOTIFICATION_MUTE_CHANNEL = userSave.config.LIST_NOTIFICATION_MUTE_CHANNEL;
-        });
-    } catch(e) {
-        setTimeout(initSocketConfig, 1000);
-    }
-};
 
 //設定情報をサーバーと同期するかどうか
 const CONFIG_SYNC = ref(true);
