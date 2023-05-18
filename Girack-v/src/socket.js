@@ -738,7 +738,7 @@ function loadDataFromCookie() {
 
         if ( COOKIE_ConfigSync ) {
             console.log("socket :: loadDataFromCookie : 設定を同期します");
-            socket.emit("getUserSave", {
+            socket.emit("getUserSaveConfig", {
                 reqSender: {
                     userid: Userinfo.value.userid,
                     sessionid: Userinfo.value.sessionid
