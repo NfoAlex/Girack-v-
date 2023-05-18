@@ -9,6 +9,7 @@ import { getCONFIG } from './config.js';
 export const CLIENT_VERSION = "alpha_20230518";
 
 const {
+    CONFIG_SYNC,
     CONFIG_NOTIFICATION,
     LIST_NOTIFICATION_MUTE_CHANNEL,
     CONFIG_DISPLAY 
