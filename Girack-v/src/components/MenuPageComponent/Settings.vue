@@ -8,9 +8,9 @@ export default {
 
     setup() {
         //設定をインポート
-        const { CONFIG_NOTIFICATION, CONFIG_DISPLAY } = getCONFIG();
+        const { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC } = getCONFIG();
         const { Userinfo } = dataUser();
-        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, Userinfo };
+        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, Userinfo };
         
     },
 
@@ -25,7 +25,7 @@ export default {
             record: 0,
 
             //表示するページ
-            configPage: "notification",
+            configPage: "sync",
 
             //復元用
             CurrentConfig: {},
@@ -36,6 +36,12 @@ export default {
 
     watch: {
         //設定の変更を検知してCookieへ書き込み
+        CONFIG_SYNC: {
+            handler() {
+                setCookie("configSync", this.CONFIG_SYNC);
+
+            }
+        },
         CONFIG_NOTIFICATION: {
             handler() {
                 setCookie("configNotify", JSON.stringify(this.CONFIG_NOTIFICATION), 7);
@@ -147,6 +153,15 @@ export default {
                 <div class="d-flex align-center">
                     <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto; overflow-y:hidden">
                         <v-btn
+                            @click="configPage='sync'"
+                            size="large"
+                            :color="configPage==='sync'?'secondary':'grey'"
+                            class="ma-1 rounded-pill"
+                        >
+                            同期
+                        </v-btn>
+
+                        <v-btn
                             @click="configPage='notification'"
                             size="large"
                             :color="configPage==='notification'?'secondary':'grey'"
@@ -188,8 +203,23 @@ export default {
             <!-- 設定ページメイン -->
             <div class="scroll" style="width:100%; overflow-y:auto">
                 <div class="mx-auto" style="margin: 1% 0;">
+                    <!-- 設定の同期 -->
+                    <v-card v-if="configPage===('sync'||'')" class="mx-auto rounded-lg card">
+
+                        <p><v-icon>mdi:mdi-sync</v-icon>同期状態</p>
+                        <v-card class="cardInner pa-3 rounded-lg">
+                            <v-switch
+                                v-model="CONFIG_SYNC"
+                                label="設定を同期する"
+                            ></v-switch>
+                        </v-card>
+
+                    </v-card>
+
+                    <br>
+
                     <!-- 通知 -->
-                    <v-card v-if="configPage===('notification'||'')" class="mx-auto rounded-lg card">
+                    <v-card v-if="configPage===('notification')" class="mx-auto rounded-lg card">
                         <p class="text-h6 ma-2">通知</p>
 
                         <p><v-icon>mdi:mdi-bell-cog</v-icon>許可状況</p>
