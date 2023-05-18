@@ -1,13 +1,16 @@
 <script>
 import { getCONFIG } from "../../config.js";
-import { setCookie } from "../../socket.js";
+import { getSocket, setCookie, dataUser } from "../../socket.js";
+
+const socket = getSocket();
 
 export default {
 
     setup() {
         //設定をインポート
         const { CONFIG_NOTIFICATION, CONFIG_DISPLAY } = getCONFIG();
-        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY };
+        const { Userinfo } = dataUser();
+        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, Userinfo };
         
     },
 
@@ -36,6 +39,7 @@ export default {
         CONFIG_NOTIFICATION: {
             handler() {
                 setCookie("configNotify", JSON.stringify(this.CONFIG_NOTIFICATION), 7);
+                this.updateConfigWithServer();
 
             },
             deep:true
@@ -43,6 +47,8 @@ export default {
         CONFIG_DISPLAY: {
             handler() {
                 setCookie("configDisplay", JSON.stringify(this.CONFIG_DISPLAY), 7);
+                this.updateConfigWithServer();
+
             },
             deep: true
         }
@@ -81,6 +87,22 @@ export default {
                 this.txt = "Higher!"
 
             }
+
+        },
+
+        //サーバー上の設定情報を更新
+        updateConfigWithServer() {
+            //データ送信
+            socket.emit("updateUserSaveConfig", {
+                config: {
+                    CONFIG_DISPLAY: this.CONFIG_DISPLAY,
+                    CONFIG_NOTIFICATION: this.CONFIG_NOTIFICATION
+                },
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
 
         },
 

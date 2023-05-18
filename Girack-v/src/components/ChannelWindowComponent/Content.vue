@@ -70,6 +70,7 @@ export default {
 
                     //既読状態をCookieへ書き込み
                     setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
+                    //socket.emit("updateUserSaveConfig", )
 
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
