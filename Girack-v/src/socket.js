@@ -625,7 +625,7 @@ socket.on("authResult", (dat) => {
         };
 
         //クッキーから設定を読み込み
-        loadConfigFromCookie();
+        loadDataFromCookie();
 
         //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
@@ -662,8 +662,8 @@ socket.on("authResult", (dat) => {
 
 });
 
-//初回処理用のクッキーから設定を読み込む
-function loadConfigFromCookie() {
+//初回処理用のクッキーから設定や既読状態を読み込む
+function loadDataFromCookie() {
     //既読状態をクッキーから取得して設定に適用
     try {
         //クッキーから既読状態を取得
