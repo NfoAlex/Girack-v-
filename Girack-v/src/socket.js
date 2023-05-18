@@ -719,6 +719,14 @@ function loadDataFromCookie() {
                 CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
             
             }
+        } else {
+            socket.emit("getUserSave", {
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
+
         }
     }
     catch(e) {
