@@ -6,7 +6,7 @@ import { getSocket} from "./socket.js";
 
 let socket = null;
 
-let initSocket = new Promise(() => {
+let initSocketConfig = new Promise(() => {
     try {
         socket = getSocket();
     } catch(e) {
@@ -14,11 +14,11 @@ let initSocket = new Promise(() => {
     }
 });
 
-initSocket.then(() => {
+initSocketConfig.then(() => {
     //ユーザーの個人用データを受信したときに設定を更新
     socket.on("infoUserSaveConfig", (userSaveConfig) => {
         console.log("config :: initSocket : 設定受信");
-        
+
         CONFIG_NOTIFICATION = userSave.config.CONFIG_NOTIFICATION;
         CONFIG_DISPLAY = userSave.config.CONFIG_DISPLAY;
         LIST_NOTIFICATION_MUTE_CHANNEL = userSave.config.LIST_NOTIFICATION_MUTE_CHANNEL;
