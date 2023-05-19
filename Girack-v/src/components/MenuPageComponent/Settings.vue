@@ -265,7 +265,7 @@ export default {
                     <v-card v-if="configPage===('sync'||'')" class="mx-auto rounded-lg card">
 
                         <p class="text-h6 ma-2">同期</p>
-                        <p><v-icon>mdi:mdi-sync</v-icon>設定データ同期状態</p>
+                        <p><v-icon>mdi:mdi-sync</v-icon>設定データの同期状態</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-switch
                                 v-model="CONFIG_SYNC"
