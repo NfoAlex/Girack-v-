@@ -7,6 +7,7 @@ import Userpage from "../Userpage.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
+
 const socket = getSocket();
 
 export default {
@@ -70,6 +71,7 @@ export default {
 
                     //既読状態をCookieへ書き込み
                     setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
+                    
 
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
@@ -124,6 +126,15 @@ export default {
                     TotalMention += ObjMsgReadTime[index][1].mention; //メンション
 
                 }
+
+                //既読状態をサーバーへ同期させる
+                socket.emit("updateUserSaveMsgReadState", {
+                    msgReadState: this.MsgReadTime,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
 
                 //タブ名へ適用
                 document.title = (TotalMention>0?("[!" + TotalMention +"]"):"") + (TotalNew>0?("[" + TotalNew +"]"):"") + " #" + this.ChannelIndex[this.$route.params.id].channelname;

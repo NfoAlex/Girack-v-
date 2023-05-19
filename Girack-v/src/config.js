@@ -3,6 +3,9 @@
 
 import { ref } from "vue";
 
+//設定情報をサーバーと同期するかどうか
+const CONFIG_SYNC = ref(true);
+
 //通知設定
 const CONFIG_NOTIFICATION = ref({
     ENABLE: true, //ブラウザ通知
@@ -27,6 +30,7 @@ const CONFIG_DISPLAY = ref({
 //設定とデータを返す
 export function getCONFIG() {
     return {
+        CONFIG_SYNC,
         CONFIG_NOTIFICATION,
         LIST_NOTIFICATION_MUTE_CHANNEL,
         LIST_NOTIFICATION_MUTE_USER,

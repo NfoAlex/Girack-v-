@@ -6,16 +6,17 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
-export const CLIENT_VERSION = "alpha_20230516";
+export const CLIENT_VERSION = "alpha_20230519";
 
 const {
+    CONFIG_SYNC,
     CONFIG_NOTIFICATION,
     LIST_NOTIFICATION_MUTE_CHANNEL,
     CONFIG_DISPLAY 
 } = getCONFIG(); //設定
 
 //Socket通信用
-export const backendURI = "http://" + location.hostname + ":33333";
+export const backendURI = "http://" + location.hostname + ":33334";
 
 const socket = io(backendURI, {
     transports : ['websocket'],
@@ -204,6 +205,15 @@ socket.on("messageReceive", (msg) => {
             }
 
         }
+
+        //既読状態をサーバーへ同期させる
+        socket.emit("updateUserSaveMsgReadState", {
+            msgReadState: MsgReadTime.value,
+            reqSender: {
+                userid: Userinfo.value.userid,
+                sessionid: Userinfo.value.sessionid
+            }
+        });
 
         //新着のメッセージを通知
         if (
@@ -562,28 +572,6 @@ socket.on("messageHistory", (history) => {
         return;
     }
 
-    let index = 0; //チャンネル参照インデックス変数
-
-    //受信した履歴の中で新着のものかどうか調べて新着数を加算
-    for ( index in history ) {
-        //既読状態がそもそも無ければやらない
-        if ( MsgReadTime.value[channelid] === undefined ) break;
-        
-        //既読状態の時間から新着メッセージ数を加算
-        if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
-            //メンションされていたかどうかにあわせて既読状態を更新
-            if ( history[index].content.includes("@" + Userinfo.value.username) ) {
-                MsgReadTime.value[channelid].mention++; //メンション数を加算
-
-            } else {
-                MsgReadTime.value[channelid].new++; //新着数を加算
-
-            }
-
-        }
-
-    }
-
     if ( PreviewChannelData.value.channelid === channelid ) {
         MsgDB.value[channelid] = history;
         return;
@@ -625,7 +613,15 @@ socket.on("authResult", (dat) => {
         };
 
         //クッキーから設定を読み込み
-        loadConfigFromCookie();
+        loadDataFromCookie();
+
+        //既読状態の取得
+        socket.emit("getUserSaveMsgReadState",{
+            reqSender: {
+                userid: dat.userid,
+                sessionid: dat.sessionid
+            }
+        });
 
         //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
@@ -662,8 +658,34 @@ socket.on("authResult", (dat) => {
 
 });
 
-//初回処理用のクッキーから設定を読み込む
-function loadConfigFromCookie() {
+//設定データの受け取り、適用
+socket.on("infoUserSaveConfig", (userSaveConfig) => {
+    console.log("socket :: infoUserSaveConfig : 設定受信", userSaveConfig);
+
+    //もしクラウド上に設定が保存されていたなら
+    if ( userSaveConfig.configAvailable ) {
+        CONFIG_NOTIFICATION.value = userSaveConfig.config.CONFIG_NOTIFICATION;
+        CONFIG_DISPLAY.value = userSaveConfig.config.CONFIG_DISPLAY;
+        //LIST_NOTIFICATION_MUTE_CHANNEL.value = userSaveConfig.config.LIST_NOTIFICATION_MUTE_CHANNEL;
+
+    }
+
+});
+
+//既読状態データの受け取り、適用
+socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
+    console.log("socket :: infoUserSaveMsgReadState : 既読状態受信", userSaveMsgReadState);
+
+    //もしクラウド上に設定が保存されていたなら
+    if ( userSaveMsgReadState.msgReadStateAvailable ) {
+        MsgReadTime.value = userSaveMsgReadState.msgReadState;
+
+    }
+
+});
+
+//初回処理用のクッキーから設定や既読状態を読み込む
+function loadDataFromCookie() {
     //既読状態をクッキーから取得して設定に適用
     try {
         //クッキーから既読状態を取得
@@ -705,20 +727,54 @@ function loadConfigFromCookie() {
     }
     catch(e) {}
 
+    //もし同期設定がそもそも空だったら
+    if ( getCookie("configSync") === "" ) {
+        //サーバーから設定を取得
+        socket.emit("getUserSaveConfig", {
+            reqSender: {
+                userid: Userinfo.value.userid,
+                sessionid: Userinfo.value.sessionid
+            }
+        });
+
+    }
+
     //クッキーから表示設定を取得して適用
     try {
         //クッキーから通知設定を読み込み
+        let COOKIE_ConfigSync = getCookie("configSync");
         let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
-        console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(COOKIE_ConfigDisplay).length);
-        console.log("socket :: cookie : Object.keys(COOKIE_ConfigDisplay).length", Object.keys(CONFIG_DISPLAY.value).length);
+        let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
+
+        //同期設定の上書き
+        CONFIG_SYNC.value = (COOKIE_ConfigSync==="true")?true:false;
+        console.log("socket :: loadDataFromCookie : Syncの設定(cookie)->", COOKIE_ConfigSync, " そして適用した状態->", CONFIG_SYNC.value);
+        
         //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
         if ( Object.keys(COOKIE_ConfigDisplay).length === Object.keys(CONFIG_DISPLAY.value).length ) {
+            //表示設定を上書き
             CONFIG_DISPLAY.value = COOKIE_ConfigDisplay;
         
         }
+
+        //通知設定を上書き
+        CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
+
+        //もし同期設定がオンだったら設定を取得
+        if ( CONFIG_SYNC.value ) {
+            console.log("socket :: loadDataFromCookie : 設定を同期します");
+           //取得
+            socket.emit("getUserSaveConfig", {
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
+
+        }
     }
     catch(e) {
-        console.log("エラーだな");
+        console.log("socket :: loadDataFromCookie : 設定読み取りエラー", e);
     }
 
 }
