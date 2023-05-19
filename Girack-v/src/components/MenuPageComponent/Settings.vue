@@ -166,6 +166,7 @@ export default {
 
     <div>
 
+        <!-- 同期設定をオンにするときの確認ダイアログ -->
         <v-dialog
             v-model="configSyncTogglingDialog"
             style="min-width:650px; width:50vh;"
@@ -269,6 +270,9 @@ export default {
                                 v-model="CONFIG_SYNC"
                                 label="設定を同期する"
                             ></v-switch>
+                            <p class="text-subtitle-2">
+                                同期をオンにする際にサーバー上の設定データと同期するか確認されます。
+                            </p>
                         </v-card>
 
                     </v-card>
