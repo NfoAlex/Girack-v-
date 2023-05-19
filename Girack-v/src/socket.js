@@ -572,28 +572,6 @@ socket.on("messageHistory", (history) => {
         return;
     }
 
-    let index = 0; //チャンネル参照インデックス変数
-
-    //受信した履歴の中で新着のものかどうか調べて新着数を加算
-    for ( index in history ) {
-        //既読状態がそもそも無ければやらない
-        if ( MsgReadTime.value[channelid] === undefined ) break;
-        
-        //既読状態の時間から新着メッセージ数を加算
-        if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
-            //メンションされていたかどうかにあわせて既読状態を更新
-            if ( history[index].content.includes("@" + Userinfo.value.username) ) {
-                MsgReadTime.value[channelid].mention++; //メンション数を加算
-
-            } else {
-                MsgReadTime.value[channelid].new++; //新着数を加算
-
-            }
-
-        }
-
-    }
-
     if ( PreviewChannelData.value.channelid === channelid ) {
         MsgDB.value[channelid] = history;
         return;
