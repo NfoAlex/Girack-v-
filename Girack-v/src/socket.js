@@ -628,6 +628,14 @@ socket.on("authResult", (dat) => {
         //クッキーから設定を読み込み
         loadDataFromCookie();
 
+        //既読状態の取得
+        socket.emit("getUserSaveMsgReadState",{
+            reqSender: {
+                userid: dat.userid,
+                sessionid: dat.sessionid
+            }
+        });
+
         //ユーザー情報をさらに取得
         socket.emit("getInfoUser", {
             targetid: dat.userid,
@@ -672,6 +680,18 @@ socket.on("infoUserSaveConfig", (userSaveConfig) => {
         CONFIG_NOTIFICATION.value = userSaveConfig.config.CONFIG_NOTIFICATION;
         CONFIG_DISPLAY.value = userSaveConfig.config.CONFIG_DISPLAY;
         //LIST_NOTIFICATION_MUTE_CHANNEL.value = userSaveConfig.config.LIST_NOTIFICATION_MUTE_CHANNEL;
+
+    }
+
+});
+
+//既読状態データの受け取り、適用
+socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
+    console.log("socket :: infoUserSaveMsgReadState : 既読状態受信", userSaveMsgReadState);
+
+    //もしクラウド上に設定が保存されていたなら
+    if ( userSaveMsgReadState.msgReadStateAvailable ) {
+        this.MsgReadTime.value = userSaveMsgReadState.msgReadState;
 
     }
 
