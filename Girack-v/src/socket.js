@@ -206,6 +206,15 @@ socket.on("messageReceive", (msg) => {
 
         }
 
+        //既読状態をサーバーへ同期させる
+        socket.emit("updateUserSaveMsgReadState", {
+            msgReadState: MsgReadTime.value,
+            reqSender: {
+                userid: Userinfo.value.userid,
+                sessionid: Userinfo.value.sessionid
+            }
+        });
+
         //新着のメッセージを通知
         if (
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
