@@ -145,39 +145,41 @@ export default {
 </script>
 
 <template>
-    <v-dialog
-        v-model="configSyncTogglingDialog"
-        style="min-width:650px; width:50vh;"
-    >
-        <v-card class="pa-6 rounded-lg">
-            <v-card-title>
-                同期の確認
-            </v-card-title>
-            
-            <p class="text-subtitle-1">
-                設定を同期するようにします。
-                現在の設定をサーバー上の設定へ上書きしますか？
-            </p>
-
-            <v-divider class=""></v-divider>
-
-            <div class="ma-3">
-                
-                <v-btn @click="updateConfigWithServer" block color="error" class="ma-1 rounded-lg">
-                    はい。上書きしてください。
-                </v-btn>
-                <v-btn @click="bringConfigFromServer" block color="grey" class="ma-1 rounded-lg">
-                    いいえ。サーバー上の設定を取得して適用してください。
-                </v-btn>
-                <v-btn @click="configSyncTogglingDialog=false;" block class="ma-1 rounded-lg">
-                    やっぱキャンセル
-                </v-btn>
-                
-            </div>
-        </v-card>
-    </v-dialog>
 
     <div>
+
+        <v-dialog
+            v-model="configSyncTogglingDialog"
+            style="min-width:650px; width:50vh;"
+        >
+            <v-card class="pa-6 rounded-lg">
+                <v-card-title>
+                    同期の確認
+                </v-card-title>
+                
+                <p class="text-subtitle-1">
+                    設定を同期するようにします。
+                    現在の設定をサーバー上の設定へ上書きしますか？
+                </p>
+
+                <v-divider class=""></v-divider>
+
+                <div class="ma-3">
+                    
+                    <v-btn @click="updateConfigWithServer" block color="error" class="ma-1 rounded-lg">
+                        はい。上書きしてください。
+                    </v-btn>
+                    <v-btn @click="bringConfigFromServer" block color="grey" class="ma-1 rounded-lg">
+                        いいえ。サーバー上の設定を取得して適用してください。
+                    </v-btn>
+                    <v-btn @click="CONFIG_SYNC=false;configSyncTogglingDialog=false;" block class="ma-1 rounded-lg">
+                        やっぱキャンセル
+                    </v-btn>
+                    
+                </div>
+            </v-card>
+        </v-dialog>
+
         <div style="height:100vh; width:90%;" class="d-flex align-center flex-column">
             <div style="width:90%; padding-top:3%" class="text-left align-center">
                 <p class="text-left" style="font-size:min(4vh,36px)">
