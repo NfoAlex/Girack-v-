@@ -691,7 +691,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
 
     //もしクラウド上に設定が保存されていたなら
     if ( userSaveMsgReadState.msgReadStateAvailable ) {
-        this.MsgReadTime.value = userSaveMsgReadState.msgReadState;
+        MsgReadTime.value = userSaveMsgReadState.msgReadState;
 
     }
 
