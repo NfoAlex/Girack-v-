@@ -7,6 +7,7 @@ import Userpage from "../Userpage.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
+
 const socket = getSocket();
 
 export default {
@@ -70,7 +71,13 @@ export default {
 
                     //既読状態をCookieへ書き込み
                     setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
-                    //socket.emit("updateUserSaveConfig", )
+                    socket.emit("updateUserSaveMsgReadState", {
+                        msgReadState: this.MsgReadTime,
+                        reqSender: {
+                            userid: this.Userinfo.userid,
+                            sessionid: this.Userinfo.sessionid
+                        }
+                    });
 
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
