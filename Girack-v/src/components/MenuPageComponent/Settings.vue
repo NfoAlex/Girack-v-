@@ -33,6 +33,7 @@ export default {
             //復元用
             CurrentConfig: {},
 
+            //joke
             dataConsent: true
         }
     },
@@ -49,7 +50,7 @@ export default {
         CONFIG_NOTIFICATION: {
             handler() {
                 setCookie("configNotify", JSON.stringify(this.CONFIG_NOTIFICATION), 7);
-                this.updateConfigWithServer();
+                if ( this.CONFIG_SYNC ) this.updateConfigWithServer();
 
             },
             deep:true
@@ -57,7 +58,7 @@ export default {
         CONFIG_DISPLAY: {
             handler() {
                 setCookie("configDisplay", JSON.stringify(this.CONFIG_DISPLAY), 7);
-                this.updateConfigWithServer();
+                if ( this.CONFIG_SYNC ) this.updateConfigWithServer();
 
             },
             deep: true
