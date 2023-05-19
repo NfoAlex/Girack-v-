@@ -739,8 +739,8 @@ function loadDataFromCookie() {
         let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
 
         //同期設定の上書き
-        CONFIG_SYNC.value = Boolean(COOKIE_ConfigSync);
-        
+        CONFIG_SYNC.value = (COOKIE_ConfigSync==="true")?true:false;
+        console.log("socket :: loadDataFromCookie : Syncの設定(cookie)->", COOKIE_ConfigSync, " そして適用した状態->", CONFIG_SYNC.value);
         
         //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
         if ( Object.keys(COOKIE_ConfigDisplay).length === Object.keys(CONFIG_DISPLAY.value).length ) {
