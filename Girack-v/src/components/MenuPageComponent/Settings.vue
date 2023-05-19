@@ -116,6 +116,24 @@ export default {
                 }
             });
 
+            //ダイアログを非表示
+            this.configSyncTogglingDialog=false;
+
+        },
+
+        //サーバー上の自分の設定情報を取得して適用
+        bringConfigFromServer() {
+            //サーバー上の自分の設定を取得
+            socket.emit("getUserSaveConfig", {
+                reqSender: {
+                    userid: this.Userinfo.userid,
+                    sessionid: this.Userinfo.sessionid
+                }
+            });
+
+            //ダイアログを非表示
+            this.configSyncTogglingDialog=false;
+
         },
 
         //ブラウザの通知設定を確認
