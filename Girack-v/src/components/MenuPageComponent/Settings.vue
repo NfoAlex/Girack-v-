@@ -42,7 +42,7 @@ export default {
         //設定の変更を検知してCookieへ書き込み
         CONFIG_SYNC: {
             handler() {
-                this.configSyncTogglingDialog = true;
+                if ( this.CONFIG_SYNC ) this.configSyncTogglingDialog = true;
                 setCookie("configSync", this.CONFIG_SYNC);
 
             }
@@ -414,8 +414,8 @@ export default {
             </div>
 
         </div>
+
     </div>
-    
 
 </template>
 
