@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
-export const CLIENT_VERSION = "alpha_20230518";
+export const CLIENT_VERSION = "alpha_20230519";
 
 const {
     CONFIG_SYNC,
@@ -16,7 +16,7 @@ const {
 } = getCONFIG(); //設定
 
 //Socket通信用
-export const backendURI = "http://" + location.hostname + ":33333";
+export const backendURI = "http://" + location.hostname + ":33334";
 
 const socket = io(backendURI, {
     transports : ['websocket'],
@@ -667,9 +667,13 @@ socket.on("authResult", (dat) => {
 socket.on("infoUserSaveConfig", (userSaveConfig) => {
     console.log("socket :: infoUserSaveConfig : 設定受信", userSaveConfig);
 
-    CONFIG_NOTIFICATION.value = userSaveConfig.CONFIG_NOTIFICATION;
-    CONFIG_DISPLAY.value = userSaveConfig.CONFIG_DISPLAY;
-    LIST_NOTIFICATION_MUTE_CHANNEL.value = userSaveConfig.LIST_NOTIFICATION_MUTE_CHANNEL;
+    //もしクラウド上に設定が保存されていたなら
+    if ( userSaveConfig.configAvailable ) {
+        CONFIG_NOTIFICATION.value = userSaveConfig.config.CONFIG_NOTIFICATION;
+        CONFIG_DISPLAY.value = userSaveConfig.config.CONFIG_DISPLAY;
+        LIST_NOTIFICATION_MUTE_CHANNEL.value = userSaveConfig.config.LIST_NOTIFICATION_MUTE_CHANNEL;
+
+    }
 });
 
 //初回処理用のクッキーから設定や既読状態を読み込む
