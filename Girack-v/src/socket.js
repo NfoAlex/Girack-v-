@@ -671,9 +671,10 @@ socket.on("infoUserSaveConfig", (userSaveConfig) => {
     if ( userSaveConfig.configAvailable ) {
         CONFIG_NOTIFICATION.value = userSaveConfig.config.CONFIG_NOTIFICATION;
         CONFIG_DISPLAY.value = userSaveConfig.config.CONFIG_DISPLAY;
-        LIST_NOTIFICATION_MUTE_CHANNEL.value = userSaveConfig.config.LIST_NOTIFICATION_MUTE_CHANNEL;
+        //LIST_NOTIFICATION_MUTE_CHANNEL.value = userSaveConfig.config.LIST_NOTIFICATION_MUTE_CHANNEL;
 
     }
+
 });
 
 //初回処理用のクッキーから設定や既読状態を読み込む
