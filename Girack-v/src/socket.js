@@ -753,7 +753,7 @@ function loadDataFromCookie() {
         CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
 
         //もし同期設定がオンだったら設定を取得
-        if ( COOKIE_ConfigSync ) {
+        if ( CONFIG_SYNC.value ) {
             console.log("socket :: loadDataFromCookie : 設定を同期します");
            //取得
             socket.emit("getUserSaveConfig", {
