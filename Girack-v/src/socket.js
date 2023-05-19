@@ -16,7 +16,7 @@ const {
 } = getCONFIG(); //設定
 
 //Socket通信用
-export const backendURI = "http://" + location.hostname + ":33334";
+export const backendURI = "http://" + location.hostname + ":33333";
 
 const socket = io(backendURI, {
     transports : ['websocket'],
