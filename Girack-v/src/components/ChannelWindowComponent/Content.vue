@@ -64,6 +64,8 @@ export default {
                             new: 0, //新着メッセージ数を0に
                             mention: 0
                         };
+                        //faviconを普通表示に
+                        document.querySelector("link[rel~='icon']").href = "/icon.svg";
                     }
                     catch(e) {
                         console.log("Content :: watch(MsgDB) : 既読状態更新できなかった");
@@ -548,6 +550,8 @@ export default {
                         //メンション数を0に
                         mention: 0
                     };
+                    //faviconを普通表示に
+                    document.querySelector("link[rel~='icon']").href = "/icon.svg";
                 }
                 catch(e) {
                     console.log("Content :: setScrollState : 既読状態の更新できなかった");

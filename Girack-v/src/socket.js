@@ -175,6 +175,8 @@ socket.on("messageReceive", (msg) => {
                     new: 1,
                     mention: 0
                 };
+                //faviconにドット表示
+                document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
             } else {
                 MsgReadTime.value[msg.channelid] = {
@@ -182,6 +184,8 @@ socket.on("messageReceive", (msg) => {
                     new: 0,
                     mention: 1
                 };
+                //faviconにドット表示
+                document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
             }
 
@@ -195,12 +199,17 @@ socket.on("messageReceive", (msg) => {
                     MsgReadTime.value[msg.channelid].mention = 0;
 
                 } else {
+                    //メンション数加算
                     MsgReadTime.value[msg.channelid].mention++;
+                    //faviconにドット表示
+                    document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
                 }
 
             } else { //そうじゃないなら普通に通知を加算
                 MsgReadTime.value[msg.channelid].new++;
+                //faviconにドット表示
+                document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
             }
 
