@@ -593,7 +593,7 @@ socket.on("messageHistory", (history) => {
         //既読状態の時間から新着メッセージ数を加算
         if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
             //メンションされていたかどうかにあわせて既読状態を更新
-            if ( history[index].content.includes("@" + Userinfo.value.username) ) {
+            if ( history[index].content.includes("@/" + Userinfo.value.userid + "/") ) {
                 MsgReadTime.value[channelid].mention++; //メンション数を加算
 
             } else {
