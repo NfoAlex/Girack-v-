@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
-export const CLIENT_VERSION = "alpha_20230519";
+export const CLIENT_VERSION = "alpha_20230520";
 
 const {
     CONFIG_SYNC,
@@ -182,25 +182,29 @@ socket.on("messageReceive", (msg) => {
                     new: 0,
                     mention: 1
                 };
-
             }
 
-        } else { //すでにあるなら加算
-            //最新の既読時間を設定
-            //MsgReadTime.value[msg.channelid].time = msg.time;
+            //faviconにドット表示
+            document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
+        } else { //すでにあるなら加算
             //メンションか自分への返信ならメンションを加算
             if ( msg.content.includes("@/" + Userinfo.value.userid + "/") || msg.replyData.userid === Userinfo.value.userid ) {
                 if ( MsgReadTime.value[msg.channelid].mention === null ) {
                     MsgReadTime.value[msg.channelid].mention = 0;
 
                 } else {
+                    //メンション数加算
                     MsgReadTime.value[msg.channelid].mention++;
+                    //faviconにドット表示
+                    document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
                 }
 
             } else { //そうじゃないなら普通に通知を加算
                 MsgReadTime.value[msg.channelid].new++;
+                //faviconにドット表示
+                document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
             }
 
@@ -589,13 +593,16 @@ socket.on("messageHistory", (history) => {
         //既読状態の時間から新着メッセージ数を加算
         if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
             //メンションされていたかどうかにあわせて既読状態を更新
-            if ( history[index].content.includes("@" + Userinfo.value.username) ) {
+            if ( history[index].content.includes("@/" + Userinfo.value.userid + "/") ) {
                 MsgReadTime.value[channelid].mention++; //メンション数を加算
 
             } else {
                 MsgReadTime.value[channelid].new++; //新着数を加算
 
             }
+
+            //faviconをドット表示に
+            document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
         }
 
@@ -768,13 +775,17 @@ function loadDataFromCookie() {
 
     }
 
+    let COOKIE_ConfigSync;
+    let COOKIE_ConfigDisplay;
+    let COOKIE_ConfigNotify;
+
+    //クッキーから通知設定を読み込み
+    try { COOKIE_ConfigSync = getCookie("configSync"); } catch(e) {}
+    try { COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay")); } catch(e) {}
+    try { COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify")); } catch(e) {}
+
     //クッキーから表示設定を取得して適用
     try {
-        //クッキーから通知設定を読み込み
-        let COOKIE_ConfigSync = getCookie("configSync");
-        let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
-        let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
-
         //同期設定の上書き
         CONFIG_SYNC.value = (COOKIE_ConfigSync==="true")?true:false;
         console.log("socket :: loadDataFromCookie : Syncの設定(cookie)->", COOKIE_ConfigSync, " そして適用した状態->", CONFIG_SYNC.value);

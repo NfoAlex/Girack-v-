@@ -127,6 +127,17 @@ export default {
 
                 }
 
+                //新着が１つ以上あるならfaivonをバッジ付きに変更
+                if ( TotalNew > 0 || TotalMention > 0 ) { //どっちかが0より上なら
+                    //faviconをドット表示に
+                    document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
+
+                } else { //新着なしなら
+                    //faviconを普通表示に
+                    document.querySelector("link[rel~='icon']").href = "/icon.svg";
+
+                }
+
                 //既読状態をサーバーへ同期させる
                 socket.emit("updateUserSaveMsgReadState", {
                     msgReadState: this.MsgReadTime,
