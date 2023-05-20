@@ -175,8 +175,6 @@ socket.on("messageReceive", (msg) => {
                     new: 1,
                     mention: 0
                 };
-                //faviconにドット表示
-                document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
             } else {
                 MsgReadTime.value[msg.channelid] = {
@@ -184,15 +182,12 @@ socket.on("messageReceive", (msg) => {
                     new: 0,
                     mention: 1
                 };
-                //faviconにドット表示
-                document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
-
             }
 
-        } else { //すでにあるなら加算
-            //最新の既読時間を設定
-            //MsgReadTime.value[msg.channelid].time = msg.time;
+            //faviconにドット表示
+            document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
+        } else { //すでにあるなら加算
             //メンションか自分への返信ならメンションを加算
             if ( msg.content.includes("@/" + Userinfo.value.userid + "/") || msg.replyData.userid === Userinfo.value.userid ) {
                 if ( MsgReadTime.value[msg.channelid].mention === null ) {
@@ -605,6 +600,9 @@ socket.on("messageHistory", (history) => {
                 MsgReadTime.value[channelid].new++; //新着数を加算
 
             }
+
+            //faviconをドット表示に
+            document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
         }
 

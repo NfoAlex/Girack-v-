@@ -64,8 +64,6 @@ export default {
                             new: 0, //新着メッセージ数を0に
                             mention: 0
                         };
-                        //faviconを普通表示に
-                        document.querySelector("link[rel~='icon']").href = "/icon.svg";
                     }
                     catch(e) {
                         console.log("Content :: watch(MsgDB) : 既読状態更新できなかった");
@@ -126,6 +124,17 @@ export default {
                 for ( let index in ObjMsgReadTime ) {
                     TotalNew += ObjMsgReadTime[index][1].new; //新着
                     TotalMention += ObjMsgReadTime[index][1].mention; //メンション
+
+                }
+
+                //新着が１つ以上あるならfaivonをバッジ付きに変更
+                if ( TotalNew > 0 || TotalMention > 0 ) { //どっちかが0より上なら
+                    //faviconをドット表示に
+                    document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
+
+                } else { //新着なしなら
+                    //faviconを普通表示に
+                    document.querySelector("link[rel~='icon']").href = "/icon.svg";
 
                 }
 
@@ -550,8 +559,6 @@ export default {
                         //メンション数を0に
                         mention: 0
                     };
-                    //faviconを普通表示に
-                    document.querySelector("link[rel~='icon']").href = "/icon.svg";
                 }
                 catch(e) {
                     console.log("Content :: setScrollState : 既読状態の更新できなかった");
