@@ -739,13 +739,17 @@ function loadDataFromCookie() {
 
     }
 
+    let COOKIE_ConfigSync;
+    let COOKIE_ConfigDisplay;
+    let COOKIE_ConfigNotify;
+
+    //クッキーから通知設定を読み込み
+    try { COOKIE_ConfigSync = getCookie("configSync"); } catch(e) {}
+    try { COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay")); } catch(e) {}
+    try { COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify")); } catch(e) {}
+
     //クッキーから表示設定を取得して適用
     try {
-        //クッキーから通知設定を読み込み
-        let COOKIE_ConfigSync = getCookie("configSync");
-        let COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay"));
-        let COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
-
         //同期設定の上書き
         CONFIG_SYNC.value = (COOKIE_ConfigSync==="true")?true:false;
         console.log("socket :: loadDataFromCookie : Syncの設定(cookie)->", COOKIE_ConfigSync, " そして適用した状態->", CONFIG_SYNC.value);
