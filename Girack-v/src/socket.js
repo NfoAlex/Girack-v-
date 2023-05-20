@@ -574,9 +574,12 @@ socket.on("messageHistory", (history) => {
 
     let index = 0; //チャンネル参照インデックス変数
 
-    //既読状態の時間から計算するから予め新着数初期化
-    MsgReadTime.value[channelid].new = 0;
-    MsgReadTime.value[channelid].mention = 0;
+    if ( MsgReadTime.value[channelid] !== undefined ) {
+        //既読状態の時間から計算するから予め新着数初期化
+        MsgReadTime.value[channelid].new = 0;
+        MsgReadTime.value[channelid].mention = 0;
+
+    }
 
     //受信した履歴の中で新着のものかどうか調べて新着数を加算
     for ( index in history ) {
