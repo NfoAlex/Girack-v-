@@ -54,7 +54,7 @@ export default {
         MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
-                this.newMessageArrived = true;
+                this.newMessageArrived = true; //新着メッセージアリに切り替え
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
                     try {
@@ -105,7 +105,7 @@ export default {
                         new: 0, //新着メッセージ数を0に
                         mention: 0
                     };
-                    this.newMessageArrived = false;
+                    this.newMessageArrived = false; //新着メッセージアリをナシに
                 });
 
             }
@@ -549,6 +549,7 @@ export default {
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
 
+                //プレビューあるいは新着メッセージが来ているのなら
                 if ( this.channelInfo.previewmode || this.newMessageArrived ) return -1;
 
                 try {
