@@ -271,7 +271,7 @@ export default {
     <!-- ここから表示部分 -->
     <div style="margin:2% auto; width:85%; height:97.5%;">
         
-        <div style="height:10%;" class="d-flex justify-space-around align-center bg-surface-variant">
+        <div style="height:10%;" class="d-flex justify-space-around align-center">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
             <v-btn @click="overlayChannelCreate=true" color="primary" icon="" class="rounded-lg">
                 <v-icon icon="mdi:mdi-plus">
