@@ -72,7 +72,6 @@ export default {
                     //既読状態をCookieへ書き込み
                     setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
                     
-
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
@@ -97,8 +96,10 @@ export default {
                     }
 
                     this.scrollIt(); //スクロールする
+
+                    let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                     this.MsgReadTime[this.getPath] = {
-                        //time: 
+                        time: latestTime,
                         new: 0, //新着メッセージ数を0に
                         mention: 0
                     };
@@ -136,6 +137,8 @@ export default {
                     document.querySelector("link[rel~='icon']").href = "/icon.svg";
 
                 }
+
+                console.log("Content :: watch(MsgReadTime) : 既読状態変更されたな");
 
                 //既読状態をサーバーへ同期させる
                 socket.emit("updateUserSaveMsgReadState", {
@@ -549,15 +552,21 @@ export default {
                 try {
                     //最新のメッセージを取得するために履歴の長さを予め取得
                     let latestTime = this.MsgDBActive.slice(-1)[0].time;
-                    //既読状態をセット
-                    this.MsgReadTime[this.getPath] = {
-                        //既読時間を最新メッセージの時間に設定
-                        time: latestTime,
-                        //新着メッセージ数を0に
-                        new: 0,
-                        //メンション数を0に
-                        mention: 0
-                    };
+
+                    //もし新着数とメンション数が0じゃなければ0に初期化する
+                    if ( this.MsgReadTime[this.getPath].new !== 0 && this.MsgReadTime[this.getPath].mention !== 0 ) {
+                        //既読状態をセット
+                        this.MsgReadTime[this.getPath] = {
+                            //既読時間を最新メッセージの時間に設定
+                            time: latestTime,
+                            //新着メッセージ数を0に
+                            new: 0,
+                            //メンション数を0に
+                            mention: 0
+                        };
+                        console.log("Content :: Content : 既読状態変更したな");
+
+                    }
                 }
                 catch(e) {
                     console.log("Content :: setScrollState : 既読状態の更新できなかった");

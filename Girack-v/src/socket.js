@@ -231,7 +231,7 @@ socket.on("messageReceive", (msg) => {
                 //通知を出す
                 new Notification(ChannelIndex.value[msg.channelid].channelname, {
                     body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
-                    icon: backendURI + "/img/" + msg.userid + ".jpeg"
+                    icon: backendURI + "/img/" + msg.userid
                 });
 
             } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
@@ -248,7 +248,7 @@ socket.on("messageReceive", (msg) => {
                     //通知を出す
                     new Notification(ChannelIndex.value[msg.channelid].channelname, {
                         body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + contentToDisplay,
-                        icon: backendURI + "/img/" + msg.userid + ".jpeg"
+                        icon: backendURI + "/img/" + msg.userid
                     });
 
                 }
@@ -258,7 +258,7 @@ socket.on("messageReceive", (msg) => {
                     //通知を出す
                     new Notification(ChannelIndex.value[msg.channelid].channelname, {
                         body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
-                        icon: backendURI + "/img/" + msg.userid + ".jpeg"
+                        icon: backendURI + "/img/" + msg.userid
                     });
 
                 }
@@ -610,6 +610,18 @@ socket.on("messageHistory", (history) => {
             document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
         }
+
+    }
+
+    if ( MsgReadTime.value[channelid].mention !== 0 && MsgReadTime.value[channelid].new !== 0 ) {
+        //既読状態をサーバーへ同期させる
+        socket.emit("updateUserSaveMsgReadState", {
+            msgReadState: MsgReadTime.value,
+            reqSender: {
+                userid: Userinfo.value.userid,
+                sessionid: Userinfo.value.sessionid
+            }
+        });
 
     }
 
