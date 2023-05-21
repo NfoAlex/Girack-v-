@@ -1,7 +1,6 @@
 <script>
 import { dataUser, getSocket, backendURI } from '../socket';
 import Userpage from "./Userpage.vue";
-import { VVirtualScroll } from "vuetify/labs/VVirtualScroll";
 
 const socket = getSocket();
 let loopGetSessionOnline = null; //オンラインユーザー取得ループ用
@@ -13,7 +12,7 @@ export default {
         return { Userinfo };
     },
 
-    components: { VVirtualScroll, Userpage },
+    components: { Userpage },
 
     data() {
         return {
@@ -135,7 +134,7 @@ export default {
 
         <!-- リスト表示 -->
         <div style="overflow-y:auto; margin-top:3vh;">
-            <VVirtualScroll height="90vh" :items="userListDisplay">
+            <v-infinite-scroll height="90vh" :items="userListDisplay">
                 <template v-slot:default="{ item }">
                     <v-card
                         @click="()=>{userDialogShow=true; userDialogUserid=item.userid}"
@@ -156,7 +155,7 @@ export default {
                     
                     </v-card>
                 </template>
-            </VVirtualScroll>
+            </v-infinite-scroll>
         </div>
         
     </div>
