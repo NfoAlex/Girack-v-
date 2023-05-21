@@ -399,6 +399,12 @@ socket.on("infoServer", (dat) => {
     console.log("serverinfo :: ");
     console.log(dat);
 
+    //もしサーバーとクライアントのバージョンが違っていたらページを更新させる
+    if ( dat.serverVersion !== CLIENT_VERSION && Userinfo.value.loggedin ) {
+        location.reload();
+
+    }
+
     //サーバーの基本情報の更新
     Serverinfo.value = {
         servername: dat.servername, //サーバーの名前
