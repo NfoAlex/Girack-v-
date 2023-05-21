@@ -138,7 +138,7 @@ export default {
                 </div>
             </div>
 
-            <v-infinite-scroll
+            <v-virtual-scroll
                 height="80vh"
                 :items="userListDisplay"
             >
@@ -177,7 +177,7 @@ export default {
                         </div>
                     </v-card>
                 </template>
-            </v-infinite-scroll>
+            </v-virtual-scroll>
             
         </div>
     </div>

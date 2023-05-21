@@ -134,7 +134,7 @@ export default {
 
         <!-- リスト表示 -->
         <div style="overflow-y:auto; margin-top:3vh;">
-            <v-infinite-scroll height="90vh" :items="userListDisplay">
+            <v-virtual-scroll height="90vh" :items="userListDisplay">
                 <template v-slot:default="{ item }">
                     <v-card
                         @click="()=>{userDialogShow=true; userDialogUserid=item.userid}"
@@ -155,7 +155,7 @@ export default {
                     
                     </v-card>
                 </template>
-            </v-infinite-scroll>
+            </v-virtual-scroll>
         </div>
         
     </div>
