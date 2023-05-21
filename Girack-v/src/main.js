@@ -19,7 +19,7 @@ const vuetify = createVuetify({
             thelight: {
                 dark: false,
                 colors: {
-                    background: "#212121",
+                    background: "#ffffff",
                     surface: "#CFD8DC",
                     primary: "#607D8B", // #E53935
                     secondary: "#B0BEC5", // #FFCDD2
@@ -28,6 +28,7 @@ const vuetify = createVuetify({
             thedark: {
                 dark: true,
                 colors: {
+                        background: "#212121",
                         primary: "#381E72",
                         secondary: "#332D41",
                         surface: "#19181b",
