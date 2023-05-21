@@ -396,8 +396,7 @@ export function getMessage(channelid, readLength, startLength) {
 
 //サーバー情報の受け取り
 socket.on("infoServer", (dat) => {
-    console.log("serverinfo :: ");
-    console.log(dat);
+    console.log("infoServer :: ", dat);
 
     //もしサーバーとクライアントのバージョンが違っていたらページを更新させる
     if ( dat.serverVersion !== CLIENT_VERSION && Userinfo.value.loggedin ) {
