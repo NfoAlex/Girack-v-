@@ -293,6 +293,7 @@ export default {
                             class="rounded-lg pa-2 d-flex align-center"
                             :variant="path.indexOf(l.id)!==-1?'tonal':'text'"
                             @click=""
+                            :ripple="false"
                             style="font-size:calc(6px + 0.75vb);"
                         >
                             <!-- チャンネル名前の#の部分 -->
