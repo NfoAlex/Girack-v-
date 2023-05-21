@@ -346,7 +346,7 @@ export default {
 
         <!-- プロフィールメイン画面 -->
         <div style="margin-top:5%; height:90%;">
-                <v-container class="bg-surface-variant">
+                <v-container>
                     <v-row no-gutters>
 
                         <!-- アバター -->
@@ -421,7 +421,7 @@ export default {
                     </v-row>
                 </v-container>
 
-                <v-container class="bg-surface-variant">
+                <v-container>
                     <p class="text-h6">パスワード変更</p>
                     <!-- パスワード変更 -->
                     <v-row no-gutters>
@@ -440,7 +440,7 @@ export default {
                     </v-row>
                 </v-container>
 
-                <v-container class="bg-surface-variant">
+                <v-container>
                     <!-- ログアウトボタン -->
                     <v-row no-gutters>
                         <p class="text-h6">ログアウト</p>

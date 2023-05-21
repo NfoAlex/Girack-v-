@@ -2,14 +2,13 @@
 
 import { getSocket, dataUser, backendURI } from '../../socket';
 import Userpage from "../Userpage.vue";
-import { VVirtualScroll } from "vuetify/labs/VVirtualScroll";
 
 const socket = getSocket();
 const { Userinfo } = dataUser();
 
 export default {
 
-    components: { Userpage, VVirtualScroll },
+    components: { Userpage },
 
     data() {
         return {
@@ -139,7 +138,7 @@ export default {
                 </div>
             </div>
 
-            <VVirtualScroll
+            <v-virtual-scroll
                 height="80vh"
                 :items="userListDisplay"
             >
@@ -178,7 +177,7 @@ export default {
                         </div>
                     </v-card>
                 </template>
-            </VVirtualScroll>
+            </v-virtual-scroll>
             
         </div>
     </div>

@@ -111,7 +111,6 @@ export default {
         //新着数の変化を監視してタブ名に新着数を出す
         MsgReadTime: {
             handler() {
-                console.log("Content :: watch(MsgReadtime) : ", this.channelInfo);
                 //プレビュー中なら停止
                 if ( this.channelInfo.previewmode ) return -1;
                 let TotalNew = 0; //新着数のトータル
