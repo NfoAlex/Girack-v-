@@ -552,6 +552,7 @@ export default {
                     //最新のメッセージを取得するために履歴の長さを予め取得
                     let latestTime = this.MsgDBActive.slice(-1)[0].time;
 
+                    //もし新着数とメンション数が0じゃなければ0に初期化する
                     if ( this.MsgReadTime[this.getPath].new !== 0 && this.MsgReadTime[this.getPath].mention !== 0 ) {
                         //既読状態をセット
                         this.MsgReadTime[this.getPath] = {
