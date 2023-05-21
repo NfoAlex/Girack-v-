@@ -395,7 +395,7 @@ export function getMessage(channelid, readLength, startLength) {
 }
 
 //サーバー情報の受け取り
-socket.on("serverinfo", (dat) => {
+socket.on("infoServer", (dat) => {
     console.log("serverinfo :: ");
     console.log(dat);
 

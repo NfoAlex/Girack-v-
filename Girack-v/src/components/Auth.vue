@@ -117,7 +117,7 @@ export default {
         });
 
         //サーバー名表示用
-        socket.on("serverinfo", (dat) => {
+        socket.on("infoServer", (dat) => {
             this.serverinfoLoaded = dat; //サーバーの情報
             document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
 
