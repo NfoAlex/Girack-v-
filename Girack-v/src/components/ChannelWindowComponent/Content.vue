@@ -110,51 +110,51 @@ export default {
         },
 
         //新着数の変化を監視してタブ名に新着数を出す
-        MsgReadTime: {
-            handler() {
-                //プレビュー中なら停止
-                if ( this.channelInfo.previewmode ) return -1;
-                let TotalNew = 0; //新着数のトータル
-                let TotalMention = 0; //メンション数のトータル
+        // MsgReadTime: {
+        //     handler() {
+        //         //プレビュー中なら停止
+        //         if ( this.channelInfo.previewmode ) return -1;
+        //         let TotalNew = 0; //新着数のトータル
+        //         let TotalMention = 0; //メンション数のトータル
 
-                //新着とメンションを取り出すために配列化
-                let ObjMsgReadTime = Object.entries(this.MsgReadTime);
+        //         //新着とメンションを取り出すために配列化
+        //         let ObjMsgReadTime = Object.entries(this.MsgReadTime);
 
-                //配列の数分それぞれの合計を計算
-                for ( let index in ObjMsgReadTime ) {
-                    TotalNew += ObjMsgReadTime[index][1].new; //新着
-                    TotalMention += ObjMsgReadTime[index][1].mention; //メンション
+        //         //配列の数分それぞれの合計を計算
+        //         for ( let index in ObjMsgReadTime ) {
+        //             TotalNew += ObjMsgReadTime[index][1].new; //新着
+        //             TotalMention += ObjMsgReadTime[index][1].mention; //メンション
 
-                }
+        //         }
 
-                //新着が１つ以上あるならfaivonをバッジ付きに変更
-                if ( TotalNew > 0 || TotalMention > 0 ) { //どっちかが0より上なら
-                    //faviconをドット表示に
-                    document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
+        //         //新着が１つ以上あるならfaivonをバッジ付きに変更
+        //         if ( TotalNew > 0 || TotalMention > 0 ) { //どっちかが0より上なら
+        //             //faviconをドット表示に
+        //             document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
-                } else { //新着なしなら
-                    //faviconを普通表示に
-                    document.querySelector("link[rel~='icon']").href = "/icon.svg";
+        //         } else { //新着なしなら
+        //             //faviconを普通表示に
+        //             document.querySelector("link[rel~='icon']").href = "/icon.svg";
 
-                }
+        //         }
 
-                console.log("Content :: watch(MsgReadTime) : 既読状態変更されたな");
+        //         console.log("Content :: watch(MsgReadTime) : 既読状態変更されたな");
 
-                //既読状態をサーバーへ同期させる
-                socket.emit("updateUserSaveMsgReadState", {
-                    msgReadState: this.MsgReadTime,
-                    reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
-                    }
-                });
+        //         //既読状態をサーバーへ同期させる
+        //         socket.emit("updateUserSaveMsgReadState", {
+        //             msgReadState: this.MsgReadTime,
+        //             reqSender: {
+        //                 userid: this.Userinfo.userid,
+        //                 sessionid: this.Userinfo.sessionid
+        //             }
+        //         });
 
-                //タブ名へ適用
-                document.title = (TotalMention>0?("[!" + TotalMention +"]"):"") + (TotalNew>0?("[" + TotalNew +"]"):"") + " #" + this.ChannelIndex[this.$route.params.id].channelname;
+        //         //タブ名へ適用
+        //         document.title = (TotalMention>0?("[!" + TotalMention +"]"):"") + (TotalNew>0?("[" + TotalNew +"]"):"") + " #" + this.ChannelIndex[this.$route.params.id].channelname;
 
-            },
-            deep: true
-        }
+        //     },
+        //     deep: true
+        // }
     },
 
     computed: {
