@@ -72,7 +72,6 @@ export default {
                     //既読状態をCookieへ書き込み
                     setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
                     
-
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
@@ -97,8 +96,10 @@ export default {
                     }
 
                     this.scrollIt(); //スクロールする
+
+                    let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                     this.MsgReadTime[this.getPath] = {
-                        //time: 
+                        time: latestTime,
                         new: 0, //新着メッセージ数を0に
                         mention: 0
                     };
