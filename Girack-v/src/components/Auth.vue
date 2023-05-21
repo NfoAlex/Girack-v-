@@ -57,36 +57,12 @@ export default {
     mounted() {
         socket.emit("getInitInfo"); //サーバーの情報を取得
 
-        let checkStatusCount = 0;
-        //接続とクッキーを確認するための関数
-        function checkStatus() {
-
-            if ( checkStatusCount > 10 ) return;
-
-            //クッキーに認証情報があるか確認
-            if ( getCookie("sessionid") !== "" ) {
-                socket.emit("authByCookie", getCookie("sessionid"), CLIENT_VERSION);
-                return;
-
-            }
-
-            console.log("Auth :: checkStatus : 認証を試みています...");
-
-            checkStatusCount++;
-            setInterval(checkStatus, 1000); //ループさせる
-
-        };
-
         //クッキーに認証情報があるか確認
         if ( getCookie("sessionid") !== "" ) {
             console.log("Auth :: mounted : クッキーで認証します");
             socket.emit("authByCookie", getCookie("sessionid"), CLIENT_VERSION);
-            //return;
 
         }
-
-        //接続とクッキーを確認するための関数を実行
-        //checkStatus();
 
         //認証結果の受け取りと処理
         socket.on("authResult", (dat) => {
