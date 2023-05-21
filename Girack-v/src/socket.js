@@ -613,17 +613,19 @@ socket.on("messageHistory", (history) => {
 
     }
 
-    if ( MsgReadTime.value[channelid].mention !== 0 && MsgReadTime.value[channelid].new !== 0 ) {
-        //既読状態をサーバーへ同期させる
-        socket.emit("updateUserSaveMsgReadState", {
-            msgReadState: MsgReadTime.value,
-            reqSender: {
-                userid: Userinfo.value.userid,
-                sessionid: Userinfo.value.sessionid
-            }
-        });
+    try {
+        if ( MsgReadTime.value[channelid].mention !== 0 && MsgReadTime.value[channelid].new !== 0 ) {
+            //既読状態をサーバーへ同期させる
+            socket.emit("updateUserSaveMsgReadState", {
+                msgReadState: MsgReadTime.value,
+                reqSender: {
+                    userid: Userinfo.value.userid,
+                    sessionid: Userinfo.value.sessionid
+                }
+            });
 
-    }
+        }
+    } catch(e) {}
 
     if ( PreviewChannelData.value.channelid === channelid ) {
         MsgDB.value[channelid] = history;
