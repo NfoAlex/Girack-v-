@@ -44,8 +44,6 @@ export default {
     },
 
     mounted() {
-        //socket.emit("getInitInfo"); //サーバーの情報を取得
-
         //オンラインユーザーの更新
         socket.on("sessionOnlineUpdate", (num) => {
             this.sessionOnlineNum = num;
@@ -61,10 +59,12 @@ export default {
 
         //再接続できたら接続できたと表示
         socket.on("connect", () => {
+            socket.emit("getInitInfo"); //サーバーの情報を再取得
+            
+            //もし切断されているときにきたら
             if ( this.disconnected ) {
-                this.disconnectSnackbar = false,
-                this.reconnectedSnackbar = true;
-                console.log("App :: connection : サーバーに接続されました!");
+                this.disconnectSnackbar = false, //切断されたアラート非表示
+                this.reconnectedSnackbar = true; //接続できたアラート表示
 
                 //オンラインとして加算してもらう
                 socket.emit("countmeAsOnline", {
