@@ -40,7 +40,7 @@ export default {
 </script>
 
 <template>
-    <div class="d-flex bg-surface-variant">
+    <div class="d-flex">
         <div style="width:20%; max-width:200px; height:100%; overflow-y:auto;">
             <RouterLink to="/menu/profile">
                 <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('profile')?'primary':'secondary'">
