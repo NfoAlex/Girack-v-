@@ -27,6 +27,7 @@ export default {
     data() {
         return {
             uri: backendURI, //バックエンドのURI
+            newMessageArrived: false, //新着メッセージが来ているかどうか
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -53,6 +54,7 @@ export default {
         MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
+                this.newMessageArrived = true;
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
                     try {
@@ -103,7 +105,7 @@ export default {
                         new: 0, //新着メッセージ数を0に
                         mention: 0
                     };
-
+                    this.newMessageArrived = false;
                 });
 
             }
@@ -547,7 +549,7 @@ export default {
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
 
-                if ( this.channelInfo.previewmode ) return -1;
+                if ( this.channelInfo.previewmode || this.newMessageArrived ) return -1;
 
                 try {
                     //最新のメッセージを取得するために履歴の長さを予め取得
@@ -573,6 +575,15 @@ export default {
                     this.MsgReadTime[this.getPath].new = 0;
                     this.MsgReadTime[this.getPath].mention = 0;
                 }
+
+                //既読状態をサーバーへ同期させる
+                socket.emit("updateUserSaveMsgReadState", {
+                    msgReadState: this.MsgReadTime,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
 
                 //既読状態をCookieへ書き込み
                 setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
