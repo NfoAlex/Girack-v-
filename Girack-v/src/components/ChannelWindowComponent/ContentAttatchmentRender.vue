@@ -7,7 +7,7 @@ export default {
 
     data() {
         return {
-            filesrc: backendURI,
+            filesrc: backendURI + "/file/",
             imageDialogShow: false, //画像拡大ダイアログ用
             imageDialogSrc: ""
         }
@@ -138,7 +138,7 @@ export default {
 
             <!-- 添付ファイルのアイコン表記 -->
             <span>
-                <a target="_blank" :href="filesrc+file.fileid">
+                <a target="_blank" :href="filesrc+channelid+'/'+file.fileid">
                     <v-icon
                         v-if="!file.type.includes('image/')"
                         style="margin:0 16px;"
@@ -152,7 +152,7 @@ export default {
             <!-- ファイル情報の表示 -->
             <span class="flex-grow-1" style="margin-left:16px;">
                 <p class="text-subtitle-1">
-                    <a target="_blank" :href="filesrc+file.fileid">{{ file.name }}</a>
+                    <a target="_blank" :href="filesrc+channelid+'/'+file.fileid">{{ file.name }}</a>
                 </p>
                 <p class="text-medium-emphasis">サイズ: <v-chip size="small">{{ humanFileSize(file.size) }}</v-chip> | 種類: <v-chip size="small">{{ file.type }}</v-chip></p>
             </span>
