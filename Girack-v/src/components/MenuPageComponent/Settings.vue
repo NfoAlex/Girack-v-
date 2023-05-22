@@ -329,6 +329,7 @@ export default {
 
                         <br>
 
+                        <!-- 
                         <p><v-icon>mdi:mdi-tab</v-icon>タブ名に表示する通知</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
@@ -351,6 +352,7 @@ export default {
                                 #random
                             </p>
                         </v-card>
+                        -->
 
                     </v-card>
 
