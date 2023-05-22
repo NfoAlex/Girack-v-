@@ -115,10 +115,10 @@ export default {
             <!-- 画像ファイルだった時のプレビュー表示 -->
             <v-img
                 v-if="file.type.includes('image/')"
-                @click="imageDialogShow=true;imageDialogSrc=filesrc+ '/file/' + this.$route.params.id + '/' + file.fileid;"
+                @click="imageDialogShow=true;imageDialogSrc=filesrc + channelid + '/' + file.fileid;"
                 class="flex-shrink-1"
                 style="max-height:150px; min-height:30px; height:100%; min-width:30%; max-width:150px; cursor:pointer;"
-                :src="filesrc+ '/file/' + this.$route.params.id + '/' + file.fileid"
+                :src="filesrc + channelid + '/' + file.fileid"
             >
                 <template v-slot:error>
                     <div class="mx-auto" style="width:fit-content; min-height:150px;">
