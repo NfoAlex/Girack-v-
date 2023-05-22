@@ -782,7 +782,7 @@ function loadDataFromCookie() {
     }
     catch(e) {}
 
-    //もし同期設定がそもそも空だったら
+    //もし同期設定がそもそも空だったらとりあえず同期
     if ( getCookie("configSync") === "" ) {
         //サーバーから設定を取得
         socket.emit("getUserSaveConfig", {
@@ -806,7 +806,7 @@ function loadDataFromCookie() {
     //クッキーから表示設定を取得して適用
     try {
         //同期設定の上書き
-        CONFIG_SYNC.value = (COOKIE_ConfigSync==="true")?true:false;
+        CONFIG_SYNC.value = (COOKIE_ConfigSync==="true"||COOKIE_ConfigSync==="")?true:false;
         console.log("socket :: loadDataFromCookie : Syncの設定(cookie)->", COOKIE_ConfigSync, " そして適用した状態->", CONFIG_SYNC.value);
         
         //もしクッキーの設定情報とデフォルトの項目数が違ったらデフォルトを採用
