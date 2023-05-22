@@ -27,6 +27,7 @@ export default {
     data() {
         return {
             uri: backendURI, //バックエンドのURI
+            newMessageArrived: false, //新着メッセージが来ているかどうか
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -53,6 +54,7 @@ export default {
         MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
+                this.newMessageArrived = true; //新着メッセージアリに切り替え
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
                     try {
@@ -88,6 +90,9 @@ export default {
         //チャンネルの移動を監視
         $route: { //URLパスの変更監視
             handler(newPage, oldPage) {
+                //ブラウザ上のタブ名を設定
+                document.title = this.ChannelIndex[this.getPath].channelname;
+
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     //チャンネル以外の場合、以降の処理をスキップする
@@ -103,58 +108,12 @@ export default {
                         new: 0, //新着メッセージ数を0に
                         mention: 0
                     };
-
+                    this.newMessageArrived = false; //新着メッセージアリをナシに
                 });
 
             }
         },
 
-        //新着数の変化を監視してタブ名に新着数を出す
-        MsgReadTime: {
-            handler() {
-                //プレビュー中なら停止
-                if ( this.channelInfo.previewmode ) return -1;
-                let TotalNew = 0; //新着数のトータル
-                let TotalMention = 0; //メンション数のトータル
-
-                //新着とメンションを取り出すために配列化
-                let ObjMsgReadTime = Object.entries(this.MsgReadTime);
-
-                //配列の数分それぞれの合計を計算
-                for ( let index in ObjMsgReadTime ) {
-                    TotalNew += ObjMsgReadTime[index][1].new; //新着
-                    TotalMention += ObjMsgReadTime[index][1].mention; //メンション
-
-                }
-
-                //新着が１つ以上あるならfaivonをバッジ付きに変更
-                if ( TotalNew > 0 || TotalMention > 0 ) { //どっちかが0より上なら
-                    //faviconをドット表示に
-                    document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
-
-                } else { //新着なしなら
-                    //faviconを普通表示に
-                    document.querySelector("link[rel~='icon']").href = "/icon.svg";
-
-                }
-
-                console.log("Content :: watch(MsgReadTime) : 既読状態変更されたな");
-
-                //既読状態をサーバーへ同期させる
-                socket.emit("updateUserSaveMsgReadState", {
-                    msgReadState: this.MsgReadTime,
-                    reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
-                    }
-                });
-
-                //タブ名へ適用
-                document.title = (TotalMention>0?("[!" + TotalMention +"]"):"") + (TotalNew>0?("[" + TotalNew +"]"):"") + " #" + this.ChannelIndex[this.$route.params.id].channelname;
-
-            },
-            deep: true
-        }
     },
 
     computed: {
@@ -175,6 +134,9 @@ export default {
 
     mounted() {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
+
+        //ブラウザ上のタブ名を設定
+        document.title = this.ChannelIndex[this.getPath].channelname;
 
         let channelWindow = document.querySelector("#channelWindow")
 
@@ -547,7 +509,8 @@ export default {
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
 
-                if ( this.channelInfo.previewmode ) return -1;
+                //プレビューあるいは新着メッセージが来ているのなら
+                if ( this.channelInfo.previewmode || this.newMessageArrived ) return -1;
 
                 try {
                     //最新のメッセージを取得するために履歴の長さを予め取得
@@ -573,6 +536,15 @@ export default {
                     this.MsgReadTime[this.getPath].new = 0;
                     this.MsgReadTime[this.getPath].mention = 0;
                 }
+
+                //既読状態をサーバーへ同期させる
+                socket.emit("updateUserSaveMsgReadState", {
+                    msgReadState: this.MsgReadTime,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
 
                 //既読状態をCookieへ書き込み
                 setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
