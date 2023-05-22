@@ -90,6 +90,9 @@ export default {
         //チャンネルの移動を監視
         $route: { //URLパスの変更監視
             handler(newPage, oldPage) {
+                //ブラウザ上のタブ名を設定
+                document.title = this.ChannelIndex[this.getPath].channelname;
+
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     //チャンネル以外の場合、以降の処理をスキップする
@@ -131,6 +134,9 @@ export default {
 
     mounted() {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
+
+        //ブラウザ上のタブ名を設定
+        document.title = this.ChannelIndex[this.getPath].channelname;
 
         let channelWindow = document.querySelector("#channelWindow")
 
