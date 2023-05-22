@@ -90,15 +90,15 @@ export default {
         //チャンネルの移動を監視
         $route: { //URLパスの変更監視
             handler(newPage, oldPage) {
-                //ブラウザ上のタブ名を設定
-                document.title = this.ChannelIndex[this.getPath].channelname;
-
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     //チャンネル以外の場合、以降の処理をスキップする
                     if (!(newPage.path.startsWith('/c/'))) {
                         return 0;
                     }
+
+                    //ブラウザ上のタブ名を設定
+                    document.title = this.ChannelIndex[this.getPath].channelname;
 
                     this.scrollIt(); //スクロールする
 
