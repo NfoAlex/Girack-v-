@@ -232,11 +232,9 @@ export default {
             
             this.txt = ""; //入力欄を空に
             this.fileInputData = []; //ファイルを空に
-            
-            console.log("--- msg sent ---");
 
             this.resetReply(); //返信状態を初期化
-            document.querySelector("#inp").focus();
+            document.querySelector("#inp").focus(); //入力欄へフォーカス
 
         },
 
