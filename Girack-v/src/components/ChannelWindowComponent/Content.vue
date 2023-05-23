@@ -527,7 +527,16 @@ export default {
                             //メンション数を0に
                             mention: 0
                         };
-                        console.log("Content :: Content : 既読状態変更したな");
+                        console.log("Content :: setScrollState : 既読状態変更したな");
+
+                        //既読状態をサーバーへ同期させる
+                        socket.emit("updateUserSaveMsgReadState", {
+                            msgReadState: this.MsgReadTime,
+                            reqSender: {
+                                userid: this.Userinfo.userid,
+                                sessionid: this.Userinfo.sessionid
+                            }
+                        });
 
                     }
                 }
@@ -536,15 +545,6 @@ export default {
                     this.MsgReadTime[this.getPath].new = 0;
                     this.MsgReadTime[this.getPath].mention = 0;
                 }
-
-                //既読状態をサーバーへ同期させる
-                socket.emit("updateUserSaveMsgReadState", {
-                    msgReadState: this.MsgReadTime,
-                    reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
-                    }
-                });
 
                 //既読状態をCookieへ書き込み
                 setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
