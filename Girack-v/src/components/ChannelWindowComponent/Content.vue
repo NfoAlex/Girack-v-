@@ -57,27 +57,9 @@ export default {
                 this.newMessageArrived = true; //新着メッセージアリに切り替え
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
-                    try {
-                        //最新メッセージを取得するために長さ計算
-                        let latestTime = this.MsgDBActive.slice(-1)[0].time;
-                        //最新メッセージを元に既読した時間を設定して新着数を0にする
-                        this.MsgReadTime[this.getPath] = {
-                            time: latestTime,
-                            new: 0, //新着メッセージ数を0に
-                            mention: 0
-                        };
-                    }
-                    catch(e) {
-                        console.log("Content :: watch(MsgDB) : 既読状態更新できなかった");
-                    }
-
-                    //既読状態をCookieへ書き込み
-                    setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
-                    
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
-                        this.setScrollState(true); //スクロール状態を"スクロールしきった"と保存
 
                     });
 
@@ -100,8 +82,6 @@ export default {
                     //ブラウザ上のタブ名を設定
                     document.title = this.ChannelIndex[this.getPath].channelname;
 
-                    this.scrollIt(); //スクロールする
-
                     let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                     this.MsgReadTime[this.getPath] = {
                         time: latestTime,
@@ -109,6 +89,8 @@ export default {
                         mention: 0
                     };
                     this.newMessageArrived = false; //新着メッセージアリをナシに
+                    this.scrollIt(); //スクロールする
+
                 });
 
             }
@@ -473,8 +455,6 @@ export default {
                 this.msgIdHovering = null;
 
             }
-    
-            //console.log("mouseOverMsg :: hovered on -> " + this.msgIdHovering);
 
         },
 
@@ -508,16 +488,17 @@ export default {
                 channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
+                console.log("Content :: setScrollState : スクロールされた", this.MsgReadTime[this.getPath]);
 
                 //プレビューあるいは新着メッセージが来ているのなら
-                if ( this.channelInfo.previewmode || this.newMessageArrived ) return -1;
+                if ( this.channelInfo.previewmode ) return -1;
 
                 try {
                     //最新のメッセージを取得するために履歴の長さを予め取得
                     let latestTime = this.MsgDBActive.slice(-1)[0].time;
 
                     //もし新着数とメンション数が0じゃなければ0に初期化する
-                    if ( this.MsgReadTime[this.getPath].new !== 0 && this.MsgReadTime[this.getPath].mention !== 0 ) {
+                    if ( this.MsgReadTime[this.getPath].new !== 0 || this.MsgReadTime[this.getPath].mention !== 0 ) {
                         //既読状態をセット
                         this.MsgReadTime[this.getPath] = {
                             //既読時間を最新メッセージの時間に設定
@@ -527,7 +508,16 @@ export default {
                             //メンション数を0に
                             mention: 0
                         };
-                        console.log("Content :: Content : 既読状態変更したな");
+                        console.log("Content :: setScrollState : 既読状態変更したな");
+
+                        //既読状態をサーバーへ同期させる
+                        socket.emit("updateUserSaveMsgReadState", {
+                            msgReadState: this.MsgReadTime,
+                            reqSender: {
+                                userid: this.Userinfo.userid,
+                                sessionid: this.Userinfo.sessionid
+                            }
+                        });
 
                     }
                 }
@@ -536,15 +526,6 @@ export default {
                     this.MsgReadTime[this.getPath].new = 0;
                     this.MsgReadTime[this.getPath].mention = 0;
                 }
-
-                //既読状態をサーバーへ同期させる
-                socket.emit("updateUserSaveMsgReadState", {
-                    msgReadState: this.MsgReadTime,
-                    reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
-                    }
-                });
 
                 //既読状態をCookieへ書き込み
                 setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
