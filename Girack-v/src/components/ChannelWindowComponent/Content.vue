@@ -473,8 +473,6 @@ export default {
                 this.msgIdHovering = null;
 
             }
-    
-            //console.log("mouseOverMsg :: hovered on -> " + this.msgIdHovering);
 
         },
 
@@ -508,16 +506,17 @@ export default {
                 channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
+                console.log("Content :: setScrollState : スクロールされた", this.MsgReadTime[this.getPath]);
 
                 //プレビューあるいは新着メッセージが来ているのなら
-                if ( this.channelInfo.previewmode || this.newMessageArrived ) return -1;
+                if ( this.channelInfo.previewmode ) return -1;
 
                 try {
                     //最新のメッセージを取得するために履歴の長さを予め取得
                     let latestTime = this.MsgDBActive.slice(-1)[0].time;
 
                     //もし新着数とメンション数が0じゃなければ0に初期化する
-                    if ( this.MsgReadTime[this.getPath].new !== 0 && this.MsgReadTime[this.getPath].mention !== 0 ) {
+                    if ( this.MsgReadTime[this.getPath].new !== 0 || this.MsgReadTime[this.getPath].mention !== 0 ) {
                         //既読状態をセット
                         this.MsgReadTime[this.getPath] = {
                             //既読時間を最新メッセージの時間に設定
