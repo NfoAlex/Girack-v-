@@ -236,6 +236,7 @@ export default {
             console.log("--- msg sent ---");
 
             this.resetReply(); //返信状態を初期化
+            document.querySelector("#inp").focus();
 
         },
 
