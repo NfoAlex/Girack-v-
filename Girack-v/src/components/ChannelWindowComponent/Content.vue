@@ -100,8 +100,6 @@ export default {
                     //ブラウザ上のタブ名を設定
                     document.title = this.ChannelIndex[this.getPath].channelname;
 
-                    this.scrollIt(); //スクロールする
-
                     let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                     this.MsgReadTime[this.getPath] = {
                         time: latestTime,
@@ -109,6 +107,8 @@ export default {
                         mention: 0
                     };
                     this.newMessageArrived = false; //新着メッセージアリをナシに
+                    this.scrollIt(); //スクロールする
+
                 });
 
             }
