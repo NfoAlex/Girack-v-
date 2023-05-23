@@ -18,7 +18,7 @@ export default {
     <div class="text-center pa-5" style="width:80%">
         <p class="text-h3">Girack</p>
         <br>
-        <p class="text-h5">BetterPerformance</p>
+        <p class="text-h5">FixReading</p>
         <p>ビルド : {{ clientVersion }}</p>
         <br>
         <p>それ以外書くことな</p>
