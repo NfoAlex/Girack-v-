@@ -57,27 +57,9 @@ export default {
                 this.newMessageArrived = true; //新着メッセージアリに切り替え
                 //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
                 if ( this.StateScrolled ) {
-                    try {
-                        //最新メッセージを取得するために長さ計算
-                        let latestTime = this.MsgDBActive.slice(-1)[0].time;
-                        //最新メッセージを元に既読した時間を設定して新着数を0にする
-                        this.MsgReadTime[this.getPath] = {
-                            time: latestTime,
-                            new: 0, //新着メッセージ数を0に
-                            mention: 0
-                        };
-                    }
-                    catch(e) {
-                        console.log("Content :: watch(MsgDB) : 既読状態更新できなかった");
-                    }
-
-                    //既読状態をCookieへ書き込み
-                    setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
-                    
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
-                        this.setScrollState(true); //スクロール状態を"スクロールしきった"と保存
 
                     });
 
