@@ -376,6 +376,12 @@ export default {
                                 density="compact"
                             >
                             </v-checkbox>
+                            <v-checkbox
+                                v-model="CONFIG_DISPLAY.CONTENT_GOBOTTOMFAB_SHOW"
+                                label="「下に行くボタン」を表示"
+                                density="compact"
+                            >
+                            </v-checkbox>
                         </v-card>
 
                         <br>

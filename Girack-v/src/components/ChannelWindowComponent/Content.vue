@@ -687,7 +687,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div :id="m.messageid" class="d-flex justify-end" style="margin:0px 8px;">
+            <div :id="m.messageid" class="d-flex justify-end" style="margin:0px 12px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%;">
@@ -710,7 +710,7 @@ export default {
                 </v-avatar>
 
                 <!-- アバターを表示しないときの空欄ホルダー -->
-                <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:15%; height:0 !important;">
+                <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%; height:0 !important;">
                     <v-img
                         v-if="getUserStats(m.userid, 'role')!=='Deleted'"
                         @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
@@ -723,7 +723,8 @@ export default {
                 <!-- メッセージ本体 -->
                 <span
                     :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
-                    style=" width:95%; margin-left:8px; padding-left:1.5%; padding-right:1.5%"
+                    class="flex-grow-1"
+                    style=" width:90%; margin-left:8px; padding-left:1.5%; padding-right:1.5%"
                 >
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
@@ -841,7 +842,7 @@ export default {
 
         <!-- 一番下にスクロールするボタン -->
         <v-btn
-            v-if="!StateScrolled"
+            v-if="!StateScrolled&&CONFIG_DISPLAY.CONTENT_GOBOTTOMFAB_SHOW"
             @click="scrollIt"
             style="z-index:20; padding:0; position:sticky; left:100%; bottom:32px; margin-right:1.5% !important;"
             icon=""
@@ -940,7 +941,7 @@ export default {
 
 /* スクロールバー用 */
 #channelWindow::-webkit-scrollbar {
-    width: 5px;
+    width: 10px;
 }
 
 #channelWindow::-webkit-scrollbar-track {
