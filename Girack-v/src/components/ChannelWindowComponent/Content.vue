@@ -133,10 +133,6 @@ export default {
 
             });
 
-            //ウィンドウのフォーカス監視開始
-            window.addEventListener("focus", this.setFocusStateTrue);
-            window.addEventListener("blur", this.setFocusStateFalse);
-
             this.scrollIt(); //スクロールする
 
         });
@@ -144,7 +140,15 @@ export default {
 
     },
 
-    //別チャンネルへ移動したとき(keepAliveの対象が変わったとき)
+    //KeepAliveを通して新しくチャンネルに移動したとき
+    activated() {
+        //ウィンドウのフォーカス監視開始
+        window.addEventListener("focus", this.setFocusStateTrue);
+        window.addEventListener("blur", this.setFocusStateFalse);
+
+    },
+
+    //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)
     deactivated() {
         //ウィンドウのフォーカス監視を取りやめ
         window.removeEventListener("focus", this.setFocusStateTrue);
