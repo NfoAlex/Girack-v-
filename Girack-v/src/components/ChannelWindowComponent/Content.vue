@@ -841,7 +841,7 @@ export default {
 
         <!-- 一番下にスクロールするボタン -->
         <v-btn
-            v-if="!StateScrolled"
+            v-if="!StateScrolled&&CONFIG_DISPLAY.CONTENT_GOBOTTOMFAB_SHOW"
             @click="scrollIt"
             style="z-index:20; padding:0; position:sticky; left:100%; bottom:32px; margin-right:1.5% !important;"
             icon=""
