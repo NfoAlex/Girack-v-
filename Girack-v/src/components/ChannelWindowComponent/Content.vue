@@ -74,7 +74,7 @@ export default {
             handler(newPage, oldPage) {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
-                    //チャンネル以外の場合、以降の処理をスキップする
+                    //チャンネル以外のページ場合、あるいは別のチャンネルでの処理が続いている場合、以降の処理をスキップする
                     if ( !(newPage.path.startsWith('/c/')) || this.getPath !== newPage.params.id ) {
                         console.log("Content :: watch($route) : スクロールしないわ", this.channelInfo.channelid, newPage.params.id);
                         return 0;
