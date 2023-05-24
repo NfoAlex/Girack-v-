@@ -436,6 +436,7 @@ export default {
             this.$nextTick(() => {
                 const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
                 channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+                this.setScrollState(true); //スクロール状態を"した"と設定
 
             });
 
