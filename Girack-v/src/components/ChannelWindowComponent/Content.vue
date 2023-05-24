@@ -755,7 +755,7 @@ export default {
                                         </v-chip>
                                     </a>
                                     <!-- 返信内容 -->
-                                    : <ContentMessageRender :content="m.replyData.content" />
+                                    : <ContentMessageRender class="text-medium-emphasis" :content="m.replyData.content" />
 
                                 </p>
 
