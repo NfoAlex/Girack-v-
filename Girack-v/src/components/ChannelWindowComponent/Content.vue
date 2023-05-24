@@ -55,8 +55,6 @@ export default {
         MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
-                //this.newMessageArrived = true; //新着メッセージアリに切り替え
-                console.log("focusしてるよな", this.StateFocus);
                 //もしスクロールしきった状態、かつこのページにブラウザがいるなら
                 if ( this.StateScrolled && this.StateFocus ) {
                     //レンダーを待ってからスクロール
@@ -123,8 +121,6 @@ export default {
         document.title = this.ChannelIndex[this.getPath].channelname;
 
         let channelWindow = document.querySelector("#channelWindow");
-
-        console.log("Content :: mounted : useDisplay", useDisplay().name.value);
 
         //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
