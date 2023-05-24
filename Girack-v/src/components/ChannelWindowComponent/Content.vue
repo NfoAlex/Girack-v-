@@ -75,8 +75,10 @@ export default {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     //チャンネル以外の場合、以降の処理をスキップする
-                    if ( !(newPage.path.startsWith('/c/')) || this.getPath !== this.channelInfo.channelid ) {
+                    if ( !(newPage.path.startsWith('/c/')) || this.getPath !== newPage.params.id ) {
+                        console.log("Content :: watch($route) : スクロールしないわ", this.channelInfo.channelid, newPage.params.id);
                         return 0;
+
                     }
 
                     //ブラウザ上のタブ名を設定
