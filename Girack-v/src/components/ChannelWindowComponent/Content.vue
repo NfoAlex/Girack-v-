@@ -723,7 +723,8 @@ export default {
                 <!-- メッセージ本体 -->
                 <span
                     :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
-                    style=" width:95%; margin-left:8px; padding-left:1.5%; padding-right:1.5%"
+                    class="flex-grow-1"
+                    style=" width:90%; margin-left:8px; padding-left:1.5%; padding-right:1.5%"
                 >
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
