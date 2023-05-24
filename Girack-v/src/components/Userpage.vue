@@ -225,7 +225,7 @@ export default {
 </script>
 
 <template>
-    <v-card elevation="6" style="max-width:700px; max-height:550px;" class="mx-auto pa-1 userpage text-center rounded-lg">
+    <v-card elevation="6" style="max-width:700px;" class="mx-auto pa-1 userpage text-center rounded-lg">
 
         <v-card color="secondary" elevation="12" width="70%" style="max-width:300px; overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
             
