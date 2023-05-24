@@ -594,7 +594,7 @@ export default {
             this.StateFocus = true;
             console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
 
-            this.setScrollState();
+            this.setScrollState(); //既読チェック
 
         },
 
