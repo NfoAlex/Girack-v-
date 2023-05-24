@@ -225,7 +225,7 @@ export default {
 </script>
 
 <template>
-    <v-card elevation="6" style="max-width:700px;" class="mx-auto pa-1 userpage text-center rounded-lg">
+    <v-card elevation="6" style="max-width:400px;" class="mx-auto pa-1 userpage text-center rounded-lg">
 
         <v-card color="secondary" elevation="12" width="70%" style="max-width:300px; overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
             
@@ -284,14 +284,13 @@ export default {
 
             <!-- 参加しているチャンネル -->
             <v-window-item value="channel" class="ma-5" style="max-height:20vh; overflow-y:auto;">
-                <!-- ToDo -->
                 <v-card
                     v-for="item in targetUserJoinedChannelList"
                     variant="tonal"
-                    class="mx-auto pa-1 rounded-lg d-flex align-center"
-                    style="margin-top:8px; padding-left:16px; padding-right:16px; width:75%"
+                    class="mx-auto rounded-lg d-flex align-center"
+                    style="margin-top:8px; padding:6px 4%; width:75%"
                 >
-                    <v-icon>
+                    <v-icon style="margin-right:8px;">
                         mdi:mdi-pound
                     </v-icon>
                     <span class="text-truncate">
