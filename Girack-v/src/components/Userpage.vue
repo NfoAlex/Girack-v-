@@ -22,6 +22,7 @@ export default {
             //そのユーザーの情報
             targetUserRole: "Member",
             targetUserBanned: false,
+            targetUserJoinedChannelList: [],
             manageDisabled: false,
 
             //削除確認表示
@@ -140,6 +141,20 @@ export default {
 
         }
 
+        //参加チャンネルの情報取得
+        socket.on("infoChannel", (dat) => {
+            //表示するチャンネル参加リストの配列へ追加
+            this.targetUserJoinedChannelList.push({
+                channelname: dat.channelname,
+                channelid: dat.channelid,
+                description: dat.description,
+                scope: dat.scope
+            });
+
+            console.log("Userpage :: mounted : チャンネル情報リスト->", this.targetUserJoinedChannelList);
+
+        });
+
         //ユーザーの情報受け取り
         socket.on("infoUser", (dat) => {
             //受信した情報がこいつのと確認して処理
@@ -168,6 +183,18 @@ export default {
 
                 }
 
+                //参加しているチャンネルリストの情報取得
+                for ( let index in dat.channelJoined ) {
+                    socket.emit("getInfoChannel", {
+                        targetid: dat.channelJoined[index],
+                        reqSender: {
+                            userid: this.Userinfo.userid,
+                            sessionid: this.Userinfo.sessionid
+                        }
+                    });
+
+                }
+
             }
 
         });
@@ -189,6 +216,7 @@ export default {
     unmounted() {
         //socket通信の重複防止
         socket.off("infoUser");
+        socket.off("infoChannel");
 
     }
 
@@ -255,11 +283,21 @@ export default {
         <v-window v-model="tab">
 
             <!-- 参加しているチャンネル -->
-            <v-window-item value="channel" class="ma-5">
+            <v-window-item value="channel" class="ma-5" style="max-height:20vh; overflow-y:auto;">
                 <!-- ToDo -->
-                <p>参加チャンネル</p>
-                <p>参加チャンネル</p>
-                <p>参加チャンネル</p>
+                <v-card
+                    v-for="item in targetUserJoinedChannelList"
+                    variant="tonal"
+                    class="mx-auto pa-1 rounded-lg d-flex align-center"
+                    style="margin-top:8px; padding-left:16px; padding-right:16px; width:75%"
+                >
+                    <v-icon>
+                        mdi:mdi-pound
+                    </v-icon>
+                    <span class="text-truncate">
+                        {{ item.channelname }}
+                    </span>
+                </v-card>
             </v-window-item>
 
             <!-- ユーザー管理タブ -->
