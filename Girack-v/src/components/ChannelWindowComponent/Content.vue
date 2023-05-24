@@ -55,8 +55,10 @@ export default {
         MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
+                //this.newMessageArrived = true; //新着メッセージアリに切り替え
                 console.log("focusしてるよな", this.StateFocus);
                 //もしスクロールしきった状態、かつこのページにブラウザがいるなら
+                if ( this.StateScrolled && this.StateFocus ) {
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
