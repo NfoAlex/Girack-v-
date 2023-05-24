@@ -28,6 +28,7 @@ export default {
         return {
             uri: backendURI, //バックエンドのURI
             newMessageArrived: false, //新着メッセージが来ているかどうか
+            StateFocus: true,
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -54,9 +55,8 @@ export default {
         MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
-                this.newMessageArrived = true; //新着メッセージアリに切り替え
-                //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
-                if ( this.StateScrolled ) {
+                console.log("focusしてるよな", this.StateFocus);
+                //もしスクロールしきった状態、かつこのページにブラウザがいるなら
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
@@ -110,7 +110,7 @@ export default {
             console.log("Content :: getDisplaySize : 返す->", useDisplay().name.value);
             return useDisplay().name.value;
 
-        }
+        },
 
     },
 
@@ -130,15 +130,31 @@ export default {
                 ref.setScrollState(); //確認開始
 
             });
-            this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
 
-            //もしスクロールできない縦幅だったらスクロール状態をTrueにする
-            if ( channelWindow.scrollHeight <= channelWindow.clientHeight ) { //縦幅比較
-                this.setScrollState(true); //trueへ設定
+            //ウィンドウのフォーカス監視開始
+            window.addEventListener("focus", this.setFocusStateTrue);
+            window.addEventListener("blur", this.setFocusStateFalse);
 
-            }
+            this.scrollIt(); //スクロールする
 
         });
+
+
+    },
+
+    //別チャンネルへ移動したとき(keepAliveの対象が変わったとき)
+    deactivated() {
+        //ウィンドウのフォーカス監視を取りやめ
+        window.removeEventListener("focus", this.setFocusStateTrue);
+        window.removeEventListener("blur", this.setFocusStateFalse);
+
+    },
+
+    //マウント外れた時
+    unmounted() {
+        //ウィンドウのフォーカス監視を取りやめ
+        window.removeEventListener("focus", this.setFocusStateTrue);
+        window.removeEventListener("blur", this.setFocusStateFalse);
 
     },
 
@@ -564,6 +580,20 @@ export default {
                 this.StateScrolled = false; //スクロールしきってないと保存
 
             }
+
+        },
+
+        //このウィンドウにいるかどうかを設定する
+        setFocusStateTrue() {
+            this.StateFocus = true;
+            console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
+
+        },
+
+        //このウィンドウにいるかどうかを設定する
+        setFocusStateFalse() {
+            this.StateFocus = false;
+            console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
 
         },
 
