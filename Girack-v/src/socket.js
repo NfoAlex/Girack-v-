@@ -734,6 +734,20 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
 
     //もしクラウド上に設定が保存されていたなら
     if ( userSaveMsgReadState.msgReadStateAvailable ) {
+        //既読状態のチャンネルIDを取り出して配列にする
+        let keysUserSaveMsgReadState = Object.keys(userSaveMsgReadState.msgReadState);
+        //参加していないチャンネルの既読状態を削除
+        for ( let index in keysUserSaveMsgReadState ) { //既読状態のチャンネルIDをぶん回す
+            //もしチャンネル参加リストにチャンネルIDが入っていなければ
+            if ( !Userinfo.value.channelJoined.includes(keysUserSaveMsgReadState[index]) ) {
+                //引っ張ってきた既読状態から削除
+                delete userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]];
+
+            }
+
+        }
+
+        //既読状態を適用
         MsgReadTime.value = userSaveMsgReadState.msgReadState;
 
     }
