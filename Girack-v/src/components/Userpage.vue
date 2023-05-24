@@ -143,6 +143,9 @@ export default {
 
         //参加チャンネルの情報取得
         socket.on("infoChannel", (dat) => {
+            //もしチャンネルデータが空ならなにもしない
+            if ( dat.channelname === null ) return -1;
+
             //表示するチャンネル参加リストの配列へ追加
             this.targetUserJoinedChannelList.push({
                 channelname: dat.channelname,
