@@ -120,7 +120,8 @@ const UserIndex = ref({
 
 });
 
-const StateScrolled = ref(false); //スクロールしきっているかどうか
+//スクロールしきっているかどうか(別コンポーネントでも使えるように独立させている)
+const StateScrolled = ref(false);
 
 //履歴DB返すだけ
 export function dataMsg() {
