@@ -13,11 +13,11 @@ const socket = getSocket();
 export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
-        const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
+        const { MsgDB, UserIndex, StateScrolled, MsgReadTime } = dataMsg(); //履歴用DB
         const { PreviewChannelData, ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
         
-        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
+        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
 
     },
 
