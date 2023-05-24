@@ -436,6 +436,7 @@ export default {
             this.$nextTick(() => {
                 const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
                 channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+                this.setScrollState(true); //スクロール状態を"した"と設定
 
             });
 
@@ -523,8 +524,14 @@ export default {
                 }
                 catch(e) {
                     console.log("Content :: setScrollState : 既読状態の更新できなかった");
-                    this.MsgReadTime[this.getPath].new = 0;
-                    this.MsgReadTime[this.getPath].mention = 0;
+                    this.MsgReadTime[this.getPath] = {
+                        //既読時間を最新メッセージの時間に設定
+                        time: 0,
+                        //新着メッセージ数を0に
+                        new: 0,
+                        //メンション数を0に
+                        mention: 0
+                    };
                 }
 
                 //既読状態をCookieへ書き込み
@@ -749,7 +756,7 @@ export default {
                                         </v-chip>
                                     </a>
                                     <!-- 返信内容 -->
-                                    : <ContentMessageRender :content="m.replyData.content" />
+                                    : <ContentMessageRender class="text-medium-emphasis" :content="m.replyData.content" />
 
                                 </p>
 
