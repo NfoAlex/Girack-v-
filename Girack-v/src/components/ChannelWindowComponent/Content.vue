@@ -13,11 +13,11 @@ const socket = getSocket();
 export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
-        const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
+        const { MsgDB, UserIndex, StateScrolled, MsgReadTime } = dataMsg(); //履歴用DB
         const { PreviewChannelData, ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
         
-        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
+        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
 
     },
 
@@ -28,6 +28,7 @@ export default {
         return {
             uri: backendURI, //バックエンドのURI
             newMessageArrived: false, //新着メッセージが来ているかどうか
+            StateFocus: true,
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -54,9 +55,8 @@ export default {
         MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
-                this.newMessageArrived = true; //新着メッセージアリに切り替え
-                //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
-                if ( this.StateScrolled ) {
+                //もしスクロールしきった状態、かつこのページにブラウザがいるなら
+                if ( this.StateScrolled && this.StateFocus ) {
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
@@ -74,9 +74,11 @@ export default {
             handler(newPage, oldPage) {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
-                    //チャンネル以外の場合、以降の処理をスキップする
-                    if (!(newPage.path.startsWith('/c/'))) {
+                    //チャンネル以外のページ場合、あるいは別のチャンネルでの処理が続いている場合、以降の処理をスキップする
+                    if ( !(newPage.path.startsWith('/c/')) || this.getPath !== newPage.params.id ) {
+                        console.log("Content :: watch($route) : スクロールしないわ", this.channelInfo.channelid, newPage.params.id);
                         return 0;
+
                     }
 
                     //ブラウザ上のタブ名を設定
@@ -99,7 +101,7 @@ export default {
     },
 
     computed: {
-        //現在いるパスを返すだけ
+        //現在いるパス(チャンネルID)を返すだけ
         getPath() {
             return this.$route.params.id;
 
@@ -110,7 +112,7 @@ export default {
             console.log("Content :: getDisplaySize : 返す->", useDisplay().name.value);
             return useDisplay().name.value;
 
-        }
+        },
 
     },
 
@@ -120,9 +122,7 @@ export default {
         //ブラウザ上のタブ名を設定
         document.title = this.ChannelIndex[this.getPath].channelname;
 
-        let channelWindow = document.querySelector("#channelWindow")
-
-        console.log("Content :: mounted : useDisplay", useDisplay().name.value);
+        let channelWindow = document.querySelector("#channelWindow");
 
         //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
@@ -130,15 +130,35 @@ export default {
                 ref.setScrollState(); //確認開始
 
             });
-            this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
 
-            //もしスクロールできない縦幅だったらスクロール状態をTrueにする
-            if ( channelWindow.scrollHeight <= channelWindow.clientHeight ) { //縦幅比較
-                this.setScrollState(true); //trueへ設定
-
-            }
+            this.scrollIt(); //スクロールする
 
         });
+
+
+    },
+
+    //KeepAliveを通して新しくチャンネルに移動したとき
+    activated() {
+        //ウィンドウのフォーカス監視開始
+        window.addEventListener("focus", this.setFocusStateTrue);
+        window.addEventListener("blur", this.setFocusStateFalse);
+
+    },
+
+    //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)
+    deactivated() {
+        //ウィンドウのフォーカス監視を取りやめ
+        window.removeEventListener("focus", this.setFocusStateTrue);
+        window.removeEventListener("blur", this.setFocusStateFalse);
+
+    },
+
+    //マウント外れた時
+    unmounted() {
+        //ウィンドウのフォーカス監視を取りやめ
+        window.removeEventListener("focus", this.setFocusStateTrue);
+        window.removeEventListener("blur", this.setFocusStateFalse);
 
     },
 
@@ -564,6 +584,22 @@ export default {
                 this.StateScrolled = false; //スクロールしきってないと保存
 
             }
+
+        },
+
+        //このウィンドウにいるかどうかを設定する
+        setFocusStateTrue() {
+            this.StateFocus = true;
+            console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
+
+            this.setScrollState(); //既読チェック
+
+        },
+
+        //このウィンドウにいるかどうかを設定する
+        setFocusStateFalse() {
+            this.StateFocus = false;
+            console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
 
         },
 
