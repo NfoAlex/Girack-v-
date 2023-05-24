@@ -75,7 +75,7 @@ export default {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     //チャンネル以外の場合、以降の処理をスキップする
-                    if (!(newPage.path.startsWith('/c/'))) {
+                    if ( !(newPage.path.startsWith('/c/')) || this.getPath !== this.channelInfo.channelid ) {
                         return 0;
                     }
 
@@ -99,7 +99,7 @@ export default {
     },
 
     computed: {
-        //現在いるパスを返すだけ
+        //現在いるパス(チャンネルID)を返すだけ
         getPath() {
             return this.$route.params.id;
 
@@ -120,7 +120,7 @@ export default {
         //ブラウザ上のタブ名を設定
         document.title = this.ChannelIndex[this.getPath].channelname;
 
-        let channelWindow = document.querySelector("#channelWindow")
+        let channelWindow = document.querySelector("#channelWindow");
 
         console.log("Content :: mounted : useDisplay", useDisplay().name.value);
 
