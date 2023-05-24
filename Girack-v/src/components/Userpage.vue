@@ -184,6 +184,12 @@ export default {
         console.log("Userpage :: path",this.$route.path);
 
 
+    },
+
+    unmounted() {
+        //socket通信の重複防止
+        socket.off("infoUser");
+
     }
 
 }
