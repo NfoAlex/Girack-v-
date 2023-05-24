@@ -710,7 +710,7 @@ export default {
                 </v-avatar>
 
                 <!-- アバターを表示しないときの空欄ホルダー -->
-                <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:15%; height:0 !important;">
+                <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%; height:0 !important;">
                     <v-img
                         v-if="getUserStats(m.userid, 'role')!=='Deleted'"
                         @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
@@ -940,7 +940,7 @@ export default {
 
 /* スクロールバー用 */
 #channelWindow::-webkit-scrollbar {
-    width: 5px;
+    width: 10px;
 }
 
 #channelWindow::-webkit-scrollbar-track {
