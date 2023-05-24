@@ -687,7 +687,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div :id="m.messageid" class="d-flex justify-end" style="margin:0px 8px;">
+            <div :id="m.messageid" class="d-flex justify-end" style="margin:0px 12px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%;">
