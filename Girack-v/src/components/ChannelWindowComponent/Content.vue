@@ -594,6 +594,8 @@ export default {
             this.StateFocus = true;
             console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
 
+            this.setScrollState();
+
         },
 
         //このウィンドウにいるかどうかを設定する
