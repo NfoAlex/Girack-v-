@@ -288,6 +288,7 @@ export default {
             <!-- 参加しているチャンネル -->
             <v-window-item value="channel" class="ma-5" style="max-height:20vh; overflow-y:auto;">
                 <v-card
+                    @click="$router.push({ path: '/c/'+item.channelid });"
                     v-for="item in targetUserJoinedChannelList"
                     variant="tonal"
                     class="mx-auto rounded-lg d-flex align-center"
