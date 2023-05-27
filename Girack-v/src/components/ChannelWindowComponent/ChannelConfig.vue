@@ -365,11 +365,11 @@ export default {
                         v-model="descriptionText"
                         label="概要"
                     >
-                    <!-- 確定とキャンセルのアイコン -->
-                    <template v-slot:append-inner>
-                        <v-icon @click="updateChannel" :disabled="descriptionText.length>=128">mdi:mdi-check-bold</v-icon>
-                        <v-icon @click="switchEditing('desc',false)">mdi:mdi-window-close</v-icon>
-                    </template>
+                        <!-- 確定とキャンセルのアイコン -->
+                        <template v-slot:append-inner>
+                            <v-icon @click="updateChannel" :disabled="descriptionText.length>=128">mdi:mdi-check-bold</v-icon>
+                            <v-icon @click="switchEditing('desc',false)">mdi:mdi-window-close</v-icon>
+                        </template>
                     </v-textarea>
                 </div>
             </v-card>
