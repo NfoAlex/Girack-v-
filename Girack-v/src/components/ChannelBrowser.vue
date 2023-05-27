@@ -224,7 +224,12 @@ export default {
 
             <p style="float:left">チャンネル名</p>
             <br>
-            <v-text-field variant="outlined" v-model="channelCreateName">
+            <v-text-field
+                variant="outlined"
+                v-model="channelCreateName"
+                maxlength="32"
+                counter
+            >
             </v-text-field>
 
             <p style="float:left">概要</p>
