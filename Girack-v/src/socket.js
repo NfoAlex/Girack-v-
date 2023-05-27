@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
-export const CLIENT_VERSION = "alpha_20230526";
+export const CLIENT_VERSION = "alpha_20230527";
 
 const {
     CONFIG_SYNC,
@@ -120,7 +120,8 @@ const UserIndex = ref({
 
 });
 
-const StateScrolled = ref(false); //スクロールしきっているかどうか
+//スクロールしきっているかどうか(別コンポーネントでも使えるように独立させている)
+const StateScrolled = ref(false);
 
 //履歴DB返すだけ
 export function dataMsg() {
@@ -733,6 +734,20 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
 
     //もしクラウド上に設定が保存されていたなら
     if ( userSaveMsgReadState.msgReadStateAvailable ) {
+        //既読状態のチャンネルIDを取り出して配列にする
+        let keysUserSaveMsgReadState = Object.keys(userSaveMsgReadState.msgReadState);
+        //参加していないチャンネルの既読状態を削除
+        for ( let index in keysUserSaveMsgReadState ) { //既読状態のチャンネルIDをぶん回す
+            //もしチャンネル参加リストにチャンネルIDが入っていなければ
+            if ( !Userinfo.value.channelJoined.includes(keysUserSaveMsgReadState[index]) ) {
+                //引っ張ってきた既読状態から削除
+                delete userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]];
+
+            }
+
+        }
+
+        //既読状態を適用
         MsgReadTime.value = userSaveMsgReadState.msgReadState;
 
     }

@@ -24,6 +24,7 @@ const LIST_NOTIFICATION_MUTE_USER = ref([]);
 const CONFIG_DISPLAY = ref({
     CONTENT_SHOW_ROLE: true,
     CONTENT_DATELINE_SHOWONLEFT: false,
+    CONTENT_GOBOTTOMFAB_SHOW: false,
     SIDEBAR_CHANNEL_ORDERBY: "alphabetical", //"id","alphabetical"
 });
 

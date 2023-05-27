@@ -13,11 +13,11 @@ const socket = getSocket();
 export default {
     setup() {
         const { Userinfo } = dataUser(); //ユーザー情報
-        const { MsgDB, UserIndex, StateScrolled, DoScroll, MsgReadTime } = dataMsg(); //履歴用DB
+        const { MsgDB, UserIndex, StateScrolled, MsgReadTime } = dataMsg(); //履歴用DB
         const { PreviewChannelData, ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
         
-        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, DoScroll, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
+        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
 
     },
 
@@ -28,6 +28,7 @@ export default {
         return {
             uri: backendURI, //バックエンドのURI
             newMessageArrived: false, //新着メッセージが来ているかどうか
+            StateFocus: true,
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -54,9 +55,8 @@ export default {
         MsgDBActive: {
             //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
             handler() {
-                this.newMessageArrived = true; //新着メッセージアリに切り替え
-                //もしスクロールしきった状態、あるいは自分が送ったメッセージなら
-                if ( this.StateScrolled ) {
+                //もしスクロールしきった状態、かつこのページにブラウザがいるなら
+                if ( this.StateScrolled && this.StateFocus ) {
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
@@ -74,9 +74,11 @@ export default {
             handler(newPage, oldPage) {
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
-                    //チャンネル以外の場合、以降の処理をスキップする
-                    if (!(newPage.path.startsWith('/c/'))) {
+                    //チャンネル以外のページ場合、あるいは別のチャンネルでの処理が続いている場合、以降の処理をスキップする
+                    if ( !(newPage.path.startsWith('/c/')) || this.getPath !== newPage.params.id ) {
+                        console.log("Content :: watch($route) : スクロールしないわ", this.channelInfo.channelid, newPage.params.id);
                         return 0;
+
                     }
 
                     //ブラウザ上のタブ名を設定
@@ -99,7 +101,7 @@ export default {
     },
 
     computed: {
-        //現在いるパスを返すだけ
+        //現在いるパス(チャンネルID)を返すだけ
         getPath() {
             return this.$route.params.id;
 
@@ -110,7 +112,7 @@ export default {
             console.log("Content :: getDisplaySize : 返す->", useDisplay().name.value);
             return useDisplay().name.value;
 
-        }
+        },
 
     },
 
@@ -120,9 +122,7 @@ export default {
         //ブラウザ上のタブ名を設定
         document.title = this.ChannelIndex[this.getPath].channelname;
 
-        let channelWindow = document.querySelector("#channelWindow")
-
-        console.log("Content :: mounted : useDisplay", useDisplay().name.value);
+        let channelWindow = document.querySelector("#channelWindow");
 
         //レンダー完了したらスクロール監視、スクロール状態の初期化
         this.$nextTick(() => {
@@ -130,15 +130,35 @@ export default {
                 ref.setScrollState(); //確認開始
 
             });
-            this.scrollIt(); //スクロールする(ToDo:チャンネルごとに記憶したい)
 
-            //もしスクロールできない縦幅だったらスクロール状態をTrueにする
-            if ( channelWindow.scrollHeight <= channelWindow.clientHeight ) { //縦幅比較
-                this.setScrollState(true); //trueへ設定
-
-            }
+            this.scrollIt(); //スクロールする
 
         });
+
+
+    },
+
+    //KeepAliveを通して新しくチャンネルに移動したとき
+    activated() {
+        //ウィンドウのフォーカス監視開始
+        window.addEventListener("focus", this.setFocusStateTrue);
+        window.addEventListener("blur", this.setFocusStateFalse);
+
+    },
+
+    //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)
+    deactivated() {
+        //ウィンドウのフォーカス監視を取りやめ
+        window.removeEventListener("focus", this.setFocusStateTrue);
+        window.removeEventListener("blur", this.setFocusStateFalse);
+
+    },
+
+    //マウント外れた時
+    unmounted() {
+        //ウィンドウのフォーカス監視を取りやめ
+        window.removeEventListener("focus", this.setFocusStateTrue);
+        window.removeEventListener("blur", this.setFocusStateFalse);
 
     },
 
@@ -436,6 +456,7 @@ export default {
             this.$nextTick(() => {
                 const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
                 channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
+                this.setScrollState(true); //スクロール状態を"した"と設定
 
             });
 
@@ -523,8 +544,14 @@ export default {
                 }
                 catch(e) {
                     console.log("Content :: setScrollState : 既読状態の更新できなかった");
-                    this.MsgReadTime[this.getPath].new = 0;
-                    this.MsgReadTime[this.getPath].mention = 0;
+                    this.MsgReadTime[this.getPath] = {
+                        //既読時間を最新メッセージの時間に設定
+                        time: 0,
+                        //新着メッセージ数を0に
+                        new: 0,
+                        //メンション数を0に
+                        mention: 0
+                    };
                 }
 
                 //既読状態をCookieへ書き込み
@@ -557,6 +584,22 @@ export default {
                 this.StateScrolled = false; //スクロールしきってないと保存
 
             }
+
+        },
+
+        //このウィンドウにいるかどうかを設定する
+        setFocusStateTrue() {
+            this.StateFocus = true;
+            console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
+
+            this.setScrollState(); //既読チェック
+
+        },
+
+        //このウィンドウにいるかどうかを設定する
+        setFocusStateFalse() {
+            this.StateFocus = false;
+            console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
 
         },
 
@@ -644,7 +687,7 @@ export default {
             </div>
 
             <!-- ここからflexで表示するもの-->
-            <div :id="m.messageid" class="d-flex justify-end" style="margin:0px 8px;">
+            <div :id="m.messageid" class="d-flex justify-end" style="margin:0px 12px;">
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%;">
@@ -667,7 +710,7 @@ export default {
                 </v-avatar>
 
                 <!-- アバターを表示しないときの空欄ホルダー -->
-                <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:15%; height:0 !important;">
+                <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%; height:0 !important;">
                     <v-img
                         v-if="getUserStats(m.userid, 'role')!=='Deleted'"
                         @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
@@ -680,7 +723,8 @@ export default {
                 <!-- メッセージ本体 -->
                 <span
                     :class="[msgHovered&&(msgIdHovering===m.messageid)?'hovered':null, checkMsgPosition(m.userid,index)]"
-                    style=" width:95%; margin-left:8px; padding-left:1.5%; padding-right:1.5%"
+                    class="flex-grow-1"
+                    style=" width:90%; margin-left:8px; padding-left:1.5%; padding-right:1.5%"
                 >
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
@@ -749,7 +793,7 @@ export default {
                                         </v-chip>
                                     </a>
                                     <!-- 返信内容 -->
-                                    : <ContentMessageRender :content="m.replyData.content" />
+                                    : <ContentMessageRender class="text-medium-emphasis" :content="m.replyData.content" />
 
                                 </p>
 
@@ -798,7 +842,7 @@ export default {
 
         <!-- 一番下にスクロールするボタン -->
         <v-btn
-            v-if="!StateScrolled"
+            v-if="!StateScrolled&&CONFIG_DISPLAY.CONTENT_GOBOTTOMFAB_SHOW"
             @click="scrollIt"
             style="z-index:20; padding:0; position:sticky; left:100%; bottom:32px; margin-right:1.5% !important;"
             icon=""
@@ -897,7 +941,7 @@ export default {
 
 /* スクロールバー用 */
 #channelWindow::-webkit-scrollbar {
-    width: 5px;
+    width: 10px;
 }
 
 #channelWindow::-webkit-scrollbar-track {
