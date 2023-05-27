@@ -228,67 +228,70 @@ export default {
 </script>
 
 <template>
-    <v-card elevation="6" style="max-width:400px;" class="mx-auto pa-1 userpage text-center rounded-lg">
+    <v-card elevation="6" style="max-width:500px; max-height:65vh;" class="mx-auto d-flex flex-column align-self-start pa-1 userpage text-center rounded-lg">
 
-        <v-card color="secondary" elevation="12" width="70%" style="max-width:300px; overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
-            
-            <!-- アバター -->
-            <v-avatar style="margin-top:16px;" size="7vh" :image="imgsrc + userid"></v-avatar>
-            
-            <!-- ユーザー情報 -->
-            <div class="ma-3">
-                <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
-                <p class="text-overline"># {{ userid }}</p>
-
-                <p v-if="targetinfo.loggedin&&userid!==Userinfo.userid">
-                    <v-chip class="ma-1" variant="flat" color="success" size="x-small">
-                        オンライン
-                    </v-chip>
-                </p>
-
-                <p>
-                    <v-chip v-if="userid===Userinfo.userid" color="green" size="small">
-                        あなた
-                    </v-chip>
-                </p>
-
-                <v-chip :color="getRoleColor(targetinfo.role)" class="ma-1" size="small">
-                    {{ targetinfo.role }}
-                </v-chip>
+        <div>
+            <v-card color="secondary" elevation="12" width="70%" style="overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
                 
-                <p class="text-h5 text-truncate">
-                    {{ targetinfo.username }}
-                </p>
-            </div>
-        </v-card>
+                <!-- アバター -->
+                <v-avatar style="margin-top:16px;" size="20%" :image="imgsrc + userid"></v-avatar>
+                
+                <!-- ユーザー情報 -->
+                <div class="ma-3">
+                    <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
+                    <p class="text-overline"># {{ userid }}</p>
 
-        <!-- タブ -->
-        <v-tabs
-            bg-color="grey"
-            class="mx-auto rounded-lg"
-            center-active
-            v-model="tab"
-        >
+                    <p v-if="targetinfo.loggedin&&userid!==Userinfo.userid">
+                        <v-chip class="ma-1" variant="flat" color="success" size="x-small">
+                            オンライン
+                        </v-chip>
+                    </p>
 
-            <v-tab value="channel">
-                チャンネル
-            </v-tab>
-            <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
-                管理
-            </v-tab>
-            <v-tab v-if="Userinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
-                <p style="color:pink">削除</p>
-            </v-tab>
+                    <p>
+                        <v-chip v-if="userid===Userinfo.userid" color="green" size="small">
+                            あなた
+                        </v-chip>
+                    </p>
 
-        </v-tabs>
+                    <v-chip :color="getRoleColor(targetinfo.role)" class="ma-1" size="small">
+                        {{ targetinfo.role }}
+                    </v-chip>
+                    
+                    <p class="text-h5 text-truncate">
+                        {{ targetinfo.username }}
+                    </p>
+                </div>
+            </v-card>
+
+            <!-- タブ -->
+            <v-tabs
+                bg-color="grey"
+                class="mx-auto rounded-lg"
+                fixed-tabs
+                style="width:fit-content;"
+                v-model="tab"
+            >
+
+                    <v-tab value="channel">
+                        チャンネル
+                    </v-tab>
+                    <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
+                        管理
+                    </v-tab>
+                    <v-tab v-if="Userinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
+                        <p style="color:pink">削除</p>
+                    </v-tab>
+
+            </v-tabs>
+
+        </div>
         
         <!-- タブの中身 -->
-        <v-window v-model="tab">
+        <v-window v-model="tab" style="overflow-y:auto;">
 
             <!-- 参加しているチャンネル -->
-            <v-window-item value="channel" class="ma-5" style="max-height:20vh; overflow-y:auto;">
+            <v-window-item value="channel" class="ma-5">
                 <v-card
-                    @click="$router.push({ path: '/c/'+item.channelid });"
                     v-for="item in targetUserJoinedChannelList"
                     variant="tonal"
                     class="mx-auto rounded-lg d-flex align-center"
