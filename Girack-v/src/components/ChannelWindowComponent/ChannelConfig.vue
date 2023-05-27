@@ -298,99 +298,103 @@ export default {
     
 
     <!-- チャンネルメニュー本体 -->
-    <v-card class="text-center d-flex rounded-lg pa-3">
-        <!-- チャンネル名とバッジ -->
-        <div class="ma-5">
-            <p class="text-h4">
+    <v-card style="max-height:65vh; overflow-y:auto;" class="d-flex flex-column text-center rounded-lg pa-3">
+        <div>
+            <!-- チャンネル名とバッジ -->
+            <div class="ma-5">
+                <p class="text-h4">
 
-                <!-- プライベートチャンネル用アイコン -->
-                <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
-                
-                <br>
+                    <!-- プライベートチャンネル用アイコン -->
+                    <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
+                    
+                    <br>
 
-                <!-- チャンネル名 -->
-                <p
-                    @dblclick="switchEditing('channelname',true)"
-                    v-if="!channelnameEditing"
-                    class="text-truncate"
-                >
-                    <v-tooltip
-                        activator="parent"
-                        location="top"
+                    <!-- チャンネル名 -->
+                    <p
+                        @dblclick="switchEditing('channelname',true)"
+                        v-if="!channelnameEditing"
+                        class="text-truncate"
                     >
-                        ダブルクリックでチャンネル名を変更
-                    </v-tooltip>
-                    {{ channelnameText }}
+                        <v-tooltip
+                            activator="parent"
+                            location="top"
+                        >
+                            ダブルクリックでチャンネル名を変更
+                        </v-tooltip>
+                        {{ channelnameText }}
+                    </p>
+
+                    <!-- 編集中のチャンネル名 -->
+                    <v-text-field
+                        v-else
+                        counter
+                        maxlength="32"
+                        v-model="channelnameText"
+                    >
+                        <!-- 確定とキャンセルのアイコン -->
+                        <template v-slot:append-inner>
+                            <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
+                            <v-icon @click="switchEditing('channelname',false)">mdi:mdi-window-close</v-icon>
+                        </template>
+                    </v-text-field>
+
                 </p>
+            </div>
 
-                <!-- 編集中のチャンネル名 -->
-                <v-text-field
-                    v-else
-                    counter
-                    maxlength="32"
-                    v-model="channelnameText"
-                >
-                    <!-- 確定とキャンセルのアイコン -->
-                    <template v-slot:append-inner>
-                        <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
-                        <v-icon @click="switchEditing('channelname',false)">mdi:mdi-window-close</v-icon>
-                    </template>
-                </v-text-field>
+            <!-- チャンネル概要 -->
+            <v-card
+                @dblclick="switchEditing('desc',true)"
+                class="channelScrollbar pa-3 ma-2 mx-auto rounded-lg"
+                style="min-height:75px; overflow-y:auto; max-height:15vh"
+                width="85%"
+                color="secondary">
+                
+                <!-- 概要欄 -->
+                <div v-if="!descriptionEditing">
+                    <p>
+                    {{ descriptionText }}
+                    </p>
+                    <p class="text-caption" style="margin-top:-2px; color:#555">ダブルクリックで編集</p>
+                </div>
 
-            </p>
+                <!-- 編集中の概要欄 -->
+                <div v-if="descriptionEditing">
+                    <v-textarea
+                        no-resize
+                        counter
+                        maxlength="128"
+                        rows="3"
+                        v-model="descriptionText"
+                        label="概要"
+                    >
+                        <!-- 確定とキャンセルのアイコン -->
+                        <template v-slot:append-inner>
+                            <v-icon @click="updateChannel" :disabled="descriptionText.length>=128">mdi:mdi-check-bold</v-icon>
+                            <v-icon @click="switchEditing('desc',false)">mdi:mdi-window-close</v-icon>
+                        </template>
+                    </v-textarea>
+                </div>
+            </v-card>
+            
+            <v-divider class="ma-3 mx-auto" style="width:85%" :thickness="0"></v-divider>
+
+            <!-- タブ -->
+            <v-tabs
+                v-model="tab"
+                class="mx-auto rounded-lg"
+                style="width:fit-content; min-height:30px;"
+                bg-color="grey"
+            >
+                <v-tab value="userJoined">参加者</v-tab>
+                <v-tab v-if="!channelInfo.previewmode" value="manage">管理</v-tab>
+            </v-tabs>
         </div>
 
-        <!-- チャンネル概要 -->
-        <v-card
-            @dblclick="switchEditing('desc',true)"
-            class="channelScrollbar pa-3 ma-2 mx-auto rounded-lg"
-            style="max-height:500px; min-height:75px; overflow-y:auto;"
-            width="85%"
-            color="secondary">
-            
-            <!-- 概要欄 -->
-            <div v-if="!descriptionEditing">
-                {{ descriptionText }}
-                <p class="text-caption" style="margin-top:-2px; color:#555">ダブルクリックで編集</p>
-            </div>
-
-            <!-- 編集中の概要欄 -->
-            <div v-if="descriptionEditing">
-                <v-textarea
-                    no-resize
-                    counter
-                    maxlength="128"
-                    rows="3"
-                    v-model="descriptionText"
-                    label="概要"
-                >
-                <!-- 確定とキャンセルのアイコン -->
-                <template v-slot:append-inner>
-                    <v-icon @click="updateChannel" :disabled="descriptionText.length>=128">mdi:mdi-check-bold</v-icon>
-                    <v-icon @click="switchEditing('desc',false)">mdi:mdi-window-close</v-icon>
-                </template>
-                </v-textarea>
-            </div>
-        </v-card>
-        
-        <v-divider class="ma-3 mx-auto" style="width:85%" :thickness="0"></v-divider>
-
-        <!-- タブ -->
-        <v-tabs
-            v-model="tab"
-            class="mx-auto rounded-lg"
-            style="width:fit-content; min-height:30px;"
-            bg-color="grey"
-        >
-            <v-tab value="userJoined">参加者</v-tab>
-            <v-tab v-if="!channelInfo.previewmode" value="manage">管理</v-tab>
-        </v-tabs>
-
         <!-- タブの中身を知りたくて─────────── -->
-        <v-window v-model="tab" style="margin-top:8px">
+        <v-window v-model="tab" style="margin-top:8px; overflow-y:auto;">
 
             <!-- チャンネル参加者リスト -->
-            <v-window-item value="userJoined" class="channelScrollbar" style="max-height:350px; overflow-y:auto;">
+            <v-window-item value="userJoined" class="channelScrollbar">
                 <!-- ユーザー招待ボタン -->
                 <span>
                     <v-btn
@@ -436,7 +440,7 @@ export default {
                 
             </v-window-item>
 
-            <v-window-item value="manage" class="mx-auto" style="min-height:300px; overflow-y:auto;">
+            <v-window-item value="manage" class="mx-auto" style="overflow-y:auto;">
                 <v-checkbox
                     v-model="scopeIsPrivate"
                     @click="scopeIsPrivate=!scopeIsPrivate;updateChannel();"

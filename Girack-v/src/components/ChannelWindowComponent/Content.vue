@@ -660,7 +660,7 @@ export default {
         <div>
             <v-dialog
                 v-model="userDialogShow"
-                width="30vw"
+                width="50vw"
             >
                 <Userpage :userid="userDialogUserid" />
             </v-dialog>
