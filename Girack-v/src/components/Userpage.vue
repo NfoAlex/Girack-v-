@@ -294,7 +294,12 @@ export default {
                     class="mx-auto rounded-lg d-flex align-center"
                     style="margin-top:8px; padding:6px 4%; width:75%"
                 >
-                    <v-icon style="margin-right:8px;">
+                    <!-- プライベートチャンネル用鍵マーク -->
+                    <v-icon v-if="item.scope==='private'" style="margin-right:8px;">
+                        mdi:mdi-lock-outline
+                    </v-icon>
+                    <!-- 普通のチャンネル -->
+                    <v-icon v-else style="margin-right:8px;">
                         mdi:mdi-pound
                     </v-icon>
                     <span class="text-truncate">
