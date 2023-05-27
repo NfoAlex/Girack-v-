@@ -345,7 +345,7 @@ export default {
             <v-card
                 @dblclick="switchEditing('desc',true)"
                 class="channelScrollbar pa-3 ma-2 mx-auto rounded-lg"
-                style="max-height:500px; min-height:75px; overflow-y:auto;"
+                style="min-height:75px; overflow-y:auto;"
                 width="85%"
                 color="secondary">
                 
