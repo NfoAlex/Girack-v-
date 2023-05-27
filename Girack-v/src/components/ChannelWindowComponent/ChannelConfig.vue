@@ -298,8 +298,8 @@ export default {
     
 
     <!-- チャンネルメニュー本体 -->
-    <v-card style="max-height:65vh;" class="text-center rounded-lg pa-3">
-        <div style="height:30%">
+    <v-card style="max-height:65vh; overflow-y:auto;" class="d-flex flex-column text-center rounded-lg pa-3">
+        <div>
             <!-- チャンネル名とバッジ -->
             <div class="ma-5">
                 <p class="text-h4">
@@ -345,13 +345,15 @@ export default {
             <v-card
                 @dblclick="switchEditing('desc',true)"
                 class="channelScrollbar pa-3 ma-2 mx-auto rounded-lg"
-                style="min-height:75px; overflow-y:auto;"
+                style="min-height:75px; overflow-y:auto; max-height:15vh"
                 width="85%"
                 color="secondary">
                 
                 <!-- 概要欄 -->
                 <div v-if="!descriptionEditing">
+                    <p>
                     {{ descriptionText }}
+                    </p>
                     <p class="text-caption" style="margin-top:-2px; color:#555">ダブルクリックで編集</p>
                 </div>
 
@@ -389,7 +391,7 @@ export default {
         </div>
 
         <!-- タブの中身を知りたくて─────────── -->
-        <v-window v-model="tab" style="margin-top:8px; height:100%; overflow-y:auto;">
+        <v-window v-model="tab" style="margin-top:8px; overflow-y:auto;">
 
             <!-- チャンネル参加者リスト -->
             <v-window-item value="userJoined" class="channelScrollbar">
@@ -438,7 +440,7 @@ export default {
                 
             </v-window-item>
 
-            <v-window-item value="manage" class="mx-auto" style="min-height:300px; overflow-y:auto;">
+            <v-window-item value="manage" class="mx-auto" style="overflow-y:auto;">
                 <v-checkbox
                     v-model="scopeIsPrivate"
                     @click="scopeIsPrivate=!scopeIsPrivate;updateChannel();"
