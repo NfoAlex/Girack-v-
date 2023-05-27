@@ -237,7 +237,7 @@ export default {
     <!-- ユーザーページ用 -->
     <v-dialog
         v-model="userDialogShow"
-        width="30vw"
+        width="fit-content"
     >
         <Userpage :userid="userDialogUserid" />
     </v-dialog>
