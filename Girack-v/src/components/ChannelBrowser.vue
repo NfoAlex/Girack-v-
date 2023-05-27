@@ -229,7 +229,15 @@ export default {
 
             <p style="float:left">概要</p>
             <br>
-            <v-textarea variant="outlined" aria-placeholder="yeah" v-model="channelCreateDescription">
+            <v-textarea
+                variant="outlined"
+                maxlength="128"
+                rows="3"
+                no-resize
+                counter
+                placeholder="テキストチャンネル。"
+                v-model="channelCreateDescription"
+            >
             </v-textarea>
 
             <v-checkbox
