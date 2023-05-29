@@ -131,8 +131,7 @@ export function dataMsg() {
 
 //メッセージ受け取り、履歴の保存
 socket.on("messageReceive", (msg) => {
-    //ログインあるいはチャンネルに参加していないなら
-    if ( !Userinfo.value.loggedin ) return;
+    //メッセージ発信元のチャンネルに参加していないなら
     if ( !Userinfo.value.channelJoined.includes(msg.channelid) ) return;
 
     console.log("socket :: msgReceive : ↓");
