@@ -27,8 +27,7 @@ export default {
     data() {
         return {
             uri: backendURI, //バックエンドのURI
-            newMessageArrived: false, //新着メッセージが来ているかどうか
-            StateFocus: true,
+            StateFocus: true, //Girackにフォーカスしているかどうか
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -90,7 +89,6 @@ export default {
                         new: 0, //新着メッセージ数を0に
                         mention: 0
                     };
-                    this.newMessageArrived = false; //新着メッセージアリをナシに
                     this.scrollIt(); //スクロールする
 
                 });
