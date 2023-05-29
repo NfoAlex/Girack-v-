@@ -151,8 +151,8 @@ socket.on("messageReceive", (msg) => {
     }
 
     try{
-        //DB配列に追加
-        if ( MsgDB.value[msg.channelid] !== undefined ) {
+        //DB配列の存在を確認してから追加
+        if ( MsgDB.value[msg.channelid] !== undefined ) { //undefinedじゃないなら追加
             MsgDB.value[msg.channelid].push({
                 ...msg
             });
@@ -164,7 +164,7 @@ socket.on("messageReceive", (msg) => {
 
         }
 
-        //メンション数がデータになかったら新たに定義
+        //指定チャンネルの既読状態がデータになかったら新たに定義
         if ( MsgReadTime.value[msg.channelid] === null ) MsgReadTime.value[msg.channelid].mention = 0;
 
         //新着メッセージ数を更新
