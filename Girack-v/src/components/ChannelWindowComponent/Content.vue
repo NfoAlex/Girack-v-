@@ -28,6 +28,7 @@ export default {
         return {
             uri: backendURI, //バックエンドのURI
             StateFocus: true, //Girackにフォーカスしているかどうか
+            msgDisplayNum: 25,
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -109,6 +110,12 @@ export default {
         getDisplaySize() {
             console.log("Content :: getDisplaySize : 返す->", useDisplay().name.value);
             return useDisplay().name.value;
+
+        },
+
+        //表示する履歴数を設定する
+        cropMessage() {
+            return this.MsgDBActive.slice(0, this.msgDisplayNum);
 
         },
 
@@ -676,7 +683,7 @@ export default {
         </div>
 
         <!-- こっからメッセージ表示 -->
-        <div style="z-index:1;" v-for="(m, index) in MsgDBActive">
+        <div style="z-index:1;" v-for="(m, index) in cropMessage">
 
             <!-- 日付線 -->
             <div v-if="checkDateDifference(index)" style="width:100%; padding:12px 0;">
