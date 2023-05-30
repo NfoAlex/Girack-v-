@@ -138,7 +138,7 @@ export default {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
         //ブラウザ上のタブ名を設定
-        document.title = this.ChannelIndex[this.getPath].channelname;
+        document.title = this.channelInfo.channelname;
 
         let channelWindow = document.querySelector("#channelWindow");
 
