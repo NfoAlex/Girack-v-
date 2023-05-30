@@ -361,10 +361,7 @@ export default {
                 }
             }
             catch(e) {}
-
-            //表示数の最大値なら何がなんでもbottom表示
-            if ( index === this.msgDisplayNum-1 ) return "msgBackgroundEnd";
-
+            
             //ここから条件処理
             if ( AvatarNeedToShowBefore ) { //一つ前でアバター出てるか
                 if ( AvatarNeedToShow ) {
