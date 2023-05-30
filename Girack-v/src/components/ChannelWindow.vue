@@ -61,7 +61,7 @@ export default {
 
                 //チャンネル情報の取得
                 socket.emit("getInfoChannel", {
-                    targetid: this.$route.params.id,
+                    targetid: this.PreviewChannelData.channelid,
                     reqSender: {
                         userid: this.Userinfo.userid,
                         sessionid: this.Userinfo.sessionid
