@@ -772,6 +772,13 @@ export default {
                                 @mouseover="mouseOverMsg(m.messageid, 'on')"
                                 @mouseleave="mouseOverMsg(m.messageid, 'off')"
                             >
+                                <!-- 過去を表示していたら -->
+                                <span v-if="index===(msgDisplayNum-25)&&msgDisplayNum!==25" class="d-flex align-center">
+                                    <v-divider class="flex-grow-0 flex-shrink-1"></v-divider>
+                                    <span class="flex-grow-1 flex-shrink-0" style="margin:0 8px;">ここから過去</span>
+                                    <v-divider class="flex-grow-0 flex-shrink-1"></v-divider>
+                                </span>
+                                
                                 <!-- ユーザー名と時間表記 -->
                                 <div class="text-h6 d-flex align-center" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
