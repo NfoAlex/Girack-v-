@@ -2,7 +2,7 @@
 import Content from "./ChannelWindowComponent/Content.vue";
 import Head from "./ChannelWindowComponent/Head.vue";
 import Input from "./ChannelWindowComponent/Input.vue";
-import { dataMsg, dataChannel, dataUser, getSocket } from "../socket.js";
+import { dataMsg, dataChannel, dataUser, getSocket, getMessage } from "../socket.js";
 
 const socket = getSocket();
 
@@ -66,7 +66,19 @@ export default {
 
             //プレビューでもないならブラウザで飛ばす
             } else {
-                this.$router.push({ path: "/browser" });
+                this.PreviewChannelData.channelid = this.$route.params.id;
+
+                //チャンネル情報の取得
+                socket.emit("getInfoChannel", {
+                    targetid: this.$route.params.id,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+
+                getMessage(this.$route.params.id, 25, 0); //履歴を取得
+
                 return {
                     channelname: "...",
                     description: "...",
