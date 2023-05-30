@@ -21,7 +21,7 @@ export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI, {
     transports : ['websocket'],
     reconnection: true,
-    reconnectionDelay: 10,
+    reconnectionDelay: 100,
     reconnectionDelayMax: 1000,
 });
 
@@ -59,7 +59,7 @@ const ChannelIndex = ref({
     "0001": {
         channelname: "random",
         description: "Hello, Girack",
-        scope: "public"
+        scope: "public",
     }
     */
 });
@@ -70,7 +70,8 @@ const PreviewChannelData = ref({
     channelid: "0001",
     channelname: "random",
     description: "Hello Girack",
-    scope: "public"
+    scope: "public",
+    previewmode: true
     */
 });
 
@@ -426,6 +427,9 @@ socket.on("infoChannel", (dat) => {
         PreviewChannelData.value.description = dat.description;
         PreviewChannelData.value.scope = dat.scope;
 
+        //チャンネルに渡す時にプレビュー中と処理する用
+        PreviewChannelData.value.previewmode = true;
+
         return;
 
     }
@@ -574,11 +578,17 @@ socket.on("messageHistory", (history) => {
 
     try {
         channelid = history[0].channelid; //受け取ったデータの中身使っちゃうんだよね
-    }
-    catch(e) {
+    } catch(e) {
         console.log("???");
         console.log(history);
         return;
+    }
+
+    //プレビュー用の履歴データなら読み込むだけで処理を終える
+    if ( PreviewChannelData.value.channelid === channelid ) {
+        MsgDB.value[channelid] = history;
+        return;
+
     }
 
     let index = 0; //チャンネル参照インデックス変数
@@ -626,12 +636,6 @@ socket.on("messageHistory", (history) => {
 
         }
     } catch(e) {}
-
-    if ( PreviewChannelData.value.channelid === channelid ) {
-        MsgDB.value[channelid] = history;
-        return;
-
-    }
 
     //履歴が存在しているなら履歴を頭から追加
     if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {

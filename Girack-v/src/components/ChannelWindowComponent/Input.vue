@@ -101,7 +101,7 @@ export default {
                 });
 
                 //入力欄に表示するためのチャンネル名を取得
-                this.channelname = this.ChannelIndex[this.getPath].channelname;
+                this.channelname = this.channelInfo.channelname;
                 
                 //チャンネルを移動するごとに入力欄へフォーカス
                 this.$el.querySelector("#inp").focus();

@@ -73,6 +73,13 @@ export default {
         //チャンネルの移動を監視
         $route: { //URLパスの変更監視
             handler(newPage, oldPage) {
+                //ページが切り替わったらユーザーページを閉じるように
+                this.userDialogShow = false;
+                //もしひとつ前がプレビューのものだったなら履歴データを削除
+                try {
+                    if ( this.PreviewChannelData.channelid === oldPage.params.id ) delete this.MsgDB[oldPage.params.id];
+                } catch(e) {}
+
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     //チャンネル以外のページ場合、あるいは別のチャンネルでの処理が続いている場合、以降の処理をスキップする
@@ -83,7 +90,10 @@ export default {
                     }
 
                     //ブラウザ上のタブ名を設定
-                    document.title = this.ChannelIndex[this.getPath].channelname;
+                    document.title = this.channelInfo.channelname;
+
+                    //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
+                    if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) ) return 0;
 
                     let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                     this.MsgReadTime[this.getPath] = {
@@ -138,7 +148,7 @@ export default {
         let ref = this; //methodsの関数使う用（直接参照はできないため）
 
         //ブラウザ上のタブ名を設定
-        document.title = this.ChannelIndex[this.getPath].channelname;
+        document.title = this.channelInfo.channelname;
 
         let channelWindow = document.querySelector("#channelWindow");
 

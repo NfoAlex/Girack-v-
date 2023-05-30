@@ -2,7 +2,7 @@
 import Content from "./ChannelWindowComponent/Content.vue";
 import Head from "./ChannelWindowComponent/Head.vue";
 import Input from "./ChannelWindowComponent/Input.vue";
-import { dataMsg, dataChannel, dataUser, getSocket } from "../socket.js";
+import { dataMsg, dataChannel, dataUser, getSocket, getMessage } from "../socket.js";
 
 const socket = getSocket();
 
@@ -30,19 +30,7 @@ export default {
         }
     },
 
-    methods: {
-        //メッセージ履歴を返す
-        getMsgDB() {
-            if ( this.ChannelIndex[this.$route.params.id] !== undefined || this.PreviewChannelData.channelid === this.$route.params.id ) {
-                return this.MsgDB[this.$route.params.id];
-
-            } else {
-                this.$router.push({ path: "/browser" });
-
-            }
-
-        },
-
+    computed: {
         //チャンネル情報を返す
         getChannelInfo() {
             //もしチャンネルリストにあるなら
@@ -57,6 +45,11 @@ export default {
 
             //あるいはプレビュー用としてチャンネルを登録しているなら
             } else if ( this.PreviewChannelData.channelid === this.$route.params.id ) {
+                console.log("ChannelWindow :: getChannelInfo : 元からプレビューする予定のものだな");
+                
+                //履歴を取得
+                getMessage(this.$route.params.id, 25, 0);
+                
                 return {
                     channelname: this.PreviewChannelData.channelname,
                     description: this.PreviewChannelData.description,
@@ -64,18 +57,43 @@ export default {
                     previewmode: true,
                 };
 
+            //プレビューでもないならブラウザで飛ばす
             } else {
-                this.$router.push({ path: "/browser" });
-                return {
-                    channelname: "...",
-                    description: "...",
-                    scope: "public",
-                    previewmode: true,
-                };
+                //プレビュー用チャンネルデータにチャンネルIDを設定
+                this.PreviewChannelData.channelid = this.$route.params.id;
+                console.log("ChannelWindow :: getChannelInfo : channelid->", this.PreviewChannelData.channelid);
+
+                //チャンネル情報の取得
+                socket.emit("getInfoChannel", {
+                    targetid: this.PreviewChannelData.channelid,
+                    reqSender: {
+                        userid: this.Userinfo.userid,
+                        sessionid: this.Userinfo.sessionid
+                    }
+                });
+
+                getMessage(this.$route.params.id, 25, 0); //履歴を取得
+                
+                return this.PreviewChannelData;
 
             }
 
         }
+    },
+
+    methods: {
+        //メッセージ履歴を返す
+        getMsgDB() {
+            if ( this.ChannelIndex[this.$route.params.id] !== undefined || this.PreviewChannelData.channelid === this.$route.params.id ) {
+                return this.MsgDB[this.$route.params.id];
+
+            } else {
+                this.$router.push({ path: "/browser" });
+
+            }
+
+        },
+        
     },
 
 }
@@ -85,15 +103,15 @@ export default {
 <template>
     <div style="height:100vh;" class="d-flex mb-2 flex-column">
         <div :class="[w,head]" class="flex-grow-0 flex-shrink-0">
-            <Head :channelInfo="getChannelInfo()" />
+            <Head :channelInfo="getChannelInfo" />
         </div>
         <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
             <KeepAlive :max="5">
-                <component is="Content" :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo()" :key="$route.params.id" />
+                <component is="Content" :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo" :key="$route.params.id" />
             </KeepAlive>
         </div>
         <div :class="[w]" class="input flex-grow-0 flex-shrink-1">
-            <Input :channelInfo="getChannelInfo()" />
+            <Input :channelInfo="getChannelInfo" />
         </div>
     </div>
 </template>

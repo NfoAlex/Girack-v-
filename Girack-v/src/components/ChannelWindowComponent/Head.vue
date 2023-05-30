@@ -1,12 +1,11 @@
 <script setup>
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
-import { dataChannel, dataUser, setCookie } from '../../socket';
+import { dataUser, setCookie } from '../../socket';
 import ChannelConfig from "./ChannelConfig.vue";
 </script>
 
 <script>
-const { ChannelIndex } = dataChannel(); //チャンネル情報
 const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
 
 export default {
@@ -19,10 +18,6 @@ export default {
             //チャンネルメニューダイアログ用
             channelDialogShow: false,
             channelDialogId: "0001",
-
-            ChannelDisplayname: "...",
-            ChannelDisplayDescription: "...",
-            ChannelScope: "public",
         }
     },
 

@@ -1,6 +1,6 @@
 <script>
 
-import { getSocket, backendURI, dataMsg, dataUser } from '../socket.js';
+import { getSocket, backendURI, dataUser, dataChannel } from '../socket.js';
 
 const socket = getSocket();
 
@@ -9,7 +9,8 @@ export default {
 
     setup() {
         const { Userinfo } = dataUser();
-        return { Userinfo };
+        const { ChannelIndex, PreviewChannelData } = dataChannel();
+        return { Userinfo, ChannelIndex, PreviewChannelData };
 
     },
 
@@ -125,7 +126,32 @@ export default {
 
             }
 
+        },
+
+        //チャンネルボタンをクリックされたときの移動用
+        gotoChannel(channelid,index) {
+            //もし参加しているチャンネルならそのまま移動
+            if ( this.ChannelIndex[channelid] !== undefined ) {
+                this.$router.push({ path: "/c/" + channelid });
+
+            //参加していないチャンネルならプレビューモードとして参加
+            } else {
+                //プレビュー用データへデータを設定
+                this.PreviewChannelData = {
+                    channelid: channelid,
+                    channelname: this.targetUserJoinedChannelList[index].channelname,
+                    description: this.targetUserJoinedChannelList[index].description,
+                    scope: this.targetUserJoinedChannelList[index].scope,
+                    previewmode: true
+                };
+                //そのチャンネルへ移動
+                this.$router.push({ path: "/c/" + channelid });
+
+            }
+
+
         }
+
     },
 
     mounted() {
@@ -292,7 +318,8 @@ export default {
             <!-- 参加しているチャンネル -->
             <v-window-item value="channel" class="ma-5">
                 <v-card
-                    v-for="item in targetUserJoinedChannelList"
+                    @click="gotoChannel(item.channelid,index)"
+                    v-for="(item,index) in targetUserJoinedChannelList"
                     variant="tonal"
                     class="mx-auto rounded-lg d-flex align-center"
                     style="margin-top:8px; padding:6px 4%; width:75%"
