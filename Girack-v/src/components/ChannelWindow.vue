@@ -46,6 +46,9 @@ export default {
             //あるいはプレビュー用としてチャンネルを登録しているなら
             } else if ( this.PreviewChannelData.channelid === this.$route.params.id ) {
                 console.log("ChannelWindow :: getChannelInfo : 元からプレビューする予定のものだな");
+                
+                //履歴を取得
+                getMessage(this.$route.params.id, 25, 0);
                 return {
                     channelname: this.PreviewChannelData.channelname,
                     description: this.PreviewChannelData.description,
