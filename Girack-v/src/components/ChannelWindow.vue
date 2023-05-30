@@ -55,7 +55,7 @@ export default {
             //プレビューでもないならブラウザで飛ばす
             } else {
                 this.PreviewChannelData.channelid = this.$route.params.id;
-                //this.PreviewChannelData.previewmode = true;
+                this.PreviewChannelData.previemode = true;
                 console.log("ChannelWindow :: getChannelInfo : channelid->", this.PreviewChannelData.channelid);
 
                 //チャンネル情報の取得
@@ -68,18 +68,8 @@ export default {
                 });
 
                 getMessage(this.$route.params.id, 25, 0); //履歴を取得
-
-                return {
-                    ...this.PreviewChannelData,
-                    previewmode: true,
-                };
-
-                // return {
-                //     channelname: "...",
-                //     description: "...",
-                //     scope: "public",
-                //     previewmode: true,
-                // };
+                
+                return this.PreviewChannelData;
 
             }
 
