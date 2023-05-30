@@ -85,14 +85,15 @@ export default {
 
             //プレビュー用のチャンネルIDの設定
             this.PreviewChannelData.channelid = channelid;
-            //チャンネル情報の取得
-            socket.emit("getInfoChannel", {
-                targetid: channelid,
-                reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
-                }
-            });
+
+            //プレビュー用にチャンネルデータを横流し
+            this.PreviewChannelData = {
+                channelid: channelid,
+                channelname: this.channelList[channelid].name,
+                description: this.channelList[channelid].description,
+                scope: this.channelList[channelid].scope,
+                previewmode: true,
+            };
 
             getMessage(channelid, 25, 0); //履歴を取得
             this.$router.push({ path: "/c/" + channelid }); //そのページへ移動
