@@ -30,19 +30,7 @@ export default {
         }
     },
 
-    methods: {
-        //メッセージ履歴を返す
-        getMsgDB() {
-            if ( this.ChannelIndex[this.$route.params.id] !== undefined || this.PreviewChannelData.channelid === this.$route.params.id ) {
-                return this.MsgDB[this.$route.params.id];
-
-            } else {
-                this.$router.push({ path: "/browser" });
-
-            }
-
-        },
-
+    computed: {
         //チャンネル情報を返す
         getChannelInfo() {
             //もしチャンネルリストにあるなら
@@ -67,6 +55,8 @@ export default {
             //プレビューでもないならブラウザで飛ばす
             } else {
                 this.PreviewChannelData.channelid = this.$route.params.id;
+                //this.PreviewChannelData.previewmode = true;
+                console.log("ChannelWindow :: getChannelInfo : channelid->", this.PreviewChannelData.channelid);
 
                 //チャンネル情報の取得
                 socket.emit("getInfoChannel", {
@@ -80,15 +70,35 @@ export default {
                 getMessage(this.$route.params.id, 25, 0); //履歴を取得
 
                 return {
-                    channelname: "...",
-                    description: "...",
-                    scope: "public",
+                    ...this.PreviewChannelData,
                     previewmode: true,
                 };
+
+                // return {
+                //     channelname: "...",
+                //     description: "...",
+                //     scope: "public",
+                //     previewmode: true,
+                // };
 
             }
 
         }
+    },
+
+    methods: {
+        //メッセージ履歴を返す
+        getMsgDB() {
+            if ( this.ChannelIndex[this.$route.params.id] !== undefined || this.PreviewChannelData.channelid === this.$route.params.id ) {
+                return this.MsgDB[this.$route.params.id];
+
+            } else {
+                this.$router.push({ path: "/browser" });
+
+            }
+
+        },
+        
     },
 
 }
@@ -98,15 +108,15 @@ export default {
 <template>
     <div style="height:100vh;" class="d-flex mb-2 flex-column">
         <div :class="[w,head]" class="flex-grow-0 flex-shrink-0">
-            <Head :channelInfo="getChannelInfo()" />
+            <Head :channelInfo="getChannelInfo" />
         </div>
         <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
             <KeepAlive :max="5">
-                <component is="Content" :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo()" :key="$route.params.id" />
+                <component is="Content" :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo" :key="$route.params.id" />
             </KeepAlive>
         </div>
         <div :class="[w]" class="input flex-grow-0 flex-shrink-1">
-            <Input :channelInfo="getChannelInfo()" />
+            <Input :channelInfo="getChannelInfo" />
         </div>
     </div>
 </template>
