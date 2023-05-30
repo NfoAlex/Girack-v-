@@ -73,6 +73,9 @@ export default {
         //チャンネルの移動を監視
         $route: { //URLパスの変更監視
             handler(newPage, oldPage) {
+                //ページが切り替わったらユーザーページを閉じるように
+                this.userDialogShow = false;
+
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     //チャンネル以外のページ場合、あるいは別のチャンネルでの処理が続いている場合、以降の処理をスキップする
