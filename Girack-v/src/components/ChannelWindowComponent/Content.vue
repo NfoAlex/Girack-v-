@@ -279,14 +279,14 @@ export default {
         checkShowAvatar(userid, index) {
             try {
                 //分(min)差計算
-                let msgTimeMinBefore = parseInt(this.MsgDBActive[index-1].time.slice(10,12));
-                let msgTimeMinThis = parseInt(this.MsgDBActive[index].time.slice(10,12));
+                let msgTimeMinBefore = parseInt(this.cropMessage[index-1].time.slice(10,12));
+                let msgTimeMinThis = parseInt(this.cropMessage[index].time.slice(10,12));
                     //分差計算
                 let timeMinDifference = msgTimeMinThis - msgTimeMinBefore;
 
                 //時(h)差計算
-                let msgTimeHourBefore = parseInt(this.MsgDBActive[index-1].time.slice(8,10));
-                let msgTimeHourThis = parseInt(this.MsgDBActive[index].time.slice(8,10));
+                let msgTimeHourBefore = parseInt(this.cropMessage[index-1].time.slice(8,10));
+                let msgTimeHourThis = parseInt(this.cropMessage[index].time.slice(8,10));
                     //時差計算
                 let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
 
