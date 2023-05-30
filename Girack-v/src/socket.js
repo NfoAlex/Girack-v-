@@ -21,7 +21,7 @@ export const backendURI = "http://" + location.hostname + ":33333";
 const socket = io(backendURI, {
     transports : ['websocket'],
     reconnection: true,
-    reconnectionDelay: 10,
+    reconnectionDelay: 100,
     reconnectionDelayMax: 1000,
 });
 
