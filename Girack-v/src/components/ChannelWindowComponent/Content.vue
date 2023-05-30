@@ -83,7 +83,10 @@ export default {
                     }
 
                     //ブラウザ上のタブ名を設定
-                    document.title = this.ChannelIndex[this.getPath].channelname;
+                    document.title = this.channelInfo.channelname;
+
+                    //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
+                    if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) ) return 0;
 
                     let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                     this.MsgReadTime[this.getPath] = {
