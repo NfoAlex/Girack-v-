@@ -705,7 +705,7 @@ socket.on("authResult", (dat) => {
 
         //メッセージ履歴の取得
         for ( let cid in Userinfo.value.channelJoined ) {
-            getMessage(Userinfo.value.channelJoined[cid], 20); //リクエスト送信する
+            getMessage(Userinfo.value.channelJoined[cid], 40); //リクエスト送信する
 
         }
 
