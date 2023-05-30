@@ -76,7 +76,9 @@ export default {
                 //ページが切り替わったらユーザーページを閉じるように
                 this.userDialogShow = false;
                 //もしひとつ前がプレビューのものだったなら履歴データを削除
-                if ( this.PreviewChannelData.channelid === oldPage.params.id ) delete this.MsgDB[oldPage.params.id];
+                try {
+                    if ( this.PreviewChannelData.channelid === oldPage.params.id ) delete this.MsgDB[oldPage.params.id];
+                } catch(e) {}
 
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
