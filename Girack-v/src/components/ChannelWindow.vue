@@ -49,6 +49,7 @@ export default {
                 
                 //履歴を取得
                 getMessage(this.$route.params.id, 25, 0);
+                
                 return {
                     channelname: this.PreviewChannelData.channelname,
                     description: this.PreviewChannelData.description,
