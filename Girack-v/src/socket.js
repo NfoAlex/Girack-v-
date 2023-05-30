@@ -578,11 +578,17 @@ socket.on("messageHistory", (history) => {
 
     try {
         channelid = history[0].channelid; //受け取ったデータの中身使っちゃうんだよね
-    }
-    catch(e) {
+    } catch(e) {
         console.log("???");
         console.log(history);
         return;
+    }
+
+    //プレビュー用の履歴データなら読み込むだけで処理を終える
+    if ( PreviewChannelData.value.channelid === channelid ) {
+        MsgDB.value[channelid] = history;
+        return;
+
     }
 
     let index = 0; //チャンネル参照インデックス変数
@@ -630,12 +636,6 @@ socket.on("messageHistory", (history) => {
 
         }
     } catch(e) {}
-
-    if ( PreviewChannelData.value.channelid === channelid ) {
-        MsgDB.value[channelid] = history;
-        return;
-
-    }
 
     //履歴が存在しているなら履歴を頭から追加
     if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
