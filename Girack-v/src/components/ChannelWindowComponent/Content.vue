@@ -60,6 +60,7 @@ export default {
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
+                        this.msgDisplayNum = 25;
 
                     });
 
@@ -113,13 +114,15 @@ export default {
 
         },
 
-        //表示する履歴数を設定する
+        //表示する履歴数を設定
         cropMessage() {
             try {
                 //履歴を表示し始める位置数計算
                 let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
                 //もし開始位置が0未満なら0にする
                 if ( displayStartPosition<0 ) displayStartPosition = 0;
+
+                console.log("Content :: cropMessage : 履歴を出力します 範囲->", this.msgDisplayNum);
                 
                 //履歴を削って返す
                 return this.MsgDBActive.slice(displayStartPosition);
@@ -246,6 +249,12 @@ export default {
             timestamp += time.slice(6,8);
 
             return timestamp;
+
+        },
+
+        //表示する履歴を拡張する
+        cropMessageExtend() {
+            this.msgDisplayNum += 15;
 
         },
 
@@ -691,7 +700,7 @@ export default {
 
         <!-- 履歴読み込みボタン -->
         <div v-if="MsgDBActive!==undefined" style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
-            <v-btn v-if="!channelInfo.previewmode" size="small" @click="getHistory" variant="text">↑過去を読み込む</v-btn>
+            <v-btn v-if="!channelInfo.previewmode" size="small" @click="cropMessageExtend" variant="text">↑過去を読み込む</v-btn>
             <v-btn v-else class="rounded-lg" size="small" @click="" variant="text">履歴を読み込むにはチャンネルに参加してください...</v-btn>
         </div>
 
