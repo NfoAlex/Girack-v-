@@ -18,10 +18,6 @@ export default {
             //チャンネルメニューダイアログ用
             channelDialogShow: false,
             channelDialogId: "0001",
-
-            ChannelDisplayname: "...",
-            ChannelDisplayDescription: "...",
-            ChannelScope: "public",
         }
     },
 
