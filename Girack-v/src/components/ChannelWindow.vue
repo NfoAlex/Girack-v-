@@ -64,6 +64,7 @@ export default {
                     previewmode: true,
                 };
 
+            //プレビューでもないならブラウザで飛ばす
             } else {
                 this.$router.push({ path: "/browser" });
                 return {
