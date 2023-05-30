@@ -241,7 +241,7 @@ export default {
 
         //指定された履歴の日付を取得
         getHistoryDate(index){
-            let time = this.MsgDBActive[index].time;
+            let time = this.cropMessage[index].time;
             let timestamp = "";
 
             timestamp += time.slice(0,4) + "/";
@@ -319,7 +319,7 @@ export default {
 
         //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
         checkMsgPosition(userid, index) {
-            if ( this.MsgDBActive === undefined || this.MsgDBActive.length <= 0 ) return;
+            if ( this.MsgDBActive === undefined || this.cropMessage.length <= 0 ) return;
 
             let AvatarNeedToShowBefore = false;
             let AvatarNeedToShow = false;
@@ -328,7 +328,7 @@ export default {
             //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
               //前
             try {
-                AvatarNeedToShowBefore = this.checkShowAvatar(this.MsgDBActive[index-1].userid, index-1);
+                AvatarNeedToShowBefore = this.checkShowAvatar(this.cropMessage[index-1].userid, index-1);
             } catch(e){}
 
               //今の位置
@@ -338,7 +338,7 @@ export default {
 
               //次
             try {
-                AvatarNeedToShowNext = this.checkShowAvatar(this.MsgDBActive[index+1].userid, index+1);
+                AvatarNeedToShowNext = this.checkShowAvatar(this.cropMessage[index+1].userid, index+1);
             } catch(e){}
 
             let SameWithBefore = false; //ひとつ前と送信者が同じかどうか
@@ -346,7 +346,7 @@ export default {
 
             //一つ前と送信者が今のと同じならそう記録
             try {
-                if ( this.MsgDBActive[index-1].userid === userid ) {
+                if ( this.cropMessage[index-1].userid === userid ) {
                     SameWithBefore = true;
 
                 }
@@ -355,7 +355,7 @@ export default {
 
             //次の送信者が今のと同じならそう記録
             try {
-                if ( this.MsgDBActive[index+1].userid === userid ) {
+                if ( this.cropMessage[index+1].userid === userid ) {
                     SameWithNext = true;
 
                 }
@@ -451,8 +451,8 @@ export default {
         checkDateDifference(index) {
             try {
                 //日を取得
-                let msgDateBefore = parseInt(this.MsgDBActive[index-1].time.slice(6,8));
-                let msgDateThis = parseInt(this.MsgDBActive[index].time.slice(6,8));
+                let msgDateBefore = parseInt(this.cropMessage[index-1].time.slice(6,8));
+                let msgDateThis = parseInt(this.cropMessage[index].time.slice(6,8));
                 //日付の差を計算
                 let dateDifference = msgDateBefore - msgDateThis;
 
