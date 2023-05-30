@@ -59,7 +59,7 @@ const ChannelIndex = ref({
     "0001": {
         channelname: "random",
         description: "Hello, Girack",
-        scope: "public"
+        scope: "public",
     }
     */
 });
@@ -70,7 +70,8 @@ const PreviewChannelData = ref({
     channelid: "0001",
     channelname: "random",
     description: "Hello Girack",
-    scope: "public"
+    scope: "public",
+    previewmode: true
     */
 });
 
@@ -425,6 +426,9 @@ socket.on("infoChannel", (dat) => {
         PreviewChannelData.value.channelname = dat.channelname;
         PreviewChannelData.value.description = dat.description;
         PreviewChannelData.value.scope = dat.scope;
+
+        //チャンネルに渡す時にプレビュー中と処理する用
+        PreviewChannelData.value.previewmode = true;
 
         return;
 
