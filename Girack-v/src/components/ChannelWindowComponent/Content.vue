@@ -27,8 +27,8 @@ export default {
     data() {
         return {
             uri: backendURI, //バックエンドのURI
-            newMessageArrived: false, //新着メッセージが来ているかどうか
-            StateFocus: true,
+            StateFocus: true, //Girackにフォーカスしているかどうか
+            msgDisplayNum: 25,
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -60,6 +60,7 @@ export default {
                     //レンダーを待ってからスクロール
                     this.$nextTick(() => {
                         this.scrollIt(); //スクロールする
+                        this.msgDisplayNum = 25; //メッセージの表示数の初期化
 
                     });
 
@@ -100,7 +101,6 @@ export default {
                         new: 0, //新着メッセージ数を0に
                         mention: 0
                     };
-                    this.newMessageArrived = false; //新着メッセージアリをナシに
                     this.scrollIt(); //スクロールする
 
                 });
@@ -121,6 +121,24 @@ export default {
         getDisplaySize() {
             console.log("Content :: getDisplaySize : 返す->", useDisplay().name.value);
             return useDisplay().name.value;
+
+        },
+
+        //表示する履歴数を設定
+        cropMessage() {
+            try {
+                //履歴を表示し始める位置数計算
+                let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
+                //もし開始位置が0未満なら0にする
+                if ( displayStartPosition<0 ) displayStartPosition = 0;
+
+                console.log("Content :: cropMessage : 履歴を出力します 範囲->", this.msgDisplayNum);
+                
+                //履歴を削って返す
+                return this.MsgDBActive.slice(displayStartPosition);
+            } catch(e) {
+                console.log("Content :: cropMessage : MsgDBが空...?");
+            }
 
         },
 
@@ -227,13 +245,13 @@ export default {
         //さらに過去の履歴(10件)を取得する
         getHistory() {
             console.log("履歴ほしいね :  path -> " + this.getPath + ", hrcount -> " + this.ChannelIndex[this.getPath].historyReadCount);
-            getMessage(this.getPath, 10, this.ChannelIndex[this.getPath].historyReadCount);
+            getMessage(this.getPath, 15, this.ChannelIndex[this.getPath].historyReadCount);
 
         },
 
         //指定された履歴の日付を取得
         getHistoryDate(index){
-            let time = this.MsgDBActive[index].time;
+            let time = this.cropMessage[index].time;
             let timestamp = "";
 
             timestamp += time.slice(0,4) + "/";
@@ -241,6 +259,14 @@ export default {
             timestamp += time.slice(6,8);
 
             return timestamp;
+
+        },
+
+        //表示する履歴を拡張する
+        cropMessageExtend() {
+            //もし表示する数が履歴の長さより長かったらさらに深い履歴をサーバーから取得する
+            if ( this.msgDisplayNum + 15 > this.MsgDBActive.length ) this.getHistory();
+            this.msgDisplayNum += 15;
 
         },
 
@@ -263,14 +289,14 @@ export default {
         checkShowAvatar(userid, index) {
             try {
                 //分(min)差計算
-                let msgTimeMinBefore = parseInt(this.MsgDBActive[index-1].time.slice(10,12));
-                let msgTimeMinThis = parseInt(this.MsgDBActive[index].time.slice(10,12));
+                let msgTimeMinBefore = parseInt(this.cropMessage[index-1].time.slice(10,12));
+                let msgTimeMinThis = parseInt(this.cropMessage[index].time.slice(10,12));
                     //分差計算
                 let timeMinDifference = msgTimeMinThis - msgTimeMinBefore;
 
                 //時(h)差計算
-                let msgTimeHourBefore = parseInt(this.MsgDBActive[index-1].time.slice(8,10));
-                let msgTimeHourThis = parseInt(this.MsgDBActive[index].time.slice(8,10));
+                let msgTimeHourBefore = parseInt(this.cropMessage[index-1].time.slice(8,10));
+                let msgTimeHourThis = parseInt(this.cropMessage[index].time.slice(8,10));
                     //時差計算
                 let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
 
@@ -278,7 +304,7 @@ export default {
                 if ( this.checkDateDifference(index) ) return true;
 
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-                if ( this.MsgDBActive[index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                if ( this.cropMessage[index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
                     //条件でアバターを見せるか見せないか決める
                     if ( timeMinDifference < -55 || timeMinDifference > 4 || timeHourDifference !== 0 ) {
                         return true;
@@ -303,7 +329,7 @@ export default {
 
         //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
         checkMsgPosition(userid, index) {
-            if ( this.MsgDBActive === undefined || this.MsgDBActive.length <= 0 ) return;
+            if ( this.MsgDBActive === undefined || this.cropMessage.length <= 0 ) return;
 
             let AvatarNeedToShowBefore = false;
             let AvatarNeedToShow = false;
@@ -312,7 +338,7 @@ export default {
             //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
               //前
             try {
-                AvatarNeedToShowBefore = this.checkShowAvatar(this.MsgDBActive[index-1].userid, index-1);
+                AvatarNeedToShowBefore = this.checkShowAvatar(this.cropMessage[index-1].userid, index-1);
             } catch(e){}
 
               //今の位置
@@ -322,7 +348,7 @@ export default {
 
               //次
             try {
-                AvatarNeedToShowNext = this.checkShowAvatar(this.MsgDBActive[index+1].userid, index+1);
+                AvatarNeedToShowNext = this.checkShowAvatar(this.cropMessage[index+1].userid, index+1);
             } catch(e){}
 
             let SameWithBefore = false; //ひとつ前と送信者が同じかどうか
@@ -330,7 +356,7 @@ export default {
 
             //一つ前と送信者が今のと同じならそう記録
             try {
-                if ( this.MsgDBActive[index-1].userid === userid ) {
+                if ( this.cropMessage[index-1].userid === userid ) {
                     SameWithBefore = true;
 
                 }
@@ -339,15 +365,15 @@ export default {
 
             //次の送信者が今のと同じならそう記録
             try {
-                if ( this.MsgDBActive[index+1].userid === userid ) {
+                if ( this.cropMessage[index+1].userid === userid ) {
                     SameWithNext = true;
 
                 }
             }
             catch(e) {}
-
+            
             //ここから条件処理
-            if ( AvatarNeedToShowBefore ) {
+            if ( AvatarNeedToShowBefore ) { //一つ前でアバター出てるか
                 if ( AvatarNeedToShow ) {
                     if ( SameWithNext ) {
                         if ( AvatarNeedToShowNext ) {
@@ -432,8 +458,8 @@ export default {
         checkDateDifference(index) {
             try {
                 //日を取得
-                let msgDateBefore = parseInt(this.MsgDBActive[index-1].time.slice(6,8));
-                let msgDateThis = parseInt(this.MsgDBActive[index].time.slice(6,8));
+                let msgDateBefore = parseInt(this.cropMessage[index-1].time.slice(6,8));
+                let msgDateThis = parseInt(this.cropMessage[index].time.slice(6,8));
                 //日付の差を計算
                 let dateDifference = msgDateBefore - msgDateThis;
 
@@ -683,12 +709,12 @@ export default {
 
         <!-- 履歴読み込みボタン -->
         <div v-if="MsgDBActive!==undefined" style="display:flex; margin:8px 0; flex-direction:row; justify-content:space-around;">
-            <v-btn v-if="!channelInfo.previewmode" size="small" @click="getHistory" variant="text">↑過去を読み込む</v-btn>
+            <v-btn v-if="!channelInfo.previewmode" size="small" @click="cropMessageExtend" variant="text">↑過去を読み込む</v-btn>
             <v-btn v-else class="rounded-lg" size="small" @click="" variant="text">履歴を読み込むにはチャンネルに参加してください...</v-btn>
         </div>
 
         <!-- こっからメッセージ表示 -->
-        <div style="z-index:1;" v-for="(m, index) in MsgDBActive">
+        <div style="z-index:1;" v-for="(m, index) in cropMessage">
 
             <!-- 日付線 -->
             <div v-if="checkDateDifference(index)" style="width:100%; padding:12px 0;">
@@ -753,6 +779,13 @@ export default {
                                 @mouseover="mouseOverMsg(m.messageid, 'on')"
                                 @mouseleave="mouseOverMsg(m.messageid, 'off')"
                             >
+                                <!-- 過去を表示していたら -->
+                                <span v-if="index===(msgDisplayNum-25)&&msgDisplayNum!==25" class="d-flex align-center">
+                                    <v-divider class="flex-grow-0 flex-shrink-1"></v-divider>
+                                    <span class="flex-grow-1 flex-shrink-0" style="margin:0 8px;">ここから過去</span>
+                                    <v-divider class="flex-grow-0 flex-shrink-1"></v-divider>
+                                </span>
+                                
                                 <!-- ユーザー名と時間表記 -->
                                 <div class="text-h6 d-flex align-center" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
