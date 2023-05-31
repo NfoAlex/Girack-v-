@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
 
-export const CLIENT_VERSION = "alpha_20230530";
+export const CLIENT_VERSION = "alpha_20230527";
 
 const {
     CONFIG_SYNC,
@@ -132,7 +132,8 @@ export function dataMsg() {
 
 //メッセージ受け取り、履歴の保存
 socket.on("messageReceive", (msg) => {
-    //メッセージ発信元のチャンネルに参加していないなら
+    //ログインあるいはチャンネルに参加していないなら
+    if ( !Userinfo.value.loggedin ) return;
     if ( !Userinfo.value.channelJoined.includes(msg.channelid) ) return;
 
     console.log("socket :: msgReceive : ↓");
@@ -152,8 +153,8 @@ socket.on("messageReceive", (msg) => {
     }
 
     try{
-        //DB配列の存在を確認してから追加
-        if ( MsgDB.value[msg.channelid] !== undefined ) { //undefinedじゃないなら追加
+        //DB配列に追加
+        if ( MsgDB.value[msg.channelid] !== undefined ) {
             MsgDB.value[msg.channelid].push({
                 ...msg
             });
@@ -165,7 +166,7 @@ socket.on("messageReceive", (msg) => {
 
         }
 
-        //指定チャンネルの既読状態がデータになかったら新たに定義
+        //メンション数がデータになかったら新たに定義
         if ( MsgReadTime.value[msg.channelid] === null ) MsgReadTime.value[msg.channelid].mention = 0;
 
         //新着メッセージ数を更新
@@ -709,7 +710,7 @@ socket.on("authResult", (dat) => {
 
         //メッセージ履歴の取得
         for ( let cid in Userinfo.value.channelJoined ) {
-            getMessage(Userinfo.value.channelJoined[cid], 40); //リクエスト送信する
+            getMessage(Userinfo.value.channelJoined[cid], 20); //リクエスト送信する
 
         }
 
