@@ -495,7 +495,7 @@ export default {
                             id="inp"
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
-                            @keydown.enter="EnterTrigger"
+                            @keydown.enter.prevent="EnterTrigger"
                             @keydown.@="AtsignTrigger"
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
