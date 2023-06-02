@@ -46,6 +46,12 @@ export default {
 
                 });
 
+                //改行部分を置き換え
+                msgCleaned = msgCleaned.replace(("\n"), function(c){
+                    return "<br>";
+
+                });
+
                 //人のメンションならセカンダリーの色に着色
                 msgCleaned = msgCleaned.replace(this.mentionRegex, function(c){
                     let userid = "";
