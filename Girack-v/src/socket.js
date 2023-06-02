@@ -605,6 +605,19 @@ socket.on("messageHistory", (history) => {
         //既読状態がそもそも無ければやらない
         if ( MsgReadTime.value[channelid] === undefined ) break;
 
+        //もしユーザーの名前リストに名前がなかったら
+        if ( UserIndex.value[history[index].userid] === undefined ) {
+            //名前をリクエスト
+            socket.emit("getInfoUser", {
+                targetid: history[index].userid,
+                reqSender: {
+                    userid: Userinfo.value.userid, //ユーザーID
+                    sessionid: Userinfo.value.sessionid //セッションID
+                }
+            });
+
+        }
+
         //既読状態の時間から新着メッセージ数を加算
         if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
             //メンションされていたかどうかにあわせて既読状態を更新
