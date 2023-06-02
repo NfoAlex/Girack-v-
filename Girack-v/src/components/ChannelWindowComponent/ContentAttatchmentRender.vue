@@ -117,7 +117,7 @@ export default {
                 v-if="file.type.includes('image/')"
                 @click="imageDialogShow=true;imageDialogSrc=filesrc + channelid + '/' + file.fileid;"
                 class="flex-shrink-1"
-                style="max-height:150px; min-height:30px; height:100%; min-width:30%; max-width:150px; cursor:pointer;"
+                style="height:150px; min-width:30%; max-width:150px; cursor:pointer;"
                 :src="filesrc + channelid + '/' + file.fileid"
             >
                 <template v-slot:error>

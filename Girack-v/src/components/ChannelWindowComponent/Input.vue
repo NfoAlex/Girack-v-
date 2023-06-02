@@ -182,6 +182,13 @@ export default {
         EnterTrigger(event) {
             if ( event.keyCode !== 13 ) return; //変換中のEnterなら処理させない
 
+            //Shiftが同時に押されていたら改行するだけ
+            if ( event.shiftKey ) {
+                this.txt+="\n";
+                return;
+
+            }
+
             //もしメンションのゆーざー検索が有効ならメンション文を打ち込む、違うならメッセージ送信
             if ( this.searchMode.enabled ) {
                 //メンション文打ち込み開始
@@ -300,8 +307,12 @@ export default {
 
         //メンション用のユーザー検索の十字キーでのユーザー選択変更部分
         changeMentionUserSelect(e) {
-            //上下の十字キーの入力からのテキストのカーソル移動を防ぐ
-            e.preventDefault();
+            //上下の十字キーの入力からのテキストのカーソル移動を防ぐ(メンション検索中限定)
+            if ( this.searchMode.enabled ) {
+                e.preventDefault();
+                return;
+
+            }
 
             //もしキー入力が下矢印で、かつ選択しているインデックス番号が(検索結果配列の長さ-1)未満なら
             if ( e.code === "ArrowDown" && this.searchDisplayArray.length-1 > this.searchMode.selectedIndex ) {
@@ -489,21 +500,22 @@ export default {
                 >
                     <template v-slot:activator="{ props }">
                         <!-- 入力部分 -->
-                        <v-text-field
-                            style="height:fit-content"
+                        
+
+                        <v-textarea
                             id="inp"
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
-                            @keydown.enter="EnterTrigger"
+                            @keydown.enter.prevent="EnterTrigger"
                             @keydown.@="AtsignTrigger"
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
                             variant="solo"
-                            density="compact"
                             clearable
+                            no-resize
                             v-model="txt"
                             v-bind="props"
-                            :single-line="true"
+                            rows="1"
                         >
 
                             <!-- ファイルアップロード部分 -->
@@ -529,7 +541,9 @@ export default {
                                 </v-btn>
                             </template>
 
-                        </v-text-field>
+                        </v-textarea>
+
+                        
                     </template>
 
                     <!-- ユーザー検索候補の表示 -->
@@ -558,7 +572,7 @@ export default {
                     </v-list>
                 </v-menu>
             
-                <v-btn @click="msgSend(null,'byBtn')" icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
+                <v-btn @click="msgSend(null,'byBtn')" icon="" size="large" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
                     <v-icon icon="mdi:mdi-send-outline"></v-icon>
                     <v-tooltip
                         activator="parent"
