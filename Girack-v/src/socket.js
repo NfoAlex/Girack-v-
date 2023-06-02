@@ -132,8 +132,11 @@ export function dataMsg() {
 
 //メッセージ受け取り、履歴の保存
 socket.on("messageReceive", (msg) => {
-    //メッセージ発信元のチャンネルに参加していないなら
-    if ( !Userinfo.value.channelJoined.includes(msg.channelid) ) return;
+    //メッセージ発信元のチャンネルに参加してなくてかつプレビューでもないなら
+    if (
+        !Userinfo.value.channelJoined.includes(msg.channelid) &&
+        PreviewChannelData.value.channelid !== msg.channelid
+    ) return;
 
     console.log("socket :: msgReceive : ↓");
     console.log(msg);
@@ -586,6 +589,27 @@ socket.on("messageHistory", (history) => {
 
     //プレビュー用の履歴データなら読み込むだけで処理を終える
     if ( PreviewChannelData.value.channelid === channelid ) {
+        //履歴分ユーザーデータを持っているか調べて持ってなければ取得する
+        for ( let index in history ) {
+            //もしユーザーの名前リストに名前がなかったら
+            if ( UserIndex.value[history[index].userid] === undefined ) {
+                //データ受け取るまでのホルダー
+                UserIndex.value[history[index].userid] = {username:"loading..."};
+                //名前をリクエスト
+                socket.emit("getInfoUser", {
+                    targetid: history[index].userid,
+                    reqSender: {
+                        userid: Userinfo.value.userid, //ユーザーID
+                        sessionid: Userinfo.value.sessionid //セッションID
+                    }
+                });
+
+            }
+
+        }
+
+        console.log("messageHistory :: プレビュー用に読み込まれました...");
+
         MsgDB.value[channelid] = history;
         return;
 
@@ -604,6 +628,21 @@ socket.on("messageHistory", (history) => {
     for ( index in history ) {
         //既読状態がそもそも無ければやらない
         if ( MsgReadTime.value[channelid] === undefined ) break;
+
+        //もしユーザーの名前リストに名前がなかったら
+        if ( UserIndex.value[history[index].userid] === undefined ) {
+            //データ受け取るまでのホルダー
+            UserIndex.value[history[index].userid] = {username:"loading..."};
+            //名前をリクエスト
+            socket.emit("getInfoUser", {
+                targetid: history[index].userid,
+                reqSender: {
+                    userid: Userinfo.value.userid, //ユーザーID
+                    sessionid: Userinfo.value.sessionid //セッションID
+                }
+            });
+
+        }
 
         //既読状態の時間から新着メッセージ数を加算
         if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {

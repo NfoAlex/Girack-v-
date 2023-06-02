@@ -790,7 +790,7 @@ export default {
                                 <div class="text-h6 d-flex align-center" v-if="checkShowAvatar(m.userid, index)">
                                     <!-- ユーザー名 -->
                                     <span class="text-truncate">
-                                        {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : needUserIndex(m.userid) }}
+                                        {{ UserIndex[m.userid]!==undefined ? UserIndex[m.userid].username : m.userid }}
                                     </span>
 
                                     <!-- ロールバッジ -->
