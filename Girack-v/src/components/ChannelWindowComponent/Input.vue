@@ -307,8 +307,12 @@ export default {
 
         //メンション用のユーザー検索の十字キーでのユーザー選択変更部分
         changeMentionUserSelect(e) {
-            //上下の十字キーの入力からのテキストのカーソル移動を防ぐ
-            if ( this.searchMode.enabled ) e.preventDefault();
+            //上下の十字キーの入力からのテキストのカーソル移動を防ぐ(メンション検索中限定)
+            if ( this.searchMode.enabled ) {
+                e.preventDefault();
+                return;
+
+            }
 
             //もしキー入力が下矢印で、かつ選択しているインデックス番号が(検索結果配列の長さ-1)未満なら
             if ( e.code === "ArrowDown" && this.searchDisplayArray.length-1 > this.searchMode.selectedIndex ) {
