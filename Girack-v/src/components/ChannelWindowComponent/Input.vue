@@ -182,6 +182,13 @@ export default {
         EnterTrigger(event) {
             if ( event.keyCode !== 13 ) return; //変換中のEnterなら処理させない
 
+            //Shiftが同時に押されていたら改行するだけ
+            if ( event.shiftKey ) {
+                this.txt+="\n";
+                return;
+
+            }
+
             //もしメンションのゆーざー検索が有効ならメンション文を打ち込む、違うならメッセージ送信
             if ( this.searchMode.enabled ) {
                 //メンション文打ち込み開始
