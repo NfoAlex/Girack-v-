@@ -34,6 +34,7 @@ export default {
         return {
             uri: backendURI,
             txt: "", //入力した文字
+            txtinputRow: 1, //入力する文字の行数
             fileInputData: [], //アップロードするファイル
 
             dialogChannelMove: false, //チャンネル移動確認ダイアログ
@@ -111,6 +112,12 @@ export default {
 
         //(メンション用)入力したテキストを監視してユーザー名を検索しようとしているか調べる
         txt() {
+            //改行の数分入力欄を拡張、５行まで
+            if ( this.txt.split('\n').length < 5 ) {
+                this.txtinputRow = this.txt.split('\n').length; //入力するテキストの行数
+
+            }
+
             //@が入力されたら検索モードに入る
             if ( this.txt[this.txt.length-1] === "@" ) {
                 this.searchMode.enabled = true; //検索モードを有効化
@@ -515,7 +522,7 @@ export default {
                             no-resize
                             v-model="txt"
                             v-bind="props"
-                            rows="1"
+                            :rows="txtinputRow"
                         >
 
                             <!-- ファイルアップロード部分 -->
