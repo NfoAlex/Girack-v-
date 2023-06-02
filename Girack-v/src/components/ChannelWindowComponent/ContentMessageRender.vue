@@ -35,25 +35,25 @@ export default {
             try {
 
                 //XSS対策用
-                msgCleaned = String(msg).replace(this.XSSRegex, function(c){
+                msgCleaned = String(msg).replaceAll(this.XSSRegex, function(c){
                     return '&#'+c.charCodeAt(0)+';';
 
                 });
 
                 //自分に対するメンションなら着色
-                msgCleaned = msgCleaned.replace(("@/"+this.Userinfo.userid + "/"), function(c){
+                msgCleaned = msgCleaned.replaceAll(("@/"+this.Userinfo.userid + "/"), function(c){
                     return "<span style='color:orange'>@" + REF.Userinfo.username + "</span>";
 
                 });
 
                 //改行部分を置き換え
-                msgCleaned = msgCleaned.replace(("\n"), function(c){
+                msgCleaned = msgCleaned.replaceAll(("\n"), function(c){
                     return "<br>";
 
                 });
 
                 //人のメンションならセカンダリーの色に着色
-                msgCleaned = msgCleaned.replace(this.mentionRegex, function(c){
+                msgCleaned = msgCleaned.replaceAll(this.mentionRegex, function(c){
                     let userid = "";
 
                     //ユーザーIDを抽出
@@ -65,11 +65,11 @@ export default {
 
                 });
 
-            //リンクをクリックできる形にする
-            return msgCleaned.replace(this.URLRegex, (url) => {
-                return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
+                //リンクをクリックできる形にする
+                return msgCleaned.replaceAll(this.URLRegex, (url) => {
+                    return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
 
-            });
+                });
 
             } catch(e) {
                 console.log("ContentMessageRender :: formatMessage : エラー -> ", e);
