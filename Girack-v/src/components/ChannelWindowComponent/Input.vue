@@ -499,7 +499,6 @@ export default {
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
                             variant="solo"
-                            density="compact"
                             clearable
                             v-model="txt"
                             v-bind="props"
@@ -558,7 +557,7 @@ export default {
                     </v-list>
                 </v-menu>
             
-                <v-btn @click="msgSend(null,'byBtn')" icon="" size="small" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
+                <v-btn @click="msgSend(null,'byBtn')" icon="" size="large" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
                     <v-icon icon="mdi:mdi-send-outline"></v-icon>
                     <v-tooltip
                         activator="parent"
