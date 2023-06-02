@@ -75,9 +75,13 @@ export default {
             handler(newPage, oldPage) {
                 //ページが切り替わったらユーザーページを閉じるように
                 this.userDialogShow = false;
-                //もしひとつ前がプレビューのものだったなら履歴データを削除
+                //もしひとつ前がプレビューのものだったなら履歴データと既読状態を削除
                 try {
-                    if ( this.PreviewChannelData.channelid === oldPage.params.id ) delete this.MsgDB[oldPage.params.id];
+                    if ( this.PreviewChannelData.channelid === oldPage.params.id ) {
+                        delete this.MsgDB[oldPage.params.id];
+                        delete this.MsgReadTime[oldPage.params.id];
+                    
+                    }
                 } catch(e) {}
 
                 //レンダーを待ってからスクロール
