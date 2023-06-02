@@ -168,6 +168,9 @@ socket.on("messageReceive", (msg) => {
 
         }
 
+        //プレビューモードならここでやめる
+        if ( PreviewChannelData.value.channelid === msg.channelid ) return;
+
         //指定チャンネルの既読状態がデータになかったら新たに定義
         if ( MsgReadTime.value[msg.channelid] === null ) MsgReadTime.value[msg.channelid].mention = 0;
 
