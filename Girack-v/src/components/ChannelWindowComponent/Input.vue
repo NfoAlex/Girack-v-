@@ -489,8 +489,9 @@ export default {
                 >
                     <template v-slot:activator="{ props }">
                         <!-- 入力部分 -->
-                        <v-text-field
-                            style="height:fit-content"
+                        
+
+                        <v-textarea
                             id="inp"
                             ref="inp"
                             :placeholder="channelInfo.channelname + 'へ送信'"
@@ -500,9 +501,10 @@ export default {
                             @keydown.down="changeMentionUserSelect"
                             variant="solo"
                             clearable
+                            no-resize
                             v-model="txt"
                             v-bind="props"
-                            :single-line="true"
+                            rows="1"
                         >
 
                             <!-- ファイルアップロード部分 -->
@@ -528,7 +530,9 @@ export default {
                                 </v-btn>
                             </template>
 
-                        </v-text-field>
+                        </v-textarea>
+
+                        
                     </template>
 
                     <!-- ユーザー検索候補の表示 -->
