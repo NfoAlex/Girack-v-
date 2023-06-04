@@ -48,7 +48,7 @@ export default {
 
                 //改行部分を置き換え
                 msgCleaned = msgCleaned.replaceAll(("\n"), function(c){
-                    return "<br>";
+                    return " <br>";
 
                 });
 
