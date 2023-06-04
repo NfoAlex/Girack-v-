@@ -164,6 +164,22 @@ export default {
                 }
             });
 
+        },
+
+        //チャンネルリストの取得
+        SOCKETinfoList(dat) {
+            //型が違うかデータが無効なら関数を終わらせる
+            if ( dat.type !== "channel" || dat === -1 ) {
+                console.log("ChannelBrwoser :: infoList : データ違うっぽい???"); 
+                return;
+
+            }
+            
+            this.channelList = dat.channelList; //リスト追加
+
+            console.log("ChannelBrwoser :: infoList : dat ↓ ");
+            console.log(dat);
+
         }
     },
 
@@ -181,20 +197,7 @@ export default {
         });
 
         //結果受け取り
-        socket.on("infoList", (dat) => {
-            //型が違うかデータが無効なら関数を終わらせる
-            if ( dat.type !== "channel" || dat === -1 ) {
-                console.log("ChannelBrwoser :: infoList : データ違うっぽい???"); 
-                return;
-
-            }
-            
-            this.channelList = dat.channelList; //リスト追加
-
-            console.log("ChannelBrwoser :: infoList : dat ↓ ");
-            console.log(dat);
-
-        });
+        socket.on("infoList", this.SOCKETinfoList);
 
         document.title = "チャンネルブラウザ"; //タブ名を変更
 
@@ -202,7 +205,7 @@ export default {
 
     unmounted() {
         //通信重複防止
-        socket.off("infoList");
+        socket.off("infoList", this.SOCKETinfoList);
 
     }
 
