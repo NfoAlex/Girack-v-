@@ -178,6 +178,7 @@ export default {
 
         },
 
+        //参加しているユーザーをリスト化
         SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
             //ユーザー名でソートして追加
             this.channelJoinedUser = channelJoinedUserList.sort((u1, u2) => {
@@ -193,6 +194,7 @@ export default {
 
         },
 
+        //ユーザーの検索結果をリスト化
         SOCKETinfoSearchUser(result) {
             this.userSearchResult = result;
 
