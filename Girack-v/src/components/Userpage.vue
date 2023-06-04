@@ -2,7 +2,7 @@
 
 import { getSocket, backendURI, dataUser, dataChannel } from '../socket.js';
 
-const socket = getSocket();
+const socketUserpage = getSocket();
 
 export default {
     props: ["userid"],
@@ -45,7 +45,7 @@ export default {
 
                 } else { //変わった瞬間ロール更新を送信
                     //ロールの更新を通知
-                    socket.emit("mod", {
+                    socketUserpage.emit("mod", {
                         targetid: this.userid,
                         action: {
                             change: "role",
@@ -67,7 +67,7 @@ export default {
         //BANする関数
         banUser() {
             //BANトリガーを送信
-            socket.emit("mod", {
+            socketUserpage.emit("mod", {
                 targetid: this.userid,
                 action: {
                     change: "ban",
@@ -83,7 +83,7 @@ export default {
         //ユーザーを削除する関数
         deleteUser() {
             //削除すると送信
-            socket.emit("mod", {
+            socketUserpage.emit("mod", {
                 targetid: this.userid,
                 action: {
                     change: "delete",
@@ -150,42 +150,9 @@ export default {
             }
 
 
-        }
+        },
 
-    },
-
-    mounted() {
-        //自分のロールに合わせて選べるロールの範囲を設定
-        if ( this.Userinfo.role === "Admin" ) { //Adminなら全員選べるようにする
-            this.roleList = ["Admin", "Moderator", "Member"];
-
-        } else if ( this.Userinfo.role === "Moderator" ) { //ModeratorならModerator以下
-            this.roleList = ["Moderator", "Member"];
-
-        } else {
-            this.roleList = [];
-
-        }
-
-        //参加チャンネルの情報取得
-        socket.on("infoChannel", (dat) => {
-            //もしチャンネルデータが空ならなにもしない
-            if ( dat.channelname === null ) return -1;
-
-            //表示するチャンネル参加リストの配列へ追加
-            this.targetUserJoinedChannelList.push({
-                channelname: dat.channelname,
-                channelid: dat.channelid,
-                description: dat.description,
-                scope: dat.scope
-            });
-
-            console.log("Userpage :: mounted : チャンネル情報リスト->", this.targetUserJoinedChannelList);
-
-        });
-
-        //ユーザーの情報受け取り
-        socket.on("infoUser", (dat) => {
+        fntargetinfo(dat) {
             //受信した情報がこいつのと確認して処理
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
@@ -214,7 +181,7 @@ export default {
 
                 //参加しているチャンネルリストの情報取得
                 for ( let index in dat.channelJoined ) {
-                    socket.emit("getInfoChannel", {
+                    socketUserpage.emit("getInfoChannel", {
                         targetid: dat.channelJoined[index],
                         reqSender: {
                             userid: this.Userinfo.userid,
@@ -226,10 +193,49 @@ export default {
 
             }
 
-        });
+        },
+
+        fntargetUserJoinedChannelList(dat) {
+                //もしチャンネルデータが空ならなにもしない
+                if ( dat.channelname === null ) return -1;
+
+                //表示するチャンネル参加リストの配列へ追加
+                this.targetUserJoinedChannelList.push({
+                    channelname: dat.channelname,
+                    channelid: dat.channelid,
+                    description: dat.description,
+                    scope: dat.scope
+                });
+
+                console.log("Userpage :: mounted : チャンネル情報リスト->", this.targetUserJoinedChannelList);
+
+        }
+
+    },
+
+    mounted() {
+        
+
+        //自分のロールに合わせて選べるロールの範囲を設定
+        if ( this.Userinfo.role === "Admin" ) { //Adminなら全員選べるようにする
+            this.roleList = ["Admin", "Moderator", "Member"];
+
+        } else if ( this.Userinfo.role === "Moderator" ) { //ModeratorならModerator以下
+            this.roleList = ["Moderator", "Member"];
+
+        } else {
+            this.roleList = [];
+
+        }
+
+        //参加チャンネルの情報取得
+        socketUserpage.on("infoChannel", this.fntargetUserJoinedChannelList);
+
+        //ユーザーの情報受け取り
+        socketUserpage.on("infoUser", this.fntargetinfo);
 
         //ユーザー情報取得
-        socket.emit("getInfoUser", {
+        socketUserpage.emit("getInfoUser", {
             targetid: this.userid,
             reqSender: {
                 userid: dataUser().Userinfo.value.userid,
@@ -239,13 +245,12 @@ export default {
 
         console.log("Userpage :: path",this.$route.path);
 
-
     },
 
     unmounted() {
         //socket通信の重複防止
-        socket.off("infoUser");
-        socket.off("infoChannel");
+        socketUserpage.off("infoUser", this.fntargetinfo);
+        socketUserpage.off("infoChannel", this.fntargetUserJoinedChannelList);
 
     }
 
