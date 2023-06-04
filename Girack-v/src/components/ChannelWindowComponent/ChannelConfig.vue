@@ -176,6 +176,28 @@ export default {
                 }
             });
 
+        },
+
+        //参加しているユーザーをリスト化
+        SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
+            //ユーザー名でソートして追加
+            this.channelJoinedUser = channelJoinedUserList.sort((u1, u2) => {
+                if ( u1.username > u2.username ) {
+                    return 1;
+
+                } else {
+                    return -1;
+
+                }
+
+            });
+
+        },
+
+        //ユーザーの検索結果をリスト化
+        SOCKETinfoSearchUser(result) {
+            this.userSearchResult = result;
+
         }
 
     },
@@ -189,26 +211,10 @@ export default {
 
 
         //チャンネル参加者リストを受信
-        socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
-            //ユーザー名でソートして追加
-            this.channelJoinedUser = channelJoinedUserList.sort((u1, u2) => {
-                if ( u1.username > u2.username ) {
-                    return 1;
-
-                } else {
-                    return -1;
-
-                }
-
-            });
-
-        });
+        socket.on("infoChannelJoinedUserList", this.SOCKETinfoChannelJoinedUserList);
 
         //ユーザー名検索の結果受け取り用
-        socket.on("infoSearchUser", (result) => {
-            this.userSearchResult = result;
-
-        });
+        socket.on("infoSearchUser", this.SOCKETinfoSearchUser);
 
         //チャンネルに参加しているユーザーリストを取得
         socket.emit("getInfoChannelJoinedUserList", {
@@ -223,8 +229,8 @@ export default {
 
     unmounted() {
         //通信重複防止
-        socket.off("infoChannelJoinedUserList");
-        socket.off("infoSearchUser");
+        socket.off("infoChannelJoinedUserList", this.SOCKETinfoChannelJoinedUserList);
+        socket.off("infoSearchUser", this.SOCKETinfoSearchUser);
 
     }
 

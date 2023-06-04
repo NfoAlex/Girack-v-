@@ -51,6 +51,45 @@ export default {
             this.error = false;
             this.registerResult = 0;
 
+        },
+
+        //認証結果の受け取りと処理
+        SOCKETauthResult(dat) {
+            //ログインできたらページ移動
+            if ( dat.result ) {
+                this.success = true; //成功を表示
+                setTimeout(() => this.$emit("login"), 10); //画面遷移
+
+            } else {
+                this.error = true; //エラーを表示
+
+            }
+
+        },
+
+        SOCKETregisterEnd(resultPassword) {
+            //結果がダメならそう表示
+            if ( resultPassword === -1 ) {
+                this.registerResult = -1;
+                return;
+
+            }
+
+            this.pwFromRegister = resultPassword; //パスワード更新
+            this.registerResult = 1; //結果成功ととして表示
+
+        },
+
+        SOCKETinfoServer(dat) {
+            this.serverinfoLoaded = dat; //サーバーの情報
+            document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
+
+            //もしサーバーとクライアントがバージョンが違っていたら
+            if ( this.serverinfoLoaded.serverVersion !== CLIENT_VERSION ) {
+                this.clientVersionDifference = true;
+
+            }
+
         }
     },
 
@@ -65,45 +104,13 @@ export default {
         }
 
         //認証結果の受け取りと処理
-        socket.on("authResult", (dat) => {
-            //ログインできたらページ移動
-            if ( dat.result ) {
-                this.success = true; //成功を表示
-                setTimeout(() => this.$emit("login"), 10); //画面遷移
-
-            } else {
-                this.error = true; //エラーを表示
-
-            }
-            
-        });
+        socket.on("authResult", this.SOCKETauthResult);
 
         //登録ができたと受信したときの処理
-        socket.on("registerEnd", (resultPassword) => {
-            //結果がダメならそう表示
-            if ( resultPassword === -1 ) {
-                this.registerResult = -1;
-                return;
-
-            }
-
-            this.pwFromRegister = resultPassword; //パスワード更新
-            this.registerResult = 1; //結果成功ととして表示
-
-        });
+        socket.on("registerEnd", this.SOCKETregisterEnd);
 
         //サーバー名表示用
-        socket.on("infoServer", (dat) => {
-            this.serverinfoLoaded = dat; //サーバーの情報
-            document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
-
-            //もしサーバーとクライアントがバージョンが違っていたら
-            if ( this.serverinfoLoaded.serverVersion !== CLIENT_VERSION ) {
-                this.clientVersionDifference = true;
-
-            }
-
-        });
+        socket.on("infoServer", this.SOCKETinfoServer);
 
         //接続確認できたら接続できた状態にする
         socket.on("connect", () => {
@@ -115,8 +122,9 @@ export default {
 
     unmounted() {
         //通信の重複防止
-        socket.off("authResult");
-        socket.off("serverinfo");
+        socket.off("authResult", this.SOCKETauthResult);
+        socket.off("registerEnd", this.SOCKETregisterEnd);
+        socket.off("infoServer", this.SOCKETinfoServer);
 
     }
 

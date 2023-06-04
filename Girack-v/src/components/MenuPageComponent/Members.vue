@@ -61,9 +61,9 @@ export default {
         }
     },
 
-    mounted() {
+    methods: {
         //ユーザーリストの受信用
-        socket.on("infoList", (dat) => {
+        SOCKETinfoList(dat) {
             //型がユーザーリストだったらデータを登録
             if ( dat.type === "user" ) {
                 this.userList = dat.userList; //ユーザーリストを設定
@@ -80,8 +80,14 @@ export default {
                 });
 
             }
-            
-        });
+
+        }
+
+    },
+
+    mounted() {
+        //ユーザーリストの受信用
+        socket.on("infoList", this.SOCKETinfoList);
 
         //ユーザーリストの情報取得
         socket.emit("getInfoList", {
@@ -96,7 +102,7 @@ export default {
 
     unmounted() {
         //通信重複防止
-        socket.off("infoList");
+        socket.off("infoList", this.SOCKETinfoList);
 
     }
 
