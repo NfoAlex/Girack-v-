@@ -249,7 +249,7 @@ export default {
         //さらに過去の履歴(10件)を取得する
         getHistory() {
             console.log("履歴ほしいね :  path -> " + this.getPath + ", hrcount -> " + this.ChannelIndex[this.getPath].historyReadCount);
-            getMessage(this.getPath, 15, this.ChannelIndex[this.getPath].historyReadCount);
+            getMessage(this.getPath, 15, this.MsgDBActive.length);
 
         },
 
