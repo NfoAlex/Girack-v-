@@ -62,6 +62,7 @@ export default {
     },
 
     methods: {
+        //ユーザーリストの受信用
         SOCKETinfoList(dat) {
             //型がユーザーリストだったらデータを登録
             if ( dat.type === "user" ) {
