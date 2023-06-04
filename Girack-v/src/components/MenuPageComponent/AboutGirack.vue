@@ -16,9 +16,9 @@ export default {
 
 <template>
     <div class="text-center pa-5" style="width:80%">
-        <p class="text-h3">Girack</p>
+        <p class="text-h3">FixSocket</p>
         <br>
-        <p class="text-h5">MultiRows</p>
+        <p class="text-h5"></p>
         <p>ビルド : {{ clientVersion }}</p>
         <br>
         <p>それ以外書くことな</p>
