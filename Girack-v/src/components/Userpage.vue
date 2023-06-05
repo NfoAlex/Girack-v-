@@ -322,7 +322,7 @@ export default {
 
             </div>
 
-            <v-divider></v-divider>
+            <v-divider style="margin-top:16px;"></v-divider>
             
             <!-- タブの中身 -->
             <v-window v-model="tab" style="overflow-y:auto;">
