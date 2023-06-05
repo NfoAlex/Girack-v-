@@ -9,8 +9,8 @@ let loopGetSessionOnline = null; //オンラインユーザー取得ループ用
 export default {
     
     setup() {
-        const { Userinfo } = dataUser(); //ユーザー情報
-        return { Userinfo };
+        const { myUserinfo } = dataUser(); //ユーザー情報
+        return { myUserinfo };
     },
 
     components: { Userpage },
@@ -75,8 +75,8 @@ export default {
         socket.emit("getInfoList", {
             target: "user",
             reqSender: {
-                userid: this.Userinfo.userid,
-                sessionid: this.Userinfo.sessionid
+                userid: this.myUserinfo.userid,
+                sessionid: this.myUserinfo.sessionid
             }
         });
 
@@ -85,8 +85,8 @@ export default {
             socket.emit("getInfoList", {
                 target: "user",
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
         }, 500);

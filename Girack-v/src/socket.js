@@ -56,7 +56,7 @@ import { dataMsg } from './data/dataMsg.js';
 socket.on("messageReceive", (msg) => {
     //メッセージ発信元のチャンネルに参加してなくてかつプレビューでもないなら
     if (
-        !dataUser().Userinfo.value.channelJoined.includes(msg.channelid) &&
+        !dataUser().myUserinfo.value.channelJoined.includes(msg.channelid) &&
         dataChannel().PreviewChannelData.value.channelid !== msg.channelid
     ) return;
 
@@ -69,8 +69,8 @@ socket.on("messageReceive", (msg) => {
         socket.emit("getInfoUser", {
             targetid: msg.userid,
             reqSender: {
-                userid: dataUser().Userinfo.value.userid, //ユーザーID
-                sessionid: dataUser().Userinfo.value.sessionid //セッションID
+                userid: dataUser().myUserinfo.value.userid, //ユーザーID
+                sessionid: dataUser().myUserinfo.value.sessionid //セッションID
             }
         });
 
@@ -98,7 +98,7 @@ socket.on("messageReceive", (msg) => {
 
         //新着メッセージ数を更新
         if ( dataMsg().MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
-            if ( msg.content.includes("@" + dataUser().Userinfo.value.username) ) {
+            if ( msg.content.includes("@" + dataUser().myUserinfo.value.username) ) {
                 dataMsg().MsgReadTime.value[msg.channelid] = {
                     time: msg.time, //最後に読んだ時間
                     new: 1,
@@ -118,7 +118,7 @@ socket.on("messageReceive", (msg) => {
 
         } else { //すでにあるなら加算
             //メンションか自分への返信ならメンションを加算
-            if ( msg.content.includes("@/" + dataUser().Userinfo.value.userid + "/") || msg.replyData.userid === dataUser().Userinfo.value.userid ) {
+            if ( msg.content.includes("@/" + dataUser().myUserinfo.value.userid + "/") || msg.replyData.userid === dataUser().myUserinfo.value.userid ) {
                 if ( dataMsg().MsgReadTime.value[msg.channelid].mention === null ) {
                     dataMsg().MsgReadTime.value[msg.channelid].mention = 0;
 
@@ -143,15 +143,15 @@ socket.on("messageReceive", (msg) => {
         socket.emit("updateUserSaveMsgReadState", {
             msgReadState: dataMsg().MsgReadTime.value,
             reqSender: {
-                userid: dataUser().Userinfo.value.userid,
-                sessionid: dataUser().Userinfo.value.sessionid
+                userid: dataUser().myUserinfo.value.userid,
+                sessionid: dataUser().myUserinfo.value.sessionid
             }
         });
 
         //新着のメッセージを通知
         if (
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
-            msg.userid !== dataUser().Userinfo.value.userid && //送信者が自分じゃない
+            msg.userid !== dataUser().myUserinfo.value.userid && //送信者が自分じゃない
             !LIST_NOTIFICATION_MUTE_CHANNEL.value.includes(msg.channelid) && //ミュートリストにチャンネルが入っていない
             (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、または違うタブなら
         ) {
@@ -165,10 +165,10 @@ socket.on("messageReceive", (msg) => {
 
             } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
                 //メンションの条件である@<名前>が入っているか
-                if ( msg.content.includes("@/" + dataUser().Userinfo.value.userid + "/") ) {
+                if ( msg.content.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
                     let contentToDisplay = msg.content.replace(/@\/([0-9]*)\//g,(mentionedId) => {
-                        if ( mentionedId.includes(dataUser().Userinfo.value.userid) ) {
-                            return "@" + dataUser().Userinfo.value.username;
+                        if ( mentionedId.includes(dataUser().myUserinfo.value.userid) ) {
+                            return "@" + dataUser().myUserinfo.value.username;
 
                         }
 
@@ -183,7 +183,7 @@ socket.on("messageReceive", (msg) => {
                 }
 
                 //自分宛の返信なら
-                if ( msg.replyData.userid === dataUser().Userinfo.value.userid ) {
+                if ( msg.replyData.userid === dataUser().myUserinfo.value.userid ) {
                     //通知を出す
                     new Notification(dataChannel().ChannelIndex.value[msg.channelid].channelname, {
                         body: "#" + ( dataMsg().UserIndex.value[msg.userid]===undefined ? msg.userid : dataMsg().UserIndex.value[msg.userid].username) + ": " + msg.content,
@@ -248,7 +248,7 @@ socket.on("messageUpdate", (dat) => {
                     //もしまだ未読のものだったら新着数を減らす
                     if ( dataMsg().MsgReadTime.value[dat.channelid].time < dataMsg().MsgDB.value.value[dat.channelid][index].time ) {
                         //メンションされているかどうかで減らす値を選ぶ
-                        if ( dataMsg().MsgDB.value.value[dat.channelid][index].content.includes("@/" + dataUser().Userinfo.value.userid + "/") ) {
+                        if ( dataMsg().MsgDB.value.value[dat.channelid][index].content.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
                             //メンション数を減らす
                             dataMsg().MsgReadTime.value[dat.channelid].mention--;
 
@@ -313,8 +313,8 @@ export function getMessage(channelid, readLength, startLength) {
     socket.emit("getMessage", {
         //送信者の情報
         reqSender: {
-            userid: dataUser().Userinfo.value.userid, //ユーザーID
-            sessionid: dataUser().Userinfo.value.sessionid //セッションID
+            userid: dataUser().myUserinfo.value.userid, //ユーザーID
+            sessionid: dataUser().myUserinfo.value.sessionid //セッションID
         },
         channelid: channelid, //ほしい履歴のチャンネルID
         readLength: readLength, //ほしい長さ
@@ -328,7 +328,7 @@ socket.on("infoServer", (dat) => {
     console.log("infoServer :: ", dat);
 
     //もしサーバーとクライアントのバージョンが違っていたらページを更新させる
-    if ( dat.serverVersion !== CLIENT_VERSION && dataUser().Userinfo.value.loggedin ) {
+    if ( dat.serverVersion !== CLIENT_VERSION && dataUser().myUserinfo.value.loggedin ) {
         location.reload();
 
     }
@@ -363,7 +363,7 @@ socket.on("infoChannel", (dat) => {
     }
 
     //参加していないチャンネルならスルー
-    if ( !dataUser().Userinfo.value.channelJoined.includes(dat.channelid) ) {
+    if ( !dataUser().myUserinfo.value.channelJoined.includes(dat.channelid) ) {
         return;
 
     }
@@ -382,10 +382,10 @@ socket.on("infoChannel", (dat) => {
         socket.emit("channelAction", {
             action: "leave",
             channelid: dat.channelid,
-            userid: dataUser().Userinfo.value.userid,
+            userid: dataUser().myUserinfo.value.userid,
             reqSender: {
-                userid: dataUser().Userinfo.value.userid,
-                sessionid: dataUser().Userinfo.value.sessionid
+                userid: dataUser().myUserinfo.value.userid,
+                sessionid: dataUser().myUserinfo.value.sessionid
             }
         });
 
@@ -422,13 +422,13 @@ socket.on("infoUser", (dat) => {
     dataMsg().UserIndex.value[userid].channelJoined = dat.channelJoined; //参加しているチャンネル
 
     //自分の情報の更新にだけ使うから
-    if ( dat.userid !== dataUser().Userinfo.value.userid ) { return; }
+    if ( dat.userid !== dataUser().myUserinfo.value.userid ) { return; }
 
     //参加しているチャンネルリストの長さを比較をして減ったり増えたりしたチャンネルのデータを処理
-    if ( dat.channelJoined.length !== dataUser().Userinfo.value.channelJoined.length ) {
+    if ( dat.channelJoined.length !== dataUser().myUserinfo.value.channelJoined.length ) {
         //チャンネル数が増えているなら
-        if ( dat.channelJoined.length > dataUser().Userinfo.value.channelJoined.length ) {
-            let channelNew = (dat.channelJoined).filter( cid => !(dataUser().Userinfo.value.channelJoined).includes(cid) );
+        if ( dat.channelJoined.length > dataUser().myUserinfo.value.channelJoined.length ) {
+            let channelNew = (dat.channelJoined).filter( cid => !(dataUser().myUserinfo.value.channelJoined).includes(cid) );
             
             console.log("socket :: チャンネル差 : ");
             console.log(channelNew);
@@ -439,8 +439,8 @@ socket.on("infoUser", (dat) => {
                 socket.emit("getInfoChannel", {
                     targetid: channelNew[c],
                     reqSender: {
-                        userid: dataUser().Userinfo.value.userid, //ユーザーID
-                        sessionid: dataUser().Userinfo.value.sessionid //セッションID
+                        userid: dataUser().myUserinfo.value.userid, //ユーザーID
+                        sessionid: dataUser().myUserinfo.value.sessionid //セッションID
                     }
                 });
 
@@ -455,9 +455,9 @@ socket.on("infoUser", (dat) => {
         }
 
         //チャンネル数が減っている（チャンネルを抜けた）なら
-        if ( dat.channelJoined.length < dataUser().Userinfo.value.channelJoined.length ) {
+        if ( dat.channelJoined.length < dataUser().myUserinfo.value.channelJoined.length ) {
             console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-            dat.channelid = dataUser().Userinfo.value.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
+            dat.channelid = dataUser().myUserinfo.value.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
 
             console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
             //自分が抜けたチャンネル分channelIndexを削る
@@ -480,12 +480,12 @@ socket.on("infoUser", (dat) => {
 
     }
 
-    dataUser().Userinfo.value = {
+    dataUser().myUserinfo.value = {
         username: dat.username,
-        userid: dataUser().Userinfo.value.userid, //ユーザーID
+        userid: dataUser().myUserinfo.value.userid, //ユーザーID
         role: dat.role, //ロール
         loggedin: true, //ログイン状態はそのまま
-        sessionid: dataUser().Userinfo.value.sessionid, //セッションIDはそのまま
+        sessionid: dataUser().myUserinfo.value.sessionid, //セッションIDはそのまま
         channelJoined: dat.channelJoined, //参加しているチャンネル
     }
 
@@ -524,8 +524,8 @@ socket.on("messageHistory", (history) => {
                 socket.emit("getInfoUser", {
                     targetid: history[index].userid,
                     reqSender: {
-                        userid: dataUser().Userinfo.value.userid, //ユーザーID
-                        sessionid: dataUser().Userinfo.value.sessionid //セッションID
+                        userid: dataUser().myUserinfo.value.userid, //ユーザーID
+                        sessionid: dataUser().myUserinfo.value.sessionid //セッションID
                     }
                 });
 
@@ -562,8 +562,8 @@ socket.on("messageHistory", (history) => {
             socket.emit("getInfoUser", {
                 targetid: history[index].userid,
                 reqSender: {
-                    userid: dataUser().Userinfo.value.userid, //ユーザーID
-                    sessionid: dataUser().Userinfo.value.sessionid //セッションID
+                    userid: dataUser().myUserinfo.value.userid, //ユーザーID
+                    sessionid: dataUser().myUserinfo.value.sessionid //セッションID
                 }
             });
 
@@ -572,7 +572,7 @@ socket.on("messageHistory", (history) => {
         //既読状態の時間から新着メッセージ数を加算
         if ( parseInt(history[index].time) > parseInt(dataMsg().MsgReadTime.value[channelid].time) ) {
             //メンションされていたかどうかにあわせて既読状態を更新
-            if ( history[index].content.includes("@/" + dataUser().Userinfo.value.userid + "/") ) {
+            if ( history[index].content.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
                 dataMsg().MsgReadTime.value[channelid].mention++; //メンション数を加算
 
             } else {
@@ -593,8 +593,8 @@ socket.on("messageHistory", (history) => {
             socket.emit("updateUserSaveMsgReadState", {
                 msgReadState: dataMsg().MsgReadTime.value,
                 reqSender: {
-                    userid: dataUser().Userinfo.value.userid,
-                    sessionid: dataUser().Userinfo.value.sessionid
+                    userid: dataUser().myUserinfo.value.userid,
+                    sessionid: dataUser().myUserinfo.value.sessionid
                 }
             });
 
@@ -628,7 +628,7 @@ socket.on("authResult", (dat) => {
     //ユーザーデータの更新
     if ( dat.result ) { //もしログイン成功なら
         //ユーザー情報を更新
-        dataUser().Userinfo.value = {
+        dataUser().myUserinfo.value = {
             userid: dat.userid, //ユーザーID
             loggedin: true, //ログイン状態
             sessionid: dat.sessionid, //セッションID
@@ -660,20 +660,20 @@ socket.on("authResult", (dat) => {
         console.log("session id in cookie -> " + getCookie("sessionid"));
 
         //チャンネル情報の取得
-        for ( let c in dataUser().Userinfo.value.channelJoined ) {
+        for ( let c in dataUser().myUserinfo.value.channelJoined ) {
             socket.emit("getInfoChannel", { //リクエスト送信
-                targetid: dataUser().Userinfo.value.channelJoined[c],
+                targetid: dataUser().myUserinfo.value.channelJoined[c],
                 reqSender: {
-                    userid: dataUser().Userinfo.value.userid, //ユーザーID
-                    sessionid: dataUser().Userinfo.value.sessionid //セッションID
+                    userid: dataUser().myUserinfo.value.userid, //ユーザーID
+                    sessionid: dataUser().myUserinfo.value.sessionid //セッションID
                 }
             });
 
         }
 
         //メッセージ履歴の取得
-        for ( let cid in dataUser().Userinfo.value.channelJoined ) {
-            getMessage(dataUser().Userinfo.value.channelJoined[cid], 40); //リクエスト送信する
+        for ( let cid in dataUser().myUserinfo.value.channelJoined ) {
+            getMessage(dataUser().myUserinfo.value.channelJoined[cid], 40); //リクエスト送信する
 
         }
 
@@ -706,7 +706,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
         //参加していないチャンネルの既読状態を削除
         for ( let index in keysUserSaveMsgReadState ) { //既読状態のチャンネルIDをぶん回す
             //もしチャンネル参加リストにチャンネルIDが入っていなければ
-            if ( !dataUser().Userinfo.value.channelJoined.includes(keysUserSaveMsgReadState[index]) ) {
+            if ( !dataUser().myUserinfo.value.channelJoined.includes(keysUserSaveMsgReadState[index]) ) {
                 //引っ張ってきた既読状態から削除
                 delete userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]];
 
@@ -769,8 +769,8 @@ function loadDataFromCookie() {
         //サーバーから設定を取得
         socket.emit("getUserSaveConfig", {
             reqSender: {
-                userid: dataUser().Userinfo.value.userid,
-                sessionid: dataUser().Userinfo.value.sessionid
+                userid: dataUser().myUserinfo.value.userid,
+                sessionid: dataUser().myUserinfo.value.sessionid
             }
         });
 
@@ -807,8 +807,8 @@ function loadDataFromCookie() {
            //取得
             socket.emit("getUserSaveConfig", {
                 reqSender: {
-                    userid: dataUser().Userinfo.value.userid,
-                    sessionid: dataUser().Userinfo.value.sessionid
+                    userid: dataUser().myUserinfo.value.userid,
+                    sessionid: dataUser().myUserinfo.value.sessionid
                 }
             });
 

@@ -4,8 +4,8 @@ import { dataUser } from '../data/dataUserinfo.js';
 
 export default {
     setup() {
-        const Userinfo = dataUser();
-        return { Userinfo };
+        const myUserinfo = dataUser();
+        return { myUserinfo };
 
     },
     
@@ -79,7 +79,7 @@ export default {
                 </v-card>
             </RouterLink>
             <RouterLink to="/menu/serversettings">
-                <v-card v-if="Userinfo.role==='Admin'" @click="" class="rounded-lg menu-card" :color="isThisActive('serversettings')?'primary':'secondary'">
+                <v-card v-if="myUserinfo.role==='Admin'" @click="" class="rounded-lg menu-card" :color="isThisActive('serversettings')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-server
                     </v-icon>

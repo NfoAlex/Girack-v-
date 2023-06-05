@@ -14,8 +14,8 @@ export default {
     props: ["channelid", "channelInfo"],
 
     setup() {
-        const { Userinfo } = dataUser();
-        return { Userinfo };
+        const { myUserinfo } = dataUser();
+        return { myUserinfo };
 
     },
 
@@ -57,8 +57,8 @@ export default {
                         socket.emit("searchUserDynamic", {
                             query: this.userSearchQuery,
                             reqSender: {
-                                userid: this.Userinfo.userid,
-                                sessionid: this.Userinfo.sessionid
+                                userid: this.myUserinfo.userid,
+                                sessionid: this.myUserinfo.sessionid
                             }
                         })
 
@@ -102,8 +102,8 @@ export default {
                 description: this.descriptionText,
                 scope: (this.scopeIsPrivate?"private":"public"),
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -138,8 +138,8 @@ export default {
                 channelid: this.channelid,
                 userid: targetUserid,
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -147,8 +147,8 @@ export default {
             socket.emit("getInfoChannelJoinedUserList", {
                 targetid: this.channelid,
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -164,8 +164,8 @@ export default {
                 channelid: this.channelid,
                 userid: targetUserid,
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -173,8 +173,8 @@ export default {
             socket.emit("getInfoChannelJoinedUserList", {
                 targetid: this.channelid,
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -222,8 +222,8 @@ export default {
         socket.emit("getInfoChannelJoinedUserList", {
             targetid: this.channelid,
             reqSender: {
-                userid: this.Userinfo.userid,
-                sessionid: this.Userinfo.sessionid
+                userid: this.myUserinfo.userid,
+                sessionid: this.myUserinfo.sessionid
             }
         });
 
@@ -428,7 +428,7 @@ export default {
                         >
                             {{ u.username }}
                         </span>
-                        <span v-if="Userinfo.role!=='Member'" style="float:right" class="text-center">
+                        <span v-if="myUserinfo.role!=='Member'" style="float:right" class="text-center">
                             <v-btn
                                 @click.stop="kickUser(u.userid)"
                                 size="small"

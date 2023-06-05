@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-const Userinfo = ref({
+const myUserinfo = ref({
     username: "User", //名前
     role: "Admin",
     userid: "001", //ユーザーID
@@ -10,6 +10,6 @@ const Userinfo = ref({
 });
 
 export function dataUser() {
-    return { Userinfo };
+    return { myUserinfo };
 
 }

@@ -5,7 +5,7 @@ import Userpage from "../Userpage.vue";
 import { dataUser } from '../../data/dataUserinfo.js';
 
 const socket = getSocket();
-const { Userinfo } = dataUser();
+const { myUserinfo } = dataUser();
 
 export default {
 
@@ -36,8 +36,8 @@ export default {
                     socket.emit("getInfoList", {
                         target: "user",
                         reqSender: {
-                            userid: Userinfo.value.userid,
-                            sessionid: Userinfo.value.sessionid
+                            userid: myUserinfo.value.userid,
+                            sessionid: myUserinfo.value.sessionid
                         }
                     });
 
@@ -94,8 +94,8 @@ export default {
         socket.emit("getInfoList", {
             target: "user",
             reqSender: {
-                userid: Userinfo.value.userid,
-                sessionid: Userinfo.value.sessionid
+                userid: myUserinfo.value.userid,
+                sessionid: myUserinfo.value.sessionid
             }
         });
 

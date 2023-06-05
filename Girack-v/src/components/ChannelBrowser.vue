@@ -9,10 +9,10 @@ const socket = getSocket();
 export default {
 
     setup() {
-        const { Userinfo } = dataUser(); //自分のユーザー情報をインポート
+        const { myUserinfo } = dataUser(); //自分のユーザー情報をインポート
         const { PreviewChannelData } = dataChannel();
         const { MsgDB } = dataMsg();
-        return { PreviewChannelData, Userinfo, MsgDB };
+        return { PreviewChannelData, myUserinfo, MsgDB };
 
     },
 
@@ -37,7 +37,7 @@ export default {
 
     watch: {
         //ユーザー情報の変更を監視
-        Userinfo: {
+        myUserinfo: {
             //変更を検知したらチャンネルリストを再取得
             handler(U) { //U => 変更されたあとのUserinfo
                 socket.emit("getInfoList", {
