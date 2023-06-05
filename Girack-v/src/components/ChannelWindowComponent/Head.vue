@@ -97,12 +97,7 @@ export default {
 <template>
 
     <!-- チャンネル設定ダイアログ -->
-    <v-dialog
-        v-model="channelDialogShow"
-        style="width:50vw; max-width:650px;"
-    >
-        <ChannelConfig :channelid="getPath" :channelInfo="channelInfo" />
-    </v-dialog>
+    <ChannelConfig v-model="channelDialogShow" :channelid="getPath" :channelInfo="channelInfo" />
 
     <!-- ヘッダの表示部分(メイン) -->
     <div class="d-flex align-center justify-space-evenly" style="max-width:100%; height:100%;">
