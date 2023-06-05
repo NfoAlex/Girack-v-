@@ -116,12 +116,7 @@ export default {
         <div class="mx-auto d-flex flex-column justify-space-evenly" style="width:90%;">
             
             <!-- ユーザーページ用 -->
-            <v-dialog
-                v-model="userDialogShow"
-                width="50vw"
-            >
-                <Userpage @closeUserpage="userDialogShow=false;" :userid="userDialogUserid" />
-            </v-dialog>
+            <Userpage v-if="userDialogShow" v-model="userDialogShow" :userid="userDialogUserid" />
 
             <div style="height:8vh;">
                 <div>
@@ -151,7 +146,7 @@ export default {
                 <template v-slot:default="{ item }">
                     <v-card
                         color="grey"
-                        @click="()=>{userDialogShow=true; userDialogUserid=item.userid}"
+                        @click="()=>{userDialogUserid=item.userid; userDialogShow=true;}"
                         class="pa-3 rounded-lg d-flex align-center"
                         style="margin-top:12px;"
                     >

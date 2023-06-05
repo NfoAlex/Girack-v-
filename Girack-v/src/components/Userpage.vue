@@ -5,7 +5,7 @@ import { getSocket, backendURI, dataUser, dataChannel } from '../socket.js';
 const socketUserpage = getSocket();
 
 export default {
-    props: ["userDialogShow", "userid"],
+    props: ["userid"],
 
     setup() {
         const { Userinfo } = dataUser();
@@ -17,7 +17,6 @@ export default {
     data() {
         return {
             targetinfo: {},
-            DIALOG: this.userDialogShow,
             imgsrc: backendURI + "/img/",
             roleList: [],
 
@@ -61,7 +60,7 @@ export default {
                 }
 
             }
-        }
+        },
     },
 
     methods: {
@@ -154,6 +153,7 @@ export default {
         },
 
         SOCKETtargetinfo(dat) {
+            console.log("Userpage :: SOCKETtargetinfo : 情報->", dat);
             //受信した情報がこいつのと確認して処理
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
@@ -215,6 +215,8 @@ export default {
     },
 
     mounted() {
+        console.log("Userpage :: mounted : userid->", this.$props);
+
         //自分のロールに合わせて選べるロールの範囲を設定
         if ( this.Userinfo.role === "Admin" ) { //Adminなら全員選べるようにする
             this.roleList = ["Admin", "Moderator", "Member"];
@@ -234,15 +236,18 @@ export default {
         socketUserpage.on("infoUser", this.SOCKETtargetinfo);
 
         //ユーザー情報取得
-        socketUserpage.emit("getInfoUser", {
-            targetid: this.userid,
-            reqSender: {
-                userid: dataUser().Userinfo.value.userid,
-                sessionid: dataUser().Userinfo.value.sessionid
-            }
+        this.$nextTick(() => {
+            socketUserpage.emit("getInfoUser", {
+                targetid: this.userid,
+                reqSender: {
+                    userid: dataUser().Userinfo.value.userid,
+                    sessionid: dataUser().Userinfo.value.sessionid
+                }
+            });
+
         });
 
-        console.log("Userpage :: path",this.$route.path);
+        console.log("Userpage :: path->",this.$route.path);
 
     },
 
@@ -258,7 +263,7 @@ export default {
 </script>
 
 <template>
-    <v-dialog style="max-width:550px; width:50vw; max-height:65vh;">
+    <v-dialog style="max-width:550px; width:50vw; max-height:85vh;">
         <v-card elevation="6" class="mx-auto d-flex flex-column align-self-start pa-1 userpage text-center rounded-lg">
 
             <div>
