@@ -33,7 +33,6 @@ export default {
     mounted() {
         //ブラウザ上のタブ名を設定
         document.title = "メニュー";
-        console.log("Menu :: mounted : myUserinfo->", this.myUserinfo.role);
 
     }
 
