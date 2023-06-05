@@ -262,6 +262,7 @@ export default {
         <v-card elevation="6" class="mx-auto d-flex flex-column align-self-start pa-1 userpage text-center rounded-lg">
 
             <div>
+                <!-- ユーザー名とアイコンとロール -->
                 <v-card color="secondary" elevation="12" width="70%" style="overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
                     
                     <!-- アバター -->
@@ -316,6 +317,8 @@ export default {
                 </v-tabs>
 
             </div>
+
+            <v-divider></v-divider>
             
             <!-- タブの中身 -->
             <v-window v-model="tab" style="overflow-y:auto;">
