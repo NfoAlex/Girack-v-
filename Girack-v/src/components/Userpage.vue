@@ -60,7 +60,7 @@ export default {
                 }
 
             }
-        }
+        },
     },
 
     methods: {
@@ -152,7 +152,7 @@ export default {
 
         },
 
-        fntargetinfo(dat) {
+        SOCKETtargetinfo(dat) {
             //受信した情報がこいつのと確認して処理
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
@@ -195,7 +195,7 @@ export default {
 
         },
 
-        fntargetUserJoinedChannelList(dat) {
+        SOCKETtargetUserJoinedChannelList(dat) {
                 //もしチャンネルデータが空ならなにもしない
                 if ( dat.channelname === null ) return -1;
 
@@ -214,8 +214,6 @@ export default {
     },
 
     mounted() {
-        
-
         //自分のロールに合わせて選べるロールの範囲を設定
         if ( this.Userinfo.role === "Admin" ) { //Adminなら全員選べるようにする
             this.roleList = ["Admin", "Moderator", "Member"];
@@ -229,28 +227,31 @@ export default {
         }
 
         //参加チャンネルの情報取得
-        socketUserpage.on("infoChannel", this.fntargetUserJoinedChannelList);
+        socketUserpage.on("infoChannel", this.SOCKETtargetUserJoinedChannelList);
 
         //ユーザーの情報受け取り
-        socketUserpage.on("infoUser", this.fntargetinfo);
+        socketUserpage.on("infoUser", this.SOCKETtargetinfo);
 
         //ユーザー情報取得
-        socketUserpage.emit("getInfoUser", {
-            targetid: this.userid,
-            reqSender: {
-                userid: dataUser().Userinfo.value.userid,
-                sessionid: dataUser().Userinfo.value.sessionid
-            }
+        this.$nextTick(() => {
+            socketUserpage.emit("getInfoUser", {
+                targetid: this.userid,
+                reqSender: {
+                    userid: dataUser().Userinfo.value.userid,
+                    sessionid: dataUser().Userinfo.value.sessionid
+                }
+            });
+
         });
 
-        console.log("Userpage :: path",this.$route.path);
+        console.log("Userpage :: path->",this.$route.path);
 
     },
 
     unmounted() {
         //socket通信の重複防止
-        socketUserpage.off("infoUser", this.fntargetinfo);
-        socketUserpage.off("infoChannel", this.fntargetUserJoinedChannelList);
+        socketUserpage.off("infoUser", this.SOCKETtargetinfo);
+        socketUserpage.off("infoChannel", this.SOCKETtargetUserJoinedChannelList);
 
     }
 
@@ -259,141 +260,146 @@ export default {
 </script>
 
 <template>
-    <v-card elevation="6" style="max-width:500px; width:50vw; max-height:65vh;" class="mx-auto d-flex flex-column align-self-start pa-1 userpage text-center rounded-lg">
+    <v-dialog style="max-width:550px; width:50vw; max-height:85vh;">
+        <v-card elevation="6" class="mx-auto d-flex flex-column align-self-start pa-1 userpage text-center rounded-lg">
 
-        <div>
-            <v-card color="secondary" elevation="12" width="70%" style="overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
-                
-                <!-- アバター -->
-                <v-avatar style="margin-top:16px;" size="20%" :image="imgsrc + userid"></v-avatar>
-                
-                <!-- ユーザー情報 -->
-                <div class="ma-3">
-                    <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
-                    <p class="text-overline"># {{ userid }}</p>
-
-                    <p v-if="targetinfo.loggedin&&userid!==Userinfo.userid">
-                        <v-chip class="ma-1" variant="flat" color="success" size="x-small">
-                            オンライン
-                        </v-chip>
-                    </p>
-
-                    <p>
-                        <v-chip v-if="userid===Userinfo.userid" color="green" size="small">
-                            あなた
-                        </v-chip>
-                    </p>
-
-                    <v-chip :color="getRoleColor(targetinfo.role)" class="ma-1" size="small">
-                        {{ targetinfo.role }}
-                    </v-chip>
+            <div>
+                <!-- ユーザー名とアイコンとロール -->
+                <v-card color="secondary" elevation="12" width="70%" style="overflow-y:auto;" class="mx-auto boxProfile rounded-lg">
                     
-                    <p class="text-h5 text-truncate">
-                        {{ targetinfo.username }}
-                    </p>
-                </div>
-            </v-card>
+                    <!-- アバター -->
+                    <v-avatar style="margin-top:16px;" size="20%" :image="imgsrc + userid"></v-avatar>
+                    
+                    <!-- ユーザー情報 -->
+                    <div class="ma-3">
+                        <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
+                        <p class="text-overline"># {{ userid }}</p>
 
-            <!-- タブ -->
-            <v-tabs
-                bg-color="grey"
-                class="mx-auto rounded-lg"
-                fixed-tabs
-                style="width:fit-content;"
-                v-model="tab"
-            >
+                        <p v-if="targetinfo.loggedin&&userid!==Userinfo.userid">
+                            <v-chip class="ma-1" variant="flat" color="success" size="x-small">
+                                オンライン
+                            </v-chip>
+                        </p>
 
-                    <v-tab value="channel">
-                        チャンネル
-                    </v-tab>
-                    <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
-                        管理
-                    </v-tab>
-                    <v-tab v-if="Userinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
-                        <p style="color:pink">削除</p>
-                    </v-tab>
+                        <p>
+                            <v-chip v-if="userid===Userinfo.userid" color="green" size="small">
+                                あなた
+                            </v-chip>
+                        </p>
 
-            </v-tabs>
-
-        </div>
-        
-        <!-- タブの中身 -->
-        <v-window v-model="tab" style="overflow-y:auto;">
-
-            <!-- 参加しているチャンネル -->
-            <v-window-item value="channel" class="ma-5">
-                <v-card
-                    @click="gotoChannel(item.channelid,index)"
-                    v-for="(item,index) in targetUserJoinedChannelList"
-                    variant="tonal"
-                    class="mx-auto rounded-lg d-flex align-center"
-                    style="margin-top:8px; padding:6px 4%; width:75%"
-                >
-                    <!-- プライベートチャンネル用鍵マーク -->
-                    <v-icon v-if="item.scope==='private'" style="margin-right:8px;">
-                        mdi:mdi-lock-outline
-                    </v-icon>
-                    <!-- 普通のチャンネル -->
-                    <v-icon v-else style="margin-right:8px;">
-                        mdi:mdi-pound
-                    </v-icon>
-                    <span class="text-truncate">
-                        {{ item.channelname }}
-                    </span>
+                        <v-chip :color="getRoleColor(targetinfo.role)" class="ma-1" size="small">
+                            {{ targetinfo.role }}
+                        </v-chip>
+                        
+                        <p class="text-h5 text-truncate">
+                            {{ targetinfo.username }}
+                        </p>
+                    </div>
                 </v-card>
-            </v-window-item>
 
-            <!-- ユーザー管理タブ -->
-            <v-window-item value="mod" class="ma-5">
-
-                <!-- ロール選択 -->
-                <v-select
-                    class="mx-auto"
-                    v-model="targetUserRole"
-                    style="width:100%; max-width:200px;"
-                    density="compact"
-                    label="ロール"
-                    :items="roleList"
-                ></v-select>
-
-                <!-- BANボタン -->
-                <v-btn @click="banUser" v-if="!targetinfo.banned" color="error">
-                    <v-icon>mdi:mdi-account-cancel</v-icon> BAN
-                </v-btn>
-                <v-btn @click="banUser" v-if="targetinfo.banned" color="info">
-                    <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
-                </v-btn>
-
-            </v-window-item>
-
-            <!-- ユーザー削除タブ(メンバーページからだけ) -->
-            <v-window-item value="delete" class="ma-5">
-                <v-btn
-                    v-if="!deleteConfirmCheckDisplay"
-                    @click="deleteConfirmCheckDisplay=true;"
-                    class="rounded-lg"
-                    color="error"
-                    size="large"
-                    variant="tonal"
+                <!-- タブ -->
+                <v-tabs
+                    bg-color="grey"
+                    class="mx-auto rounded-lg"
+                    fixed-tabs
+                    style="width:fit-content;"
+                    v-model="tab"
                 >
-                    このユーザーを削除
-                </v-btn>
-                <v-btn
-                    v-if="deleteConfirmCheckDisplay"
-                    @click="deleteUser()"
-                    class="rounded-lg"
-                    color="error"
-                    size="large"
-                    elevation="12"
-                >
-                    本当にいいの?
-                </v-btn>
 
-            </v-window-item>
+                        <v-tab value="channel">
+                            チャンネル
+                        </v-tab>
+                        <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
+                            管理
+                        </v-tab>
+                        <v-tab v-if="Userinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
+                            <p style="color:pink">削除</p>
+                        </v-tab>
 
-        </v-window>
-        
-    </v-card>
+                </v-tabs>
+
+            </div>
+
+            <v-divider></v-divider>
+            
+            <!-- タブの中身 -->
+            <v-window v-model="tab" style="overflow-y:auto;">
+
+                <!-- 参加しているチャンネル -->
+                <v-window-item value="channel" class="ma-5">
+                    <v-card
+                        @click="gotoChannel(item.channelid,index)"
+                        v-for="(item,index) in targetUserJoinedChannelList"
+                        variant="tonal"
+                        class="mx-auto rounded-lg d-flex align-center"
+                        style="margin-top:8px; padding:6px 4%; width:75%"
+                    >
+                        <!-- プライベートチャンネル用鍵マーク -->
+                        <v-icon v-if="item.scope==='private'" style="margin-right:8px;">
+                            mdi:mdi-lock-outline
+                        </v-icon>
+                        <!-- 普通のチャンネル -->
+                        <v-icon v-else style="margin-right:8px;">
+                            mdi:mdi-pound
+                        </v-icon>
+                        <span class="text-truncate">
+                            {{ item.channelname }}
+                        </span>
+                    </v-card>
+                </v-window-item>
+
+                <!-- ユーザー管理タブ -->
+                <v-window-item value="mod" class="ma-5">
+
+                    <!-- ロール選択 -->
+                    <v-select
+                        class="mx-auto"
+                        v-model="targetUserRole"
+                        style="width:100%; max-width:200px;"
+                        density="compact"
+                        label="ロール"
+                        :items="roleList"
+                    ></v-select>
+
+                    <!-- BANボタン -->
+                    <v-btn @click="banUser" v-if="!targetinfo.banned" color="error">
+                        <v-icon>mdi:mdi-account-cancel</v-icon> BAN
+                    </v-btn>
+                    <v-btn @click="banUser" v-if="targetinfo.banned" color="info">
+                        <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
+                    </v-btn>
+
+                </v-window-item>
+
+                <!-- ユーザー削除タブ(メンバーページからだけ) -->
+                <v-window-item value="delete" class="ma-5">
+                    <v-btn
+                        v-if="!deleteConfirmCheckDisplay"
+                        @click="deleteConfirmCheckDisplay=true;"
+                        class="rounded-lg"
+                        color="error"
+                        size="large"
+                        variant="tonal"
+                    >
+                        このユーザーを削除
+                    </v-btn>
+                    <v-btn
+                        v-if="deleteConfirmCheckDisplay"
+                        @click="deleteUser()"
+                        class="rounded-lg"
+                        color="error"
+                        size="large"
+                        elevation="12"
+                    >
+                        本当にいいの?
+                    </v-btn>
+
+                </v-window-item>
+
+            </v-window>
+            
+        </v-card>
+    </v-dialog>
 </template>
 
 <style scoped>

@@ -107,12 +107,7 @@ export default {
 <template>
 
     <!-- ユーザーページ用ダイアログ -->
-    <v-dialog
-        v-model="userDialogShow"
-        width="50vw"
-    >
-        <Userpage @closeUserpage="userDialogShow=false;" :userid="userDialogUserid" />
-    </v-dialog>
+    <Userpage v-if="userDialogShow" v-model="userDialogShow" :userid="userDialogUserid" />
 
     <!-- ユーザーリストここから -->
     <div class="mx-auto d-flex flex-column justify-space-evenly" style="width:95%; height:100vh;">
