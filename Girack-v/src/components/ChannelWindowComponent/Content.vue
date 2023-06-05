@@ -15,12 +15,12 @@ const socket = getSocket();
 
 export default {
     setup() {
-        const { Userinfo } = dataUser(); //ユーザー情報
+        const { myUserinfo } = dataUser(); //ユーザー情報
         const { MsgDB, UserIndex, StateScrolled, MsgReadTime } = dataMsg(); //履歴用DB
         const { PreviewChannelData, ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
         
-        return { Userinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
+        return { myUserinfo, MsgDB, MsgReadTime, UserIndex, StateScrolled, ChannelIndex, PreviewChannelData, CONFIG_DISPLAY };
 
     },
 
@@ -283,8 +283,8 @@ export default {
             socket.emit("getInfoUser", {
                 targetid: userid,
                 reqSender: {
-                    userid: this.Userinfo.userid, //ユーザーID
-                    sessionid: this.Userinfo.sessionid //セッションID
+                    userid: this.myUserinfo.userid, //ユーザーID
+                    sessionid: this.myUserinfo.sessionid //セッションID
                 }
             });
 
@@ -533,8 +533,8 @@ export default {
                     messageid: msgId,
                     reaction: reaction, //送るリアクション
                     reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
                     }
                 });
             }
@@ -578,8 +578,8 @@ export default {
                         socket.emit("updateUserSaveMsgReadState", {
                             msgReadState: this.MsgReadTime,
                             reqSender: {
-                                userid: this.Userinfo.userid,
-                                sessionid: this.Userinfo.sessionid
+                                userid: this.myUserinfo.userid,
+                                sessionid: this.myUserinfo.sessionid
                             }
                         });
 
