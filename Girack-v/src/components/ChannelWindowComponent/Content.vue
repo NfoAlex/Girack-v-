@@ -698,7 +698,7 @@ export default {
     <div id="channelWindow" style="height:100%; width:100%; overflow-y:auto;">
         <!-- ユーザーページ用 -->
         <div>
-            <Userpage v-model="userDialogShow" :userDialogShow="userDialogShow" :userid="userDialogUserid" />
+            <Userpage v-model="userDialogShow" :userid="userDialogUserid" />
         </div>
 
         <!-- 履歴が空なら -->
