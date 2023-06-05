@@ -242,13 +242,13 @@ socket.on("messageUpdate", (dat) => {
         //削除する
         case "delete":
             //ループでIDが一致するメッセージを探す
-            for ( let index in dataMsg().MsgDB.value.value[dat.channelid] ) {
-                if ( dataMsg().MsgDB.value.value[dat.channelid][index].messageid === dat.messageid ) {
+            for ( let index in dataMsg().MsgDB.value[dat.channelid] ) {
+                if ( dataMsg().MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
                     console.log("socket :: messageUpdate : これから時間比較 既読時間:", dataMsg().MsgReadTime.value[dat.channelid].time, " これから消すmsgの時間:",MsgDB.value[dat.channelid][index].time);
                     //もしまだ未読のものだったら新着数を減らす
-                    if ( dataMsg().MsgReadTime.value[dat.channelid].time < dataMsg().MsgDB.value.value[dat.channelid][index].time ) {
+                    if ( dataMsg().MsgReadTime.value[dat.channelid].time < dataMsg().MsgDB.value[dat.channelid][index].time ) {
                         //メンションされているかどうかで減らす値を選ぶ
-                        if ( dataMsg().MsgDB.value.value[dat.channelid][index].content.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
+                        if ( dataMsg().MsgDB.value[dat.channelid][index].content.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
                             //メンション数を減らす
                             dataMsg().MsgReadTime.value[dat.channelid].mention--;
 
@@ -260,7 +260,7 @@ socket.on("messageUpdate", (dat) => {
 
                     }
 
-                    dataMsg().MsgDB.value.value[dat.channelid].splice(index,1); //削除
+                    dataMsg().MsgDB.value[dat.channelid].splice(index,1); //削除
 
                 }
 
@@ -468,7 +468,7 @@ socket.on("infoUser", (dat) => {
                 //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
                 if ( !dat.channelJoined.includes(channelid) ) { //チャンネルがリストに入っていなければ
                     delete dataChannel().ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
-                    delete dataMsg().MsgDB.value.value[channelid]; //そのチャンネルの履歴を削除
+                    delete dataMsg().MsgDB.value[channelid]; //そのチャンネルの履歴を削除
 
                     break;
 
@@ -535,7 +535,7 @@ socket.on("messageHistory", (history) => {
 
         console.log("messageHistory :: プレビュー用に読み込まれました...");
 
-        dataMsg().MsgDB.value.value[channelid] = history;
+        dataMsg().MsgDB.value[channelid] = history;
         return;
 
     }
@@ -608,7 +608,7 @@ socket.on("messageHistory", (history) => {
 
         //履歴用配列の先頭から一つずつ履歴を追加
         for ( let index in history ) {
-            dataMsg().MsgDB.value.value[channelid].unshift(history[index]);
+            dataMsg().MsgDB.value[channelid].unshift(history[index]);
 
         }
         
