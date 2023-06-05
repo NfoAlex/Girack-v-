@@ -153,7 +153,6 @@ export default {
         },
 
         SOCKETtargetinfo(dat) {
-            console.log("Userpage :: SOCKETtargetinfo : 情報->", dat);
             //受信した情報がこいつのと確認して処理
             if ( dat.userid === this.userid ) {
                 this.targetinfo = dat; //表示する情報に設定
@@ -215,8 +214,6 @@ export default {
     },
 
     mounted() {
-        console.log("Userpage :: mounted : userid->", this.$props);
-
         //自分のロールに合わせて選べるロールの範囲を設定
         if ( this.Userinfo.role === "Admin" ) { //Adminなら全員選べるようにする
             this.roleList = ["Admin", "Moderator", "Member"];
