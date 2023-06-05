@@ -17,10 +17,10 @@ export default {
     },
 
     setup() {
-        const { Userinfo } = dataUser();
+        const { myUserinfo } = dataUser();
         const { MsgDB } = dataMsg();
         const { ChannelIndex, PreviewChannelData } = dataChannel();
-        return { Userinfo, MsgDB, ChannelIndex, PreviewChannelData };
+        return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData };
 
     },
 
@@ -70,8 +70,8 @@ export default {
                 socket.emit("getInfoChannel", {
                     targetid: this.PreviewChannelData.channelid,
                     reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
                     }
                 });
 
