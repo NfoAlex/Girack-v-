@@ -11,6 +11,7 @@ export default {
     setup() {
         const { myUserinfo } = dataUser(); //ユーザー情報
         return { myUserinfo };
+        
     },
 
     components: { Userpage },
