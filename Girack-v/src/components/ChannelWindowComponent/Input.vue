@@ -1,6 +1,9 @@
 <script>
 
-import { dataUser, dataMsg, dataChannel, getSocket, getMessage, backendURI } from '../../socket.js';
+import { getSocket, getMessage, backendURI } from '../../socket.js';
+import { dataMsg } from '../../data/dataMsg';
+import { dataChannel } from '../../data/dataChannel';
+import { dataUser } from '../../data/dataUserinfo';
 import { ref } from "vue";
 
 const socket = getSocket();

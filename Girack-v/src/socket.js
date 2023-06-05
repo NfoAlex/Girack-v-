@@ -2,6 +2,17 @@
 //通信とかそこらへん
 
 import { io } from 'socket.io-client'; //ウェブソケット通信用
+
+//Socket通信用
+export const backendURI = "http://" + location.hostname + ":33333";
+
+const socket = io(backendURI, {
+    transports : ['websocket'],
+    reconnection: true,
+    reconnectionDelay: 100,
+    reconnectionDelayMax: 1000,
+});
+
 import { ref } from "vue";
 
 import { getCONFIG } from './config.js';
@@ -15,140 +26,51 @@ const {
     CONFIG_DISPLAY 
 } = getCONFIG(); //設定
 
-//Socket通信用
-export const backendURI = "http://" + location.hostname + ":33333";
 
-const socket = io(backendURI, {
-    transports : ['websocket'],
-    reconnection: true,
-    reconnectionDelay: 100,
-    reconnectionDelayMax: 1000,
-});
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 //ユーザー(自分)情報
 
-const Userinfo = ref({
-    username: "User", //名前
-    role: "Admin",
-    userid: "001", //ユーザーID
-    loggedin: false, //ログイン状態
-    sessionid: 0, //セッションID
-    channelJoined: [], //参加しているチャンネル
-});
-
-export function dataUser() {
-    return { Userinfo };
-
-}
+import { dataUser } from './data/dataUserinfo.js';
 
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-//サーバー(インスタンス)情報 (ToDo削除)
+//サーバー(インスタンス)情報
 export const Serverinfo = ref({
     servername: "...",
     registerAvailable: null,
     inviteOnly: null
 });
 
-//チャンネル情報
-const ChannelIndex = ref({
-    /*
-    "0001": {
-        channelname: "random",
-        description: "Hello, Girack",
-        scope: "public",
-    }
-    */
-});
-
-//チャンネルプレビュー用
-const PreviewChannelData = ref({
-    /*
-    channelid: "0001",
-    channelname: "random",
-    description: "Hello Girack",
-    scope: "public",
-    previewmode: true
-    */
-});
-
-//チャンネル情報を返すだけ
-export function dataChannel() {
-    return { ChannelIndex, PreviewChannelData };
-
-}
+import { dataChannel } from './data/dataChannel.js';
 
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
 /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 
-//メッセージ履歴DB
-const MsgDB = ref({
-    // "001": [
-    //     {
-    //         id: 0,
-    //         username: "asdf",
-    //         userid: "xx0",
-    //         channelid: "001",
-    //         time: "20200217165240643",
-    //         content: "Ayo"
-    //     },
-    //     {
-    //         id: 1,
-    //         username: "fdsa",
-    //         userid: "xx1",
-    //         channelid: "001",
-    //         time: "20200227165240646",
-    //         content: "は"
-    //     }
-    // ]
-});
-
-//ユーザーが最後に読んだ時間リスト
-const MsgReadTime = ref({
-    "0001": {
-        time: "202301011210938424",
-        new: 0,
-        mention: 0
-    }
-});
-
-//ユーザー情報(名前とかロールとか)
-const UserIndex = ref({
-
-});
-
-//スクロールしきっているかどうか(別コンポーネントでも使えるように独立させている)
-const StateScrolled = ref(false);
-
-//履歴DB返すだけ
-export function dataMsg() {
-    return { MsgDB, UserIndex, StateScrolled, MsgReadTime };
-
-}
+import { dataMsg } from './data/dataMsg.js';
 
 //メッセージ受け取り、履歴の保存
 socket.on("messageReceive", (msg) => {
     //メッセージ発信元のチャンネルに参加してなくてかつプレビューでもないなら
     if (
-        !Userinfo.value.channelJoined.includes(msg.channelid) &&
-        PreviewChannelData.value.channelid !== msg.channelid
+        !dataUser().Userinfo.value.channelJoined.includes(msg.channelid) &&
+        dataChannel().PreviewChannelData.value.channelid !== msg.channelid
     ) return;
 
     console.log("socket :: msgReceive : ↓");
     console.log(msg);
 
     //もしユーザーの名前リストに名前がなかったら
-    if ( UserIndex.value[msg.userid] === undefined ) {
+    if ( dataMsg().UserIndex.value[msg.userid] === undefined ) {
         //名前をリクエスト
         socket.emit("getInfoUser", {
             targetid: msg.userid,
             reqSender: {
-                userid: Userinfo.value.userid, //ユーザーID
-                sessionid: Userinfo.value.sessionid //セッションID
+                userid: dataUser().Userinfo.value.userid, //ユーザーID
+                sessionid: dataUser().Userinfo.value.sessionid //セッションID
             }
         });
 
@@ -156,35 +78,35 @@ socket.on("messageReceive", (msg) => {
 
     try{
         //DB配列の存在を確認してから追加
-        if ( MsgDB.value[msg.channelid] !== undefined ) { //undefinedじゃないなら追加
-            MsgDB.value[msg.channelid].push({
+        if ( dataMsg().MsgDB.value[msg.channelid] !== undefined ) { //undefinedじゃないなら追加
+            dataMsg().MsgDB.value[msg.channelid].push({
                 ...msg
             });
             
         } else { //配列が空なら新しく作成、配置
-            MsgDB.value[msg.channelid] = [{
+            dataMsg().MsgDB.value[msg.channelid] = [{
                 ...msg
             }];
 
         }
 
         //プレビューモードならここでやめる
-        if ( PreviewChannelData.value.channelid === msg.channelid ) return;
+        if ( dataChannel().PreviewChannelData.value.channelid === msg.channelid ) return;
 
         //指定チャンネルの既読状態がデータになかったら新たに定義
-        if ( MsgReadTime.value[msg.channelid] === null ) MsgReadTime.value[msg.channelid].mention = 0;
+        if ( dataMsg().MsgReadTime.value[msg.channelid] === null ) dataMsg().MsgReadTime.value[msg.channelid].mention = 0;
 
         //新着メッセージ数を更新
-        if ( MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
-            if ( msg.content.includes("@" + Userinfo.value.username) ) {
-                MsgReadTime.value[msg.channelid] = {
+        if ( dataMsg().MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
+            if ( msg.content.includes("@" + dataUser().Userinfo.value.username) ) {
+                dataMsg().MsgReadTime.value[msg.channelid] = {
                     time: msg.time, //最後に読んだ時間
                     new: 1,
                     mention: 0
                 };
 
             } else {
-                MsgReadTime.value[msg.channelid] = {
+                dataMsg().MsgReadTime.value[msg.channelid] = {
                     time: msg.time, //最後に読んだ時間
                     new: 0,
                     mention: 1
@@ -196,20 +118,20 @@ socket.on("messageReceive", (msg) => {
 
         } else { //すでにあるなら加算
             //メンションか自分への返信ならメンションを加算
-            if ( msg.content.includes("@/" + Userinfo.value.userid + "/") || msg.replyData.userid === Userinfo.value.userid ) {
-                if ( MsgReadTime.value[msg.channelid].mention === null ) {
-                    MsgReadTime.value[msg.channelid].mention = 0;
+            if ( msg.content.includes("@/" + dataUser().Userinfo.value.userid + "/") || msg.replyData.userid === dataUser().Userinfo.value.userid ) {
+                if ( dataMsg().MsgReadTime.value[msg.channelid].mention === null ) {
+                    dataMsg().MsgReadTime.value[msg.channelid].mention = 0;
 
                 } else {
                     //メンション数加算
-                    MsgReadTime.value[msg.channelid].mention++;
+                    dataMsg().MsgReadTime.value[msg.channelid].mention++;
                     //faviconにドット表示
                     document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
                 }
 
             } else { //そうじゃないなら普通に通知を加算
-                MsgReadTime.value[msg.channelid].new++;
+                dataMsg().MsgReadTime.value[msg.channelid].new++;
                 //faviconにドット表示
                 document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
 
@@ -219,52 +141,52 @@ socket.on("messageReceive", (msg) => {
 
         //既読状態をサーバーへ同期させる
         socket.emit("updateUserSaveMsgReadState", {
-            msgReadState: MsgReadTime.value,
+            msgReadState: dataMsg().MsgReadTime.value,
             reqSender: {
-                userid: Userinfo.value.userid,
-                sessionid: Userinfo.value.sessionid
+                userid: dataUser().Userinfo.value.userid,
+                sessionid: dataUser().Userinfo.value.sessionid
             }
         });
 
         //新着のメッセージを通知
         if (
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
-            msg.userid !== Userinfo.value.userid && //送信者が自分じゃない
+            msg.userid !== dataUser().Userinfo.value.userid && //送信者が自分じゃない
             !LIST_NOTIFICATION_MUTE_CHANNEL.value.includes(msg.channelid) && //ミュートリストにチャンネルが入っていない
             (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、または違うタブなら
         ) {
             //すべてのメッセージを通知に出すようにしているなら通知
             if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {
                 //通知を出す
-                new Notification(ChannelIndex.value[msg.channelid].channelname, {
-                    body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                new Notification(dataChannel().ChannelIndex.value[msg.channelid].channelname, {
+                    body: "#" + ( dataMsg().UserIndex.value[msg.userid]===undefined ? msg.userid : dataMsg().UserIndex.value[msg.userid].username) + ": " + msg.content,
                     icon: backendURI + "/img/" + msg.userid
                 });
 
             } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
                 //メンションの条件である@<名前>が入っているか
-                if ( msg.content.includes("@/" + Userinfo.value.userid + "/") ) {
+                if ( msg.content.includes("@/" + dataUser().Userinfo.value.userid + "/") ) {
                     let contentToDisplay = msg.content.replace(/@\/([0-9]*)\//g,(mentionedId) => {
-                        if ( mentionedId.includes(Userinfo.value.userid) ) {
-                            return "@" + Userinfo.value.username;
+                        if ( mentionedId.includes(dataUser().Userinfo.value.userid) ) {
+                            return "@" + dataUser().Userinfo.value.username;
 
                         }
 
                     });
 
                     //通知を出す
-                    new Notification(ChannelIndex.value[msg.channelid].channelname, {
-                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + contentToDisplay,
+                    new Notification(dataChannel().ChannelIndex.value[msg.channelid].channelname, {
+                        body: "#" + ( dataMsg().UserIndex.value[msg.userid]===undefined ? msg.userid : dataMsg().UserIndex.value[msg.userid].username) + ": " + contentToDisplay,
                         icon: backendURI + "/img/" + msg.userid
                     });
 
                 }
 
                 //自分宛の返信なら
-                if ( msg.replyData.userid === Userinfo.value.userid ) {
+                if ( msg.replyData.userid === dataUser().Userinfo.value.userid ) {
                     //通知を出す
-                    new Notification(ChannelIndex.value[msg.channelid].channelname, {
-                        body: "#" + ( UserIndex.value[msg.userid]===undefined ? msg.userid : UserIndex.value[msg.userid].username) + ": " + msg.content,
+                    new Notification(dataChannel().ChannelIndex.value[msg.channelid].channelname, {
+                        body: "#" + ( dataMsg().UserIndex.value[msg.userid]===undefined ? msg.userid : dataMsg().UserIndex.value[msg.userid].username) + ": " + msg.content,
                         icon: backendURI + "/img/" + msg.userid
                     });
 
@@ -276,7 +198,7 @@ socket.on("messageReceive", (msg) => {
 
     }
     catch(e) {
-        console.log("Content :: msgDB書き込みエラー");
+        console.log("Content :: dataMsg().MsgDB.value書き込みエラー");
         console.log(e);
 
     }
@@ -293,11 +215,11 @@ socket.on("infoResult", (dat) => {
     let userid = dat.userid;
     let role = dat.role;
 
-    UserIndex.value[userid] = {};
+    dataMsg().UserIndex.value[userid] = {};
 
     //ユーザーインデックス更新
-    UserIndex.value[userid].username = username; //名前
-    UserIndex.value[userid].role = role; //ロール
+    dataMsg().UserIndex.value[userid].username = username; //名前
+    dataMsg().UserIndex.value[userid].role = role; //ロール
 
 });
 
@@ -320,25 +242,25 @@ socket.on("messageUpdate", (dat) => {
         //削除する
         case "delete":
             //ループでIDが一致するメッセージを探す
-            for ( let index in MsgDB.value[dat.channelid] ) {
-                if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
-                    console.log("socket :: messageUpdate : これから時間比較 既読時間:", MsgReadTime.value[dat.channelid].time, " これから消すmsgの時間:",MsgDB.value[dat.channelid][index].time);
+            for ( let index in dataMsg().MsgDB.value.value[dat.channelid] ) {
+                if ( dataMsg().MsgDB.value.value[dat.channelid][index].messageid === dat.messageid ) {
+                    console.log("socket :: messageUpdate : これから時間比較 既読時間:", dataMsg().MsgReadTime.value[dat.channelid].time, " これから消すmsgの時間:",MsgDB.value[dat.channelid][index].time);
                     //もしまだ未読のものだったら新着数を減らす
-                    if ( MsgReadTime.value[dat.channelid].time < MsgDB.value[dat.channelid][index].time ) {
+                    if ( dataMsg().MsgReadTime.value[dat.channelid].time < dataMsg().MsgDB.value.value[dat.channelid][index].time ) {
                         //メンションされているかどうかで減らす値を選ぶ
-                        if ( MsgDB.value[dat.channelid][index].content.includes("@/" + Userinfo.value.userid + "/") ) {
+                        if ( dataMsg().MsgDB.value.value[dat.channelid][index].content.includes("@/" + dataUser().Userinfo.value.userid + "/") ) {
                             //メンション数を減らす
-                            MsgReadTime.value[dat.channelid].mention--;
+                            dataMsg().MsgReadTime.value[dat.channelid].mention--;
 
                         } else {
                             //新着数を減らす
-                            MsgReadTime.value[dat.channelid].new--;
+                            dataMsg().MsgReadTime.value[dat.channelid].new--;
 
                         }
 
                     }
 
-                    MsgDB.value[dat.channelid].splice(index,1); //削除
+                    dataMsg().MsgDB.value.value[dat.channelid].splice(index,1); //削除
 
                 }
 
@@ -348,9 +270,9 @@ socket.on("messageUpdate", (dat) => {
         //リアクションをつける
         case "reaction":
             //メッセージIDで探索して更新
-            for ( let index in MsgDB.value[dat.channelid] ) {
-                if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
-                    MsgDB.value[dat.channelid][index].reaction = dat.reaction; //リアクション更新
+            for ( let index in dataMsg().MsgDB.value[dat.channelid] ) {
+                if ( dataMsg().MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
+                    dataMsg().MsgDB.value[dat.channelid][index].reaction = dat.reaction; //リアクション更新
 
                 }
 
@@ -360,10 +282,10 @@ socket.on("messageUpdate", (dat) => {
         //URLプレビュー用のデータを追加
         case "urlData":
             //メッセージIDで探索して更新
-            for ( let index in MsgDB.value[dat.channelid] ) {
-                if ( MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
+            for ( let index in dataMsg().MsgDB.value[dat.channelid] ) {
+                if ( dataMsg().MsgDB.value[dat.channelid][index].messageid === dat.messageid ) {
                     //URlプレビューデータを更新
-                    MsgDB.value[dat.channelid][index].urlData.data[dat.urlIndex] = dat.urlDataItem;
+                    dataMsg().MsgDB.value[dat.channelid][index].urlData.data[dat.urlIndex] = dat.urlDataItem;
 
                 }
 
@@ -391,8 +313,8 @@ export function getMessage(channelid, readLength, startLength) {
     socket.emit("getMessage", {
         //送信者の情報
         reqSender: {
-            userid: Userinfo.value.userid, //ユーザーID
-            sessionid: Userinfo.value.sessionid //セッションID
+            userid: dataUser().Userinfo.value.userid, //ユーザーID
+            sessionid: dataUser().Userinfo.value.sessionid //セッションID
         },
         channelid: channelid, //ほしい履歴のチャンネルID
         readLength: readLength, //ほしい長さ
@@ -406,7 +328,7 @@ socket.on("infoServer", (dat) => {
     console.log("infoServer :: ", dat);
 
     //もしサーバーとクライアントのバージョンが違っていたらページを更新させる
-    if ( dat.serverVersion !== CLIENT_VERSION && Userinfo.value.loggedin ) {
+    if ( dat.serverVersion !== CLIENT_VERSION && dataUser().Userinfo.value.loggedin ) {
         location.reload();
 
     }
@@ -424,24 +346,24 @@ socket.on("infoServer", (dat) => {
 //チャンネル情報の更新
 socket.on("infoChannel", (dat) => {
 
-    console.log("socket :: infoChannel : ", PreviewChannelData.value.channelid, dat);
+    console.log("socket :: infoChannel : ", dataChannel().PreviewChannelData.value.channelid, dat);
 
     //もしプレビュー用のチャンネルの情報なら
-    if ( PreviewChannelData.value.channelid === dat.channelid ) {
+    if ( dataChannel().PreviewChannelData.value.channelid === dat.channelid ) {
         console.log("socket :: infoChannel : preview用チャンネル情報取得 -> ", dat);
-        PreviewChannelData.value.channelname = dat.channelname;
-        PreviewChannelData.value.description = dat.description;
-        PreviewChannelData.value.scope = dat.scope;
+        dataChannel().PreviewChannelData.value.channelname = dat.channelname;
+        dataChannel().PreviewChannelData.value.description = dat.description;
+        dataChannel().PreviewChannelData.value.scope = dat.scope;
 
         //チャンネルに渡す時にプレビュー中と処理する用
-        PreviewChannelData.value.previewmode = true;
+        dataChannel().PreviewChannelData.value.previewmode = true;
 
         return;
 
     }
 
     //参加していないチャンネルならスルー
-    if ( !Userinfo.value.channelJoined.includes(dat.channelid) ) {
+    if ( !dataUser().Userinfo.value.channelJoined.includes(dat.channelid) ) {
         return;
 
     }
@@ -451,8 +373,8 @@ socket.on("infoChannel", (dat) => {
     //削除されているならスキップ
     if ( dat.scope === "deleted" ) {
         //もしすでにデータを持っているなら削除
-        if ( ChannelIndex.value[dat.channelid] !== undefined ) {
-            delete ChannelIndex.value[dat.channelid]; //削除
+        if ( dataChannel().ChannelIndex.value[dat.channelid] !== undefined ) {
+            delete dataChannel().ChannelIndex.value[dat.channelid]; //削除
 
         }
 
@@ -460,10 +382,10 @@ socket.on("infoChannel", (dat) => {
         socket.emit("channelAction", {
             action: "leave",
             channelid: dat.channelid,
-            userid: Userinfo.value.userid,
+            userid: dataUser().Userinfo.value.userid,
             reqSender: {
-                userid: Userinfo.value.userid,
-                sessionid: Userinfo.value.sessionid
+                userid: dataUser().Userinfo.value.userid,
+                sessionid: dataUser().Userinfo.value.sessionid
             }
         });
 
@@ -473,7 +395,7 @@ socket.on("infoChannel", (dat) => {
     }
 
     //チャンネルデータを更新
-    ChannelIndex.value[dat.channelid] = {
+    dataChannel().ChannelIndex.value[dat.channelid] = {
         channelname: dat.channelname, //チャンネル名
         description: dat.description, //チャンネル概要
         scope: dat.scope, //チャンネルの公開範囲
@@ -488,25 +410,25 @@ socket.on("infoUser", (dat) => {
     let userid = dat.userid;
     let role = dat.role;
 
-    UserIndex.value[userid] = {};
+    dataMsg().UserIndex.value[userid] = {};
 
-    // console.log("socket :: infoUser : 情報北");
-    // console.log(dat);
+    console.log("socket :: infoUser : 情報北");
+    console.log(dat);
 
     //ユーザーインデックス更新
-    UserIndex.value[userid].username = username; //名前
-    UserIndex.value[userid].role = role; //ロール
-    UserIndex.value[userid].banned = dat.banned; //BANされているかどうか
-    UserIndex.value[userid].channelJoined = dat.channelJoined; //参加しているチャンネル
+    dataMsg().UserIndex.value[userid].username = username; //名前
+    dataMsg().UserIndex.value[userid].role = role; //ロール
+    dataMsg().UserIndex.value[userid].banned = dat.banned; //BANされているかどうか
+    dataMsg().UserIndex.value[userid].channelJoined = dat.channelJoined; //参加しているチャンネル
 
     //自分の情報の更新にだけ使うから
-    if ( dat.userid !== Userinfo.value.userid ) { return; }
+    if ( dat.userid !== dataUser().Userinfo.value.userid ) { return; }
 
     //参加しているチャンネルリストの長さを比較をして減ったり増えたりしたチャンネルのデータを処理
-    if ( dat.channelJoined.length !== Userinfo.value.channelJoined.length ) {
+    if ( dat.channelJoined.length !== dataUser().Userinfo.value.channelJoined.length ) {
         //チャンネル数が増えているなら
-        if ( dat.channelJoined.length > Userinfo.value.channelJoined.length ) {
-            let channelNew = (dat.channelJoined).filter( cid => !(Userinfo.value.channelJoined).includes(cid) );
+        if ( dat.channelJoined.length > dataUser().Userinfo.value.channelJoined.length ) {
+            let channelNew = (dat.channelJoined).filter( cid => !(dataUser().Userinfo.value.channelJoined).includes(cid) );
             
             console.log("socket :: チャンネル差 : ");
             console.log(channelNew);
@@ -517,8 +439,8 @@ socket.on("infoUser", (dat) => {
                 socket.emit("getInfoChannel", {
                     targetid: channelNew[c],
                     reqSender: {
-                        userid: Userinfo.value.userid, //ユーザーID
-                        sessionid: Userinfo.value.sessionid //セッションID
+                        userid: dataUser().Userinfo.value.userid, //ユーザーID
+                        sessionid: dataUser().Userinfo.value.sessionid //セッションID
                     }
                 });
 
@@ -533,20 +455,20 @@ socket.on("infoUser", (dat) => {
         }
 
         //チャンネル数が減っている（チャンネルを抜けた）なら
-        if ( dat.channelJoined.length < Userinfo.value.channelJoined.length ) {
+        if ( dat.channelJoined.length < dataUser().Userinfo.value.channelJoined.length ) {
             console.log("socket :: infoResult : チャンネル差が少ないから減らす");
-            dat.channelid = Userinfo.value.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
+            dat.channelid = dataUser().Userinfo.value.channelJoined.filter(cid => !dat.channelJoined.includes(cid));
 
             console.log("socket :: infoResult : 今参加しているチャンネル -> " + dat.channelJoined);
             //自分が抜けたチャンネル分channelIndexを削る
-            for (let c=0; c<Object.keys(ChannelIndex.value).length; c++ ) {
+            for (let c=0; c<Object.keys(dataChannel().ChannelIndex.value).length; c++ ) {
                 //チャンネルIDをチャンネル情報リストからとる
-                let channelid = Object.keys(ChannelIndex.value)[c];
+                let channelid = Object.keys(dataChannel().ChannelIndex.value)[c];
                 
                 //チャンネルIDがユーザーが参加しているチャンネルIDリストに入っているかどうか調べる
                 if ( !dat.channelJoined.includes(channelid) ) { //チャンネルがリストに入っていなければ
-                    delete ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
-                    delete MsgDB.value[channelid]; //そのチャンネルの履歴を削除
+                    delete dataChannel().ChannelIndex.value[channelid]; //そのチャンネルIDのJSONを削除
+                    delete dataMsg().MsgDB.value.value[channelid]; //そのチャンネルの履歴を削除
 
                     break;
 
@@ -558,12 +480,12 @@ socket.on("infoUser", (dat) => {
 
     }
 
-    Userinfo.value = {
+    dataUser().Userinfo.value = {
         username: dat.username,
-        userid: Userinfo.value.userid, //ユーザーID
+        userid: dataUser().Userinfo.value.userid, //ユーザーID
         role: dat.role, //ロール
         loggedin: true, //ログイン状態はそのまま
-        sessionid: Userinfo.value.sessionid, //セッションIDはそのまま
+        sessionid: dataUser().Userinfo.value.sessionid, //セッションIDはそのまま
         channelJoined: dat.channelJoined, //参加しているチャンネル
     }
 
@@ -591,19 +513,19 @@ socket.on("messageHistory", (history) => {
     }
 
     //プレビュー用の履歴データなら読み込むだけで処理を終える
-    if ( PreviewChannelData.value.channelid === channelid ) {
+    if ( dataChannel().PreviewChannelData.value.channelid === channelid ) {
         //履歴分ユーザーデータを持っているか調べて持ってなければ取得する
         for ( let index in history ) {
             //もしユーザーの名前リストに名前がなかったら
-            if ( UserIndex.value[history[index].userid] === undefined ) {
+            if ( dataMsg().UserIndex.value[history[index].userid] === undefined ) {
                 //データ受け取るまでのホルダー
-                UserIndex.value[history[index].userid] = {username:"loading..."};
+                dataMsg().UserIndex.value[history[index].userid] = {username:"loading..."};
                 //名前をリクエスト
                 socket.emit("getInfoUser", {
                     targetid: history[index].userid,
                     reqSender: {
-                        userid: Userinfo.value.userid, //ユーザーID
-                        sessionid: Userinfo.value.sessionid //セッションID
+                        userid: dataUser().Userinfo.value.userid, //ユーザーID
+                        sessionid: dataUser().Userinfo.value.sessionid //セッションID
                     }
                 });
 
@@ -613,48 +535,48 @@ socket.on("messageHistory", (history) => {
 
         console.log("messageHistory :: プレビュー用に読み込まれました...");
 
-        MsgDB.value[channelid] = history;
+        dataMsg().MsgDB.value.value[channelid] = history;
         return;
 
     }
 
     let index = 0; //チャンネル参照インデックス変数
 
-    if ( MsgReadTime.value[channelid] !== undefined ) {
+    if ( dataMsg().MsgReadTime.value[channelid] !== undefined ) {
         //既読状態の時間から計算するから予め新着数初期化
-        MsgReadTime.value[channelid].new = 0;
-        MsgReadTime.value[channelid].mention = 0;
+        dataMsg().MsgReadTime.value[channelid].new = 0;
+        dataMsg().MsgReadTime.value[channelid].mention = 0;
 
     }
 
     //受信した履歴の中で新着のものかどうか調べて新着数を加算
     for ( index in history ) {
         //既読状態がそもそも無ければやらない
-        if ( MsgReadTime.value[channelid] === undefined ) break;
+        if ( dataMsg().MsgReadTime.value[channelid] === undefined ) break;
 
         //もしユーザーの名前リストに名前がなかったら
-        if ( UserIndex.value[history[index].userid] === undefined ) {
+        if ( dataMsg().UserIndex.value[history[index].userid] === undefined ) {
             //データ受け取るまでのホルダー
-            UserIndex.value[history[index].userid] = {username:"loading..."};
+            dataMsg().UserIndex.value[history[index].userid] = {username:"loading..."};
             //名前をリクエスト
             socket.emit("getInfoUser", {
                 targetid: history[index].userid,
                 reqSender: {
-                    userid: Userinfo.value.userid, //ユーザーID
-                    sessionid: Userinfo.value.sessionid //セッションID
+                    userid: dataUser().Userinfo.value.userid, //ユーザーID
+                    sessionid: dataUser().Userinfo.value.sessionid //セッションID
                 }
             });
 
         }
 
         //既読状態の時間から新着メッセージ数を加算
-        if ( parseInt(history[index].time) > parseInt(MsgReadTime.value[channelid].time) ) {
+        if ( parseInt(history[index].time) > parseInt(dataMsg().MsgReadTime.value[channelid].time) ) {
             //メンションされていたかどうかにあわせて既読状態を更新
-            if ( history[index].content.includes("@/" + Userinfo.value.userid + "/") ) {
-                MsgReadTime.value[channelid].mention++; //メンション数を加算
+            if ( history[index].content.includes("@/" + dataUser().Userinfo.value.userid + "/") ) {
+                dataMsg().MsgReadTime.value[channelid].mention++; //メンション数を加算
 
             } else {
-                MsgReadTime.value[channelid].new++; //新着数を加算
+                dataMsg().MsgReadTime.value[channelid].new++; //新着数を加算
 
             }
 
@@ -666,13 +588,13 @@ socket.on("messageHistory", (history) => {
     }
 
     try {
-        if ( MsgReadTime.value[channelid].mention !== 0 && MsgReadTime.value[channelid].new !== 0 ) {
+        if ( dataMsg().MsgReadTime.value[channelid].mention !== 0 && dataMsg().MsgReadTime.value[channelid].new !== 0 ) {
             //既読状態をサーバーへ同期させる
             socket.emit("updateUserSaveMsgReadState", {
-                msgReadState: MsgReadTime.value,
+                msgReadState: dataMsg().MsgReadTime.value,
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: dataUser().Userinfo.value.userid,
+                    sessionid: dataUser().Userinfo.value.sessionid
                 }
             });
 
@@ -680,22 +602,22 @@ socket.on("messageHistory", (history) => {
     } catch(e) {}
 
     //履歴が存在しているなら履歴を頭から追加
-    if ( ChannelIndex.value[channelid].historyReadCount !== 0 ) {
+    if ( dataChannel().ChannelIndex.value[channelid].historyReadCount !== 0 ) {
         //データの追加順的に逆だからここでソートしておく
         history = history.reverse();
 
         //履歴用配列の先頭から一つずつ履歴を追加
         for ( let index in history ) {
-            MsgDB.value[channelid].unshift(history[index]);
+            dataMsg().MsgDB.value.value[channelid].unshift(history[index]);
 
         }
         
         //履歴の長さを計算
-        ChannelIndex.value[channelid].historyReadCount += history.length;
+        dataChannel().ChannelIndex.value[channelid].historyReadCount += history.length;
 
     } else { //存在しないなら新しく追加
-        MsgDB.value[channelid] = history;
-        ChannelIndex.value[channelid].historyReadCount += history.length;
+        dataMsg().MsgDB.value[channelid] = history;
+        dataChannel().ChannelIndex.value[channelid].historyReadCount += history.length;
 
     }
 
@@ -706,7 +628,7 @@ socket.on("authResult", (dat) => {
     //ユーザーデータの更新
     if ( dat.result ) { //もしログイン成功なら
         //ユーザー情報を更新
-        Userinfo.value = {
+        dataUser().Userinfo.value = {
             userid: dat.userid, //ユーザーID
             loggedin: true, //ログイン状態
             sessionid: dat.sessionid, //セッションID
@@ -738,20 +660,20 @@ socket.on("authResult", (dat) => {
         console.log("session id in cookie -> " + getCookie("sessionid"));
 
         //チャンネル情報の取得
-        for ( let c in Userinfo.value.channelJoined ) {
+        for ( let c in dataUser().Userinfo.value.channelJoined ) {
             socket.emit("getInfoChannel", { //リクエスト送信
-                targetid: Userinfo.value.channelJoined[c],
+                targetid: dataUser().Userinfo.value.channelJoined[c],
                 reqSender: {
-                    userid: Userinfo.value.userid, //ユーザーID
-                    sessionid: Userinfo.value.sessionid //セッションID
+                    userid: dataUser().Userinfo.value.userid, //ユーザーID
+                    sessionid: dataUser().Userinfo.value.sessionid //セッションID
                 }
             });
 
         }
 
         //メッセージ履歴の取得
-        for ( let cid in Userinfo.value.channelJoined ) {
-            getMessage(Userinfo.value.channelJoined[cid], 40); //リクエスト送信する
+        for ( let cid in dataUser().Userinfo.value.channelJoined ) {
+            getMessage(dataUser().Userinfo.value.channelJoined[cid], 40); //リクエスト送信する
 
         }
 
@@ -784,7 +706,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
         //参加していないチャンネルの既読状態を削除
         for ( let index in keysUserSaveMsgReadState ) { //既読状態のチャンネルIDをぶん回す
             //もしチャンネル参加リストにチャンネルIDが入っていなければ
-            if ( !Userinfo.value.channelJoined.includes(keysUserSaveMsgReadState[index]) ) {
+            if ( !dataUser().Userinfo.value.channelJoined.includes(keysUserSaveMsgReadState[index]) ) {
                 //引っ張ってきた既読状態から削除
                 delete userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]];
 
@@ -793,7 +715,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
         }
 
         //既読状態を適用
-        MsgReadTime.value = userSaveMsgReadState.msgReadState;
+        dataMsg().MsgReadTime.value = userSaveMsgReadState.msgReadState;
 
     }
 
@@ -818,7 +740,7 @@ function loadDataFromCookie() {
         }
         
         //既読状態をクッキーから取得
-        MsgReadTime.value = COOKIE_MsgReadTime;
+        dataMsg().MsgReadTime.value = COOKIE_MsgReadTime;
     }
     catch(e) {}
 
@@ -847,8 +769,8 @@ function loadDataFromCookie() {
         //サーバーから設定を取得
         socket.emit("getUserSaveConfig", {
             reqSender: {
-                userid: Userinfo.value.userid,
-                sessionid: Userinfo.value.sessionid
+                userid: dataUser().Userinfo.value.userid,
+                sessionid: dataUser().Userinfo.value.sessionid
             }
         });
 
@@ -859,9 +781,9 @@ function loadDataFromCookie() {
     let COOKIE_ConfigNotify;
 
     //クッキーから通知設定を読み込み
-    try { COOKIE_ConfigSync = getCookie("configSync"); } catch(e) {}
-    try { COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay")); } catch(e) {}
-    try { COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify")); } catch(e) {}
+    try { COOKIE_ConfigSync = getCookie("configSync"); } catch(e) { COOKIE_ConfigSync={}; }
+    try { COOKIE_ConfigDisplay = JSON.parse(getCookie("configDisplay")); } catch(e) { COOKIE_ConfigDisplay={};}
+    try { COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify")); } catch(e) { COOKIE_ConfigNotify={}; }
 
     //クッキーから表示設定を取得して適用
     try {
@@ -885,8 +807,8 @@ function loadDataFromCookie() {
            //取得
             socket.emit("getUserSaveConfig", {
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: dataUser().Userinfo.value.userid,
+                    sessionid: dataUser().Userinfo.value.sessionid
                 }
             });
 

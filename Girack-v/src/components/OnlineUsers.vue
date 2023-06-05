@@ -1,5 +1,6 @@
 <script>
-import { dataUser, getSocket, backendURI } from '../socket';
+import { getSocket, backendURI } from '../socket';
+import { dataUser } from '../data/dataUserinfo';
 import Userpage from "./Userpage.vue";
 
 const socket = getSocket();

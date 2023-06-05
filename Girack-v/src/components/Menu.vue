@@ -1,13 +1,13 @@
-<script setup>
-import { dataUser } from '../socket.js';
-import { RouterView } from 'vue-router';
-
-</script>
-
 <script>
-const { Userinfo } = dataUser();
+import { RouterView } from 'vue-router';
+import { dataUser } from '../data/dataUserinfo.js';
 
 export default {
+    setup() {
+        const Userinfo = dataUser();
+        return { Userinfo };
+
+    },
     
     data() {
         return {

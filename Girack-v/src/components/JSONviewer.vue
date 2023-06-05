@@ -6,7 +6,8 @@ DELETE OR HIDE ON HOSTING TO PUBLIC
 ********************************************************/
 
 <script setup>
-import { dataChannel, dataMsg } from '../socket';
+import { dataChannel } from '../data/dataChannel';
+import { dataMsg } from '../data/dataMsg';
 </script>
 
 <script>

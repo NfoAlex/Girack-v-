@@ -1,6 +1,7 @@
 <script>
 
-import { getSocket, dataUser } from '../../socket';
+import { getSocket } from '../../socket';
+import { dataUser } from '../../data/dataUserinfo';
 import { getReplyState } from "./Input.vue";
 
 const socket = getSocket();

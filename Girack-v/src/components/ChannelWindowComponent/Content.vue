@@ -1,5 +1,8 @@
 <script>
-import { getSocket, dataMsg, dataUser, backendURI, getMessage, dataChannel, setCookie } from "../../socket.js";
+import { getSocket, backendURI, getMessage, setCookie } from "../../socket.js";
+import { dataMsg } from "../../data/dataMsg";
+import { dataChannel } from "../../data/dataChannel";
+import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
 import ContentHoverMenu from "./ContentHoverMenu.vue";

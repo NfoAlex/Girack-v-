@@ -1,7 +1,7 @@
 <script>
+import { getSocket } from "./socket.js";
+import { dataUser } from './data/dataUserinfo';
 import { RouterView } from 'vue-router';
-import { getSocket, dataUser } from "./socket.js";
-
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
 import { useTheme } from 'vuetify';

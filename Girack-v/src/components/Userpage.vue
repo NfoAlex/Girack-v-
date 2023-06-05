@@ -1,6 +1,8 @@
 <script>
 
-import { getSocket, backendURI, dataUser, dataChannel } from '../socket.js';
+import { getSocket, backendURI } from '../socket.js';
+import { dataChannel } from '../data/dataChannel';
+import { dataUser } from '../data/dataUserinfo';
 
 const socketUserpage = getSocket();
 

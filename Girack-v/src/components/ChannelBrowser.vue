@@ -1,5 +1,8 @@
 <script>
-import { getSocket, dataMsg, dataUser, dataChannel, getMessage } from '../socket.js';
+import { getSocket, getMessage } from '../socket.js';
+import { dataMsg } from '../data/dataMsg';
+import { dataChannel } from '../data/dataChannel';
+import { dataUser } from '../data/dataUserinfo';
 
 const socket = getSocket();
 
