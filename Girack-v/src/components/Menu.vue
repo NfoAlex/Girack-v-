@@ -4,7 +4,7 @@ import { dataUser } from '../data/dataUserinfo.js';
 
 export default {
     setup() {
-        const myUserinfo = dataUser();
+        const { myUserinfo } = dataUser();
         return { myUserinfo };
 
     },
@@ -33,6 +33,7 @@ export default {
     mounted() {
         //ブラウザ上のタブ名を設定
         document.title = "メニュー";
+        console.log("Menu :: mounted : myUserinfo->", this.myUserinfo.role);
 
     }
 
@@ -41,6 +42,7 @@ export default {
 
 <template>
     <div class="d-flex">
+        
         <div style="width:20%; max-width:200px; height:100%; overflow-y:auto;">
             <RouterLink to="/menu/profile">
                 <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('profile')?'primary':'secondary'">
