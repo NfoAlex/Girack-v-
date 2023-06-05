@@ -258,7 +258,7 @@ export default {
 </script>
 
 <template>
-    <v-dialog style="max-width:500px; width:50vw; max-height:65vh;">
+    <v-dialog style="max-width:550px; width:50vw; max-height:65vh;">
         <v-card elevation="6" class="mx-auto d-flex flex-column align-self-start pa-1 userpage text-center rounded-lg">
 
             <div>
