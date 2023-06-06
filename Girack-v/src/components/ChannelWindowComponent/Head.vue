@@ -69,17 +69,17 @@ export default {
             let channelidHere = this.$route.params.id;
 
             //チャンネルミュートリスト入っていたら削除、なかったら追加
-            if ( (LIST_NOTIFICATION_MUTE_CHANNEL.value).includes(channelidHere) ) {
+            if ( (this.LIST_NOTIFICATION_MUTE_CHANNEL).includes(channelidHere) ) {
                 //ミュートリストからチャンネルを削除
-                LIST_NOTIFICATION_MUTE_CHANNEL.value.splice( LIST_NOTIFICATION_MUTE_CHANNEL.value.indexOf(channelidHere),1 );
+                this.LIST_NOTIFICATION_MUTE_CHANNEL.splice( this.LIST_NOTIFICATION_MUTE_CHANNEL.indexOf(channelidHere),1 );
 
             } else {
                 //ミュートリストへ追加
-                LIST_NOTIFICATION_MUTE_CHANNEL.value.push(this.$route.params.id);
+                this.LIST_NOTIFICATION_MUTE_CHANNEL.push(this.$route.params.id);
 
             }
 
-            setCookie("configListMute", (LIST_NOTIFICATION_MUTE_CHANNEL.value.join("::")), 7);
+            setCookie("configListMute", (this.LIST_NOTIFICATION_MUTE_CHANNEL.join("::")), 7);
 
         },
     },
