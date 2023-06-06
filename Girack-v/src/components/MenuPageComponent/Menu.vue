@@ -1,6 +1,6 @@
 <script>
 import { RouterView } from 'vue-router';
-import { dataUser } from '../data/dataUserinfo.js';
+import { dataUser } from '../../data/dataUserinfo';
 
 export default {
     setup() {
