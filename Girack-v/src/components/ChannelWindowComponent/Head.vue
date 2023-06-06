@@ -1,15 +1,17 @@
-<script setup>
+<script>
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
 import { setCookie } from '../../data/socket';
 import { dataUser } from "../../data/dataUserinfo";
 import ChannelConfig from "./ChannelConfig.vue";
-</script>
-
-<script>
-const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
 
 export default {
+    setup() {
+        const { myUserinfo } = dataUser();
+        const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
+        return { myUserinfo, LIST_NOTIFICATION_MUTE_CHANNEL };
+
+    },
 
     components: { ChannelConfig },
     props: ["channelInfo"],
@@ -84,7 +86,7 @@ export default {
 
     mounted() {
         //読み込みエラー対策(参加しているチャンネルリストに今のチャンネルがあるかどうか)
-        if ( dataUser().myUserinfo.value.channelJoined.includes(this.getPath) === -1 ) {
+        if ( this.myUserinfo.channelJoined.includes(this.getPath) === -1 ) {
             location.pathname = "/";
 
         }
