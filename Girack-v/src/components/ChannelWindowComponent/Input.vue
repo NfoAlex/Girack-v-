@@ -183,7 +183,8 @@ export default {
     methods: {
         //Enterキーのトリガー処理
         EnterTrigger(event) {
-            if ( event.keyCode !== 13 ) return; //変換中のEnterなら処理させない
+            //変換中のEnterなら処理させない
+            if ( event.keyCode !== 13 ) return;
 
             //Shiftが同時に押されていたら改行するだけ
             if ( event.shiftKey ) {
@@ -199,7 +200,8 @@ export default {
                 //検索モードを終了
                 this.searchMode.enabled = false;
 
-            } else {
+            //もし250文字以内ならメッセージ送信
+            } else if ( this.txt.length <= 250 ) {
                 //メッセージ送信開始
                 this.msgSend(event);
 
@@ -217,9 +219,7 @@ export default {
         },
 
         //メッセージを送信する
-        msgSend( event, btn ) {
-            console.log("Input :: msgSend : 送信しようとしている");
-
+        msgSend( ) {
             //送信ｨﾝ!
             socket.emit("msgSend", {
                 userid: this.myUserinfo.userid, //名前
@@ -576,8 +576,9 @@ export default {
                     </v-list>
                 </v-menu>
             
-                <v-btn @click="msgSend(null,'byBtn')" icon="" size="large" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
-                    <v-icon icon="mdi:mdi-send-outline"></v-icon>
+                <v-btn @click="msgSend(null,'byBtn')" :disabled="txt.length>250" icon="" size="large" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
+                    <v-icon v-if="txt.length<=250" icon="mdi:mdi-send-outline"></v-icon>
+                    <span v-if="txt.length>250">{{ 250 - txt.length }}</span>
                     <v-tooltip
                         activator="parent"
                         location="top"
