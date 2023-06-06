@@ -1,6 +1,9 @@
 <script>
 
-import { dataUser, dataMsg, dataChannel, getSocket, getMessage, backendURI } from '../../socket.js';
+import { getSocket, getMessage, backendURI } from '../../data/socket.js';
+import { dataMsg } from '../../data/dataMsg';
+import { dataChannel } from '../../data/dataChannel';
+import { dataUser } from '../../data/dataUserinfo';
 import { ref } from "vue";
 
 const socket = getSocket();
@@ -20,11 +23,11 @@ export default {
 
     setup() {
         const { ReplyState } = getReplyState();
-        const { Userinfo } = dataUser();
+        const { myUserinfo, UserIndex } = dataUser();
         const { ChannelIndex } = dataChannel();
-        const { MsgDB, UserIndex } = dataMsg();
+        const { MsgDB } = dataMsg();
 
-        return { ReplyState, Userinfo, ChannelIndex, MsgDB, UserIndex };
+        return { ReplyState, myUserinfo, ChannelIndex, MsgDB, UserIndex };
 
     },
 
@@ -96,8 +99,8 @@ export default {
                 socket.emit("getInfoChannelJoinedUserList", {
                     targetid: this.getPath,
                     reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
                     }
                 });
 
@@ -129,8 +132,8 @@ export default {
                 socket.emit("getInfoChannelJoinedUserList", {
                     targetid: this.getPath,
                     reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
                     }
                 });
 
@@ -226,9 +229,9 @@ export default {
 
             //送信ｨﾝ!
             socket.emit("msgSend", {
-                userid: this.Userinfo.userid, //名前
+                userid: this.myUserinfo.userid, //名前
                 channelid: this.getPath, //チャンネルID
-                sessionid: this.Userinfo.sessionid, //セッションID);
+                sessionid: this.myUserinfo.sessionid, //セッションID);
                 replyData: { //返信データ
                     isReplying: ReplyState.value.isReplying, //これは返信かどうか
                     messageid: (ReplyState.value.isReplying)?ReplyState.value.messageid:null, //返信先のメッセージID
@@ -239,8 +242,8 @@ export default {
                 },
                 content: this.txt, //メッセージの本文
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
             
@@ -401,8 +404,8 @@ export default {
         socket.emit("getInfoChannelJoinedUserList", {
             targetid: this.getPath,
             reqSender: {
-                userid: this.Userinfo.userid,
-                sessionid: this.Userinfo.sessionid
+                userid: this.myUserinfo.userid,
+                sessionid: this.myUserinfo.sessionid
             }
         });
 

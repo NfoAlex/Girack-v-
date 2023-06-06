@@ -1,6 +1,7 @@
 <script>
 import { getCONFIG } from "../../config.js";
-import { getSocket, setCookie, dataUser } from "../../socket.js";
+import { getSocket, setCookie } from "../../data/socket.js";
+import { dataUser } from "../../data/dataUserinfo";
 
 const socket = getSocket();
 
@@ -9,8 +10,8 @@ export default {
     setup() {
         //設定をインポート
         const { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC } = getCONFIG();
-        const { Userinfo } = dataUser();
-        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, Userinfo };
+        const { myUserinfo } = dataUser();
+        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
         
     },
 
@@ -111,8 +112,8 @@ export default {
                     LIST_NOTIFICATION_MUTE_CHANNEL: this.LIST_NOTIFICATION_MUTE_CHANNEL
                 },
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -126,8 +127,8 @@ export default {
             //サーバー上の自分の設定を取得
             socket.emit("getUserSaveConfig", {
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 

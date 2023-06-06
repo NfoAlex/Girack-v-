@@ -1,15 +1,18 @@
 <script>
-import { getSocket, dataMsg, dataUser, dataChannel, getMessage } from '../socket.js';
+import { getSocket, getMessage } from '../data/socket';
+import { dataMsg } from '../data/dataMsg';
+import { dataChannel } from '../data/dataChannel';
+import { dataUser } from '../data/dataUserinfo';
 
 const socket = getSocket();
 
 export default {
 
     setup() {
-        const { Userinfo } = dataUser(); //自分のユーザー情報をインポート
+        const { myUserinfo } = dataUser(); //自分のユーザー情報をインポート
         const { PreviewChannelData } = dataChannel();
         const { MsgDB } = dataMsg();
-        return { PreviewChannelData, Userinfo, MsgDB };
+        return { PreviewChannelData, myUserinfo, MsgDB };
 
     },
 
@@ -34,7 +37,7 @@ export default {
 
     watch: {
         //ユーザー情報の変更を監視
-        Userinfo: {
+        myUserinfo: {
             //変更を検知したらチャンネルリストを再取得
             handler(U) { //U => 変更されたあとのUserinfo
                 socket.emit("getInfoList", {
@@ -57,10 +60,10 @@ export default {
             socket.emit("channelAction", {
                 action: "join",
                 channelid: channelid, //参加するチャンネルのid
-                userid: this.Userinfo.userid, //参加する人のユーザーID(この場合自分)
+                userid: this.myUserinfo.userid, //参加する人のユーザーID(この場合自分)
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -68,8 +71,8 @@ export default {
             socket.emit("getInfoList", {
                 target: "channel",
                 reqSender: {
-                    userid: this.Userinfo.userid, //ユーザーID
-                    sessionid: this.Userinfo.sessionid //セッションID
+                    userid: this.myUserinfo.userid, //ユーザーID
+                    sessionid: this.myUserinfo.sessionid //セッションID
                 }
             });
 
@@ -106,10 +109,10 @@ export default {
             socket.emit("channelAction", {
                 action: "leave",
                 channelid: channelid, //抜けるチャンネルのID
-                userid: this.Userinfo.userid, //抜ける人のユーザーID(この場合自分)
+                userid: this.myUserinfo.userid, //抜ける人のユーザーID(この場合自分)
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -117,8 +120,8 @@ export default {
             socket.emit("getInfoList", {
             target: "channel",
             reqSender: {
-                userid: this.Userinfo.userid, //ユーザーID
-                sessionid: this.Userinfo.sessionid //セッションID
+                userid: this.myUserinfo.userid, //ユーザーID
+                sessionid: this.myUserinfo.sessionid //セッションID
             }
         });
 
@@ -132,8 +135,8 @@ export default {
                 description: this.channelCreateDescription, //作るチャンネルの概要
                 scope: ( this.channelCreatePrivate?"private":"public" ), //作るチャンネルの公開範囲
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
             this.overlayChannelCreate = false; //チャンネル作成ダイアログを非表示
@@ -159,8 +162,8 @@ export default {
             socket.emit("channelRemove", {
                 channelid: cid, //消すチャンネルのID
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -191,8 +194,8 @@ export default {
         socket.emit("getInfoList", {
             target: "channel",
             reqSender: {
-                userid: this.Userinfo.userid, //ユーザーID
-                sessionid: this.Userinfo.sessionid //セッションID
+                userid: this.myUserinfo.userid, //ユーザーID
+                sessionid: this.myUserinfo.sessionid //セッションID
             }
         });
 
@@ -335,13 +338,13 @@ export default {
                             </v-btn>
 
                             <!-- プレビューボタン -->
-                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelPreview(c[0])" icon="" size="small" style="margin-right:16px;" class="rounded-lg" variant="text">
+                            <v-btn v-if="!myUserinfo.channelJoined.includes(c[0])" @click="channelPreview(c[0])" icon="" size="small" style="margin-right:16px;" class="rounded-lg" variant="text">
                                 <v-icon>
                                     mdi:mdi-eye
                                 </v-icon>
                             </v-btn>
                             
-                            <v-btn v-if="!Userinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal" class="rounded-lg">参加</v-btn>
+                            <v-btn v-if="!myUserinfo.channelJoined.includes(c[0])" @click="channelJoin(c[0])" variant="tonal" class="rounded-lg">参加</v-btn>
                             <v-btn v-else @click="channelLeave(c[0])" variant="outlined" class="rounded-lg">退出</v-btn>
                         </div>
 

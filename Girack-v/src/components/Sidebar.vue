@@ -1,20 +1,23 @@
 //Sidebar.vue
 <script>
+import { getSocket, backendURI, Serverinfo } from "../data/socket";
+import { dataMsg } from "../data/dataMsg";
+import { dataChannel } from "../data/dataChannel";
+import { dataUser } from '../data/dataUserinfo';
+import { getCONFIG } from "../config";
 import { RouterLink } from 'vue-router';
-import { getSocket, dataChannel, dataUser, dataMsg, backendURI, Serverinfo } from "../socket.js";
-import { getCONFIG } from "../config.js";
 
 const socket = getSocket();
 
 export default {
     
     setup() {
-        const { Userinfo } = dataUser();
+        const { myUserinfo } = dataUser();
         const { MsgReadTime } = dataMsg();
         const { ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
 
-        return { Userinfo, MsgReadTime, ChannelIndex, Serverinfo, CONFIG_DISPLAY };
+        return { myUserinfo, MsgReadTime, ChannelIndex, Serverinfo, CONFIG_DISPLAY };
 
     },
 
@@ -207,26 +210,26 @@ export default {
                     <!-- アイコン-->
                     <div class="mx-auto" style="width:fit-content; margin-top:10%;">
                             <v-avatar style="width:4vmax; height:auto; margin-bottom:12px;">
-                                <v-img :alt="Userinfo.userid" :src="uri + '/img/' + Userinfo.userid"></v-img>
+                                <v-img :alt="myUserinfo.userid" :src="uri + '/img/' + myUserinfo.userid"></v-img>
                             </v-avatar>
                     </div>
 
                     <!-- ロールバッジ-->
                     <div style="width:fit-content" class="mx-auto">
                         <v-chip
-                            v-if="Userinfo.role!=='Member'"
-                            :color="Userinfo.role==='Admin'?'purple':'blue'"
+                            v-if="myUserinfo.role!=='Member'"
+                            :color="myUserinfo.role==='Admin'?'purple':'blue'"
                             size="x-small"
                             :elevation="6"
                         >
-                            <!-- ここはロール ⇒⇒⇒ -->{{ Userinfo.role }}
+                            <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
                         </v-chip>
                     </div>
 
                     <!-- ユーザー名-->
                     <v-card-text class="text-subtitle-1 text-center mx-auto">
                         <span>
-                            {{ Userinfo.username }}
+                            {{ myUserinfo.username }}
                         </span>
                     </v-card-text>
 
@@ -255,7 +258,7 @@ export default {
                 <!-- FOR DEBUGGING ONLY -->
                 <RouterLink :to="'/jsonviewer'">
                     <v-card
-                        v-if="Userinfo.role==='Admin'"
+                        v-if="myUserinfo.role==='Admin'"
                         class="d-flex pa-2 justify-center align-center rounded-pill"
                         @click=""
                         :variant="path.indexOf('jsonviewer')!==-1?'tonal':'text'"

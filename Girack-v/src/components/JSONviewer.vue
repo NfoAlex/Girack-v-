@@ -6,11 +6,14 @@ DELETE OR HIDE ON HOSTING TO PUBLIC
 ********************************************************/
 
 <script setup>
-import { dataChannel, dataMsg } from '../socket';
+import { dataChannel } from '../data/dataChannel';
+import { dataMsg } from '../data/dataMsg';
+import { dataUser } from '../data/dataUserinfo';
 </script>
 
 <script>
-const { MsgDB, MsgReadTime, UserIndex } = dataMsg();
+const { UserIndex } = dataUser();
+const { MsgDB, MsgReadTime } = dataMsg();
 const { ChannelIndex } = dataChannel();
 
 export default {

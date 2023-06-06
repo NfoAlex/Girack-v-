@@ -1,6 +1,8 @@
 <script>
 
-import { getSocket, backendURI, dataUser, dataChannel } from '../socket.js';
+import { getSocket, backendURI } from '../data/socket';
+import { dataChannel } from '../data/dataChannel';
+import { dataUser } from '../data/dataUserinfo';
 
 const socketUserpage = getSocket();
 
@@ -8,9 +10,9 @@ export default {
     props: ["userid"],
 
     setup() {
-        const { Userinfo } = dataUser();
+        const { myUserinfo } = dataUser();
         const { ChannelIndex, PreviewChannelData } = dataChannel();
-        return { Userinfo, ChannelIndex, PreviewChannelData };
+        return { myUserinfo, ChannelIndex, PreviewChannelData };
 
     },
 
@@ -52,8 +54,8 @@ export default {
                             value: this.targetUserRole
                         },
                         reqSender: {
-                            userid: this.Userinfo.userid,
-                            sessionid: this.Userinfo.sessionid
+                            userid: this.myUserinfo.userid,
+                            sessionid: this.myUserinfo.sessionid
                         }
                     });
 
@@ -74,8 +76,8 @@ export default {
                     value: this.targetinfo.banned?false:true //true=>BANする、false=>解除
                 },
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             })
         },
@@ -89,8 +91,8 @@ export default {
                     change: "delete",
                 },
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -118,7 +120,7 @@ export default {
         //メンバーページから開かれたものか確認
         checkOpenedFromMemberPage() {
             //メンバーページから開かれたものなら
-            if ( this.$route.path === "/menu/members" && this.Userinfo.userid !== this.userid ) {
+            if ( this.$route.path === "/menu/members" && this.myUserinfo.userid !== this.userid ) {
                 return true;
 
             } else {
@@ -167,12 +169,12 @@ export default {
                 if (
                     ( //自分がAdminではなく、かつターゲットのユーザーがAdminなら
                         this.targetinfo.role === "Admin" &&
-                        this.Userinfo.role !== "Admin"
+                        this.myUserinfo.role !== "Admin"
                     ) ||
                     this.targetinfo.role === "Deleted" //消されたユーザーなら
                 ) {
                     //条件にひっかかっても自分だったらスルー
-                    if ( this.Userinfo.userid !== this.targetinfo.userid ) {
+                    if ( this.myUserinfo.userid !== this.targetinfo.userid ) {
                         this.manageDisabled = true; //管理を無効化
 
                     }
@@ -184,8 +186,8 @@ export default {
                     socketUserpage.emit("getInfoChannel", {
                         targetid: dat.channelJoined[index],
                         reqSender: {
-                            userid: this.Userinfo.userid,
-                            sessionid: this.Userinfo.sessionid
+                            userid: this.myUserinfo.userid,
+                            sessionid: this.myUserinfo.sessionid
                         }
                     });
 
@@ -215,10 +217,10 @@ export default {
 
     mounted() {
         //自分のロールに合わせて選べるロールの範囲を設定
-        if ( this.Userinfo.role === "Admin" ) { //Adminなら全員選べるようにする
+        if ( this.myUserinfo.role === "Admin" ) { //Adminなら全員選べるようにする
             this.roleList = ["Admin", "Moderator", "Member"];
 
-        } else if ( this.Userinfo.role === "Moderator" ) { //ModeratorならModerator以下
+        } else if ( this.myUserinfo.role === "Moderator" ) { //ModeratorならModerator以下
             this.roleList = ["Moderator", "Member"];
 
         } else {
@@ -237,8 +239,8 @@ export default {
             socketUserpage.emit("getInfoUser", {
                 targetid: this.userid,
                 reqSender: {
-                    userid: dataUser().Userinfo.value.userid,
-                    sessionid: dataUser().Userinfo.value.sessionid
+                    userid: dataUser().myUserinfo.value.userid,
+                    sessionid: dataUser().myUserinfo.value.sessionid
                 }
             });
 
@@ -275,14 +277,14 @@ export default {
                         <v-chip v-if="targetinfo.banned" color="red" size="small">BANされています</v-chip>
                         <p class="text-overline"># {{ userid }}</p>
 
-                        <p v-if="targetinfo.loggedin&&userid!==Userinfo.userid">
+                        <p v-if="targetinfo.loggedin&&userid!==myUserinfo.userid">
                             <v-chip class="ma-1" variant="flat" color="success" size="x-small">
                                 オンライン
                             </v-chip>
                         </p>
 
                         <p>
-                            <v-chip v-if="userid===Userinfo.userid" color="green" size="small">
+                            <v-chip v-if="userid===myUserinfo.userid" color="green" size="small">
                                 あなた
                             </v-chip>
                         </p>
@@ -309,10 +311,10 @@ export default {
                         <v-tab value="channel">
                             チャンネル
                         </v-tab>
-                        <v-tab v-if="Userinfo.role!=='Member'&&!manageDisabled" value="mod">
+                        <v-tab v-if="myUserinfo.role!=='Member'&&!manageDisabled" value="mod">
                             管理
                         </v-tab>
-                        <v-tab v-if="Userinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
+                        <v-tab v-if="myUserinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
                             <p style="color:pink">削除</p>
                         </v-tab>
 
@@ -320,7 +322,7 @@ export default {
 
             </div>
 
-            <v-divider></v-divider>
+            <v-divider style="margin-top:16px;"></v-divider>
             
             <!-- タブの中身 -->
             <v-window v-model="tab" style="overflow-y:auto;">

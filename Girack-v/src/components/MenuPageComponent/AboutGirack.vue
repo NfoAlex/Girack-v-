@@ -1,6 +1,6 @@
 <script>
 
-import { CLIENT_VERSION } from "../../socket.js";
+import { CLIENT_VERSION } from "../../data/socket.js";
 
 export default {
 

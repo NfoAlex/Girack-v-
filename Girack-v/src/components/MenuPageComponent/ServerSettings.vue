@@ -1,7 +1,8 @@
 <script>
-import { getSocket, dataUser } from '../../socket';
+import { getSocket } from '../../data/socket';
+import { dataUser } from '../../data/dataUserinfo';
 const socket = getSocket();
-const { Userinfo } = dataUser();
+const { myUserinfo } = dataUser();
 
 export default {
 
@@ -73,8 +74,8 @@ export default {
                     }
                 },
                 reqSender: {
-                    userid: Userinfo.value.userid,
-                    sessionid: Userinfo.value.sessionid
+                    userid: myUserinfo.value.userid,
+                    sessionid: myUserinfo.value.sessionid
                 }
             });
         }
@@ -86,8 +87,8 @@ export default {
         //サーバーの設定情報を取得
         socket.emit("getServerSettings", {
             reqSender: {
-                userid: Userinfo.value.userid,
-                sessionid: Userinfo.value.sessionid
+                userid: myUserinfo.value.userid,
+                sessionid: myUserinfo.value.sessionid
             }
         });
 

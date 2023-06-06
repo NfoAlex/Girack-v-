@@ -1,16 +1,17 @@
 <script>
 
-import { getSocket, dataUser } from '../../socket';
+import { getSocket } from '../../data/socket';
+import { dataUser } from '../../data/dataUserinfo';
 import { getReplyState } from "./Input.vue";
 
 const socket = getSocket();
 
 export default {
     setup() {
-        const { Userinfo } = dataUser();
+        const { myUserinfo } = dataUser();
         const { ReplyState } = getReplyState();
 
-        return { Userinfo, ReplyState };
+        return { myUserinfo, ReplyState };
 
     },
 
@@ -76,8 +77,8 @@ export default {
                     channelid: this.channelid,
                     messageid: msgId,
                     reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
                     }
                 });
 
@@ -92,8 +93,8 @@ export default {
                     messageid: msgId,
                     reaction: reaction, //送るリアクション
                     reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
                     }
                 });
             }
@@ -147,7 +148,7 @@ export default {
             <!-- 削除ボタン -->
             <v-btn
                 prepend-icon="mdi:mdi-delete-forever"
-                v-if="Userinfo.role==='Admin'||(userrole!=='Admin'&&Userinfo.role==='Moderator')||m.userid===Userinfo.userid"
+                v-if="myUserinfo.role==='Admin'||(userrole!=='Admin'&&myUserinfo.role==='Moderator')||m.userid===myUserinfo.userid"
                 @click="messageAction(m.messageid, 'delete')"
                 style="margin-right:3px"
                 variant="tonal"

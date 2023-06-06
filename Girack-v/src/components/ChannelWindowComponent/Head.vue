@@ -1,7 +1,8 @@
 <script setup>
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
-import { dataUser, setCookie } from '../../socket';
+import { setCookie } from '../../data/socket';
+import { dataUser } from "../../data/dataUserinfo";
 import ChannelConfig from "./ChannelConfig.vue";
 </script>
 
@@ -83,7 +84,7 @@ export default {
 
     mounted() {
         //読み込みエラー対策(参加しているチャンネルリストに今のチャンネルがあるかどうか)
-        if ( dataUser().Userinfo.value.channelJoined.includes(this.getPath) === -1 ) {
+        if ( dataUser().myUserinfo.value.channelJoined.includes(this.getPath) === -1 ) {
             location.pathname = "/";
 
         }

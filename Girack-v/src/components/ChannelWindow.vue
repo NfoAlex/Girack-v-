@@ -2,7 +2,10 @@
 import Content from "./ChannelWindowComponent/Content.vue";
 import Head from "./ChannelWindowComponent/Head.vue";
 import Input from "./ChannelWindowComponent/Input.vue";
-import { dataMsg, dataChannel, dataUser, getSocket, getMessage } from "../socket.js";
+import { getSocket, getMessage } from "../data/socket.js";
+import { dataMsg } from "../data/dataMsg";
+import { dataChannel } from "../data/dataChannel";
+import { dataUser } from "../data/dataUserinfo";
 
 const socket = getSocket();
 
@@ -14,10 +17,10 @@ export default {
     },
 
     setup() {
-        const { Userinfo } = dataUser();
+        const { myUserinfo } = dataUser();
         const { MsgDB } = dataMsg();
         const { ChannelIndex, PreviewChannelData } = dataChannel();
-        return { Userinfo, MsgDB, ChannelIndex, PreviewChannelData };
+        return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData };
 
     },
 
@@ -67,8 +70,8 @@ export default {
                 socket.emit("getInfoChannel", {
                     targetid: this.PreviewChannelData.channelid,
                     reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
                     }
                 });
 

@@ -1,6 +1,7 @@
 <script>
 
-import { getSocket, dataMsg, dataUser } from "../../socket.js";
+import { getSocket } from "../../data/socket.js";
+import { dataUser } from "../../data/dataUserinfo";
 
 const socket = getSocket();
 
@@ -9,10 +10,9 @@ export default {
     props: ["content"],
 
     setup() {
-        const { UserIndex } = dataMsg();
-        const { Userinfo } = dataUser();
+        const { myUserinfo, UserIndex } = dataUser();
 
-        return { UserIndex, Userinfo };
+        return { UserIndex, myUserinfo };
 
     },
 
@@ -41,8 +41,8 @@ export default {
                 });
 
                 //自分に対するメンションなら着色
-                msgCleaned = msgCleaned.replaceAll(("@/"+this.Userinfo.userid + "/"), function(c){
-                    return "<span style='color:orange'>@" + REF.Userinfo.username + "</span>";
+                msgCleaned = msgCleaned.replaceAll(("@/"+this.myUserinfo.userid + "/"), function(c){
+                    return "<span style='color:orange'>@" + REF.myUserinfo.username + "</span>";
 
                 });
 
@@ -85,8 +85,8 @@ export default {
             socket.emit("getInfoUser", {
                 targetid: userid,
                 reqSender: {
-                    userid: this.Userinfo.userid, //ユーザーID
-                    sessionid: this.Userinfo.sessionid //セッションID
+                    userid: this.myUserinfo.userid, //ユーザーID
+                    sessionid: this.myUserinfo.sessionid //セッションID
                 }
             });
 

@@ -1,13 +1,14 @@
 <script>
-import { setCookie, getSocket, dataUser, backendURI } from '../../socket.js';
+import { setCookie, getSocket, backendURI } from '../../data/socket.js';
+import { dataUser } from '../../data/dataUserinfo';
 
 const socket = getSocket();
 
 export default {
 
     setup() {
-        const { Userinfo } = dataUser();
-        return { Userinfo, backendURI };
+        const { myUserinfo } = dataUser();
+        return { myUserinfo, backendURI };
     },
     
     data() {
@@ -41,7 +42,7 @@ export default {
 
     watch: {
         //ユーザー情報の監視
-        Userinfo: {
+        myUserinfo: {
             //変更を検知したら表示名を変更
             handler(U) {
                 this.nameDisplaying = U.username; //表示名を更新
@@ -76,8 +77,8 @@ export default {
             //ログアウトするとサーバーへ通達
             socket.emit("logout", {
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
             location.reload(); //ページリロード
@@ -90,8 +91,8 @@ export default {
                 currentPassword: this.currentPassword,
                 newPassword: this.newPassword,
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
 
@@ -104,8 +105,8 @@ export default {
             socket.emit("changeProfile", {
                 name: nameUpdating, //更新する名前
                 reqSender: { //セッション認証に必要な情報送信
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
             this.nameEditing = false; //編集モードを閉じる
@@ -114,7 +115,7 @@ export default {
 
         //編集しているかどうかを切り替えする
         toggleEditing() {
-            this.nameDisplaying = this.Userinfo.username;
+            this.nameDisplaying = this.myUserinfo.username;
             this.nameEditing = !this.nameEditing; //編集モード
 
         },
@@ -133,8 +134,8 @@ export default {
                     buffer: this.iconUploadFile[0],
                 },
                 reqSender: {
-                    userid: this.Userinfo.userid,
-                    sessionid: this.Userinfo.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             },
             (status) => {
@@ -157,7 +158,7 @@ export default {
     },
     
     mounted() {
-        this.nameDisplaying = this.Userinfo.username; //名前更新
+        this.nameDisplaying = this.myUserinfo.username; //名前更新
 
         //結果の受け取り
         socket.on("changePasswordResult", (result) => {
@@ -352,7 +353,7 @@ export default {
                         <!-- アバター -->
                         <v-col cols="2">
                             <v-card @click="" variant="tonal" :class="cd" style="padding:0">
-                                <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="Userinfo.userid" :src="backendURI + '/img/' + Userinfo.userid">
+                                <v-img @click="iconUploadDialog=true;" class="rounded-lg" :alt="myUserinfo.userid" :src="backendURI + '/img/' + myUserinfo.userid">
                                     <v-tooltip
                                         activator="parent"
                                         location="top center"
@@ -371,7 +372,7 @@ export default {
 
                                     <!-- ユーザーID -->
                                     <p class="text-left text-h6">
-                                        # {{ Userinfo.userid }}
+                                        # {{ myUserinfo.userid }}
                                     </p>
 
                                     <!-- ユーザー名 -->
@@ -380,7 +381,7 @@ export default {
                                         @dblclick="toggleEditing"
                                         class="text-h4 text-left text-truncate"
                                     >
-                                        {{ Userinfo.username }}
+                                        {{ myUserinfo.username }}
                                         <v-btn v-if="!nameEditing" color="primary" icon="mdi:mdi-pencil" @click="toggleEditing" class="rounded-lg ma-5"></v-btn>
                                     </p>
 

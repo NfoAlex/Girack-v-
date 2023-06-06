@@ -1,13 +1,13 @@
-<script setup>
-import { dataUser } from '../socket.js';
-import { RouterView } from 'vue-router';
-
-</script>
-
 <script>
-const { Userinfo } = dataUser();
+import { RouterView } from 'vue-router';
+import { dataUser } from '../../data/dataUserinfo';
 
 export default {
+    setup() {
+        const { myUserinfo } = dataUser();
+        return { myUserinfo };
+
+    },
     
     data() {
         return {
@@ -33,6 +33,7 @@ export default {
     mounted() {
         //ブラウザ上のタブ名を設定
         document.title = "メニュー";
+        console.log("Menu :: mounted : myUserinfo->", this.myUserinfo.role);
 
     }
 
@@ -41,6 +42,7 @@ export default {
 
 <template>
     <div class="d-flex">
+        
         <div style="width:20%; max-width:200px; height:100%; overflow-y:auto;">
             <RouterLink to="/menu/profile">
                 <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('profile')?'primary':'secondary'">
@@ -79,7 +81,7 @@ export default {
                 </v-card>
             </RouterLink>
             <RouterLink to="/menu/serversettings">
-                <v-card v-if="Userinfo.role==='Admin'" @click="" class="rounded-lg menu-card" :color="isThisActive('serversettings')?'primary':'secondary'">
+                <v-card v-if="myUserinfo.role==='Admin'" @click="" class="rounded-lg menu-card" :color="isThisActive('serversettings')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-server
                     </v-icon>
