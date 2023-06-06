@@ -69,8 +69,8 @@ export default {
                 //オンラインとして加算してもらう
                 socket.emit("countmeAsOnline", {
                     reqSender: {
-                        userid: this.Userinfo.userid,
-                        sessionid: this.Userinfo.sessionid
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
                     }
                 });
 
