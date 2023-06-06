@@ -521,11 +521,13 @@ export default {
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
                             variant="solo"
+                            max-rows="5"
                             clearable
                             no-resize
+                            auto-grow
                             v-model="txt"
                             v-bind="props"
-                            :rows="txtinputRow"
+                            rows="1"
                         >
 
                             <!-- ファイルアップロード部分 -->
