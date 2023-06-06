@@ -212,7 +212,6 @@ export default {
             this.searchMode.enabled = true;
             this.searchMode.txtLengthWhenStartSearching = this.txt.length;
             this.searchMode.searchStartingAt = document.querySelector("#inp").selectionStart;
-            console.log("Input :: AtsignTrigger : @がおされた->", this.searchMode.searchStartingAt);
 
         },
 
@@ -313,7 +312,6 @@ export default {
             //上下の十字キーの入力からのテキストのカーソル移動を防ぐ(メンション検索中限定)
             if ( this.searchMode.enabled ) {
                 e.preventDefault();
-                return;
 
             }
 
