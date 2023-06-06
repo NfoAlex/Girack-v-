@@ -57,28 +57,6 @@ export default {
         }
     },
 
-    watch: {
-        //メッセージの更新監視
-        MsgDBActive: {
-            //変更を検知したらレンダーを待ってから状況に合わせてスクロールする
-            handler() {
-                //もしスクロールしきった状態、かつこのページにブラウザがいるなら
-                if ( this.StateScrolled && this.StateFocus ) {
-                    //レンダーを待ってからスクロール
-                    this.$nextTick(() => {
-                        this.scrollIt(); //スクロールする
-                        this.msgDisplayNum = 25; //メッセージの表示数の初期化
-
-                    });
-
-                }
-
-            },
-            deep: true //階層ごと監視するため
-        },
-
-    },
-
     computed: {
         //現在いるパス(チャンネルID)を返すだけ
         getPath() {
@@ -176,6 +154,20 @@ export default {
             });
 
         });
+        this.watcherMsgDB = this.$watch("MsgDBActive", function () {
+            //もしスクロールしきった状態、かつこのページにブラウザがいるなら
+            if ( this.StateScrolled && this.StateFocus ) {
+                //レンダーを待ってからスクロール
+                this.$nextTick(() => {
+                    this.scrollIt(); //スクロールする
+                    this.msgDisplayNum = 25; //メッセージの表示数の初期化
+
+                });
+
+            }
+        }, {
+            deep: true
+        });
 
         //ウィンドウのフォーカス監視開始
         window.addEventListener("focus", this.setFocusStateTrue);
@@ -187,6 +179,7 @@ export default {
     deactivated() {
         //watch監視停止
         this.watcherRoute();
+        this.watcherMsgDB();
 
         //ウィンドウのフォーカス監視を取りやめ
         window.removeEventListener("focus", this.setFocusStateTrue);
