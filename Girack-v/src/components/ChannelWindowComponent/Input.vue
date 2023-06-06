@@ -381,16 +381,17 @@ export default {
 
 
             return bytes.toFixed(dp) + ' ' + units[u];
+        },
+
+        SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
+            this.channelJoinedUserArray = channelJoinedUserList;
+
         }
 
     },
 
     mounted() {
         //チャンネルへ参加している人リストの受信
-        socket.on("infoChannelJoinedUserList", (channelJoinedUserList) => {
-            this.channelJoinedUserArray = channelJoinedUserList;
-
-        });
 
         //チャンネルに参加している人リストを取得
         socket.emit("getInfoChannelJoinedUserList", {
@@ -400,12 +401,13 @@ export default {
                 sessionid: this.myUserinfo.sessionid
             }
         });
+        socket.on("infoChannelJoinedUserList", this.SOCKETinfoChannelJoinedUserList);
 
     },
 
     unmounted() {
         //socketの重複防止
-        socket.off("infoChannelJoinedUserList");
+        socket.off("infoChannelJoinedUserList", this.SOCKETinfoChannelJoinedUserList);
         //メニューページなどにいったら返信状態をリセット
         this.resetReply();
 
