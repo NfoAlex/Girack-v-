@@ -1,4 +1,5 @@
 <script>
+import { watch } from "vue";
 import { getSocket, backendURI, getMessage, setCookie } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
 import { dataChannel } from "../../data/dataChannel";
@@ -32,6 +33,9 @@ export default {
             uri: backendURI, //バックエンドのURI
             StateFocus: true, //Girackにフォーカスしているかどうか
             msgDisplayNum: 25,
+
+            watcherRoute: {},
+            watcherMsgDB: {},
         
             //ホバー処理用
             msgHovered: false, //ホバーされたかどうか
@@ -71,48 +75,6 @@ export default {
 
             },
             deep: true //階層ごと監視するため
-        },
-
-        //チャンネルの移動を監視
-        $route: { //URLパスの変更監視
-            handler(newPage, oldPage) {
-                //ページが切り替わったらユーザーページを閉じるように
-                this.userDialogShow = false;
-                //もしひとつ前がプレビューのものだったなら履歴データと既読状態を削除
-                try {
-                    if ( this.PreviewChannelData.channelid === oldPage.params.id ) {
-                        delete this.MsgDB[oldPage.params.id];
-                        delete this.MsgReadTime[oldPage.params.id];
-                    
-                    }
-                } catch(e) {}
-
-                //レンダーを待ってからスクロール
-                this.$nextTick(() => {
-                    //チャンネル以外のページ場合、あるいは別のチャンネルでの処理が続いている場合、以降の処理をスキップする
-                    if ( !(newPage.path.startsWith('/c/')) || this.getPath !== newPage.params.id ) {
-                        console.log("Content :: watch($route) : スクロールしないわ", this.channelInfo.channelid, newPage.params.id);
-                        return 0;
-
-                    }
-
-                    //ブラウザ上のタブ名を設定
-                    document.title = this.channelInfo.channelname;
-
-                    //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
-                    if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) ) return 0;
-
-                    let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
-                    this.MsgReadTime[this.getPath] = {
-                        time: latestTime,
-                        new: 0, //新着メッセージ数を0に
-                        mention: 0
-                    };
-                    this.scrollIt(); //スクロールする
-
-                });
-
-            }
         },
 
     },
@@ -175,6 +137,46 @@ export default {
 
     //KeepAliveを通して新しくチャンネルに移動したとき
     activated() {
+        //watch開始
+        this.watcherRoute = this.$watch("$route", function (newPage, oldPage) {
+            //ページが切り替わったらユーザーページを閉じるように
+            this.userDialogShow = false;
+            //もしひとつ前がプレビューのものだったなら履歴データと既読状態を削除
+            try {
+                if ( this.PreviewChannelData.channelid === oldPage.params.id ) {
+                    delete this.MsgDB[oldPage.params.id];
+                    delete this.MsgReadTime[oldPage.params.id];
+                
+                }
+            } catch(e) {}
+
+            //レンダーを待ってからスクロール
+            this.$nextTick(() => {
+                //チャンネル以外のページ場合、あるいは別のチャンネルでの処理が続いている場合、以降の処理をスキップする
+                if ( !(newPage.path.startsWith('/c/')) || this.getPath !== newPage.params.id ) {
+                    console.log("Content :: watch($route) : スクロールしないわ", this.channelInfo.channelid, newPage.params.id);
+                    return 0;
+
+                }
+
+                //ブラウザ上のタブ名を設定
+                document.title = this.ChannelIndex[newPage.params.id].channelname;
+
+                //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
+                if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) ) return 0;
+
+                let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
+                this.MsgReadTime[this.getPath] = {
+                    time: latestTime,
+                    new: 0, //新着メッセージ数を0に
+                    mention: 0
+                };
+                this.scrollIt(); //スクロールする
+
+            });
+
+        });
+
         //ウィンドウのフォーカス監視開始
         window.addEventListener("focus", this.setFocusStateTrue);
         window.addEventListener("blur", this.setFocusStateFalse);
@@ -183,6 +185,9 @@ export default {
 
     //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)
     deactivated() {
+        //watch監視停止
+        this.watcherRoute();
+
         //ウィンドウのフォーカス監視を取りやめ
         window.removeEventListener("focus", this.setFocusStateTrue);
         window.removeEventListener("blur", this.setFocusStateFalse);
