@@ -1,6 +1,6 @@
 <script>
 
-import { getSocket, backendURI } from '../socket.js';
+import { getSocket, backendURI } from '../data/socket';
 import { dataChannel } from '../data/dataChannel';
 import { dataUser } from '../data/dataUserinfo';
 

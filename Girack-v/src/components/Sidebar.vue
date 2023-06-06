@@ -1,10 +1,10 @@
 //Sidebar.vue
 <script>
-import { getSocket, backendURI, Serverinfo } from "../socket.js";
+import { getSocket, backendURI, Serverinfo } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
-import { dataUser } from '../data/dataUserinfo.js';
-import { getCONFIG } from "../config.js";
+import { dataUser } from '../data/dataUserinfo';
+import { getCONFIG } from "../config";
 import { RouterLink } from 'vue-router';
 
 const socket = getSocket();

@@ -41,6 +41,6 @@ const StateScrolled = ref(false);
 
 //履歴DB返すだけ
 export function dataMsg() {
-    return { MsgDB, UserIndex, StateScrolled, MsgReadTime };
+    return { MsgDB, StateScrolled, MsgReadTime };
 
 }

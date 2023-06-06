@@ -2,7 +2,7 @@
 import Content from "./ChannelWindowComponent/Content.vue";
 import Head from "./ChannelWindowComponent/Head.vue";
 import Input from "./ChannelWindowComponent/Input.vue";
-import { getSocket, getMessage } from "../socket.js";
+import { getSocket, getMessage } from "../data/socket.js";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";

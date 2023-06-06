@@ -1,5 +1,5 @@
 <script>
-import { getSocket, backendURI } from '../socket';
+import { getSocket, backendURI } from '../data/socket';
 import { dataUser } from '../data/dataUserinfo';
 import Userpage from "./Userpage.vue";
 

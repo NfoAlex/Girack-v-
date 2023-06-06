@@ -1,5 +1,5 @@
 <script>
-import { getSocket } from "./socket.js";
+import { getSocket } from './data/socket';
 import { dataUser } from './data/dataUserinfo';
 import { RouterView } from 'vue-router';
 import Auth from "./components/Auth.vue";
@@ -10,9 +10,9 @@ const socket = getSocket();
 export default {
     setup() {
         const theme = useTheme();
-        const { Userinfo } = dataUser();
+        const { myUserinfo } = dataUser();
 
-        return { theme, Userinfo };
+        return { theme, myUserinfo };
         
     },
 

@@ -1,5 +1,5 @@
 <script>
-import { setCookie, getSocket, backendURI } from '../../socket.js';
+import { setCookie, getSocket, backendURI } from '../../data/socket.js';
 import { dataUser } from '../../data/dataUserinfo';
 
 const socket = getSocket();

@@ -1,7 +1,7 @@
 <script setup>
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
-import { setCookie } from '../../socket';
+import { setCookie } from '../../data/socket';
 import { dataUser } from "../../data/dataUserinfo";
 import ChannelConfig from "./ChannelConfig.vue";
 </script>

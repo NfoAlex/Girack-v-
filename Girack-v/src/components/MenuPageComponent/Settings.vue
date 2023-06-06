@@ -1,6 +1,6 @@
 <script>
 import { getCONFIG } from "../../config.js";
-import { getSocket, setCookie } from "../../socket.js";
+import { getSocket, setCookie } from "../../data/socket.js";
 import { dataUser } from "../../data/dataUserinfo";
 
 const socket = getSocket();

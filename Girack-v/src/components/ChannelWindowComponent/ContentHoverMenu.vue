@@ -1,6 +1,6 @@
 <script>
 
-import { getSocket } from '../../socket';
+import { getSocket } from '../../data/socket';
 import { dataUser } from '../../data/dataUserinfo';
 import { getReplyState } from "./Input.vue";
 

@@ -1,6 +1,6 @@
 <script>
 
-import { getSocket, getMessage, backendURI } from '../../socket.js';
+import { getSocket, getMessage, backendURI } from '../../data/socket.js';
 import { dataMsg } from '../../data/dataMsg';
 import { dataChannel } from '../../data/dataChannel';
 import { dataUser } from '../../data/dataUserinfo';
@@ -23,9 +23,9 @@ export default {
 
     setup() {
         const { ReplyState } = getReplyState();
-        const { myUserinfo } = dataUser();
+        const { myUserinfo, UserIndex } = dataUser();
         const { ChannelIndex } = dataChannel();
-        const { MsgDB, UserIndex } = dataMsg();
+        const { MsgDB } = dataMsg();
 
         return { ReplyState, myUserinfo, ChannelIndex, MsgDB, UserIndex };
 

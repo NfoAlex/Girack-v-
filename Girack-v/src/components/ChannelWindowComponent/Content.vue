@@ -1,5 +1,5 @@
 <script>
-import { getSocket, backendURI, getMessage, setCookie } from "../../socket.js";
+import { getSocket, backendURI, getMessage, setCookie } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
 import { dataChannel } from "../../data/dataChannel";
 import { dataUser } from "../../data/dataUserinfo";
@@ -15,8 +15,8 @@ const socket = getSocket();
 
 export default {
     setup() {
-        const { myUserinfo } = dataUser(); //ユーザー情報
-        const { MsgDB, UserIndex, StateScrolled, MsgReadTime } = dataMsg(); //履歴用DB
+        const { myUserinfo, UserIndex } = dataUser(); //ユーザー情報
+        const { MsgDB, StateScrolled, MsgReadTime } = dataMsg(); //履歴用DB
         const { PreviewChannelData, ChannelIndex } = dataChannel();
         const { CONFIG_DISPLAY } = getCONFIG();
         

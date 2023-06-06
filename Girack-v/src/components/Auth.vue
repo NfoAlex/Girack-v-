@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getCookie, CLIENT_VERSION } from "../socket.js";
+import { getSocket, getCookie, CLIENT_VERSION } from "../data/socket.js";
 const socket = getSocket();
 
 export default {

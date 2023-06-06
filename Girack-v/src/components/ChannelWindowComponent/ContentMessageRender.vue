@@ -1,7 +1,6 @@
 <script>
 
-import { getSocket } from "../../socket.js";
-import { dataMsg } from "../../data/dataMsg";
+import { getSocket } from "../../data/socket.js";
 import { dataUser } from "../../data/dataUserinfo";
 
 const socket = getSocket();
@@ -11,8 +10,7 @@ export default {
     props: ["content"],
 
     setup() {
-        const { UserIndex } = dataMsg();
-        const { myUserinfo } = dataUser();
+        const { myUserinfo, UserIndex } = dataUser();
 
         return { UserIndex, myUserinfo };
 

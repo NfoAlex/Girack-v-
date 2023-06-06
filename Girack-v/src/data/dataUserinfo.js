@@ -9,7 +9,12 @@ const myUserinfo = ref({
     channelJoined: [], //参加しているチャンネル
 });
 
+//ユーザー情報(名前とかロールとか)
+const UserIndex = ref({
+
+});
+
 export function dataUser() {
-    return { myUserinfo };
+    return { myUserinfo, UserIndex };
 
 }
