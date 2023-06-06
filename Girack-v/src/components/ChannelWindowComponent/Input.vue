@@ -209,8 +209,9 @@ export default {
 
         //テキスト入力中の@押された時のトリガー処理
         AtsignTrigger() {
-            this.searchMode.enabled = true;
-            this.searchMode.txtLengthWhenStartSearching = this.txt.length;
+            this.searchMode.enabled = true; //検索モードに入る
+            this.searchMode.txtLengthWhenStartSearching = this.txt.length; //検索に入った時の文字の長さ取得
+            this.searchMode.selectedIndex = 0; //選択を初期化
             this.searchMode.searchStartingAt = document.querySelector("#inp").selectionStart;
 
         },
