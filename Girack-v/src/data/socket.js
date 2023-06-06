@@ -15,7 +15,7 @@ const socket = io(backendURI, {
 
 import { ref } from "vue";
 
-import { getCONFIG } from './config.js';
+import { getCONFIG } from '../config.js';
 
 export const CLIENT_VERSION = "alpha_20230606";
 
@@ -26,17 +26,6 @@ const {
     CONFIG_DISPLAY 
 } = getCONFIG(); //設定
 
-
-
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-//ユーザー(自分)情報
-
-import { dataUser } from './data/dataUserinfo.js';
-
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
-
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-
 //サーバー(インスタンス)情報
 export const Serverinfo = ref({
     servername: "...",
@@ -44,13 +33,10 @@ export const Serverinfo = ref({
     inviteOnly: null
 });
 
-import { dataChannel } from './data/dataChannel.js';
-
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
-
-/* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
-
-import { dataMsg } from './data/dataMsg.js';
+//データインポート
+import { dataUser } from './dataUserinfo.js';
+import { dataChannel } from './dataChannel.js';
+import { dataMsg } from './dataMsg.js';
 
 //メッセージ受け取り、履歴の保存
 socket.on("messageReceive", (msg) => {
@@ -64,7 +50,7 @@ socket.on("messageReceive", (msg) => {
     console.log(msg);
 
     //もしユーザーの名前リストに名前がなかったら
-    if ( dataMsg().UserIndex.value[msg.userid] === undefined ) {
+    if ( dataUser().UserIndex.value[msg.userid] === undefined ) {
         //名前をリクエスト
         socket.emit("getInfoUser", {
             targetid: msg.userid,
@@ -159,7 +145,7 @@ socket.on("messageReceive", (msg) => {
             if ( CONFIG_NOTIFICATION.value.NOTIFY_ALL ) {
                 //通知を出す
                 new Notification(dataChannel().ChannelIndex.value[msg.channelid].channelname, {
-                    body: "#" + ( dataMsg().UserIndex.value[msg.userid]===undefined ? msg.userid : dataMsg().UserIndex.value[msg.userid].username) + ": " + msg.content,
+                    body: "#" + ( dataUser().UserIndex.value[msg.userid]===undefined ? msg.userid : dataUser().UserIndex.value[msg.userid].username) + ": " + msg.content,
                     icon: backendURI + "/img/" + msg.userid
                 });
 
@@ -176,7 +162,7 @@ socket.on("messageReceive", (msg) => {
 
                     //通知を出す
                     new Notification(dataChannel().ChannelIndex.value[msg.channelid].channelname, {
-                        body: "#" + ( dataMsg().UserIndex.value[msg.userid]===undefined ? msg.userid : dataMsg().UserIndex.value[msg.userid].username) + ": " + contentToDisplay,
+                        body: "#" + ( dataUser().UserIndex.value[msg.userid]===undefined ? msg.userid : dataUser().UserIndex.value[msg.userid].username) + ": " + contentToDisplay,
                         icon: backendURI + "/img/" + msg.userid
                     });
 
@@ -186,7 +172,7 @@ socket.on("messageReceive", (msg) => {
                 if ( msg.replyData.userid === dataUser().myUserinfo.value.userid ) {
                     //通知を出す
                     new Notification(dataChannel().ChannelIndex.value[msg.channelid].channelname, {
-                        body: "#" + ( dataMsg().UserIndex.value[msg.userid]===undefined ? msg.userid : dataMsg().UserIndex.value[msg.userid].username) + ": " + msg.content,
+                        body: "#" + ( dataUser().UserIndex.value[msg.userid]===undefined ? msg.userid : dataUser().UserIndex.value[msg.userid].username) + ": " + msg.content,
                         icon: backendURI + "/img/" + msg.userid
                     });
 
@@ -215,11 +201,11 @@ socket.on("infoResult", (dat) => {
     let userid = dat.userid;
     let role = dat.role;
 
-    dataMsg().UserIndex.value[userid] = {};
+    dataUser().UserIndex.value[userid] = {};
 
     //ユーザーインデックス更新
-    dataMsg().UserIndex.value[userid].username = username; //名前
-    dataMsg().UserIndex.value[userid].role = role; //ロール
+    dataUser().UserIndex.value[userid].username = username; //名前
+    dataUser().UserIndex.value[userid].role = role; //ロール
 
 });
 
@@ -410,16 +396,16 @@ socket.on("infoUser", (dat) => {
     let userid = dat.userid;
     let role = dat.role;
 
-    dataMsg().UserIndex.value[userid] = {};
+    dataUser().UserIndex.value[userid] = {};
 
     console.log("socket :: infoUser : 情報北");
     console.log(dat);
 
     //ユーザーインデックス更新
-    dataMsg().UserIndex.value[userid].username = username; //名前
-    dataMsg().UserIndex.value[userid].role = role; //ロール
-    dataMsg().UserIndex.value[userid].banned = dat.banned; //BANされているかどうか
-    dataMsg().UserIndex.value[userid].channelJoined = dat.channelJoined; //参加しているチャンネル
+    dataUser().UserIndex.value[userid].username = username; //名前
+    dataUser().UserIndex.value[userid].role = role; //ロール
+    dataUser().UserIndex.value[userid].banned = dat.banned; //BANされているかどうか
+    dataUser().UserIndex.value[userid].channelJoined = dat.channelJoined; //参加しているチャンネル
 
     //自分の情報の更新にだけ使うから
     if ( dat.userid !== dataUser().myUserinfo.value.userid ) { return; }
@@ -517,9 +503,9 @@ socket.on("messageHistory", (history) => {
         //履歴分ユーザーデータを持っているか調べて持ってなければ取得する
         for ( let index in history ) {
             //もしユーザーの名前リストに名前がなかったら
-            if ( dataMsg().UserIndex.value[history[index].userid] === undefined ) {
+            if ( dataUser().UserIndex.value[history[index].userid] === undefined ) {
                 //データ受け取るまでのホルダー
-                dataMsg().UserIndex.value[history[index].userid] = {username:"loading..."};
+                dataUser().UserIndex.value[history[index].userid] = {username:"loading..."};
                 //名前をリクエスト
                 socket.emit("getInfoUser", {
                     targetid: history[index].userid,
@@ -555,9 +541,9 @@ socket.on("messageHistory", (history) => {
         if ( dataMsg().MsgReadTime.value[channelid] === undefined ) break;
 
         //もしユーザーの名前リストに名前がなかったら
-        if ( dataMsg().UserIndex.value[history[index].userid] === undefined ) {
+        if ( dataUser().UserIndex.value[history[index].userid] === undefined ) {
             //データ受け取るまでのホルダー
-            dataMsg().UserIndex.value[history[index].userid] = {username:"loading..."};
+            dataUser().UserIndex.value[history[index].userid] = {username:"loading..."};
             //名前をリクエスト
             socket.emit("getInfoUser", {
                 targetid: history[index].userid,
