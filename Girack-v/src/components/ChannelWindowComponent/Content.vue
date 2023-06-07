@@ -34,6 +34,7 @@ export default {
             StateFocus: true, //Girackにフォーカスしているかどうか
             msgDisplayNum: 25,
 
+            //watchする時のハンドラ用
             watcherRoute: {},
             watcherMsgDB: {},
         
@@ -715,8 +716,8 @@ export default {
             <v-btn v-else class="rounded-lg" size="small" @click="" variant="text">履歴を読み込むにはチャンネルに参加してください...</v-btn>
         </div>
 
-        <!-- こっからメッセージ表示 -->
-        <div style="z-index:1;" v-for="(m, index) in cropMessage">
+        <!-- !!!こっからメッセージ表示!!! -->
+        <div style="z-index:1;" v-for="(m, index) in cropMessage" :key="m.messageid">
 
             <!-- 日付線 -->
             <div v-if="checkDateDifference(index)" style="width:100%; padding:12px 0;">
