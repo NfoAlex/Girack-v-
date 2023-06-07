@@ -87,6 +87,7 @@ export default {
     methods: {
         //メッセージ履歴を返す
         getMsgDB() {
+            //チャンネルインデックスにあるか、またはプレビューにあるかでデータを返し、無ければブラウザに戻す
             if ( this.ChannelIndex[this.$route.params.id] !== undefined || this.PreviewChannelData.channelid === this.$route.params.id ) {
                 return this.MsgDB[this.$route.params.id];
 
