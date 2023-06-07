@@ -243,7 +243,7 @@ export default {
 <template>
     <v-dialog style="width:50vw; max-width:650px; height:80vh; overflow-y:auto;">
         <!-- ユーザーページ用 -->
-        <Userpage v-model="userDialogShow" :userid="userDialogUserid" />
+        <Userpage v-if="userDialogShow" v-model="userDialogShow" :userid="userDialogUserid" />
 
         <!-- チャンネルへユーザーを招待するときのユーザー検索画面 -->
         <v-dialog
@@ -299,7 +299,6 @@ export default {
             </div>
         </v-dialog>
         
-
         <!-- チャンネルメニュー本体 -->
         <v-card class="d-flex flex-column text-center rounded-lg pa-3">
             <div>
