@@ -421,8 +421,12 @@ export default {
                     >
 
                         <v-avatar size="32" style="margin-left:10%;" :image="imgsrc + u.userid"></v-avatar>
+                        <!-- オンライン状態 -->
+                        <v-icon :class="!u.loggedin?'hideOnlineIcon':null" :color="u.loggedin?'green':null" style="margin-left:8px;">
+                            mdi:mdi-circle-medium
+                        </v-icon>
                         <span
-                            style="margin-left:16px;"
+                            style="margin-left:8px;"
                             class="text-center text-truncate me-auto"
                         >
                             {{ u.username }}
@@ -461,6 +465,11 @@ export default {
 </template>
 
 <style scoped>
+
+.hideOnlineIcon
+{
+    visibility: hidden;
+}
 
 .channelScrollbar::-webkit-scrollbar
 {
