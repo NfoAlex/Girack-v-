@@ -243,7 +243,7 @@ export default {
 <template>
     <v-dialog style="width:50vw; max-width:650px; height:80vh; overflow-y:auto;">
         <!-- ユーザーページ用 -->
-        <Userpage v-model="userDialogShow" :userid="userDialogUserid" />
+        <Userpage v-if="userDialogShow" v-model="userDialogShow" :userid="userDialogUserid" />
 
         <!-- チャンネルへユーザーを招待するときのユーザー検索画面 -->
         <v-dialog
@@ -299,7 +299,6 @@ export default {
             </div>
         </v-dialog>
         
-
         <!-- チャンネルメニュー本体 -->
         <v-card class="d-flex flex-column text-center rounded-lg pa-3">
             <div>
@@ -422,8 +421,12 @@ export default {
                     >
 
                         <v-avatar size="32" style="margin-left:10%;" :image="imgsrc + u.userid"></v-avatar>
+                        <!-- オンライン状態 -->
+                        <v-icon :class="!u.loggedin?'hideOnlineIcon':null" :color="u.loggedin?'green':null" style="margin-left:8px;">
+                            mdi:mdi-circle-medium
+                        </v-icon>
                         <span
-                            style="margin-left:16px;"
+                            style="margin-left:8px;"
                             class="text-center text-truncate me-auto"
                         >
                             {{ u.username }}
@@ -462,6 +465,11 @@ export default {
 </template>
 
 <style scoped>
+
+.hideOnlineIcon
+{
+    visibility: hidden;
+}
 
 .channelScrollbar::-webkit-scrollbar
 {
