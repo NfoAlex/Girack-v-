@@ -62,7 +62,7 @@ export default {
                 </v-card>
             </RouterLink>
             <RouterLink to="/menu/modlog">
-                <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('members')?'primary':'secondary'">
+                <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('modlog')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-security
                     </v-icon>
