@@ -21,7 +21,7 @@ export default {
                 userBan: "ユーザーをBAN",
                 userDelete: "ユーザーを削除",
                 userPardon: "ユーザーのBANを解除",
-                userChaneRole: "ユーザーの権限を変更",
+                userChangeRole: "ユーザーの権限を変更",
                 userKickFromChannel: "ユーザーをチャンネルからキック",
 
                 channelEditName: "チャンネル名を変更",
