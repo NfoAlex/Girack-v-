@@ -120,7 +120,7 @@ export default {
                         </p>
 
                         <!-- 変更後のデータが空なら削除されたと表示 -->
-                        <p v-if="item.actionInfo.valueAfter===''">
+                        <p v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter==''">
                             削除された
                         </p>
 
