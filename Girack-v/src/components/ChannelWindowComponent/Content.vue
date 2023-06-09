@@ -143,7 +143,7 @@ export default {
                 document.title = this.ChannelIndex[newPage.params.id].channelname;
 
                 //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
-                if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) ) return 0;
+                if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) || this.MsgDB[newPage.params.id].length === 0 ) return 0;
 
                 let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                 this.MsgReadTime[this.getPath] = {
