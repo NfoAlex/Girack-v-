@@ -107,9 +107,11 @@ export default {
                         <p v-if="item.actionInfo.valueAfter===''">
                             削除された
                         </p>
-                        <span v-if="item.actionTo.messageid!==''">
+                        <!-- 変更されたものがメッセージならIDを表示 -->
+                        <span v-if="item.actionTo.type==='message'">
                             メッセージID : <code>{{ item.actionTo.messageid }}</code>
                         </span>
+                        <!-- 変更前と変更後の値表示 -->
                         <span v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''">
                             <p>
                                 <code>{{ item.actionInfo.valueBefore }}</code>
