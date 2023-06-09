@@ -28,15 +28,17 @@ const vuetify = createVuetify({
             thedark: {
                 dark: true,
                 colors: {
-                        background: "#212121",
-                        primary: "#381E72",
-                        secondary: "#332D41",
-                        surface: "#19181b",
-                        accent: "#9c27b0",
-                        error: "#B71C1C",
-                        warning: "#4caf50",
-                        success: "#1B5E20",
-                        "grey": "#263238"
+                    background: "#111111",
+                    "backgroundSidebar": "#000",
+                    primary: "#381E72",
+                    secondary: "#332D41",
+                    surface: "#19181b",
+                    accent: "#9c27b0",
+                    error: "#B71C1C",
+                    warning: "#4caf50",
+                    success: "#1B5E20",
+                    "grey": "#263238",
+                    "cardInner": "#323232",
                 }
             },
         },

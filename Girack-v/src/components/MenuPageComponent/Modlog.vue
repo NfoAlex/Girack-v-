@@ -147,10 +147,12 @@ export default {
 
                     <!-- やったことの内容 -->
                     <v-expansion-panel-text class="pa-2">
+
                         <!-- 関係にあるユーザーデータを表示 -->
-                        <div class="d-flex flex-clumn align-center">
+                        <p class="ma-1">ユーザー情報</p>
+                        <v-card color="grey" style="width:fit-content" class="rounded-lg pa-5 d-flex flex-clumn align-center">
                             <!-- やった人のアイコン -->
-                            <v-avatar size="small" style="margin-right:8px;">
+                            <v-avatar size="x-small" style="margin-right:8px;">
                                 <v-img alt="icon" :src="backendURI+'/img/'+item.actionBy">
                                 </v-img>
                                 
@@ -166,7 +168,7 @@ export default {
                             </v-icon>
 
                             <!-- 受けた人のアイコン -->
-                            <v-avatar v-if="item.actionTo.type!=='channel'" size="small" style="margin-right:8px;">
+                            <v-avatar v-if="item.actionTo.type!=='channel'" size="x-small" style="margin-right:8px;">
                                 <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.userid">
                                 </v-img>
                             </v-avatar>
@@ -174,60 +176,65 @@ export default {
                             <span v-if="item.actionTo.type!=='channel'">
                                 {{ getUsername(item.actionTo.userid) }}
                             </span>
-                        </div>
+                        </v-card>
 
-                        <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
-                        <p
-                            v-if="actionameIndex[item.actionInfo.actionname]===undefined"
-                            class="pa-2"
-                        >
-                            変更内容 : <code>{{ item.actionInfo.actionname }}</code>
-                        </p>
+                        <br>
 
-                        <!-- 変更後のデータが空なら削除されたと表示 -->
-                        <p v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter==''" class="pa-2">
-                            削除された
-                        </p>
-
-                        <!-- チャンネルが変更に関係があるなら表示 -->
-                        <p
-                            v-if="item.actionTo.channelid!==''"
-                            class="pa-2"
-                        >
-                            チャンネルID : <code>{{ item.actionTo.channelid }}</code>
-                        </p>
-
-                        <!-- 変更されたものがメッセージならIDを表示 -->
-                        <span
-                            v-if="item.actionTo.type==='message'"
-                            class="pa-2"
-                        >
-                            メッセージID : <code>{{ item.actionTo.messageid }}</code>
-                        </span>
-
-                        <!-- 無から作られた時の値表示 -->
-                        <span
-                            v-if="item.actionInfo.valueBefore===''&&item.actionInfo.valueAfter!==''"
-                            class="pa-2"
-                        >
-                            +  <code>{{ item.actionInfo.valueAfter }}</code>
-                        </span>
-
-                        <!-- 変更前と変更後の値表示 -->
-                        <span
-                            v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
-                            class="pa-2"
-                        >
-                            <p>
-                                <code>{{ item.actionInfo.valueBefore }}</code>
+                        <p class="ma-1">変更内容</p>
+                        <v-card color="cardInner" class="pa-5 rounded-lg">
+                            <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
+                            <p
+                                v-if="actionameIndex[item.actionInfo.actionname]===undefined"
+                                class="pa-1"
+                            >
+                                変更内容 : <code>{{ item.actionInfo.actionname }}</code>
                             </p>
-                            <v-icon>
-                                mdi:mdi-arrow-down
-                            </v-icon>
-                            <p>
-                                <code>{{ item.actionInfo.valueAfter }}</code>
+
+                            <!-- 変更後のデータが空なら削除されたと表示 -->
+                            <p v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter==''" class="pa-2">
+                                削除された
                             </p>
-                        </span>
+
+                            <!-- チャンネルが変更に関係があるなら表示 -->
+                            <p
+                                v-if="item.actionTo.channelid!==''"
+                                class="pa-2"
+                            >
+                                チャンネルID : <code>{{ item.actionTo.channelid }}</code>
+                            </p>
+
+                            <!-- 変更されたものがメッセージならIDを表示 -->
+                            <span
+                                v-if="item.actionTo.type==='message'"
+                                class="pa-2"
+                            >
+                                メッセージID : <code>{{ item.actionTo.messageid }}</code>
+                            </span>
+
+                            <!-- 無から作られた時の値表示 -->
+                            <span
+                                v-if="item.actionInfo.valueBefore===''&&item.actionInfo.valueAfter!==''"
+                                class="pa-2"
+                            >
+                                +  <code>{{ item.actionInfo.valueAfter }}</code>
+                            </span>
+
+                            <!-- 変更前と変更後の値表示 -->
+                            <span
+                                v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
+                            >
+                                <p>
+                                    <code>{{ item.actionInfo.valueBefore }}</code>
+                                </p>
+                                <v-icon>
+                                    mdi:mdi-arrow-down
+                                </v-icon>
+                                <p>
+                                    <code>{{ item.actionInfo.valueAfter }}</code>
+                                </p>
+                            </span>
+                        </v-card>
+
                     </v-expansion-panel-text>
 
                 </v-expansion-panel>
