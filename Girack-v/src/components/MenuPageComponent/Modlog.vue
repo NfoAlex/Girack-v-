@@ -134,7 +134,7 @@ export default {
 
                         <!-- 受けた人のアイコン -->
                         <v-avatar v-if="item.actionTo.type==='user'" size="small" style="margin-right:16px;">
-                            <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.targetid">
+                            <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.userid">
                             </v-img>
                         </v-avatar>
 
@@ -166,12 +166,12 @@ export default {
 
                             <!-- 受けた人のアイコン -->
                             <v-avatar v-if="item.actionTo.type!=='channel'" size="small" style="margin-right:8px;">
-                                <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.targetid">
+                                <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.userid">
                                 </v-img>
                             </v-avatar>
                             <!-- 受けた人の名前 -->
                             <span v-if="item.actionTo.type!=='channel'">
-                                {{ getUsername(item.actionTo.targetid) }}
+                                {{ getUsername(item.actionTo.userid) }}
                             </span>
                         </div>
 
@@ -187,8 +187,18 @@ export default {
                             削除された
                         </p>
 
+                        <p
+                            v-of="item.actionTo.channelid===''"
+                            class="pa-2"
+                        >
+                            チャンネルID : <code>{{ item.actionTo.channelid }}</code>
+                        </p>
+
                         <!-- 変更されたものがメッセージならIDを表示 -->
-                        <span v-if="item.actionTo.type==='message'">
+                        <span
+                            v-if="item.actionTo.type==='message'"
+                            class="pa-2"
+                        >
                             メッセージID : <code>{{ item.actionTo.messageid }}</code>
                         </span>
 
@@ -197,7 +207,7 @@ export default {
                             v-if="item.actionInfo.valueBefore===''&&item.actionInfo.valueAfter!==''"
                             class="pa-2"
                         >
-                            +  <code>{{ item.actionTo.targetid }}</code> : <code>{{ item.actionInfo.valueAfter }}</code>
+                            +  <code>{{ item.actionInfo.valueAfter }}</code>
                         </span>
 
                         <!-- 変更前と変更後の値表示 -->
