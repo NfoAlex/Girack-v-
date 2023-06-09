@@ -12,7 +12,8 @@ export default {
 
     data() {
         return {
-            modLogDisplay: [],
+            modLogDisplay: [], //監査ログデータの格納用
+            thereIsMoreData: true, //サーバー上にまだ読み込んでいない監査ログがあるかどうか
             
             //変更情報のタイトルインデックス
             actionameIndex: {
@@ -72,9 +73,25 @@ export default {
             }
         },
 
+        //更に監査ログを遡る
+        getMoreModlog() {
+            //取得
+            socket.emit("getModlog", {
+                startLength: this.modLogDisplay.length+1,
+                reqSender: {
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
+                }
+            });
+        },
+
+        //監査ログの受け取り部分
         SOCKETinfoModlog(modLog) {
             console.log("Modlog :: SOCKETinfoModlog : dat->", modLog);
-            this.modLogDisplay = modLog.data;
+            //監査ログデータを格納
+            this.modLogDisplay = this.modLogDisplay.concat(modLog.data);
+            //もしサーバー上の全データを読み込んだのなら"さらに読み込むボタンを非表示"
+            if ( modLog.endOfData ) this.thereIsMoreData = false;
 
         }
     },
@@ -110,7 +127,7 @@ export default {
             </p>
         </div>
 
-        <div style="overflow-y:auto; width:100%;">
+        <div class="d-flex flex-column align-center" style="overflow-y:auto; width:100%;">
             
             <v-expansion-panels style="width:90%">
                 
@@ -239,7 +256,19 @@ export default {
 
                 </v-expansion-panel>
 
+                
+
             </v-expansion-panels>
+
+            <v-btn
+                @click="getMoreModlog()"
+                v-if="thereIsMoreData"
+                color="primary"
+                class="rounded-pill ma-3"
+            >
+                監査ログを更に読み込む
+            </v-btn>
+
         </div>
     </div>
 </template>
