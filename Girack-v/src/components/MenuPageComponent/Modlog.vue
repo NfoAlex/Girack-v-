@@ -97,13 +97,30 @@ export default {
                             </v-img>
                         </v-avatar>
 
-                        {{ getActionname(item.actionInfo.actionname) }}
-
+                        <span class="text-truncate">
+                            {{ getActionname(item.actionInfo.actionname) }}
+                        </span>
                     </v-expansion-panel-title>
 
                     <!-- やったことの内容 -->
-                    <v-expansion-panel-text>
-                        asdf
+                    <v-expansion-panel-text class="pa-2">
+                        <p v-if="item.actionInfo.valueAfter===''">
+                            削除された
+                        </p>
+                        <span v-if="item.actionTo.messageid!==''">
+                            メッセージID : <code>{{ item.actionTo.messageid }}</code>
+                        </span>
+                        <span v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''">
+                            <p>
+                                <code>{{ item.actionInfo.valueBefore }}</code>
+                            </p>
+                            <v-icon>
+                                mdi:mdi-arrow-down
+                            </v-icon>
+                            <p>
+                                <code>{{ item.actionInfo.valueAfter }}</code>
+                            </p>
+                        </span>
                     </v-expansion-panel-text>
 
                 </v-expansion-panel>
