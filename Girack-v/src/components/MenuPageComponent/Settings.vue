@@ -267,7 +267,7 @@ export default {
 
                         <p class="text-h6 ma-2">同期</p>
                         <p><v-icon>mdi:mdi-sync</v-icon>設定データの同期状態</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
+                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
                             <v-switch
                                 v-model="CONFIG_SYNC"
                                 label="設定を同期する"
@@ -286,7 +286,7 @@ export default {
                         <p class="text-h6 ma-2">通知</p>
 
                         <p><v-icon>mdi:mdi-bell-cog</v-icon>許可状況</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
+                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
                             <p v-if="checkNotificationPermission()">
                                 <v-icon color="success">mdi:mdi-check-bold</v-icon>
                                 通知いけるな
@@ -304,7 +304,7 @@ export default {
                         <br>
 
                         <p><v-icon>mdi:mdi-bell</v-icon>通知する内容</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
+                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
                             <v-checkbox
                                 v-model="CONFIG_NOTIFICATION.ENABLE"
                                 label="通知を有効化"
@@ -364,7 +364,7 @@ export default {
                         <p class="text-h6 ma-2">表示</p>
 
                         <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
+                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
                             <v-checkbox
                                 v-model="CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
                                 label="ユーザー名の横にロールを表示"
@@ -388,7 +388,7 @@ export default {
                         <br>
 
                         <p><v-icon>mdi:mdi-format-list-group</v-icon>サイドバー</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
+                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
                             <p class="pa-1">チャンネルの表示順番</p>
                             <v-select
                                 v-model="CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY"
@@ -406,7 +406,7 @@ export default {
                         <p class="text-h6 ma-2">プライバシー</p>
 
                         <p><v-icon>mdi:mdi-radar</v-icon>データ</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
+                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
                             <v-checkbox
                                 v-model="dataConsent"
                                 readonly
@@ -457,7 +457,6 @@ export default {
 
 .cardInner
 {
-    background-color: #222;
     margin: 8px 0;
 }
 

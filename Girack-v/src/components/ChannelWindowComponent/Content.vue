@@ -143,7 +143,7 @@ export default {
                 document.title = this.ChannelIndex[newPage.params.id].channelname;
 
                 //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
-                if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) ) return 0;
+                if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) || this.MsgDB[newPage.params.id].length === 0 ) return 0;
 
                 let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                 this.MsgReadTime[this.getPath] = {
@@ -312,7 +312,7 @@ export default {
                 if ( this.checkDateDifference(index) ) return true;
 
                 //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-                if ( this.cropMessage[index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID?
+                if ( this.cropMessage[index-1].userid === userid ) { //このメッセージの一つ前のメッセージのユーザーID
                     //条件でアバターを見せるか見せないか決める
                     if ( timeMinDifference < -55 || timeMinDifference > 4 || timeHourDifference !== 0 ) {
                         return true;

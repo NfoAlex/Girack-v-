@@ -33,7 +33,6 @@ export default {
     mounted() {
         //ブラウザ上のタブ名を設定
         document.title = "メニュー";
-        console.log("Menu :: mounted : myUserinfo->", this.myUserinfo.role);
 
     }
 
@@ -62,15 +61,15 @@ export default {
                     設定
                 </v-card>
             </RouterLink>
-            <!-- <RouterLink to="/menu/modlog"> -->
-                <v-card disabled @click="" class="rounded-lg menu-card">
+            <RouterLink to="/menu/modlog">
+                <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('modlog')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
                         mdi:mdi-security
                     </v-icon>
                     <br>
                     監査ログ
                 </v-card>
-            <!-- </RouterLink> -->
+            </RouterLink>
             <RouterLink to="/menu/members">
                 <v-card @click="" class="rounded-lg menu-card" :color="isThisActive('members')?'primary':'secondary'">
                     <v-icon size="large" style="margin:0 auto;">
