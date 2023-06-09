@@ -210,8 +210,17 @@ export default {
 
                         <br>
 
-                        <p class="ma-1">変更内容</p>
-                        <v-card color="cardInner" class="pa-3 rounded-lg">
+                        <p
+                        v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
+                            class="ma-1"
+                        >
+                            変更内容
+                        </p>
+                        <v-card
+                            v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
+                            color="cardInner"
+                            class="pa-3 rounded-lg"
+                        >
                             <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
                             <p
                                 v-if="actionameIndex[item.actionInfo.actionname]===undefined"
