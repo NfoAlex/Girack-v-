@@ -210,14 +210,10 @@ export default {
 
                         <br>
 
-                        <p
-                        v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
-                            class="ma-1"
-                        >
+                        <p class="ma-1">
                             変更内容
                         </p>
                         <v-card
-                            v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
                             color="cardInner"
                             class="pa-3 rounded-lg"
                         >
