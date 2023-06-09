@@ -157,8 +157,13 @@ export default {
                         </v-avatar>
 
                         <!-- 変更情報の説明（タイトル） -->
-                        <span class="text-truncate">
+                        <span class="text-truncate flex-grow-1">
                             {{ getActionname(item.actionInfo.actionname) }}
+                        </span>
+
+                        <!-- 時間表示 -->
+                        <span class="text-disabled" style="margin-right:5%;">
+                            {{ item.actionId.slice(0,4) }}-{{ item.actionId.slice(4,6) }}-{{ item.actionId.slice(6,8) }} {{ item.actionId.slice(8,10) }}:{{ item.actionId.slice(10,12) }}:{{ item.actionId.slice(12,14) }}
                         </span>
                     </v-expansion-panel-title>
 
