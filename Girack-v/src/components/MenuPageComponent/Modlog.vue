@@ -5,14 +5,16 @@ const socket = getSocket();
 
 export default {
     setup() {
-        const { myUserinfo } = dataUser();
-        return { myUserinfo, backendURI };
+        const { myUserinfo, UserIndex } = dataUser();
+        return { myUserinfo, backendURI, UserIndex };
     
     },
 
     data() {
         return {
             modLogDisplay: [],
+            
+            //情報変更のタイトルインデックス
             actionameIndex: {
                 messageDelete: "メッセージの削除",
                 userDelete: "ユーザーを削除",
@@ -37,6 +39,24 @@ export default {
                 return "変更情報";
             }
 
+        },
+
+        //ユーザー名の取得
+        getUsername(userid) {
+            try {
+                return this.UserIndex[userid].username;
+            } catch(e) { //ユーザーが無い
+                //ユーザー情報の取得
+                socket.emit("getInfoUser", {
+                    targetid: userid,
+                    reqSender: {
+                        userid: this.myUserinfo.userid,
+                        sessionid: this.myUserinfo.sessionid
+                    },
+                });
+                //今のところはIDだけ返す
+                return userid;
+            }
         },
 
         SOCKETinfoModlog(modLog) {
@@ -114,6 +134,35 @@ export default {
 
                     <!-- やったことの内容 -->
                     <v-expansion-panel-text class="pa-2">
+                        <!-- 関係にあるユーザーデータを表示 -->
+                        <div class="d-flex flex-clumn align-center">
+                            <!-- やった人のアイコン -->
+                            <v-avatar size="small" style="margin-right:8px;">
+                                <v-img alt="icon" :src="backendURI+'/img/'+item.actionBy">
+                                </v-img>
+                                
+                            </v-avatar>
+                            <!-- やった人の名前 -->
+                            <span style="margin-right:8px;">
+                                {{ getUsername(item.actionBy) }}
+                            </span>
+
+                            <!-- 矢印 -->
+                            <v-icon v-if="item.actionTo.type!=='channel'" style="margin-right:8px;">
+                                mdi:mdi-arrow-right
+                            </v-icon>
+
+                            <!-- 受けた人のアイコン -->
+                            <v-avatar v-if="item.actionTo.type!=='channel'" size="small" style="margin-right:8px;">
+                                <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.targetid">
+                                </v-img>
+                            </v-avatar>
+                            <!-- 受けた人の名前 -->
+                            <span v-if="item.actionTo.type!=='channel'">
+                                {{ getUsername(item.actionTo.targetid) }}
+                            </span>
+                        </div>
+
                         <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
                         <p
                             v-if="actionameIndex[item.actionInfo.actionname]===undefined"
