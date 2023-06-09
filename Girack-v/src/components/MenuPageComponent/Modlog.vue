@@ -146,7 +146,7 @@ export default {
                     </v-expansion-panel-title>
 
                     <!-- やったことの内容 -->
-                    <v-expansion-panel-text class="pa-2">
+                    <v-expansion-panel-text>
 
                         <!-- 関係にあるユーザーデータを表示 -->
                         <p class="ma-1">ユーザー情報</p>
@@ -181,7 +181,7 @@ export default {
                         <br>
 
                         <p class="ma-1">変更内容</p>
-                        <v-card color="cardInner" class="pa-5 rounded-lg">
+                        <v-card color="cardInner" class="pa-3 rounded-lg">
                             <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
                             <p
                                 v-if="actionameIndex[item.actionInfo.actionname]===undefined"
@@ -224,13 +224,13 @@ export default {
                                 v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
                             >
                                 <p>
-                                    <code>{{ item.actionInfo.valueBefore }}</code>
+                                    <code style="color:green;">{{ item.actionInfo.valueBefore }}</code>
                                 </p>
                                 <v-icon>
                                     mdi:mdi-arrow-down
                                 </v-icon>
                                 <p>
-                                    <code>{{ item.actionInfo.valueAfter }}</code>
+                                    <code style="color:green;">{{ item.actionInfo.valueAfter }}</code>
                                 </p>
                             </span>
                         </v-card>
