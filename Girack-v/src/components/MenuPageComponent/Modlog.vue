@@ -179,17 +179,19 @@ export default {
                         <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
                         <p
                             v-if="actionameIndex[item.actionInfo.actionname]===undefined"
+                            class="pa-2"
                         >
                             変更内容 : <code>{{ item.actionInfo.actionname }}</code>
                         </p>
 
                         <!-- 変更後のデータが空なら削除されたと表示 -->
-                        <p v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter==''">
+                        <p v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter==''" class="pa-2">
                             削除された
                         </p>
 
+                        <!-- チャンネルが変更に関係があるなら表示 -->
                         <p
-                            v-of="item.actionTo.channelid===''"
+                            v-if="item.actionTo.channelid!==''"
                             class="pa-2"
                         >
                             チャンネルID : <code>{{ item.actionTo.channelid }}</code>
