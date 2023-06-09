@@ -37,7 +37,7 @@ const vuetify = createVuetify({
                     warning: "#4caf50",
                     success: "#1B5E20",
                     "grey": "#263238",
-                    "cardInner": "#323232",
+                    "cardInner": "#212121",
                 }
             },
         },
