@@ -127,7 +127,7 @@ export default {
             </p>
         </div>
 
-        <div class="d-flex flex-column align-center" style="overflow-y:auto; width:100%;">
+        <div class="d-flex flex-column align-center" style="overflow-y:auto; width:100%; padding-bottom:24px;">
             
             <v-expansion-panels style="width:90%">
                 
