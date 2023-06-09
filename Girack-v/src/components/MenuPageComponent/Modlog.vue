@@ -94,16 +94,17 @@ export default {
                         </v-avatar>
 
                         <!-- 矢印 -->
-                        <v-icon style="margin-right:8px;">
+                        <v-icon v-if="item.actionTo.type==='user'" style="margin-right:8px;">
                             mdi:mdi-arrow-right
                         </v-icon>
 
                         <!-- 受けた人のアイコン -->
-                        <v-avatar size="small" style="margin-right:16px;">
+                        <v-avatar v-if="item.actionTo.type==='user'" size="small" style="margin-right:16px;">
                             <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.targetid">
                             </v-img>
                         </v-avatar>
 
+                        <!-- 変更情報の説明（タイトル） -->
                         <span class="text-truncate">
                             {{ getActionname(item.actionInfo.actionname) }}
                         </span>
