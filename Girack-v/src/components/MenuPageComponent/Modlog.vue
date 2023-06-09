@@ -184,26 +184,43 @@ export default {
                                 {{ getUsername(item.actionBy) }}
                             </span>
 
-                            <!-- 矢印 -->
-                            <v-icon v-if="item.actionTo.type!=='channel'" style="margin-right:8px;">
-                                mdi:mdi-arrow-right
-                            </v-icon>
+                            <!-- 影響を受けているのがユーザーならそのユーザーも表示 -->
+                            <span v-if="item.actionTo.type!=='channel'&&item.actionTo.type!=='server'">
+                                <!-- 矢印 -->
+                                <v-icon
+                                    style="margin-right:8px;"
+                                >
+                                    mdi:mdi-arrow-right
+                                </v-icon>
 
-                            <!-- 受けた人のアイコン -->
-                            <v-avatar v-if="item.actionTo.type!=='channel'" size="x-small" style="margin-right:8px;">
-                                <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.userid">
-                                </v-img>
-                            </v-avatar>
-                            <!-- 受けた人の名前 -->
-                            <span v-if="item.actionTo.type!=='channel'">
-                                {{ getUsername(item.actionTo.userid) }}
+                                <!-- 受けた人のアイコン -->
+                                <v-avatar
+                                    size="x-small"
+                                    style="margin-right:8px;"
+                                >
+                                    <v-img alt="icon" :src="backendURI+'/img/'+item.actionTo.userid">
+                                    </v-img>
+                                </v-avatar>
+                                <!-- 受けた人の名前 -->
+                                <span>
+                                    {{ getUsername(item.actionTo.userid) }}
+                                </span>
                             </span>
                         </v-card>
 
                         <br>
 
-                        <p class="ma-1">変更内容</p>
-                        <v-card color="cardInner" class="pa-3 rounded-lg">
+                        <p
+                        v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
+                            class="ma-1"
+                        >
+                            変更内容
+                        </p>
+                        <v-card
+                            v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
+                            color="cardInner"
+                            class="pa-3 rounded-lg"
+                        >
                             <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
                             <p
                                 v-if="actionameIndex[item.actionInfo.actionname]===undefined"
