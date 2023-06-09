@@ -100,7 +100,7 @@ export default {
 <template>
 
     <!-- チャンネル設定ダイアログ -->
-    <ChannelConfig v-model="channelDialogShow" :channelid="getPath" :channelInfo="channelInfo" />
+    <ChannelConfig v-if="channelDialogShow" v-model="channelDialogShow" :channelid="getPath" :channelInfo="channelInfo" />
 
     <!-- ヘッダの表示部分(メイン) -->
     <div class="d-flex align-center justify-space-evenly" style="max-width:100%; height:100%;">
