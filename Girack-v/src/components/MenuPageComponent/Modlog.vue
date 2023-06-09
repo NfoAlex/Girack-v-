@@ -14,7 +14,9 @@ export default {
         return {
             modLogDisplay: [],
             actionameIndex: {
-                messageDelete: "メッセージの削除"
+                messageDelete: "メッセージの削除",
+                userDelete: "ユーザーを削除",
+                channelCreate: "チャンネルを作成"
             }
         }
     },
