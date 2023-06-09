@@ -20,10 +20,17 @@ export default {
     },
 
     methods: {
-        //起こされた変更の表示名
+        //起こされた変更の表示名出力
         getActionname(actioname) {
             try {
-                return this.actionameIndex[actioname];
+                //変更情報の名前インデックスを参照してその名前を返す
+                if ( this.actionameIndex[actioname] !== undefined ) {
+                    return this.actionameIndex[actioname];
+
+                } else { //インデックスに無ければfallback
+                    return "変更情報";
+
+                }
             } catch(e) {
                 return "変更情報";
             }
@@ -104,15 +111,36 @@ export default {
 
                     <!-- やったことの内容 -->
                     <v-expansion-panel-text class="pa-2">
+                        <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
+                        <p
+                            v-if="actionameIndex[item.actionInfo.actionname]===undefined"
+                        >
+                            変更内容 : <code>{{ item.actionInfo.actionname }}</code>
+                        </p>
+
+                        <!-- 変更後のデータが空なら削除されたと表示 -->
                         <p v-if="item.actionInfo.valueAfter===''">
                             削除された
                         </p>
+
                         <!-- 変更されたものがメッセージならIDを表示 -->
                         <span v-if="item.actionTo.type==='message'">
                             メッセージID : <code>{{ item.actionTo.messageid }}</code>
                         </span>
+
+                        <!-- 無から作られた時の値表示 -->
+                        <span
+                            v-if="item.actionInfo.valueBefore===''&&item.actionInfo.valueAfter!==''"
+                            class="pa-2"
+                        >
+                            +  <code>{{ item.actionTo.targetid }}</code> : <code>{{ item.actionInfo.valueAfter }}</code>
+                        </span>
+
                         <!-- 変更前と変更後の値表示 -->
-                        <span v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''">
+                        <span
+                            v-if="item.actionInfo.valueBefore!==''&&item.actionInfo.valueAfter!==''"
+                            class="pa-2"
+                        >
                             <p>
                                 <code>{{ item.actionInfo.valueBefore }}</code>
                             </p>
