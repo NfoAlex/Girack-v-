@@ -14,11 +14,23 @@ export default {
         return {
             modLogDisplay: [],
             
-            //情報変更のタイトルインデックス
+            //変更情報のタイトルインデックス
             actionameIndex: {
                 messageDelete: "メッセージの削除",
+
+                userBan: "ユーザーをBAN",
                 userDelete: "ユーザーを削除",
-                channelCreate: "チャンネルを作成"
+                userPardon: "ユーザーのBANを解除",
+                userKickFromChannel: "ユーザーをチャンネルからキック",
+
+                channelEditName: "チャンネル名を変更",
+                channelEditDesc: "チャンネル概要を変更",
+                channelChangeScope: "チャンネルのプライベート状態を変更",
+                channelCreate: "チャンネルを作成",
+                channelDelete: "チャンネルを削除",
+
+                serverEditName: "サーバー名を変更",
+                serverEditConfig: "サーバー設定を更新"
             }
         }
     },
