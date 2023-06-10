@@ -195,12 +195,17 @@ export default {
                 //テキストを現在のカーソル位置をもとに分裂させる
                 let txtBefore = this.txt.slice(0,currentTxtCursor);
                 let txtAfter = this.txt.slice(currentTxtCursor);
+
                 //改行を挿入
                 this.txt = txtBefore + "\n" + txtAfter;
 
                 //カーソル位置を改行のすぐ次へ移動
-                this.$el.querySelector("#inp").selectionStart = currentTxtCursor;
+                this.$nextTick(() => {
+                    this.$el.querySelector("#inp").setSelectionRange(currentTxtCursor+1, currentTxtCursor+1);
+                    
+                });
                 
+                //ここでトリガー処理を停止
                 return;
 
             }
