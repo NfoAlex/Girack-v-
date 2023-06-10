@@ -69,7 +69,8 @@ export default {
         ReplyState: {
             handler() {
                 console.log("Input :: watch(ReplyState) : うおお", ReplyState.value);
-                this.getMessage();
+                this.getMessage(); //返信先のメッセージ取得
+                this.$el.querySelector("#inp").focus(); //入力欄へフォーカス
 
             },
             deep: true
