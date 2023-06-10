@@ -15,7 +15,7 @@ export default {
 
             imageAloneLoadState: false, //画像単体の時のロード状態
 
-            embedTwitter :false //Twitter埋め込みを表示するかどうか
+            embedTwitter :false, //Twitter埋め込みを表示するかどうか
         }
     },
 
@@ -49,12 +49,39 @@ export default {
 
         },
 
+        //ツイートのURLを抽出
+        getTweetURL(url) {
+            //IDを取り出すための正規表現条件
+            const regexes = [
+                /https?:\/\/twitter\.com\/(\w+)\/status(es)?\/(\d+)/,
+                /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)/,
+                /https?:\/\/mobile\.twitter\.com\/(\w+)\/status(es)?\/(\d+)/,
+            ];
+
+            //条件からそれぞれ調べてIDを返す
+            for (let regex of regexes) {
+                //探しまくり
+                let match = url.match(regex);
+                //もし見つかってたら返す
+                if ( match ) return match[match.length - 1];
+
+            }
+
+        },
+
         //画像単体時での画像ロードが検知されたときのロードされたと設定
         imageAloneLoaded() {
             this.imageAloneLoadState = true; //ロードできた
             console.log("ContentURLpreview :: imageAloneLoaded : 画像ロードできたよ");
 
         },
+
+        //ツイートの読み込みができなかったとき
+        tweetErrorHandler() {
+            console.log("ContentURLPreview :: tweetErrorHandler : エラー");
+            this.embedTwitterError = true;
+
+        }
 
     },
 
@@ -116,7 +143,7 @@ export default {
             <Tweet
                 style="max-width:350px; width:30%; background: black;"
                 width="550"
-                :tweet-url="link.url.split('?s=')[0]"
+                :tweet-id="getTweetURL(link.url)"
                 theme="dark"
                 lang="ja"
                 :dnt="true"
