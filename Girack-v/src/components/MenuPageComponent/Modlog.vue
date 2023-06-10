@@ -73,6 +73,21 @@ export default {
             }
         },
 
+        //監査ログの再取得
+        refreshModlog() {
+            //監査ログの配列初期化
+            this.modLogDisplay = [];
+            //0から取得
+            socket.emit("getModlog", {
+                startLength: 0,
+                reqSender: {
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
+                }
+            });
+
+        },
+
         //更に監査ログを遡る
         getMoreModlog() {
             //取得
@@ -121,10 +136,19 @@ export default {
 <template>
     <div style="height:100vh; width:90%;" class="d-flex align-center flex-column">
         <!-- ページタイトル -->
-        <div style="width:90%; padding-top:3%; margin-bottom:16px;" class="text-left align-center">
-            <p class="text-left" style="font-size:min(4vh,36px)">
+        <div style="width:90%; padding-top:3%; margin-bottom:16px;" class="d-flex align-center">
+            <p class="text-left me-auto" style="font-size:min(4vh,36px)">
                 監査ログ
             </p>
+            <!-- 再取得ボタン -->
+            <v-btn
+                @click="refreshModlog"
+                icon="mdi:mdi-refresh"
+                size="large"
+                class="rounded-lg ma-3"
+                color="primary"
+            >
+            </v-btn>
         </div>
 
         <div class="d-flex flex-column align-center" style="overflow-y:auto; width:100%; padding-bottom:24px;">
