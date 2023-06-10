@@ -77,7 +77,10 @@ export default {
         refreshModlog() {
             //監査ログの配列初期化
             this.modLogDisplay = [];
-            //0から取得
+            //監査ログの末端読み込み状態を初期化
+            this.thereIsMoreData = true;
+
+            //0から監査ログを取得
             socket.emit("getModlog", {
                 startLength: 0,
                 reqSender: {
