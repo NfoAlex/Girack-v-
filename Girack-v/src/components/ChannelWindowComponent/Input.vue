@@ -189,7 +189,23 @@ export default {
 
             //Shiftが同時に押されていたら改行するだけ
             if ( event.shiftKey ) {
-                this.txt+="\n";
+                //現在の入力欄上のカーソル位置
+                let currentTxtCursor = this.$el.querySelector("#inp").selectionStart;
+
+                //テキストを現在のカーソル位置をもとに分裂させる
+                let txtBefore = this.txt.slice(0,currentTxtCursor);
+                let txtAfter = this.txt.slice(currentTxtCursor);
+
+                //改行を挿入
+                this.txt = txtBefore + "\n" + txtAfter;
+
+                //カーソル位置を改行のすぐ次へ移動
+                this.$nextTick(() => {
+                    this.$el.querySelector("#inp").setSelectionRange(currentTxtCursor+1, currentTxtCursor+1);
+                    
+                });
+                
+                //ここでトリガー処理を停止
                 return;
 
             }
@@ -488,6 +504,7 @@ export default {
 
             <v-container fill-height fluid class="d-flex">
 
+                <!-- 入力欄 -->
                 <v-menu
                     ref="MentionUserList"
                     label="list"
@@ -496,8 +513,6 @@ export default {
                 >
                     <template v-slot:activator="{ props }">
                         <!-- 入力部分 -->
-                        
-
                         <v-textarea
                             id="inp"
                             ref="inp"
