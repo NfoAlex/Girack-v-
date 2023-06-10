@@ -112,8 +112,10 @@ export default {
     },
 
     mounted() {
+        //監査ログの受け取り
         socket.on("infoModlog", this.SOCKETinfoModlog);
 
+        //監査ログの取得
         socket.emit("getModlog", {
             startLength: 0,
             reqSender: {
@@ -145,7 +147,7 @@ export default {
                 @click="refreshModlog"
                 icon="mdi:mdi-refresh"
                 size="large"
-                class="rounded-lg ma-3"
+                class="rounded-lg"
                 color="primary"
             >
             </v-btn>
