@@ -134,6 +134,9 @@ export default {
             v-for="(url, index) in InstanceURLArray"
             @click="$router.push({ path: url.slice(locationOrigin.length)})"
         >
+            <v-icon v-if="url.includes('/browser')">
+                mdi:mdi-list-box
+            </v-icon>
             {{ url.includes("/browser")?"チャンネルブラウザ":url.slice(locationOrigin.length) }}
         </v-chip>
     </span>
