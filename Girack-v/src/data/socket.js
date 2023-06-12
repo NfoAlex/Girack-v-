@@ -30,7 +30,9 @@ const {
 export const Serverinfo = ref({
     servername: "...",
     registerAvailable: null,
-    inviteOnly: null
+    inviteOnly: null,
+    config: {},
+    serverVersion: ""
 });
 
 //データインポート
@@ -324,6 +326,7 @@ socket.on("infoServer", (dat) => {
         servername: dat.servername, //サーバーの名前
         registerAvailable: dat.registerAvailable, //登録できるかどうか
         inviteOnly: dat.inviteOnly, //招待オンリーかどうか
+        config: dat.config, //サーバーの設定
         serverVersion: dat.serverVersion //サーバー側のバージョン
     };
 
