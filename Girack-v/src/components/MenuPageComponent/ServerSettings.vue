@@ -95,7 +95,13 @@ export default {
             this.displaySettings.inviteOnly = dat.registration.invite.inviteOnly;
             this.displaySettings.inviteCode = dat.registration.invite.inviteCode;
 
+            //設定の変更があったフラグを初期化
             this.changed = false;
+
+            //ロードできたと設定
+            this.configReady = true;
+
+            console.log("ServerSettings :: mounted : maxLengthCompare->", this.displaySettings);
 
         }
     },
@@ -124,7 +130,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div v-if="configReady">
         <div style="width:90%; height:100vh;" class="d-flex flex-column">
             <!-- ページタイトル -->
             <div style="width:90%; padding-top:3%; margin-bottom:16px;" class="d-flex align-center">
