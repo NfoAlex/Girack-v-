@@ -14,6 +14,7 @@ export default {
                 inviteOnly: false,
                 config: {}
             },
+            configReady: false,
 
             displayServername: "...",
             displaySettings: {
