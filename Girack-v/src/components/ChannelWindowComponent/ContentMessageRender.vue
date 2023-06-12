@@ -80,7 +80,7 @@ export default {
                     //インスタンス内に対するURLかどうかを判別してからアンカーをつける
                     if ( url.startsWith(location.origin) ) {
                         this.InstanceURLArray.push(url); //配列追加
-                        return "<a style='color:green'>" + url + "</a>";
+                        return "<a style='color:rgb(var(--v-theme-success))'>" + url + "</a>";
 
                     } else {
                         return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
