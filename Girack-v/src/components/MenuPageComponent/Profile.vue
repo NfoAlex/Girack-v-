@@ -428,13 +428,13 @@ export default {
                                             class="me-auto"
                                             v-model="nameDisplaying"
                                             counter
-                                            maxlength="32"
+                                            :maxlength="Serverinfo.config.PROFILE.PROFILE_USERNAME_MAXLENGTH"
                                             variant="solo"
                                         >
                                             <template v-slot:append-inner>
                                                 <v-btn
                                                     @click="updateName"
-                                                    :disabled="nameDisplaying.length>=32"
+                                                    :disabled="nameDisplaying.length>=Serverinfo.config.PROFILE.PROFILE_USERNAME_MAXLENGTH"
                                                     color="secondary"
                                                     size="x-small"
                                                     icon="mdi:mdi-check-bold"
