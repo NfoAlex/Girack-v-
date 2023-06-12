@@ -226,7 +226,7 @@ export default {
                         class="mx-auto"
                         style="width:90%"
                         :hint="humanFileSize(displaySettings.config.MESSAGE.MESSAGE_FILE_MAXSIZE,true)"
-                        persistent-hint="true"
+                        :persistent-hint="true"
                         v-model="displaySettings.config.MESSAGE.MESSAGE_FILE_MAXSIZE"
                     >
                     </v-text-field>
@@ -258,7 +258,7 @@ export default {
                         class="mx-auto"
                         style="width:90%"
                         :hint="humanFileSize(displaySettings.config.PROFILE.PROFILE_ICON_MAXSIZE,true)"
-                        persistent-hint="true"
+                        :persistent-hint="true"
                     >
                     </v-text-field>
 
