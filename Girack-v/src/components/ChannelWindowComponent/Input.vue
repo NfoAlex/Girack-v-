@@ -1,6 +1,6 @@
 <script>
 
-import { getSocket, getMessage, backendURI } from '../../data/socket.js';
+import { getSocket, Serverinfo, backendURI } from '../../data/socket.js';
 import { dataMsg } from '../../data/dataMsg';
 import { dataChannel } from '../../data/dataChannel';
 import { dataUser } from '../../data/dataUserinfo';
@@ -27,7 +27,7 @@ export default {
         const { ChannelIndex } = dataChannel();
         const { MsgDB } = dataMsg();
 
-        return { ReplyState, myUserinfo, ChannelIndex, MsgDB, UserIndex };
+        return { ReplyState, myUserinfo, ChannelIndex, MsgDB, UserIndex, Serverinfo };
 
     },
 
@@ -585,9 +585,9 @@ export default {
                     </v-list>
                 </v-menu>
             
-                <v-btn @click="msgSend(null,'byBtn')" :disabled="txt.length>250" icon="" size="large" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
-                    <v-icon v-if="txt.length<=250" icon="mdi:mdi-send-outline"></v-icon>
-                    <span v-if="txt.length>250">{{ 250 - txt.length }}</span>
+                <v-btn @click="msgSend(null,'byBtn')" :disabled="txt.length>Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH" icon="" size="large" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
+                    <v-icon v-if="txt.length<=Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH" icon="mdi:mdi-send-outline"></v-icon>
+                    <span v-if="txt.length>Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH">{{ Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH - txt.length }}</span>
                     <v-tooltip
                         activator="parent"
                         location="top"
