@@ -1,5 +1,5 @@
 <script>
-import { getSocket } from '../../data/socket';
+import { getSocket, Serverinfo } from '../../data/socket';
 import { dataUser } from '../../data/dataUserinfo';
 const socket = getSocket();
 const { myUserinfo } = dataUser();
@@ -11,14 +11,16 @@ export default {
             currentSettings: {
                 servername: "...",
                 registerAvailable: false,
-                inviteOnly: false
+                inviteOnly: false,
+                config: {}
             },
 
             displayServername: "...",
             displaySettings: {
                 registerAvailable: false,
                 inviteOnly: false,
-                inviteCode: ""
+                inviteCode: "",
+                config: Serverinfo.value.config
             },
 
             changed: false
@@ -33,7 +35,8 @@ export default {
                 if (
                     this.displaySettings.registerAvailable === this.currentSettings.registration.available &&
                     this.displaySettings.inviteOnly === this.currentSettings.registration.invite.inviteOnly &&
-                    this.displaySettings.inviteCode === this.currentSettings.registration.invite.inviteCode
+                    this.displaySettings.inviteCode === this.currentSettings.registration.invite.inviteCode &&
+                    this.displaySettings.config === this.currentSettings.config
                 ) {
                     this.changed = false;
 
@@ -189,7 +192,7 @@ export default {
                         variant="outlined"
                         class="mx-auto"
                         style="width:90%"
-                        v-model="displaySettings.inviteCode"
+                        v-model="displaySettings.config.MESSAGE.MESSAGE_TXT_MAXLENGTH"
                     >
                     </v-text-field>
                 </v-card>
