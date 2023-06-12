@@ -147,7 +147,7 @@ export default {
 
 <template>
     <div v-if="configReady">
-        <div style="width:90%; height:100vh;" class="d-flex flex-column">
+        <div style="width:90%; height:97.5vh;" class="d-flex flex-column">
             <!-- ページタイトル -->
             <div style="width:90%; padding-top:3%; margin-bottom:16px;" class="d-flex align-center">
                 <p class="text-left me-auto" style="font-size:min(4vh,36px)">
@@ -155,15 +155,15 @@ export default {
                 </p>
             </div>
 
-            <v-card class="card mx-auto rounded-lg">
-                <p class="text-h5">
+            <v-card class="card mx-auto rounded-lg d-flex align-center">
+                <p class="text-h5 text-center ma-1">
                     サーバー名 : {{ displaySettings.servername }}
                 </p>
             </v-card>
 
             <br>
             <!-- 設定を適用・キャンセルボタン -->
-            <div class="mx-auto" style="width:fit-content">
+            <div class="mx-auto ma-2" style="width:fit-content">
                 <v-btn
                     :disabled="!changed"
                     @click="updateServerSettings"
@@ -281,7 +281,7 @@ export default {
 
 .card
 {
-    margin-top: 16px;
+    margin-top: 8px;
 
     padding: 16px;
     width: 95%;
