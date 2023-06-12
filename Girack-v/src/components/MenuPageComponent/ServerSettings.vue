@@ -144,12 +144,18 @@ export default {
                     :disabled="!changed"
                     @click="updateServerSettings"
                     class="rounded-lg ma-1"
-                    size="large"
                     color="success"
                 >
-                設定を保存
+                    設定を保存
                 </v-btn>
-                <v-btn :disabled="!changed" @click="restoreDefault" class="rounded-lg ma-1" size="large" color="grey">元に戻す</v-btn>
+                <v-btn
+                    :disabled="!changed"
+                    @click="restoreDefault"
+                    class="rounded-lg ma-1"
+                    color="grey"
+                >
+                    元に戻す
+                </v-btn>
             </div>
             
             <!-- 設定メイン -->
