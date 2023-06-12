@@ -34,13 +34,6 @@ export default {
 
             },
             deep: true
-        },
-
-        currentSettings: {
-            handler() {
-                console.log("なんで？", this.currentSettings);
-            },
-            deep: true
         }
         
     },
