@@ -78,22 +78,9 @@ export default {
                     sessionid: myUserinfo.value.sessionid
                 }
             });
-        }
-    },
+        },
 
-    mounted() {
-        this.changed = false;
-
-        //サーバーの設定情報を取得
-        socket.emit("getServerSettings", {
-            reqSender: {
-                userid: myUserinfo.value.userid,
-                sessionid: myUserinfo.value.sessionid
-            }
-        });
-
-        //サーバーの設定情報受け取り
-        socket.on("infoServerSettings", (dat) => {
+        SOCKETinfoServer(dat) {
             console.log("ServerSettings :: 設定北");
             console.log(dat);
 
@@ -107,13 +94,25 @@ export default {
 
             this.changed = false;
 
-        });
+        }
+    },
+
+    mounted() {
+        this.changed = false;
+
+        //サーバーの設定情報受け取り
+        socket.on("infoServer",this.SOCKETinfoServer);
+
+        //サーバーの設定情報を取得
+        socket.emit("getServerSettings");
+
+        console.log("ServerSettings :: mounted : displaySettings->", this.displaySettings);
 
     },
 
     unmounted() {
         //通信重複防止
-        socket.off("infoServerSettings");
+        socket.off("infoServerSettings", this.SOCKETinfoServer);
         
     }
 
