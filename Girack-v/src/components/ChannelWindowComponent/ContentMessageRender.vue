@@ -79,7 +79,7 @@ export default {
                 return msgCleaned.replaceAll(this.URLRegex, (url) => {
                     //インスタンス内に対するURLかどうかを判別してからアンカーをつける
                     if ( url.startsWith(location.origin) ) {
-                        this.InstanceURLArray.push(url);
+                        this.InstanceURLArray.push(url); //配列追加
                         return "<a style='color:green'>" + url + "</a>";
 
                     } else {
