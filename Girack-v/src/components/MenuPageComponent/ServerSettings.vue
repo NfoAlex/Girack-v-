@@ -8,21 +8,11 @@ export default {
 
     data() {
         return {
-            currentSettings: {
-                servername: "...",
-                registerAvailable: false,
-                inviteOnly: false,
-                config: {}
-            },
             configReady: false,
+            currentSettings: null,
 
             displayServername: "...",
-            displaySettings: {
-                registerAvailable: false,
-                inviteOnly: false,
-                inviteCode: "",
-                config: Serverinfo.value.config
-            },
+            displaySettings: null,
 
             changed: false
         }
@@ -33,34 +23,35 @@ export default {
         displaySettings: {
             handler() {
                 //検知して元と同じなら"変更無し"と登録、違うならアリと登録
-                if (
-                    this.displaySettings.registerAvailable === this.currentSettings.registration.available &&
-                    this.displaySettings.inviteOnly === this.currentSettings.registration.invite.inviteOnly &&
-                    this.displaySettings.inviteCode === this.currentSettings.registration.invite.inviteCode &&
-                    this.displaySettings.config === this.currentSettings.config
-                ) {
+                if ( JSON.stringify(this.displaySettings) === JSON.stringify(this.currentSettings) ) {
                     this.changed = false;
 
                 } else {
                     this.changed = true;
+                    console.log("違うね", this.displaySettings, this.currentSettings);
 
                 }
 
             },
             deep: true
         },
+
+        currentSettings: {
+            handler() {
+                console.log("なんで？", this.currentSettings);
+            },
+            deep: true
+        }
         
     },
 
     methods: {
         //設定の値を初期設定に戻す
         restoreDefault() {
-            this.displayServername = this.currentSettings.servername;
-            this.displaySettings.registerAvailable = this.currentSettings.registration.available;
-            this.displaySettings.inviteOnly = this.currentSettings.registration.invite.inviteOnly;
-            this.displaySettings.inviteCode = this.currentSettings.registration.invite.inviteCode;
+            //サーバーの設定情報を取得
+            socket.emit("getInfoServer");
 
-            this.changed = false; //変更状況をリセット
+            //this.changed = false; //変更状況をリセット
 
         },
 
@@ -71,12 +62,13 @@ export default {
             //新しく設定を更新させる
             socket.emit("changeServerSettings", {
                 registration: {
-                    available: this.displaySettings.registerAvailable,
+                    available: this.displaySettings.registration.registerAvailable,
                     invite: {
-                        inviteOnly: this.displaySettings.inviteOnly,
-                        inviteCode: this.displaySettings.inviteCode
+                        inviteOnly: this.displaySettings.registration.invite.inviteOnly,
+                        inviteCode: this.displaySettings.registration.invite.inviteCode
                     }
                 },
+                config: this.displaySettings.config,
                 reqSender: {
                     userid: myUserinfo.value.userid,
                     sessionid: myUserinfo.value.sessionid
@@ -89,12 +81,10 @@ export default {
             console.log(dat);
 
             //現在の設定を保存
-            this.currentSettings = dat;
+            this.currentSettings = structuredClone(dat);
 
             //表示する設定を取り出す
-            this.displaySettings.registerAvailable = dat.registration.available;
-            this.displaySettings.inviteOnly = dat.registration.invite.inviteOnly;
-            this.displaySettings.inviteCode = dat.registration.invite.inviteCode;
+            this.displaySettings = structuredClone(dat);
 
             //設定の変更があったフラグを初期化
             this.changed = false;
@@ -114,15 +104,13 @@ export default {
         socket.on("infoServer",this.SOCKETinfoServer);
 
         //サーバーの設定情報を取得
-        socket.emit("getServerSettings");
-
-        console.log("ServerSettings :: mounted : displaySettings->", this.displaySettings);
+        socket.emit("getInfoServer");
 
     },
 
     unmounted() {
         //通信重複防止
-        socket.off("infoServerSettings", this.SOCKETinfoServer);
+        socket.off("infoServer", this.SOCKETinfoServer);
         
     }
 
@@ -142,7 +130,7 @@ export default {
 
             <v-card class="card mx-auto rounded-lg">
                 <p class="text-h5">
-                    サーバー名 : {{ currentSettings.servername }}
+                    サーバー名 : {{ displaySettings.servername }}
                 </p>
             </v-card>
 
@@ -172,20 +160,20 @@ export default {
                 
                 <p class="text-h6 ma-2">登録</p>
                 <v-card color="cardInner" class="rounded-lg cardInner">
-                    <v-checkbox v-model="displaySettings.registerAvailable" color="primary" label="登録を受け付ける"></v-checkbox>
+                    <v-checkbox v-model="displaySettings.registration.registerAvailable" color="primary" label="登録を受け付ける"></v-checkbox>
                     <v-checkbox
-                        :disabled="!displaySettings.registerAvailable"
-                        v-model="displaySettings.inviteOnly"
+                        :disabled="!displaySettings.registration.registerAvailable"
+                        v-model="displaySettings.registration.invite.inviteOnly"
                         label="招待制"
                     >
                     </v-checkbox>
                     <v-text-field
-                        :disabled="!displaySettings.inviteOnly||!displaySettings.registerAvailable"
+                        :disabled="!displaySettings.registration.invite.inviteOnly||!displaySettings.registration.registerAvailable"
                         variant="outlined"
                         label="招待コード"
                         class="mx-auto"
                         style="width:90%"
-                        v-model="displaySettings.inviteCode"
+                        v-model="displaySettings.registration.invite.inviteCode"
                     >
                     </v-text-field>
                 </v-card>
