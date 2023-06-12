@@ -80,7 +80,7 @@ export default {
                     //インスタンス内に対するURLかどうかを判別してからアンカーをつける
                     if ( url.startsWith(location.origin) ) {
                         this.InstanceURLArray.push(url); //配列追加
-                        return "<span style='background-color:gray; padding:2px; border-radius:4px;'>" +
+                        return "<span style='background-color:gray; padding:6px; border-radius:8px;'>" +
                                     "<a>" +
                                         url +
                                     "</a>" +
@@ -132,6 +132,7 @@ export default {
         <!-- インスタンス内URL -->
         <v-chip
             v-for="(url, index) in InstanceURLArray"
+            class="ma-2"
             @click="$router.push({ path: url.slice(locationOrigin.length)})"
         >
             <v-icon v-if="url.includes('/browser')">
