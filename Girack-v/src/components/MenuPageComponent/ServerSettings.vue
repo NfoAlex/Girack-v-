@@ -51,8 +51,6 @@ export default {
             //サーバーの設定情報を取得
             socket.emit("getInfoServer");
 
-            //this.changed = false; //変更状況をリセット
-
         },
 
         //サーバーの設定を更新させる
@@ -61,6 +59,7 @@ export default {
 
             //新しく設定を更新させる
             socket.emit("changeServerSettings", {
+                servername: this.displaySettings.servername,
                 registration: {
                     available: this.displaySettings.registration.registerAvailable,
                     invite: {
