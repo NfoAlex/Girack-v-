@@ -68,6 +68,41 @@ export default {
             });
         },
 
+        //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
+        humanFileSize(bytes, si=false, dp=1) {
+            const thresh = si ? 1000 : 1024;
+
+            //略式サイズなら数字に変換
+            if ( bytes.includes("e") ) {
+                let NumOfZeros = bytes.slice(bytes.length-1); //使う0の数
+                let ZerosInString = ""; //0を入れる変数
+                for ( let i=0; i<NumOfZeros; i++ ) { ZerosInString+="0"; } //追加
+
+                //文字列を統合して数字にする
+                bytes = parseInt(bytes.split("e")[0] + ZerosInString);
+
+            }
+
+            if (Math.abs(bytes) < thresh) {
+                return bytes + ' B';
+            }
+
+            const units = si 
+                ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+                : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+            let u = -1;
+            const r = 10**dp;
+
+            do {
+                bytes /= thresh;
+                ++u;
+            } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+            return bytes.toFixed(dp) + ' ' + units[u];
+            
+        },
+
         SOCKETinfoServer(dat) {
             console.log("ServerSettings :: SOCKETinfoServer : 設定北");
             console.log(dat);
@@ -150,9 +185,10 @@ export default {
             <!-- 設定メイン -->
             <v-card class="card mx-auto rounded-lg" style="overflow-y:auto;">
                 
+                <!-- 登録設定 -->
                 <p class="text-h6 ma-2">登録</p>
-                <v-card color="cardInner" class="rounded-lg cardInner">
-                    <v-checkbox v-model="displaySettings.registration.available" color="primary" label="登録を受け付ける"></v-checkbox>
+                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                    <v-switch v-model="displaySettings.registration.available" color="primary" label="登録を受け付ける"></v-switch>
                     <v-checkbox
                         :disabled="!displaySettings.registration.available"
                         v-model="displaySettings.registration.invite.inviteOnly"
@@ -172,14 +208,65 @@ export default {
 
                 <br>
 
+                <!-- メッセージ設定 -->
                 <p class="text-h6 ma-2">メッセージ</p>
-                <v-card color="cardInner" class="rounded-lg cardInner">
+                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
                     <p class="ma-2">メッセージの最大文字数</p>
                     <v-text-field
                         variant="outlined"
                         class="mx-auto"
                         style="width:90%"
                         v-model="displaySettings.config.MESSAGE.MESSAGE_TXT_MAXLENGTH"
+                    >
+                    </v-text-field>
+
+                    <p class="ma-2">添付ファイルの最高サイズ (1e3=1kB)</p>
+                    <v-text-field
+                        variant="outlined"
+                        class="mx-auto"
+                        style="width:90%"
+                        :hint="humanFileSize(displaySettings.config.MESSAGE.MESSAGE_FILE_MAXSIZE,true)"
+                        persistent-hint="true"
+                        v-model="displaySettings.config.MESSAGE.MESSAGE_FILE_MAXSIZE"
+                    >
+                    </v-text-field>
+                </v-card>
+
+                <br>
+
+                <!-- チャンネル関連 -->
+                <p class="text-h6 ma-2">チャンネル関連</p>
+                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                    <v-switch
+                        v-model="displaySettings.config.CHANNEL.CHANNEL_CREATE_AVAILABLE"
+                        label="チャンネル作成を可能にする(Adminはいつでも可能)"
+                    >
+                    </v-switch>
+                    <v-switch
+                        v-model="displaySettings.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER"
+                        label="Memberロールのユーザーでもチャンネル削除をできるようにする"
+                    >
+                    </v-switch>
+                </v-card>
+
+                <!-- プロフィール -->
+                <p class="text-h6 ma-2">チャンネル関連</p>
+                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                    <p class="ma-2">プロフィールアイコンの最大サイズ</p>
+                    <v-text-field
+                        v-model="displaySettings.config.PROFILE.PROFILE_ICON_MAXSIZE"
+                        class="mx-auto"
+                        style="width:90%"
+                        :hint="humanFileSize(displaySettings.config.PROFILE.PROFILE_ICON_MAXSIZE,true)"
+                        persistent-hint="true"
+                    >
+                    </v-text-field>
+
+                    <p class="ma-2">ユーザー名の最大文字数</p>
+                    <v-text-field
+                        v-model="displaySettings.config.PROFILE.PROFILE_USERNAME_MAXLENGTH"
+                        class="mx-auto"
+                        style="width:90%"
                     >
                     </v-text-field>
                 </v-card>
