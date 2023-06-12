@@ -181,6 +181,20 @@ export default {
                     </v-text-field>
                 </v-card>
 
+                <br>
+
+                <p class="text-h6 ma-2">メッセージ</p>
+                <v-card color="cardInner" class="rounded-lg cardInner">
+                    <p class="ma-2">メッセージの最大文字数</p>
+                    <v-text-field
+                        variant="outlined"
+                        class="mx-auto"
+                        style="width:90%"
+                        v-model="displaySettings.inviteCode"
+                    >
+                    </v-text-field>
+                </v-card>
+
             </v-card>
 
         </div>
