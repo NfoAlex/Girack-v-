@@ -409,6 +409,7 @@ export default {
 
 
             return bytes.toFixed(dp) + ' ' + units[u];
+            
         },
 
         SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {

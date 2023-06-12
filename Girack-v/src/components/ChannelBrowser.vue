@@ -343,7 +343,7 @@ export default {
                             <!-- 削除ボタン -->
                             <v-btn
                                 @click="channelRemove(c[0])"
-                                v-if="Serverinfo.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER"
+                                v-if="Serverinfo.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER||myUserinfo.role!=='Member'"
                                 variant="text"
                                 icon=""
                                 size="small"
