@@ -54,7 +54,7 @@ export default {
             socket.emit("changeServerSettings", {
                 servername: this.displaySettings.servername,
                 registration: {
-                    available: this.displaySettings.registration.registerAvailable,
+                    available: this.displaySettings.registration.available,
                     invite: {
                         inviteOnly: this.displaySettings.registration.invite.inviteOnly,
                         inviteCode: this.displaySettings.registration.invite.inviteCode
@@ -69,7 +69,7 @@ export default {
         },
 
         SOCKETinfoServer(dat) {
-            console.log("ServerSettings :: 設定北");
+            console.log("ServerSettings :: SOCKETinfoServer : 設定北");
             console.log(dat);
 
             //現在の設定を保存
@@ -152,15 +152,15 @@ export default {
                 
                 <p class="text-h6 ma-2">登録</p>
                 <v-card color="cardInner" class="rounded-lg cardInner">
-                    <v-checkbox v-model="displaySettings.registration.registerAvailable" color="primary" label="登録を受け付ける"></v-checkbox>
+                    <v-checkbox v-model="displaySettings.registration.available" color="primary" label="登録を受け付ける"></v-checkbox>
                     <v-checkbox
-                        :disabled="!displaySettings.registration.registerAvailable"
+                        :disabled="!displaySettings.registration.available"
                         v-model="displaySettings.registration.invite.inviteOnly"
                         label="招待制"
                     >
                     </v-checkbox>
                     <v-text-field
-                        :disabled="!displaySettings.registration.invite.inviteOnly||!displaySettings.registration.registerAvailable"
+                        :disabled="!displaySettings.registration.invite.inviteOnly||!displaySettings.registration.available"
                         variant="outlined"
                         label="招待コード"
                         class="mx-auto"
