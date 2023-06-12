@@ -123,10 +123,13 @@ export default {
 
 <template>
     <div>
-        <div style="margin:3% auto; width:90%; height:95%;">
-            <p class="text-h4">
-                サーバー設定
-            </p>
+        <div style="width:90%; height:100vh;" class="d-flex flex-column">
+            <!-- ページタイトル -->
+            <div style="width:90%; padding-top:3%; margin-bottom:16px;" class="d-flex align-center">
+                <p class="text-left me-auto" style="font-size:min(4vh,36px)">
+                    サーバー設定
+                </p>
+            </div>
 
             <v-card class="card mx-auto rounded-lg">
                 <p class="text-h5">
@@ -135,6 +138,7 @@ export default {
             </v-card>
 
             <br>
+            <!-- 設定を適用・キャンセルボタン -->
             <div class="mx-auto" style="width:fit-content">
                 <v-btn
                     :disabled="!changed"
@@ -148,10 +152,11 @@ export default {
                 <v-btn :disabled="!changed" @click="restoreDefault" class="rounded-lg ma-1" size="large" color="grey">元に戻す</v-btn>
             </div>
             
-
-            <v-card class="card mx-auto rounded-lg">
+            <!-- 設定メイン -->
+            <v-card class="card mx-auto rounded-lg" style="overflow-y:auto;">
+                
                 <p class="text-h6 ma-2">登録</p>
-                <v-card color="#222" class="rounded-lg cardInner">
+                <v-card color="cardInner" class="rounded-lg cardInner">
                     <v-checkbox v-model="displaySettings.registerAvailable" color="primary" label="登録を受け付ける"></v-checkbox>
                     <v-checkbox
                         :disabled="!displaySettings.registerAvailable"
