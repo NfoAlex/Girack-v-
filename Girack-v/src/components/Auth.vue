@@ -94,7 +94,7 @@ export default {
     },
 
     mounted() {
-        socket.emit("getInitInfo"); //サーバーの情報を取得
+        socket.emit("getInfoServer"); //サーバーの情報を取得
 
         //クッキーに認証情報があるか確認
         if ( getCookie("sessionid") !== "" ) {

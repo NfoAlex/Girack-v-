@@ -59,7 +59,7 @@ export default {
 
         //再接続できたら接続できたと表示
         socket.on("connect", () => {
-            socket.emit("getInitInfo"); //サーバーの情報を再取得
+            socket.emit("getInfoServer"); //サーバーの情報を再取得
             
             //もし切断されているときにきたら
             if ( this.disconnected ) {
