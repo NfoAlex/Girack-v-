@@ -1,6 +1,6 @@
 <script>
 
-import { getSocket, getMessage, backendURI } from '../../data/socket.js';
+import { getSocket, Serverinfo, backendURI } from '../../data/socket.js';
 import { dataMsg } from '../../data/dataMsg';
 import { dataChannel } from '../../data/dataChannel';
 import { dataUser } from '../../data/dataUserinfo';
@@ -27,7 +27,7 @@ export default {
         const { ChannelIndex } = dataChannel();
         const { MsgDB } = dataMsg();
 
-        return { ReplyState, myUserinfo, ChannelIndex, MsgDB, UserIndex };
+        return { ReplyState, myUserinfo, ChannelIndex, MsgDB, UserIndex, Serverinfo };
 
     },
 
@@ -381,6 +381,17 @@ export default {
         humanFileSize(bytes, si=false, dp=1) {
             const thresh = si ? 1000 : 1024;
 
+            //略式サイズなら数字に変換
+            if ( bytes.includes("e") ) {
+                let NumOfZeros = bytes.slice(bytes.length-1); //使う0の数
+                let ZerosInString = ""; //0を入れる変数
+                for ( let i=0; i<NumOfZeros; i++ ) { ZerosInString+="0"; } //追加
+
+                //文字列を統合して数字にする
+                bytes = parseInt(bytes.split("e")[0] + ZerosInString);
+
+            }
+
             if (Math.abs(bytes) < thresh) {
                 return bytes + ' B';
             }
@@ -398,6 +409,7 @@ export default {
 
 
             return bytes.toFixed(dp) + ' ' + units[u];
+            
         },
 
         SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
@@ -549,7 +561,7 @@ export default {
                                         activator="parent"
                                         location="top"
                                     >
-                                        100MBまで
+                                        {{ humanFileSize(Serverinfo.config.MESSAGE.MESSAGE_FILE_MAXSIZE, true) }}MBまで
                                     </v-tooltip>
                                 </v-btn>
                             </template>
@@ -585,9 +597,10 @@ export default {
                     </v-list>
                 </v-menu>
             
-                <v-btn @click="msgSend(null,'byBtn')" :disabled="txt.length>250" icon="" size="large" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
-                    <v-icon v-if="txt.length<=250" icon="mdi:mdi-send-outline"></v-icon>
-                    <span v-if="txt.length>250">{{ 250 - txt.length }}</span>
+                <!-- 送信ボタン -->
+                <v-btn @click="msgSend(null,'byBtn')" :disabled="txt.length>Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH" icon="" size="large" class="rounded-lg" style="margin:0 1vw;" elevation="0" color="primary">
+                    <v-icon v-if="txt.length<=Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH" icon="mdi:mdi-send-outline"></v-icon>
+                    <span v-if="txt.length>Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH">{{ Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH - txt.length }}</span>
                     <v-tooltip
                         activator="parent"
                         location="top"

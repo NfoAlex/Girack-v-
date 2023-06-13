@@ -1,5 +1,5 @@
 <script>
-import { setCookie, getSocket, backendURI } from '../../data/socket.js';
+import { setCookie, getSocket, backendURI, Serverinfo } from '../../data/socket.js';
 import { dataUser } from '../../data/dataUserinfo';
 
 const socket = getSocket();
@@ -8,7 +8,7 @@ export default {
 
     setup() {
         const { myUserinfo } = dataUser();
-        return { myUserinfo, backendURI };
+        return { myUserinfo, backendURI, Serverinfo };
     },
     
     data() {
@@ -31,7 +31,7 @@ export default {
             iconUploadDialog: false, //アイコンアップロード用ダイアログの表示
             iconUploadRule: [ //アイコンをアップロードするためのルール
                 value => {
-                    return !value || !value.length || value[0].size < 3072000 || '画像は3MB以下にしてください!'
+                    return !value || !value.length || value[0].size < Serverinfo.value.config.PROFILE.PROFILE_ICON_MAXSIZE || '画像サイズが大きいです!'
                 }
             ],
             iconUploadFile: null, //アイコン用画像のデータ
@@ -120,6 +120,41 @@ export default {
 
         },
 
+        //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
+        humanFileSize(bytes, si=false, dp=1) {
+            const thresh = si ? 1000 : 1024;
+
+            //略式サイズなら数字に変換
+            if ( bytes.includes("e") ) {
+                let NumOfZeros = bytes.slice(bytes.length-1); //使う0の数
+                let ZerosInString = ""; //0を入れる変数
+                for ( let i=0; i<NumOfZeros; i++ ) { ZerosInString+="0"; } //追加
+
+                //文字列を統合して数字にする
+                bytes = parseInt(bytes.split("e")[0] + ZerosInString);
+
+            }
+
+            if (Math.abs(bytes) < thresh) {
+                return bytes + ' B';
+            }
+
+            const units = si 
+                ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+                : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+            let u = -1;
+            const r = 10**dp;
+
+            do {
+                bytes /= thresh;
+                ++u;
+            } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+
+            return bytes.toFixed(dp) + ' ' + units[u];
+            
+        },
+
         //アイコンの画像アップロード
         uploadIcon() {
             console.log("Profile :: uploadIcon : iconData ->", this.iconUploadFile);
@@ -206,7 +241,7 @@ export default {
                         :rules="iconUploadRule"
                         v-model="iconUploadFile"
                         class="ma-3"
-                        label="アイコン用画像(3MB以下)"
+                        :label="'アイコン用画像('+humanFileSize(Serverinfo.config.PROFILE.PROFILE_ICON_MAXSIZE,true)+'以下)'"
                         show-size
                     ></v-file-input>
                 </div>
@@ -393,13 +428,13 @@ export default {
                                             class="me-auto"
                                             v-model="nameDisplaying"
                                             counter
-                                            maxlength="32"
+                                            :maxlength="Serverinfo.config.PROFILE.PROFILE_USERNAME_MAXLENGTH"
                                             variant="solo"
                                         >
                                             <template v-slot:append-inner>
                                                 <v-btn
                                                     @click="updateName"
-                                                    :disabled="nameDisplaying.length>=32"
+                                                    :disabled="nameDisplaying.length>=Serverinfo.config.PROFILE.PROFILE_USERNAME_MAXLENGTH"
                                                     color="secondary"
                                                     size="x-small"
                                                     icon="mdi:mdi-check-bold"

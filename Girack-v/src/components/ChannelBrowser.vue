@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getMessage } from '../data/socket';
+import { getSocket, getMessage, Serverinfo } from '../data/socket';
 import { dataMsg } from '../data/dataMsg';
 import { dataChannel } from '../data/dataChannel';
 import { dataUser } from '../data/dataUserinfo';
@@ -12,7 +12,7 @@ export default {
         const { myUserinfo } = dataUser(); //自分のユーザー情報をインポート
         const { PreviewChannelData } = dataChannel();
         const { MsgDB } = dataMsg();
-        return { PreviewChannelData, myUserinfo, MsgDB };
+        return { PreviewChannelData, myUserinfo, MsgDB, Serverinfo };
 
     },
 
@@ -295,7 +295,14 @@ export default {
         
         <div style="height:10%;" class="d-flex justify-space-around align-center">
             <p class="text-h4 me-auto">チャンネルブラウザー</p>
-            <v-btn @click="overlayChannelCreate=true" color="primary" icon="" class="rounded-lg">
+            <!-- チャンネル作成ボタン -->
+            <v-btn
+                @click="overlayChannelCreate=true"
+                v-if="Serverinfo.config.CHANNEL.CHANNEL_CREATE_AVAILABLE||myUserinfo.role==='Admin'"
+                color="primary"
+                icon=""
+                class="rounded-lg"
+            >
                 <v-icon icon="mdi:mdi-plus">
                 </v-icon>
                 <v-tooltip
@@ -333,7 +340,16 @@ export default {
 
                         <!-- ボタン群 -->
                         <div style="float:right">
-                            <v-btn @click="channelRemove(c[0])" variant="text" icon="" size="small" style="margin-right:4px;" class="rounded-lg">
+                            <!-- 削除ボタン -->
+                            <v-btn
+                                @click="channelRemove(c[0])"
+                                v-if="Serverinfo.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER||myUserinfo.role!=='Member'"
+                                variant="text"
+                                icon=""
+                                size="small"
+                                style="margin-right:4px;"
+                                class="rounded-lg"
+                            >
                                 <v-icon icon="mdi:mdi-delete-forever"></v-icon>
                             </v-btn>
 
