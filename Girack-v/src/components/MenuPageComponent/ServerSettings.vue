@@ -11,7 +11,8 @@ export default {
             configReady: false,
             currentSettings: null,
 
-            servernameEditing: false, //インスタンス名を編集しているかどうか
+            servernameEditingMode: false, //インスタンス名を編集しているかどうか
+            servernameEditingTemp: "", //編集途中のインスタンス名記憶用
             displayServername: "...",
             displaySettings: null,
 
@@ -113,6 +114,7 @@ export default {
 
             //表示する設定を取り出す
             this.displaySettings = structuredClone(dat);
+            this.servernameEditingTemp = this.displaySettings.servername;
 
             //設定の変更があったフラグを初期化
             this.changed = false;
@@ -123,6 +125,7 @@ export default {
             console.log("ServerSettings :: mounted : maxLengthCompare->", this.displaySettings);
 
         }
+
     },
 
     mounted() {
@@ -157,16 +160,16 @@ export default {
             </div>
 
             <v-card class="card mx-auto rounded-lg d-flex align-center">
-                <p v-if="!servernameEditing" class="text-h5 ma-1 me-auto">
-                    サーバー名 : {{ displaySettings.servername }}
+                <p v-if="!servernameEditingMode" class="text-h5 ma-1 me-auto">
+                    サーバー名{{ displaySettings.servername!==currentSettings.servername?"*":"" }} : {{ displaySettings.servername }}
                 </p>
                 <v-text-field
-                    v-if="servernameEditing"
-                    v-model="displaySettings.servername"
+                    v-if="servernameEditingMode"
+                    v-model="servernameEditingTemp"
                 >
                     <template v-slot:append-inner>
                         <v-btn
-                            @click="servernameEditing=false"
+                            @click="servernameEditingMode=false; displaySettings.servername=servernameEditingTemp;"
                             color="secondary"
                             size="x-small"
                             icon="mdi:mdi-check-bold"
@@ -175,7 +178,7 @@ export default {
                         >
                         </v-btn>
                         <v-btn
-                            @click="servernameEditing=false;displaySettings.servername=currentSettings.servername;"
+                            @click="servernameEditingMode=false; servernameEditingTemp=currentSettings.servername;"
                             color="secondary"
                             size="x-small"
                             icon="mdi:mdi-window-close"
@@ -188,8 +191,8 @@ export default {
                 </v-text-field>
                 <!-- サーバー名変更ボタン -->
                 <v-btn
-                    v-if="!servernameEditing"
-                    @click="servernameEditing=true;"
+                    v-if="!servernameEditingMode"
+                    @click="servernameEditingMode=true;"
                     class="rounded-lg"
                     color="primary"
                     icon="mdi:mdi-pencil"
