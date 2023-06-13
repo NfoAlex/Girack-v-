@@ -27,7 +27,7 @@ export default {
 
                 channelEditName: "チャンネル名を変更",
                 channelEditDesc: "チャンネル概要を変更",
-                channelChangeScope: "チャンネルのプライベート状態を変更",
+                channelEditScope: "チャンネルのプライベート状態を変更",
                 channelCreate: "チャンネルを作成",
                 channelDelete: "チャンネルを削除",
 
