@@ -11,6 +11,7 @@ export default {
             configReady: false,
             currentSettings: null,
 
+            servernameEditing: false, //インスタンス名を編集しているかどうか
             displayServername: "...",
             displaySettings: null,
 
@@ -156,9 +157,44 @@ export default {
             </div>
 
             <v-card class="card mx-auto rounded-lg d-flex align-center">
-                <p class="text-h5 text-center ma-1">
+                <p v-if="!servernameEditing" class="text-h5 ma-1 me-auto">
                     サーバー名 : {{ displaySettings.servername }}
                 </p>
+                <v-text-field
+                    v-if="servernameEditing"
+                    v-model="displaySettings.servername"
+                >
+                    <template v-slot:append-inner>
+                        <v-btn
+                            @click="servernameEditing=false"
+                            color="secondary"
+                            size="x-small"
+                            icon="mdi:mdi-check-bold"
+                            class="rounded-lg"
+                            style="margin:0 4px 0 8px; float:right"
+                        >
+                        </v-btn>
+                        <v-btn
+                            @click="servernameEditing=false;displaySettings.servername=currentSettings.servername;"
+                            color="secondary"
+                            size="x-small"
+                            icon="mdi:mdi-window-close"
+                            class="rounded-lg"
+                            style="margin:0 8px 0 4px;
+                            float:right"
+                        >
+                        </v-btn>
+                    </template>
+                </v-text-field>
+                <!-- サーバー名変更ボタン -->
+                <v-btn
+                    v-if="!servernameEditing"
+                    @click="servernameEditing=true;"
+                    class="rounded-lg"
+                    color="primary"
+                    icon="mdi:mdi-pencil"
+                >
+                </v-btn>
             </v-card>
 
             <br>
