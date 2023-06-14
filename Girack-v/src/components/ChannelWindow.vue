@@ -110,7 +110,7 @@ export default {
             <Head :channelInfo="getChannelInfo" />
         </div>
         <div :class="[w]" style="overflow-y:auto;" class="me-auto flex-grow-1 flex-shrink-1">
-            <KeepAlive :max="5" :exclude="'Userpage'">
+            <KeepAlive :max="10" :exclude="'Userpage'">
                 <component is="Content" :MsgDBActive="getMsgDB()" :channelInfo="getChannelInfo" :key="$route.params.id" />
             </KeepAlive>
         </div>
