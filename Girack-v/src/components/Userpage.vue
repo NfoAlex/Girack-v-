@@ -43,7 +43,7 @@ export default {
             handler() {
                 //もし今のロールと同じならスルー
                 if ( this.targetinfo.role === this.targetUserRole ) {
-                    console.log("Userpage :: watch : targetUserRole 同じだから変更ナシ");
+                    console.log("Userpage :: watch(targetUserRole) : 同じだから変更ナシ");
 
                 } else { //変わった瞬間ロール更新を送信
                     //ロールの更新を通知
@@ -246,7 +246,7 @@ export default {
 
         });
 
-        console.log("Userpage :: path->",this.$route.path);
+        console.log("Userpage :: mounted");
 
     },
 
