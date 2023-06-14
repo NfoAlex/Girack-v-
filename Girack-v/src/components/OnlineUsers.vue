@@ -38,19 +38,17 @@ export default {
         setUsernameFromList() {
             this.userListDisplay = this.userList.filter((u) => u.state.loggedin===true?u:null);
             
-        }
-    },
+        },
 
-    mounted() {
         //オンラインユーザーの受け取り
-        socket.on("resultSessionOnline", (result) => {
+        SOCKETresultSessionOnline(result) {
             this.OnlineSession = result;
             this.OnlineSessionReady = true;
 
-        });
+        },
 
         //ユーザーリストの受信用
-        socket.on("infoList", (dat) => {
+        SOCKETinfoList(dat) {
             //型がユーザーリストだったらデータを登録
             if ( dat.type === "user" ) {
                 //ソートして表示用の配列へ追加
@@ -69,8 +67,17 @@ export default {
 
             }
             this.userListReady = true;
-            
-        });
+
+        }
+
+    },
+
+    mounted() {
+        //オンラインユーザーの受け取り
+        socket.on("resultSessionOnline", this.SOCKETresultSessionOnline);
+
+        //ユーザーリストの受信用
+        socket.on("infoList", this.SOCKETinfoList);
 
         //初回でユーザーリストを取得
         socket.emit("getInfoList", {
@@ -96,8 +103,8 @@ export default {
 
     unmounted() {
         //通信重複防止
-        socket.off("resultSessionOnline");
-        socket.off("infoList");
+        socket.off("resultSessionOnline", this.SOCKETresultSessionOnline);
+        socket.off("infoList", this.SOCKETinfoList);
         //ループ削除
         clearInterval(loopGetSessionOnline);
 

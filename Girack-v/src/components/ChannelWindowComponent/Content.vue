@@ -752,8 +752,6 @@ export default {
                 <v-avatar v-else class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%; height:0 !important;">
                     <v-img
                         v-if="getUserStats(m.userid, 'role')!=='Deleted'"
-                        @click="()=>{userDialogShow=true; userDialogUserid=m.userid}"
-                        class="pointed"
                         :alt="m.userid"
                     >
                     </v-img>
