@@ -234,15 +234,36 @@ export default {
         //ユーザーの情報受け取り
         socketUserpage.on("infoUser", this.SOCKETtargetinfo);
 
-        //ユーザー情報取得
+        //レンダー待ってからユーザー情報の取得
         this.$nextTick(() => {
-            socketUserpage.emit("getInfoUser", {
-                targetid: this.userid,
-                reqSender: {
-                    userid: dataUser().myUserinfo.value.userid,
-                    sessionid: dataUser().myUserinfo.value.sessionid
+            //自分じゃなければ情報取得
+            if ( this.userid !== dataUser().myUserinfo.value.userid ) {
+                //ユーザー情報の取得
+                socketUserpage.emit("getInfoUser", {
+                    targetid: this.userid,
+                    reqSender: {
+                        userid: dataUser().myUserinfo.value.userid,
+                        sessionid: dataUser().myUserinfo.value.sessionid
+                    }
+                });
+
+            } else {
+                //表示用情報に自分の情報割り当て
+                this.targetinfo = dataUser().myUserinfo.value;
+                //参加しているチャンネル情報すべて取得
+                for ( let index in this.targetinfo.channelJoined ) {
+                    //チャンネル情報のリクエスト送信
+                    socketUserpage.emit("getInfoChannel", {
+                        targetid: this.targetinfo.channelJoined[index],
+                        reqSender: {
+                            userid: this.targetinfo.userid,
+                            sessionid: this.targetinfo.sessionid
+                        }
+                    });
+
                 }
-            });
+
+            }
 
         });
 
@@ -336,17 +357,21 @@ export default {
                         class="mx-auto rounded-lg d-flex align-center"
                         style="margin-top:8px; padding:6px 4%; width:75%"
                     >
+
                         <!-- プライベートチャンネル用鍵マーク -->
                         <v-icon v-if="item.scope==='private'" style="margin-right:8px;">
                             mdi:mdi-lock-outline
                         </v-icon>
+
                         <!-- 普通のチャンネル -->
                         <v-icon v-else style="margin-right:8px;">
                             mdi:mdi-pound
                         </v-icon>
+
                         <span class="text-truncate">
                             {{ item.channelname }}
                         </span>
+
                     </v-card>
                 </v-window-item>
 
