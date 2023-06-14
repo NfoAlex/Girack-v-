@@ -40,12 +40,14 @@ export default {
             
         },
 
+        //オンラインユーザーの受け取り
         SOCKETresultSessionOnline(result) {
             this.OnlineSession = result;
             this.OnlineSessionReady = true;
 
         },
 
+        //ユーザーリストの受信用
         SOCKETinfoList(dat) {
             //型がユーザーリストだったらデータを登録
             if ( dat.type === "user" ) {
