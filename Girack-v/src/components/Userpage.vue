@@ -18,7 +18,14 @@ export default {
 
     data() {
         return {
-            targetinfo: {},
+            targetinfo: {
+                userid: "000",
+                username: "Loading...",
+                role: "loading",
+                banned: false,
+                channelJoined: [],
+                loggedin: false
+            },
             imgsrc: backendURI + "/img/",
             roleList: [],
 
