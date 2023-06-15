@@ -380,19 +380,23 @@ export default {
         //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
         humanFileSize(bytes, si=false, dp=1) {
             const thresh = si ? 1000 : 1024;
+            
+            //文字列ならeが含まれるか調べる
+            if ( typeof(bytes) === "string" ) {
+                //略式サイズなら数字に変換
+                if ( bytes.includes("e") ) {
+                    let NumOfZeros = bytes.slice(bytes.length-1); //使う0の数
+                    let ZerosInString = ""; //0を入れる変数
+                    for ( let i=0; i<NumOfZeros; i++ ) { ZerosInString+="0"; } //追加
 
-            //略式サイズなら数字に変換
-            if ( bytes.includes("e") ) {
-                let NumOfZeros = bytes.slice(bytes.length-1); //使う0の数
-                let ZerosInString = ""; //0を入れる変数
-                for ( let i=0; i<NumOfZeros; i++ ) { ZerosInString+="0"; } //追加
+                    //文字列を統合して数字にする
+                    bytes = parseInt(bytes.split("e")[0] + ZerosInString);
 
-                //文字列を統合して数字にする
-                bytes = parseInt(bytes.split("e")[0] + ZerosInString);
+                }
 
             }
 
-            if (Math.abs(bytes) < thresh) {
+            if ( Math.abs(bytes) < thresh ) {
                 return bytes + ' B';
             }
 
@@ -496,7 +500,7 @@ export default {
                 v-for="(file,index) in fileInputData"
             >
                 <span class="text-truncate">{{ file.name }}</span>
-                <v-chip style="margin:0 4px;" size="small"> {{ humanFileSize(file.size) }} </v-chip>
+                <v-chip style="margin:0 4px;" size="small"> {{ humanFileSize(file.size, true) }} </v-chip>
                 <v-icon @click="fileInputData.splice(index,1)" style="margin-left:4px">
                     mdi:mdi-close-circle
                 </v-icon>
