@@ -10,9 +10,9 @@ export default {
     props: ["userid"],
 
     setup() {
-        const { myUserinfo } = dataUser();
+        const { myUserinfo, UserIndex } = dataUser();
         const { ChannelIndex, PreviewChannelData } = dataChannel();
-        return { myUserinfo, ChannelIndex, PreviewChannelData };
+        return { myUserinfo, UserIndex, ChannelIndex, PreviewChannelData };
 
     },
 
