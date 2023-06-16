@@ -112,7 +112,7 @@ export default {
         },
 
         SOCKETinfoServerFull(dat) {
-            console.log("ServerSettings :: SOCKETinfoServer : 設定北");
+            console.log("ServerSettings :: SOCKETinfoServerFull : 設定北");
             console.log(dat);
 
             //現在の設定を保存
@@ -127,9 +127,7 @@ export default {
 
             //ロードできたと設定
             this.configReady = true;
-
-            console.log("ServerSettings :: mounted : maxLengthCompare->", this.displaySettings);
-
+            
         }
 
     },
