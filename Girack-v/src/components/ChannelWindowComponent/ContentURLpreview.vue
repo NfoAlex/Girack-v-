@@ -142,7 +142,6 @@ export default {
         <div v-if="embedTwitter">
             <Tweet
                 style="max-width:350px; width:30%; background: black;"
-                width="550"
                 :tweet-id="getTweetURL(link.url)"
                 theme="dark"
                 lang="ja"
