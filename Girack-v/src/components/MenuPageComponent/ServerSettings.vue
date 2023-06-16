@@ -2,9 +2,15 @@
 import { getSocket } from '../../data/socket';
 import { dataUser } from '../../data/dataUserinfo';
 const socket = getSocket();
-const { myUserinfo } = dataUser();
+
 
 export default {
+
+    setup() {
+        const { myUserinfo } = dataUser();
+        return { myUserinfo };
+
+    },
 
     data() {
         return {
@@ -64,8 +70,8 @@ export default {
                 },
                 config: this.displaySettings.config,
                 reqSender: {
-                    userid: myUserinfo.value.userid,
-                    sessionid: myUserinfo.value.sessionid
+                    userid: this.myUserinfo.userid,
+                    sessionid: this.myUserinfo.sessionid
                 }
             });
         },
@@ -105,8 +111,8 @@ export default {
             
         },
 
-        SOCKETinfoServer(dat) {
-            console.log("ServerSettings :: SOCKETinfoServer : 設定北");
+        SOCKETinfoServerFull(dat) {
+            console.log("ServerSettings :: SOCKETinfoServerFull : 設定北");
             console.log(dat);
 
             //現在の設定を保存
@@ -121,9 +127,7 @@ export default {
 
             //ロードできたと設定
             this.configReady = true;
-
-            console.log("ServerSettings :: mounted : maxLengthCompare->", this.displaySettings);
-
+            
         }
 
     },
@@ -132,16 +136,21 @@ export default {
         this.changed = false;
 
         //サーバーの設定情報受け取り
-        socket.on("infoServer",this.SOCKETinfoServer);
+        socket.on("infoServerFull",this.SOCKETinfoServerFull);
 
         //サーバーの設定情報を取得
-        socket.emit("getInfoServer");
+        socket.emit("getInfoServerFull", {
+            reqSender: {
+                userid: this.myUserinfo.userid,
+                sessionid: this.myUserinfo.sessionid
+            }
+        });
 
     },
 
     unmounted() {
         //通信重複防止
-        socket.off("infoServer", this.SOCKETinfoServer);
+        socket.off("infoServerFull", this.SOCKETinfoServerFull);
         
     }
 
