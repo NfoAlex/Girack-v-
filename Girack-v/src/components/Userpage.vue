@@ -339,10 +339,16 @@ export default {
                         <v-tab value="channel">
                             チャンネル
                         </v-tab>
-                        <v-tab v-if="myUserinfo.role!=='Member'&&!manageDisabled" value="mod">
+                        <v-tab
+                            v-if="myUserinfo.role!=='Member'&&!manageDisabled"
+                            value="mod"
+                        >
                             管理
                         </v-tab>
-                        <v-tab v-if="myUserinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
+                        <v-tab
+                            v-if="myUserinfo.role==='Admin'&&checkOpenedFromMemberPage()"
+                            value="delete"
+                        >
                             <p style="color:pink">削除</p>
                         </v-tab>
 
