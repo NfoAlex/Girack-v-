@@ -12,8 +12,13 @@ export default {
             //使うサーバーデータ
             serverinfoLoaded: {
                 servername: "", //サーバーの名前
-                registerAvailable: false, //登録できるかどうか
-                inviteOnly: false //招待オンリーかどうか
+                //サーバーのアカウント登録設定
+                registration: {
+                    available: false, //登録できるかどうか
+                    invite: {
+                        inviteOnly: false //招待オンリーかどうか
+                    }
+                }
             },
 
             //見た目
@@ -133,6 +138,7 @@ export default {
 </script>
 
 <template>
+    <!-- バックエンドとバージョンに差があったときの表示 -->
     <v-dialog
         v-model="clientVersionDifference"
         style="width:50vw; min-width:400px; "
@@ -151,17 +157,21 @@ export default {
             </v-card>
         </v-card>
     </v-dialog>
+
+    <!-- インスタンス名 -->
     <p class="text-h4" style="margin:2% auto; text-align:center">
         {{ serverinfoLoaded.servername }}
     </p>
+
     <v-card :class="[authWindow, 'rounded-lg']" variant="tonal">
+        <!-- タブ表示 -->
         <v-tabs
             v-model="tab"
             bg-color="primary"
             align-tabs="center"
         >
             <v-tab value="login">ログイン</v-tab>
-            <v-tab v-if="serverinfoLoaded.registerAvailable" value="register">登録</v-tab>
+            <v-tab v-if="serverinfoLoaded.registration.available" value="register">登録</v-tab>
         </v-tabs>
 
         <v-window v-model="tab">
@@ -250,7 +260,7 @@ export default {
                             <span style="margin-right:6px" class="mdi mdi-account"></span>
                         </v-text-field>
 
-                        <div v-if="serverinfoLoaded.inviteOnly">
+                        <div v-if="serverinfoLoaded.registration.invite.inviteOnly">
                             <p>招待コード</p>
                             <v-text-field
                                 style="width:100%"
@@ -261,7 +271,15 @@ export default {
                         </div>
 
                         <br>
-                        <v-btn :disabled="!Connected && serverinfo.registerAvailable" @click="requestRegister" class="rounded-lg mx-auto" color="primary" block>登録</v-btn>
+                        <v-btn
+                            :disabled="!Connected && serverinfo.registration.available"
+                            @click="requestRegister"
+                            class="rounded-lg mx-auto"
+                            color="primary"
+                            block
+                        >
+                            登録
+                        </v-btn>
                         <br>
 
                         <v-alert
