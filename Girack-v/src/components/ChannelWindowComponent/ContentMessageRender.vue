@@ -23,13 +23,6 @@ export default {
             mentionRegex: /@\/([0-9]*)\//g,
             XSSRegex: /<(|\/|[^>\/bi]|\/[^>bi]|[^\/>][^>]+|\/[^>][^>]+)>/g,
             URLstyle: "color:#607D8B",
-
-            //インスタンス内のURLかどうかの判別用にここのURL取得
-            locationOrigin: location.origin,
-
-            //インスタンス内に対するURLがあるかどうか
-            hasInstanceURL: false,
-            InstanceURLArray: []
         }
     },
 
@@ -77,19 +70,7 @@ export default {
 
                 //リンクをクリックできる形にする
                 return msgCleaned.replaceAll(this.URLRegex, (url) => {
-                    //インスタンス内に対するURLかどうかを判別してからアンカーをつける
-                    if ( url.startsWith(location.origin) ) {
-                        this.InstanceURLArray.push(url); //配列追加
-                        return "<span style='background-color:gray; padding:6px; border-radius:8px;'>" +
-                                    "<a>" +
-                                        url +
-                                    "</a>" +
-                                "</span>";
-
-                    } else {
-                        return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
-
-                    }
+                    return "<a style='" + this.URLstyle + "' target='_blank' href='" + url + "'>" + url + "</a>";
 
                 });
 
@@ -128,17 +109,5 @@ export default {
             v-html="formatMessage(content)"
         >
         </span>
-        <br>
-        <!-- インスタンス内URL -->
-        <v-chip
-            v-for="(url, index) in InstanceURLArray"
-            class="ma-2"
-            @click="$router.push({ path: url.slice(locationOrigin.length)})"
-        >
-            <v-icon v-if="url.includes('/browser')">
-                mdi:mdi-list-box
-            </v-icon>
-            {{ url.includes("/browser")?"チャンネルブラウザ":url.slice(locationOrigin.length) }}
-        </v-chip>
     </span>
 </template>
