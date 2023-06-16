@@ -85,7 +85,7 @@ export default {
 
         },
 
-        SOCKETinfoServer(dat) {
+        SOCKETinfoInitServer(dat) {
             this.serverinfoLoaded = dat; //サーバーの情報
             document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
 
@@ -99,7 +99,7 @@ export default {
     },
 
     mounted() {
-        socket.emit("getInfoServer"); //サーバーの情報を取得
+        socket.emit("getInfoInitServer"); //サーバーの情報を取得
 
         //クッキーに認証情報があるか確認
         if ( getCookie("sessionid") !== "" ) {
@@ -115,7 +115,7 @@ export default {
         socket.on("registerEnd", this.SOCKETregisterEnd);
 
         //サーバー名表示用
-        socket.on("infoServer", this.SOCKETinfoServer);
+        socket.on("infoInitServer", this.SOCKETinfoInitServer);
 
         //接続確認できたら接続できた状態にする
         socket.on("connect", () => {
@@ -129,7 +129,7 @@ export default {
         //通信の重複防止
         socket.off("authResult", this.SOCKETauthResult);
         socket.off("registerEnd", this.SOCKETregisterEnd);
-        socket.off("infoServer", this.SOCKETinfoServer);
+        socket.off("infoInitServer", this.SOCKETinfoServer);
 
     }
 
@@ -197,6 +197,7 @@ export default {
                     <v-text-field
                         style="width:100%"
                         type="password"
+                        @keydown.enter="requestAuth"
                         v-model="pwForAuth"
                         prepend-inner-icon="mdi:mdi-lock"
                         clearable
