@@ -115,7 +115,7 @@ export default {
         socket.on("registerEnd", this.SOCKETregisterEnd);
 
         //サーバー名表示用
-        socket.on("infoInitServer", this.SOCKETinfoInitServer);
+        socket.on("infoServer", this.SOCKETinfoInitServer);
 
         //接続確認できたら接続できた状態にする
         socket.on("connect", () => {
