@@ -99,7 +99,7 @@ export default {
     },
 
     mounted() {
-        socket.emit("getInfoInitServer"); //サーバーの情報を取得
+        socket.emit("getInfoServer"); //サーバーの情報を取得
 
         //クッキーに認証情報があるか確認
         if ( getCookie("sessionid") !== "" ) {
@@ -129,7 +129,7 @@ export default {
         //通信の重複防止
         socket.off("authResult", this.SOCKETauthResult);
         socket.off("registerEnd", this.SOCKETregisterEnd);
-        socket.off("infoInitServer", this.SOCKETinfoServer);
+        socket.off("infoServer", this.SOCKETinfoServer);
 
     }
 
@@ -206,6 +206,7 @@ export default {
                     >
                         <v-icon icon="mdi:mid-lock" />
                     </v-text-field>
+
                     <br>
                     <v-btn :disabled="!Connected" @click="requestAuth" class="rounded-lg" color="primary">認証</v-btn>
                     <br>
