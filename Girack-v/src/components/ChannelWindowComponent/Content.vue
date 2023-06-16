@@ -278,21 +278,6 @@ export default {
 
         },
 
-        //もし人のやつほしくなったら
-        needUserIndex(userid) {
-
-            socket.emit("getInfoUser", {
-                targetid: userid,
-                reqSender: {
-                    userid: this.myUserinfo.userid, //ユーザーID
-                    sessionid: this.myUserinfo.sessionid //セッションID
-                }
-            });
-
-            return userid;
-
-        },
-
         //アバターを表示するかどうか
         checkShowAvatar(userid, index) {
             try {
@@ -833,7 +818,7 @@ export default {
                                         <v-icon>mdi:mdi-reply</v-icon>
                                         <!-- 返信する人の名前 -->
                                         <v-chip size="small" color="grey" variant="flat" style="cursor:pointer;">
-                                            {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : needUserIndex(m.replyData.userid) }}
+                                            {{ UserIndex[m.replyData.userid]!==undefined ? UserIndex[m.replyData.userid].username : m.replyData.userid }}
                                         </v-chip>
                                     </a>
                                     <!-- 返信内容 -->
