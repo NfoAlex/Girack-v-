@@ -163,7 +163,7 @@ export default {
             style="height:fit-content; max-width:800px; width:95%; margin:8px 0;"
             color="#222"
             class="overflow-y-hidden d-flex flex-row"
-            v-if="link.title!==undefined"
+            v-if="link.title!==undefined&&!link.url.includes('https://twitter.com/')"
         >
 
             <!-- ウェブ記事とかそこらへん用 -->
