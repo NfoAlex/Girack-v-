@@ -10,9 +10,9 @@ export default {
     props: ["userid"],
 
     setup() {
-        const { myUserinfo } = dataUser();
+        const { myUserinfo, UserIndex } = dataUser();
         const { ChannelIndex, PreviewChannelData } = dataChannel();
-        return { myUserinfo, ChannelIndex, PreviewChannelData };
+        return { myUserinfo, UserIndex, ChannelIndex, PreviewChannelData };
 
     },
 
@@ -339,10 +339,16 @@ export default {
                         <v-tab value="channel">
                             チャンネル
                         </v-tab>
-                        <v-tab v-if="myUserinfo.role!=='Member'&&!manageDisabled" value="mod">
+                        <v-tab
+                            v-if="myUserinfo.role!=='Member'&&!manageDisabled"
+                            value="mod"
+                        >
                             管理
                         </v-tab>
-                        <v-tab v-if="myUserinfo.role==='Admin'&&checkOpenedFromMemberPage()" value="delete">
+                        <v-tab
+                            v-if="myUserinfo.role==='Admin'&&checkOpenedFromMemberPage()"
+                            value="delete"
+                        >
                             <p style="color:pink">削除</p>
                         </v-tab>
 
