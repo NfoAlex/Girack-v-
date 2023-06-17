@@ -163,7 +163,7 @@ export default {
             style="height:fit-content; max-width:800px; width:95%; margin:8px 0;"
             color="#222"
             class="overflow-y-hidden d-flex flex-row"
-            v-if="link.title!==undefined&&!link.url.includes('https://twitter.com/')"
+            v-if="!link.url.includes('https://twitter.com/')"
         >
 
             <!-- ウェブ記事とかそこらへん用 -->
@@ -226,7 +226,7 @@ export default {
                         
                         
                         <!-- 記事のタイトル -->
-                        <p class="text-subtitle-2">
+                        <p class="text-subtitle-2" v-if="link.title!==undefined">
                             <a :href="link.url" target="_blank">
                                 {{ link.title.length>60 ? link.title.substring(0,60)+"..." : link.title }}
                                 <!-- タイトルが60文字以上ならホバーで表示 -->
