@@ -565,7 +565,7 @@ export default {
                                         activator="parent"
                                         location="top"
                                     >
-                                        {{ humanFileSize(Serverinfo.config.MESSAGE.MESSAGE_FILE_MAXSIZE, true) }}MBまで
+                                        {{ humanFileSize(Serverinfo.config.MESSAGE.MESSAGE_FILE_MAXSIZE, true) }}まで
                                     </v-tooltip>
                                 </v-btn>
                             </template>
