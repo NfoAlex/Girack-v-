@@ -97,17 +97,6 @@ export default {
             timeout="-1"
         >
             サーバーから切断されました...(再接続中)
-            <template v-slot:actions>
-                <v-btn
-                    class="rounded-lg"
-                    variant="text"
-                    @click="disconnectSnackbar=false;"
-                >
-                    <v-icon>
-                        mdi:mdi-close
-                    </v-icon>
-                </v-btn>
-            </template>
         </v-snackbar>
 
         <v-snackbar
