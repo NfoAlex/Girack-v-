@@ -752,14 +752,15 @@ export default {
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
                         open-on-hover
-                        open-delay="0"
-                        close-delay="0"
+                        open-delay="50"
+                        close-delay="1"
+                        transition="none"
                         :close-on-content-click="false"
                         location="end top"
                         origin="overlap"
                     >
+                        <!-- ホバーで反応する範囲 -->
                         <template v-slot:activator="{ props }">
-                            <!-- ホバーで反応する範囲 -->
                             <div 
                                 v-bind="props"
                                 @mouseover="mouseOverMsg(m.messageid, 'on')"
