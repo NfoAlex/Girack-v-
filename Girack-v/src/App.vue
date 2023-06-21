@@ -155,7 +155,7 @@ export default {
 
 html
 {
-    background: --v-theme-background;
+    background: rgb(var(--v-theme-background));
     overflow-y: hidden !important;
     font-family: "Noto Sans CJK JP", "BIZ UDPGothic" !important;
 }
