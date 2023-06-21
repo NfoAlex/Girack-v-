@@ -176,7 +176,7 @@ export default {
 
 <template>
     <div>
-        <div class="d-flex flex-column channelBar">
+        <div class="d-flex flex-column channelBar" style="background-color:#1c1b1e;">
             <!-- インスタンス名 -->
             <div class="mx-auto" style="margin:16px 0; width:90%;">
                 <p
@@ -301,8 +301,8 @@ export default {
                         >
                             <!-- チャンネル名前の#の部分 -->
                             <div class="flex-shrink-1">
-                                <v-icon v-if="l.scope!=='private'">mdi:mdi-pound</v-icon>
-                                <v-icon v-else>mdi:mdi-lock-outline</v-icon> <!-- プライベートチャンネル用鍵マーク -->
+                                <v-icon v-if="l.scope!=='private'" size="small">mdi:mdi-pound</v-icon>
+                                <v-icon v-else size="small">mdi:mdi-lock-outline</v-icon> <!-- プライベートチャンネル用鍵マーク -->
                             </div>
                             
                             <!-- チャンネル名 -->
@@ -346,7 +346,7 @@ export default {
     height: 100vh;
 
     box-sizing: border-box;
-    border-right: 0.1px #424242 solid;
+    border-right: 0.1px #222 solid;
 }
 
 .scroll::-webkit-scrollbar
