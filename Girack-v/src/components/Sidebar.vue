@@ -346,7 +346,7 @@ export default {
     height: 100vh;
 
     box-sizing: border-box;
-    border-right: 0.1px #222 solid;
+    border-right: 0.1px #424242 solid;
 }
 
 .scroll::-webkit-scrollbar
