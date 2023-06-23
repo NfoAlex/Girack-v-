@@ -416,6 +416,7 @@ export default {
             
         },
 
+        //チャンネルへ参加している人リストの受信
         SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
             this.channelJoinedUserArray = channelJoinedUserList;
 
