@@ -528,7 +528,6 @@ export default {
 
                 <!-- 入力欄 -->
                 <v-menu
-                    ref="MentionUserList"
                     label="list"
                     location="top"
                     :close-on-content-click="false"
