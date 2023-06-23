@@ -17,7 +17,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from '../config.js';
 
-export const CLIENT_VERSION = "alpha_20230621";
+export const CLIENT_VERSION = "alpha_20230623";
 
 const {
     CONFIG_SYNC,
@@ -313,7 +313,7 @@ export function getMessage(channelid, readLength, startLength) {
 
 //サーバー情報の受け取り
 socket.on("infoServer", (dat) => {
-    console.log("infoServer :: ", dat);
+    console.log("socket :: infoServer : ", dat);
 
     //もしサーバーとクライアントのバージョンが違っていたらページを更新させる
     if ( dat.serverVersion !== CLIENT_VERSION && dataUser().myUserinfo.value.loggedin ) {
