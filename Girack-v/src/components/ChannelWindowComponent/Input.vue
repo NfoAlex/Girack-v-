@@ -436,6 +436,14 @@ export default {
     mounted() {
         //チャンネルへ参加している人リストの受信
         socket.on("infoChannelJoinedUserList", this.SOCKETinfoChannelJoinedUserList);
+        //ここに参加している人リストを取得
+        socket.emit("getInfoChannelJoinedUserList", {
+            targetid: this.getPath,
+            reqSender: {
+                userid: this.myUserinfo.userid,
+                sessionid: this.myUserinfo.sessionid
+            }
+        });
 
     },
 
