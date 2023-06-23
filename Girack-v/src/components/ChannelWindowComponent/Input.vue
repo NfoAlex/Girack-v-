@@ -350,10 +350,18 @@ export default {
                 
             }
 
-            //選択しているユーザーの高さ取得してその位置にスクロール
-            let liH = this.$refs.optionsItem[this.searchMode.selectedIndex].$el.clientHeight;
-            this.$refs.optionsList.$el.scrollTo(0, liH * this.searchMode.selectedIndex); //スクロール
-            
+            console.log(this.$refs.optionsList.$el);
+            let scrollHeight = this.$refs.optionsList.$el.clientHeight;
+            //選択しているユーザーの高さ取得してその位置にスクロールする
+              //選択しているユーザーの要素の高さ全部同じになるはず
+            let itemPosition = this.$refs.optionsItem[this.searchMode.selectedIndex].$el.clientHeight;
+              //どれくらいスクロールするかの計算(上を空けてスクロールするために２個分空ける)
+            let scrollingPosition = itemPosition * (this.searchMode.selectedIndex - 2);
+                //スクロール位置の計算が0未満になったなら0にする
+            if ( scrollingPosition < 0) scrollingPosition = 0;
+              //スクロール
+            this.$refs.optionsList.$el.scrollTo(0, scrollingPosition);
+
         },
 
         //一つ前のチャンネルに戻る
