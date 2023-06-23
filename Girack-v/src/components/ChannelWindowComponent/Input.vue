@@ -350,6 +350,10 @@ export default {
                 
             }
 
+            //選択しているユーザーの高さ取得してその位置にスクロール
+            let liH = this.$refs.optionsItem[this.searchMode.selectedIndex].$el.clientHeight;
+            this.$refs.optionsList.$el.scrollTo(0, liH * this.searchMode.selectedIndex); //スクロール
+            
         },
 
         //一つ前のチャンネルに戻る
@@ -581,8 +585,9 @@ export default {
                     </template>
 
                     <!-- ユーザー検索候補の表示 -->
-                    <v-list max-height="30vh" v-if="searchMode.enabled">
+                    <v-list max-height="30vh" v-if="searchMode.enabled" ref="optionsList">
                         <v-list-item
+                            ref="optionsItem"
                             v-for="(i,index) in searchDisplayArray"
                         >
                             <span @click="replaceQueryWithName(i.userid)" style="cursor:pointer;">
