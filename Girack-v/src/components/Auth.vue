@@ -85,7 +85,7 @@ export default {
 
         },
 
-        SOCKETinfoInitServer(dat) {
+        SOCKETinfoServer(dat) {
             this.serverinfoLoaded = dat; //サーバーの情報
             document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
 
@@ -115,7 +115,7 @@ export default {
         socket.on("registerEnd", this.SOCKETregisterEnd);
 
         //サーバー名表示用
-        socket.on("infoServer", this.SOCKETinfoInitServer);
+        socket.on("infoServer", this.SOCKETinfoServer);
 
         //接続確認できたら接続できた状態にする
         socket.on("connect", () => {
