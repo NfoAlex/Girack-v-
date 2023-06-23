@@ -350,6 +350,18 @@ export default {
                 
             }
 
+            console.log(this.$refs.optionsList.$el);
+            let scrollHeight = this.$refs.optionsList.$el.clientHeight;
+            //選択しているユーザーの高さ取得してその位置にスクロールする
+              //選択しているユーザーの要素の高さ全部同じになるはず
+            let itemPosition = this.$refs.optionsItem[this.searchMode.selectedIndex].$el.clientHeight;
+              //どれくらいスクロールするかの計算(上を空けてスクロールするために２個分空ける)
+            let scrollingPosition = itemPosition * (this.searchMode.selectedIndex - 2);
+                //スクロール位置の計算が0未満になったなら0にする
+            if ( scrollingPosition < 0) scrollingPosition = 0;
+              //スクロール
+            this.$refs.optionsList.$el.scrollTo(0, scrollingPosition);
+
         },
 
         //一つ前のチャンネルに戻る
@@ -432,6 +444,14 @@ export default {
     mounted() {
         //チャンネルへ参加している人リストの受信
         socket.on("infoChannelJoinedUserList", this.SOCKETinfoChannelJoinedUserList);
+        //ここに参加している人リストを取得
+        socket.emit("getInfoChannelJoinedUserList", {
+            targetid: this.getPath,
+            reqSender: {
+                userid: this.myUserinfo.userid,
+                sessionid: this.myUserinfo.sessionid
+            }
+        });
 
     },
 
@@ -528,7 +548,6 @@ export default {
 
                 <!-- 入力欄 -->
                 <v-menu
-                    ref="MentionUserList"
                     label="list"
                     location="top"
                     :close-on-content-click="false"
@@ -582,8 +601,9 @@ export default {
                     </template>
 
                     <!-- ユーザー検索候補の表示 -->
-                    <v-list max-height="30vh" v-if="searchMode.enabled">
+                    <v-list max-height="30vh" v-if="searchMode.enabled" ref="optionsList">
                         <v-list-item
+                            ref="optionsItem"
                             v-for="(i,index) in searchDisplayArray"
                         >
                             <span @click="replaceQueryWithName(i.userid)" style="cursor:pointer;">
