@@ -330,6 +330,11 @@ export default {
             //上下の十字キーの入力からのテキストのカーソル移動を防ぐ(メンション検索中限定)
             if ( this.searchMode.enabled ) {
                 e.preventDefault();
+                //フォーカスが外れるからフォーカスしなおすように
+                this.$nextTick(() => {
+                    this.$el.querySelector("#inp").focus();
+                    
+                });
 
             }
 
