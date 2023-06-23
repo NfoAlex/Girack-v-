@@ -143,7 +143,13 @@ export default {
                 document.title = this.ChannelIndex[newPage.params.id].channelname;
 
                 //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
-                if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) || this.MsgDB[newPage.params.id].length === 0 ) return 0;
+                if ( !Object.keys(this.ChannelIndex).includes(newPage.params.id) ) return 0;
+                //そもそも履歴データがないなら(あるいは読み込みエラーがあるなら)止める
+                try {
+                    if ( this.MsgDB[newPage.params.id].length === 0 ) return 0; //履歴の長さが0なら
+                } catch(e) {
+                    return 0; //エラーでも止める
+                }
 
                 let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                 this.MsgReadTime[this.getPath] = {
