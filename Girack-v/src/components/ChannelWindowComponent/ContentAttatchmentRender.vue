@@ -70,6 +70,9 @@ export default {
                 case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                     return "microsoft-word";
 
+                case "image/gif":
+                    return "file-gif-box";
+
                 default:
                     return "file";
 
@@ -114,7 +117,7 @@ export default {
         >
             <!-- 画像ファイルだった時のプレビュー表示 -->
             <v-img
-                v-if="file.type.includes('image/')"
+                v-if="file.type.includes('image/')&&file.size<5e6"
                 @click="imageDialogShow=true;imageDialogSrc=filesrc + channelid + '/' + file.fileid;"
                 class="flex-shrink-1"
                 style="height:150px; min-width:30%; max-width:150px; cursor:pointer;"
@@ -140,7 +143,7 @@ export default {
             <span>
                 <a target="_blank" :href="filesrc+channelid+'/'+file.fileid">
                     <v-icon
-                        v-if="!file.type.includes('image/')"
+                        v-if="!file.type.includes('image/')||file.size>5e6"
                         style="margin:0 16px;"
                         size="x-large"
                     >
