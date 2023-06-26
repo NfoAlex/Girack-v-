@@ -547,8 +547,12 @@ socket.on("messageHistory", (history) => {
 
     if ( dataMsg().MsgReadTime.value[channelid] !== undefined ) {
         //既読状態の時間から計算するから予め新着数初期化
-        dataMsg().MsgReadTime.value[channelid].new = 0;
-        dataMsg().MsgReadTime.value[channelid].mention = 0;
+        dataMsg().MsgReadTime.value[channelid] = {
+            new: 0,
+            mention: 0,
+            timeBefore: "",
+            time: 0
+        };
 
     }
 
@@ -717,7 +721,9 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
                 delete userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]];
 
             } else {
-                userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].timeBefore = userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].time;
+                try {
+                    userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].timeBefore = userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].time;
+                } catch(e) {}
 
             }
 
