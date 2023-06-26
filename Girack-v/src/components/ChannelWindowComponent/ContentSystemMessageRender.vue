@@ -81,7 +81,7 @@ export default {
     <span>
         <span
             style="width:100%; word-wrap:break-word"
-            class="d-flex justify-center"
+            class="d-flex justify-center text-medium-emphasis"
         >
             <span>
                 {{ (UserIndex[content.triggeredUser]!==undefined)?UserIndex[content.triggeredUser].username:needUserIndex(content.triggeredUser) }}
