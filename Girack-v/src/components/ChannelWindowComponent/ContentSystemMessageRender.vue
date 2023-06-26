@@ -23,7 +23,7 @@ export default {
                 "LEFT": ["がチャンネルを退出しました"],
                 "INVITED": ["が","をこのチャンネルに招待しました"],
                 "KICKED": ["が","をこのチャンネルからキックしました"],
-                "DESCRIPTION_UPDATED": ["がチャンネル概要を変更しました"],
+                "DESCRIPTION_UPDATED": ["がチャンネル概要を更新しました"],
                 "CHANNELNAME_UPDATED": ["がチャンネル名を変更しました"]
             }
         }
