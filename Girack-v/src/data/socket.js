@@ -17,7 +17,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from '../config.js';
 
-export const CLIENT_VERSION = "alpha_20230623";
+export const CLIENT_VERSION = "alpha_20230626";
 
 const {
     CONFIG_SYNC,
@@ -84,9 +84,21 @@ socket.on("messageReceive", (msg) => {
         //指定チャンネルの既読状態がデータになかったら新たに定義
         if ( dataMsg().MsgReadTime.value[msg.channelid] === null ) dataMsg().MsgReadTime.value[msg.channelid].mention = 0;
 
+        //メンション判別する文字列
+        let ContentChecking = "";
+        //システムメッセージなら
+        if ( msg.isSystemMessage ) {
+            //メンション判別のためにも標的ユーザーを本文扱いする
+            ContentChecking = "@"+msg.content.targetUser;
+
+        } else { //普通のメッセージなら
+            ContentChecking = msg.content;
+
+        }
+
         //新着メッセージ数を更新
         if ( dataMsg().MsgReadTime.value[msg.channelid] === undefined ) { //セットされてなかったら新しく定義
-            if ( msg.content.includes("@" + dataUser().myUserinfo.value.username) ) {
+            if ( ContentChecking.includes("@" + dataUser().myUserinfo.value.username) ) {
                 dataMsg().MsgReadTime.value[msg.channelid] = {
                     time: msg.time, //最後に読んだ時間
                     new: 1,
@@ -106,7 +118,7 @@ socket.on("messageReceive", (msg) => {
 
         } else { //すでにあるなら加算
             //メンションか自分への返信ならメンションを加算
-            if ( msg.content.includes("@/" + dataUser().myUserinfo.value.userid + "/") || msg.replyData.userid === dataUser().myUserinfo.value.userid ) {
+            if ( ContentChecking.includes("@/" + dataUser().myUserinfo.value.userid + "/") || msg.replyData.userid === dataUser().myUserinfo.value.userid ) {
                 if ( dataMsg().MsgReadTime.value[msg.channelid].mention === null ) {
                     dataMsg().MsgReadTime.value[msg.channelid].mention = 0;
 
@@ -153,8 +165,8 @@ socket.on("messageReceive", (msg) => {
 
             } else if ( CONFIG_NOTIFICATION.value.NOTIFY_MENTION ) { //メンションで通知なら
                 //メンションの条件である@<名前>が入っているか
-                if ( msg.content.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
-                    let contentToDisplay = msg.content.replace(/@\/([0-9]*)\//g,(mentionedId) => {
+                if ( ContentChecking.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
+                    let contentToDisplay = ContentChecking.replace(/@\/([0-9]*)\//g,(mentionedId) => {
                         if ( mentionedId.includes(dataUser().myUserinfo.value.userid) ) {
                             return "@" + dataUser().myUserinfo.value.username;
 
@@ -558,8 +570,11 @@ socket.on("messageHistory", (history) => {
 
         }
 
-        //既読状態の時間から新着メッセージ数を加算
-        if ( parseInt(history[index].time) > parseInt(dataMsg().MsgReadTime.value[channelid].time) ) {
+        //システムメッセージじゃないなら既読状態の時間から新着メッセージ数を加算
+        if (
+            parseInt(history[index].time) > parseInt(dataMsg().MsgReadTime.value[channelid].time) &&
+            !history[index].isSystemMessage
+        ) {
             //メンションされていたかどうかにあわせて既読状態を更新
             if ( history[index].content.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
                 dataMsg().MsgReadTime.value[channelid].mention++; //メンション数を加算
