@@ -34,6 +34,7 @@ export default {
             uri: backendURI, //バックエンドのURI
             StateFocus: true, //Girackにフォーカスしているかどうか
             msgDisplayNum: 25,
+            MsgReadTimeBefore: "", //"ここから新着メッセージ"線の比較用
 
             //watchする時のハンドラ用
             watcherRoute: {},
@@ -152,6 +153,11 @@ export default {
                     return 0; //エラーでも止める
                 }
 
+                //既読状態の更新前に今までの既読時間を保存
+                this.MsgReadTimeBefore = this.MsgReadTime[this.getPath].time;
+                console.log("Content :: activated : MsgReadTimeBefore->", this.MsgReadTimeBefore);
+
+                //既読時間を更新
                 let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                 this.MsgReadTime[this.getPath] = {
                     time: latestTime,
@@ -167,6 +173,10 @@ export default {
         this.watcherMsgDB = this.$watch("MsgDBActive", function () {
             //もしスクロールしきった状態、かつこのページにブラウザがいるなら
             if ( this.StateScrolled && this.StateFocus ) {
+                //時間を取得して新着比較用の既読時間を更新
+                let latestTime = this.MsgDBActive.slice(-1)[0].time;
+                this.MsgReadTimeBefore = latestTime;
+
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
                     this.scrollIt(); //スクロールする
@@ -190,6 +200,9 @@ export default {
         //watch監視停止
         this.watcherRoute();
         this.watcherMsgDB();
+
+        //ひとつ前の既読状態変数を初期化
+        this.MsgReadTimeBefore = "";
 
         //ウィンドウのフォーカス監視を取りやめ
         window.removeEventListener("focus", this.setFocusStateTrue);
@@ -566,6 +579,9 @@ export default {
                             mention: 0
                         };
                         console.log("Content :: setScrollState : 既読状態変更したな");
+                        
+                        //時差を置いて新着比較用の既読時間を更新
+                        //this.MsgReadTimeBefore = latestTime;
 
                         //既読状態をサーバーへ同期させる
                         socket.emit("updateUserSaveMsgReadState", {
@@ -713,9 +729,18 @@ export default {
 
             <!-- 日付線 -->
             <div v-if="checkDateDifference(index)" style="width:100%; padding:12px 0;">
-                <v-divider>asdf</v-divider>
                 <p class="text-subtitle-1" :class="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT?'text-left':'text-center'" style="margin-left:1.5%">{{ getHistoryDate(index) }}</p>
             </div>
+
+            <!-- 新着メッセージ線 -->
+            <span
+                v-if="m.time===MsgReadTimeBefore"
+                class="d-flex"
+            >
+                <v-divider class="flex-shrink-1 flex-grow-0"></v-divider>
+                <v-chip class="pa-1 ma-1 flex-grow-1 flex-shrink-0" size="x-small">ここから新着</v-chip>
+                <v-divider class="flex-shrink-1 flex-grow-0"></v-divider>
+            </span>
 
             <!-- ここからflexで表示するメッセージ-->
             <div
