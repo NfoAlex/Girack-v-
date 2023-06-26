@@ -751,11 +751,11 @@ export default {
 
             <!-- 新着メッセージ線 -->
             <span
-                v-if="m.time===MsgReadTimeBefore&&index!==msgDisplayNum-1"
+                v-if="m.time===MsgReadTimeBefore||(index===0&&m.time>MsgReadTimeBefore)&&MsgReadTimeBefore!==''"
                 class="d-flex align-center"
             >
                 <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
-                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着({{ index }} : {{ m.time }})</v-chip>
+                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着</v-chip>
                 <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
             </span>
 
