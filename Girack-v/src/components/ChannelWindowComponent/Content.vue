@@ -10,6 +10,7 @@ import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
+import ContentSystemMessageRender from "./ContentSystemMessageRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
 
 const socket = getSocket();
@@ -25,7 +26,7 @@ export default {
 
     },
 
-    components: { Userpage, ContentURLpreview, ContentHoverMenu, ContentMessageRender, ContentAttatchmentRender }, //ユーザーページ用
+    components: { Userpage, ContentURLpreview, ContentHoverMenu, ContentMessageRender, ContentSystemMessageRender, ContentAttatchmentRender }, //ユーザーページ用
     props: ["MsgDBActive", "channelInfo"],
 
     data() {
