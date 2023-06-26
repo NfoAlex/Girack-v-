@@ -738,7 +738,7 @@ export default {
                 class="d-flex align-center"
             >
                 <v-divider class="flex-shrink-1 flex-grow-0"></v-divider>
-                <v-chip class="pa-1 ma-1 flex-grow-1 flex-shrink-0" size="x-small">ここから新着</v-chip>
+                <v-chip class="pa-2 ma-1 flex-grow-1 flex-shrink-0" size="x-small">ここから新着({{ index }} : {{ m.time }})</v-chip>
                 <v-divider class="flex-shrink-1 flex-grow-0"></v-divider>
             </span>
 
