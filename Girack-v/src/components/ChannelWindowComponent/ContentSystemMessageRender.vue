@@ -36,12 +36,20 @@ export default {
             let ContentRedering = "";
 
             //メッセージを追加
-            ContentRedering = this.content.triggeredUser;
-            ContentRedering += this.MessageTemplate[this.content.term][0];
+            ContentRedering = String(this.UserIndex[this.content.triggeredUser].username);
+            try {
+                ContentRedering += this.MessageTemplate[this.content.term][0];
+            } catch(e) {return this.content}
 
             //もし標的ユーザーが空じゃないなら文章とユーザーを続けて追加
             if ( this.content.targetUser !== "" ) {
-                ContentRedering += this.content.targetUser;
+                if ( String(this.UserIndex[this.content.targetUser].username) === undefined ) {
+                    this.needUserIndex(this.content.targetUser);
+                } else {
+                    ContentRedering += String(this.UserIndex[this.content.targetUser].username);
+
+                }
+
                 ContentRedering += this.MessageTemplate[this.content.term][1];
                 
             }
@@ -72,9 +80,19 @@ export default {
 <template>
     <span>
         <span
-            style="width:90%; word-wrap:break-word"
+            style="width:100%; word-wrap:break-word"
+            class="d-flex justify-center"
         >
-        {{ formatSystemMessage }}
+            <span>
+                {{ (UserIndex[content.triggeredUser]!==undefined)?UserIndex[content.triggeredUser].username:needUserIndex(content.triggeredUser) }}
+            </span>
+            <span>
+                {{ MessageTemplate[content.term][0] }}
+            </span>
+            <span v-if="content.targetUser!==''">
+                {{ (UserIndex[content.targetUser]!==undefined)?UserIndex[content.targetUser].username:needUserIndex(content.targetUser) }}
+                {{ MessageTemplate[content.term][1] }}
+            </span>
         </span>
     </span>
 </template>

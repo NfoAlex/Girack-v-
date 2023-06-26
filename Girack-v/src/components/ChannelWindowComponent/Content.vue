@@ -717,8 +717,13 @@ export default {
                 <p class="text-subtitle-1" :class="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT?'text-left':'text-center'" style="margin-left:1.5%">{{ getHistoryDate(index) }}</p>
             </div>
 
-            <!-- ここからflexで表示するもの-->
-            <div :id="m.messageid" class="d-flex justify-end" style="margin:0px 12px;">
+            <!-- ここからflexで表示するメッセージ-->
+            <div
+                v-if="m.isSystemMessage===undefined||m.isSystemMessage===false"
+                :id="m.messageid"
+                class="d-flex justify-end"
+                style="margin:0px 12px;"
+            >
             
                 <!-- アバター -->
                 <v-avatar v-if="checkShowAvatar(m.userid, index)" class="mx-auto flex-shrink-1" width="5vw" style="max-width:20%;">
@@ -873,6 +878,14 @@ export default {
                 
                 </span>
                 
+            </div>
+
+            <!-- システムメッセージ -->
+            <div
+                style="width:100%"
+                v-if="m.isSystemMessage===true"
+            >
+                <ContentSystemMessageRender :content="m.content" />
             </div>
 
         </div>
