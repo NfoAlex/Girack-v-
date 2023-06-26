@@ -101,6 +101,7 @@ socket.on("messageReceive", (msg) => {
             if ( ContentChecking.includes("@" + dataUser().myUserinfo.value.username) ) {
                 dataMsg().MsgReadTime.value[msg.channelid] = {
                     time: msg.time, //最後に読んだ時間
+                    timeBefore: "",
                     new: 1,
                     mention: 0
                 };
@@ -108,6 +109,7 @@ socket.on("messageReceive", (msg) => {
             } else {
                 dataMsg().MsgReadTime.value[msg.channelid] = {
                     time: msg.time, //最後に読んだ時間
+                    timeBefore: String((Number(dataMsg().MsgReadTime.value[msg.channelid].timeBefore)+1)),
                     new: 0,
                     mention: 1
                 };
@@ -713,6 +715,9 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
             if ( !dataUser().myUserinfo.value.channelJoined.includes(keysUserSaveMsgReadState[index]) ) {
                 //引っ張ってきた既読状態から削除
                 delete userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]];
+
+            } else {
+                userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].timeBefore = userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].time;
 
             }
 

@@ -34,7 +34,6 @@ export default {
             uri: backendURI, //バックエンドのURI
             StateFocus: true, //Girackにフォーカスしているかどうか
             msgDisplayNum: 25,
-            MsgReadTimeBefore: "", //"ここから新着メッセージ"線の比較用
 
             //watchする時のハンドラ用
             watcherRoute: {},
@@ -154,13 +153,13 @@ export default {
                 }
 
                 //既読状態の更新前に今までの既読時間を保存
-                this.MsgReadTimeBefore = this.MsgReadTime[this.getPath].time;
-                console.log("Content :: activated : MsgReadTimeBefore->", this.MsgReadTimeBefore);
-
+                let timeBeforeTEMP = this.MsgReadTime[this.getPath].timeBefore;
+                
                 //既読時間を更新
                 let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
                 this.MsgReadTime[this.getPath] = {
-                    time: latestTime,
+                    time: latestTime, //最新のメッセージの時間
+                    timeBefore: timeBeforeTEMP, //新着比較用
                     new: 0, //新着メッセージ数を0に
                     mention: 0
                 };
@@ -174,7 +173,7 @@ export default {
             //もしスクロールしきった状態、かつこのページにブラウザがいるなら
             if ( this.StateScrolled && this.StateFocus ) {
                 //比較用既読状態を空に
-                this.MsgReadTimeBefore = "";
+                this.MsgReadTime[this.getPath].timeBefore = "";
 
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
@@ -183,10 +182,10 @@ export default {
 
                 });
 
-            } else if( this.MsgReadTimeBefore === "" ) { //もし比較用既読状態が空なら
+            } else if( this.MsgReadTime[this.getPath].timeBefore === "" ) { //もし比較用既読状態が空なら
                 //時間を取得して新着比較用の既読時間を更新
                 let latestTime = this.MsgDBActive.slice(-1)[0].time;
-                this.MsgReadTimeBefore = latestTime;
+                this.MsgReadTime[this.getPath].timeBefore = latestTime;
 
             }
         }, {
@@ -206,8 +205,10 @@ export default {
         this.watcherRoute();
         this.watcherMsgDB();
 
-        //ひとつ前の既読状態変数を初期化
-        this.MsgReadTimeBefore = "";
+        //ひとつ前の既読状態変数を初期化、できなかったら放置
+        try {
+            this.MsgReadTime[this.getPath].timeBefore = "";
+        } catch(e) {}
 
         //ウィンドウのフォーカス監視とキープレス監視を取りやめ
         window.removeEventListener("focus", this.setFocusStateTrue);
@@ -579,15 +580,14 @@ export default {
                         this.MsgReadTime[this.getPath] = {
                             //既読時間を最新メッセージの時間に設定
                             time: latestTime,
+                            //比較用既読時間を初期化
+                            timeBefore: this.MsgReadTime[this.getPath].timeBefore,
                             //新着メッセージ数を0に
                             new: 0,
                             //メンション数を0に
                             mention: 0
                         };
                         console.log("Content :: setScrollState : 既読状態変更したな");
-                        
-                        //時差を置いて新着比較用の既読時間を更新
-                        //this.MsgReadTimeBefore = latestTime;
 
                         //既読状態をサーバーへ同期させる
                         socket.emit("updateUserSaveMsgReadState", {
@@ -666,7 +666,7 @@ export default {
             //escなら
             if ( event.key === "Escape" ) {
                 //比較用既読状態を初期化
-                this.MsgReadTimeBefore = "";
+                this.MsgReadTime[this.getPath].timeBefore = "";
 
             }
 
@@ -751,11 +751,11 @@ export default {
 
             <!-- 新着メッセージ線 -->
             <span
-                v-if="m.time===MsgReadTimeBefore||(index===0&&m.time>MsgReadTimeBefore)&&MsgReadTimeBefore!==''"
+                v-if="m.time===MsgReadTime[getPath].timeBefore||(index===0&&m.time>MsgReadTime[getPath].timeBefore)&&MsgReadTime[getPath].timeBefore!==''"
                 class="d-flex align-center"
             >
                 <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
-                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着</v-chip>
+                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着({{ MsgReadTime[getPath].timeBefore }}, {{ msgDisplayNum-1 }})</v-chip>
                 <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
             </span>
 
