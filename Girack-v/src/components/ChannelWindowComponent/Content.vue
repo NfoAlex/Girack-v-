@@ -734,7 +734,7 @@ export default {
 
             <!-- 新着メッセージ線 -->
             <span
-                v-if="m.time===MsgReadTimeBefore"
+                v-if="m.time===MsgReadTimeBefore&&index!==msgDisplayNum-1"
                 class="d-flex"
             >
                 <v-divider class="flex-shrink-1 flex-grow-0"></v-divider>
