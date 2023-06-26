@@ -558,8 +558,11 @@ socket.on("messageHistory", (history) => {
 
         }
 
-        //既読状態の時間から新着メッセージ数を加算
-        if ( parseInt(history[index].time) > parseInt(dataMsg().MsgReadTime.value[channelid].time) ) {
+        //システムメッセージじゃないなら既読状態の時間から新着メッセージ数を加算
+        if (
+            parseInt(history[index].time) > parseInt(dataMsg().MsgReadTime.value[channelid].time) &&
+            !history[index].isSystemMessage
+        ) {
             //メンションされていたかどうかにあわせて既読状態を更新
             if ( history[index].content.includes("@/" + dataUser().myUserinfo.value.userid + "/") ) {
                 dataMsg().MsgReadTime.value[channelid].mention++; //メンション数を加算
