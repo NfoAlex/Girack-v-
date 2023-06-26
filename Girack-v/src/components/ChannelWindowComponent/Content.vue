@@ -737,9 +737,9 @@ export default {
                 v-if="m.time===MsgReadTimeBefore&&index!==msgDisplayNum-1"
                 class="d-flex align-center"
             >
-                <v-divider class="flex-shrink-1 flex-grow-0"></v-divider>
-                <v-chip class="pa-2 ma-1 flex-grow-1 flex-shrink-0" size="x-small">ここから新着({{ index }} : {{ m.time }})</v-chip>
-                <v-divider class="flex-shrink-1 flex-grow-0"></v-divider>
+                <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
+                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着({{ index }} : {{ m.time }})</v-chip>
+                <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
             </span>
 
             <!-- ここからflexで表示するメッセージ-->
