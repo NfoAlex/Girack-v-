@@ -193,9 +193,10 @@ export default {
             deep: true
         });
 
-        //ウィンドウのフォーカス監視開始
+        //ウィンドウのフォーカス監視とキープレス監視開始
         window.addEventListener("focus", this.setFocusStateTrue);
         window.addEventListener("blur", this.setFocusStateFalse);
+        window.addEventListener("keydown", this.initMsgReadTimeBefore);
 
     },
 
@@ -208,9 +209,10 @@ export default {
         //ひとつ前の既読状態変数を初期化
         this.MsgReadTimeBefore = "";
 
-        //ウィンドウのフォーカス監視を取りやめ
+        //ウィンドウのフォーカス監視とキープレス監視を取りやめ
         window.removeEventListener("focus", this.setFocusStateTrue);
         window.removeEventListener("blur", this.setFocusStateFalse);
+        window.removeEventListener("keydown", this.initMsgReadTimeBefore);
 
     },
 
@@ -656,6 +658,17 @@ export default {
         setFocusStateFalse() {
             this.StateFocus = false;
             console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
+
+        },
+
+        //escキーで新着線を非表示にする
+        initMsgReadTimeBefore(event) {
+            //escなら
+            if ( event.key === "Escape" ) {
+                //比較用既読状態を初期化
+                this.MsgReadTimeBefore = "";
+
+            }
 
         },
 
