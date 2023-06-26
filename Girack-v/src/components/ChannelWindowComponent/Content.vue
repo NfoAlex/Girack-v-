@@ -173,9 +173,8 @@ export default {
         this.watcherMsgDB = this.$watch("MsgDBActive", function () {
             //もしスクロールしきった状態、かつこのページにブラウザがいるなら
             if ( this.StateScrolled && this.StateFocus ) {
-                //時間を取得して新着比較用の既読時間を更新
-                let latestTime = this.MsgDBActive.slice(-1)[0].time;
-                this.MsgReadTimeBefore = latestTime;
+                //比較用既読状態を空に
+                this.MsgReadTimeBefore = "";
 
                 //レンダーを待ってからスクロール
                 this.$nextTick(() => {
@@ -183,6 +182,11 @@ export default {
                     this.msgDisplayNum = 25; //メッセージの表示数の初期化
 
                 });
+
+            } else if( this.MsgReadTimeBefore === "" ) { //もし比較用既読状態が空なら
+                //時間を取得して新着比較用の既読時間を更新
+                let latestTime = this.MsgDBActive.slice(-1)[0].time;
+                this.MsgReadTimeBefore = latestTime;
 
             }
         }, {
