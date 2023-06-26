@@ -30,34 +30,6 @@ export default {
     },
 
     methods: {
-        //メッセージ本文のメンションやURLの着色などをする
-        formatSystemMessage() {
-            //表示するメッセージ
-            let ContentRedering = "";
-
-            //メッセージを追加
-            ContentRedering = String(this.UserIndex[this.content.triggeredUser].username);
-            try {
-                ContentRedering += this.MessageTemplate[this.content.term][0];
-            } catch(e) {return this.content}
-
-            //もし標的ユーザーが空じゃないなら文章とユーザーを続けて追加
-            if ( this.content.targetUser !== "" ) {
-                if ( String(this.UserIndex[this.content.targetUser].username) === undefined ) {
-                    this.needUserIndex(this.content.targetUser);
-                } else {
-                    ContentRedering += String(this.UserIndex[this.content.targetUser].username);
-
-                }
-
-                ContentRedering += this.MessageTemplate[this.content.term][1];
-                
-            }
-
-            return ContentRedering;
-            
-        },
-
         //もし人のやつほしくなったら
         needUserIndex(userid) {
             socket.emit("getInfoUser", {
@@ -89,6 +61,7 @@ export default {
             <span>
                 {{ MessageTemplate[content.term][0] }}
             </span>
+            <!-- もし別のユーザーが招待あるいはキックされたのなら表示 -->
             <span v-if="content.targetUser!==''">
                 {{ (UserIndex[content.targetUser]!==undefined)?UserIndex[content.targetUser].username:needUserIndex(content.targetUser) }}
                 {{ MessageTemplate[content.term][1] }}
