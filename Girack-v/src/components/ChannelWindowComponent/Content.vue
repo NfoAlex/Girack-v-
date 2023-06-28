@@ -152,17 +152,6 @@ export default {
                     return 0; //エラーでも止める
                 }
 
-                //既読状態の更新前に今までの既読時間を保存
-                let timeBeforeTEMP = this.MsgReadTime[this.getPath].timeBefore;
-                
-                //既読時間を更新
-                let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
-                this.MsgReadTime[this.getPath] = {
-                    time: latestTime, //最新のメッセージの時間
-                    timeBefore: timeBeforeTEMP, //新着比較用
-                    new: 0, //新着メッセージ数を0に
-                    mention: 0
-                };
                 this.scrollIt(); //スクロールする
 
             });
