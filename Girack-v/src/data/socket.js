@@ -661,11 +661,11 @@ socket.on("authResult", (dat) => {
 
         }
 
-        //メッセージ履歴の取得
-        for ( let cid in dataUser().myUserinfo.value.channelJoined ) {
-            getMessage(dataUser().myUserinfo.value.channelJoined[cid], 40); //リクエスト送信する
+        // //メッセージ履歴の取得
+        // for ( let cid in dataUser().myUserinfo.value.channelJoined ) {
+        //     getMessage(dataUser().myUserinfo.value.channelJoined[cid], 40); //リクエスト送信する
 
-        }
+        // }
 
     }
 
@@ -713,6 +713,12 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
 
         //既読状態を適用
         dataMsg().MsgReadTime.value = userSaveMsgReadState.msgReadState;
+
+    }
+
+    //メッセージ履歴の取得
+    for ( let cid in dataUser().myUserinfo.value.channelJoined ) {
+        getMessage(dataUser().myUserinfo.value.channelJoined[cid], 40); //リクエスト送信する
 
     }
 
