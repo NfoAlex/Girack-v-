@@ -639,6 +639,41 @@ export default {
 
         },
 
+        //escキーで新着線を非表示にする
+        initMsgReadTimeBefore(event) {
+            //escなら
+            if ( event.key === "Escape" ) {
+                //比較用既読状態を初期化
+                this.MsgReadTime[this.getPath].timeBefore = "";
+
+            }
+
+        },
+
+        //新着メッセージ線を表示するかどうか
+        checkShowNewMessageLine(m, index) {
+            try {
+                if ( 
+                    m.time===this.MsgReadTime[this.getPath].timeBefore ||
+                    (
+                        index===0 &&
+                        m.time>this.MsgReadTime[this.getPath].timeBefore
+                    ) &&
+                    this.MsgReadTime[this.getPath].timeBefore!==''
+                ) {
+                    return true;
+
+                } else {
+                    return false;
+
+                }
+            } catch(e) {
+                console.log("Content :: checkShowNewMessageLine : エラー", e);
+                return false;
+            }
+
+        },
+
         //メッセージの時間を出力する関数
         printDate(time) {
             let t = new Date(); //時間取得用
@@ -716,6 +751,16 @@ export default {
                 <v-divider>asdf</v-divider>
                 <p class="text-subtitle-1" :class="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT?'text-left':'text-center'" style="margin-left:1.5%">{{ getHistoryDate(index) }}</p>
             </div>
+
+            <!-- 新着メッセージ線 -->
+            <span
+                v-if="checkShowNewMessageLine(m, index)"
+                class="d-flex align-center"
+            >
+                <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
+                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着({{ MsgReadTime[getPath].timeBefore }}, {{ msgDisplayNum-1 }})</v-chip>
+                <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
+            </span>
 
             <!-- ここからflexで表示するメッセージ-->
             <div
