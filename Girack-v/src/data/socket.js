@@ -708,6 +708,10 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
                 //引っ張ってきた既読状態から削除
                 delete userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]];
 
+            } else { //チャンネル参加してるなら
+                //比較用時間に今の既読時間を設定
+                userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].timeBefore = userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].time;
+
             }
 
         }
