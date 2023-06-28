@@ -549,16 +549,19 @@ export default {
                 if ( this.channelInfo.previewmode ) return -1;
 
                 try {
-                    //最新のメッセージを取得するために履歴の長さを予め取得
-                    let latestTime = this.MsgDBActive.slice(-1)[0].time;
-
                     //もし新着数とメンション数が0じゃなければ0に初期化する
                     if ( this.MsgReadTime[this.getPath].new !== 0 || this.MsgReadTime[this.getPath].mention !== 0 ) {
+                        //最新のメッセージを取得するために履歴の長さを予め取得
+                        let latestTime = this.MsgDBActive.slice(-1)[0].time;
+                        //スクロールだけでは新着線は消さないため保存
+                        let timeBefore = this.MsgReadTime[this.getPath].timeBefore;
+
                         //既読状態をセット
                         this.MsgReadTime[this.getPath] = {
                             //既読時間を最新メッセージの時間に設定
                             time: latestTime,
-                            timeBefore: latestTime,
+                            //保存したのをそのままキープさせる
+                            timeBefore: timeBefore,
                             //新着メッセージ数を0に
                             new: 0,
                             //メンション数を0に
