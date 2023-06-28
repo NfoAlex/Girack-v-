@@ -648,12 +648,15 @@ export default {
         checkShowNewMessageLine(m, index) {
             try {
                 if ( 
-                    m.time===this.MsgReadTime[this.getPath].timeBefore ||
+                    (
+                        m.time===this.MsgReadTime[this.getPath].timeBefore &&
+                        index!==24
+                    ) 
+                    ||
                     (
                         index===0 &&
                         m.time>this.MsgReadTime[this.getPath].timeBefore
-                    ) &&
-                    this.MsgReadTime[this.getPath].timeBefore!==''
+                    )
                 ) {
                     return true;
 
