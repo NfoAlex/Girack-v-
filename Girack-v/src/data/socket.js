@@ -597,20 +597,6 @@ socket.on("messageHistory", (history) => {
 
     }
 
-    try {
-        if ( dataMsg().MsgReadTime.value[channelid].mention !== 0 && dataMsg().MsgReadTime.value[channelid].new !== 0 ) {
-            //既読状態をサーバーへ同期させる
-            socket.emit("updateUserSaveMsgReadState", {
-                msgReadState: dataMsg().MsgReadTime.value,
-                reqSender: {
-                    userid: dataUser().myUserinfo.value.userid,
-                    sessionid: dataUser().myUserinfo.value.sessionid
-                }
-            });
-
-        }
-    } catch(e) {}
-
     //履歴が存在しているなら履歴を頭から追加
     if ( dataChannel().ChannelIndex.value[channelid].historyReadCount !== 0 ) {
         //データの追加順的に逆だからここでソートしておく
