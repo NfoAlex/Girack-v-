@@ -662,9 +662,9 @@ export default {
             try {
                 console.log("Content :: checkShowNewMessageLine : MsgDBActive.length->", this.MsgDBActive.length);
                 if (
-                    this.MsgDBActive.length-1!==index&&
                     (
                         m.time===this.MsgReadTime[this.getPath].timeBefore &&
+                        this.MsgDBActive.length-1!==index&&
                         index!==24
                     ) 
                     ||
