@@ -141,15 +141,6 @@ socket.on("messageReceive", (msg) => {
 
         }
 
-        //既読状態をサーバーへ同期させる
-        socket.emit("updateUserSaveMsgReadState", {
-            msgReadState: dataMsg().MsgReadTime.value,
-            reqSender: {
-                userid: dataUser().myUserinfo.value.userid,
-                sessionid: dataUser().myUserinfo.value.sessionid
-            }
-        });
-
         //新着のメッセージを通知
         if (
             CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
@@ -545,6 +536,7 @@ socket.on("messageHistory", (history) => {
 
     let index = 0; //チャンネル参照インデックス変数
 
+    //そのチャンネルの既読状態がなければ作る
     if ( dataMsg().MsgReadTime.value[channelid] !== undefined ) {
         //既読状態の時間から計算するから予め新着数初期化
         dataMsg().MsgReadTime.value[channelid] = {
@@ -589,6 +581,8 @@ socket.on("messageHistory", (history) => {
                 dataMsg().MsgReadTime.value[channelid].new++; //新着数を加算
 
             }
+
+            console.log("socket :: messageReceive : 使った既読状態->", dataMsg().MsgReadTime.value[channelid]);
 
             //faviconをドット表示に
             document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
@@ -699,7 +693,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
     if ( userSaveMsgReadState.msgReadStateAvailable ) {
         //既読状態のチャンネルIDを取り出して配列にする
         let keysUserSaveMsgReadState = Object.keys(userSaveMsgReadState.msgReadState);
-        //参加していないチャンネルの既読状態を削除
+        //参加していないチャンネルの既読状態を削除、参加してるなら適用
         for ( let index in keysUserSaveMsgReadState ) { //既読状態のチャンネルIDをぶん回す
             //もしチャンネル参加リストにチャンネルIDが入っていなければ
             if ( !dataUser().myUserinfo.value.channelJoined.includes(keysUserSaveMsgReadState[index]) ) {
@@ -712,6 +706,8 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
                 } catch(e) {}
 
             }
+
+            console.log("socket :: infoUserSaveMsgReadState : データ->", userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]]);
 
         }
 
