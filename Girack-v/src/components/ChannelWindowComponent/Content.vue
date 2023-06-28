@@ -660,7 +660,9 @@ export default {
         //新着メッセージ線を表示するかどうか
         checkShowNewMessageLine(m, index) {
             try {
-                if ( 
+                console.log("Content :: checkShowNewMessageLine : MsgDBActive.length->", this.MsgDBActive.length);
+                if (
+                    this.MsgDBActive.length-1!==index&&
                     (
                         m.time===this.MsgReadTime[this.getPath].timeBefore &&
                         index!==24
