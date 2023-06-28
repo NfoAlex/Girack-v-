@@ -197,7 +197,9 @@ export default {
         //ひとつ前の既読状態変数を初期化、できなかったら放置
         try {
             this.MsgReadTime[this.getPath].timeBefore = "";
-        } catch(e) {}
+        } catch(e) {
+            console.log("Content :: deactivated : ?", e);
+        }
 
         //ウィンドウのフォーカス監視とキープレス監視を取りやめ
         window.removeEventListener("focus", this.setFocusStateTrue);
