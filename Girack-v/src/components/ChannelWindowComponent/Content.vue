@@ -169,7 +169,7 @@ export default {
                     this.scrollIt(); //スクロールする
                     this.msgDisplayNum = 25; //メッセージの表示数の初期化
 
-                    //比較用
+                    //比較用既読時間を更新
                     let latestTime = this.MsgDBActive.slice(-1)[0].time;
                     this.MsgReadTime[this.getPath].timeBefore = latestTime;
 
@@ -762,16 +762,6 @@ export default {
                 <p class="text-subtitle-1" :class="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT?'text-left':'text-center'" style="margin-left:1.5%">{{ getHistoryDate(index) }}</p>
             </div>
 
-            <!-- 新着メッセージ線 -->
-            <span
-                v-if="checkShowNewMessageLine(m, index)"
-                class="d-flex align-center"
-            >
-                <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
-                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着({{ MsgReadTime[getPath].timeBefore }}, {{ msgDisplayNum-1 }})</v-chip>
-                <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
-            </span>
-
             <!-- ここからflexで表示するメッセージ-->
             <div
                 v-if="m.isSystemMessage===undefined||m.isSystemMessage===false"
@@ -942,6 +932,16 @@ export default {
             >
                 <ContentSystemMessageRender :content="m.content" />
             </div>
+
+            <!-- 新着メッセージ線 -->
+            <span
+                v-if="checkShowNewMessageLine(m, index)"
+                class="d-flex align-center"
+            >
+                <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
+                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着({{ MsgReadTime[getPath].timeBefore }}, {{ msgDisplayNum }})</v-chip>
+                <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
+            </span>
 
         </div>
 
