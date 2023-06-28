@@ -166,6 +166,10 @@ export default {
                     this.scrollIt(); //スクロールする
                     this.msgDisplayNum = 25; //メッセージの表示数の初期化
 
+                    //比較用
+                    let latestTime = this.MsgDBActive.slice(-1)[0].time;
+                    this.MsgReadTime[this.getPath].timeBefore = latestTime;
+
                 });
 
             }
