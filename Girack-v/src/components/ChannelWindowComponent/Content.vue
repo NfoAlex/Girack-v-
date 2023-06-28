@@ -939,7 +939,14 @@ export default {
                 class="d-flex align-center"
             >
                 <v-divider color="white" thickness="2px" class="flex-shrink-1"></v-divider>
-                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">ここから新着</v-chip>
+                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">
+                    <span v-if="index===0">
+                        過去に更に新着があります...
+                    </span>
+                    <span v-else>
+                        ここから新着
+                    </span>
+                </v-chip>
                 <v-divider color="white" thickness="2px" class="flex-shrink-1"></v-divider>
             </span>
 
