@@ -10,6 +10,7 @@ import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
+import ContentNewMessageLine from "./ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentSystemMessageRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
 
@@ -26,7 +27,16 @@ export default {
 
     },
 
-    components: { Userpage, ContentURLpreview, ContentHoverMenu, ContentMessageRender, ContentSystemMessageRender, ContentAttatchmentRender }, //ユーザーページ用
+    components: {
+        Userpage,
+        ContentURLpreview,
+        ContentHoverMenu,
+        ContentMessageRender,
+        ContentSystemMessageRender,
+        ContentAttatchmentRender,
+        ContentNewMessageLine
+    },
+
     props: ["MsgDBActive", "channelInfo"],
 
     data() {
@@ -657,35 +667,6 @@ export default {
 
         },
 
-        //新着メッセージ線を表示するかどうか
-        checkShowNewMessageLine(m, index) {
-            try {
-                console.log("Content :: checkShowNewMessageLine : MsgDBActive.length->", this.MsgDBActive.length);
-                if (
-                    (
-                        m.time===this.MsgReadTime[this.getPath].timeBefore &&
-                        this.MsgDBActive.length-1!==index&&
-                        index!==24
-                    ) 
-                    ||
-                    (
-                        index===0 &&
-                        m.time>this.MsgReadTime[this.getPath].timeBefore
-                    )
-                ) {
-                    return true;
-
-                } else {
-                    return false;
-
-                }
-            } catch(e) {
-                console.log("Content :: checkShowNewMessageLine : エラー", e);
-                return false;
-            }
-
-        },
-
         //メッセージの時間を出力する関数
         printDate(time) {
             let t = new Date(); //時間取得用
@@ -936,21 +917,7 @@ export default {
             </div>
 
             <!-- 新着メッセージ線 -->
-            <span
-                v-if="checkShowNewMessageLine(m, index)"
-                class="d-flex align-center"
-            >
-                <v-divider color="white" thickness="2px" class="flex-shrink-1"></v-divider>
-                <v-chip style="margin:-1em;" variant="flat" elevation="6" class="pa-2 flex-grow-1 flex-shrink-0" size="x-small">
-                    <span v-if="index===0">
-                        過去に更に新着があります...
-                    </span>
-                    <span v-else>
-                        ここから新着
-                    </span>
-                </v-chip>
-                <v-divider color="white" thickness="2px" class="flex-shrink-1"></v-divider>
-            </span>
+            <ContentNewMessageLine :m="m" :index="index" :MsgDBActive="MsgDBActive" />
 
         </div>
 
