@@ -3,6 +3,7 @@
 import { getSocket, backendURI } from '../../data/socket';
 import { dataChannel } from '../../data/dataChannel';
 import { dataUser } from '../../data/dataUserinfo';
+import ContentMessageRender from './ContentMessageRender.vue';
 import Userpage from "../Userpage.vue";
 
 const socket = getSocket();
@@ -10,7 +11,7 @@ const { ChannelIndex } = dataChannel();
 
 export default {
 
-    components: { Userpage },
+    components: { Userpage, ContentMessageRender },
     props: ["channelid", "channelInfo"],
 
     setup() {
@@ -353,9 +354,9 @@ export default {
                     
                     <!-- 概要欄 -->
                     <div v-if="!descriptionEditing">
-                        <p>
-                        {{ descriptionText }}
-                        </p>
+                        <ContentMessageRender
+                            :content="descriptionText"
+                        />
                         <p class="text-caption" style="margin-top:-2px; color:#555">ダブルクリックで編集</p>
                     </div>
 
