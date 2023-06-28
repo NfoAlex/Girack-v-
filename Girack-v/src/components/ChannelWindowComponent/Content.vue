@@ -592,7 +592,7 @@ export default {
                     }
                 }
                 catch(e) {
-                    console.log("Content :: setScrollState : 既読状態の更新できなかった");
+                    console.log("Content :: setScrollState : 既読状態の更新できなかった", e);
                     this.MsgReadTime[this.getPath] = {
                         //既読時間を最新メッセージの時間に設定
                         time: 0,
