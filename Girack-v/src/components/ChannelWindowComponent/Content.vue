@@ -672,6 +672,27 @@ export default {
 
         },
 
+        //新着メッセージ線を表示するかどうか
+        checkShowNewMessageLine(m) {
+            try {
+                if ( 
+                    m.time===MsgReadTime[getPath].timeBefore ||
+                    (
+                        index===0 &&
+                        m.time>MsgReadTime[getPath].timeBefore
+                    ) &&
+                    MsgReadTime[getPath].timeBefore!==''
+                ) {
+                    return true;
+
+                } else {
+                    return false;
+
+                }
+            } catch(e) { return false; }
+
+        },
+
         //メッセージの時間を出力する関数
         printDate(time) {
             let t = new Date(); //時間取得用
@@ -751,7 +772,7 @@ export default {
 
             <!-- 新着メッセージ線 -->
             <span
-                v-if="m.time===MsgReadTime[getPath].timeBefore||(index===0&&m.time>MsgReadTime[getPath].timeBefore)&&MsgReadTime[getPath].timeBefore!==''"
+                v-if="checkShowNewMessageLine(m)"
                 class="d-flex align-center"
             >
                 <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
