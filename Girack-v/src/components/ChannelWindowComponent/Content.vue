@@ -639,7 +639,7 @@ export default {
             //escなら
             if ( event.key === "Escape" ) {
                 //比較用既読状態を初期化
-                this.MsgReadTime[this.getPath].timeBefore = "";
+                this.MsgReadTime[this.getPath].timeBefore = this.MsgReadTime[this.getPath].time;
 
             }
 
