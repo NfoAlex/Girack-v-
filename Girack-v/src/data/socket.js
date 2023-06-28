@@ -101,7 +101,7 @@ socket.on("messageReceive", (msg) => {
             if ( ContentChecking.includes("@" + dataUser().myUserinfo.value.username) ) {
                 dataMsg().MsgReadTime.value[msg.channelid] = {
                     time: msg.time, //最後に読んだ時間
-                    timeBefore: "",
+                    timeBefore:msg.time,
                     new: 1,
                     mention: 0
                 };
@@ -109,7 +109,7 @@ socket.on("messageReceive", (msg) => {
             } else {
                 dataMsg().MsgReadTime.value[msg.channelid] = {
                     time: msg.time, //最後に読んだ時間
-                    timeBefore: String((Number(dataMsg().MsgReadTime.value[msg.channelid].timeBefore)+1)),
+                    timeBefore: msg.time,
                     new: 0,
                     mention: 1
                 };
