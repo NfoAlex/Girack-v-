@@ -554,6 +554,7 @@ export default {
                         this.MsgReadTime[this.getPath] = {
                             //既読時間を最新メッセージの時間に設定
                             time: latestTime,
+                            timeBefore: latestTime,
                             //新着メッセージ数を0に
                             new: 0,
                             //メンション数を0に
