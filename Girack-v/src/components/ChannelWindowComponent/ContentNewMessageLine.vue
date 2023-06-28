@@ -22,15 +22,14 @@ export default {
         //新着メッセージ線を表示するかどうか
         checkShowNewMessageLine(m, index) {
             try {
-                console.log("Content :: checkShowNewMessageLine : MsgDBActive.length->", this.MsgDBActive.length, index);
                 if (
-                    (
+                    ( //メッセージの表示分最後でなく、比較時間がメッセージと同じならtrue
                         m.time===this.MsgReadTime[this.getPath].timeBefore &&
                         this.MsgDBActive.length-1!==index&&
                         index!==24
                     ) 
                     ||
-                    (
+                    ( //表示している最初のメッセージで、時間が比較時間より後ならとにかくtrue
                         index===0 &&
                         m.time>this.MsgReadTime[this.getPath].timeBefore
                     )
