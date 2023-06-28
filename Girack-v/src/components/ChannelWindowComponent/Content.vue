@@ -180,6 +180,7 @@ export default {
         //ウィンドウのフォーカス監視開始
         window.addEventListener("focus", this.setFocusStateTrue);
         window.addEventListener("blur", this.setFocusStateFalse);
+        window.addEventListener("keydown", this.initMsgReadTimeBefore);
 
     },
 
@@ -192,6 +193,7 @@ export default {
         //ウィンドウのフォーカス監視を取りやめ
         window.removeEventListener("focus", this.setFocusStateTrue);
         window.removeEventListener("blur", this.setFocusStateFalse);
+        window.removeEventListener("keydown", this.initMsgReadTimeBefore);
 
     },
 
