@@ -17,7 +17,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from '../config.js';
 
-export const CLIENT_VERSION = "alpha_20230626";
+export const CLIENT_VERSION = "alpha_20230628";
 
 const {
     CONFIG_SYNC,
@@ -675,12 +675,6 @@ socket.on("authResult", (dat) => {
 
         }
 
-        //メッセージ履歴の取得
-        for ( let cid in dataUser().myUserinfo.value.channelJoined ) {
-            getMessage(dataUser().myUserinfo.value.channelJoined[cid], 40); //リクエスト送信する
-
-        }
-
     }
 
 });
@@ -714,12 +708,22 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
                 //引っ張ってきた既読状態から削除
                 delete userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]];
 
+            } else { //チャンネル参加してるなら
+                //比較用時間に今の既読時間を設定
+                userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].timeBefore = userSaveMsgReadState.msgReadState[keysUserSaveMsgReadState[index]].time;
+
             }
 
         }
 
         //既読状態を適用
         dataMsg().MsgReadTime.value = userSaveMsgReadState.msgReadState;
+
+    }
+
+    //メッセージ履歴の取得
+    for ( let cid in dataUser().myUserinfo.value.channelJoined ) {
+        getMessage(dataUser().myUserinfo.value.channelJoined[cid], 40); //リクエスト送信する
 
     }
 
