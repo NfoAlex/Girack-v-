@@ -152,12 +152,6 @@ export default {
                     return 0; //エラーでも止める
                 }
 
-                let latestTime = this.MsgDB[newPage.params.id].slice(-1)[0].time;
-                this.MsgReadTime[this.getPath] = {
-                    time: latestTime,
-                    new: 0, //新着メッセージ数を0に
-                    mention: 0
-                };
                 this.scrollIt(); //スクロールする
 
             });
