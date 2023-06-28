@@ -662,15 +662,15 @@ export default {
         },
 
         //新着メッセージ線を表示するかどうか
-        checkShowNewMessageLine(m) {
+        checkShowNewMessageLine(m, index) {
             try {
                 if ( 
-                    m.time===MsgReadTime[getPath].timeBefore ||
+                    m.time===this.MsgReadTime[this.getPath].timeBefore ||
                     (
                         index===0 &&
-                        m.time>MsgReadTime[getPath].timeBefore
+                        m.time>this.MsgReadTime[this.getPath].timeBefore
                     ) &&
-                    MsgReadTime[getPath].timeBefore!==''
+                    this.MsgReadTime[this.getPath].timeBefore!==''
                 ) {
                     return true;
 
@@ -761,7 +761,7 @@ export default {
 
             <!-- 新着メッセージ線 -->
             <span
-                v-if="checkShowNewMessageLine(m)"
+                v-if="checkShowNewMessageLine(m, index)"
                 class="d-flex align-center"
             >
                 <v-divider color="white" thickness="2px" class="flex-shrink-1 flex-grow-0"></v-divider>
