@@ -43,6 +43,8 @@ export default {
         return {
             uri: backendURI, //バックエンドのURI
             StateFocus: true, //Girackにフォーカスしているかどうか
+            StateScrolled: false, //スクロールし切った状態かどうか
+            StateScrolling: false, //スクロールしている際中かどうか
             msgDisplayNum: 25,
 
             //watchする時のハンドラ用
@@ -550,6 +552,15 @@ export default {
         //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
+            
+            //スクロールしている際中と設定
+            this.StateScrolling = true;
+            //0.1秒後にしてないと設定
+            setTimeout(() => {
+                this.StateScrolling = false;
+                //console.log("Content :: setScrollState : スクロール状態無効にするわ", this.StateScrolling);
+            
+            },500);
 
             //一番下かどうか調べる？
             if (
@@ -558,7 +569,7 @@ export default {
                 channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
-                console.log("Content :: setScrollState : スクロールされた", this.MsgReadTime[this.getPath]);
+                //console.log("Content :: setScrollState : スクロールされた", this.MsgReadTime[this.getPath]);
 
                 //プレビューあるいは新着メッセージが来ているのなら
                 if ( this.channelInfo.previewmode ) return -1;
@@ -582,7 +593,6 @@ export default {
                             //メンション数を0に
                             mention: 0
                         };
-                        console.log("Content :: setScrollState : 既読状態変更したな");
 
                         //既読状態をサーバーへ同期させる
                         socket.emit("updateUserSaveMsgReadState", {
@@ -791,8 +801,9 @@ export default {
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
-                        open-on-hover
-                        open-delay="50"
+                        :open-on-hover="!StateScrolling"
+                        :disabled="StateScrolling"
+                        open-delay="100"
                         close-delay="1"
                         transition="none"
                         :close-on-content-click="false"
@@ -803,8 +814,8 @@ export default {
                         <template v-slot:activator="{ props }">
                             <div 
                                 v-bind="props"
-                                @mouseover="mouseOverMsg(m.messageid, 'on')"
-                                @mouseleave="mouseOverMsg(m.messageid, 'off')"
+                                @mouseover="!StateScrolling?mouseOverMsg(m.messageid, 'on'):null"
+                                @mouseleave="!StateScrolling?mouseOverMsg(m.messageid, 'off'):null"
                             >
                                 <!-- 過去を表示していたら -->
                                 <span v-if="index===(msgDisplayNum-25)&&msgDisplayNum!==25" class="d-flex align-center">
