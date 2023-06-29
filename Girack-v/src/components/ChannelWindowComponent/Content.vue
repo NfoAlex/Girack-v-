@@ -558,7 +558,7 @@ export default {
             //0.1秒後にしてないと設定
             setTimeout(() => {
                 this.StateScrolling = false;
-                console.log("Content :: setScrollState : スクロール状態無効にするわ", this.StateScrolling);
+                //console.log("Content :: setScrollState : スクロール状態無効にするわ", this.StateScrolling);
             
             },500);
 
@@ -569,7 +569,7 @@ export default {
                 channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
-                console.log("Content :: setScrollState : スクロールされた", this.MsgReadTime[this.getPath]);
+                //console.log("Content :: setScrollState : スクロールされた", this.MsgReadTime[this.getPath]);
 
                 //プレビューあるいは新着メッセージが来ているのなら
                 if ( this.channelInfo.previewmode ) return -1;
@@ -593,7 +593,6 @@ export default {
                             //メンション数を0に
                             mention: 0
                         };
-                        console.log("Content :: setScrollState : 既読状態変更したな");
 
                         //既読状態をサーバーへ同期させる
                         socket.emit("updateUserSaveMsgReadState", {
