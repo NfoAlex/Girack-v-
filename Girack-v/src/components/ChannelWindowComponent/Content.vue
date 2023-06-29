@@ -43,6 +43,8 @@ export default {
         return {
             uri: backendURI, //バックエンドのURI
             StateFocus: true, //Girackにフォーカスしているかどうか
+            StateScrolled: false, //スクロールし切った状態かどうか
+            StateScrolling: false, //スクロールしている際中かどうか
             msgDisplayNum: 25,
 
             //watchする時のハンドラ用
@@ -550,6 +552,13 @@ export default {
         //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
+            
+            this.StateScrolling = true;
+            setTimeout(() => {
+                this.StateScrolling = false;
+                console.log("Content :: setScrollState : スクロール状態無効にするわ", this.StateScrolling);
+            
+            },100);
 
             //一番下かどうか調べる？
             if (
@@ -791,8 +800,8 @@ export default {
                     <!-- メッセージ本体 -->
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
-                        open-on-hover
-                        open-delay="50"
+                        :open-on-hover="!StateScrolling"
+                        open-delay="10"
                         close-delay="1"
                         transition="none"
                         :close-on-content-click="false"
