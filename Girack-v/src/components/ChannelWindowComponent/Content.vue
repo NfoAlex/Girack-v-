@@ -553,12 +553,14 @@ export default {
         setScrollState(s) { //s => bool
             const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
             
+            //スクロールしている際中と設定
             this.StateScrolling = true;
+            //0.1秒後にしてないと設定
             setTimeout(() => {
                 this.StateScrolling = false;
                 console.log("Content :: setScrollState : スクロール状態無効にするわ", this.StateScrolling);
             
-            },100);
+            },500);
 
             //一番下かどうか調べる？
             if (
