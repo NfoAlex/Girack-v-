@@ -802,7 +802,7 @@ export default {
                       <!-- v-menuはホバーメニュー用 -->
                     <v-menu
                         :open-on-hover="!StateScrolling"
-                        open-delay="10"
+                        open-delay="100"
                         close-delay="1"
                         transition="none"
                         :close-on-content-click="false"
