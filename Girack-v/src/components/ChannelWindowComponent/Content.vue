@@ -814,8 +814,8 @@ export default {
                         <template v-slot:activator="{ props }">
                             <div 
                                 v-bind="props"
-                                @mouseover="mouseOverMsg(m.messageid, 'on')"
-                                @mouseleave="mouseOverMsg(m.messageid, 'off')"
+                                @mouseover="!StateScrolling?mouseOverMsg(m.messageid, 'on'):null"
+                                @mouseleave="!StateScrolling?mouseOverMsg(m.messageid, 'off'):null"
                             >
                                 <!-- 過去を表示していたら -->
                                 <span v-if="index===(msgDisplayNum-25)&&msgDisplayNum!==25" class="d-flex align-center">
