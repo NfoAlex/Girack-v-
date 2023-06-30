@@ -573,7 +573,7 @@ export default {
                             id="inp"
                             ref="inp"
                             :disabled="!checkCanITalk()"
-                            :placeholder="channelInfo.channelname + 'へ送信'"
+                            :placeholder="checkCanITalk()?channelInfo.channelname+'へ送信':channelInfo.channelname+' : ここでは会話できません'"
                             @keydown.enter.prevent="EnterTrigger"
                             @keydown.@="AtsignTrigger"
                             @keydown.up="changeMentionUserSelect"
