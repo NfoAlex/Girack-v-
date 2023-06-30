@@ -75,6 +75,14 @@ export default {
                 }
 
             }
+        },
+
+        //チャンネルで話せるロールが更新された時チャンネル設定を更新
+        channelCanTalk: {
+            handler() {
+                this.updateChannel();
+
+            }
         }
     },
 
