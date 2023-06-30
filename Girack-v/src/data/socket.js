@@ -483,6 +483,7 @@ socket.on("infoUser", (dat) => {
 
     }
 
+    //自分のユーザーデータを更新
     dataUser().myUserinfo.value = {
         username: dat.username,
         userid: dataUser().myUserinfo.value.userid, //ユーザーID

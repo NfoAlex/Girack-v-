@@ -223,7 +223,7 @@ export default {
         if ( this.myUserinfo.role === "Admin" ) { //Adminなら全員選べるようにする
             this.roleList = ["Admin", "Moderator", "Member"];
 
-        } else if ( this.myUserinfo.role === "Moderator" ) { //ModeratorならModerator以下
+        } else if ( this.myUserinfo.role === "Moderator" && this.channelInfo.canTalk !== "Admin" ) { //Moderatorかつロール制限がAdminじゃないならModerator以下
             this.roleList = ["Moderator", "Member"];
 
         } else {
