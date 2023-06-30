@@ -43,7 +43,6 @@ export default {
         return {
             uri: backendURI, //バックエンドのURI
             StateFocus: true, //Girackにフォーカスしているかどうか
-            StateScrolled: false, //スクロールし切った状態かどうか
             StateScrolling: false, //スクロールしている際中かどうか
             msgDisplayNum: 25,
 
@@ -557,7 +556,7 @@ export default {
             //0.1秒後にしてないと設定
             setTimeout(() => {
                 this.StateScrolling = false;
-                
+
             },500);
 
             //一番下かどうか調べる？
