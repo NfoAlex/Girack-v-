@@ -394,6 +394,21 @@ export default {
 
         },
 
+        //自分が話せるチャンネルかどうか判別
+        checkCanITalk() {
+            //それぞれ条件判別
+              //Adminなら問答無用で話せる
+            if ( this.myUserinfo.role === "Admin" ) return true;
+              //Moderatorで話せるロールがAdmin指定でないなら話せる
+            if ( this.myUserinfo.role === "Moderator" && this.channelInfo.canTalk !== "Admin" ) return true;
+              //Memberで話せるロールがMemberなら話せる
+            if ( this.myUserinfo.role === "Member" && this.channelInfo.canTalk === "memebr" ) return true;
+
+            //どれにも当てはまらないなら話せない
+            return false;
+
+        },
+
         //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
         humanFileSize(bytes, si=false, dp=1) {
             const thresh = si ? 1000 : 1024;
@@ -557,6 +572,7 @@ export default {
                         <v-textarea
                             id="inp"
                             ref="inp"
+                            :disabled="!checkCanITalk()"
                             :placeholder="channelInfo.channelname + 'へ送信'"
                             @keydown.enter.prevent="EnterTrigger"
                             @keydown.@="AtsignTrigger"
