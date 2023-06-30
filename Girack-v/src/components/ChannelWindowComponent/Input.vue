@@ -307,6 +307,12 @@ export default {
 
         },
 
+        //クリップボードからのファイル受け取り
+        fileInputFromClipboard(event) {
+            const files = event.target.files;
+            
+        },
+
         //メンション用のユーザー検索時にクリックされたらユーザーIDを自動入力する部分
         replaceQueryWithName(targetUserid) {
             console.log("Input :: replaceQueryWithName : 置き換えるユーザーid->", targetUserid, " 文字位置->", this.searchMode.searchStartingAt);
@@ -578,6 +584,7 @@ export default {
                             @keydown.@="AtsignTrigger"
                             @keydown.up="changeMentionUserSelect"
                             @keydown.down="changeMentionUserSelect"
+                            @paste="fileInputFromClipboard"
                             variant="solo"
                             max-rows="5"
                             clearable
