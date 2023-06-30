@@ -395,13 +395,17 @@ socket.on("infoChannel", (dat) => {
 
     }
 
-    //チャンネルデータを更新
-    dataChannel().ChannelIndex.value[dat.channelid] = {
-        channelname: dat.channelname, //チャンネル名
-        description: dat.description, //チャンネル概要
-        scope: dat.scope, //チャンネルの公開範囲
+    //チャンネルデータテンプレ
+    let channelDataTemplate = {
+        channelname: "channel", //チャンネル名
+        description: "desc", //チャンネル概要
+        scope: "public", //チャンネルの公開範囲
+        canTalk: "Member", //喋るのに必要なロール
         historyReadCount: 0 //すでに読んだ履歴の数
     };
+
+    //チャンネルデータをテンプレに上書きするように更新
+    dataChannel().ChannelIndex.value[dat.channelid] = {...channelDataTemplate, ...dat};
 
 });
 
