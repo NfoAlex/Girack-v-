@@ -114,6 +114,24 @@ export default {
                 <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
                     <span v-if="channelInfo.scope==='private'" class="mdi mdi-lock"></span>
                     <v-chip v-if="channelInfo.previewmode" class="ma-1">プレビュー</v-chip>
+                    <!-- 発言にロール制限があったら -->
+                    <span>
+                        <!-- ホバーしたら表示するテキスト -->
+                        <v-tooltip
+                            activator="parent"
+                            location="top center"
+                            origin="top center"
+                        >
+                            {{ channelInfo.canTalk }}以上が発言可能
+                        </v-tooltip>
+                        <v-icon
+                            v-if="channelInfo.canTalk!=='Member'"
+                            icon="mdi:mdi-circle-medium"
+                            :color="channelInfo.canTalk==='Admin'?'purple':'blue'"
+                            size="small"
+                        >
+                        </v-icon>
+                    </span>
                     {{ channelInfo.channelname }}
                 </div>
             </div>
