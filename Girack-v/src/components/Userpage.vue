@@ -256,7 +256,9 @@ export default {
 
             } else {
                 //表示用情報に自分の情報割り当て
-                this.targetinfo = dataUser().myUserinfo.value;
+                this.targetinfo = this.myUserinfo;
+                this.targetUserRole = this.myUserinfo.role;
+
                 //参加しているチャンネル情報すべて取得
                 for ( let index in this.targetinfo.channelJoined ) {
                     //チャンネル情報のリクエスト送信
