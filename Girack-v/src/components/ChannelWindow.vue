@@ -39,10 +39,10 @@ export default {
             //もしチャンネルリストにあるなら
             if ( this.ChannelIndex[this.$route.params.id] !== undefined ) {
                 console.log("ChannelWindow :: getChannelInfo : infos ->", this.ChannelIndex[this.$route.params.id]);
+
+                //チャンネルデータを返す
                 return {
-                    channelname: this.ChannelIndex[this.$route.params.id].channelname,
-                    description: this.ChannelIndex[this.$route.params.id].description,
-                    scope: this.ChannelIndex[this.$route.params.id].scope,
+                    ...this.ChannelIndex[this.$route.params.id],
                     previewmode: false,
                 };
 
@@ -57,6 +57,7 @@ export default {
                     channelname: this.PreviewChannelData.channelname,
                     description: this.PreviewChannelData.description,
                     scope: this.PreviewChannelData.scope,
+                    canTalk: this.PreviewChannelData.canTalk,
                     previewmode: true,
                 };
 

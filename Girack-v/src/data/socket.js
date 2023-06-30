@@ -17,7 +17,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from '../config.js';
 
-export const CLIENT_VERSION = "alpha_20230629";
+export const CLIENT_VERSION = "alpha_20230630";
 
 const {
     CONFIG_SYNC,
@@ -349,12 +349,19 @@ socket.on("infoChannel", (dat) => {
 
     console.log("socket :: infoChannel : ", dataChannel().PreviewChannelData.value.channelid, dat);
 
+    //チャンネルデータテンプレ
+    let channelDataTemplate = {
+        channelname: "channel", //チャンネル名
+        description: "desc", //チャンネル概要
+        scope: "public", //チャンネルの公開範囲
+        canTalk: "Member", //喋るのに必要なロール
+        historyReadCount: 0 //すでに読んだ履歴の数
+    };
+
     //もしプレビュー用のチャンネルの情報なら
     if ( dataChannel().PreviewChannelData.value.channelid === dat.channelid ) {
         console.log("socket :: infoChannel : preview用チャンネル情報取得 -> ", dat);
-        dataChannel().PreviewChannelData.value.channelname = dat.channelname;
-        dataChannel().PreviewChannelData.value.description = dat.description;
-        dataChannel().PreviewChannelData.value.scope = dat.scope;
+        dataChannel().PreviewChannelData.value = {...channelDataTemplate, ...dat};
 
         //チャンネルに渡す時にプレビュー中と処理する用
         dataChannel().PreviewChannelData.value.previewmode = true;
@@ -395,13 +402,8 @@ socket.on("infoChannel", (dat) => {
 
     }
 
-    //チャンネルデータを更新
-    dataChannel().ChannelIndex.value[dat.channelid] = {
-        channelname: dat.channelname, //チャンネル名
-        description: dat.description, //チャンネル概要
-        scope: dat.scope, //チャンネルの公開範囲
-        historyReadCount: 0 //すでに読んだ履歴の数
-    };
+    //チャンネルデータをテンプレに上書きするように更新
+    dataChannel().ChannelIndex.value[dat.channelid] = {...channelDataTemplate, ...dat};
 
 });
 
@@ -481,6 +483,7 @@ socket.on("infoUser", (dat) => {
 
     }
 
+    //自分のユーザーデータを更新
     dataUser().myUserinfo.value = {
         username: dat.username,
         userid: dataUser().myUserinfo.value.userid, //ユーザーID

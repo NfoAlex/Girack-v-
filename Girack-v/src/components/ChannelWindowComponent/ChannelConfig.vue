@@ -24,6 +24,7 @@ export default {
         return {
             channelTargetInfo: {}, //表示するチャンネル情報
             channelJoinedUser: [],
+            roleList: [], //しゃべれる人ロールリスト
 
             //ユーザーページ用
             userDialogShow: false,
@@ -39,7 +40,10 @@ export default {
             descriptionText: "...", //チャンネル概要
             channelnameEditing: false, //チャンネルの編集状態
             channelnameText: "...", //チャンネルの名前
+            
+            //チャンネルの公開範囲と話せるロール
             scopeIsPrivate: false, //チャンネルがプレイベートかどうか
+            channelCanTalk: "Member", //話せるロール
 
             tab: "", //タブの移動用
             imgsrc: backendURI + "/img/" //アイコン用
@@ -69,6 +73,14 @@ export default {
                     }
 
                 }
+
+            }
+        },
+
+        //チャンネルで話せるロールが更新された時チャンネル設定を更新
+        channelCanTalk: {
+            handler() {
+                this.updateChannel();
 
             }
         }
@@ -102,6 +114,7 @@ export default {
                 channelname: this.channelnameText,
                 description: this.descriptionText,
                 scope: (this.scopeIsPrivate?"private":"public"),
+                canTalk: this.channelCanTalk,
                 reqSender: {
                     userid: this.myUserinfo.userid,
                     sessionid: this.myUserinfo.sessionid
@@ -206,12 +219,24 @@ export default {
     },
 
     mounted() {
+        //自分のロールに合わせて選べるロールの範囲を設定
+        if ( this.myUserinfo.role === "Admin" ) { //Adminなら全員選べるようにする
+            this.roleList = ["Admin", "Moderator", "Member"];
+
+        } else if ( this.myUserinfo.role === "Moderator" && this.channelInfo.canTalk !== "Admin" ) { //Moderatorかつロール制限がAdminじゃないならModerator以下
+            this.roleList = ["Moderator", "Member"];
+
+        } else {
+            this.roleList = [];
+
+        }
+
         //表示するデータをチャンネル情報から取得して設定
         this.channelTargetInfo = this.channelInfo;
         this.channelnameText = this.channelInfo.channelname;
         this.descriptionText = this.channelInfo.description;
         this.scopeIsPrivate = (this.channelInfo.scope==="private"?true:false);
-
+        this.channelCanTalk = this.channelInfo.canTalk;
 
         //チャンネル参加者リストを受信
         socket.on("infoChannelJoinedUserList", this.SOCKETinfoChannelJoinedUserList);
@@ -448,6 +473,7 @@ export default {
                 </v-window-item>
 
                 <v-window-item value="manage" class="mx-auto" style="overflow-y:auto;">
+                    <!-- プラベチャンネルのスイッチ -->
                     <v-checkbox
                         v-model="scopeIsPrivate"
                         @click="scopeIsPrivate=!scopeIsPrivate;updateChannel();"
@@ -455,6 +481,17 @@ export default {
                         label="プライベートチャンネル"
                     >
                     </v-checkbox>
+
+                    <!-- ロール選択 -->
+                    <v-select
+                        class="mx-auto"
+                        v-model="channelCanTalk"
+                        style="width:100%; max-width:200px;"
+                        density="compact"
+                        label="話せるロール"
+                        :items="roleList"
+                    ></v-select>
+
                 </v-window-item>
 
             </v-window>
