@@ -522,7 +522,6 @@ export default {
             }
 
             if ( bool === "off" ) {
-                //console.log("mouseOverMsg :: OFF msgId -> " + msgId);
                 this.msgHovered = false;
                 this.msgIdHovering = null;
 
@@ -558,8 +557,7 @@ export default {
             //0.1秒後にしてないと設定
             setTimeout(() => {
                 this.StateScrolling = false;
-                //console.log("Content :: setScrollState : スクロール状態無効にするわ", this.StateScrolling);
-            
+                
             },500);
 
             //一番下かどうか調べる？
@@ -569,7 +567,6 @@ export default {
                 channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
             ) {
                 this.StateScrolled = true; //スクロールしきったと保存
-                //console.log("Content :: setScrollState : スクロールされた", this.MsgReadTime[this.getPath]);
 
                 //プレビューあるいは新着メッセージが来ているのなら
                 if ( this.channelInfo.previewmode ) return -1;
