@@ -402,7 +402,7 @@ export default {
               //Moderatorで話せるロールがAdmin指定でないなら話せる
             if ( this.myUserinfo.role === "Moderator" && this.channelInfo.canTalk !== "Admin" ) return true;
               //Memberで話せるロールがMemberなら話せる
-            if ( this.myUserinfo.role === "Member" && this.channelInfo.canTalk === "memebr" ) return true;
+            if ( this.myUserinfo.role === "Member" && this.channelInfo.canTalk === "Member" ) return true;
 
             //どれにも当てはまらないなら話せない
             return false;
