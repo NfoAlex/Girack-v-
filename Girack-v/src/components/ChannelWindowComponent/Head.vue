@@ -114,6 +114,7 @@ export default {
                 <div class="overflow-x-hidden text-truncate" style="font-size:3vh;" >
                     <span v-if="channelInfo.scope==='private'" class="mdi mdi-lock"></span>
                     <v-chip v-if="channelInfo.previewmode" class="ma-1">プレビュー</v-chip>
+                    
                     <!-- 発言にロール制限があったら -->
                     <span>
                         <!-- ホバーしたら表示するテキスト -->
@@ -132,6 +133,7 @@ export default {
                         >
                         </v-icon>
                     </span>
+
                     {{ channelInfo.channelname }}
                 </div>
             </div>
