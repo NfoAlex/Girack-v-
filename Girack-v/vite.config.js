@@ -12,6 +12,20 @@ export default defineConfig({
     }
   },
   server: {
-    host: ["192.168.0.134", "localhost"]
+    host: ["192.168.0.134", "localhost"],
+    proxy: {
+      "/socket.io": {
+        target: "ws://localhost:33333",
+        ws: true,
+      },
+      "/img": {
+        target: "http://localhost:33333/",
+        changeOrigin: true,
+      },
+      "/file": {
+        target: "http://localhost:33333/",
+        changeOrigin: true,
+      }
+    }
   }
 })
