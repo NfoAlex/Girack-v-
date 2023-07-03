@@ -28,7 +28,7 @@ const {
 } = getCONFIG(); //設定
 
 //クライアントがロードできたかどうかのフラグ
-export const CLIENT_LOADED = ref(false);
+export const CLIENT_FULL_LOADED = ref(false);
 
 //サーバー(インスタンス)情報
 export const Serverinfo = ref({
@@ -407,8 +407,11 @@ socket.on("infoChannel", (dat) => {
     historyReadCount: 0, //すでに読んだ履歴の数
   };
 
-  //もしプレビュー用のチャンネルの情報なら
-  if (dataChannel().PreviewChannelData.value.channelid === dat.channelid) {
+  //もしプレビュー用のチャンネル情報、かつロードができていたら
+  if (
+    dataChannel().PreviewChannelData.value.channelid === dat.channelid &&
+    CLIENT_FULL_LOADED
+  ) {
     console.log("socket :: infoChannel : preview用チャンネル情報取得 -> ", dat);
     dataChannel().PreviewChannelData.value = { ...channelDataTemplate, ...dat };
 
@@ -452,6 +455,11 @@ socket.on("infoChannel", (dat) => {
     ...channelDataTemplate,
     ...dat,
   };
+
+  //自分の参加チャンネル数と受け取ったチャンネルデータの数が一致したらロードできたと設定
+  if (dataUser().myUserinfo.value.channelJoined.length === Object.keys(dataChannel().ChannelIndex.value).length) {
+    CLIENT_FULL_LOADED.value = true;
+  }
 });
 
 //プロフィール情報の受け取り
@@ -555,9 +563,6 @@ socket.on("infoUser", (dat) => {
     sessionid: dataUser().myUserinfo.value.sessionid, //セッションIDはそのまま
     channelJoined: dat.channelJoined, //参加しているチャンネル
   };
-
-  //クライアントのロードいけたと設定
-  CLIENT_LOADED.value = true;
 });
 
 //メッセージの履歴受け取り

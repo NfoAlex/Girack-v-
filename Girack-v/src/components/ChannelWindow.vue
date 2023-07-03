@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getMessage, CLIENT_LOADED } from "../data/socket.js";
+import { getSocket, getMessage, CLIENT_FULL_LOADED } from "../data/socket.js";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
@@ -14,7 +14,7 @@ export default {
     const { myUserinfo } = dataUser();
     const { MsgDB } = dataMsg();
     const { ChannelIndex, PreviewChannelData } = dataChannel();
-    return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData, CLIENT_LOADED };
+    return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData, CLIENT_FULL_LOADED };
   },
 
   components: {
@@ -109,7 +109,7 @@ export default {
 </script>
 
 <template>
-  <div v-if="CLIENT_LOADED" style="height: 100vh" class="d-flex mb-2 flex-column">
+  <div v-if="CLIENT_FULL_LOADED" style="height: 100vh" class="d-flex mb-2 flex-column">
     <div class="w head flex-grow-0 flex-shrink-0">
       <Head :channelInfo="getChannelInfo" />
     </div>
