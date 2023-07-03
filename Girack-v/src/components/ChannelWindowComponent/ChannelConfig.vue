@@ -505,6 +505,7 @@ export default {
           <!-- プラベチャンネルのスイッチ -->
           <v-checkbox
             v-model="scopeIsPrivate"
+            :disabled="myUserinfo.role==='Member'"
             @click="
               scopeIsPrivate = !scopeIsPrivate;
               updateChannel();
@@ -518,6 +519,7 @@ export default {
           <v-select
             class="mx-auto"
             v-model="channelCanTalk"
+            :disabled="myUserinfo.role==='Member'"
             style="width: 100%; max-width: 200px"
             density="compact"
             label="話せるロール"
