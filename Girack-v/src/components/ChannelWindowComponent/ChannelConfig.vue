@@ -1,5 +1,5 @@
 <script>
-import { getSocket, backendURI } from "../../data/socket";
+import { getSocket, backendURI, Serverinfo } from "../../data/socket";
 import { dataUser } from "../../data/dataUserinfo";
 import ContentMessageRender from "./ContentMessageRender.vue";
 import Userpage from "../Userpage.vue";
@@ -12,7 +12,7 @@ export default {
 
   setup() {
     const { myUserinfo } = dataUser();
-    return { myUserinfo };
+    return { myUserinfo, Serverinfo };
   },
 
   data() {
@@ -505,7 +505,7 @@ export default {
           <!-- プラベチャンネルのスイッチ -->
           <v-checkbox
             v-model="scopeIsPrivate"
-            :disabled="myUserinfo.role==='Member'"
+            :disabled="myUserinfo.role==='Member'&&!Serverinfo.config.CHANNEL.CHANNEL_PRIVATIZE_AVAILABLEFORMEMBER"
             @click="
               scopeIsPrivate = !scopeIsPrivate;
               updateChannel();
