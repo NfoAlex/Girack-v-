@@ -88,13 +88,6 @@ export default {
       );
     },
   },
-
-  mounted() {
-    //読み込みエラー対策(参加しているチャンネルリストに今のチャンネルがあるかどうか)
-    if (this.myUserinfo.channelJoined.includes(this.getPath) === -1) {
-      location.pathname = "/";
-    }
-  },
 };
 </script>
 
