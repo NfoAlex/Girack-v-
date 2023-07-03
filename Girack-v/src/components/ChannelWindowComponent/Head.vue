@@ -139,7 +139,7 @@ export default {
               {{ channelInfo.canTalk }}以上が発言可能
             </v-tooltip>
             <v-icon
-              v-if="channelInfo.canTalk !== 'Member'"
+              v-if="channelInfo.canTalk !== 'Member' && channelInfo.canTalk !== undefined"
               icon="mdi:mdi-circle-medium"
               :color="channelInfo.canTalk === 'Admin' ? 'purple' : 'blue'"
               size="small"
