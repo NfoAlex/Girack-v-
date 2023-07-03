@@ -63,6 +63,19 @@ export default {
       },
     },
 
+    //検索画面を開いたときに空クエリーで一度検索
+    userSearchShow: {
+      handler() {
+        socket.emit("searchUserDynamic", {
+          query: "",
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid,
+          },
+        });
+      }
+    },
+
     //チャンネルで話せるロールが更新された時チャンネル設定を更新
     channelCanTalk: {
       handler() {
