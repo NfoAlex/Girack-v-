@@ -298,7 +298,7 @@ export default {
                 </v-card>
 
                 <!-- プロフィール -->
-                <p class="text-h6 ma-2">チャンネル関連</p>
+                <p class="text-h6 ma-2">プロフィール関連</p>
                 <v-card color="cardInner" class="rounded-lg cardInner pa-2">
                     <p class="ma-2">プロフィールアイコンの最大サイズ</p>
                     <v-text-field
