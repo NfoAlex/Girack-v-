@@ -51,22 +51,29 @@ export default {
       handler() {
         //もし検索画面を開いてるなら
         if (this.userSearchShow) {
-          //検索文字列が１文字以上なら
-          if (this.userSearchQuery.length >= 1) {
-            //検索クエリーを送信
-            socket.emit("searchUserDynamic", {
-              query: this.userSearchQuery,
-              reqSender: {
-                userid: this.myUserinfo.userid,
-                sessionid: this.myUserinfo.sessionid,
-              },
-            });
-          } else {
-            //もし文字列が０文字なら
-            this.userSearchResult = []; //検索結果を初期化
-          }
+          //検索クエリーを送信
+          socket.emit("searchUserDynamic", {
+            query: this.userSearchQuery,
+            reqSender: {
+              userid: this.myUserinfo.userid,
+              sessionid: this.myUserinfo.sessionid,
+            },
+          });
         }
       },
+    },
+
+    //検索画面を開いたときに空クエリーで一度検索
+    userSearchShow: {
+      handler() {
+        socket.emit("searchUserDynamic", {
+          query: "",
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid,
+          },
+        });
+      }
     },
 
     //チャンネルで話せるロールが更新された時チャンネル設定を更新
