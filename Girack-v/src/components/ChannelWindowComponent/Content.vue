@@ -662,15 +662,12 @@ export default {
     //このウィンドウにいるかどうかを設定する
     setFocusStateTrue() {
       this.StateFocus = true;
-      console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
-
       this.setScrollState(); //既読チェック
     },
 
     //このウィンドウにいるかどうかを設定する
     setFocusStateFalse() {
       this.StateFocus = false;
-      console.log("Content :: setFocusState : フォーカス->", this.StateFocus);
     },
 
     //escキーで新着線を非表示にする
