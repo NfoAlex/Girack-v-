@@ -23,15 +23,6 @@ export default {
     Input
   },
 
-  data() {
-    return {
-      w: "w",
-      head: "head",
-      content: "content",
-      input: "input",
-    };
-  },
-
   computed: {
     //チャンネル情報を返す
     getChannelInfo() {

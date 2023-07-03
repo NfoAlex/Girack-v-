@@ -93,6 +93,7 @@ export default {
         channelname: this.channelList[channelid].name,
         description: this.channelList[channelid].description,
         scope: this.channelList[channelid].scope,
+        canTalk: this.channelList[channelid].canTalk,
         previewmode: true,
       };
 

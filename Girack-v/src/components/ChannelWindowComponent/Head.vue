@@ -88,13 +88,6 @@ export default {
       );
     },
   },
-
-  mounted() {
-    //読み込みエラー対策(参加しているチャンネルリストに今のチャンネルがあるかどうか)
-    if (this.myUserinfo.channelJoined.includes(this.getPath) === -1) {
-      location.pathname = "/";
-    }
-  },
 };
 </script>
 
@@ -139,7 +132,7 @@ export default {
               {{ channelInfo.canTalk }}以上が発言可能
             </v-tooltip>
             <v-icon
-              v-if="channelInfo.canTalk !== 'Member'"
+              v-if="channelInfo.canTalk !== 'Member' && channelInfo.canTalk !== undefined"
               icon="mdi:mdi-circle-medium"
               :color="channelInfo.canTalk === 'Admin' ? 'purple' : 'blue'"
               size="small"
