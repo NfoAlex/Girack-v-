@@ -180,7 +180,12 @@ export default {
 
       <!-- メニューボタン/プロフィールカード -->
       <RouterLink to="/menu/profile">
-        <v-card class="mx-auto rounded-lg" color="secondary" width="80%">
+        <v-card
+          class="mx-auto rounded-lg"
+          color="secondary"
+          width="80%"
+          v-ripple
+        >
           <!-- 三点メニューアイコン -->
           <div style="width: fit-content" class="mx-auto">
             <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
@@ -225,6 +230,7 @@ export default {
           style="font-size: calc(6px + 0.65vb); margin-top: 8px; width: 80%"
           class="mx-auto pa-2 rounded-lg d-flex justify-center align-center"
           color="#222"
+          v-ripple
         >
           <v-icon
             v-if="sessionOnlineNum >= 2"
