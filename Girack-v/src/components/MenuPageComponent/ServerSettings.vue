@@ -295,6 +295,11 @@ export default {
                         label="Memberロールのユーザーでもチャンネル削除をできるようにする"
                     >
                     </v-switch>
+                    <v-switch
+                        v-model="displaySettings.config.CHANNEL.CHANNEL_PRIVATIZE_AVAILABLEFORMEMBER"
+                        label="Memberロールのユーザーでもチャンネルをプライベートに設定できるようにする"
+                    >
+                    </v-switch>
                 </v-card>
 
                 <!-- プロフィール -->
