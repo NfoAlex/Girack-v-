@@ -40,6 +40,18 @@ export default {
 
       return userid;
     },
+
+    //システムメッセージを返す
+    renderMessageTemplate(term, i) {
+      try {
+        //テンプレから取得、なければそれはそれでテンプレを返す
+        if (this.MessageTemplate[term][i] !== undefined) {
+          return this.MessageTemplate[term][i];
+        } else {
+          return "によって設定が更新されました"
+        }
+      } catch(e) {return " : 設定更新"}
+    }
   },
 };
 </script>
@@ -58,7 +70,7 @@ export default {
         }}
       </span>
       <span>
-        {{ MessageTemplate[content.term][0] }}
+        {{ renderMessageTemplate(content.term, 0) }}
       </span>
       <!-- もし別のユーザーが招待あるいはキックされたのなら表示 -->
       <span v-if="content.targetUser !== ''">
@@ -67,7 +79,7 @@ export default {
             ? UserIndex[content.targetUser].username
             : needUserIndex(content.targetUser)
         }}
-        {{ MessageTemplate[content.term][1] }}
+        {{ renderMessageTemplate(content.term, 1) }}
       </span>
     </span>
   </span>
