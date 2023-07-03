@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { getCONFIG } from "../../config.js";
 import { getSocket, setCookie } from "../../data/socket.js";
@@ -6,331 +7,341 @@ import { dataUser } from "../../data/dataUserinfo";
 const socket = getSocket();
 
 export default {
+  setup() {
+    //設定をインポート
+    const { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC } = getCONFIG();
+    const { myUserinfo } = dataUser();
+    return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
+  },
 
-    setup() {
-        //設定をインポート
-        const { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC } = getCONFIG();
-        const { myUserinfo } = dataUser();
-        return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
-        
+  data() {
+    return {
+      txt: "---",
+      gameStarted: false,
+      gameEnd: false,
+      targetNum: 0,
+      guessNum: 0,
+      input: "",
+      record: 0,
+
+      //表示するページ
+      configPage: "sync",
+
+      //同期をオンにするとき用のダイアログ
+      configSyncTogglingDialog: false,
+
+      //復元用
+      CurrentConfig: {},
+
+      //joke
+      dataConsent: true,
+    };
+  },
+
+  watch: {
+    //設定の変更を検知してCookieへ書き込み
+    CONFIG_SYNC: {
+      handler() {
+        if (this.CONFIG_SYNC) this.configSyncTogglingDialog = true;
+        setCookie("configSync", this.CONFIG_SYNC);
+      },
+    },
+    CONFIG_NOTIFICATION: {
+      handler() {
+        setCookie("configNotify", JSON.stringify(this.CONFIG_NOTIFICATION), 7);
+        if (this.CONFIG_SYNC) this.updateConfigWithServer();
+      },
+      deep: true,
+    },
+    CONFIG_DISPLAY: {
+      handler() {
+        setCookie("configDisplay", JSON.stringify(this.CONFIG_DISPLAY), 7);
+        if (this.CONFIG_SYNC) this.updateConfigWithServer();
+      },
+      deep: true,
+    },
+  },
+
+  methods: {
+    start() {
+      this.gameEnd = false;
+      this.targetNum = parseInt(Math.random() * 100);
+      this.gameStarted = true;
+      this.input = "";
+      this.guessNum = 0;
+      this.txt = "";
+      this.record = 0;
     },
 
-    data() {
-        return {
-            txt: "---",
-            gameStarted: false,
-            gameEnd: false,
-            targetNum: 0,
-            guessNum: 0,
-            input: "",
-            record: 0,
+    guess() {
+      this.record++;
+      this.guessNum = parseInt(this.input);
 
-            //表示するページ
-            configPage: "sync",
+      if (this.guessNum === this.targetNum) {
+        this.txt = "正解!";
+        this.gameStarted = false;
+        this.gameEnd = true;
+        return;
+      }
 
-            //同期をオンにするとき用のダイアログ
-            configSyncTogglingDialog: false,
+      if (this.guessNum > this.targetNum) {
+        this.txt = "Lower...";
+      }
 
-            //復元用
-            CurrentConfig: {},
-
-            //joke
-            dataConsent: true
-        }
+      if (this.guessNum < this.targetNum) {
+        this.txt = "Higher!";
+      }
     },
 
-    watch: {
-        //設定の変更を検知してCookieへ書き込み
-        CONFIG_SYNC: {
-            handler() {
-                if ( this.CONFIG_SYNC ) this.configSyncTogglingDialog = true;
-                setCookie("configSync", this.CONFIG_SYNC);
-
-            }
+    //サーバー上の設定情報を更新
+    updateConfigWithServer() {
+      //データ送信
+      socket.emit("updateUserSaveConfig", {
+        config: {
+          CONFIG_DISPLAY: this.CONFIG_DISPLAY,
+          CONFIG_NOTIFICATION: this.CONFIG_NOTIFICATION,
+          LIST_NOTIFICATION_MUTE_CHANNEL: this.LIST_NOTIFICATION_MUTE_CHANNEL,
         },
-        CONFIG_NOTIFICATION: {
-            handler() {
-                setCookie("configNotify", JSON.stringify(this.CONFIG_NOTIFICATION), 7);
-                if ( this.CONFIG_SYNC ) this.updateConfigWithServer();
-
-            },
-            deep:true
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
         },
-        CONFIG_DISPLAY: {
-            handler() {
-                setCookie("configDisplay", JSON.stringify(this.CONFIG_DISPLAY), 7);
-                if ( this.CONFIG_SYNC ) this.updateConfigWithServer();
+      });
 
-            },
-            deep: true
-        }
+      //ダイアログを非表示
+      this.configSyncTogglingDialog = false;
     },
 
-    methods: {
-        start() {
-            this.gameEnd = false;
-            this.targetNum = parseInt(Math.random()*100);
-            this.gameStarted = true;
-            this.input = "";
-            this.guessNum = 0;
-            this.txt = "";
-            this.record = 0;
-
+    //サーバー上の自分の設定情報を取得して適用
+    bringConfigFromServer() {
+      //サーバー上の自分の設定を取得
+      socket.emit("getUserSaveConfig", {
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
         },
+      });
 
-        guess() {
-            this.record++;
-            this.guessNum = parseInt(this.input);
+      //ダイアログを非表示
+      this.configSyncTogglingDialog = false;
+    },
 
-            if ( this.guessNum === this.targetNum ) {
-                this.txt = "正解!"
-                this.gameStarted = false;
-                this.gameEnd = true;
-                return;
+    //ブラウザの通知設定を確認
+    checkNotificationPermission() {
+      //もし通知が許可されていたらtrueを返す
+      if (Notification.permission === "granted") {
+        return true;
+      } else {
+        return false;
+      }
+    },
 
-            }
-
-            if ( this.guessNum > this.targetNum ) {
-                this.txt = "Lower..."
-
-            }
-
-            if ( this.guessNum < this.targetNum ) {
-                this.txt = "Higher!"
-
-            }
-
-        },
-
-        //サーバー上の設定情報を更新
-        updateConfigWithServer() {
-            //データ送信
-            socket.emit("updateUserSaveConfig", {
-                config: {
-                    CONFIG_DISPLAY: this.CONFIG_DISPLAY,
-                    CONFIG_NOTIFICATION: this.CONFIG_NOTIFICATION,
-                    LIST_NOTIFICATION_MUTE_CHANNEL: this.LIST_NOTIFICATION_MUTE_CHANNEL
-                },
-                reqSender: {
-                    userid: this.myUserinfo.userid,
-                    sessionid: this.myUserinfo.sessionid
-                }
-            });
-
-            //ダイアログを非表示
-            this.configSyncTogglingDialog=false;
-
-        },
-
-        //サーバー上の自分の設定情報を取得して適用
-        bringConfigFromServer() {
-            //サーバー上の自分の設定を取得
-            socket.emit("getUserSaveConfig", {
-                reqSender: {
-                    userid: this.myUserinfo.userid,
-                    sessionid: this.myUserinfo.sessionid
-                }
-            });
-
-            //ダイアログを非表示
-            this.configSyncTogglingDialog=false;
-
-        },
-
-        //ブラウザの通知設定を確認
-        checkNotificationPermission() {
-            //もし通知が許可されていたらtrueを返す
-            if ( Notification.permission === "granted" ) {
-                return true;
-
-            } else {
-                return false;
-
-            }
-
-        },
-
-        //通知テスト
-        doNotificationDemo() {
-            new Notification("通知だな", {
-                body: "これは通知テストです。",
-                icon: "http://" + location.host + "/icon_crop.png"
-            });
-
-        }
-    }
-}
-
+    //通知テスト
+    doNotificationDemo() {
+      new Notification("通知だな", {
+        body: "これは通知テストです。",
+        icon: "http://" + location.host + "/icon_crop.png",
+      });
+    },
+  },
+};
 </script>
 
 <template>
+  <div>
+    <!-- 同期設定をオンにするときの確認ダイアログ -->
+    <v-dialog
+      v-model="configSyncTogglingDialog"
+      style="min-width: 650px; width: 50vh"
+    >
+      <v-card class="pa-6 rounded-lg">
+        <v-card-title> 同期の確認 </v-card-title>
 
-    <div>
+        <p class="text-subtitle-1">
+          設定を同期するようにします。
+          現在の設定をサーバー上の設定へ上書きしますか？
+        </p>
 
-        <!-- 同期設定をオンにするときの確認ダイアログ -->
-        <v-dialog
-            v-model="configSyncTogglingDialog"
-            style="min-width:650px; width:50vh;"
-        >
-            <v-card class="pa-6 rounded-lg">
-                <v-card-title>
-                    同期の確認
-                </v-card-title>
-                
-                <p class="text-subtitle-1">
-                    設定を同期するようにします。
-                    現在の設定をサーバー上の設定へ上書きしますか？
-                </p>
+        <v-divider class=""></v-divider>
 
-                <v-divider class=""></v-divider>
+        <div class="ma-3">
+          <v-btn
+            @click="updateConfigWithServer"
+            block
+            color="error"
+            class="ma-1 rounded-lg"
+          >
+            はい。上書きしてください。
+          </v-btn>
+          <v-btn
+            @click="bringConfigFromServer"
+            block
+            color="grey"
+            class="ma-1 rounded-lg"
+          >
+            いいえ。サーバー上の設定を取得して適用してください。
+          </v-btn>
+          <v-btn
+            @click="
+              CONFIG_SYNC = false;
+              configSyncTogglingDialog = false;
+            "
+            block
+            class="ma-1 rounded-lg"
+          >
+            やっぱキャンセル
+          </v-btn>
+        </div>
+      </v-card>
+    </v-dialog>
 
-                <div class="ma-3">
-                    
-                    <v-btn @click="updateConfigWithServer" block color="error" class="ma-1 rounded-lg">
-                        はい。上書きしてください。
-                    </v-btn>
-                    <v-btn @click="bringConfigFromServer" block color="grey" class="ma-1 rounded-lg">
-                        いいえ。サーバー上の設定を取得して適用してください。
-                    </v-btn>
-                    <v-btn @click="CONFIG_SYNC=false;configSyncTogglingDialog=false;" block class="ma-1 rounded-lg">
-                        やっぱキャンセル
-                    </v-btn>
-                    
-                </div>
+    <div
+      style="height: 100vh; width: 90%"
+      class="d-flex align-center flex-column"
+    >
+      <div style="width: 90%; padding-top: 3%" class="text-left align-center">
+        <p class="text-left" style="font-size: min(4vh, 36px)">設定</p>
+      </div>
+
+      <!-- 設定ページボタン -->
+      <div style="width: 100%; padding-top: 8px">
+        <div class="d-flex align-center">
+          <div
+            class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll"
+            style="
+              width: 95%;
+              height: 7.5vh;
+              padding: 0 16px;
+              overflow-x: auto;
+              overflow-y: hidden;
+            "
+          >
+            <v-btn
+              @click="configPage = 'sync'"
+              size="large"
+              :color="configPage === 'sync' ? 'secondary' : 'grey'"
+              class="ma-1 rounded-pill"
+            >
+              同期
+            </v-btn>
+
+            <v-btn
+              @click="configPage = 'notification'"
+              size="large"
+              :color="configPage === 'notification' ? 'secondary' : 'grey'"
+              class="ma-1 rounded-pill"
+            >
+              通知
+            </v-btn>
+
+            <v-btn
+              @click="configPage = 'interface'"
+              size="large"
+              :color="configPage === 'interface' ? 'secondary' : 'grey'"
+              class="ma-1 rounded-pill"
+            >
+              表示
+            </v-btn>
+
+            <v-btn
+              @click="configPage = 'privacy'"
+              size="large"
+              :color="configPage === 'privacy' ? 'secondary' : 'grey'"
+              class="ma-1 rounded-pill"
+            >
+              プライバシー
+            </v-btn>
+
+            <v-btn
+              @click="configPage = 'game'"
+              size="large"
+              :color="configPage === 'game' ? 'secondary' : 'grey'"
+              class="ma-1 rounded-pill"
+            >
+              ?
+            </v-btn>
+          </div>
+        </div>
+      </div>
+
+      <!-- 設定ページメイン -->
+      <div class="scroll" style="width: 100%; overflow-y: auto">
+        <div class="mx-auto" style="margin: 1% 0">
+          <!-- 設定の同期 -->
+          <v-card
+            v-if="configPage === ('sync' || '')"
+            class="mx-auto rounded-lg card"
+          >
+            <p class="text-h6 ma-2">同期</p>
+            <p><v-icon>mdi:mdi-sync</v-icon>設定データの同期状態</p>
+            <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
+              <v-switch v-model="CONFIG_SYNC" label="設定を同期する"></v-switch>
+              <p class="text-subtitle-2">
+                同期をオンにする際にサーバー上の設定データと同期するか確認されます。
+              </p>
             </v-card>
-        </v-dialog>
+          </v-card>
 
-        <div style="height:100vh; width:90%;" class="d-flex align-center flex-column">
-            <div style="width:90%; padding-top:3%" class="text-left align-center">
-                <p class="text-left" style="font-size:min(4vh,36px)">
-                    設定
-                </p>
-            </div>
+          <br />
 
-            <!-- 設定ページボタン -->
-            <div style="width:100%; padding-top:8px;">
-                <div class="d-flex align-center">
-                    <div class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll" style="width:95%; height:7.5vh; padding:0 16px; overflow-x:auto; overflow-y:hidden">
-                        <v-btn
-                            @click="configPage='sync'"
-                            size="large"
-                            :color="configPage==='sync'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            同期
-                        </v-btn>
+          <!-- 通知 -->
+          <v-card
+            v-if="configPage === 'notification'"
+            class="mx-auto rounded-lg card"
+          >
+            <p class="text-h6 ma-2">通知</p>
 
-                        <v-btn
-                            @click="configPage='notification'"
-                            size="large"
-                            :color="configPage==='notification'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            通知
-                        </v-btn>
+            <p><v-icon>mdi:mdi-bell-cog</v-icon>許可状況</p>
+            <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
+              <p v-if="checkNotificationPermission()">
+                <v-icon color="success">mdi:mdi-check-bold</v-icon>
+                通知いけるな
+              </p>
+              <p v-else>
+                <v-icon color="yellow">mdi:mdi-help</v-icon>
+                現在の設定だと通知が利用できません。
+                ブラウザ設定からこのインスタンスURLによる通知を許可してください。
+              </p>
+              <v-btn
+                class="ma-2"
+                size="small"
+                color="grey"
+                @click="doNotificationDemo"
+              >
+                通知テスト
+              </v-btn>
+            </v-card>
 
-                        <v-btn
-                            @click="configPage='interface'"
-                            size="large"
-                            :color="configPage==='interface'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            表示
-                        </v-btn>
+            <br />
 
-                        <v-btn
-                            @click="configPage='privacy'"
-                            size="large"
-                            :color="configPage==='privacy'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            プライバシー
-                        </v-btn>
+            <p><v-icon>mdi:mdi-bell</v-icon>通知する内容</p>
+            <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
+              <v-checkbox
+                v-model="CONFIG_NOTIFICATION.ENABLE"
+                label="通知を有効化"
+                density="compact"
+              >
+              </v-checkbox>
+              <v-checkbox
+                :disabled="!CONFIG_NOTIFICATION.ENABLE"
+                v-model="CONFIG_NOTIFICATION.NOTIFY_ALL"
+                label="すべてのメッセージを通知する"
+                density="compact"
+              >
+              </v-checkbox>
+              <v-checkbox
+                :disabled="!CONFIG_NOTIFICATION.ENABLE"
+                v-model="CONFIG_NOTIFICATION.NOTIFY_MENTION"
+                label="メンションで通知する"
+                density="compact"
+                messages="'@<あなたの名前>'が含まれると通知"
+              >
+              </v-checkbox>
+            </v-card>
 
-                        <v-btn
-                            @click="configPage='game'"
-                            size="large"
-                            :color="configPage==='game'?'secondary':'grey'"
-                            class="ma-1 rounded-pill"
-                        >
-                            ?
-                        </v-btn>
-                    </div>
-                </div>
-            </div>
+            <br />
 
-            <!-- 設定ページメイン -->
-            <div class="scroll" style="width:100%; overflow-y:auto">
-                <div class="mx-auto" style="margin: 1% 0;">
-                    <!-- 設定の同期 -->
-                    <v-card v-if="configPage===('sync'||'')" class="mx-auto rounded-lg card">
-
-                        <p class="text-h6 ma-2">同期</p>
-                        <p><v-icon>mdi:mdi-sync</v-icon>設定データの同期状態</p>
-                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
-                            <v-switch
-                                v-model="CONFIG_SYNC"
-                                label="設定を同期する"
-                            ></v-switch>
-                            <p class="text-subtitle-2">
-                                同期をオンにする際にサーバー上の設定データと同期するか確認されます。
-                            </p>
-                        </v-card>
-
-                    </v-card>
-
-                    <br>
-
-                    <!-- 通知 -->
-                    <v-card v-if="configPage===('notification')" class="mx-auto rounded-lg card">
-                        <p class="text-h6 ma-2">通知</p>
-
-                        <p><v-icon>mdi:mdi-bell-cog</v-icon>許可状況</p>
-                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
-                            <p v-if="checkNotificationPermission()">
-                                <v-icon color="success">mdi:mdi-check-bold</v-icon>
-                                通知いけるな
-                            </p>
-                            <p v-else>
-                                <v-icon color="yellow">mdi:mdi-help</v-icon>
-                                現在の設定だと通知が利用できません。
-                                ブラウザ設定からこのインスタンスURLによる通知を許可してください。
-                            </p>
-                            <v-btn class="ma-2" size="small" color="grey" @click="doNotificationDemo">
-                                通知テスト
-                            </v-btn>
-                        </v-card>
-
-                        <br>
-
-                        <p><v-icon>mdi:mdi-bell</v-icon>通知する内容</p>
-                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
-                            <v-checkbox
-                                v-model="CONFIG_NOTIFICATION.ENABLE"
-                                label="通知を有効化"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                            <v-checkbox
-                                :disabled="!CONFIG_NOTIFICATION.ENABLE"
-                                v-model="CONFIG_NOTIFICATION.NOTIFY_ALL"
-                                label="すべてのメッセージを通知する"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                            <v-checkbox
-                                :disabled="!CONFIG_NOTIFICATION.ENABLE"
-                                v-model="CONFIG_NOTIFICATION.NOTIFY_MENTION"
-                                label="メンションで通知する"
-                                density="compact"
-                                messages="'@<あなたの名前>'が含まれると通知"
-                            >
-                            </v-checkbox>
-                        </v-card>
-
-                        <br>
-
-                        <!-- 
+            <!-- 
                         <p><v-icon>mdi:mdi-tab</v-icon>タブ名に表示する通知</p>
                         <v-card class="cardInner pa-3 rounded-lg">
                             <v-checkbox
@@ -354,131 +365,130 @@ export default {
                             </p>
                         </v-card>
                         -->
+          </v-card>
 
-                    </v-card>
+          <br />
 
-                    <br>
+          <!-- UI表示 -->
+          <v-card
+            v-if="configPage === 'interface'"
+            class="mx-auto rounded-lg card"
+          >
+            <p class="text-h6 ma-2">表示</p>
 
-                    <!-- UI表示 -->
-                    <v-card v-if="configPage===('interface')" class="mx-auto rounded-lg card">
-                        <p class="text-h6 ma-2">表示</p>
+            <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
+            <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
+              <v-checkbox
+                v-model="CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
+                label="ユーザー名の横にロールを表示"
+                density="compact"
+              >
+              </v-checkbox>
+              <v-checkbox
+                v-model="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT"
+                label="日付線の時間を左に表示"
+                density="compact"
+              >
+              </v-checkbox>
+              <v-checkbox
+                v-model="CONFIG_DISPLAY.CONTENT_GOBOTTOMFAB_SHOW"
+                label="「下に行くボタン」を表示"
+                density="compact"
+              >
+              </v-checkbox>
+            </v-card>
 
-                        <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
-                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
-                            <v-checkbox
-                                v-model="CONFIG_DISPLAY.CONTENT_SHOW_ROLE"
-                                label="ユーザー名の横にロールを表示"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                            <v-checkbox
-                                v-model="CONFIG_DISPLAY.CONTENT_DATELINE_SHOWONLEFT"
-                                label="日付線の時間を左に表示"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                            <v-checkbox
-                                v-model="CONFIG_DISPLAY.CONTENT_GOBOTTOMFAB_SHOW"
-                                label="「下に行くボタン」を表示"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                        </v-card>
+            <br />
 
-                        <br>
+            <p><v-icon>mdi:mdi-format-list-group</v-icon>サイドバー</p>
+            <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
+              <p class="pa-1">チャンネルの表示順番</p>
+              <v-select
+                v-model="CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY"
+                :items="['alphabetical', 'id']"
+              >
+              </v-select>
+            </v-card>
+          </v-card>
 
-                        <p><v-icon>mdi:mdi-format-list-group</v-icon>サイドバー</p>
-                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
-                            <p class="pa-1">チャンネルの表示順番</p>
-                            <v-select
-                                v-model="CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY"
-                                :items="['alphabetical','id']"
-                            >
-                            </v-select>
-                        </v-card>
+          <br />
 
-                    </v-card>
+          <!-- プライバシー(ネタ) -->
+          <v-card
+            v-if="configPage === 'privacy'"
+            class="mx-auto rounded-lg card"
+          >
+            <p class="text-h6 ma-2">プライバシー</p>
 
-                    <br>
+            <p><v-icon>mdi:mdi-radar</v-icon>データ</p>
+            <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
+              <v-checkbox
+                v-model="dataConsent"
+                readonly
+                label="ブラウザ上のすべての動きのトラッキングを許可する"
+                density="compact"
+              >
+              </v-checkbox>
+            </v-card>
+          </v-card>
 
-                    <!-- プライバシー(ネタ) -->
-                    <v-card v-if="configPage===('privacy')" class="mx-auto rounded-lg card">
-                        <p class="text-h6 ma-2">プライバシー</p>
+          <br />
 
-                        <p><v-icon>mdi:mdi-radar</v-icon>データ</p>
-                        <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
-                            <v-checkbox
-                                v-model="dataConsent"
-                                readonly
-                                label="ブラウザ上のすべての動きのトラッキングを許可する"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                        </v-card>
+          <v-card
+            v-if="configPage === 'game'"
+            class="mx-auto text-center pa-5 rounded-lg"
+            style="width: 50%"
+          >
+            <p class="text-h5">{{ txt }}</p>
+            <p v-if="gameStarted" class="text-h3">{{ guessNum }}</p>
+            <v-btn @click="start" v-if="!gameStarted" color="primary">
+              ゲーム開始
+            </v-btn>
+            <br />
+            <v-text-field
+              v-if="gameStarted"
+              v-model="input"
+              class="mx-auto"
+              label="予想!"
+              style="width: 50%"
+              variant="solo"
+            ></v-text-field>
+            <v-btn @click="guess" class="ma-2" color="green" v-if="gameStarted">
+              GUESS...
+            </v-btn>
+            <v-btn @click="start" class="ma-2" color="blue" v-if="gameEnd">
+              もう１回やる
+            </v-btn>
 
-                    </v-card>
-                    
-                    <br>
-
-                    <v-card v-if="configPage===('game')" class="mx-auto text-center pa-5 rounded-lg" style="width:50%">
-                        <p class="text-h5">{{ txt }}</p>
-                        <p v-if="gameStarted" class="text-h3">{{ guessNum }}</p>
-                        <v-btn @click="start" v-if="!gameStarted" color="primary">
-                            ゲーム開始
-                        </v-btn>
-                        <br>
-                        <v-text-field
-                            v-if="gameStarted"
-                            v-model="input"
-                            class="mx-auto"
-                            label="予想!"
-                            style="width:50%"
-                            variant="solo"
-                        ></v-text-field>
-                        <v-btn @click="guess" class="ma-2" color="green" v-if="gameStarted">
-                            GUESS...
-                        </v-btn>
-                        <v-btn @click="start" class="ma-2" color="blue" v-if="gameEnd">
-                            もう１回やる
-                        </v-btn>
-
-                        <p>{{ record }}回目のトライ</p>
-                    </v-card>
-                </div>
-            </div>
-
+            <p>{{ record }}回目のトライ</p>
+          </v-card>
         </div>
-
+      </div>
     </div>
-
+  </div>
 </template>
 
 <style scoped>
-
-.cardInner
-{
-    margin: 8px 0;
+.cardInner {
+  margin: 8px 0;
 }
 
-.card
-{
-    width:95%;
-    margin-top: 16px;
+.card {
+  width: 95%;
+  margin-top: 16px;
 
-    padding: 16px;
+  padding: 16px;
 }
 
-.scroll::-webkit-scrollbar
-{
-    width: 5px;
+.scroll::-webkit-scrollbar {
+  width: 5px;
 }
 
 .scroll::-webkit-scrollbar-track {
-    background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .scroll::-webkit-scrollbar-thumb {
-    background-color: #666;
+  background-color: #666;
 }
-
 </style>

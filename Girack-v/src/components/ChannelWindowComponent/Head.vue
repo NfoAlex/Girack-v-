@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
@@ -26,6 +27,7 @@ export default {
   computed: {
     //今いるパス(チャンネルID)を取得するだけ
     getPath() {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.channelDialogId = this.$route.params.id;
       return this.$route.params.id;
     },
@@ -106,15 +108,18 @@ export default {
   />
 
   <!-- ヘッダの表示部分(メイン) -->
-  <div class="d-flex align-center justify-space-evenly" style="height: 100%">
+  <div
+    class="d-flex align-center justify-space-evenly"
+    style="max-width: 100%; height: 100%"
+  >
     <v-card
-      class="d-flex flex-column justify-start rounded-lg pa-2"
+      class="d-flex flex-column justify-start rounded-lg"
       color="#222"
-      style="margin: 0 16px; width: 100%"
+      style="margin: 0 16px; padding: 0 16px; width: 100%"
     >
       <!-- チャンネル情報(チャンネル名、概要) -->
       <div style="white-space: nowrap">
-        <div class="overflow-x-hidden text-truncate text-h4">
+        <div class="overflow-x-hidden text-truncate" style="font-size: 3vh">
           <span
             v-if="channelInfo.scope === 'private'"
             class="mdi mdi-lock"
