@@ -3,6 +3,9 @@ import { getSocket, getMessage } from "../data/socket.js";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
+import Head from "./ChannelWindowComponent/Head.vue";
+import Content from "./ChannelWindowComponent/Content.vue";
+import Input from "./ChannelWindowComponent/Input.vue";
 
 const socket = getSocket();
 
@@ -12,6 +15,12 @@ export default {
     const { MsgDB } = dataMsg();
     const { ChannelIndex, PreviewChannelData } = dataChannel();
     return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData };
+  },
+
+  components: {
+    Head,
+    Content,
+    Input
   },
 
   data() {
@@ -101,13 +110,12 @@ export default {
 
 <template>
   <div style="height: 100vh" class="d-flex mb-2 flex-column">
-    <div :class="[w, head]" class="flex-grow-0 flex-shrink-0">
+    <div class="w head flex-grow-0 flex-shrink-0">
       <Head :channelInfo="getChannelInfo" />
     </div>
     <div
-      :class="[w]"
       style="overflow-y: auto"
-      class="me-auto flex-grow-1 flex-shrink-1"
+      class="w me-auto flex-grow-1 flex-shrink-1"
     >
       <KeepAlive :max="10" :exclude="'Userpage'">
         <component
@@ -118,7 +126,7 @@ export default {
         />
       </KeepAlive>
     </div>
-    <div :class="[w]" class="input flex-grow-0 flex-shrink-1">
+    <div class="w input flex-grow-0 flex-shrink-1">
       <Input :channelInfo="getChannelInfo" />
     </div>
   </div>
