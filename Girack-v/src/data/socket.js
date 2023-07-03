@@ -6,6 +6,7 @@ import { io } from "socket.io-client"; //ウェブソケット通信用
 //Socket通信用
 export const backendURI = "http://" + location.hostname + ":33333";
 
+//Socket接続
 const socket = io(backendURI, {
   transports: ["websocket"],
   reconnection: true,
@@ -25,6 +26,9 @@ const {
   LIST_NOTIFICATION_MUTE_CHANNEL,
   CONFIG_DISPLAY,
 } = getCONFIG(); //設定
+
+//クライアントがロードできたかどうかのフラグ
+export const CLIENT_LOADED = ref(false);
 
 //サーバー(インスタンス)情報
 export const Serverinfo = ref({
@@ -551,6 +555,9 @@ socket.on("infoUser", (dat) => {
     sessionid: dataUser().myUserinfo.value.sessionid, //セッションIDはそのまま
     channelJoined: dat.channelJoined, //参加しているチャンネル
   };
+
+  //クライアントのロードいけたと設定
+  CLIENT_LOADED.value = true;
 });
 
 //メッセージの履歴受け取り
@@ -845,7 +852,7 @@ function loadDataFromCookie() {
       CONFIG_NOTIFICATION.value = COOKIE_ConfigNotify;
     }
   } catch (e) {
-    console.error(e);
+    console.error("socket :: loadDataFromCookie : エラー->", e);
   }
 
   //もし同期設定がそもそも空だったらとりあえず同期
