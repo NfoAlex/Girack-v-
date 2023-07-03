@@ -197,6 +197,9 @@ export default {
             this.scrollIt(); //スクロールする
             this.msgDisplayNum = 25; //メッセージの表示数の初期化
 
+            //プレビューならここで停止
+            if (this.channelInfo.previewmode) return 0;
+
             //比較用既読時間を更新
             let latestTime = this.MsgDBActive.slice(-1)[0].time;
             this.MsgReadTime[this.getPath].timeBefore = latestTime;
