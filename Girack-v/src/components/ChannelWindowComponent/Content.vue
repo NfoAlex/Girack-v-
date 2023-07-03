@@ -369,10 +369,13 @@ export default {
       //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
       //前
       try {
-        AvatarNeedToShowBefore = this.checkShowAvatar(
-          this.cropMessage[index - 1].userid,
-          index - 1
-        );
+        //そもそも一つ前のメッセージが存在するか確認
+        if (this.cropMessage[index - 1] !== undefined) {
+          AvatarNeedToShowBefore = this.checkShowAvatar(
+            this.cropMessage[index - 1].userid,
+            index - 1
+          );
+        }
       } catch (e) {
         console.error(e);
       }
@@ -386,10 +389,13 @@ export default {
 
       //次
       try {
-        AvatarNeedToShowNext = this.checkShowAvatar(
-          this.cropMessage[index + 1].userid,
-          index + 1
-        );
+        //そもそも次のメッセージが存在するか確認
+        if (this.cropMessage[index + 1] !== undefined) {
+          AvatarNeedToShowNext = this.checkShowAvatar(
+            this.cropMessage[index + 1].userid,
+            index + 1
+          );
+        }
       } catch (e) {
         console.error(e);
       }
@@ -399,8 +405,11 @@ export default {
 
       //一つ前と送信者が今のと同じならそう記録
       try {
-        if (this.cropMessage[index - 1].userid === userid) {
-          SameWithBefore = true;
+        //まず一つ前のメッセージがあるか確認
+        if (this.cropMessage[index - 1] !== undefined) {
+          if (this.cropMessage[index - 1].userid === userid) {
+            SameWithBefore = true;
+          }
         }
       } catch (e) {
         console.error(e);
@@ -408,8 +417,11 @@ export default {
 
       //次の送信者が今のと同じならそう記録
       try {
-        if (this.cropMessage[index + 1].userid === userid) {
-          SameWithNext = true;
+        //まず次のメッセージがあるか確認
+        if (this.cropMessage[index + 1] !== undefined) {
+          if (this.cropMessage[index + 1].userid === userid) {
+            SameWithNext = true;
+          }
         }
       } catch (e) {
         console.error(e);
@@ -475,6 +487,9 @@ export default {
     //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
     checkDateDifference(index) {
       try {
+        //もし一つ前のメッセージが存在しないなら処理を停止
+        if (this.cropMessage[index - 1] === undefined) return 0;
+
         //日を取得
         let msgDateBefore = parseInt(
           this.cropMessage[index - 1].time.slice(6, 8)
