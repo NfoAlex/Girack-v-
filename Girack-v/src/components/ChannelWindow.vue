@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getMessage } from "../data/socket.js";
+import { getSocket, getMessage, CLIENT_FULL_LOADED } from "../data/socket.js";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
@@ -14,7 +14,7 @@ export default {
     const { myUserinfo } = dataUser();
     const { MsgDB } = dataMsg();
     const { ChannelIndex, PreviewChannelData } = dataChannel();
-    return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData };
+    return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData, CLIENT_FULL_LOADED };
   },
 
   components: {
@@ -109,7 +109,7 @@ export default {
 </script>
 
 <template>
-  <div style="height: 100vh" class="d-flex mb-2 flex-column">
+  <div v-if="CLIENT_FULL_LOADED" style="height: 100vh" class="d-flex mb-2 flex-column">
     <div class="w head flex-grow-0 flex-shrink-0">
       <Head :channelInfo="getChannelInfo" />
     </div>
@@ -129,6 +129,12 @@ export default {
     <div class="w input flex-grow-0 flex-shrink-1">
       <Input :channelInfo="getChannelInfo" />
     </div>
+  </div>
+  <div v-else>
+      <v-card width="40vw" class="pa-4 mx-auto d-flex flex-column rounded-lg" style="margin-top:10vh;">
+        <v-img src="/loading.svg"></v-img>
+        <h3 class="text-center">Loading...</h3>
+      </v-card>
   </div>
 </template>
 
