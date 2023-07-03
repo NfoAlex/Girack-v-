@@ -40,6 +40,7 @@ export default {
         <v-card
           class="rounded-lg menu-card"
           :color="isThisActive('profile') ? 'primary' : 'secondary'"
+          v-ripple
         >
           <v-icon size="large" style="margin: 0 auto"> mdi:mdi-account </v-icon>
           <br />
@@ -50,6 +51,7 @@ export default {
         <v-card
           class="rounded-lg menu-card"
           :color="isThisActive('/settings') ? 'primary' : 'secondary'"
+          v-ripple
         >
           <v-icon size="large" style="margin: 0 auto"> mdi:mdi-cog </v-icon>
           <br />
@@ -60,6 +62,7 @@ export default {
         <v-card
           class="rounded-lg menu-card"
           :color="isThisActive('modlog') ? 'primary' : 'secondary'"
+          v-ripple
         >
           <v-icon size="large" style="margin: 0 auto">
             mdi:mdi-security
@@ -72,6 +75,7 @@ export default {
         <v-card
           class="rounded-lg menu-card"
           :color="isThisActive('members') ? 'primary' : 'secondary'"
+          v-ripple
         >
           <v-icon size="large" style="margin: 0 auto">
             mdi:mdi-account-group
@@ -85,6 +89,7 @@ export default {
           v-if="myUserinfo.role === 'Admin'"
           class="rounded-lg menu-card"
           :color="isThisActive('serversettings') ? 'primary' : 'secondary'"
+          v-ripple
         >
           <v-icon size="large" style="margin: 0 auto"> mdi:mdi-server </v-icon>
           <br />
@@ -95,6 +100,7 @@ export default {
         <v-card
           class="rounded-lg menu-card"
           :color="isThisActive('aboutgirack') ? 'primary' : 'secondary'"
+          v-ripple
         >
           <v-icon size="large" style="margin: 0 auto">
             mdi:mdi-information
