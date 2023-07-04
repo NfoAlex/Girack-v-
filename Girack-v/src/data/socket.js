@@ -736,7 +736,14 @@ socket.on("authResult", (dat) => {
     });
 
     //クッキーにセッションIDを設定、寿命は15日
-    setCookie("sessionid", dat.sessionid, 15);
+    setCookie(
+      "session",
+      JSON.stringify({
+        userid: dat.userid,
+        sessionid: dat.sessionid,
+      }),
+      15
+    );
     console.log("session id in cookie -> " + getCookie("sessionid"));
 
     //チャンネル情報の取得
