@@ -321,7 +321,7 @@ export default {
           this.$refs.fileInput.files[index].size < 1 ||
           this.$refs.fileInput.files[index].size === undefined
         ) {
-          console.log("アップロードエラー");
+          console.log("Input :: fileInput : ファイル入力エラー");
         } else {
           //ファイルデータ用配列へファイルデータを追加
           this.fileInputData.push({
@@ -342,7 +342,22 @@ export default {
       //格納されたデータ分処理
       for ( let index in files ) {
         const item = files[index]; //データ抽出
-        console.log("input :: fileInputFromClipboard : 単一データ->", item);
+        console.log("input :: fileInputFromClipboard : 単一データ->", typeof(item));
+
+        //もしデータがオブジェクト型ならファイルデータ配列へプッシュ
+        if (typeof(item) === "object") {
+          try {
+            //ファイルデータ用配列へファイルデータを追加
+            this.fileInputData.push({
+              name: files[index].name,
+              size: files[index].size,
+              type: files[index].type,
+              buffer: files[index],
+            });
+          } catch(e) {
+            console.log("Input :: fileInputFromClipboard : ファイル入力エラー");
+          }
+        }
       }
     },
 
