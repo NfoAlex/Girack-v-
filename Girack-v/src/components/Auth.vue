@@ -98,7 +98,7 @@ export default {
     socket.emit("getInfoServer"); //サーバーの情報を取得
 
     //クッキーに認証情報があるか確認
-    if (getCookie("sessionid") !== "") {
+    if (getCookie("session") !== "") {
       try {
         console.log("Auth :: mounted : クッキーで認証します");
         
@@ -115,7 +115,7 @@ export default {
           },
           CLIENT_VERSION
         );
-      } catch(e) {}
+      } catch(e) {console.log("Auth :: mounted : クッキー認証エラー->", e);}
     }
 
     //認証結果の受け取りと処理

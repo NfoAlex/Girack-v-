@@ -82,7 +82,7 @@ export default {
   methods: {
     //ログアウト処理
     logout() {
-      setCookie("sessionid", "", 0); //クッキー削除
+      setCookie("session", "", 0); //クッキー削除
       //ログアウトするとサーバーへ通達
       socket.emit("logout", {
         reqSender: {
