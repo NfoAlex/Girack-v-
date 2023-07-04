@@ -601,27 +601,44 @@ export default {
     </div>
 
     <!-- ファイルアップロードデータの表示 -->
-    <div style="margin:0 1.5%; margin-top:8px; overflow-x:scroll;">
-      <span class="d-flex align-center" style="width:fit-content;">
-        <v-card
-          color="secondary"
-          style="margin-right:8px; max-width:50%;"
-          class="pa-2 rounded-lg d-flex justify-space-between align-center"
-          v-for="(file, index) in fileInputData"
-          :key="index"
+    <div v-if="Object.keys(fileInputData).length>0" class="d-flex ma-1 align-center">
+      <span class="d-flex">
+        <v-btn
+          @click="fileInputData=[];"
+          class="rounded-lg"
+          icon="mdi:mdi-trash-can-outline"
+          size="x-small"
         >
-          <span class="text-truncate">{{ file.name }}</span>
-          <v-chip style="margin: 0 4px" size="small">
-            {{ humanFileSize(file.size, true) }}
-          </v-chip>
-          <v-icon
-            @click="fileInputData.splice(index, 1)"
-            style="margin-left: 4px"
-          >
-            mdi:mdi-close-circle
-          </v-icon>
+        </v-btn>
+        <v-card class="ma-1">
+          {{ Object.keys(fileInputData).length }}
         </v-card>
+        <v-divider class="ma-1" vertical>
+        </v-divider>
       </span>
+
+      <div class="fileList" style="margin:0 1.5%; overflow-x:auto;">
+        <span class="d-flex align-center" style="width:fit-content;">
+          <v-card
+            color="secondary"
+            style="margin-right:8px; max-width:50%;"
+            class="pa-2 rounded-lg d-flex justify-space-between align-center"
+            v-for="(file, index) in fileInputData"
+            :key="index"
+          >
+            <span class="text-truncate">{{ file.name }}</span>
+            <v-chip style="margin: 0 4px" size="small">
+              {{ humanFileSize(file.size, true) }}
+            </v-chip>
+            <v-icon
+              @click="fileInputData.splice(index, 1)"
+              style="margin-left: 4px"
+            >
+              mdi:mdi-close-circle
+            </v-icon>
+          </v-card>
+        </span>
+      </div>
     </div>
 
     <!-- ファイル受け取り部分(非表示) -->
@@ -746,3 +763,11 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+
+.fileList::-webkit-scrollbar{
+  display:none;
+}
+
+</style>
