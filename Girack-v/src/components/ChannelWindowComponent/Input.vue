@@ -601,25 +601,27 @@ export default {
     </div>
 
     <!-- ファイルアップロードデータの表示 -->
-    <div class="d-flex align-center" style="margin: 0 3%; margin-top: 8px">
-      <v-card
-        color="secondary"
-        style="margin-right: 8px"
-        class="pa-2 rounded-lg d-flex justify-space-between align-center"
-        v-for="(file, index) in fileInputData"
-        :key="index"
-      >
-        <span class="text-truncate">{{ file.name }}</span>
-        <v-chip style="margin: 0 4px" size="small">
-          {{ humanFileSize(file.size, true) }}
-        </v-chip>
-        <v-icon
-          @click="fileInputData.splice(index, 1)"
-          style="margin-left: 4px"
+    <div style="margin:0 1.5%; margin-top:8px; overflow-x:scroll;">
+      <span class="d-flex align-center" style="width:fit-content;">
+        <v-card
+          color="secondary"
+          style="margin-right:8px; max-width:50%;"
+          class="pa-2 rounded-lg d-flex justify-space-between align-center"
+          v-for="(file, index) in fileInputData"
+          :key="index"
         >
-          mdi:mdi-close-circle
-        </v-icon>
-      </v-card>
+          <span class="text-truncate">{{ file.name }}</span>
+          <v-chip style="margin: 0 4px" size="small">
+            {{ humanFileSize(file.size, true) }}
+          </v-chip>
+          <v-icon
+            @click="fileInputData.splice(index, 1)"
+            style="margin-left: 4px"
+          >
+            mdi:mdi-close-circle
+          </v-icon>
+        </v-card>
+      </span>
     </div>
 
     <!-- ファイル受け取り部分(非表示) -->
