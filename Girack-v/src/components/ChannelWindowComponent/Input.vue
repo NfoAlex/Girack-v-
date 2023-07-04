@@ -337,13 +337,10 @@ export default {
     //クリップボードからのファイル受け取り
     async fileInputFromClipboard(event) {
       const files = event.clipboardData.files; //イベントデータからクリップボードのファイル取得
-      console.log("input :: fileInputFromClipboard : 全データ->", files);
 
       //格納されたデータ分処理
       for ( let index in files ) {
         const item = files[index]; //データ抽出
-        console.log("input :: fileInputFromClipboard : 単一データ->", typeof(item));
-
         //もしデータがオブジェクト型ならファイルデータ配列へプッシュ
         if (typeof(item) === "object") {
           try {
