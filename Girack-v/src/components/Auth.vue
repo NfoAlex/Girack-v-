@@ -31,6 +31,7 @@ export default {
       //入力用
       usernameForRegister: "", //登録したいユーザー名
       invcodeForRegister: "", //登録に使う招待コード
+      unForAuth: "", //入力されたユーザー名
       pwForAuth: "", //入力されたパスワード
 
       //結果用
@@ -44,7 +45,7 @@ export default {
   methods: {
     //認証申請
     requestAuth() {
-      socket.emit("auth", this.pwForAuth, CLIENT_VERSION);
+      socket.emit("auth", {username:this.unForAuth, password:this.pwForAuth}, CLIENT_VERSION);
       this.success = false;
       this.error = false;
     },
@@ -98,8 +99,20 @@ export default {
 
     //クッキーに認証情報があるか確認
     if (getCookie("sessionid") !== "") {
-      console.log("Auth :: mounted : クッキーで認証します");
-      socket.emit("authByCookie", getCookie("sessionid"), CLIENT_VERSION);
+      try {
+        console.log("Auth :: mounted : クッキーで認証します");
+        let userid = JSON.parse(getCookie("session")).userid;
+        let sessionid = JSON.parse(getCookie("session")).userid;
+        //認証する
+        socket.emit(
+          "authByCookie",
+          {
+            userid: userid,
+            sessionid: sessionid
+          },
+          CLIENT_VERSION
+        );
+      } catch(e) {}
     }
 
     //認証結果の受け取りと処理
@@ -180,6 +193,19 @@ export default {
             type="error"
             text="🤔サーバーつながってなくない?"
           ></v-alert>
+
+          <p>ユーザー名</p>
+          <v-text-field
+            style="width: 100%"
+            type="text"
+            @keydown.enter="requestAuth"
+            v-model="unForAuth"
+            prepend-inner-icon="mdi:mdi-account"
+            clearable
+            :disabled="!Connected"
+          >
+            <v-icon icon="mdi:mid-account" />
+          </v-text-field>
 
           <p>パスワード</p>
           <v-text-field
