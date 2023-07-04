@@ -334,6 +334,18 @@ export default {
       }
     },
 
+    //クリップボードからのファイル受け取り
+    async fileInputFromClipboard(event) {
+      const files = event.clipboardData.files; //イベントデータからクリップボードのファイル取得
+      console.log("input :: fileInputFromClipboard : 全データ->", files);
+
+      //格納されたデータ分処理
+      for ( let index in files ) {
+        const item = files[index]; //データ抽出
+        console.log("input :: fileInputFromClipboard : 単一データ->", item);
+      }
+    },
+
     //メンション用のユーザー検索時にクリックされたらユーザーIDを自動入力する部分
     replaceQueryWithName(targetUserid) {
       console.log(
@@ -632,6 +644,7 @@ export default {
               @keydown.@="AtsignTrigger"
               @keydown.up="changeMentionUserSelect"
               @keydown.down="changeMentionUserSelect"
+              @paste="fileInputFromClipboard"
               variant="solo"
               max-rows="5"
               clearable
