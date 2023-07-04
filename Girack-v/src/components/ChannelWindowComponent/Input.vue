@@ -321,7 +321,7 @@ export default {
           this.$refs.fileInput.files[index].size < 1 ||
           this.$refs.fileInput.files[index].size === undefined
         ) {
-          console.log("アップロードエラー");
+          console.log("Input :: fileInput : ファイル入力エラー");
         } else {
           //ファイルデータ用配列へファイルデータを追加
           this.fileInputData.push({
@@ -330,6 +330,30 @@ export default {
             type: this.$refs.fileInput.files[index].type,
             buffer: this.$refs.fileInput.files[index],
           });
+        }
+      }
+    },
+
+    //クリップボードからのファイル受け取り
+    async fileInputFromClipboard(event) {
+      const files = event.clipboardData.files; //イベントデータからクリップボードのファイル取得
+
+      //格納されたデータ分処理
+      for ( let index in files ) {
+        const item = files[index]; //データ抽出
+        //もしデータがオブジェクト型ならファイルデータ配列へプッシュ
+        if (typeof(item) === "object") {
+          try {
+            //ファイルデータ用配列へファイルデータを追加
+            this.fileInputData.push({
+              name: files[index].name,
+              size: files[index].size,
+              type: files[index].type,
+              buffer: files[index],
+            });
+          } catch(e) {
+            console.log("Input :: fileInputFromClipboard : ファイル入力エラー");
+          }
         }
       }
     },
@@ -577,25 +601,44 @@ export default {
     </div>
 
     <!-- ファイルアップロードデータの表示 -->
-    <div class="d-flex align-center" style="margin: 0 3%; margin-top: 8px">
-      <v-card
-        color="secondary"
-        style="margin-right: 8px"
-        class="pa-2 rounded-lg d-flex justify-space-between align-center"
-        v-for="(file, index) in fileInputData"
-        :key="index"
-      >
-        <span class="text-truncate">{{ file.name }}</span>
-        <v-chip style="margin: 0 4px" size="small">
-          {{ humanFileSize(file.size, true) }}
-        </v-chip>
-        <v-icon
-          @click="fileInputData.splice(index, 1)"
-          style="margin-left: 4px"
+    <div v-if="Object.keys(fileInputData).length>0" class="d-flex ma-1 align-center">
+      <span class="d-flex">
+        <v-btn
+          @click="fileInputData=[];"
+          class="rounded-lg"
+          icon="mdi:mdi-trash-can-outline"
+          size="x-small"
         >
-          mdi:mdi-close-circle
-        </v-icon>
-      </v-card>
+        </v-btn>
+        <v-card class="ma-1">
+          {{ Object.keys(fileInputData).length }}
+        </v-card>
+        <v-divider class="ma-1" vertical>
+        </v-divider>
+      </span>
+
+      <div class="fileList" style="margin:0 1.5%; overflow-x:auto;">
+        <span class="d-flex align-center" style="width:fit-content;">
+          <v-card
+            color="secondary"
+            style="margin-right:8px; max-width:50%;"
+            class="pa-2 rounded-lg d-flex justify-space-between align-center"
+            v-for="(file, index) in fileInputData"
+            :key="index"
+          >
+            <span class="text-truncate">{{ file.name }}</span>
+            <v-chip style="margin: 0 4px" size="small">
+              {{ humanFileSize(file.size, true) }}
+            </v-chip>
+            <v-icon
+              @click="fileInputData.splice(index, 1)"
+              style="margin-left: 4px"
+            >
+              mdi:mdi-close-circle
+            </v-icon>
+          </v-card>
+        </span>
+      </div>
     </div>
 
     <!-- ファイル受け取り部分(非表示) -->
@@ -632,6 +675,7 @@ export default {
               @keydown.@="AtsignTrigger"
               @keydown.up="changeMentionUserSelect"
               @keydown.down="changeMentionUserSelect"
+              @paste="fileInputFromClipboard"
               variant="solo"
               max-rows="5"
               clearable
@@ -719,3 +763,11 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+
+.fileList::-webkit-scrollbar{
+  display:none;
+}
+
+</style>
