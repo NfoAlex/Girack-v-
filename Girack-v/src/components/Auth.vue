@@ -101,11 +101,14 @@ export default {
     if (getCookie("sessionid") !== "") {
       try {
         console.log("Auth :: mounted : クッキーで認証します");
+        
+        //クッキーからユーザー名とセッションIDを抽出
         let userid = JSON.parse(getCookie("session")).userid;
-        let sessionid = JSON.parse(getCookie("session")).userid;
+        let sessionid = JSON.parse(getCookie("session")).sessionid;
+
         //認証する
         socket.emit(
-          "authByCookie",
+          "authBySession",
           {
             userid: userid,
             sessionid: sessionid
