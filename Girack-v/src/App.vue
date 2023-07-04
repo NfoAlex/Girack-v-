@@ -72,6 +72,11 @@ export default {
         this.disconnected = false;
       }
     });
+
+    //通知の許可を予め取得
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
   },
 };
 </script>
