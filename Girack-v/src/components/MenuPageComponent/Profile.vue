@@ -386,7 +386,7 @@ export default {
     </v-dialog>
 
     <!-- プロフィールメイン画面 -->
-    <div style="margin-top: 5%; height: 90%">
+    <div style="height:100vh; overflow-y:auto; padding:3vh 0vh;">
       <v-container>
         <v-row no-gutters>
           <!-- アバター -->
@@ -486,6 +486,8 @@ export default {
               @click="changePasswordDialog = true"
               class="rounded-lg"
               color="secondary"
+              height="40vh"
+              style="font-size:3vmax;"
               block
             >
               クソデカパスワード変更ボタン
