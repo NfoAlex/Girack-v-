@@ -1,5 +1,7 @@
 <script>
-import { dataUser, getSocket } from '../../data/dataUserinfo';
+import { getSocket } from '../../data/socket.js';
+import { dataUser } from '../../data/dataUserinfo.js';
+
 const socket = getSocket();
 
 export default {
