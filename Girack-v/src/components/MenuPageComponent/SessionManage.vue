@@ -1,4 +1,37 @@
 <script>
+import { dataUser, getSocket } from '../../data/dataUserinfo';
+const socket = getSocket();
+
+export default {
+  setup() {
+    const { myUserinfo } = dataUser();
+
+    return { myUserinfo };
+  },
+
+  data() {
+    return {
+      currentSessionid: "", //今ログインしているセッションID
+    }
+  },
+
+  methods: {
+    //セッションデータの受け取り
+    SOCKETInfoSessions(dat) {
+      console.log("SessionManage :: SOCKETInfoSessions : 受け取ったセッションデータ->", dat);
+    }
+  },
+
+  mounted() {
+    //セッションデータの取得
+    socket.emit("getInfoSessions", {
+      reqSender: {
+        userid: this.myUserinfo.userid,
+        sessionid: this.myUserinfo.sessionid
+      }
+    })
+  }
+}
 
 </script>
 
@@ -17,6 +50,9 @@
           <v-expansion-panel-title>
             この日のログイン
           </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            データ
+          </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
