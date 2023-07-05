@@ -15,7 +15,12 @@ export default {
     return {
       currentSessionid: "", //今ログインしているセッションID
       sessionData: {},
-      sessionDataCurrent: {},
+      sessionDataCurrent: {
+        sessionName: "",
+        loggedinTime: "",
+        loggedinTimeFirst: ""
+      },
+      sessionDataCurrentAvailable: false,
 
       fullSessionidDisplayingMine: false,
       fullSessionidDisplayIndex: -1,
@@ -79,6 +84,7 @@ export default {
       try {
         this.sessionDataCurrent = structuredClone(dat[this.myUserinfo.sessionid]);
         delete this.sessionData[this.myUserinfo.sessionid];
+        this.sessionDataCurrentAvailable = true; //自分のデータあると設定
       } catch(e) {
         console.log("Sessionmanage :: SOCKETInfoSessions : 無理だわ", e);
       }
@@ -101,7 +107,8 @@ export default {
 
   unmounted() {
     //socketの多重防止
-    socket.off("InfoSessions", this.SOCKETInfoSessions);
+    socket.off("infoSessions", this.SOCKETInfoSessions);
+    this.sessionDataCurrentAvailable = false;
   }
 }
 
@@ -127,7 +134,7 @@ export default {
       
       <!--今アクティブなセッション -->
       <h3 class="ma-1">現在のセッション</h3>
-      <v-expansion-panels v-if="Object.keys(sessionDataCurrent).length!==0" style="width: 100%">
+      <v-expansion-panels v-if="sessionDataCurrentAvailable" style="width: 100%">
         <v-expansion-panel
           class="rounded-lg"
         >
