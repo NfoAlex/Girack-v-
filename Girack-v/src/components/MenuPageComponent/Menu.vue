@@ -47,6 +47,17 @@ export default {
           プロフィール
         </v-card>
       </RouterLink>
+      <RouterLink to="/menu/sessions">
+        <v-card
+          class="rounded-lg menu-card"
+          :color="isThisActive('sessions') ? 'primary' : 'secondary'"
+          v-ripple
+        >
+          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-folder-key </v-icon>
+          <br />
+          セッション管理
+        </v-card>
+      </RouterLink>
       <RouterLink to="/menu/settings">
         <v-card
           class="rounded-lg menu-card"

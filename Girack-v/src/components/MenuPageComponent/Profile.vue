@@ -85,6 +85,7 @@ export default {
       setCookie("session", "", 0); //クッキー削除
       //ログアウトするとサーバーへ通達
       socket.emit("logout", {
+        targetSessionid: this.myUserinfo.sessionid,
         reqSender: {
           userid: this.myUserinfo.userid,
           sessionid: this.myUserinfo.sessionid,

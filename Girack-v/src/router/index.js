@@ -27,6 +27,10 @@ const router = createRouter({
           component: () => import('../components/MenuPageComponent/Profile.vue'),
         },
         {
+          path: "sessions",
+          component: () => import('../components/MenuPageComponent/SessionManage.vue'),
+        },
+        {
           path: "settings",
           component: () => import('../components/MenuPageComponent/Settings.vue'),
         },
