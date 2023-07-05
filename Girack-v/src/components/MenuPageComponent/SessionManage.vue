@@ -34,6 +34,17 @@ export default {
       });
     },
 
+    //特定のセッションをログアウトさせる
+    logoutSession(sessionid) {
+      socket.emit("logout", {
+        targetSessionid: sessionid,
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid
+        }
+      });
+    },
+
     //セッションデータの受け取り
     SOCKETInfoSessions(dat) {
       console.log("SessionManage :: SOCKETInfoSessions : 受け取ったセッションデータ->", dat);
@@ -122,6 +133,15 @@ export default {
                   {{ session[1].loggedinTime.slice(0,4) }} /{{ session[1].loggedinTime.slice(4,6) }} / {{ session[1].loggedinTime.slice(6,8) }} {{ session[1].loggedinTime.slice(8,10) }}:{{ session[1].loggedinTime.slice(10,12) }}
                 </v-chip>
               </p>
+
+              <v-btn
+                @click="logoutSession(session[0])"
+                block
+                class="ma-2 mx-auto"
+                color="error"
+              >
+                ログアウトさせる
+              </v-btn>
             </v-expansion-panel-text>
 
           </v-expansion-panel>
