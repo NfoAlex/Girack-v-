@@ -118,6 +118,7 @@ export default {
       </div>
       
       <!--今アクティブなセッション -->
+      <h3 class="ma-1">現在のセッション</h3>
       <v-expansion-panels v-if="sessionData[myUserinfo.sessionid]!==undefined" style="width: 100%">
         <v-expansion-panel
           class="rounded-lg"
