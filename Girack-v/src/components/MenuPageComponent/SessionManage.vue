@@ -89,7 +89,7 @@ export default {
 
             <v-expansion-panel-title>
               <span class="text-truncate flex-grow-1">
-                とあるデバイス ( {{ session[0].slice(0,4) }}... )
+                とあるデバイス ( {{ session[0].slice(0,5) }}... )
               </span>
               <v-chip style="margin-right: 5%" size="small">
                 最終ログイン : {{ session[1].loggedinTime.slice(0,4) }} /{{ session[1].loggedinTime.slice(4,6) }} / {{ session[1].loggedinTime.slice(6,8) }} {{ session[1].loggedinTime.slice(8,10) }}:{{ session[1].loggedinTime.slice(10,12) }}
