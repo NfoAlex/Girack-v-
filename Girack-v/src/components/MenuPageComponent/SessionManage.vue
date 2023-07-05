@@ -21,6 +21,9 @@ export default {
   methods: {
     //セッションデータを取得しなおす
     refreshSessionData() {
+      //セッションデータJSONを初期化
+      this.sessionData = {};
+      
       //セッションデータの取得
       socket.emit("getInfoSessions", {
         reqSender: {
