@@ -145,7 +145,7 @@ export default {
               >
                 <template v-slot:append-inner>
                   <v-btn
-                    @click="updateSessionName(session[0])"
+                    @click="updateSessionName(session[0]);editingSessionnameIndex=-1"
                     class="rounded-lg ma-1"
                     size="x-small"
                     icon="mdi:mdi-check-bold"
