@@ -19,6 +19,17 @@ export default {
   },
 
   methods: {
+    //セッションデータを取得しなおす
+    refreshSessionData() {
+      //セッションデータの取得
+      socket.emit("getInfoSessions", {
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid
+        }
+      });
+    },
+
     //セッションデータの受け取り
     SOCKETInfoSessions(dat) {
       console.log("SessionManage :: SOCKETInfoSessions : 受け取ったセッションデータ->", dat);
@@ -49,10 +60,19 @@ export default {
 
 <template>
   <div style="width: 90%;">
-    <div style="padding-top: 3%; margin-bottom: 16px">
-      <p class="text-truncate" style="font-size: min(4vh, 36px)">
+    <div class="d-flex align-center" style="padding-top: 3%; margin-bottom: 16px">
+      <p class="text-truncate me-auto" style="font-size: min(4vh, 36px)">
       セッション管理
       </p>
+      <!-- 再取得ボタン -->
+      <v-btn
+        @click="refreshSessionData"
+        icon="mdi:mdi-refresh"
+        size="large"
+        class="rounded-lg"
+        color="primary"
+      >
+      </v-btn>
     </div>
     <div>
       <v-expansion-panels v-if="sessionData!=={}" style="width: 90%">
