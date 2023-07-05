@@ -59,41 +59,43 @@ export default {
 </script>
 
 <template>
-  <div style="width: 90%;">
-    <div class="d-flex align-center" style="padding-top: 3%; margin-bottom: 16px">
-      <p class="text-truncate me-auto" style="font-size: min(4vh, 36px)">
-      セッション管理
-      </p>
-      <!-- 再取得ボタン -->
-      <v-btn
-        @click="refreshSessionData"
-        icon="mdi:mdi-refresh"
-        size="large"
-        class="rounded-lg"
-        color="primary"
-      >
-      </v-btn>
-    </div>
-    <div>
-      <v-expansion-panels v-if="sessionData!=={}" style="width: 90%">
-        <v-expansion-panel
-        v-for="(session,index) in Object.entries(sessionData)"
+  <div>
+    <div class="mx-auto" style="width: 90%;">
+      <div class="d-flex align-center" style="padding-top: 3%; margin-bottom: 16px">
+        <p class="text-truncate me-auto" style="font-size: min(4vh, 36px)">
+        セッション管理
+        </p>
+        <!-- 再取得ボタン -->
+        <v-btn
+          @click="refreshSessionData"
+          icon="mdi:mdi-refresh"
+          size="large"
           class="rounded-lg"
+          color="primary"
         >
-          <v-expansion-panel-title>
-            とある日のログイン
-          </v-expansion-panel-title>
-          <v-expansion-panel-text>
-            <p>{{ session[0] }}</p>
-            <p>
-              最後のログイン : 
-              <v-chip>
-                {{ session[1].loggedinTime.slice(0,4) }} /{{ session[1].loggedinTime.slice(4,6) }} / {{ session[1].loggedinTime.slice(6,8) }} {{ session[1].loggedinTime.slice(8,10) }}:{{ session[1].loggedinTime.slice(10,12) }}
-              </v-chip>
-            </p>
-          </v-expansion-panel-text>
-        </v-expansion-panel>
-      </v-expansion-panels>
+        </v-btn>
+      </div>
+      <div class="mx-auto">
+        <v-expansion-panels v-if="sessionData!=={}" style="width: 100%">
+          <v-expansion-panel
+          v-for="(session,index) in Object.entries(sessionData)"
+            class="rounded-lg"
+          >
+            <v-expansion-panel-title>
+              とある日のログイン
+            </v-expansion-panel-title>
+            <v-expansion-panel-text>
+              <p>{{ session[0] }}</p>
+              <p>
+                最後のログイン : 
+                <v-chip>
+                  {{ session[1].loggedinTime.slice(0,4) }} /{{ session[1].loggedinTime.slice(4,6) }} / {{ session[1].loggedinTime.slice(6,8) }} {{ session[1].loggedinTime.slice(8,10) }}:{{ session[1].loggedinTime.slice(10,12) }}
+                </v-chip>
+              </p>
+            </v-expansion-panel-text>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </div>
     </div>
   </div>
 </template>
