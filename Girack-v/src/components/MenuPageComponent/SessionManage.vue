@@ -140,7 +140,7 @@ export default {
         >
           <v-expansion-panel-title color="grey">
             <span class="text-truncate flex-grow-1">
-              {{ sessionDataCurrent.sessionName }} ( {{ myUserinfo.sessionid.slice(0,5) }}... )
+              <b>{{ sessionDataCurrent.sessionName }}</b> ( {{ myUserinfo.sessionid.slice(0,5) }}... )
             </span>
             <v-chip style="margin-right: 5%" size="small">
               最終ログイン : {{ sessionDataCurrent.loggedinTime.slice(0,4) }}/{{ sessionDataCurrent.loggedinTime.slice(4,6) }}/{{ sessionDataCurrent.loggedinTime.slice(6,8) }} {{ sessionDataCurrent.loggedinTime.slice(8,10) }}:{{ sessionDataCurrent.loggedinTime.slice(10,12) }}
@@ -232,7 +232,7 @@ export default {
 
           <v-expansion-panel-title>
             <span class="text-truncate flex-grow-1">
-              {{ session[1].sessionName }} ( {{ session[0].slice(0,5) }}... )
+              <b>{{ session[1].sessionName }}</b> ( {{ session[0].slice(0,5) }}... )
             </span>
             <v-chip style="margin-right: 5%" size="small">
               最終ログイン : {{ session[1].loggedinTime.slice(0,4) }}/{{ session[1].loggedinTime.slice(4,6) }}/{{ session[1].loggedinTime.slice(6,8) }} {{ session[1].loggedinTime.slice(8,10) }}:{{ session[1].loggedinTime.slice(10,12) }}
