@@ -15,6 +15,7 @@ export default {
     return {
       currentSessionid: "", //今ログインしているセッションID
       sessionData: {},
+      fullSessionidDisplayIndex: -1,
     }
   },
 
@@ -23,7 +24,7 @@ export default {
     refreshSessionData() {
       //セッションデータJSONを初期化
       this.sessionData = {};
-      
+
       //セッションデータの取得
       socket.emit("getInfoSessions", {
         reqSender: {
@@ -81,9 +82,11 @@ export default {
       <div class="mx-auto">
         <v-expansion-panels v-if="sessionData!=={}" style="width: 100%">
           <v-expansion-panel
-          v-for="(session,index) in Object.entries(sessionData)"
+            v-for="(session,index) in Object.entries(sessionData)"
+            :key="index"
             class="rounded-lg"
           >
+
             <v-expansion-panel-title>
               <span class="text-truncate flex-grow-1">
                 とあるデバイス ( {{ session[0].slice(0,4) }}... )
@@ -92,8 +95,27 @@ export default {
                 最終ログイン : {{ session[1].loggedinTime.slice(0,4) }} /{{ session[1].loggedinTime.slice(4,6) }} / {{ session[1].loggedinTime.slice(6,8) }} {{ session[1].loggedinTime.slice(8,10) }}:{{ session[1].loggedinTime.slice(10,12) }}
               </v-chip>
             </v-expansion-panel-title>
+
             <v-expansion-panel-text>
-              <p>{{ session[0] }}</p>
+              セッションID : 
+              <code
+                v-if="fullSessionidDisplayIndex===index"
+                @click="fullSessionidDisplayIndex=-1"
+                class="ma-1"
+                style="color:rgb(var(--v-theme-success))"
+              >
+                {{ session[0] }}
+              </code>
+              <v-btn
+                v-else
+                @click="fullSessionidDisplayIndex=index"
+                class="ma-1"
+                size="small"
+                variant="outlined"
+              >
+                ここをクリックでID全文を表示
+              </v-btn>
+
               <p>
                 最後のログイン : 
                 <v-chip size="small">
@@ -101,6 +123,7 @@ export default {
                 </v-chip>
               </p>
             </v-expansion-panel-text>
+
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
