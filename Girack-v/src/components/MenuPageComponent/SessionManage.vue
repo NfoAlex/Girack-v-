@@ -15,6 +15,7 @@ export default {
     return {
       currentSessionid: "", //今ログインしているセッションID
       sessionData: {},
+      sessionDataCurrent: {},
 
       fullSessionidDisplayingMine: false,
       fullSessionidDisplayIndex: -1,
@@ -72,8 +73,15 @@ export default {
 
     //セッションデータの受け取り
     SOCKETInfoSessions(dat) {
-      console.log("SessionManage :: SOCKETInfoSessions : 受け取ったセッションデータ->", dat);
+      //セッションデータをJSON用変数へ保存
       this.sessionData = dat;
+      //自分のデータを取り出して表示用JSON用変数から削除
+      try {
+        this.sessionDataCurrent = structuredClone(dat[this.myUserinfo.sessionid]);
+        delete this.sessionData[this.myUserinfo.sessionid];
+      } catch(e) {
+        console.log("Sessionmanage :: SOCKETInfoSessions : 無理だわ", e);
+      }
     }
   },
 
@@ -119,16 +127,16 @@ export default {
       
       <!--今アクティブなセッション -->
       <h3 class="ma-1">現在のセッション</h3>
-      <v-expansion-panels v-if="sessionData[myUserinfo.sessionid]!==undefined" style="width: 100%">
+      <v-expansion-panels v-if="Object.keys(sessionDataCurrent).length!==0" style="width: 100%">
         <v-expansion-panel
           class="rounded-lg"
         >
           <v-expansion-panel-title color="grey">
             <span class="text-truncate flex-grow-1">
-              {{ sessionData[myUserinfo.sessionid].sessionName }} ( {{ myUserinfo.sessionid.slice(0,5) }}... )
+              {{ sessionDataCurrent.sessionName }} ( {{ myUserinfo.sessionid.slice(0,5) }}... )
             </span>
             <v-chip style="margin-right: 5%" size="small">
-              最終ログイン : {{ sessionData[myUserinfo.sessionid].loggedinTime.slice(0,4) }}/{{ sessionData[myUserinfo.sessionid].loggedinTime.slice(4,6) }}/{{ sessionData[myUserinfo.sessionid].loggedinTime.slice(6,8) }} {{ sessionData[myUserinfo.sessionid].loggedinTime.slice(8,10) }}:{{ sessionData[myUserinfo.sessionid].loggedinTime.slice(10,12) }}
+              最終ログイン : {{ sessionDataCurrent.loggedinTime.slice(0,4) }}/{{ sessionDataCurrent.loggedinTime.slice(4,6) }}/{{ sessionDataCurrent.loggedinTime.slice(6,8) }} {{ sessionDataCurrent.loggedinTime.slice(8,10) }}:{{ sessionDataCurrent.loggedinTime.slice(10,12) }}
             </v-chip>
           </v-expansion-panel-title>
 
@@ -196,7 +204,7 @@ export default {
               <p>
                 初めてのログイン時間 : 
                 <v-chip size="small">
-                  {{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(0,4) }}/{{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(4,6) }}/{{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(6,8) }} {{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(8,10) }}:{{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(10,12) }}
+                  {{ sessionDataCurrent.loggedinTimeFirst.slice(0,4) }}/{{ sessionDataCurrent.loggedinTimeFirst.slice(4,6) }}/{{ sessionDataCurrent.loggedinTimeFirst.slice(6,8) }} {{ sessionDataCurrent.loggedinTimeFirst.slice(8,10) }}:{{ sessionDataCurrent.loggedinTimeFirst.slice(10,12) }}
                 </v-chip>
               </p>
             </div>
@@ -208,14 +216,14 @@ export default {
       <v-divider class="ma-3"></v-divider>
 
       <!-- 他のセッション -->
-      <v-expansion-panels v-if="sessionData!=={}" style="overflow-y:scroll; padding-bottom:5%">
+      <v-expansion-panels v-if="sessionData!=={}" style="overflow-y:auto; padding-bottom:5%">
         <v-expansion-panel
           v-for="(session,index) in Object.entries(sessionData)"
           :key="index"
           class="rounded-lg"
         >
 
-          <v-expansion-panel-title v-if="session[0]!==myUserinfo.sessionid">
+          <v-expansion-panel-title>
             <span class="text-truncate flex-grow-1">
               {{ session[1].sessionName }} ( {{ session[0].slice(0,5) }}... )
             </span>
