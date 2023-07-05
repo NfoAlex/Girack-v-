@@ -52,6 +52,9 @@ export default {
         }
       });
 
+      //変数のセッション名を初期化
+      this.editingSessionnameTxt = "";
+
     },
 
     //特定のセッションをログアウトさせる
