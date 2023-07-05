@@ -149,7 +149,7 @@ export default {
               >
                 <template v-slot:append-inner>
                   <v-btn
-                    @click="updateSessionName(sessionData[myUserinfo.sessionid]);editingSessionNameMine=false"
+                    @click="updateSessionName(myUserinfo.sessionid);editingSessionNameMine=false"
                     class="rounded-lg ma-1"
                     size="x-small"
                     icon="mdi:mdi-check-bold"
