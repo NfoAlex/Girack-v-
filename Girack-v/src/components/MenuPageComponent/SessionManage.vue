@@ -210,7 +210,7 @@ export default {
             class="rounded-lg"
           >
 
-            <v-expansion-panel-title>
+            <v-expansion-panel-title v-if="session[0]!==myUserinfo.sessionid">
               <span class="text-truncate flex-grow-1">
                 {{ session[1].sessionName }} ( {{ session[0].slice(0,5) }}... )
               </span>
