@@ -128,9 +128,9 @@ export default {
               </v-btn>
 
               <p>
-                最後のログイン : 
+                初めてのログイン時間 : 
                 <v-chip size="small">
-                  {{ session[1].loggedinTime.slice(0,4) }}/{{ session[1].loggedinTime.slice(4,6) }}/{{ session[1].loggedinTime.slice(6,8) }} {{ session[1].loggedinTime.slice(8,10) }}:{{ session[1].loggedinTime.slice(10,12) }}
+                  {{ session[1].loggedinTimeFirst.slice(0,4) }}/{{ session[1].loggedinTimeFirst.slice(4,6) }}/{{ session[1].loggedinTimeFirst.slice(6,8) }} {{ session[1].loggedinTimeFirst.slice(8,10) }}:{{ session[1].loggedinTimeFirst.slice(10,12) }}
                 </v-chip>
               </p>
 
