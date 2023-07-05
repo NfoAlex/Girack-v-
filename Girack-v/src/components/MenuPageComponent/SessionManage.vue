@@ -16,6 +16,8 @@ export default {
       currentSessionid: "", //今ログインしているセッションID
       sessionData: {},
       fullSessionidDisplayIndex: -1,
+      editingSessionnameIndex: -1,
+      editingSessionnameTxt: ""
     }
   },
 
@@ -32,6 +34,20 @@ export default {
           sessionid: this.myUserinfo.sessionid
         }
       });
+    },
+
+    //特定のセッション名を更新
+    updateSessionName(sessionid) {
+      //セッション名を更新
+      socket.emit("updateUserSessionName", {
+        targetSessionid: sessionid,
+        sessionName: this.editingSessionnameTxt,
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid
+        }
+      });
+
     },
 
     //特定のセッションをログアウトさせる
@@ -108,38 +124,83 @@ export default {
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
-              セッションID : 
-              <code
-                v-if="fullSessionidDisplayIndex===index"
-                @click="fullSessionidDisplayIndex=-1"
-                class="ma-1"
-                style="color:rgb(var(--v-theme-success))"
-              >
-                {{ session[0] }}
-              </code>
+              <!-- セッション名変更部分 -->
               <v-btn
+                v-if="editingSessionnameIndex!==index"
+                @click="editingSessionnameIndex=index"
+                block
+                class="rounded-lg ma-2 mx-auto"
+                color="grey"
+              >
+                <v-icon class="ma-1">
+                  mdi:mdi-pencil
+                </v-icon>
+                セッション名を変更
+              </v-btn>
+              <v-text-field
                 v-else
-                @click="fullSessionidDisplayIndex=index"
-                class="ma-1"
-                size="small"
+                v-model="editingSessionnameTxt"
+                density="compact"
                 variant="outlined"
               >
-                ここをクリックでID全文を表示
-              </v-btn>
+                <template v-slot:append-inner>
+                  <v-btn
+                    @click="updateSessionName(session[0])"
+                    class="rounded-lg ma-1"
+                    size="x-small"
+                    icon="mdi:mdi-check-bold"
+                    color="secondary"
+                  >
+                  </v-btn>
+                  <v-btn
+                    @click="editingSessionnameIndex=-1"
+                    class="rounded-lg ma-1"
+                    size="x-small"
+                    icon="mdi:mdi-window-close"
+                    color="secondary"
+                  >
+                  </v-btn>
+                </template>
+              </v-text-field>
 
-              <p>
-                初めてのログイン時間 : 
-                <v-chip size="small">
-                  {{ session[1].loggedinTimeFirst.slice(0,4) }}/{{ session[1].loggedinTimeFirst.slice(4,6) }}/{{ session[1].loggedinTimeFirst.slice(6,8) }} {{ session[1].loggedinTimeFirst.slice(8,10) }}:{{ session[1].loggedinTimeFirst.slice(10,12) }}
-                </v-chip>
-              </p>
+              <div style="margin:24px 0;">
+                <div>
+                  セッションID : 
+                  <code
+                    v-if="fullSessionidDisplayIndex===index"
+                    @click="fullSessionidDisplayIndex=-1"
+                    class="ma-1"
+                    style="color:rgb(var(--v-theme-success))"
+                  >
+                    {{ session[0] }}
+                  </code>
+                  <v-btn
+                    v-else
+                    @click="fullSessionidDisplayIndex=index"
+                    class="ma-1 rounded-lg"
+                    size="small"
+                    variant="outlined"
+                  >
+                    ここをクリックでID全文を表示
+                  </v-btn>
+                </div>
+                <p>
+                  初めてのログイン時間 : 
+                  <v-chip size="small">
+                    {{ session[1].loggedinTimeFirst.slice(0,4) }}/{{ session[1].loggedinTimeFirst.slice(4,6) }}/{{ session[1].loggedinTimeFirst.slice(6,8) }} {{ session[1].loggedinTimeFirst.slice(8,10) }}:{{ session[1].loggedinTimeFirst.slice(10,12) }}
+                  </v-chip>
+                </p>
+              </div>
 
               <v-btn
                 @click="logoutSession(session[0])"
                 block
-                class="ma-2 mx-auto"
+                class="ma-2 mx-auto rounded-lg"
                 color="error"
               >
+                <v-icon class="ma-1">
+                  mdi:mdi-logout
+                </v-icon>
                 ログアウトさせる
               </v-btn>
             </v-expansion-panel-text>
