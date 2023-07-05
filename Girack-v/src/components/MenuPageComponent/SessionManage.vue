@@ -55,7 +55,7 @@ export default {
       </p>
     </div>
     <div>
-      <v-expansion-panels style="width: 90%">
+      <v-expansion-panels v-if="sessionData!=={}" style="width: 90%">
         <v-expansion-panel
         v-for="(session,index) in Object.entries(sessionData)"
           class="rounded-lg"
@@ -68,7 +68,7 @@ export default {
             <p>
               最後のログイン : 
               <v-chip>
-                {{ session[1].loginTime.slice(0,4) }} /{{ session[1].loginTime.slice(4,6) }} / {{ session[1].loginTime.slice(6,8) }} {{ session[1].loginTime.slice(8,10) }}:{{ session[1].loginTime.slice(10,12) }}
+                {{ session[1].loggedinTime.slice(0,4) }} /{{ session[1].loggedinTime.slice(4,6) }} / {{ session[1].loggedinTime.slice(6,8) }} {{ session[1].loggedinTime.slice(8,10) }}:{{ session[1].loggedinTime.slice(10,12) }}
               </v-chip>
             </p>
           </v-expansion-panel-text>
