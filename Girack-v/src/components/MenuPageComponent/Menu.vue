@@ -53,7 +53,7 @@ export default {
           :color="isThisActive('sessions') ? 'primary' : 'secondary'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-account </v-icon>
+          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-folder-key </v-icon>
           <br />
           セッション管理
         </v-card>
