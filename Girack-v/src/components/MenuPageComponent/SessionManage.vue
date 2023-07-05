@@ -58,6 +58,7 @@ export default {
 
     //特定のセッションをログアウトさせる
     logoutSession(sessionid) {
+      //ログアウトさせる
       socket.emit("logout", {
         targetSessionid: sessionid,
         reqSender: {
@@ -65,6 +66,8 @@ export default {
           sessionid: this.myUserinfo.sessionid
         }
       });
+      //セッションデータの再取得
+      this.refreshSessionData();
     },
 
     //セッションデータの受け取り
