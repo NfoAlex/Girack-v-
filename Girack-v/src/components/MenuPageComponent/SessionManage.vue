@@ -15,7 +15,11 @@ export default {
     return {
       currentSessionid: "", //今ログインしているセッションID
       sessionData: {},
+
+      fullSessionidDisplayingMine: false,
       fullSessionidDisplayIndex: -1,
+
+      editingSessionNameMine: false,
       editingSessionnameIndex: -1,
       editingSessionnameTxt: ""
     }
@@ -69,6 +73,7 @@ export default {
   },
 
   mounted() {
+    console.log("session :::: ", this.myUserinfo.sessionid);
     //セッションデータの受け取りハンドラ
     socket.on("infoSessions", this.SOCKETInfoSessions);
 
@@ -107,6 +112,97 @@ export default {
         </v-btn>
       </div>
       <div class="mx-auto">
+      
+        <!--今アクティブなセッション -->
+        <v-expansion-panels v-if="sessionData[myUserinfo.sessionid]!==undefined" style="width: 100%">
+          <v-expansion-panel
+            class="rounded-lg"
+          >
+            <v-expansion-panel-title color="grey">
+              <span class="text-truncate flex-grow-1">
+                {{ sessionData[myUserinfo.sessionid].sessionName }} ( {{ myUserinfo.sessionid.slice(0,5) }}... )
+              </span>
+              <v-chip style="margin-right: 5%" size="small">
+                最終ログイン : {{ sessionData[myUserinfo.sessionid].loggedinTime.slice(0,4) }}/{{ sessionData[myUserinfo.sessionid].loggedinTime.slice(4,6) }}/{{ sessionData[myUserinfo.sessionid].loggedinTime.slice(6,8) }} {{ sessionData[myUserinfo.sessionid].loggedinTime.slice(8,10) }}:{{ sessionData[myUserinfo.sessionid].loggedinTime.slice(10,12) }}
+              </v-chip>
+            </v-expansion-panel-title>
+
+            <v-expansion-panel-text>
+              <!-- セッション名変更部分 -->
+              <v-btn
+                v-if="!editingSessionNameMine"
+                @click="editingSessionNameMine=true"
+                block
+                class="rounded-lg ma-2 mx-auto"
+                color="grey"
+              >
+                <v-icon class="ma-1">
+                  mdi:mdi-pencil
+                </v-icon>
+                セッション名を変更
+              </v-btn>
+              <v-text-field
+                v-else
+                v-model="editingSessionnameTxt"
+                density="compact"
+                variant="outlined"
+              >
+                <template v-slot:append-inner>
+                  <v-btn
+                    @click="updateSessionName(sessionData[myUserinfo.sessionid]);editingSessionNameMine=false"
+                    class="rounded-lg ma-1"
+                    size="x-small"
+                    icon="mdi:mdi-check-bold"
+                    color="secondary"
+                  >
+                  </v-btn>
+                  <v-btn
+                    @click="editingSessionNameMine=false"
+                    class="rounded-lg ma-1"
+                    size="x-small"
+                    icon="mdi:mdi-window-close"
+                    color="secondary"
+                  >
+                  </v-btn>
+                </template>
+              </v-text-field>
+
+              <div style="margin:24px 0;">
+                <div>
+                  セッションID : 
+                  <code
+                    v-if="fullSessionidDisplayingMine"
+                    @click="fullSessionidDisplayingMine=false"
+                    class="ma-1"
+                    style="color:rgb(var(--v-theme-success))"
+                  >
+                    {{ myUserinfo.sessionid }}
+                  </code>
+                  <v-btn
+                    v-else
+                    @click="fullSessionidDisplayingMine=true"
+                    class="ma-1 rounded-lg"
+                    size="small"
+                    variant="outlined"
+                  >
+                    ここをクリックでID全文を表示
+                  </v-btn>
+                </div>
+                <p>
+                  初めてのログイン時間 : 
+                  <v-chip size="small">
+                    {{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(0,4) }}/{{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(4,6) }}/{{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(6,8) }} {{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(8,10) }}:{{ sessionData[myUserinfo.sessionid].loggedinTimeFirst.slice(10,12) }}
+                  </v-chip>
+                </p>
+              </div>
+            </v-expansion-panel-text>
+
+          </v-expansion-panel>
+        </v-expansion-panels>
+
+        <v-divider class="ma-3"></v-divider>
+
+        <!-- 他のセッション -->
         <v-expansion-panels v-if="sessionData!=={}" style="width: 100%">
           <v-expansion-panel
             v-for="(session,index) in Object.entries(sessionData)"
