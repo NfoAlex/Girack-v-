@@ -309,7 +309,7 @@ export default {
             </div>
 
             <v-btn
-              @click="logoutSession(session[0])"
+              @dblclick="logoutSession(session[0])"
               block
               class="ma-2 mx-auto rounded-lg"
               color="error"
@@ -317,7 +317,7 @@ export default {
               <v-icon class="ma-1">
                 mdi:mdi-logout
               </v-icon>
-              ログアウトさせる
+              ダブルクリックでログアウトさせる
             </v-btn>
           </v-expansion-panel-text>
 
