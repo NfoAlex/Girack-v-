@@ -677,9 +677,13 @@ export default {
     initMsgReadTimeBefore(event) {
       //escなら
       if (event.key === "Escape") {
-        //比較用既読状態を初期化
-        this.MsgReadTime[this.getPath].timeBefore =
-          this.MsgReadTime[this.getPath].time;
+        if (this.StateScrolled) {
+          //比較用既読状態を初期化
+          this.MsgReadTime[this.getPath].timeBefore =
+            this.MsgReadTime[this.getPath].time;
+        }
+        //スクロールさせる
+          this.scrollIt();
       }
     },
 
