@@ -15,6 +15,7 @@ import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
+import ContentMessageEditing from "./ContentMessageEditing.vue";
 import ContentNewMessageLine from "./ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentSystemMessageRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
@@ -45,6 +46,7 @@ export default {
     ContentURLpreview,
     ContentHoverMenu,
     ContentMessageRender,
+    ContentMessageEditing,
     ContentSystemMessageRender,
     ContentAttatchmentRender,
     ContentNewMessageLine,
@@ -57,6 +59,7 @@ export default {
       uri: backendURI, //バックエンドのURI
       StateFocus: true, //Girackにフォーカスしているかどうか
       msgDisplayNum: 25,
+      msgIdEditing: "xxxxxxx",
 
       //watchする時のハンドラ用
       watcherRoute: {},
@@ -889,6 +892,7 @@ export default {
           <!-- メッセージ本体 -->
           <!-- v-menuはホバーメニュー用 -->
           <v-menu
+            @updateEditingMessage="(mID)=>{msgIdEditing=mID}"
             open-on-hover
             :open-on-click="false"
             open-delay="100"
@@ -999,7 +1003,13 @@ export default {
                 </p>
 
                 <!-- メッセージ本文 -->
-                <ContentMessageRender :content="m.content" />
+                <ContentMessageRender v-if="msgIdEditing!==m.userid" :content="m.content" />
+                <ContentMessageEditing
+                  v-else
+                  :content="m.content"
+                  :messageid="m.messageid"
+                >
+                </ContentMessageEditing>
 
                 <!-- メッセージが編集されていたら -->
                 <span v-if="m.isEdited" class="text-disabled">
@@ -1039,6 +1049,7 @@ export default {
             </template>
             <!-- ここからホバーメニュー -->
             <ContentHoverMenu
+              @updateEditingMessage="(mID)=>{msgIdEditing=mID}"
               style="z-index: 30"
               :m="m"
               :userrole="getUserStats(m.userid, 'role')"
