@@ -22,6 +22,7 @@ export default {
   methods: {
     //メッセージの編集を適用する関数
     updateMessage() {
+      //更新するように送信
       socket.emit("editMessage", {
         textEditing: this.editTxt,
         channelid: this.channelid,
@@ -31,7 +32,6 @@ export default {
           sessionid: this.myUserinfo.sessionid
         }
       });
-      //console.log("ContentMessageEditing :: editMessage : 編集したメッセージ->", this.editTxt);
       //編集モードから抜ける
       this.$emit('updateEditingMessage','xxxxxx');
     }
@@ -46,7 +46,7 @@ export default {
 </script>
 
 <template>
-  <v-text-field
+  <v-textarea
     v-model="editTxt"
     variant="outlined"
   >
@@ -68,5 +68,5 @@ export default {
       >
       </v-btn>
     </template>
-  </v-text-field>
+  </v-textarea>
 </template>
