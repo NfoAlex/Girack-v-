@@ -346,14 +346,16 @@ socket.on("messageUpdate", (dat) => {
     case "edit":
       console.log("socket :: messageUpdate(edit) : 更新するデータ->", dat);
       //メッセージIDで探索して更新
-      for (let index in dataMsg().MsgDB.value[dat.channelid]) {
+      for (let index in dataMsg().MsgDB.value[dat.messageData.channelid]) {
         if (
-          dataMsg().MsgDB.value[dat.channelid][index].messageid ===
-          dat.messageid
+          dataMsg().MsgDB.value[dat.messageData.channelid][index].messageid ===
+          dat.messageData.messageid
         ) {
           //URlプレビューデータを更新
-          dataMsg().MsgDB.value[dat.channelid][index].content
-            = dat.textEditing;
+          dataMsg().MsgDB.value[dat.messageData.channelid][index].content
+            = dat.messageData.content;
+          //編集されたと設定
+            dataMsg().MsgDB.value[dat.messageData.channelid][index].isEdited = true;
         }
       }
 
