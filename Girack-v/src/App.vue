@@ -1,5 +1,5 @@
 <script>
-import { getSocket } from "./data/socket";
+import { getSocket, CLIENT_FULL_LOADED } from "./data/socket";
 import { dataUser } from "./data/dataUserinfo";
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
@@ -14,7 +14,7 @@ export default {
     return { theme, myUserinfo };
   },
 
-  components: { Sidebar, Auth },
+  components: { Sidebar, Auth, CLIENT_FULL_LOADED },
 
   data() {
     return {
@@ -53,6 +53,9 @@ export default {
 
     //再接続できたら接続できたと表示
     socket.on("connect", () => {
+      //もしロードが完了していないなら処理を停止
+      if (!CLIENT_FULL_LOADED) return -1;
+
       socket.emit("getInfoServer"); //サーバーの情報を再取得
 
       //もし切断されているときにきたら
@@ -65,6 +68,14 @@ export default {
           reqSender: {
             userid: this.myUserinfo.userid,
             sessionid: this.myUserinfo.sessionid,
+          },
+        });
+
+        //既読状態の取得
+        socket.emit("getUserSaveMsgReadState", {
+          reqSender: {
+            userid: dat.userid,
+            sessionid: dat.sessionid,
           },
         });
 
