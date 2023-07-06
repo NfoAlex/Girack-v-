@@ -1,5 +1,5 @@
 <script>
-import { getSocket } from '../../data/socket.js';
+import { getSocket, Serverinfo } from '../../data/socket.js';
 import { dataUser } from '../../data/dataUserinfo.js';
 
 const socket = getSocket();
@@ -8,7 +8,7 @@ export default {
   setup() {
     const { myUserinfo } = dataUser();
 
-    return { myUserinfo };
+    return { myUserinfo, Serverinfo };
   },
 
   props: ["content", "messageid", "channelid"],
@@ -53,11 +53,25 @@ export default {
     <template v-slot:append-inner>
       <v-btn
         @click="updateMessage"
+        :disabled="Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH<editTxt.length"
         class="rounded-lg ma-1"
         size="x-small"
-        icon="mdi:mdi-check-bold"
+        icon=""
         color="secondary"
       >
+        <v-icon
+          v-if="Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH>=editTxt.length"
+        >
+          mdi:mdi-check-bold
+        </v-icon>
+        <span v-else>
+          -
+          {{ 
+            editTxt.length
+            -
+            Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH
+          }}
+        </span>
       </v-btn>
       <v-btn
         @click="$emit('updateEditingMessage','waaaa')"
