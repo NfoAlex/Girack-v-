@@ -202,7 +202,7 @@ export default {
 
       <!-- 編集 -->
       <v-btn
-        @click="messageEdit"
+        @click="$emit('updateEditingMessage',m.messageid)"
         style="margin-right: 3px"
         variant="tonal"
         rounded="pill"
