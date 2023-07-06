@@ -342,6 +342,23 @@ socket.on("messageUpdate", (dat) => {
 
       break;
 
+    //メッセージの編集
+    case "edit":
+      console.log("socket :: messageUpdate(edit) : 更新するデータ->", dat);
+      //メッセージIDで探索して更新
+      for (let index in dataMsg().MsgDB.value[dat.channelid]) {
+        if (
+          dataMsg().MsgDB.value[dat.channelid][index].messageid ===
+          dat.messageid
+        ) {
+          //URlプレビューデータを更新
+          dataMsg().MsgDB.value[dat.channelid][index].content
+            = dat.textEditing;
+        }
+      }
+
+      break;
+
     default:
       break;
   }
