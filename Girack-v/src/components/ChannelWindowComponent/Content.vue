@@ -1001,6 +1001,11 @@ export default {
                 <!-- メッセージ本文 -->
                 <ContentMessageRender :content="m.content" />
 
+                <!-- メッセージが編集されていたら -->
+                <span v-if="m.isEdited" class="text-disabled">
+                  編集済み
+                </span>
+
                 <!-- ファイル添付表示 -->
                 <ContentAttatchmentRender
                   v-if="m.fileData"
