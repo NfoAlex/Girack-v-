@@ -892,7 +892,6 @@ export default {
           <!-- メッセージ本体 -->
           <!-- v-menuはホバーメニュー用 -->
           <v-menu
-            @updateEditingMessage="(mID)=>{msgIdEditing=mID}"
             open-on-hover
             :open-on-click="false"
             open-delay="100"
@@ -1003,9 +1002,11 @@ export default {
                 </p>
 
                 <!-- メッセージ本文 -->
-                <ContentMessageRender v-if="msgIdEditing!==m.userid" :content="m.content" />
+                <ContentMessageRender v-if="msgIdEditing!==m.messageid" :content="m.content" />
                 <ContentMessageEditing
                   v-else
+                  @update-editing-message="(mID)=>{msgIdEditing=mID}"
+                  :channelid="m.channelid"
                   :content="m.content"
                   :messageid="m.messageid"
                 >
@@ -1049,7 +1050,7 @@ export default {
             </template>
             <!-- ここからホバーメニュー -->
             <ContentHoverMenu
-              @updateEditingMessage="(mID)=>{msgIdEditing=mID}"
+              @update-editing-message="(mID)=>{msgIdEditing=mID}"
               style="z-index: 30"
               :m="m"
               :userrole="getUserStats(m.userid, 'role')"

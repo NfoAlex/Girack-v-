@@ -11,11 +11,29 @@ export default {
     return { myUserinfo };
   },
 
-  props: ["content", "messageid"],
+  props: ["content", "messageid", "channelid"],
 
   data() {
     return {
       editTxt: ""
+    }
+  },
+
+  methods: {
+    //メッセージの編集を適用する関数
+    updateMessage() {
+      socket.emit("editMessage", {
+        textEditing: this.editTxt,
+        channelid: this.channelid,
+        messageid: this.messageid,
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid
+        }
+      });
+      //console.log("ContentMessageEditing :: editMessage : 編集したメッセージ->", this.editTxt);
+      //編集モードから抜ける
+      this.$emit('updateEditingMessage','xxxxxx');
     }
   },
 
@@ -29,11 +47,12 @@ export default {
 
 <template>
   <v-text-field
-    v-model="txtEditing"
+    v-model="editTxt"
+    variant="outlined"
   >
     <template v-slot:append-inner>
       <v-btn
-        @click="$emit('updateEditingMessage',messageid)"
+        @click="updateMessage"
         class="rounded-lg ma-1"
         size="x-small"
         icon="mdi:mdi-check-bold"
