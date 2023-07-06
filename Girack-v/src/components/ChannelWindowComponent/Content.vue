@@ -1013,9 +1013,9 @@ export default {
                 </ContentMessageEditing>
 
                 <!-- メッセージが編集されていたら -->
-                <span v-if="m.isEdited" class="text-disabled">
+                <p v-if="m.isEdited" class="text-disabled text-caption">
                   編集済み
-                </span>
+                </p>
 
                 <!-- ファイル添付表示 -->
                 <ContentAttatchmentRender
