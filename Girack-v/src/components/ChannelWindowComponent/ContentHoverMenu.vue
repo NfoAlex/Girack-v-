@@ -127,6 +127,19 @@ export default {
       }
     },
 
+    //メッセージの編集を適用
+    messageEdit() {
+      socket.emit("editMessage", {
+        textEditing: "asdf",
+        channelid: this.channelid,
+        messageid: this.m.messageid,
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid
+        }
+      });
+    },
+
     //返信する関数
     reply() {
       this.ReplyState.isReplying = true; //返信状態をつける
@@ -186,6 +199,19 @@ export default {
       >
         <v-icon> mdi:mdi-reply </v-icon>
       </v-btn>
+
+      <!-- 編集 -->
+      <v-btn
+        @click="$emit('updateEditingMessage',m.messageid)"
+        style="margin-right: 3px"
+        variant="tonal"
+        rounded="pill"
+        size="x-small"
+      >
+        <v-icon> mdi:mdi-pencil </v-icon>
+      </v-btn>
+
+      <v-divider vertical></v-divider>
 
       <!-- 削除ボタン -->
       <v-btn
