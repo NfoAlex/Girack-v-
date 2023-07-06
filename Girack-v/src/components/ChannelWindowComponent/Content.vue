@@ -56,7 +56,6 @@ export default {
     return {
       uri: backendURI, //バックエンドのURI
       StateFocus: true, //Girackにフォーカスしているかどうか
-      StateScrolling: false, //スクロールしている際中かどうか
       msgDisplayNum: 25,
 
       //watchする時のハンドラ用
@@ -567,13 +566,6 @@ export default {
       //s => bool
       const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-      //スクロールしている際中と設定
-      this.StateScrolling = true;
-      //0.1秒後にしてないと設定
-      setTimeout(() => {
-        this.StateScrolling = false;
-      }, 500);
-
       //一番下かどうか調べる？
       if (
         s || //そもそも引数でtrueと渡されているなら
@@ -897,10 +889,10 @@ export default {
           <!-- メッセージ本体 -->
           <!-- v-menuはホバーメニュー用 -->
           <v-menu
-            :open-on-hover="!StateScrolling"
-            :disabled="StateScrolling"
+            open-on-hover
+            :open-on-click="false"
             open-delay="100"
-            close-delay="1"
+            close-delay="0"
             transition="none"
             :close-on-content-click="false"
             location="end top"
@@ -910,12 +902,8 @@ export default {
             <template v-slot:activator="{ props }">
               <div
                 v-bind="props"
-                @mouseover="
-                  !StateScrolling ? mouseOverMsg(m.messageid, 'on') : null
-                "
-                @mouseleave="
-                  !StateScrolling ? mouseOverMsg(m.messageid, 'off') : null
-                "
+                @mouseover="mouseOverMsg(m.messageid, 'on')"
+                @mouseleave="mouseOverMsg(m.messageid, 'off')"
               >
                 <!-- 過去を表示していたら -->
                 <span
