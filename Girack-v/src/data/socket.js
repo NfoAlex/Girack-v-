@@ -815,8 +815,11 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
   }
 
   //メッセージ履歴の取得
-  for (let cid in dataUser().myUserinfo.value.channelJoined) {
-    getMessage(dataUser().myUserinfo.value.channelJoined[cid], 40); //リクエスト送信する
+  for (let index in dataUser().myUserinfo.value.channelJoined) {
+    //チャンネルIDを抽出
+    let channelid = dataUser().myUserinfo.value.channelJoined[index];
+    dataMsg().MsgDB[channelid] = [];//メッセージDBを初期化
+    getMessage(channelid, 40); //リクエスト送信する
   }
 });
 
