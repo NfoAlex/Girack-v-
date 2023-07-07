@@ -48,6 +48,7 @@ export default {
 <template>
   <v-textarea
     id="editingTextArea"
+    autofocus
     @keydown.enter="updateMessage"
     @keydown.esc="$emit('updateEditingMessage','waaaa')"
     v-model="editTxt"

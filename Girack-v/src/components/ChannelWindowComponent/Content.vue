@@ -701,12 +701,9 @@ export default {
           if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
             //編集中のメッセージIDを設定
             this.msgIdEditing = this.MsgDBActive[i].messageid;
-            //レンダーを待ってから入力欄へフォーカス
+            //レンダーを待ってから入力欄へスクロールする
             this.$nextTick(() => {
-              //編集しているメッセージへスクロール
               location.href = "#editingTextArea";
-              //入力欄へフォーカス
-              document.getElementById("editingTextArea").focus();
             });
             break;
           }
