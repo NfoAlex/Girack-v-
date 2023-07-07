@@ -48,6 +48,7 @@ export default {
 <template>
   <v-textarea
     @keydown.enter="updateMessage"
+    @keydown.esc="$emit('updateEditingMessage','waaaa')"
     v-model="editTxt"
     variant="outlined"
   >
