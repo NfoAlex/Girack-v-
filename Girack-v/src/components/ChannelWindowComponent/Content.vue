@@ -706,7 +706,7 @@ export default {
               //編集しているメッセージへスクロール
               location.href = "#editingTextArea";
               //入力欄へフォーカス
-              document.querySelector("#editingTextArea").focus();
+              document.getElementById("editingTextArea").focus();
             });
             break;
           }
