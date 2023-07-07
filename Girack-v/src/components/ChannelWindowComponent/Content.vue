@@ -699,7 +699,15 @@ export default {
         //配列を逆から探してユーザーIDが一致するものを探す
         for (let i = msgLength; i >= msgLookingNum; i--) {
           if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
+            //編集中のメッセージIDを設定
             this.msgIdEditing = this.MsgDBActive[i].messageid;
+            //レンダーを待ってから入力欄へフォーカス
+            this.$nextTick(() => {
+              //編集しているメッセージへスクロール
+              location.href = "#editingTextArea";
+              //入力欄へフォーカス
+              document.querySelector("#editingTextArea").focus();
+            });
             break;
           }
         }
