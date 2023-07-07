@@ -40,6 +40,21 @@ export default {
   mounted() {
     //propsからメッセージ分を取得、格納
     this.editTxt = this.content;
+
+    //カーソルを最後に持ってくる
+    this.$nextTick(() => {
+      let DOMeditingTextArea = document.getElementById("editingTextArea");
+      console.log("ContentMessageEditing :: mounted : 先頭へ移動したい->", this.editTxt.length, DOMeditingTextArea);
+      //テキスト入力欄の取得
+      DOMeditingTextArea.focus();
+      //きしょすぎやろ
+      setTimeout(() => {
+        //編集部分へスクロールさせる
+        DOMeditingTextArea.scrollIntoView({behavior : 'smooth'});
+        //カーソル移動
+        DOMeditingTextArea.setSelectionRange(this.editTxt.length, this.editTxt.length);
+      }, 10);
+    });
   }
 }
 
@@ -47,6 +62,9 @@ export default {
 
 <template>
   <v-textarea
+    id="editingTextArea"
+    @keydown.enter="updateMessage"
+    @keydown.esc="$emit('updateEditingMessage','waaaa')"
     v-model="editTxt"
     variant="outlined"
   >

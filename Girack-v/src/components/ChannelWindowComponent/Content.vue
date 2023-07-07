@@ -216,7 +216,9 @@ export default {
     //ウィンドウのフォーカス監視開始
     window.addEventListener("focus", this.setFocusStateTrue);
     window.addEventListener("blur", this.setFocusStateFalse);
+    //キーの監視開始
     window.addEventListener("keydown", this.initMsgReadTimeBefore);
+    window.addEventListener("keydown", this.startEditingMyRecentMessage);
   },
 
   //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)あるいは別ページに行ったとき
@@ -228,7 +230,9 @@ export default {
     //ウィンドウのフォーカス監視を取りやめ
     window.removeEventListener("focus", this.setFocusStateTrue);
     window.removeEventListener("blur", this.setFocusStateFalse);
+    //キーの監視終了
     window.removeEventListener("keydown", this.initMsgReadTimeBefore);
+    window.addEventListener("keydown", this.startEditingMyRecentMessage);
   },
 
   //マウント外れた時
@@ -679,6 +683,27 @@ export default {
         }
         //スクロールさせる
           this.scrollIt();
+      }
+    },
+
+    //十字キーから、自分の一番直近のメッセージの編集を始める
+    startEditingMyRecentMessage(event) {
+      if (event.key === "ArrowUp") {
+        //メッセージ履歴の長さ
+        let msgLength = this.MsgDBActive.length-1;
+        //調べるメッセージのインデックス始まり(表示し始めてるところ)
+        let msgLookingNum = this.MsgDBActive.length - this.msgDisplayNum;
+        //表示インデックスが0未満なら0に設定
+        if (msgLength < msgLookingNum) msgLookingNum = 0;
+
+        //配列を逆から探してユーザーIDが一致するものを探す
+        for (let i = msgLength; i >= msgLookingNum; i--) {
+          if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
+            //編集中のメッセージIDを設定
+            this.msgIdEditing = this.MsgDBActive[i].messageid;
+            break;
+          }
+        }
       }
     },
 
