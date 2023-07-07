@@ -45,12 +45,13 @@ export default {
     this.$nextTick(() => {
       let DOMeditingTextArea = document.getElementById("editingTextArea");
       console.log("ContentMessageEditing :: mounted : 先頭へ移動したい->", this.editTxt.length, DOMeditingTextArea);
-      //編集部分へスクロールさせる
-      DOMeditingTextArea.scrollIntoView({behavior : 'smooth'});
       //テキスト入力欄の取得
       DOMeditingTextArea.focus();
       //きしょすぎやろ
       setTimeout(() => {
+        //編集部分へスクロールさせる
+        DOMeditingTextArea.scrollIntoView({behavior : 'smooth'});
+        //カーソル移動
         DOMeditingTextArea.setSelectionRange(this.editTxt.length, this.editTxt.length);
       }, 10);
     });
