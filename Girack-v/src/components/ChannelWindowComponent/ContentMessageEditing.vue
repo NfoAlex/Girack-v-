@@ -47,6 +47,7 @@ export default {
 
 <template>
   <v-textarea
+    @keydown.enter="updateMessage"
     v-model="editTxt"
     variant="outlined"
   >
