@@ -216,6 +216,7 @@ export default {
     //ウィンドウのフォーカス監視開始
     window.addEventListener("focus", this.setFocusStateTrue);
     window.addEventListener("blur", this.setFocusStateFalse);
+    //キーの監視開始
     window.addEventListener("keydown", this.initMsgReadTimeBefore);
     window.addEventListener("keydown", this.startEditingMyRecentMessage);
   },
@@ -229,7 +230,9 @@ export default {
     //ウィンドウのフォーカス監視を取りやめ
     window.removeEventListener("focus", this.setFocusStateTrue);
     window.removeEventListener("blur", this.setFocusStateFalse);
+    //キーの監視終了
     window.removeEventListener("keydown", this.initMsgReadTimeBefore);
+    window.addEventListener("keydown", this.startEditingMyRecentMessage);
   },
 
   //マウント外れた時
