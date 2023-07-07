@@ -217,6 +217,7 @@ export default {
     window.addEventListener("focus", this.setFocusStateTrue);
     window.addEventListener("blur", this.setFocusStateFalse);
     window.addEventListener("keydown", this.initMsgReadTimeBefore);
+    window.addEventListener("keydown", this.startEditingMyRecentMessage);
   },
 
   //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)あるいは別ページに行ったとき
@@ -679,6 +680,20 @@ export default {
         }
         //スクロールさせる
           this.scrollIt();
+      }
+    },
+
+    //十字キーから、自分の一番直近のメッセージの編集を始める
+    startEditingMyRecentMessage(event) {
+      console.log("Content :: startEditingMyRecentMessage : 押されたキー->", event.key);
+      if (event.key === "ArrowUp") {
+        //配列を逆から探してユーザーIDが一致するものを探す
+        for (let i=this.MsgDBActive.length-1; i>=this.msgDisplayNum; i--) {
+          if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
+            this.msgIdEditing = this.MsgDBActive[i].messageid;
+            break;
+          }
+        }
       }
     },
 
