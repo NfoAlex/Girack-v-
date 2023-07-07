@@ -688,10 +688,16 @@ export default {
 
     //十字キーから、自分の一番直近のメッセージの編集を始める
     startEditingMyRecentMessage(event) {
-      console.log("Content :: startEditingMyRecentMessage : 押されたキー->", event.key);
       if (event.key === "ArrowUp") {
+        //メッセージ履歴の長さ
+        let msgLength = this.MsgDBActive.length-1;
+        //調べるメッセージのインデックス始まり(表示し始めてるところ)
+        let msgLookingNum = this.MsgDBActive.length - this.msgDisplayNum;
+        //表示インデックスが0未満なら0に設定
+        if (msgLength < msgLookingNum) msgLookingNum = 0;
+
         //配列を逆から探してユーザーIDが一致するものを探す
-        for (let i=this.MsgDBActive.length-1; i>=this.msgDisplayNum; i--) {
+        for (let i = msgLength; i >= msgLookingNum; i--) {
           if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
             this.msgIdEditing = this.MsgDBActive[i].messageid;
             break;
