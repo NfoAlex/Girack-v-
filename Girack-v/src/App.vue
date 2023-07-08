@@ -74,8 +74,8 @@ export default {
         //既読状態の取得
         socket.emit("getUserSaveMsgReadState", {
           reqSender: {
-            userid: dat.userid,
-            sessionid: dat.sessionid,
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid,
           },
         });
 
