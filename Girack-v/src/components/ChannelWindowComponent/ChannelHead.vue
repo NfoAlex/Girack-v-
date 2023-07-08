@@ -4,7 +4,7 @@ import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
 import { setCookie } from "../../data/socket";
 import { dataUser } from "../../data/dataUserinfo";
-import ChannelConfig from "./ChannelConfig.vue";
+import ChannelConfig from "./HeadComponents/ChannelConfig.vue";
 
 export default {
   setup() {

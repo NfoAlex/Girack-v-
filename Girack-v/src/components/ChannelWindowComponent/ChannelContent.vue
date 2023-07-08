@@ -11,14 +11,14 @@ import { dataChannel } from "../../data/dataChannel";
 import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
-import ContentHoverMenu from "./ContentHoverMenu.vue";
+import ContentHoverMenu from "./ContentComponents/ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
-import ContentURLpreview from "./ContentURLpreview.vue";
-import ContentMessageRender from "./ContentMessageRender.vue";
-import ContentMessageEditing from "./ContentMessageEditing.vue";
-import ContentNewMessageLine from "./ContentNewMessageLine.vue";
-import ContentSystemMessageRender from "./ContentSystemMessageRender.vue";
-import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
+import ContentURLpreview from "./ContentComponents/ContentURLpreview.vue";
+import ContentMessageRender from "./ContentComponents/ContentMessageRender.vue";
+import ContentMessageEditing from "./ContentComponents/ContentMessageEditing.vue";
+import ContentNewMessageLine from "./ContentComponents/ContentNewMessageLine.vue";
+import ContentSystemMessageRender from "./ContentComponents/ContentSystemMessageRender.vue";
+import ContentAttatchmentRender from "./ContentComponents/ContentAttatchmentRender.vue";
 
 const socket = getSocket();
 
