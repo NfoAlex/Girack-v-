@@ -572,13 +572,13 @@ export default {
     },
 
     //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
-    setScrollState(s) {
+    setScrollState(forcingTrue) {
       //s => bool
       const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
       //一番下かどうか調べる？
       if (
-        s || //そもそも引数でtrueと渡されているなら
+        forcingTrue || //そもそも引数でtrueと渡されているなら
         channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
           channelWindow.scrollHeight || //スクロール位置を計算
         channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら

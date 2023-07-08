@@ -1,4 +1,4 @@
-<script>
+
 import { getSocket, CLIENT_FULL_LOADED } from "./data/socket.js";
 import { dataUser } from "./data/dataUserinfo.js";
 import Auth from "./components/Auth.vue";
@@ -14,7 +14,7 @@ export default {
     return { theme, myUserinfo, CLIENT_FULL_LOADED };
   },
 
-  components: { Sidebar, Auth },
+  components: { Sidebar, Auth, CLIENT_FULL_LOADED },
 
   data() {
     return {
@@ -24,19 +24,27 @@ export default {
 
       sessionOnlineNum: 0, //オンラインユーザー数
       disconnectSnackbar: false, //切断された表示
-      reconnectedSnackbar: false,
+      reconnectedSnackbar: false, //再接続できたと表示
+      askResyncSnackbar: false, //MsgDBを取り直すかどうかを聞くやつ
       disconnected: false,
 
-      path: "", //現在のチャンネルID
       loggedin: false, //ログインしているかの状態
     };
   },
 
-  watch: {
-    //URLの変更を検知
-    $route(r) {
-      this.path = r.path; //変数へ取り込む
-    },
+  methods: {
+    //すべてのメッセージ履歴を初期化した取得しなおす
+    syncAllMsgDB() {
+      //既読状態の取得(受け取る時にMsgDBを初期化している)
+      socket.emit("getUserSaveMsgReadState", {
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
+        },
+      });
+      //スナックバーを非表示
+      this.askResyncSnackbar = false;
+    }
   },
 
   mounted() {
@@ -53,6 +61,9 @@ export default {
 
     //再接続できたら接続できたと表示
     socket.on("connect", () => {
+      //もしロードが完了していないなら処理を停止
+      if (!CLIENT_FULL_LOADED) return -1;
+
       socket.emit("getInfoServer"); //サーバーの情報を再取得
 
       //もし切断されているときにきたら
@@ -67,6 +78,9 @@ export default {
             sessionid: this.myUserinfo.sessionid,
           },
         });
+
+        //履歴を同期するか確認するスナックバーを表示
+        this.askResyncSnackbar = true;
 
         //切断状態をオフ
         this.disconnected = false;
@@ -107,6 +121,34 @@ export default {
           @click="reconnectedSnackbar = false"
         >
           <v-icon> mdi:mdi-close </v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="askResyncSnackbar"
+      class="rounded-lg"
+      color="grey"
+      location="bottom"
+      timeout="-1"
+      vertical
+    >
+      再接続されたようです。
+      履歴をすべて再取得しますか？
+      <template v-slot:actions>
+        <v-btn
+          class="rounded-lg"
+          variant="text"
+          @click="askResyncSnackbar = false"
+        >
+          <v-icon> mdi:mdi-close </v-icon>
+        </v-btn>
+        <v-btn
+          class="rounded-lg"
+          variant="text"
+          @click="syncAllMsgDB"
+        >
+          <v-icon> mdi:mdi-check-bold</v-icon>
         </v-btn>
       </template>
     </v-snackbar>
