@@ -1,4 +1,4 @@
-
+<script>
 import { getSocket, CLIENT_FULL_LOADED } from "./data/socket.js";
 import { dataUser } from "./data/dataUserinfo.js";
 import Auth from "./components/Auth.vue";
