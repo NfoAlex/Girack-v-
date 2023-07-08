@@ -8,6 +8,7 @@ import {
 } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
 import { dataChannel } from "../../data/dataChannel";
+import { getReplyState } from "./ChannelInput.vue";
 import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
@@ -24,12 +25,14 @@ const socket = getSocket();
 
 export default {
   setup() {
+    const { InputState } = getReplyState();
     const { myUserinfo, UserIndex } = dataUser(); //ユーザー情報
     const { MsgDB, StateScrolled, MsgReadTime } = dataMsg(); //履歴用DB
     const { PreviewChannelData, ChannelIndex } = dataChannel();
     const { CONFIG_DISPLAY } = getCONFIG();
 
     return {
+      InputState,
       myUserinfo,
       MsgDB,
       MsgReadTime,
@@ -688,7 +691,8 @@ export default {
 
     //十字キーから、自分の一番直近のメッセージの編集を始める
     startEditingMyRecentMessage(event) {
-      if (event.key === "ArrowUp") {
+      //押されたのが上矢印キー、かつ入力中でないのなら
+      if (event.key === "ArrowUp" && !this.InputState.isTyping) {
         //メッセージ履歴の長さ
         let msgLength = this.MsgDBActive.length-1;
         //調べるメッセージのインデックス始まり(表示し始めてるところ)

@@ -14,19 +14,24 @@ const ReplyState = ref({
   messageid: "0",
 });
 
+const InputState = ref({
+  isTyping: false,
+});
+
 export function getReplyState() {
-  return { ReplyState };
+  return { ReplyState, InputState };
 }
 
 export default {
   setup() {
-    const { ReplyState } = getReplyState();
+    const { ReplyState, InputState } = getReplyState();
     const { myUserinfo, UserIndex } = dataUser();
     const { ChannelIndex } = dataChannel();
     const { MsgDB } = dataMsg();
 
     return {
       ReplyState,
+      InputState,
       myUserinfo,
       ChannelIndex,
       MsgDB,
@@ -123,6 +128,9 @@ export default {
 
     //(メンション用)入力したテキストを監視してユーザー名を検索しようとしているか調べる
     txt() {
+      //もし１文字以上入力されていたら入力している状態と保存
+      if (this.txt.length > 0) this.InputState.isTyping = true;
+
       //@が入力されたら検索モードに入る
       if (this.txt[this.txt.length - 1] === "@") {
         this.searchMode.enabled = true; //検索モードを有効化
