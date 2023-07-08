@@ -44,7 +44,7 @@ import { dataUser } from "./dataUserinfo.js";
 import { dataChannel } from "./dataChannel.js";
 import { dataMsg } from "./dataMsg.js";
 
-//メッセージ受け取り、履歴の保存
+//メッセージ受け取り、履歴への保存
 socket.on("messageReceive", (msg) => {
   //メッセージ発信元のチャンネルに参加してなくてかつプレビューでもないなら
   if (
@@ -599,7 +599,7 @@ socket.on("messageHistory", (history) => {
   try {
     channelid = history[0].channelid; //受け取ったデータの中身使っちゃうんだよね
   } catch (e) {
-    console.log("???");
+    console.log("socket :: messageHistory : 履歴受け取りエラー", e);
     console.log(history);
     return;
   }
