@@ -14,7 +14,7 @@ export default {
     return { theme, myUserinfo, CLIENT_FULL_LOADED };
   },
 
-  components: { Sidebar, Auth, CLIENT_FULL_LOADED },
+  components: { Sidebar, Auth },
 
   data() {
     return {
