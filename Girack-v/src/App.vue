@@ -1,6 +1,6 @@
-<script>
-import { getSocket, CLIENT_FULL_LOADED } from "./data/socket";
-import { dataUser } from "./data/dataUserinfo";
+
+import { getSocket, CLIENT_FULL_LOADED } from "./data/socket.js";
+import { dataUser } from "./data/dataUserinfo.js";
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
 import { useTheme } from "vuetify";
