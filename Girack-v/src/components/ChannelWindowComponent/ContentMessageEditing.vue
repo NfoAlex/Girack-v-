@@ -25,11 +25,11 @@ export default {
     enterTrigger(event) {
       //変換中のEnterなら処理させない
       if (event.keyCode !== 13) return;
-      
+
       //もしShiftキーも押されていたら
       if (event.shiftKey) {
         //現在の入力欄上のカーソル位置
-        let currentTxtCursor = this.$el.querySelector("#editingTextArea").selectionStart;
+        let currentTxtCursor = document.getElementById("editingTextArea").selectionStart;
 
         //テキストを現在のカーソル位置をもとに分裂させる
         let txtBefore = this.editTxt.slice(0, currentTxtCursor);
@@ -40,7 +40,7 @@ export default {
 
         //カーソル位置を改行のすぐ次へ移動
         this.$nextTick(() => {
-          currentTxtCursor.setSelectionRange(currentTxtCursor + 1, currentTxtCursor + 1);
+          document.getElementById("editingTextArea").setSelectionRange(currentTxtCursor + 1, currentTxtCursor + 1);
         });
 
         //ここでトリガー処理を停止
