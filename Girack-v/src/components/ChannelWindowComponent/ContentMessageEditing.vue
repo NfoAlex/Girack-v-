@@ -55,12 +55,6 @@ export default {
         return;
       }
 
-      //そもそも編集テキストが元と同じならそのままにして編集をやめる
-      if (this.editTxt === this.content) {
-        this.$emit('updateEditingMessage','waaaa');
-        return;
-      }
-
       //編集を適用する
       this.updateMessage();
     },
@@ -69,14 +63,14 @@ export default {
     escTrigger(event) {
       //そもそも押されたのがescキーじゃないなら停止
       if (event.key !== "Escape") return;
-
+      
       //削除確認中かどうかで処理を変える
       if (this.dialogCheckToDelete) { //確認中なら
         //ダイアログを非表示に
         this.dialogCheckToDelete = false;
       } else { //確認中じゃないなら
         //メッセージ編集を止める
-        this.$emit('updateEditingMessage','waaaa');
+        this.$emit('updateEditingMessage','waaaa')
       }
     },
 
