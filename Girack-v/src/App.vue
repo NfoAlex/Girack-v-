@@ -27,16 +27,8 @@ export default {
       reconnectedSnackbar: false,
       disconnected: false,
 
-      path: "", //現在のチャンネルID
       loggedin: false, //ログインしているかの状態
     };
-  },
-
-  watch: {
-    //URLの変更を検知
-    $route(r) {
-      this.path = r.path; //変数へ取り込む
-    },
   },
 
   mounted() {
