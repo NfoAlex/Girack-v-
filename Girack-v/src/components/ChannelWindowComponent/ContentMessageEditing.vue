@@ -47,6 +47,13 @@ export default {
         return;
       }
 
+      //もし空なら消去するかどうか確認
+      if (this.editTxt === "") {
+        this.dialogCheckToDelete = true;
+        return;
+      }
+    },
+
     //メッセージの編集を適用する関数
     updateMessage() {
       //更新するように送信
@@ -88,6 +95,18 @@ export default {
 </script>
 
 <template>
+  <!-- メッセージの削除確認 -->
+  <v-dialog
+    v-model="dialogCheckToDelete"
+  >
+    <v-card>
+      <v-card-title>
+        消去の確認
+      </v-card-title>
+      消していいの
+    </v-card>
+  </v-dialog>
+
   <v-textarea
     id="editingTextArea"
     @keydown.enter.prevent="enterTrigger"
