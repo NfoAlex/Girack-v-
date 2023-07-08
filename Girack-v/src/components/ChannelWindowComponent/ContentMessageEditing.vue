@@ -15,11 +15,38 @@ export default {
 
   data() {
     return {
-      editTxt: ""
+      editTxt: "",
+      dialogCheckToDelete: false,
     }
   },
 
   methods: {
+    //Enterキーのトリガー処理
+    enterTrigger(event) {
+      //変換中のEnterなら処理させない
+      if (event.keyCode !== 13) return;
+      
+      //もしShiftキーも押されていたら
+      if (event.shiftKey) {
+        //現在の入力欄上のカーソル位置
+        let currentTxtCursor = this.$el.querySelector("#editingTextArea").selectionStart;
+
+        //テキストを現在のカーソル位置をもとに分裂させる
+        let txtBefore = this.editTxt.slice(0, currentTxtCursor);
+        let txtAfter = this.editTxt.slice(currentTxtCursor);
+
+        //改行を挿入
+        this.editTxt = txtBefore + "\n" + txtAfter;
+
+        //カーソル位置を改行のすぐ次へ移動
+        this.$nextTick(() => {
+          currentTxtCursor.setSelectionRange(currentTxtCursor + 1, currentTxtCursor + 1);
+        });
+
+        //ここでトリガー処理を停止
+        return;
+      }
+
     //メッセージの編集を適用する関数
     updateMessage() {
       //更新するように送信
@@ -63,7 +90,7 @@ export default {
 <template>
   <v-textarea
     id="editingTextArea"
-    @keydown.enter="updateMessage"
+    @keydown.enter.prevent="enterTrigger"
     @keydown.esc="$emit('updateEditingMessage','waaaa')"
     v-model="editTxt"
     variant="outlined"
