@@ -68,6 +68,22 @@ export default {
       });
       //編集モードから抜ける
       this.$emit('updateEditingMessage','xxxxxx');
+    },
+
+    //メッセージの削除
+    deleteMessage() {
+      //削除要請を送信
+      socket.emit("actMessage", {
+        action: "delete",
+        channelid: this.channelid,
+        messageid: this.messageid,
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
+        },
+      });
+      //編集モードから抜ける
+      this.$emit('updateEditingMessage','xxxxxx');
     }
   },
 
@@ -95,18 +111,32 @@ export default {
 </script>
 
 <template>
+  <div>
   <!-- メッセージの削除確認 -->
   <v-dialog
     v-model="dialogCheckToDelete"
+    @keydown.esc="dialogCheckToDelete=false"
+    width="40vh"
   >
-    <v-card>
+    <v-card class="rounded-lg pa-5">
       <v-card-title>
         消去の確認
       </v-card-title>
-      消していいの
+      <p>
+        消していいの
+      </p>
+      <span class="d-flex justify-end pa-1">
+        <v-btn class="ma-1 rounded-lg" color="cardInner">
+          だめ
+        </v-btn>
+        <v-btn @click="deleteMessage" class="ma-1 rounded-lg" color="success">
+          いいよ
+        </v-btn>
+      </span>
     </v-card>
   </v-dialog>
 
+  <!-- 編集部分 -->
   <v-textarea
     id="editingTextArea"
     @keydown.enter.prevent="enterTrigger"
@@ -147,4 +177,5 @@ export default {
       </v-btn>
     </template>
   </v-textarea>
+  </div>
 </template>
