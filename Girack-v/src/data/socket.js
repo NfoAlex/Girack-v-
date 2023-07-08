@@ -44,7 +44,7 @@ import { dataUser } from "./dataUserinfo.js";
 import { dataChannel } from "./dataChannel.js";
 import { dataMsg } from "./dataMsg.js";
 
-//メッセージ受け取り、履歴への保存
+//メッセージ受け取り、履歴の保存
 socket.on("messageReceive", (msg) => {
   //メッセージ発信元のチャンネルに参加してなくてかつプレビューでもないなら
   if (
@@ -599,7 +599,7 @@ socket.on("messageHistory", (history) => {
   try {
     channelid = history[0].channelid; //受け取ったデータの中身使っちゃうんだよね
   } catch (e) {
-    console.log("socket :: messageHistory : 履歴受け取りエラー", e);
+    console.log("???");
     console.log(history);
     return;
   }
@@ -834,11 +834,8 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
   }
 
   //メッセージ履歴の取得
-  for (let index in dataUser().myUserinfo.value.channelJoined) {
-    //チャンネルIDを抽出
-    let channelid = dataUser().myUserinfo.value.channelJoined[index];
-    dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
-    getMessage(channelid, 40); //リクエスト送信する
+  for (let cid in dataUser().myUserinfo.value.channelJoined) {
+    getMessage(dataUser().myUserinfo.value.channelJoined[cid], 40); //リクエスト送信する
   }
 });
 
