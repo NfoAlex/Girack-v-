@@ -118,7 +118,7 @@ export default {
   <!-- メッセージの削除確認 -->
   <v-dialog
     v-model="dialogCheckToDelete"
-    @keydown.esc="dialogCheckToDelete=false"
+    @keydown.enter="deleteMessage"
     width="40vh"
   >
     <v-card class="rounded-lg pa-5">
