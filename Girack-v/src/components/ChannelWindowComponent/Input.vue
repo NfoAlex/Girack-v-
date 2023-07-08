@@ -317,7 +317,7 @@ export default {
       for (let index in this.$refs.fileInput.files) {
         //100MBよりもでかいならパス
         if (
-          this.$refs.fileInput.files[index].size >= 100000000 ||
+          this.$refs.fileInput.files[index].size >= this.Serverinfo.config.MESSAGE_FILE_MAXSIZE ||
           this.$refs.fileInput.files[index].size < 1 ||
           this.$refs.fileInput.files[index].size === undefined
         ) {
