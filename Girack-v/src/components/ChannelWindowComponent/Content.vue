@@ -15,6 +15,7 @@ import ContentHoverMenu from "./ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
+import ContentMessageEditing from "./ContentMessageEditing.vue";
 import ContentNewMessageLine from "./ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentSystemMessageRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
@@ -45,6 +46,7 @@ export default {
     ContentURLpreview,
     ContentHoverMenu,
     ContentMessageRender,
+    ContentMessageEditing,
     ContentSystemMessageRender,
     ContentAttatchmentRender,
     ContentNewMessageLine,
@@ -57,6 +59,7 @@ export default {
       uri: backendURI, //バックエンドのURI
       StateFocus: true, //Girackにフォーカスしているかどうか
       msgDisplayNum: 25,
+      msgIdEditing: "xxxxxxx",
 
       //watchする時のハンドラ用
       watcherRoute: {},
@@ -213,7 +216,9 @@ export default {
     //ウィンドウのフォーカス監視開始
     window.addEventListener("focus", this.setFocusStateTrue);
     window.addEventListener("blur", this.setFocusStateFalse);
+    //キーの監視開始
     window.addEventListener("keydown", this.initMsgReadTimeBefore);
+    window.addEventListener("keydown", this.startEditingMyRecentMessage);
   },
 
   //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)あるいは別ページに行ったとき
@@ -225,7 +230,9 @@ export default {
     //ウィンドウのフォーカス監視を取りやめ
     window.removeEventListener("focus", this.setFocusStateTrue);
     window.removeEventListener("blur", this.setFocusStateFalse);
+    //キーの監視終了
     window.removeEventListener("keydown", this.initMsgReadTimeBefore);
+    window.addEventListener("keydown", this.startEditingMyRecentMessage);
   },
 
   //マウント外れた時
@@ -679,6 +686,27 @@ export default {
       }
     },
 
+    //十字キーから、自分の一番直近のメッセージの編集を始める
+    startEditingMyRecentMessage(event) {
+      if (event.key === "ArrowUp") {
+        //メッセージ履歴の長さ
+        let msgLength = this.MsgDBActive.length-1;
+        //調べるメッセージのインデックス始まり(表示し始めてるところ)
+        let msgLookingNum = this.MsgDBActive.length - this.msgDisplayNum;
+        //表示インデックスが0未満なら0に設定
+        if (msgLength < msgLookingNum) msgLookingNum = 0;
+
+        //配列を逆から探してユーザーIDが一致するものを探す
+        for (let i = msgLength; i >= msgLookingNum; i--) {
+          if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
+            //編集中のメッセージIDを設定
+            this.msgIdEditing = this.MsgDBActive[i].messageid;
+            break;
+          }
+        }
+      }
+    },
+
     //メッセージの時間を出力する関数
     printDate(time) {
       let t = new Date(); //時間取得用
@@ -999,7 +1027,20 @@ export default {
                 </p>
 
                 <!-- メッセージ本文 -->
-                <ContentMessageRender :content="m.content" />
+                <ContentMessageRender v-if="msgIdEditing!==m.messageid" :content="m.content" />
+                <ContentMessageEditing
+                  v-else
+                  @update-editing-message="(mID)=>{msgIdEditing=mID}"
+                  :channelid="m.channelid"
+                  :content="m.content"
+                  :messageid="m.messageid"
+                >
+                </ContentMessageEditing>
+
+                <!-- メッセージが編集されていたら -->
+                <p v-if="m.isEdited" class="text-disabled text-caption">
+                  編集済み
+                </p>
 
                 <!-- ファイル添付表示 -->
                 <ContentAttatchmentRender
@@ -1034,6 +1075,7 @@ export default {
             </template>
             <!-- ここからホバーメニュー -->
             <ContentHoverMenu
+              @update-editing-message="(mID)=>{msgIdEditing=mID}"
               style="z-index: 30"
               :m="m"
               :userrole="getUserStats(m.userid, 'role')"

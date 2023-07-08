@@ -18,7 +18,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from "../config.js";
 
-export const CLIENT_VERSION = "alpha_20230706";
+export const CLIENT_VERSION = "alpha_20230708";
 
 const {
   CONFIG_SYNC,
@@ -337,6 +337,25 @@ socket.on("messageUpdate", (dat) => {
           dataMsg().MsgDB.value[dat.channelid][index].urlData.data[
             dat.urlIndex
           ] = dat.urlDataItem;
+        }
+      }
+
+      break;
+
+    //メッセージの編集
+    case "edit":
+      console.log("socket :: messageUpdate(edit) : 更新するデータ->", dat);
+      //メッセージIDで探索して更新
+      for (let index in dataMsg().MsgDB.value[dat.messageData.channelid]) {
+        if (
+          dataMsg().MsgDB.value[dat.messageData.channelid][index].messageid ===
+          dat.messageData.messageid
+        ) {
+          //URlプレビューデータを更新
+          dataMsg().MsgDB.value[dat.messageData.channelid][index].content
+            = dat.messageData.content;
+          //編集されたと設定
+            dataMsg().MsgDB.value[dat.messageData.channelid][index].isEdited = true;
         }
       }
 

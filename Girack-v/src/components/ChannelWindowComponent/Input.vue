@@ -317,7 +317,7 @@ export default {
       for (let index in this.$refs.fileInput.files) {
         //100MBよりもでかいならパス
         if (
-          this.$refs.fileInput.files[index].size >= 100000000 ||
+          this.$refs.fileInput.files[index].size >= this.Serverinfo.config.MESSAGE_FILE_MAXSIZE ||
           this.$refs.fileInput.files[index].size < 1 ||
           this.$refs.fileInput.files[index].size === undefined
         ) {
@@ -621,7 +621,7 @@ export default {
         <span class="d-flex align-center" style="width:fit-content;">
           <v-card
             color="secondary"
-            style="margin-right:8px; max-width:50%;"
+            style="margin-right:8px;"
             class="pa-2 rounded-lg d-flex justify-space-between align-center"
             v-for="(file, index) in fileInputData"
             :key="index"
