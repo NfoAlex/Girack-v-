@@ -128,11 +128,12 @@ export default {
     <v-snackbar
       v-model="askResyncSnackbar"
       class="rounded-lg"
-      color="warning"
+      color="grey"
       location="bottom"
       timeout="-1"
       vertical
     >
+      再接続されたようです。
       履歴をすべて再取得しますか？
       <template v-slot:actions>
         <v-btn
