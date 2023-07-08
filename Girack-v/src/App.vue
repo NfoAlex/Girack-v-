@@ -24,11 +24,27 @@ export default {
 
       sessionOnlineNum: 0, //オンラインユーザー数
       disconnectSnackbar: false, //切断された表示
-      reconnectedSnackbar: false,
+      reconnectedSnackbar: false, //再接続できたと表示
+      askResyncSnackbar: false, //MsgDBを取り直すかどうかを聞くやつ
       disconnected: false,
 
       loggedin: false, //ログインしているかの状態
     };
+  },
+
+  methods: {
+    //すべてのメッセージ履歴を初期化した取得しなおす
+    syncAllMsgDB() {
+      //既読状態の取得(受け取る時にMsgDBを初期化している)
+      socket.emit("getUserSaveMsgReadState", {
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
+        },
+      });
+      //スナックバーを非表示
+      this.askResyncSnackbar = false;
+    }
   },
 
   mounted() {
@@ -63,13 +79,8 @@ export default {
           },
         });
 
-        //既読状態の取得
-        socket.emit("getUserSaveMsgReadState", {
-          reqSender: {
-            userid: this.myUserinfo.userid,
-            sessionid: this.myUserinfo.sessionid,
-          },
-        });
+        //履歴を同期するか確認するスナックバーを表示
+        this.askResyncSnackbar = true;
 
         //切断状態をオフ
         this.disconnected = false;
@@ -110,6 +121,33 @@ export default {
           @click="reconnectedSnackbar = false"
         >
           <v-icon> mdi:mdi-close </v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="askResyncSnackbar"
+      class="rounded-lg"
+      color="warning"
+      location="bottom"
+      timeout="-1"
+      vertical
+    >
+      履歴をすべて再取得しますか？
+      <template v-slot:actions>
+        <v-btn
+          class="rounded-lg"
+          variant="text"
+          @click="askResyncSnackbar = false"
+        >
+          <v-icon> mdi:mdi-close </v-icon>
+        </v-btn>
+        <v-btn
+          class="rounded-lg"
+          variant="text"
+          @click="syncAllMsgDB"
+        >
+          <v-icon> mdi:mdi-check-bold</v-icon>
         </v-btn>
       </template>
     </v-snackbar>
