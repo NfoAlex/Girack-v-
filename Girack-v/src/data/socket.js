@@ -787,7 +787,6 @@ socket.on("infoUserSaveConfig", (userSaveConfig) => {
   if (userSaveConfig.configAvailable) {
     CONFIG_NOTIFICATION.value = userSaveConfig.config.CONFIG_NOTIFICATION;
     CONFIG_DISPLAY.value = userSaveConfig.config.CONFIG_DISPLAY;
-    //LIST_NOTIFICATION_MUTE_CHANNEL.value = userSaveConfig.config.LIST_NOTIFICATION_MUTE_CHANNEL;
   }
 });
 
