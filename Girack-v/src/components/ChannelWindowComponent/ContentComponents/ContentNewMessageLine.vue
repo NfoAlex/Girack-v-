@@ -1,5 +1,5 @@
 <script>
-import { dataMsg } from "../../data/dataMsg.js";
+import { dataMsg } from "../../../data/dataMsg.js";
 
 export default {
   setup() {

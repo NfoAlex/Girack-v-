@@ -1,5 +1,5 @@
 <script>
-import { backendURI } from "../../data/socket";
+import { backendURI } from "../../../data/socket";
 
 export default {
   props: ["fileData", "channelid"],
