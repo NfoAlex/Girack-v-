@@ -621,7 +621,7 @@ export default {
         <span class="d-flex align-center" style="width:fit-content;">
           <v-card
             color="secondary"
-            style="margin-right:8px; max-width:50%;"
+            style="margin-right:8px;"
             class="pa-2 rounded-lg d-flex justify-space-between align-center"
             v-for="(file, index) in fileInputData"
             :key="index"
