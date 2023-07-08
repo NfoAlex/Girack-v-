@@ -129,7 +129,11 @@ export default {
     //(メンション用)入力したテキストを監視してユーザー名を検索しようとしているか調べる
     txt() {
       //もし１文字以上入力されていたら入力している状態と保存
-      if (this.txt.length > 0) this.InputState.isTyping = true;
+      if (this.txt.length > 0) {
+        this.InputState.isTyping = true;
+      } else {
+        this.InputState.isTyping = false;
+      }
 
       //@が入力されたら検索モードに入る
       if (this.txt[this.txt.length - 1] === "@") {
@@ -416,8 +420,9 @@ export default {
         this.searchMode.selectedIndex -= 1; //インデックスを戻す
       }
 
-      console.log(this.$refs.optionsList.$el);
-      //   let scrollHeight = this.$refs.optionsList.$el.clientHeight;
+      //もし選択するものがないなら(メンションモードじゃない時など)処理を停止
+      if (this.$refs.optionsItem === undefined) return;
+
       //選択しているユーザーの高さ取得してその位置にスクロールする
       //選択しているユーザーの要素の高さ全部同じになるはず
       let itemPosition =
