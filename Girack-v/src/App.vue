@@ -11,10 +11,10 @@ export default {
     const theme = useTheme();
     const { myUserinfo } = dataUser();
 
-    return { theme, myUserinfo };
+    return { theme, myUserinfo, CLIENT_FULL_LOADED };
   },
 
-  components: { Sidebar, Auth, CLIENT_FULL_LOADED },
+  components: { Sidebar, Auth },
 
   data() {
     return {
