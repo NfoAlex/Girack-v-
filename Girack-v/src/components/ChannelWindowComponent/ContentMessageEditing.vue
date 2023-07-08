@@ -52,6 +52,9 @@ export default {
         this.dialogCheckToDelete = true;
         return;
       }
+
+      //編集を適用する
+      this.updateMessage();
     },
 
     //メッセージの編集を適用する関数
