@@ -614,16 +614,10 @@ export default {
             };
 
             //既読状態をサーバーへ同期させる
-            socket.emit("updateUserSaveMsgReadState", {
-              msgReadState: this.MsgReadTime,
-              reqSender: {
-                userid: this.myUserinfo.userid,
-                sessionid: this.myUserinfo.sessionid,
-              },
-            });
+            this.updateMsgReadState();
           }
         } catch (e) {
-          console.log("Content :: setScrollState : 既読状態の更新できなかった");
+          console.log("Content :: setScrollState : 既読状態の更新できなかった", e);
           this.MsgReadTime[this.getPath] = {
             //既読時間を最新メッセージの時間に設定
             time: 0,
@@ -664,6 +658,26 @@ export default {
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
       }
+    },
+
+    //既読状態を更新するためだけの関数
+    updateMsgReadState() {
+      //既読状態をコピー(いいのかこれで)
+      let CLONEMsgReadState = JSON.parse(JSON.stringify(this.MsgReadTime));
+      //JSONの中からそれぞれ新着と既読を殺す
+      for (let key in CLONEMsgReadState) {
+        delete CLONEMsgReadState[key].new;
+        delete CLONEMsgReadState[key].mention;
+      }
+
+      //既読状態をサーバーへ同期させる
+      socket.emit("updateUserSaveMsgReadState", {
+        msgReadState: CLONEMsgReadState,
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
+        },
+      });
     },
 
     //このウィンドウにいるかどうかを設定する
