@@ -25,6 +25,7 @@ const CONFIG_DISPLAY = ref({
     CONTENT_SHOW_ROLE: true,
     CONTENT_DATELINE_SHOWONLEFT: false,
     CONTENT_GOBOTTOMFAB_SHOW: false,
+    CONTENT_SCROLL_ONNEWMESSAGE: true,
     SIDEBAR_CHANNEL_ORDERBY: "alphabetical", //"id","alphabetical"
 });
 

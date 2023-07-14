@@ -133,13 +133,9 @@ export default {
 
     let channelWindow = document.querySelector("#channelWindow");
 
-    //レンダー完了したらスクロール監視、スクロール状態の初期化
+    //レンダー完了を待ってからスクロール
     this.$nextTick(() => {
-      channelWindow.addEventListener("scroll", function () {
-        ref.setScrollState(); //確認開始
-      });
-
-      this.scrollIt(); //スクロールする
+      this.scrollIt();
     });
   },
 
@@ -195,8 +191,9 @@ export default {
     this.watcherMsgDB = this.$watch(
       "MsgDBActive",
       function () {
-        //もしスクロールしきった状態、かつこのページにブラウザがいるなら
-        if (this.StateScrolled && this.StateFocus) {
+        console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
+        //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
+        if ((this.StateFocus && this.StateScrolled) || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
           //レンダーを待ってからスクロール
           this.$nextTick(() => {
             this.scrollIt(); //スクロールする
@@ -204,10 +201,12 @@ export default {
 
             //プレビューならここで停止
             if (this.channelInfo.previewmode) return 0;
-
-            //比較用既読時間を更新
-            let latestTime = this.MsgDBActive.slice(-1)[0].time;
-            this.MsgReadTime[this.getPath].timeBefore = latestTime;
+            //もしフォーカスしているなら
+            if (this.StateFocus) {
+              //比較用既読時間を更新
+              let latestTime = this.MsgDBActive.slice(-1)[0].time;
+              this.MsgReadTime[this.getPath].timeBefore = latestTime;
+            }
           });
         }
       },
@@ -215,7 +214,8 @@ export default {
         deep: true,
       }
     );
-
+    //スクロールの監視開始
+    document.querySelector("#channelWindow").addEventListener("scroll", this.setScrollState);
     //ウィンドウのフォーカス監視開始
     window.addEventListener("focus", this.setFocusStateTrue);
     window.addEventListener("blur", this.setFocusStateFalse);
@@ -230,6 +230,8 @@ export default {
     this.watcherRoute();
     this.watcherMsgDB();
 
+    //スクロールの監視取りやめ
+    document.querySelector("#channelWindow").removeEventListener("scroll", this.setScrollState);
     //ウィンドウのフォーカス監視を取りやめ
     window.removeEventListener("focus", this.setFocusStateTrue);
     window.removeEventListener("blur", this.setFocusStateFalse);
@@ -578,10 +580,14 @@ export default {
 
       //一番下かどうか調べる？
       if (
-        forcingTrue || //そもそも引数でtrueと渡されているなら
-        channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
-          channelWindow.scrollHeight || //スクロール位置を計算
-        channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
+        (
+          forcingTrue || //そもそも引数でtrueと渡されているなら
+          channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
+            channelWindow.scrollHeight || //スクロール位置を計算
+          channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
+        )
+          &&
+        this.StateFocus //かつフォーカスされていたら
       ) {
         this.StateScrolled = true; //スクロールしきったと保存
 
