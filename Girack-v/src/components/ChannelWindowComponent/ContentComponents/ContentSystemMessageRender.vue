@@ -63,7 +63,7 @@ export default {
       style="width: 100%; word-wrap: break-word"
       class="d-flex justify-center text-medium-emphasis"
     >
-      <span>
+      <span class="text-truncate">
         {{
           UserIndex[content.triggeredUser] !== undefined
             ? UserIndex[content.triggeredUser].username
@@ -74,7 +74,7 @@ export default {
         {{ renderMessageTemplate(content.term, 0) }}
       </span>
       <!-- もし別のユーザーが招待あるいはキックされたのなら表示 -->
-      <span v-if="content.targetUser !== ''">
+      <span v-if="content.targetUser !== ''" class="text-truncate">
         {{
           UserIndex[content.targetUser] !== undefined
             ? UserIndex[content.targetUser].username
