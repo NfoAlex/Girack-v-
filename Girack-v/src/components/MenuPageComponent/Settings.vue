@@ -396,6 +396,12 @@ export default {
                 density="compact"
               >
               </v-checkbox>
+              <v-checkbox
+                v-model="CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE"
+                label="新着メッセージが来た時にフォーカスしていなくてもスクロールする"
+                density="compact"
+              >
+              </v-checkbox>
             </v-card>
 
             <br />
