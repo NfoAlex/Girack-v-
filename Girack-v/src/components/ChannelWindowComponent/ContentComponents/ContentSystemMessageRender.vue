@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       MessageTemplate: {
+        WELCOME: ["がGirackへ参加しました!ようこそ!"],
         JOINED: ["がチャンネルへ参加しました"],
         LEFT: ["がチャンネルを退出しました"],
         INVITED: ["が", "をこのチャンネルに招待しました"],
