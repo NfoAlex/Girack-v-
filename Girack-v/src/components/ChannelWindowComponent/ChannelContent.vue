@@ -126,12 +126,8 @@ export default {
   },
 
   mounted() {
-    let ref = this; //methodsの関数使う用（直接参照はできないため）
-
     //ブラウザ上のタブ名を設定
     document.title = this.channelInfo.channelname;
-
-    let channelWindow = document.querySelector("#channelWindow");
 
     //レンダー完了を待ってからスクロール
     this.$nextTick(() => {
