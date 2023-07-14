@@ -5,6 +5,7 @@ import {
   backendURI,
   getMessage,
   setCookie,
+  updateMsgReadState
 } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
 import { dataChannel } from "../../data/dataChannel";
@@ -138,7 +139,7 @@ export default {
   //KeepAliveを通して新しくチャンネルに移動したとき
   activated() {
     //watch開始
-    //チャンネル移動の監視
+      //チャンネル移動の監視
     this.watcherRoute = this.$watch("$route", function (newPage, oldPage) {
       //ページが切り替わったらユーザーページを閉じるように
       this.userDialogShow = false;
@@ -179,11 +180,9 @@ export default {
         } catch (e) {
           return 0; //エラーでも止める
         }
-
-        this.scrollIt(); //スクロールする
       });
     });
-    //メッセージDB更新の監視
+      //メッセージDB更新の監視
     this.watcherMsgDB = this.$watch(
       "MsgDBActive",
       function () {
@@ -218,6 +217,9 @@ export default {
     //キーの監視開始
     window.addEventListener("keydown", this.initMsgReadTimeBefore);
     window.addEventListener("keydown", this.startEditingMyRecentMessage);
+
+    //レンダーを待ってからスクロールする
+    this.$nextTick(() => {this.scrollIt();});
   },
 
   //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)あるいは別ページに行ったとき
@@ -614,16 +616,10 @@ export default {
             };
 
             //既読状態をサーバーへ同期させる
-            socket.emit("updateUserSaveMsgReadState", {
-              msgReadState: this.MsgReadTime,
-              reqSender: {
-                userid: this.myUserinfo.userid,
-                sessionid: this.myUserinfo.sessionid,
-              },
-            });
+            updateMsgReadState();
           }
         } catch (e) {
-          console.log("Content :: setScrollState : 既読状態の更新できなかった");
+          console.log("Content :: setScrollState : 既読状態の更新できなかった", e);
           this.MsgReadTime[this.getPath] = {
             //既読時間を最新メッセージの時間に設定
             time: 0,
