@@ -1030,7 +1030,7 @@ export default {
                   />
                 </p>
 
-                <!-- メッセージ本文 -->
+                <!-- メッセージ本文と編集中表示 -->
                 <ContentMessageRender v-if="msgIdEditing!==m.messageid" :content="m.content" />
                 <ContentMessageEditing
                   v-else

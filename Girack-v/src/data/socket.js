@@ -345,9 +345,12 @@ socket.on("messageUpdate", (dat) => {
           dataMsg().MsgDB.value[dat.messageData.channelid][index].messageid ===
           dat.messageData.messageid
         ) {
-          //URlプレビューデータを更新
+          //メッセージ本文を更新
           dataMsg().MsgDB.value[dat.messageData.channelid][index].content
             = dat.messageData.content;
+          //URLが含まれるかどうかを適用
+          dataMsg().MsgDB.value[dat.messageData.channelid][index].hasUrl
+            = dat.messageData.hasUrl;
           //編集されたと設定
             dataMsg().MsgDB.value[dat.messageData.channelid][index].isEdited = true;
         }
