@@ -139,7 +139,7 @@ export default {
   //KeepAliveを通して新しくチャンネルに移動したとき
   activated() {
     //watch開始
-    //チャンネル移動の監視
+      //チャンネル移動の監視
     this.watcherRoute = this.$watch("$route", function (newPage, oldPage) {
       //ページが切り替わったらユーザーページを閉じるように
       this.userDialogShow = false;
@@ -184,7 +184,7 @@ export default {
         this.scrollIt(); //スクロールする
       });
     });
-    //メッセージDB更新の監視
+      //メッセージDB更新の監視
     this.watcherMsgDB = this.$watch(
       "MsgDBActive",
       function () {
