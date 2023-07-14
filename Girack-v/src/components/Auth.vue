@@ -257,10 +257,10 @@ export default {
 
       <!-- 登録 -->
       <v-window-item value="register">
-        <p class="text-h6" style="margin: 10% auto; text-align: center">
+        <p class="text-h5 text-center" style="margin: 5% 0;">
           ようこそ!
         </p>
-        <div class="d-flex justify-center flex-column" style="margin: 10% 10%">
+        <div class="d-flex justify-center flex-column" style="margin: 5% 10%">
           <v-alert
             v-if="!Connected"
             style="margin: 3% auto"
@@ -316,8 +316,9 @@ export default {
           </div>
           <div v-if="registerResult === 1">
             <!--登録後-->
-            <p class="text-h4" style="text-align: center">🥰</p>
             <p class="text-h5" style="text-align: center">登録あざ</p>
+            <p class="text-h4 ma-2 text-center">🥰</p>
+            <p class="text-h5 ma-1 text-center">登録あざ</p>
             <br />
             <v-text-field v-model="pwFromRegister" readonly>
               <span class="mdi mdi-lock"></span>
