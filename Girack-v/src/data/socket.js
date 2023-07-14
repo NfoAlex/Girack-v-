@@ -328,9 +328,8 @@ socket.on("messageUpdate", (dat) => {
           dat.messageid
         ) {
           //URlプレビューデータを更新
-          dataMsg().MsgDB.value[dat.channelid][index].urlData.data[
-            dat.urlIndex
-          ] = dat.urlDataItem;
+          dataMsg().MsgDB.value[dat.channelid][index].urlData.data = dat.urlDataItem;
+          break;
         }
       }
 
