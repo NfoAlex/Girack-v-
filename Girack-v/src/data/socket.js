@@ -53,8 +53,7 @@ socket.on("messageReceive", (msg) => {
   )
     return;
 
-  console.log("socket :: msgReceive : ↓");
-  console.log(msg);
+  //console.log("socket :: msgReceive : ->", msg);
 
   //もしユーザーの名前リストに名前がなかったら
   if (dataUser().UserIndex.value[msg.userid] === undefined) {
@@ -234,8 +233,7 @@ socket.on("messageReceive", (msg) => {
       }
     }
   } catch (e) {
-    console.log("Content :: dataMsg().MsgDB.value書き込みエラー");
-    console.log(e);
+    console.log("Content :: dataMsg().MsgDB.value書き込みエラー", e);
   }
 });
 
@@ -777,7 +775,7 @@ socket.on("authResult", (dat) => {
 
 //設定データの受け取り、適用
 socket.on("infoUserSaveConfig", (userSaveConfig) => {
-  console.log("socket :: infoUserSaveConfig : 設定受信", userSaveConfig);
+  //console.log("socket :: infoUserSaveConfig : 設定受信", userSaveConfig);
 
   //もしクラウド上に設定が保存されていたなら
   if (userSaveConfig.configAvailable) {
