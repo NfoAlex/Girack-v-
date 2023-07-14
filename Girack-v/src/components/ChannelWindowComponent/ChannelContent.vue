@@ -632,24 +632,20 @@ export default {
 
         //既読状態をCookieへ書き込み
         setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
-
-        let objMsgReadTime = Object.entries(this.MsgReadTime); //既読状態をオブジェクト化
         let FLAGThereIsNewMessages = false; //新着アリという印
 
-        //新着が１つ以上あるかどうかを調べてあったらfaviconにバッジを付ける
-        for (let index in objMsgReadTime) {
+        //新着を確認してfaviconを戻すかどうか決める
+        for (let key in this.MsgReadTime) {
           try {
             //既読状態をループで計算して新着があればループを断ち切る
             if (
-              objMsgReadTime[index][1].new !== 0 ||
-              objMsgReadTime[index][1].mention !== 0
+              this.MsgReadTime[key].new !== 0 ||
+              this.MsgReadTime[key].mention !== 0
             ) {
               FLAGThereIsNewMessages = true; //メッセージあるぜと登録
               break;
             }
-          } catch (e) {
-            console.error(e);
-          }
+          } catch(e) {console.log(e)}
         }
 
         //もしメッセージがアリじゃないのなら通常faviconに
