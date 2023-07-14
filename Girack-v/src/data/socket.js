@@ -282,12 +282,6 @@ socket.on("messageUpdate", (dat) => {
           dataMsg().MsgDB.value[dat.channelid][index].messageid ===
           dat.messageid
         ) {
-          console.log(
-            "socket :: messageUpdate : これから時間比較 既読時間:",
-            dataMsg().MsgReadTime.value[dat.channelid].time,
-            " これから消すmsgの時間:",
-            dataMsg().MsgDB.value[dat.channelid][index].time
-          );
           //もしまだ未読のものだったら新着数を減らす
           if (
             dataMsg().MsgReadTime.value[dat.channelid].time <
