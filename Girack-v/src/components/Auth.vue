@@ -316,8 +316,8 @@ export default {
           </div>
           <div v-if="registerResult === 1">
             <!--登録後-->
-            <p class="text-h5" style="text-align: center">登録あざ</p>
             <p class="text-h4 ma-2 text-center">🥰</p>
+            <p class="text-h5 ma-3 text-center d-flex">👉<span class="text-truncate">{{ usernameForRegister }}</span>👈</p>
             <p class="text-h5 ma-1 text-center">登録あざ</p>
             <br />
             <v-text-field v-model="pwFromRegister" readonly>
