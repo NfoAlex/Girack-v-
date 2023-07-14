@@ -149,13 +149,7 @@ socket.on("messageReceive", (msg) => {
     }
 
     //既読状態をサーバーへ同期させる
-    socket.emit("updateUserSaveMsgReadState", {
-      msgReadState: dataMsg().MsgReadTime.value,
-      reqSender: {
-        userid: dataUser().myUserinfo.value.userid,
-        sessionid: dataUser().myUserinfo.value.sessionid,
-      },
-    });
+    updateMsgReadState();
 
     //新着のメッセージを通知
     if (
@@ -681,14 +675,8 @@ socket.on("messageHistory", (history) => {
       dataMsg().MsgReadTime.value[channelid].mention !== 0 &&
       dataMsg().MsgReadTime.value[channelid].new !== 0
     ) {
-      //既読状態をサーバーへ同期させる
-      socket.emit("updateUserSaveMsgReadState", {
-        msgReadState: dataMsg().MsgReadTime.value,
-        reqSender: {
-          userid: dataUser().myUserinfo.value.userid,
-          sessionid: dataUser().myUserinfo.value.sessionid,
-        },
-      });
+      //既読状態を同期させる
+      updateMsgReadState();
     }
   } catch (e) {
     console.error(e);
@@ -952,6 +940,26 @@ function loadDataFromCookie() {
   } catch (e) {
     console.log("socket :: loadDataFromCookie : 設定読み取りエラー", e);
   }
+}
+
+export function updateMsgReadState() {
+  console.log("socket :: updateMsgReadState : 同期された");
+  //既読状態をコピー(いいのかこれで)
+  let CLONEMsgReadState = JSON.parse(JSON.stringify(dataMsg().MsgReadTime.value));
+  //JSONの中からそれぞれ新着と既読を殺す
+  for (let key in CLONEMsgReadState) {
+    delete CLONEMsgReadState[key].new;
+    delete CLONEMsgReadState[key].mention;
+  }
+
+  //既読状態をサーバーへ同期させる
+  socket.emit("updateUserSaveMsgReadState", {
+    msgReadState: CLONEMsgReadState,
+    reqSender: {
+      userid: dataUser().myUserinfo.value.userid,
+      sessionid: dataUser().myUserinfo.value.sessionid,
+    },
+  });
 }
 
 //クッキー設定するやつ(MDNから参考)
