@@ -210,7 +210,7 @@ export default {
       }
     );
     //スクロールの監視開始
-    document.querySelector("#channelWindow").addEventListener("scroll", this.setScrollState);
+    window.addEventListener("scroll", this.setScrollState);
     //ウィンドウのフォーカス監視開始
     window.addEventListener("focus", this.setFocusStateTrue);
     window.addEventListener("blur", this.setFocusStateFalse);
@@ -229,7 +229,7 @@ export default {
     this.watcherMsgDB();
 
     //スクロールの監視取りやめ
-    document.querySelector("#channelWindow").removeEventListener("scroll", this.setScrollState);
+    window.removeEventListener("scroll", this.setScrollState);
     //ウィンドウのフォーカス監視を取りやめ
     window.removeEventListener("focus", this.setFocusStateTrue);
     window.removeEventListener("blur", this.setFocusStateFalse);
