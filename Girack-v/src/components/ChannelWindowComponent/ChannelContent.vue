@@ -180,8 +180,6 @@ export default {
         } catch (e) {
           return 0; //エラーでも止める
         }
-
-        this.scrollIt(); //スクロールする
       });
     });
       //メッセージDB更新の監視
@@ -219,6 +217,9 @@ export default {
     //キーの監視開始
     window.addEventListener("keydown", this.initMsgReadTimeBefore);
     window.addEventListener("keydown", this.startEditingMyRecentMessage);
+
+    //レンダーを待ってからスクロールする
+    this.$nextTick(() => {this.scrollIt();});
   },
 
   //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)あるいは別ページに行ったとき
