@@ -195,8 +195,9 @@ export default {
     this.watcherMsgDB = this.$watch(
       "MsgDBActive",
       function () {
-        //もしスクロールしきった状態、かつこのページにブラウザがいるなら
-        if (this.StateScrolled && this.StateFocus) {
+        console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
+        //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
+        if ((this.StateFocus && this.StateScrolled) || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
           //レンダーを待ってからスクロール
           this.$nextTick(() => {
             this.scrollIt(); //スクロールする
@@ -204,10 +205,12 @@ export default {
 
             //プレビューならここで停止
             if (this.channelInfo.previewmode) return 0;
-
-            //比較用既読時間を更新
-            let latestTime = this.MsgDBActive.slice(-1)[0].time;
-            this.MsgReadTime[this.getPath].timeBefore = latestTime;
+            //もしフォーカスしているなら
+            if (this.StateFocus) {
+              //比較用既読時間を更新
+              let latestTime = this.MsgDBActive.slice(-1)[0].time;
+              this.MsgReadTime[this.getPath].timeBefore = latestTime;
+            }
           });
         }
       },
@@ -536,7 +539,10 @@ export default {
       this.$nextTick(() => {
         const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
         channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
-        this.setScrollState(true); //スクロール状態を"した"と設定
+        //フォーカスしているなら既読と設定
+        if (this.StateFocus) {
+          this.setScrollState(true); //スクロール状態を"した"と設定
+        }
       });
     },
 
