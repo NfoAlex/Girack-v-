@@ -477,8 +477,7 @@ socket.on("infoUser", (dat) => {
 
   dataUser().UserIndex.value[userid] = {};
 
-  console.log("socket :: infoUser : 情報北");
-  console.log(dat);
+  //console.log("socket :: infoUser : 情報北->", dat);
 
   //ユーザーインデックス更新
   dataUser().UserIndex.value[userid].username = username; //名前
@@ -505,9 +504,7 @@ socket.on("infoUser", (dat) => {
         (cid) => !dataUser().myUserinfo.value.channelJoined.includes(cid)
       );
 
-      console.log("socket :: チャンネル差 : ");
-      console.log(channelNew);
-
+      //console.log("socket :: チャンネル差 : ", channelNew);
       //新しく参加したチャンネル情報の取得
       for (let c in channelNew) {
         //リクエスト送信
@@ -531,15 +528,10 @@ socket.on("infoUser", (dat) => {
       dat.channelJoined.length <
       dataUser().myUserinfo.value.channelJoined.length
     ) {
-      console.log("socket :: infoResult : チャンネル差が少ないから減らす");
       dat.channelid = dataUser().myUserinfo.value.channelJoined.filter(
         (cid) => !dat.channelJoined.includes(cid)
       );
 
-      console.log(
-        "socket :: infoResult : 今参加しているチャンネル -> " +
-          dat.channelJoined
-      );
       //自分が抜けたチャンネル分channelIndexを削る
       for (
         let c = 0;
@@ -579,8 +571,7 @@ socket.on("messageHistory", (history) => {
     return;
   }
 
-  console.log("socket :: messageHistory : history -> ");
-  console.log(history);
+  //console.log("socket :: messageHistory : history -> ", history);
 
   let channelid = ""; //履歴を入れるチャンネルID
 
