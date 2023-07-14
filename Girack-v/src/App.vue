@@ -26,7 +26,8 @@ export default {
       disconnectSnackbar: false, //切断された表示
       reconnectedSnackbar: false, //再接続できたと表示
       askResyncSnackbar: false, //MsgDBを取り直すかどうかを聞くやつ
-      disconnected: false,
+      disconnected: false, //切断されたかどうかの状態
+      disconnectedForEnoughTime: false, //切断されて時間が経ったかどうか
 
       loggedin: false, //ログインしているかの状態
     };
@@ -57,6 +58,11 @@ export default {
     socket.on("disconnect", () => {
       this.disconnectSnackbar = true;
       this.disconnected = true;
+
+      //３秒以上経っても直らないなら同期が必要と設定
+      setTimeout(() => {
+        if (this.disconnected) this.disconnectedForEnoughTime = true;
+      }, 3000);
     });
 
     //再接続できたら接続できたと表示
@@ -79,8 +85,8 @@ export default {
           },
         });
 
-        //履歴を同期するか確認するスナックバーを表示
-        this.askResyncSnackbar = true;
+        //3秒以上切断されていたのなら履歴を再同期
+        if (this.disconnectedForEnoughTime) this.syncAllMsgDB();
 
         //切断状態をオフ
         this.disconnected = false;
