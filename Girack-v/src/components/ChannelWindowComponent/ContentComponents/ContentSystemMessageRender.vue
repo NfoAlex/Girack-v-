@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       MessageTemplate: {
+        WELCOME: ["がGirackへ参加しました!  ようこそ!"],
         JOINED: ["がチャンネルへ参加しました"],
         LEFT: ["がチャンネルを退出しました"],
         INVITED: ["が", "をこのチャンネルに招待しました"],
@@ -59,28 +60,35 @@ export default {
 <template>
   <span>
     <span
-      style="width: 100%; word-wrap: break-word"
-      class="d-flex justify-center text-medium-emphasis"
+      style="width: 95%; word-wrap: break-word"
+      class="mx-auto d-flex justify-center text-medium-emphasis"
     >
-      <span>
+
+      <span class="text-truncate flex-shrink-1">
         {{
           UserIndex[content.triggeredUser] !== undefined
             ? UserIndex[content.triggeredUser].username
             : needUserIndex(content.triggeredUser)
         }}
       </span>
-      <span>
+
+      <span class="flex-shrink-0">
         {{ renderMessageTemplate(content.term, 0) }}
       </span>
+
       <!-- もし別のユーザーが招待あるいはキックされたのなら表示 -->
-      <span v-if="content.targetUser !== ''">
+      <span v-if="content.targetUser !== ''" class="flex-shrink-1 text-truncate">
         {{
           UserIndex[content.targetUser] !== undefined
             ? UserIndex[content.targetUser].username
             : needUserIndex(content.targetUser)
         }}
+      </span>
+
+      <span v-if="content.targetUser !== ''" class="flex-shrink-0">
         {{ renderMessageTemplate(content.term, 1) }}
       </span>
+
     </span>
   </span>
 </template>
