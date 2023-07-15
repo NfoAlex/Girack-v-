@@ -14,13 +14,16 @@ export default {
 
     data() {
         return {
-            configReady: false,
+            configReady: false, //設定データを受信できたかどうかの状態
+            channelListReady: false, //チャンネルリストを受信できたかどうかの状態
             currentSettings: null,
+
+            channelList: {}, //チャンネル設定用のJSON
 
             servernameEditingMode: false, //インスタンス名を編集しているかどうか
             servernameEditingTemp: "", //編集途中のインスタンス名記憶用
             displayServername: "...",
-            displaySettings: null,
+            displaySettings: {},
 
             changed: false
         }
@@ -50,7 +53,7 @@ export default {
         //設定の値を初期設定に戻す
         restoreDefault() {
             //サーバーの設定情報を取得
-            socket.emit("getInfoServer");
+            socket.emit("getInfoServerFull");
 
         },
 
@@ -61,6 +64,8 @@ export default {
             //新しく設定を更新させる
             socket.emit("changeServerSettings", {
                 servername: this.displaySettings.servername,
+                registerAnnounceChannel: this.displaySettings.registerAnnounceChannel,
+                defaultJoinChannels: this.displaySettings.defaultJoinChannels,
                 registration: {
                     available: this.displaySettings.registration.available,
                     invite: {
@@ -111,6 +116,7 @@ export default {
             
         },
 
+        //サーバーの情報取得
         SOCKETinfoServerFull(dat) {
             console.log("ServerSettings :: SOCKETinfoServerFull : 設定北");
             console.log(dat);
@@ -128,6 +134,17 @@ export default {
             //ロードできたと設定
             this.configReady = true;
             
+        },
+
+        //チャンネルリストの取得
+        SOCKETinfoList(dat) {
+            if (dat.type !== "channel") return 0;
+            console.log("ServerSettings :: SOCKETinfoList : dat->", dat);
+            //チャンネルリストを格納
+            this.channelList = dat.channelList;
+            //チャンネルリストを受信できたと設定
+            this.channelListReady = true;
+
         }
 
     },
@@ -137,6 +154,8 @@ export default {
 
         //サーバーの設定情報受け取り
         socket.on("infoServerFull",this.SOCKETinfoServerFull);
+        //チャンネルリストの全取得
+        socket.on("infoList", this.SOCKETinfoList);
 
         //サーバーの設定情報を取得
         socket.emit("getInfoServerFull", {
@@ -145,6 +164,14 @@ export default {
                 sessionid: this.myUserinfo.sessionid
             }
         });
+        //チャンネルリストを全取得
+        socket.emit("getInfoList", {
+            target: "channel",
+            reqSender: {
+                userid: this.myUserinfo.userid,
+                sessionid: this.myUserinfo.sessionid
+            }
+        })
 
     },
 
@@ -300,6 +327,75 @@ export default {
                         label="Memberロールのユーザーでもチャンネルをプライベートに設定できるようにする"
                     >
                     </v-switch>
+                    <!-- ユーザーの新規登録を通知するチャンネル -->
+                    <div class="ma-2">
+                        <p>ユーザーの新規登録を通知するチャンネル</p>
+                        <v-select
+                            v-if="channelListReady"
+                            v-model="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE"
+                            :items="Object.keys(channelList)"
+                        >
+                            <!-- 選択したチャンネルの表示 -->
+                            <template v-slot:selection="{item, index, props}">
+                                {{ channelList[item.value].name }}
+                            </template>
+                            <!-- 選択項目それぞれ -->
+                            <template v-slot:item="{item, index, props}">
+                                <v-chip
+                                    @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE = item.value"
+                                    :color="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE===item.value?'secondary':null"
+                                    :disabled="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE===item.value"
+                                    variant="flat"
+                                    class="ma-1"
+                                >
+                                    {{ channelList[item.value].name }}
+                                </v-chip>
+                            </template>
+                            <!-- 選択がない場合 -->
+                            <template v-slot:no-data>
+                                チャンネルが無いようです...
+                            </template>
+                        </v-select>
+                        <!-- データ受信するまでのホルダー -->
+                        <v-select v-if="!channelListReady" loading="true">
+                        </v-select>
+                    </div>
+                    <!-- ユーザー登録時に参加するチャンネル -->
+                    <div class="ma-2">
+                        <p>ユーザー登録時に参加するチャンネル</p>
+                        <v-select
+                            v-if="channelListReady"
+                            v-model="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER"
+                            :items="Object.keys(channelList)"
+                            multiple
+                        >
+                            <!-- 選択したチャンネルの表示 -->
+                            <template v-slot:selection="{ item, index }">
+                                <v-chip
+                                    @click:close="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.splice(index,1)"
+                                    variant="flat"
+                                    closable
+                                >
+                                    {{ channelList[item.value].name }}
+                                </v-chip>
+                            </template>
+                            <!-- 選択項目それぞれ -->
+                            <template v-slot:item="{item, index, props}">
+                                <v-chip
+                                    @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
+                                    :disabled="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.indexOf(item.value)!==-1"
+                                    class="ma-1"
+                                    variant="flat"
+                                >
+                                    {{ channelList[item.value].name }}
+                                </v-chip>
+                            </template>
+                            <!-- 選択がない場合 -->
+                            <template v-slot:no-data>
+                                チャンネルが無いようです...
+                            </template>
+                        </v-select>
+                    </div>
                 </v-card>
 
                 <!-- プロフィール -->
