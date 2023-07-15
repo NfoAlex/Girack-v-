@@ -328,7 +328,21 @@ export default {
                         <p>ユーザーの新規登録を通知するチャンネル</p>
                         <v-select
                             v-model="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE"
+                            :items="Object.keys(channelList)"
                         >
+                            <!-- 選択したチャンネルの表示 -->
+                            <template v-slot:selection="{item, index, props}">
+                                {{ channelList[item.value].name }}
+                            </template>
+                            <!-- 選択項目の表示 -->
+                            <template v-slot:item="{item, index, props}">
+                                <v-chip
+                                    class="ma-1"
+                                    @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE = item.value"
+                                >
+                                    {{ channelList[item.value].name }}
+                                </v-chip>
+                            </template>
                         </v-select>
                     </div>
                     <div class="ma-2">
