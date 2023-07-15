@@ -52,7 +52,7 @@ export default {
         //設定の値を初期設定に戻す
         restoreDefault() {
             //サーバーの設定情報を取得
-            socket.emit("getInfoServer");
+            socket.emit("getInfoServerFull");
 
         },
 
