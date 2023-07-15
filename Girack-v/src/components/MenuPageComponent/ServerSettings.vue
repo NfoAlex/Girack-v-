@@ -22,7 +22,7 @@ export default {
             servernameEditingMode: false, //インスタンス名を編集しているかどうか
             servernameEditingTemp: "", //編集途中のインスタンス名記憶用
             displayServername: "...",
-            displaySettings: null,
+            displaySettings: {},
 
             changed: false
         }
