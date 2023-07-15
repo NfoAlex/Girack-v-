@@ -62,12 +62,10 @@ export default {
     //画像単体時での画像ロードが検知されたときのロードされたと設定
     imageAloneLoaded() {
       this.imageAloneLoadState = true; //ロードできた
-      console.log("ContentURLpreview :: imageAloneLoaded : 画像ロードできたよ");
     },
 
     //ツイートの読み込みができなかったとき
     tweetErrorHandler() {
-      console.log("ContentURLPreview :: tweetErrorHandler : エラー");
       this.embedTwitterError = true;
     },
   },

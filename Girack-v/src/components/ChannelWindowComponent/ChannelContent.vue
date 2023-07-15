@@ -113,10 +113,12 @@ export default {
         //もし開始位置が0未満なら0にする
         if (displayStartPosition < 0) displayStartPosition = 0;
 
+        /*
         console.log(
           "Content :: cropMessage : 履歴を出力します 範囲->",
           this.msgDisplayNum
         );
+        */
 
         //履歴を削って返す
         return this.MsgDBActive.slice(displayStartPosition);
@@ -157,11 +159,7 @@ export default {
       this.$nextTick(() => {
         //チャンネル以外のページ場合、これ以降の処理をスキップする
         if (!newPage.path.startsWith("/c/")) {
-          console.log(
-            "Content :: watch($route) : スクロールしないわ",
-            this.channelInfo.channelid,
-            newPage.params.id
-          );
+          //console.log("Content :: watch($route) : スクロールしないわ", this.channelInfo.channelid, newPage.params.id);
           return 0;
         }
 
@@ -186,7 +184,7 @@ export default {
     this.watcherMsgDB = this.$watch(
       "MsgDBActive",
       function () {
-        console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
+        //console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
         //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
         if ((this.StateFocus && this.StateScrolled) || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
           //レンダーを待ってからスクロール
