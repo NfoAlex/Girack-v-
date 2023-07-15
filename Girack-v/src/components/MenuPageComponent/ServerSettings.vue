@@ -383,7 +383,7 @@ export default {
                             <template v-slot:item="{item, index, props}">
                                 <v-chip
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
-                                    v-if="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.indexOf(item.value)===-1"
+                                    :disabled="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.indexOf(item.value)!==-1"
                                     class="ma-1"
                                     variant="flat"
                                 >
