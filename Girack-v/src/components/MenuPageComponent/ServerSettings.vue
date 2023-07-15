@@ -341,8 +341,8 @@ export default {
                             <!-- 選択項目の表示 -->
                             <template v-slot:item="{item, index, props}">
                                 <v-chip
-                                    class="ma-1"
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE = item.value"
+                                    class="ma-1"
                                 >
                                     {{ channelList[item.value].name }}
                                 </v-chip>
@@ -365,17 +365,17 @@ export default {
                         >
                             <template v-slot:selection="{ item, index }">
                                 <v-chip
-                                    closable
                                     @click:close="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.splice(index,1)"
+                                    closable
                                 >
                                     {{ channelList[item.value].name }}
                                 </v-chip>
                             </template>
                             <template v-slot:item="{item, index, props}">
                                 <v-chip
+                                    @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
                                     v-if="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.indexOf(item.value)===-1"
                                     class="ma-1"
-                                    @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
                                 >
                                     {{ channelList[item.value].name }}
                                 </v-chip>
