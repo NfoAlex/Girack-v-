@@ -368,7 +368,7 @@ export default {
                                     closable
                                     @click:close="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.splice(index,1)"
                                 >
-                                    {{ item.value }}
+                                    {{ channelList[item.value].name }}
                                 </v-chip>
                             </template>
                             <template v-slot:item="{item, index, props}">
@@ -377,7 +377,7 @@ export default {
                                     class="ma-1"
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
                                 >
-                                    {{ item.value }}
+                                    {{ channelList[item.value].name }}
                                 </v-chip>
                             </template>
                             <template v-slot:no-data>
