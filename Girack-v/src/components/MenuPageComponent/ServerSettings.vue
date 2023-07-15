@@ -14,7 +14,8 @@ export default {
 
     data() {
         return {
-            configReady: false,
+            configReady: false, //設定データを受信できたかどうかの状態
+            channelListReady: false, //チャンネルリストを受信できたかどうかの状態
             currentSettings: null,
 
             channelList: {}, //チャンネル設定用のJSON
@@ -141,6 +142,8 @@ export default {
             console.log("ServerSettings :: SOCKETinfoList : dat->", dat);
             //チャンネルリストを格納
             this.channelList = dat.channelList;
+            //チャンネルリストを受信できたと設定
+            this.channelListReady = true;
 
         }
 
@@ -343,6 +346,9 @@ export default {
                                     {{ channelList[item.value].name }}
                                 </v-chip>
                             </template>
+                        </v-select>
+                        <!-- データ受信するまでのホルダー -->
+                        <v-select v-if="!channelListReady" loading="true">
                         </v-select>
                     </div>
                     <div class="ma-2">
