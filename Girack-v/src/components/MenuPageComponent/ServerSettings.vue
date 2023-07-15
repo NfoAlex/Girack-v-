@@ -63,6 +63,8 @@ export default {
             //新しく設定を更新させる
             socket.emit("changeServerSettings", {
                 servername: this.displaySettings.servername,
+                registerAnnounceChannel: this.displaySettings.registerAnnounceChannel,
+                defaultJoinChannels: this.displaySettings.defaultJoinChannels,
                 registration: {
                     available: this.displaySettings.registration.available,
                     invite: {
@@ -322,6 +324,30 @@ export default {
                         label="Memberロールのユーザーでもチャンネルをプライベートに設定できるようにする"
                     >
                     </v-switch>
+                    <div class="ma-2">
+                        <p>ユーザーの新規登録を通知するチャンネル</p>
+                        <v-select
+                            v-model="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE"
+                        >
+                        </v-select>
+                    </div>
+                    <div class="ma-2">
+                        <p>ユーザー登録時に参加するチャンネル</p>
+                        <v-btn
+                            class="rounded-pill ma-2"
+                            size="small"
+                            color="secondary"
+                        >
+                            チャンネルを追加
+                        </v-btn>
+                        <v-chip
+                            v-for="(d,index) in displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER"
+                            :key="index"
+                            closable
+                        >
+                            {{ d }}
+                        </v-chip>
+                    </div>
                 </v-card>
 
                 <!-- プロフィール -->
