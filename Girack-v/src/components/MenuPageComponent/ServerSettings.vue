@@ -327,6 +327,7 @@ export default {
                         label="Memberロールのユーザーでもチャンネルをプライベートに設定できるようにする"
                     >
                     </v-switch>
+                    <!-- ユーザーの新規登録を通知するチャンネル -->
                     <div class="ma-2">
                         <p>ユーザーの新規登録を通知するチャンネル</p>
                         <v-select
@@ -338,7 +339,7 @@ export default {
                             <template v-slot:selection="{item, index, props}">
                                 {{ channelList[item.value].name }}
                             </template>
-                            <!-- 選択項目の表示 -->
+                            <!-- 選択項目それぞれ -->
                             <template v-slot:item="{item, index, props}">
                                 <v-chip
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE = item.value"
@@ -350,6 +351,7 @@ export default {
                                     {{ channelList[item.value].name }}
                                 </v-chip>
                             </template>
+                            <!-- 選択がない場合 -->
                             <template v-slot:no-data>
                                 チャンネルが無いようです...
                             </template>
@@ -358,6 +360,7 @@ export default {
                         <v-select v-if="!channelListReady" loading="true">
                         </v-select>
                     </div>
+                    <!-- ユーザー登録時に参加するチャンネル -->
                     <div class="ma-2">
                         <p>ユーザー登録時に参加するチャンネル</p>
                         <v-select
@@ -366,6 +369,7 @@ export default {
                             :items="Object.keys(channelList)"
                             multiple
                         >
+                            <!-- 選択したチャンネルの表示 -->
                             <template v-slot:selection="{ item, index }">
                                 <v-chip
                                     @click:close="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.splice(index,1)"
@@ -375,6 +379,7 @@ export default {
                                     {{ channelList[item.value].name }}
                                 </v-chip>
                             </template>
+                            <!-- 選択項目それぞれ -->
                             <template v-slot:item="{item, index, props}">
                                 <v-chip
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
@@ -385,6 +390,7 @@ export default {
                                     {{ channelList[item.value].name }}
                                 </v-chip>
                             </template>
+                            <!-- 選択がない場合 -->
                             <template v-slot:no-data>
                                 チャンネルが無いようです...
                             </template>
