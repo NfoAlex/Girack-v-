@@ -342,6 +342,9 @@ export default {
                             <template v-slot:item="{item, index, props}">
                                 <v-chip
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE = item.value"
+                                    :color="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE===item.value?'secondary':null"
+                                    :disabled="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE===item.value"
+                                    variant="flat"
                                     class="ma-1"
                                 >
                                     {{ channelList[item.value].name }}
@@ -366,6 +369,7 @@ export default {
                             <template v-slot:selection="{ item, index }">
                                 <v-chip
                                     @click:close="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.splice(index,1)"
+                                    variant="flat"
                                     closable
                                 >
                                     {{ channelList[item.value].name }}
@@ -376,6 +380,7 @@ export default {
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
                                     v-if="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.indexOf(item.value)===-1"
                                     class="ma-1"
+                                    variant="flat"
                                 >
                                     {{ channelList[item.value].name }}
                                 </v-chip>
