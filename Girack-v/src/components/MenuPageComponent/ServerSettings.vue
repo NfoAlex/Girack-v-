@@ -330,6 +330,7 @@ export default {
                     <div class="ma-2">
                         <p>ユーザーの新規登録を通知するチャンネル</p>
                         <v-select
+                            v-if="channelListReady"
                             v-model="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE"
                             :items="Object.keys(channelList)"
                         >
@@ -346,6 +347,9 @@ export default {
                                     {{ channelList[item.value].name }}
                                 </v-chip>
                             </template>
+                            <template v-slot:no-data>
+                                チャンネルが無いようです...
+                            </template>
                         </v-select>
                         <!-- データ受信するまでのホルダー -->
                         <v-select v-if="!channelListReady" loading="true">
@@ -360,13 +364,34 @@ export default {
                         >
                             チャンネルを追加
                         </v-btn>
-                        <v-chip
-                            v-for="(d,index) in displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER"
-                            :key="index"
-                            closable
+
+                        <v-select
+                            v-if="channelListReady"
+                            v-model="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER"
+                            :items="Object.keys(channelList)"
+                            multiple
                         >
-                            {{ d }}
-                        </v-chip>
+                            <template v-slot:selection="{ item, index }">
+                                <v-chip
+                                    closable
+                                    @click:close="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.splice(index,1)"
+                                >
+                                    {{ item.value }}
+                                </v-chip>
+                            </template>
+                            <template v-slot:item="{item, index, props}">
+                                <v-chip
+                                    v-if="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.indexOf(item.value)===-1"
+                                    class="ma-1"
+                                    @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
+                                >
+                                    {{ item.value }}
+                                </v-chip>
+                            </template>
+                            <template v-slot:no-data>
+                                チャンネルが無いようです...
+                            </template>
+                        </v-select>
                     </div>
                 </v-card>
 
