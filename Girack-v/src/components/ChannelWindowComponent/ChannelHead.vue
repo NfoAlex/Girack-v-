@@ -34,10 +34,6 @@ export default {
 
     //ディスプレイのサイズから表示するボタンの要素のサイズを取得
     getDisplaySize() {
-      console.log(
-        "Head :: getDisplaySize : useDisplay().name.value",
-        useDisplay().name.value
-      );
       switch (useDisplay().name.value) {
         case "xs":
           return "small";

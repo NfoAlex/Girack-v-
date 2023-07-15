@@ -118,9 +118,6 @@ export default {
 
         //サーバーの情報取得
         SOCKETinfoServerFull(dat) {
-            console.log("ServerSettings :: SOCKETinfoServerFull : 設定北");
-            console.log(dat);
-
             //現在の設定を保存
             this.currentSettings = structuredClone(dat);
 
@@ -138,8 +135,8 @@ export default {
 
         //チャンネルリストの取得
         SOCKETinfoList(dat) {
+            //チャンネルのリストじゃないなら拒否
             if (dat.type !== "channel") return 0;
-            console.log("ServerSettings :: SOCKETinfoList : dat->", dat);
             //チャンネルリストを格納
             this.channelList = dat.channelList;
             //チャンネルリストを受信できたと設定

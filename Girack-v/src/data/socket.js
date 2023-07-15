@@ -934,7 +934,6 @@ function loadDataFromCookie() {
 }
 
 export function updateMsgReadState() {
-  console.log("socket :: updateMsgReadState : 同期された");
   //既読状態をコピー(いいのかこれで)
   let CLONEMsgReadState = JSON.parse(JSON.stringify(dataMsg().MsgReadTime.value));
   //JSONの中からそれぞれ新着と既読を殺す
