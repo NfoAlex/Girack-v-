@@ -17,6 +17,8 @@ export default {
             configReady: false,
             currentSettings: null,
 
+            channelList: {}, //チャンネル設定用のJSON
+
             servernameEditingMode: false, //インスタンス名を編集しているかどうか
             servernameEditingTemp: "", //編集途中のインスタンス名記憶用
             displayServername: "...",
@@ -111,6 +113,7 @@ export default {
             
         },
 
+        //サーバーの情報取得
         SOCKETinfoServerFull(dat) {
             console.log("ServerSettings :: SOCKETinfoServerFull : 設定北");
             console.log(dat);
@@ -128,6 +131,15 @@ export default {
             //ロードできたと設定
             this.configReady = true;
             
+        },
+
+        //チャンネルリストの取得
+        SOCKETinfoList(dat) {
+            if (dat.type !== "channel") return 0;
+            console.log("ServerSettings :: SOCKETinfoList : dat->", dat);
+            //チャンネルリストを格納
+            this.channelList = dat.channelList;
+
         }
 
     },
@@ -137,6 +149,8 @@ export default {
 
         //サーバーの設定情報受け取り
         socket.on("infoServerFull",this.SOCKETinfoServerFull);
+        //チャンネルリストの全取得
+        socket.on("infoList", this.SOCKETinfoList);
 
         //サーバーの設定情報を取得
         socket.emit("getInfoServerFull", {
@@ -145,6 +159,14 @@ export default {
                 sessionid: this.myUserinfo.sessionid
             }
         });
+        //チャンネルリストを全取得
+        socket.emit("getInfoList", {
+            target: "channel",
+            reqSender: {
+                userid: this.myUserinfo.userid,
+                sessionid: this.myUserinfo.sessionid
+            }
+        })
 
     },
 
