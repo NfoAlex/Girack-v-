@@ -77,7 +77,6 @@ export default {
     //返信状態が変わったらメッセージの取得を開始
     ReplyState: {
       handler() {
-        console.log("Input :: watch(ReplyState) : うおお", ReplyState.value);
         this.getMessage(); //返信先のメッセージ取得
         this.$el.querySelector("#inp").focus(); //入力欄へフォーカス
       },
@@ -87,11 +86,6 @@ export default {
     //ページの変更を監視
     $route: {
       handler(newPage, oldPage) {
-        console.log(
-          "Input :: watch($route) : チャンネル変えてそう",
-          newPage.params.id,
-          oldPage.params.id
-        );
         //プレビュー中なら何もしない
         if (this.channelInfo.previewmode) return -1;
 
@@ -140,10 +134,6 @@ export default {
         this.searchMode.enabled = true; //検索モードを有効化
         this.searchMode.searchStartingAt = this.txt.length - 1; //検索し始めた文字位置を記憶
         this.searchMode.selectedIndex = 0; //ユーザー選択番号を0(初期化)
-        console.log(
-          "Input :: watch(txt) : 検索モードに入った",
-          this.searchMode.enabled
-        );
 
         //最新のチャンネルに参加している人リストを取得
         socket.emit("getInfoChannelJoinedUserList", {
@@ -162,10 +152,6 @@ export default {
         this.txt.length === 0
       ) {
         this.searchMode.enabled = false;
-        console.log(
-          "Input :: watch(txt) : 検索モードから抜けた",
-          this.searchMode.enabled
-        );
       }
 
       //検索モードに入っているなら検索する
@@ -190,16 +176,6 @@ export default {
           this.searchMode.searchEndingAt
         );
 
-        console.log(
-          "Input :: watch(txt) : 検索する範囲 -> ",
-          this.searchMode.searchStartingAt,
-          this.searchMode.searchEndingAt
-        );
-        console.log(
-          "Input :: watch(txt) : 検索する文字列 -> ",
-          this.searchMode.searchingQuery
-        );
-
         //検索語で配列をフィルターして標示用の配列へ設定
         this.searchDisplayArray = this.channelJoinedUserArray.filter((u) => {
           //ユーザー名に検索語が含まれていたら表示する配列へ追加
@@ -207,11 +183,6 @@ export default {
             return u.username;
           }
         });
-
-        console.log(
-          "Input :: watch(txt) : 検索結果 -> ",
-          this.searchDisplayArray
-        );
       }
     },
   },
