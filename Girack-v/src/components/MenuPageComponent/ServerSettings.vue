@@ -357,14 +357,6 @@ export default {
                     </div>
                     <div class="ma-2">
                         <p>ユーザー登録時に参加するチャンネル</p>
-                        <v-btn
-                            class="rounded-pill ma-2"
-                            size="small"
-                            color="secondary"
-                        >
-                            チャンネルを追加
-                        </v-btn>
-
                         <v-select
                             v-if="channelListReady"
                             v-model="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER"
