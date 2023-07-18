@@ -338,15 +338,16 @@ export default {
                             </template>
                             <!-- 選択項目それぞれ -->
                             <template v-slot:item="{item, index, props}">
-                                <v-chip
+                                <v-card
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE = item.value"
                                     :color="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE===item.value?'secondary':null"
                                     :disabled="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_REGISTERANNOUNCE===item.value"
-                                    variant="flat"
-                                    class="ma-1"
+                                    variant="text"
+                                    class="ma-1 pa-1 rounded-lg"
+                                    style="width:97.5%;"
                                 >
                                     {{ channelList[item.value].name }}
-                                </v-chip>
+                                </v-card>
                             </template>
                             <!-- 選択がない場合 -->
                             <template v-slot:no-data>
@@ -378,14 +379,25 @@ export default {
                             </template>
                             <!-- 選択項目それぞれ -->
                             <template v-slot:item="{item, index, props}">
-                                <v-chip
+                                <v-card
                                     @click="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.push(item.value)"
                                     :disabled="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.indexOf(item.value)!==-1"
-                                    class="ma-1"
-                                    variant="flat"
+                                    variant="text"
+                                    class="ma-1 pa-1 rounded-lg"
+                                    style="width:97.5%;"
                                 >
+                                    <v-icon
+                                        v-if="displaySettings.config.CHANNEL.CHANNEL_DEFAULT_JOINONREGISTER.indexOf(item.value)===-1"
+                                    >
+                                        mdi:mdi-checkbox-blank-outline
+                                    </v-icon>
+                                    <v-icon
+                                        v-else
+                                    >
+                                        mdi:mdi-checkbox-marked-outline
+                                    </v-icon>
                                     {{ channelList[item.value].name }}
-                                </v-chip>
+                                </v-card>
                             </template>
                             <!-- 選択がない場合 -->
                             <template v-slot:no-data>
