@@ -185,22 +185,25 @@ export default {
       "MsgDBActive",
       function () {
         //console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
-        //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
-        if ((this.StateFocus && this.StateScrolled) || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
-          //レンダーを待ってからスクロール
-          this.$nextTick(() => {
-            this.scrollIt(); //スクロールする
-            this.msgDisplayNum = 25; //メッセージの表示数の初期化
+        //フォーカスしていることが前提
+        if (this.StateScrolled) {
+          //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
+          if ((this.StateFocus && this.StateScrolled) || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
+            //レンダーを待ってからスクロール
+            this.$nextTick(() => {
+              this.scrollIt(); //スクロールする
+              this.msgDisplayNum = 25; //メッセージの表示数の初期化
 
-            //プレビューならここで停止
-            if (this.channelInfo.previewmode) return 0;
-            //もしフォーカスしているなら
-            if (this.StateFocus) {
-              //比較用既読時間を更新
-              let latestTime = this.MsgDBActive.slice(-1)[0].time;
-              this.MsgReadTime[this.getPath].timeBefore = latestTime;
-            }
-          });
+              //プレビューならここで停止
+              if (this.channelInfo.previewmode) return 0;
+              //もしフォーカスしているなら
+              if (this.StateFocus) {
+                //比較用既読時間を更新
+                let latestTime = this.MsgDBActive.slice(-1)[0].time;
+                this.MsgReadTime[this.getPath].timeBefore = latestTime;
+              }
+            });
+          }
         }
       },
       {
