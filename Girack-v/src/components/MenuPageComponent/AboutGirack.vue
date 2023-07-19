@@ -16,7 +16,7 @@ export default {
 
 <template>
     <div class="text-center pa-5" style="width:80%">
-        <p class="text-h3">JustFixes0718</p>
+        <p class="text-h3">JustScroll</p>
         <br>
         <p class="text-h5"></p>
         <p>ビルド : {{ clientVersion }}</p>
