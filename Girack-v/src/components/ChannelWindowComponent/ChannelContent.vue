@@ -206,8 +206,7 @@ export default {
         deep: true,
       }
     );
-    //スクロールの監視開始
-    window.addEventListener("scroll", this.setScrollState);
+    
     //ウィンドウのフォーカス監視開始
     window.addEventListener("focus", this.setFocusStateTrue);
     window.addEventListener("blur", this.setFocusStateFalse);
@@ -216,7 +215,9 @@ export default {
     window.addEventListener("keydown", this.startEditingMyRecentMessage);
 
     //レンダーを待ってからスクロールする
-    this.$nextTick(() => {this.scrollIt();});
+    this.$nextTick(() => {
+      this.scrollIt();
+    });
   },
 
   //別チャンネルへ移動するとき(keepAliveの対象が変わるとき)あるいは別ページに行ったとき
@@ -225,8 +226,6 @@ export default {
     this.watcherRoute();
     this.watcherMsgDB();
 
-    //スクロールの監視取りやめ
-    window.removeEventListener("scroll", this.setScrollState);
     //ウィンドウのフォーカス監視を取りやめ
     window.removeEventListener("focus", this.setFocusStateTrue);
     window.removeEventListener("blur", this.setFocusStateFalse);
@@ -569,7 +568,7 @@ export default {
     },
 
     //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
-    setScrollState(forcingTrue) {
+    setScrollState(event, forcingTrue) {
       //s => bool
       const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
@@ -782,7 +781,11 @@ export default {
 </script>
 
 <template>
-  <div id="channelWindow" style="height: 100%; width: 100%; overflow-y: auto">
+  <div
+    id="channelWindow"
+    @scroll="setScrollState"
+    style="height: 100%; width: 100%; overflow-y: auto"
+  >
     <!-- ユーザーページ用 -->
     <div>
       <Userpage
