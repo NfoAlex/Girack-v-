@@ -97,10 +97,6 @@ export default {
 
     //デバイスのサイズ基準を出す(lgとかsmとか)
     getDisplaySize() {
-      console.log(
-        "Content :: getDisplaySize : 返す->",
-        useDisplay().name.value
-      );
       return useDisplay().name.value;
     },
 
