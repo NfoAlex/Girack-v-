@@ -11,7 +11,43 @@ export default defineConfig({
     VitePWA({
       injectRegister: 'auto',
       registerType: 'autoUpdate',
-      devOptions: { enabled: true }
+      devOptions: { enabled: true },
+      manifest: {
+        name: 'Girack(v)',
+        short_name: 'Girack',
+        lang: 'ja',
+        description: 'Girack, where you speak.',
+        theme_color: '#381E72',
+        background_color: '#121212',
+        icons: [
+          {
+            src: './maskable_icon_x128.png',
+            sizes: '128x128',
+            type: 'image/png',
+            purpose: 'any maskable'
+          },
+          {
+            src: './pwa-icons/apple-touch-icon-120x120.png',
+            sizes: '120x120',
+            type: 'image/png'
+          },
+          {
+            src: './pwa-icons/android-chrome-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: './pwa-icons/android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            src: './icon.svg',
+            sizes: '512x512',
+            type: 'image/svg',
+          }
+        ]
+      }
     })
   ],
   resolve: {
