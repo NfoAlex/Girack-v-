@@ -12,7 +12,7 @@ export default defineConfig({
     }
   },
   server: {
-    host: ["192.168.0.134", "localhost"],
+    host: ["localhost"],
     proxy: {
       "/socket.io": {
         target: "ws://localhost:33333",
