@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
-import { getSocket, Serverinfo, backendURI } from "../../data/socket.js";
+import { getSocket, Serverinfo } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
 import { dataChannel } from "../../data/dataChannel";
 import { dataUser } from "../../data/dataUserinfo";
@@ -44,7 +44,7 @@ export default {
 
   data() {
     return {
-      uri: backendURI,
+      uri: window.location.origin,
       txt: "", //入力した文字
       fileInputData: [], //アップロードするファイル
 
