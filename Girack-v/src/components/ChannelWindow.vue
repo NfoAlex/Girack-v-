@@ -133,7 +133,7 @@ export default {
       </KeepAlive>
     </div>
     <div class="w input flex-grow-0 flex-shrink-1">
-      <ChannelInput :channelInfo="getChannelInfo" />
+      <ChannelInput :channelInfo="getChannelInfo" :isMobile="isMobile" />
     </div>
   </div>
   <div v-else>
