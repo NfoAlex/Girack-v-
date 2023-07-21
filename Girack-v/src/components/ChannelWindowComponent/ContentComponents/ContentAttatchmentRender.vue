@@ -1,12 +1,11 @@
 <script>
-import { backendURI } from "../../../data/socket";
 
 export default {
   props: ["fileData", "channelid"],
 
   data() {
     return {
-      filesrc: backendURI + "/file/",
+      filesrc: window.location.origin + "/file/",
       imageDialogShow: false, //画像拡大ダイアログ用
       imageDialogSrc: "",
     };
