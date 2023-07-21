@@ -1,4 +1,5 @@
 <script>
+import { useDisplay } from "vuetify";
 import { getSocket, getMessage, CLIENT_FULL_LOADED } from "../data/socket.js";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
@@ -11,6 +12,7 @@ const socket = getSocket();
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { MsgDB } = dataMsg();
     const { ChannelIndex, PreviewChannelData } = dataChannel();
@@ -87,6 +89,11 @@ export default {
         return this.PreviewChannelData;
       }
     },
+
+    //スマホ版かどうか返すだけ
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
