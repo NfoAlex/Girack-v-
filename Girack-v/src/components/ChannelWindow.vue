@@ -14,7 +14,14 @@ export default {
     const { myUserinfo } = dataUser();
     const { MsgDB } = dataMsg();
     const { ChannelIndex, PreviewChannelData } = dataChannel();
-    return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData, CLIENT_FULL_LOADED };
+    return {
+      mobile,
+      myUserinfo,
+      MsgDB,
+      ChannelIndex,
+      PreviewChannelData,
+      CLIENT_FULL_LOADED
+    };
   },
 
   components: {
