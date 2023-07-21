@@ -16,7 +16,7 @@ export default defineConfig({
         name: 'Girack(v)',
         short_name: 'Girack',
         lang: 'ja',
-        description: 'Girack, where you speak.',
+        description: 'Girack, where you communicate.',
         theme_color: '#381E72',
         background_color: '#121212',
         icons: [
