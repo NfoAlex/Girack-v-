@@ -1,15 +1,19 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { getSocket, getCookie, CLIENT_VERSION } from "../data/socket.js";
+import { useDisplay } from "vuetify";
 const socket = getSocket();
 
 export default {
   emits: ["login"],
 
+  setup() {
+    const { mobile } = useDisplay();
+    return { mobile };
+  },
+
   data() {
     return {
-      authWindow: ["authWindow", "mx-auto"], //CSS用
-
       //使うサーバーデータ
       serverinfoLoaded: {
         servername: "", //サーバーの名前
@@ -40,6 +44,13 @@ export default {
       success: false, //ログイン結果、成功用
       error: false, //ログイン結果、失敗用
     };
+  },
+
+  computed: {
+    //スマホ版かどうか返すだけ
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -174,7 +185,7 @@ export default {
     {{ serverinfoLoaded.servername }}
   </p>
 
-  <v-card :class="[authWindow, 'rounded-lg']" variant="tonal">
+  <v-card :class="[isMobile?'autoWindowMobile':'authWindowDesk', 'mx-auto', 'rounded-lg']" variant="tonal">
     <!-- タブ表示 -->
     <v-tabs v-model="tab" bg-color="primary" align-tabs="center">
       <v-tab value="login">ログイン</v-tab>
@@ -331,11 +342,19 @@ export default {
 </template>
 
 <style scoped>
-.authWindow {
+.authWindowDesk {
   margin: 5%;
   padding: 3% auto;
 
   width: 40%;
   height: 65%;
+}
+
+.authWindowMobile {
+  margin: 5%;
+  padding: 3% auto;
+
+  width: 90vw;
+  height: 100vh;
 }
 </style>
