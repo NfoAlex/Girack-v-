@@ -4,10 +4,10 @@
 import { io } from "socket.io-client"; //ウェブソケット通信用
 
 //Socket通信用
-export const backendURI = "http://" + location.hostname + ":33333";
+//export const backendURI = "http://" + location.hostname + ":33333";
 
 //Socket接続
-const socket = io(backendURI, {
+const socket = io(location.origin, {
   transports: ["websocket"],
   reconnection: true,
   reconnectionDelay: 100,
