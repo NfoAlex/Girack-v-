@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
-import { getSocket, backendURI } from "../../data/socket";
+import { getSocket } from "../../data/socket";
 import Userpage from "../Userpage.vue";
 import { dataUser } from "../../data/dataUserinfo.js";
 
@@ -14,7 +14,7 @@ export default {
     return {
       userList: [], //ユーザーリストそのもの用の配列
       userListDisplay: [], //表示する用の配列
-      imgsrc: backendURI + "/img/",
+      imgsrc: window.location.origin + "/img/",
 
       //検索用
       nameSearchText: "",

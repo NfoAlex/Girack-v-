@@ -171,7 +171,7 @@ socket.on("messageReceive", (msg) => {
                 : dataUser().UserIndex.value[msg.userid].username) +
               ": " +
               msg.content,
-            icon: backendURI + "/img/" + msg.userid,
+            icon: window.location.origin + "/img/" + msg.userid,
           }
         );
       } else if (CONFIG_NOTIFICATION.value.NOTIFY_MENTION) {
@@ -202,7 +202,7 @@ socket.on("messageReceive", (msg) => {
                   : dataUser().UserIndex.value[msg.userid].username) +
                 ": " +
                 contentToDisplay,
-              icon: backendURI + "/img/" + msg.userid,
+              icon: window.location.origin + "/img/" + msg.userid,
             }
           );
         }
@@ -220,7 +220,7 @@ socket.on("messageReceive", (msg) => {
                   : dataUser().UserIndex.value[msg.userid].username) +
                 ": " +
                 msg.content,
-              icon: backendURI + "/img/" + msg.userid,
+              icon: window.location.origin + "/img/" + msg.userid,
             }
           );
         }

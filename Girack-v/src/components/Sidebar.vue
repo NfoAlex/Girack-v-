@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="js">
 //Sidebar.vue
-import { getSocket, backendURI, Serverinfo } from "../data/socket";
+import { getSocket, Serverinfo } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
@@ -31,6 +31,7 @@ export default {
     return {
       servername: "",
       displayusername: "Null",
+      thisURL: window.location.origin,
 
       disconnected: false,
 
@@ -38,7 +39,6 @@ export default {
       loggedin: false,
       channelJoined: [],
       displaychannelList: [],
-      uri: backendURI,
     };
   },
 
@@ -198,7 +198,7 @@ export default {
             <v-avatar style="width: 4vmax; height: auto; margin-bottom: 12px">
               <v-img
                 :alt="myUserinfo.userid"
-                :src="uri + '/img/' + myUserinfo.userid"
+                :src="thisURL + '/img/' + myUserinfo.userid"
               ></v-img>
             </v-avatar>
           </div>
