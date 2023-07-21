@@ -127,6 +127,7 @@ export default {
           is="ChannelContent"
           :MsgDBActive="getMsgDB()"
           :channelInfo="getChannelInfo"
+          :isMobile="isMobile"
           :key="$route.params.id"
         />
       </KeepAlive>

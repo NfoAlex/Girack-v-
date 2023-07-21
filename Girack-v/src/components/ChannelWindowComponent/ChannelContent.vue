@@ -56,7 +56,7 @@ export default {
     ContentNewMessageLine,
   },
 
-  props: ["MsgDBActive", "channelInfo"],
+  props: ["MsgDBActive", "channelInfo", "isMobile"],
 
   data() {
     return {
