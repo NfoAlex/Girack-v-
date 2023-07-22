@@ -137,7 +137,6 @@ export default {
 
       <!-- 添付ファイルのアイコン表記 -->
       <span>
-        <a target="_blank" :href="filesrc + channelid + '/' + file.fileid">
           <v-icon
             v-if="!file.type.includes('image/') || file.size > 5e6"
             style="margin: 0 16px"
@@ -145,15 +144,14 @@ export default {
           >
             mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
           </v-icon>
-        </a>
       </span>
 
       <!-- ファイル情報の表示 -->
       <span class="flex-grow-1" style="margin-left: 16px">
         <p class="text-subtitle-1">
-          <a target="_blank" :href="filesrc + channelid + '/' + file.fileid">{{
+          {{
             file.name
-          }}</a>
+          }}
         </p>
         <p class="text-medium-emphasis">
           サイズ: <v-chip size="small">{{ humanFileSize(file.size) }}</v-chip> |
