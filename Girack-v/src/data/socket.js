@@ -3,11 +3,8 @@
 
 import { io } from "socket.io-client"; //ウェブソケット通信用
 
-//Socket通信用
-export const backendURI = "http://" + location.hostname + ":33333";
-
 //Socket接続
-const socket = io(backendURI, {
+const socket = io(location.origin, {
   transports: ["websocket"],
   reconnection: true,
   reconnectionDelay: 100,
@@ -171,7 +168,7 @@ socket.on("messageReceive", (msg) => {
                 : dataUser().UserIndex.value[msg.userid].username) +
               ": " +
               msg.content,
-            icon: backendURI + "/img/" + msg.userid,
+            icon: window.location.origin + "/img/" + msg.userid,
           }
         );
       } else if (CONFIG_NOTIFICATION.value.NOTIFY_MENTION) {
@@ -202,7 +199,7 @@ socket.on("messageReceive", (msg) => {
                   : dataUser().UserIndex.value[msg.userid].username) +
                 ": " +
                 contentToDisplay,
-              icon: backendURI + "/img/" + msg.userid,
+              icon: window.location.origin + "/img/" + msg.userid,
             }
           );
         }
@@ -220,7 +217,7 @@ socket.on("messageReceive", (msg) => {
                   : dataUser().UserIndex.value[msg.userid].username) +
                 ": " +
                 msg.content,
-              icon: backendURI + "/img/" + msg.userid,
+              icon: window.location.origin + "/img/" + msg.userid,
             }
           );
         }

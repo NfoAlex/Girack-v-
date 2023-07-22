@@ -1,5 +1,5 @@
 <script>
-import { getSocket, backendURI, Serverinfo } from "../../../data/socket";
+import { getSocket, Serverinfo } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
 import ContentMessageRender from "../ContentComponents/ContentMessageRender.vue";
 import Userpage from "../../Userpage.vue";
@@ -41,7 +41,7 @@ export default {
       channelCanTalk: "Member", //話せるロール
 
       tab: "", //タブの移動用
-      imgsrc: backendURI + "/img/", //アイコン用
+      imgsrc: window.location.origin + "/img/", //アイコン用
     };
   },
 

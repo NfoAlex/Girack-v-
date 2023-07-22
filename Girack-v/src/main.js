@@ -58,7 +58,7 @@ const vuetify = createVuetify({
 const app = createApp(App)
 
 app.use(vuetify)
-export default vuetify;
+export default vuetify
 
 app.use(router)
 

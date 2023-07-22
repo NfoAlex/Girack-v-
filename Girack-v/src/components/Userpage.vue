@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
-import { getSocket, backendURI } from "../data/socket";
+import { getSocket } from "../data/socket";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
 
@@ -25,7 +25,7 @@ export default {
         channelJoined: [],
         loggedin: false,
       },
-      imgsrc: backendURI + "/img/",
+      imgsrc: window.location.origin + "/img/",
       roleList: [],
 
       //そのユーザーの情報
