@@ -279,6 +279,7 @@ export default {
     <!-- ユーザーページ用 -->
     <Userpage
       v-if="userDialogShow"
+      class="mx-auto"
       v-model="userDialogShow"
       :userid="userDialogUserid"
     />
@@ -346,211 +347,220 @@ export default {
       </div>
     </v-dialog>
 
-    <!-- チャンネルメニュー本体 -->
-    <v-card
-      @click:outside="$emit('update:channelDialogShow', false)"
-      :class="isMobile?'channelConfigCardMobile':'channelConfigCardDesk'"
-      class="d-flex mx-auto flex-column text-center rounded-lg pa-3"
-    >
-      <div>
-        <!-- チャンネル名とバッジ -->
-        <div class="ma-5">
-          <div class="text-h4">
-            <!-- プライベートチャンネル用アイコン -->
-            <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
+    <span class="d-flex flex-column mx-auto justify-center " :style="isMobile?'height:100vh':'width:fit-content'">
+      <!-- スマホレイアウト時の空白ホルダー -->
+      <span
+        @click="$emit('closeDialog')"
+        v-if="isMobile"
+        style="height:15vh; width:100vw;"
+      >
+      </span>
 
-            <br />
+      <!-- チャンネルメニュー本体 -->
+      <v-card
+        :class="isMobile?['channelConfigCardMobile','flex-grow-1']:'channelConfigCardDesk'"
+        class="d-flex flex-column text-center rounded-lg pa-3"
+      >
+        <div>
+          <!-- チャンネル名とバッジ -->
+          <div class="ma-5">
+            <div class="text-h4">
+              <!-- プライベートチャンネル用アイコン -->
+              <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
 
-            <!-- チャンネル名 -->
-            <p
-              @dblclick="switchEditing('channelname', true)"
-              v-if="!channelnameEditing"
-              class="text-truncate"
-            >
-              <v-tooltip activator="parent" location="top">
-                ダブルクリックでチャンネル名を変更
-              </v-tooltip>
-              {{ channelnameText }}
-            </p>
+              <br />
 
-            <!-- 編集中のチャンネル名 -->
-            <v-text-field
-              v-else
-              counter
-              maxlength="32"
-              v-model="channelnameText"
-            >
-              <!-- 確定とキャンセルのアイコン -->
-              <template v-slot:append-inner>
-                <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
-                <v-icon @click="switchEditing('channelname', false)"
-                  >mdi:mdi-window-close</v-icon
-                >
-              </template>
-            </v-text-field>
+              <!-- チャンネル名 -->
+              <p
+                @dblclick="switchEditing('channelname', true)"
+                v-if="!channelnameEditing"
+                class="text-truncate"
+              >
+                <v-tooltip activator="parent" location="top">
+                  ダブルクリックでチャンネル名を変更
+                </v-tooltip>
+                {{ channelnameText }}
+              </p>
+
+              <!-- 編集中のチャンネル名 -->
+              <v-text-field
+                v-else
+                counter
+                maxlength="32"
+                v-model="channelnameText"
+              >
+                <!-- 確定とキャンセルのアイコン -->
+                <template v-slot:append-inner>
+                  <v-icon @click="updateChannel">mdi:mdi-check-bold</v-icon>
+                  <v-icon @click="switchEditing('channelname', false)"
+                    >mdi:mdi-window-close</v-icon
+                  >
+                </template>
+              </v-text-field>
+            </div>
           </div>
+
+          <!-- チャンネル概要 -->
+          <v-card
+            @dblclick="switchEditing('desc', true)"
+            class="channelScrollbar pa-3 ma-2 mx-auto rounded-lg"
+            style="min-height: 75px; overflow-y: auto; max-height: 15vh"
+            width="85%"
+            color="secondary"
+          >
+            <!-- 概要欄 -->
+            <div v-if="!descriptionEditing">
+              <ContentMessageRender :content="descriptionText" />
+              <p class="text-caption" style="margin-top: -2px; color: #555">
+                ダブルクリックで編集
+              </p>
+            </div>
+
+            <!-- 編集中の概要欄 -->
+            <div v-if="descriptionEditing">
+              <v-textarea
+                no-resize
+                counter
+                maxlength="128"
+                rows="3"
+                v-model="descriptionText"
+                label="概要"
+              >
+                <!-- 確定とキャンセルのアイコン -->
+                <template v-slot:append-inner>
+                  <v-icon
+                    @click="updateChannel"
+                    :disabled="descriptionText.length >= 128"
+                    >mdi:mdi-check-bold</v-icon
+                  >
+                  <v-icon @click="switchEditing('desc', false)"
+                    >mdi:mdi-window-close</v-icon
+                  >
+                </template>
+              </v-textarea>
+            </div>
+          </v-card>
+
+          <v-divider
+            class="ma-3 mx-auto"
+            style="width: 85%"
+            :thickness="0"
+          ></v-divider>
+
+          <!-- タブ -->
+          <v-tabs
+            v-model="tab"
+            class="mx-auto rounded-lg"
+            style="width: fit-content; min-height: 30px"
+            bg-color="grey"
+          >
+            <v-tab value="userJoined">参加者</v-tab>
+            <v-tab v-if="!channelInfo.previewmode" value="manage">管理</v-tab>
+          </v-tabs>
         </div>
 
-        <!-- チャンネル概要 -->
-        <v-card
-          @dblclick="switchEditing('desc', true)"
-          class="channelScrollbar pa-3 ma-2 mx-auto rounded-lg"
-          style="min-height: 75px; overflow-y: auto; max-height: 15vh"
-          width="85%"
-          color="secondary"
-        >
-          <!-- 概要欄 -->
-          <div v-if="!descriptionEditing">
-            <ContentMessageRender :content="descriptionText" />
-            <p class="text-caption" style="margin-top: -2px; color: #555">
-              ダブルクリックで編集
-            </p>
-          </div>
-
-          <!-- 編集中の概要欄 -->
-          <div v-if="descriptionEditing">
-            <v-textarea
-              no-resize
-              counter
-              maxlength="128"
-              rows="3"
-              v-model="descriptionText"
-              label="概要"
-            >
-              <!-- 確定とキャンセルのアイコン -->
-              <template v-slot:append-inner>
-                <v-icon
-                  @click="updateChannel"
-                  :disabled="descriptionText.length >= 128"
-                  >mdi:mdi-check-bold</v-icon
-                >
-                <v-icon @click="switchEditing('desc', false)"
-                  >mdi:mdi-window-close</v-icon
-                >
-              </template>
-            </v-textarea>
-          </div>
-        </v-card>
-
-        <v-divider
-          class="ma-3 mx-auto"
-          style="width: 85%"
-          :thickness="0"
-        ></v-divider>
-
-        <!-- タブ -->
-        <v-tabs
-          v-model="tab"
-          class="mx-auto rounded-lg"
-          style="width: fit-content; min-height: 30px"
-          bg-color="grey"
-        >
-          <v-tab value="userJoined">参加者</v-tab>
-          <v-tab v-if="!channelInfo.previewmode" value="manage">管理</v-tab>
-        </v-tabs>
-      </div>
-
-      <!-- タブの中身を知りたくて─────────── -->
-      <v-window v-model="tab" style="margin-top: 8px; overflow-y: auto">
-        <!-- チャンネル参加者リスト -->
-        <v-window-item value="userJoined" class="channelScrollbar">
-          <!-- ユーザー招待ボタン -->
-          <span>
-            <v-btn
-              v-if="!channelInfo.previewmode"
-              @click="
-                () => {
-                  userSearchShow = !userSearchShow;
-                }
-              "
-              style="width: 75%"
-              icon=""
-              variant="text"
-              class="rounded-lg mx-auto"
-            >
-              <v-icon>mdi:mdi-account-plus</v-icon>
-            </v-btn>
-          </span>
-
-          <!-- ここからチャンネル参加者 -->
-          <v-card
-            @click="
-              () => {
-                userDialogUserid = u.userid;
-                userDialogShow = true;
-              }
-            "
-            class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
-            style="width: 75%; margin-top: 8px"
-            variant="tonal"
-            v-for="u in channelJoinedUser"
-            :key="u"
-          >
-            <v-avatar
-              size="32"
-              style="margin-left: 10%"
-              :image="imgsrc + u.userid"
-            ></v-avatar>
-            <!-- オンライン状態 -->
-            <v-icon
-              :class="!u.loggedin ? 'hideOnlineIcon' : null"
-              :color="u.loggedin ? 'green' : null"
-              style="margin-left: 8px"
-            >
-              mdi:mdi-circle-medium
-            </v-icon>
-            <span
-              style="margin-left: 8px"
-              class="text-center text-truncate me-auto"
-            >
-              {{ u.username }}
-            </span>
-            <span
-              v-if="myUserinfo.role !== 'Member'"
-              style="float: right"
-              class="text-center"
-            >
+        <!-- タブの中身を知りたくて─────────── -->
+        <v-window v-model="tab" style="margin-top: 8px; overflow-y: auto">
+          <!-- チャンネル参加者リスト -->
+          <v-window-item value="userJoined" class="channelScrollbar">
+            <!-- ユーザー招待ボタン -->
+            <span>
               <v-btn
-                @click.stop="kickUser(u.userid)"
-                size="small"
-                class="rounded-lg"
+                v-if="!channelInfo.previewmode"
+                @click="
+                  () => {
+                    userSearchShow = !userSearchShow;
+                  }
+                "
+                style="width: 75%"
+                icon=""
                 variant="text"
-                icon="mdi:mdi-karate"
+                class="rounded-lg mx-auto"
               >
+                <v-icon>mdi:mdi-account-plus</v-icon>
               </v-btn>
             </span>
-          </v-card>
-        </v-window-item>
 
-        <v-window-item value="manage" class="mx-auto" style="overflow-y: auto">
-          <!-- プラベチャンネルのスイッチ -->
-          <v-checkbox
-            v-model="scopeIsPrivate"
-            :disabled="myUserinfo.role==='Member'&&!Serverinfo.config.CHANNEL.CHANNEL_PRIVATIZE_AVAILABLEFORMEMBER"
-            @click="
-              scopeIsPrivate = !scopeIsPrivate;
-              updateChannel();
-            "
-            color="grey"
-            label="プライベートチャンネル"
-          >
-          </v-checkbox>
+            <!-- ここからチャンネル参加者 -->
+            <v-card
+              @click="
+                () => {
+                  userDialogUserid = u.userid;
+                  userDialogShow = true;
+                }
+              "
+              class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
+              style="width: 75%; margin-top: 8px"
+              variant="tonal"
+              v-for="u in channelJoinedUser"
+              :key="u"
+            >
+              <v-avatar
+                size="32"
+                style="margin-left: 10%"
+                :image="imgsrc + u.userid"
+              ></v-avatar>
+              <!-- オンライン状態 -->
+              <v-icon
+                :class="!u.loggedin ? 'hideOnlineIcon' : null"
+                :color="u.loggedin ? 'green' : null"
+                style="margin-left: 8px"
+              >
+                mdi:mdi-circle-medium
+              </v-icon>
+              <span
+                style="margin-left: 8px"
+                class="text-center text-truncate me-auto"
+              >
+                {{ u.username }}
+              </span>
+              <span
+                v-if="myUserinfo.role !== 'Member'"
+                style="float: right"
+                class="text-center"
+              >
+                <v-btn
+                  @click.stop="kickUser(u.userid)"
+                  size="small"
+                  class="rounded-lg"
+                  variant="text"
+                  icon="mdi:mdi-karate"
+                >
+                </v-btn>
+              </span>
+            </v-card>
+          </v-window-item>
 
-          <!-- ロール選択 -->
-          <v-select
-            class="mx-auto"
-            v-model="channelCanTalk"
-            :disabled="myUserinfo.role==='Member'"
-            style="width: 100%; max-width: 200px"
-            density="compact"
-            label="話せるロール"
-            :items="roleList"
-          ></v-select>
-        </v-window-item>
-      </v-window>
+          <v-window-item value="manage" class="mx-auto" style="overflow-y: auto">
+            <!-- プラベチャンネルのスイッチ -->
+            <v-checkbox
+              v-model="scopeIsPrivate"
+              :disabled="myUserinfo.role==='Member'&&!Serverinfo.config.CHANNEL.CHANNEL_PRIVATIZE_AVAILABLEFORMEMBER"
+              @click="
+                scopeIsPrivate = !scopeIsPrivate;
+                updateChannel();
+              "
+              color="grey"
+              label="プライベートチャンネル"
+            >
+            </v-checkbox>
 
-      <br />
-    </v-card>
+            <!-- ロール選択 -->
+            <v-select
+              class="mx-auto"
+              v-model="channelCanTalk"
+              :disabled="myUserinfo.role==='Member'"
+              style="width: 100%; max-width: 200px"
+              density="compact"
+              label="話せるロール"
+              :items="roleList"
+            ></v-select>
+          </v-window-item>
+        </v-window>
+
+        <br />
+      </v-card>
+    </span>
   </v-dialog>
 </template>
 
@@ -558,14 +568,12 @@ export default {
 
 .channelConfigCardMobile {
   width:100vw;
-  height:85vh;
-  margin-top: 15vh;
 }
 
 .channelConfigCardDesk {
   width: 50vw;
   max-width: 650px;
-  height: 80vh;
+  height: fit-content;
 }
 
 .hideOnlineIcon {

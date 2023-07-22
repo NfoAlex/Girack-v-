@@ -91,6 +91,7 @@ export default {
   <!-- チャンネル設定ダイアログ -->
   <ChannelConfig
     v-if="channelDialogShow"
+    @closeDialog="channelDialogShow = false"
     v-model="channelDialogShow"
     :channelid="getPath"
     :channelInfo="channelInfo"
