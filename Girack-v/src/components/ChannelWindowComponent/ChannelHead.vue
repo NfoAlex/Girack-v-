@@ -110,7 +110,7 @@ export default {
     <v-card
       @click="()=>{if(isMobile)channelDialogShow = true;}"
       :ripple="isMobile"
-      :class="isMobile?'pa-1':null"
+      :class="isMobile?'pa-2':null"
       class="d-flex flex-column justify-start rounded-lg"
       color="#222"
       style="margin: 8px 16px; padding: 0 16px; width: 100%"
