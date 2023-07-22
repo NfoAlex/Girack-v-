@@ -186,7 +186,7 @@ export default {
           if ((this.StateFocus && this.StateScrolled) || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
             //レンダーを待ってからスクロール
             this.$nextTick(() => {
-              this.scrollIt(); //スクロールする
+              //this.scrollIt(); //スクロールする
               this.msgDisplayNum = 25; //メッセージの表示数の初期化
 
               //プレビューならここで停止
@@ -784,6 +784,7 @@ export default {
     id="channelWindow"
     @scroll="setScrollState"
     style="height: 100%; width: 100%; overflow-y: auto"
+    class="d-flex flex-column-reverse"
   >
     <!-- ユーザーページ用 -->
     <div>
