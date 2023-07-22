@@ -1,5 +1,6 @@
 <script>
 import { getSocket, Serverinfo } from "../../../data/socket";
+import { useDisplay } from "vuetify";
 import { dataUser } from "../../../data/dataUserinfo";
 import ContentMessageRender from "../ContentComponents/ContentMessageRender.vue";
 import Userpage from "../../Userpage.vue";
@@ -11,8 +12,9 @@ export default {
   props: ["channelid", "channelInfo"],
 
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
-    return { myUserinfo, Serverinfo };
+    return { mobile, myUserinfo, Serverinfo };
   },
 
   data() {
@@ -82,6 +84,12 @@ export default {
         this.updateChannel();
       },
     },
+  },
+
+  computed: {
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -264,7 +272,9 @@ export default {
 
 <template>
   <v-dialog
-    style="width: 50vw; max-width: 650px; height: 80vh; overflow-y: auto"
+    :transition="isMobile?'dialog-bottom-transition':'dialog-transition'"
+    :fullscreen="isMobile?true:false"
+    style="overflow-y: auto;"
   >
     <!-- ユーザーページ用 -->
     <Userpage
@@ -337,7 +347,11 @@ export default {
     </v-dialog>
 
     <!-- チャンネルメニュー本体 -->
-    <v-card class="d-flex flex-column text-center rounded-lg pa-3">
+    <v-card
+      @click:outside="$emit('update:channelDialogShow', false)"
+      :class="isMobile?'channelConfigCardMobile':'channelConfigCardDesk'"
+      class="d-flex mx-auto flex-column text-center rounded-lg pa-3"
+    >
       <div>
         <!-- チャンネル名とバッジ -->
         <div class="ma-5">
@@ -541,9 +555,25 @@ export default {
 </template>
 
 <style scoped>
+
+.channelConfigCardMobile {
+  width:100vw;
+  height:85vh;
+  margin-top: 15vh;
+}
+
+.channelConfigCardDesk {
+  width: 50vw;
+  max-width: 650px;
+  height: 80vh;
+}
+
 .hideOnlineIcon {
   visibility: hidden;
 }
+
+
+/* スクロールバー用 */
 
 .channelScrollbar::-webkit-scrollbar {
   width: 5px;
