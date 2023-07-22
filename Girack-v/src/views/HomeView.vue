@@ -8,6 +8,6 @@ export default {
 
 <template>
   <main>
-    <h1>Homeだぜ</h1>
+    <h1 class="text-center">Homeだぜ</h1>
   </main>
 </template>

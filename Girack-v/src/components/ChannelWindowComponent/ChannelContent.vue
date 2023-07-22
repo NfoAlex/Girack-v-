@@ -2,7 +2,6 @@
 <script>
 import {
   getSocket,
-  backendURI,
   getMessage,
   setCookie,
   updateMsgReadState
@@ -60,7 +59,7 @@ export default {
 
   data() {
     return {
-      uri: backendURI, //バックエンドのURI
+      uri: window.location.origin, //バックエンドのURI
       StateFocus: true, //Girackにフォーカスしているかどうか
       msgDisplayNum: 25,
       msgIdEditing: "xxxxxxx",

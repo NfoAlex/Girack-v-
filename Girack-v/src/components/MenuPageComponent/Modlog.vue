@@ -1,19 +1,20 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
-import { backendURI, getSocket } from "../../data/socket";
+import { getSocket } from "../../data/socket";
 import { dataUser } from "../../data/dataUserinfo";
 const socket = getSocket();
 
 export default {
   setup() {
     const { myUserinfo, UserIndex } = dataUser();
-    return { myUserinfo, backendURI, UserIndex };
+    return { myUserinfo, UserIndex };
   },
 
   data() {
     return {
       modLogDisplay: [], //監査ログデータの格納用
       thereIsMoreData: true, //サーバー上にまだ読み込んでいない監査ログがあるかどうか
+      backendURI: window.location.origin, //画像参照用
 
       //変更情報のタイトルインデックス
       actionameIndex: {

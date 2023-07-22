@@ -1,5 +1,5 @@
 <script>
-import { getSocket, backendURI } from "../data/socket";
+import { getSocket } from "../data/socket";
 import { dataUser } from "../data/dataUserinfo";
 import Userpage from "./Userpage.vue";
 
@@ -26,7 +26,7 @@ export default {
 
       userListDisplay: [], //表示されるユーザーリスト
 
-      imgsrc: backendURI + "/img/",
+      imgsrc: window.location.origin + "/img/",
     };
   },
 

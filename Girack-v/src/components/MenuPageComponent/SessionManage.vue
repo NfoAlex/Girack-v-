@@ -92,7 +92,6 @@ export default {
   },
 
   mounted() {
-    console.log("session :::: ", this.myUserinfo.sessionid);
     //セッションデータの受け取りハンドラ
     socket.on("infoSessions", this.SOCKETInfoSessions);
 

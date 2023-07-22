@@ -3,7 +3,6 @@
 import {
   setCookie,
   getSocket,
-  backendURI,
   Serverinfo,
 } from "../../data/socket.js";
 import { dataUser } from "../../data/dataUserinfo";
@@ -13,7 +12,7 @@ const socket = getSocket();
 export default {
   setup() {
     const { myUserinfo } = dataUser();
-    return { myUserinfo, backendURI, Serverinfo };
+    return { myUserinfo, Serverinfo };
   },
 
   data() {
@@ -21,6 +20,7 @@ export default {
       snackbar: false, //ログアウトアラート出力用
       cd: ["card-default", "rounded-lg"], //CSS用クラス名
       okayIcon: "",
+      imgsrc: window.location.origin + "/img/",
 
       //ユーザー名
       nameDisplaying: "...",
@@ -397,7 +397,7 @@ export default {
                 @click="iconUploadDialog = true"
                 class="rounded-lg"
                 :alt="myUserinfo.userid"
-                :src="backendURI + '/img/' + myUserinfo.userid"
+                :src="imgsrc + myUserinfo.userid"
               >
                 <v-tooltip
                   activator="parent"

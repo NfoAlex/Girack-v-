@@ -1,12 +1,11 @@
 <script>
-import { backendURI } from "../../../data/socket";
 
 export default {
   props: ["fileData", "channelid"],
 
   data() {
     return {
-      filesrc: backendURI + "/file/",
+      filesrc: window.location.origin + "/file/",
       imageDialogShow: false, //画像拡大ダイアログ用
       imageDialogSrc: "",
     };
@@ -89,10 +88,25 @@ export default {
   <!-- 画像拡大ダイアログ -->
   <v-dialog
     v-model="imageDialogShow"
-    style="max-width: 90vw"
-    @click="imageDialogShow = false"
+    style="max-width: 90vw; max-height:100vh;"
+    @dblclick="imageDialogShow = false"
   >
     <div style="overflow-y: auto">
+      <span
+        style="width: 99%; position:sticky; top: 0px; z-index: 10;"
+        class="d-flex flex-row-reverse"
+      >
+        <v-btn
+          @click="imageDialogShow = false"
+          class="rounded-pill"
+          color="rgba(0,0,0,0.75)"
+        >
+          <v-icon>mdi:mdi-close</v-icon>ダイアログを閉じる
+          <v-tooltip activator="parent" location="bottom">
+            画像のダブルクリックでも閉じます
+          </v-tooltip>
+        </v-btn>
+      </span>
       <v-card
         style="width: fit-content; margin: 32px 0; padding: 0"
         color="rgba(0,0,0,0.75)"
@@ -138,7 +152,6 @@ export default {
 
       <!-- 添付ファイルのアイコン表記 -->
       <span>
-        <a target="_blank" :href="filesrc + channelid + '/' + file.fileid">
           <v-icon
             v-if="!file.type.includes('image/') || file.size > 5e6"
             style="margin: 0 16px"
@@ -146,15 +159,14 @@ export default {
           >
             mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
           </v-icon>
-        </a>
       </span>
 
       <!-- ファイル情報の表示 -->
       <span class="flex-grow-1" style="margin-left: 16px">
         <p class="text-subtitle-1">
-          <a target="_blank" :href="filesrc + channelid + '/' + file.fileid">{{
+          {{
             file.name
-          }}</a>
+          }}
         </p>
         <p class="text-medium-emphasis">
           サイズ: <v-chip size="small">{{ humanFileSize(file.size) }}</v-chip> |
