@@ -3,15 +3,16 @@ import { getSocket, CLIENT_FULL_LOADED } from "./data/socket.js";
 import { dataUser } from "./data/dataUserinfo.js";
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
-import { useTheme } from "vuetify";
+import { useTheme, useDisplay } from "vuetify";
 const socket = getSocket();
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const theme = useTheme();
     const { myUserinfo } = dataUser();
 
-    return { theme, myUserinfo, CLIENT_FULL_LOADED };
+    return { mobile, theme, myUserinfo, CLIENT_FULL_LOADED };
   },
 
   components: { Sidebar, Auth },
@@ -31,6 +32,12 @@ export default {
 
       loggedin: false, //ログインしているかの状態
     };
+  },
+
+  computed: {
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
