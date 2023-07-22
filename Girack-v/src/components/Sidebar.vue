@@ -334,7 +334,8 @@ export default {
 
 <style scoped>
 .channelBar {
-  width: 20vw;
+  max-width: 300px;
+  width: 25vw;
   height: 100vh;
 
   box-sizing: border-box;
