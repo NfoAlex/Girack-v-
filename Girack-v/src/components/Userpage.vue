@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { getSocket } from "../data/socket";
+import { useDisplay } from "vuetify";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
 
@@ -10,9 +11,10 @@ export default {
   props: ["userid"],
 
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo, UserIndex } = dataUser();
     const { ChannelIndex, PreviewChannelData } = dataChannel();
-    return { myUserinfo, UserIndex, ChannelIndex, PreviewChannelData };
+    return { mobile, myUserinfo, UserIndex, ChannelIndex, PreviewChannelData };
   },
 
   data() {
@@ -66,6 +68,12 @@ export default {
         }
       },
     },
+  },
+
+  computed: {
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -268,10 +276,11 @@ export default {
 </script>
 
 <template>
-  <v-dialog style="max-width: 550px; width: 50vw; max-height: 85vh">
+  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" style="margin:0;">
     <v-card
       elevation="6"
-      class="mx-auto d-flex flex-column align-self-start pa-1 userpage text-center rounded-lg"
+      style="width:100%;"
+      class="mx-auto d-flex flex-column align-self-start pa-1 text-center rounded-lg"
     >
       <div>
         <!-- ユーザー名とアイコンとロール -->
@@ -433,9 +442,15 @@ export default {
 </template>
 
 <style scoped>
-.userpage {
-  width: 100%;
-  height: 70vh;
+
+.userPageDesk {
+  max-width: 550px;
+  width: 50vw;
+  max-height: 85vh;
+}
+
+.userPageMobile {
+  width: 100vw;
 }
 
 .boxProfile {
@@ -443,7 +458,4 @@ export default {
   margin-bottom: 24px;
 }
 
-.boxConfig {
-  margin-top: 0px;
-}
 </style>
