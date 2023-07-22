@@ -137,7 +137,7 @@ export default {
 }
 
 .head {
-  height: 10vh;
+  max-height: 10vh;
   border-bottom: solid 0.1px #424242;
 }
 
