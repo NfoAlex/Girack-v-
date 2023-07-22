@@ -77,13 +77,28 @@ export default {
   <v-dialog
     v-model="imageDialogShow"
     style="max-width: 90vw"
-    @click="imageDialogShow = false"
+    @dblclick="imageDialogShow = false"
   >
     <div style="overflow-y: auto">
       <div class="mx-auto">
+        <span
+          style="width: 99%; position:sticky; top: 0px; z-index: 10;"
+          class="d-flex flex-row-reverse"
+        >
+          <v-btn
+            @click="imageDialogShow = false"
+            class="rounded-pill"
+            color="rgba(0,0,0,0.75)"
+          >
+            <v-icon>mdi:mdi-close</v-icon>ダイアログを閉じる
+            <v-tooltip activator="parent" location="bottom">
+              画像のダブルクリックでも閉じます
+            </v-tooltip>
+          </v-btn>
+        </span>
         <v-card
           v-for="img in imageDialogUrls"
-          style="width: fit-content; margin: 64px 0"
+          style="width: fit-content; margin: 64px 0; z-index: 5;"
           color="rgba(0,0,0,0.75)"
           class="rounded-b-lg rounded-t-0 mx-auto"
           :key="img"
