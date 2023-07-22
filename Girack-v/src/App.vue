@@ -167,11 +167,11 @@ export default {
     </v-snackbar>
 
     <!-- ログイン後(Main) -->
-    <div v-if="loggedin">
+    <div v-if="loggedin" class="d-flex" style="width:100vw; height:100vh;">
       <!-- サイドバー(オンラインユーザーの数を渡している) -->
-      <Sidebar :sessionOnlineNum="sessionOnlineNum" />
-      <div :class="main">
-        <RouterView />
+      <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
+      <div class="main flex-grow-1">
+        <RouterView style="width:100%;" />
       </div>
     </div>
 
@@ -184,11 +184,6 @@ export default {
 
 <style scoped>
 .main {
-  position: absolute;
-  right: 0;
-  top: 0;
-
-  width: 80vw;
   height: 100vh;
 }
 </style>
