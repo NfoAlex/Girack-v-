@@ -1,5 +1,4 @@
 <script>
-import { useDisplay } from "vuetify";
 import { getSocket, getMessage, CLIENT_FULL_LOADED } from "../data/socket.js";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
@@ -12,18 +11,10 @@ const socket = getSocket();
 
 export default {
   setup() {
-    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { MsgDB } = dataMsg();
     const { ChannelIndex, PreviewChannelData } = dataChannel();
-    return {
-      mobile,
-      myUserinfo,
-      MsgDB,
-      ChannelIndex,
-      PreviewChannelData,
-      CLIENT_FULL_LOADED
-    };
+    return { myUserinfo, MsgDB, ChannelIndex, PreviewChannelData, CLIENT_FULL_LOADED };
   },
 
   components: {
@@ -89,11 +80,6 @@ export default {
         return this.PreviewChannelData;
       }
     },
-
-    //スマホ版かどうか返すだけ
-    isMobile() {
-      return this.mobile;
-    }
   },
 
   methods: {
@@ -127,13 +113,12 @@ export default {
           is="ChannelContent"
           :MsgDBActive="getMsgDB()"
           :channelInfo="getChannelInfo"
-          :isMobile="isMobile"
           :key="$route.params.id"
         />
       </KeepAlive>
     </div>
     <div class="w input flex-grow-0 flex-shrink-1">
-      <ChannelInput :channelInfo="getChannelInfo" :isMobile="isMobile" />
+      <ChannelInput :channelInfo="getChannelInfo" />
     </div>
   </div>
   <div v-else>

@@ -40,7 +40,7 @@ export default {
     };
   },
 
-  props: ["channelInfo", "isMobile"],
+  props: ["channelInfo"],
 
   data() {
     return {
@@ -115,8 +115,8 @@ export default {
         //入力欄に表示するためのチャンネル名を取得
         this.channelname = this.channelInfo.channelname;
 
-        //チャンネルを移動するごとに入力欄へフォーカス(スマホじゃなければ)
-        if ( !this.isMobile ) this.$el.querySelector("#inp").focus();
+        //チャンネルを移動するごとに入力欄へフォーカス
+        this.$el.querySelector("#inp").focus();
       },
     },
 
