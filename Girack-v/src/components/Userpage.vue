@@ -276,7 +276,7 @@ export default {
 </script>
 
 <template>
-  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" style="margin:0;">
+  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" style="margin:0;" class="mx-auto">
     <v-card
       elevation="6"
       style="width:100%;"
