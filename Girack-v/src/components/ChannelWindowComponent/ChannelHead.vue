@@ -107,7 +107,7 @@ export default {
     class="d-flex align-center justify-space-evenly pa-1"
     style="max-width: 100%; height: 100%"
   >
-    <v-btn icon="mdi:mdi-menu-open" class="rounded-lg ma-1" variant="text">
+    <v-btn v-if="isMobile" icon="mdi:mdi-menu-open" class="rounded-lg ma-1" variant="text">
     </v-btn>
     <v-card
       @click="channelDialogShow = true"
@@ -166,10 +166,10 @@ export default {
       </div>
     </v-card>
 
-    <v-divider style="" vertical inset></v-divider>
+    <v-divider class="ma-2" vertical inset></v-divider>
 
     <!-- ボタン群 -->
-    <div style="margin: 0 16px" class="d-flex align-center">
+    <div class="d-flex align-center">
       <!-- チャンネルの通知オン/オフボタン -->
       <v-btn
         v-if="!channelInfo.previewmode"
