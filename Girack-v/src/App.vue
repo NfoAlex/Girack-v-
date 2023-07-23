@@ -175,7 +175,12 @@ export default {
         <!-- デスクトップ用 -->
       <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
         <!-- モバイルレイアウト用 -->
-      <v-dialog v-else v-model="sideBarMobileDisplay" fullscreen>
+      <v-dialog
+        v-else
+        v-model="sideBarMobileDisplay"
+        fullscreen
+        transition="slide-x-transition"
+      >
         <Sidebar :sessionOnlineNum="sessionOnlineNum" @closeSidebar="sideBarMobileDisplay = false" />
       </v-dialog>
 
