@@ -102,7 +102,7 @@ export default {
 <template>
   <div v-if="CLIENT_FULL_LOADED" style="height: 100vh" class="d-flex mb-2 flex-column">
     <div class="w head flex-grow-0 flex-shrink-0">
-      <ChannelHead :channelInfo="getChannelInfo" @callSidebar="$emit('callSidebar')" />
+      <ChannelHead :channelInfo="getChannelInfo" @toggleSidebar="$emit('toggleSidebar')" />
     </div>
     <div
       style="overflow-y: auto"

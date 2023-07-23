@@ -59,6 +59,7 @@ export default {
       }
     },
 
+    //スマホかどうかを返す
     isMobile() {
       return this.mobile;
     }
@@ -109,7 +110,7 @@ export default {
   >
     <v-btn
       v-if="isMobile"
-      @click="$emit('callSidebar')"
+      @click="$emit('toggleSidebar')"
       icon="mdi:mdi-menu-open"
       class="rounded-lg ma-1"
       variant="text"
