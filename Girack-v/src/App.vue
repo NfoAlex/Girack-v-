@@ -23,6 +23,8 @@ export default {
       channelBar: "channelBar", //左のチャンネルバーとか
       main: "main", //右のチャンネル表示するところ
 
+      sideBarMobileDisplay: false, //スマホ用のサイドバー表示をしているかどうか
+
       sessionOnlineNum: 0, //オンラインユーザー数
       disconnectSnackbar: false, //切断された表示
       reconnectedSnackbar: false, //再接続できたと表示
@@ -168,11 +170,20 @@ export default {
 
     <!-- ログイン後(Main) -->
     <div v-if="loggedin" class="d-flex" style="width:100vw; height:100vh;">
-      <!-- サイドバー(オンラインユーザーの数を渡している) -->
+
+      <!-- サイドバー(左側) -->
+        <!-- デスクトップ用 -->
       <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
+        <!-- モバイルレイアウト用 -->
+      <v-dialog v-else v-model="sideBarMobileDisplay" fullscreen>
+        <Sidebar :sessionOnlineNum="sessionOnlineNum" />
+      </v-dialog>
+
+      <!-- メイン画面（右側） -->
       <div class="main flex-grow-1">
-        <RouterView style="width:100%;" />
+        <RouterView style="width:100%;" @callSidebar="sideBarMobileDisplay = !sideBarMobileDisplay;" />
       </div>
+
     </div>
 
     <!-- ログイン前 -->
