@@ -104,16 +104,18 @@ export default {
 
   <!-- ヘッダの表示部分(メイン) -->
   <div
-    class="d-flex align-center justify-space-evenly"
+    class="d-flex align-center justify-space-evenly pa-1"
     style="max-width: 100%; height: 100%"
   >
+    <v-btn icon="mdi:mdi-menu-open" class="rounded-lg ma-1" variant="text">
+    </v-btn>
     <v-card
-      @click="()=>{if(isMobile)channelDialogShow = true;}"
+      @click="channelDialogShow = true"
       :ripple="isMobile"
       :class="isMobile?'pa-2':null"
-      class="d-flex flex-column justify-start rounded-lg"
+      class="d-flex flex-column justify-start rounded-lg ma-1"
       color="#222"
-      style="margin: 8px 16px; padding: 0 16px; width: 100%"
+      style=" padding: 0 16px; width: 100%;"
     >
       <!-- チャンネル情報(チャンネル名、概要) -->
       <div style="white-space: nowrap">
