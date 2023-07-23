@@ -176,12 +176,12 @@ export default {
       <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
         <!-- モバイルレイアウト用 -->
       <v-dialog v-else v-model="sideBarMobileDisplay" fullscreen>
-        <Sidebar :sessionOnlineNum="sessionOnlineNum" />
+        <Sidebar :sessionOnlineNum="sessionOnlineNum" @closeSidebar="sideBarMobileDisplay = false" />
       </v-dialog>
 
       <!-- メイン画面（右側） -->
       <div class="main flex-grow-1">
-        <RouterView style="width:100%;" @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay;" />
+        <RouterView style="width:100%;" @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
       </div>
 
     </div>

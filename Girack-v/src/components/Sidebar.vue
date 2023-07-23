@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="js">
 //Sidebar.vue
+import { useDisplay } from "vuetify";
 import { getSocket, Serverinfo } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
@@ -11,12 +12,14 @@ const socket = getSocket();
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { MsgReadTime } = dataMsg();
     const { ChannelIndex } = dataChannel();
     const { CONFIG_DISPLAY } = getCONFIG();
 
     return {
+      mobile,
       myUserinfo,
       MsgReadTime,
       ChannelIndex,
@@ -46,6 +49,10 @@ export default {
     //URLの変更を検知
     $route(r) {
       this.path = r.path; //変数へ取り込む
+      //もしスマホならサイドバーを閉じる
+      if (this.isMobile) {
+        this.$emit("closeSidebar");
+      }
     },
 
     //チャンネル情報の変化を監視
@@ -110,6 +117,11 @@ export default {
         this.displaychannelList = nameList;
       }
     },
+
+    //スマホかどうかを返す
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -168,7 +180,8 @@ export default {
 <template>
   <div>
     <div
-      class="d-flex flex-column channelBar"
+      :class="isMobile?'channelBarMobile':'channelBarDesk'"
+      class="d-flex flex-column"
       style="background-color: #1c1b1e"
     >
       <!-- インスタンス名 -->
@@ -333,13 +346,18 @@ export default {
 </template>
 
 <style scoped>
-.channelBar {
+.channelBarDesk {
   max-width: 300px;
   width: 25vw;
   height: 100vh;
 
   box-sizing: border-box;
   border-right: 0.1px #424242 solid;
+}
+
+.channelBarMobile {
+  width:100vw;
+  height:100vh;
 }
 
 .scroll::-webkit-scrollbar {
