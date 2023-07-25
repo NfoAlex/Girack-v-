@@ -16,7 +16,10 @@ export default {
 
 <template>
   <div class="text-center pa-5" style="width:80%">
-    <p class="text-h3">PWA</p>
+    <span class="d-flex">
+      <p class="text-h3">PWA</p>
+    </span>
+    
     <br>
     <p class="text-h5"></p>
     <p>ビルド : {{ clientVersion }}</p>

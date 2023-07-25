@@ -142,6 +142,16 @@ export default {
         return null;
       }
     },
+
+    //場所確認、trueを返す
+    checkSameLocation(id) {
+      //パスが同じなのかどうか
+      if (this.$route.path.includes(id)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
 
   mounted() {
@@ -263,7 +273,7 @@ export default {
           <v-card
             v-if="myUserinfo.role === 'Admin'"
             class="d-flex pa-2 justify-center align-center rounded-pill"
-            :variant="$route.params.id.indexOf('jsonviewer') !== -1 ? 'tonal' : 'text'"
+            :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
             style="font-size: calc(6px + 0.55vb)"
           >
             <v-icon>mdi:mdi-shield-bug</v-icon>
@@ -274,7 +284,7 @@ export default {
         <RouterLink :to="'/browser'">
           <v-card
             class="d-flex pa-2 justify-center align-center rounded-lg"
-            :variant="$route.params.id.indexOf('browser') !== -1 ? 'tonal' : 'text'"
+            :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
             style="font-size: calc(6px + 0.55vb)"
           >
             <v-icon>mdi:mdi-text-search</v-icon>
@@ -294,8 +304,9 @@ export default {
           <RouterLink :to="'/c/' + l.id">
             <v-card
               @click="$emit('closeSidebar')"
+              :ripple="false"
               class="rounded-lg pa-2 d-flex align-center"
-              :variant="$route.params.id.indexOf(l.id) !== -1 ? 'tonal' : 'text'"
+              :variant="checkSameLocation(l.id) ? 'tonal' : 'text'"
               style="font-size: calc(6px + 0.75vb)"
             >
               <!-- チャンネル名前の#の部分 -->
@@ -314,9 +325,9 @@ export default {
                 :class="
                   checkReadTime(l.id, 'new') ||
                   checkReadTime(l.id, 'mention') ||
-                  $route.params.id.indexOf(l.id) !== -1
-                    ? 'text-high-emphasis'
-                    : 'text-disabled'
+                  checkSameLocation(l.id)
+                    ?
+                  'text-high-emphasis' : 'text-disabled'
                 "
               >
                 {{ l.channelname }}
