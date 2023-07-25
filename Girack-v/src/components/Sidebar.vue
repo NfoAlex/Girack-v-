@@ -272,9 +272,10 @@ export default {
         <RouterLink :to="'/jsonviewer'">
           <v-card
             v-if="myUserinfo.role === 'Admin'"
-            class="d-flex pa-2 justify-center align-center rounded-pill"
             :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
-            style="font-size: calc(6px + 0.55vb)"
+            class="d-flex justify-center align-center rounded-pill"
+            :class="isMobile?'pa-3':'pa-2'"
+            :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
           >
             <v-icon>mdi:mdi-shield-bug</v-icon>
             <span class="text-truncate"> JSONviewer </span>
@@ -283,9 +284,10 @@ export default {
 
         <RouterLink :to="'/browser'">
           <v-card
-            class="d-flex pa-2 justify-center align-center rounded-lg"
+            class="d-flex justify-center align-center rounded-lg"
             :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
-            style="font-size: calc(6px + 0.55vb)"
+            :class="isMobile?'pa-3':'pa-2'"
+            :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
           >
             <v-icon>mdi:mdi-text-search</v-icon>
             <span class="text-truncate"> チャンネルブラウザ </span>
@@ -305,9 +307,10 @@ export default {
             <v-card
               @click="$emit('closeSidebar')"
               :ripple="false"
-              class="rounded-lg pa-2 d-flex align-center"
               :variant="checkSameLocation(l.id) ? 'tonal' : 'text'"
-              style="font-size: calc(6px + 0.75vb)"
+              class="rounded-lg d-flex align-center"
+              :class="isMobile?'pa-3':'pa-2'"
+              :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
             >
               <!-- チャンネル名前の#の部分 -->
               <div class="flex-shrink-1">

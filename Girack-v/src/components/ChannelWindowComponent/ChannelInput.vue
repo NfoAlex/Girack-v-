@@ -1,5 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
+import { useDisplay } from "vuetify";
 import { getSocket, Serverinfo } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
 import { dataChannel } from "../../data/dataChannel";
@@ -24,12 +25,14 @@ export function getReplyState() {
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { ReplyState, InputState } = getReplyState();
     const { myUserinfo, UserIndex } = dataUser();
     const { ChannelIndex } = dataChannel();
     const { MsgDB } = dataMsg();
 
     return {
+      mobile,
       ReplyState,
       InputState,
       myUserinfo,
@@ -116,7 +119,7 @@ export default {
         this.channelname = this.channelInfo.channelname;
 
         //チャンネルを移動するごとに入力欄へフォーカス
-        this.$el.querySelector("#inp").focus();
+        if (!this.isMobile) this.$el.querySelector("#inp").focus();
       },
     },
 
@@ -192,6 +195,11 @@ export default {
     getPath() {
       return this.$route.params.id; //パス
     },
+
+    //スマホかどうかを返すだけ
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
