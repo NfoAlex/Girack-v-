@@ -55,13 +55,7 @@ export default {
         return;
       }
 
-      //そもそも編集テキストが元と同じならそのままにして編集をやめる
-      if (this.editTxt === this.content) {
-        this.$emit('updateEditingMessage','waaaa');
-        return;
-      }
-
-      //編集を適用する
+      //編集開始
       this.updateMessage();
     },
 
@@ -82,17 +76,19 @@ export default {
 
     //メッセージの編集を適用する関数
     updateMessage() {
-      console.log("更新しようとしてる");
-      //更新するように送信
-      socket.emit("editMessage", {
-        textEditing: this.editTxt,
-        channelid: this.channelid,
-        messageid: this.messageid,
-        reqSender: {
-          userid: this.myUserinfo.userid,
-          sessionid: this.myUserinfo.sessionid
-        }
-      });
+      //メッセージが同じでないならメッセージの編集をする
+      if (this.editTxt !== this.content) {
+        //更新するように送信
+        socket.emit("editMessage", {
+          textEditing: this.editTxt,
+          channelid: this.channelid,
+          messageid: this.messageid,
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid
+          }
+        });
+      }
       //編集モードから抜ける
       this.$emit('updateEditingMessage','xxxxxx');
     },
