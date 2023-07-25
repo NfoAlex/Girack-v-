@@ -1,6 +1,7 @@
 <script>
 import { getSocket } from "../data/socket";
 import { dataUser } from "../data/dataUserinfo";
+import { useDisplay } from "vuetify";
 import Userpage from "./Userpage.vue";
 
 const socket = getSocket();
@@ -8,8 +9,9 @@ let loopGetSessionOnline = null; //オンラインユーザー取得ループ用
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser(); //ユーザー情報
-    return { myUserinfo };
+    return { mobile, myUserinfo };
   },
 
   components: { Userpage },
@@ -28,6 +30,13 @@ export default {
 
       imgsrc: window.location.origin + "/img/",
     };
+  },
+
+  computed: {
+    //スマホかどうかだけを返す
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -115,10 +124,21 @@ export default {
     style="width: 95%; height: 100vh"
   >
     <!-- ページヘッダ -->
-    <div class="d-flex align-center ma-5" style="height: 5vh">
+    <div class="d-flex align-center ma-4" style="height: 5vh">
+      <v-btn
+        v-if="isMobile"
+        @click="$emit('toggleSidebar')"
+        icon=""
+        class="rounded-lg"
+        variant="text"
+        size="small"
+      >
+        <v-icon>mdi:mdi-menu-open</v-icon>
+      </v-btn>
+      <v-divier vertical inset></v-divier>
       <p
-        style="font-size: min(4vh, 36px); margin-left: 8px"
-        class="text-truncate me-auto"
+        style="font-size: min(4vh, 16px); margin-left: 8px"
+        class="text-truncate me-auto flex-shrink-1"
       >
         オンラインユーザーリスト
       </p>
@@ -130,7 +150,7 @@ export default {
         color="secondary"
       >
         <v-icon class="ma-1">mdi:mdi-account-group</v-icon>
-        全メンバーを見る
+        全メンバー
       </v-btn>
     </div>
 
