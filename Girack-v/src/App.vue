@@ -186,7 +186,7 @@ export default {
 
       <!-- メイン画面（右側） -->
       <div class="main flex-grow-1">
-        <RouterView style="width:100%;" @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
+        <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
       </div>
 
     </div>
