@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="js">
 //Sidebar.vue
+import { useDisplay } from "vuetify";
 import { getSocket, Serverinfo } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
@@ -11,12 +12,14 @@ const socket = getSocket();
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { MsgReadTime } = dataMsg();
     const { ChannelIndex } = dataChannel();
     const { CONFIG_DISPLAY } = getCONFIG();
 
     return {
+      mobile,
       myUserinfo,
       MsgReadTime,
       ChannelIndex,
@@ -35,7 +38,6 @@ export default {
 
       disconnected: false,
 
-      path: "",
       loggedin: false,
       channelJoined: [],
       displaychannelList: [],
@@ -45,7 +47,10 @@ export default {
   watch: {
     //URLの変更を検知
     $route(r) {
-      this.path = r.path; //変数へ取り込む
+      //もしスマホならサイドバーを閉じる
+      if (this.isMobile) {
+        this.$emit("closeSidebar");
+      }
     },
 
     //チャンネル情報の変化を監視
@@ -110,6 +115,11 @@ export default {
         this.displaychannelList = nameList;
       }
     },
+
+    //スマホかどうかを返す
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -132,6 +142,16 @@ export default {
         return null;
       }
     },
+
+    //場所確認、trueを返す
+    checkSameLocation(id) {
+      //パスが同じなのかどうか
+      if (this.$route.path.includes(id)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
 
   mounted() {
@@ -168,7 +188,8 @@ export default {
 <template>
   <div>
     <div
-      class="d-flex flex-column channelBar"
+      :class="isMobile?'channelBarMobile':'channelBarDesk'"
+      class="d-flex flex-column"
       style="background-color: #1c1b1e"
     >
       <!-- インスタンス名 -->
@@ -252,7 +273,7 @@ export default {
           <v-card
             v-if="myUserinfo.role === 'Admin'"
             class="d-flex pa-2 justify-center align-center rounded-pill"
-            :variant="path.indexOf('jsonviewer') !== -1 ? 'tonal' : 'text'"
+            :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
             style="font-size: calc(6px + 0.55vb)"
           >
             <v-icon>mdi:mdi-shield-bug</v-icon>
@@ -263,7 +284,7 @@ export default {
         <RouterLink :to="'/browser'">
           <v-card
             class="d-flex pa-2 justify-center align-center rounded-lg"
-            :variant="path.indexOf('browser') !== -1 ? 'tonal' : 'text'"
+            :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
             style="font-size: calc(6px + 0.55vb)"
           >
             <v-icon>mdi:mdi-text-search</v-icon>
@@ -282,8 +303,10 @@ export default {
         <div style="margin-top: 1%" v-for="l in displaychannelList" :key="l">
           <RouterLink :to="'/c/' + l.id">
             <v-card
+              @click="$emit('closeSidebar')"
+              :ripple="false"
               class="rounded-lg pa-2 d-flex align-center"
-              :variant="path.indexOf(l.id) !== -1 ? 'tonal' : 'text'"
+              :variant="checkSameLocation(l.id) ? 'tonal' : 'text'"
               style="font-size: calc(6px + 0.75vb)"
             >
               <!-- チャンネル名前の#の部分 -->
@@ -302,9 +325,9 @@ export default {
                 :class="
                   checkReadTime(l.id, 'new') ||
                   checkReadTime(l.id, 'mention') ||
-                  path.indexOf(l.id) !== -1
-                    ? 'text-high-emphasis'
-                    : 'text-disabled'
+                  checkSameLocation(l.id)
+                    ?
+                  'text-high-emphasis' : 'text-disabled'
                 "
               >
                 {{ l.channelname }}
@@ -333,12 +356,18 @@ export default {
 </template>
 
 <style scoped>
-.channelBar {
-  width: 20vw;
+.channelBarDesk {
+  max-width: 300px;
+  width: 25vw;
   height: 100vh;
 
   box-sizing: border-box;
   border-right: 0.1px #424242 solid;
+}
+
+.channelBarMobile {
+  width:100vw;
+  height:100vh;
 }
 
 .scroll::-webkit-scrollbar {

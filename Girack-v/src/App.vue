@@ -3,15 +3,16 @@ import { getSocket, CLIENT_FULL_LOADED } from "./data/socket.js";
 import { dataUser } from "./data/dataUserinfo.js";
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
-import { useTheme } from "vuetify";
+import { useTheme, useDisplay } from "vuetify";
 const socket = getSocket();
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const theme = useTheme();
     const { myUserinfo } = dataUser();
 
-    return { theme, myUserinfo, CLIENT_FULL_LOADED };
+    return { mobile, theme, myUserinfo, CLIENT_FULL_LOADED };
   },
 
   components: { Sidebar, Auth },
@@ -22,6 +23,8 @@ export default {
       channelBar: "channelBar", //左のチャンネルバーとか
       main: "main", //右のチャンネル表示するところ
 
+      sideBarMobileDisplay: false, //スマホ用のサイドバー表示をしているかどうか
+
       sessionOnlineNum: 0, //オンラインユーザー数
       disconnectSnackbar: false, //切断された表示
       reconnectedSnackbar: false, //再接続できたと表示
@@ -31,6 +34,12 @@ export default {
 
       loggedin: false, //ログインしているかの状態
     };
+  },
+
+  computed: {
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -160,12 +169,26 @@ export default {
     </v-snackbar>
 
     <!-- ログイン後(Main) -->
-    <div v-if="loggedin">
-      <!-- サイドバー(オンラインユーザーの数を渡している) -->
-      <Sidebar :sessionOnlineNum="sessionOnlineNum" />
-      <div :class="main">
-        <RouterView />
+    <div v-if="loggedin" class="d-flex" style="width:100vw; height:100vh;">
+
+      <!-- サイドバー(左側) -->
+        <!-- デスクトップ用 -->
+      <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
+        <!-- モバイルレイアウト用 -->
+      <v-dialog
+        v-else
+        v-model="sideBarMobileDisplay"
+        fullscreen
+        transition="slide-x-transition"
+      >
+        <Sidebar :sessionOnlineNum="sessionOnlineNum" @closeSidebar="sideBarMobileDisplay = false" />
+      </v-dialog>
+
+      <!-- メイン画面（右側） -->
+      <div class="main flex-grow-1">
+        <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
       </div>
+
     </div>
 
     <!-- ログイン前 -->
@@ -177,11 +200,6 @@ export default {
 
 <style scoped>
 .main {
-  position: absolute;
-  right: 0;
-  top: 0;
-
-  width: 80vw;
   height: 100vh;
 }
 </style>

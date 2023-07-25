@@ -1,6 +1,7 @@
 <script>
 import { getSocket } from "../data/socket";
 import { dataUser } from "../data/dataUserinfo";
+import { useDisplay } from "vuetify";
 import Userpage from "./Userpage.vue";
 
 const socket = getSocket();
@@ -8,8 +9,9 @@ let loopGetSessionOnline = null; //オンラインユーザー取得ループ用
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser(); //ユーザー情報
-    return { myUserinfo };
+    return { mobile, myUserinfo };
   },
 
   components: { Userpage },
@@ -28,6 +30,13 @@ export default {
 
       imgsrc: window.location.origin + "/img/",
     };
+  },
+
+  computed: {
+    //スマホかどうかだけを返す
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -115,27 +124,40 @@ export default {
     style="width: 95%; height: 100vh"
   >
     <!-- ページヘッダ -->
-    <div class="d-flex align-center ma-5" style="height: 5vh">
+    <div class="d-flex align-center ma-4" style="height: 5vh">
+      <v-btn
+        v-if="isMobile"
+        @click="$emit('toggleSidebar')"
+        icon=""
+        class="rounded-lg flex-shrink-0"
+        variant="text"
+        size="small"
+      >
+        <v-icon>mdi:mdi-menu-open</v-icon>
+      </v-btn>
+      <v-divider v-if="isMobile" vertical inset></v-divider>
       <p
-        style="font-size: min(4vh, 36px); margin-left: 8px"
-        class="text-truncate me-auto"
+        style="font-size: min(4vh, 16px); margin-left: 8px"
+        class="text-truncate me-auto flex-shrink-1"
       >
         オンラインユーザーリスト
       </p>
       <!-- メンバーページへ行くボタン -->
       <v-btn
         @click="$router.push({ path: '/menu/members' })"
-        class="ma-3 rounded-lg"
+        class="ma-2 rounded-lg flex-shrink-0"
         size="large"
         color="secondary"
       >
         <v-icon class="ma-1">mdi:mdi-account-group</v-icon>
-        全メンバーを見る
+        <v-tooltip activator="parent" location="bottom">
+          全ユーザーを見る
+        </v-tooltip>
       </v-btn>
     </div>
 
     <!-- リスト表示 -->
-    <div style="overflow-y: auto; margin-top: 3vh">
+    <div style="overflow-y: auto; margin-top: 3vh; width: 100%;">
       <v-virtual-scroll height="90vh" :items="userListDisplay">
         <template v-slot:default="{ item }">
           <v-card
@@ -147,6 +169,7 @@ export default {
             "
             class="rounded-lg card mx-auto pa-3 d-flex align-center"
             width="97.5%"
+            style="margin: 16px 0;"
             color="grey"
           >
             <v-avatar
@@ -157,7 +180,7 @@ export default {
               {{ item.name }}
             </span>
 
-            <span v-if="item.role !== 'Member'" style="float: right">
+            <span v-if="item.role !== 'Member'">
               <v-chip :color="item.role === 'Admin' ? 'purple' : 'blue'">
                 {{ item.role }}
               </v-chip>
@@ -170,8 +193,4 @@ export default {
 </template>
 
 <style scoped>
-.card {
-  width: 100%;
-  margin: 16px 0;
-}
 </style>

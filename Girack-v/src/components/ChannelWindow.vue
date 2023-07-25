@@ -102,7 +102,7 @@ export default {
 <template>
   <div v-if="CLIENT_FULL_LOADED" style="height: 100vh" class="d-flex mb-2 flex-column">
     <div class="w head flex-grow-0 flex-shrink-0">
-      <ChannelHead :channelInfo="getChannelInfo" />
+      <ChannelHead :channelInfo="getChannelInfo" @toggleSidebar="$emit('toggleSidebar')" />
     </div>
     <div
       style="overflow-y: auto"
@@ -137,7 +137,7 @@ export default {
 }
 
 .head {
-  height: 10vh;
+  max-height: 10vh;
   border-bottom: solid 0.1px #424242;
 }
 

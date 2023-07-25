@@ -8,9 +8,10 @@ import ChannelConfig from "./HeadComponents/ChannelConfig.vue";
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
-    return { myUserinfo, LIST_NOTIFICATION_MUTE_CHANNEL };
+    return { mobile, myUserinfo, LIST_NOTIFICATION_MUTE_CHANNEL };
   },
 
   components: { ChannelConfig },
@@ -57,6 +58,11 @@ export default {
           return "";
       }
     },
+
+    //スマホかどうかを返す
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -91,6 +97,7 @@ export default {
   <!-- チャンネル設定ダイアログ -->
   <ChannelConfig
     v-if="channelDialogShow"
+    @closeDialog="channelDialogShow = false"
     v-model="channelDialogShow"
     :channelid="getPath"
     :channelInfo="channelInfo"
@@ -98,13 +105,24 @@ export default {
 
   <!-- ヘッダの表示部分(メイン) -->
   <div
-    class="d-flex align-center justify-space-evenly"
+    class="d-flex align-center justify-space-evenly pa-1"
     style="max-width: 100%; height: 100%"
   >
+    <v-btn
+      v-if="isMobile"
+      @click="$emit('toggleSidebar')"
+      icon="mdi:mdi-menu-open"
+      class="rounded-lg ma-1"
+      variant="text"
+    >
+    </v-btn>
     <v-card
-      class="d-flex flex-column justify-start rounded-lg"
+      @click="channelDialogShow = true"
+      :ripple="isMobile"
+      :class="isMobile?'pa-2':null"
+      class="d-flex flex-column justify-start rounded-lg ma-1"
       color="#222"
-      style="margin: 0 16px; padding: 0 16px; width: 100%"
+      style=" padding: 0 16px; width: 100%;"
     >
       <!-- チャンネル情報(チャンネル名、概要) -->
       <div style="white-space: nowrap">
@@ -140,20 +158,25 @@ export default {
         </div>
       </div>
 
-      <v-divider></v-divider>
+      <v-divider v-if="!isMobile"></v-divider>
 
       <!-- チャンネル概要 -->
-      <div color="grey" class="rounded-lg" style="padding: 2px 16px">
+      <div
+        v-if="!isMobile"
+        color="grey"
+        class="rounded-lg"
+        style="padding: 2px 16px"
+      >
         <p class="text-truncate" style="font-size: 2vh">
           {{ channelInfo.description }}
         </p>
       </div>
     </v-card>
 
-    <v-divider style="" vertical inset></v-divider>
+    <v-divider class="ma-2" vertical inset></v-divider>
 
     <!-- ボタン群 -->
-    <div style="margin: 0 16px" class="d-flex align-center">
+    <div class="d-flex align-center">
       <!-- チャンネルの通知オン/オフボタン -->
       <v-btn
         v-if="!channelInfo.previewmode"
@@ -183,6 +206,7 @@ export default {
 
       <!-- チャンネルメニューボタン -->
       <v-btn
+        v-if="!isMobile"
         @click="() => (channelDialogShow = !channelDialogShow)"
         :size="getDisplaySize"
         icon=""

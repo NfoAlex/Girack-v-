@@ -1,17 +1,26 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { dataUser } from "../../data/dataUserinfo";
+import { useDisplay } from "vuetify";
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
-    return { myUserinfo };
+    return { mobile, myUserinfo };
   },
 
   data() {
     return {
       cd: ["card-default", "rounded-lg"], //CSS用クラス名
     };
+  },
+
+  computed: {
+    //スマホかどうかだけを返す
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -36,6 +45,15 @@ export default {
 <template>
   <div class="d-flex">
     <div style="width: 20%; max-width: 200px; height: 100%; overflow-y: auto">
+      <v-card
+        v-if="isMobile"
+        @click="$emit('toggleSidebar')"
+        class="rounded-lg menu-card"
+        variant="text"
+        v-ripple
+      >
+        <v-icon size="large" style="margin: 0 auto"> mdi:mdi-menu-open </v-icon>
+      </v-card>
       <RouterLink to="/menu/profile">
         <v-card
           class="rounded-lg menu-card"

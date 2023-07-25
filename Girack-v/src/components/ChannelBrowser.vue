@@ -1,4 +1,5 @@
 <script>
+import { useDisplay } from "vuetify";
 import { getSocket, getMessage, Serverinfo } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
@@ -8,10 +9,11 @@ const socket = getSocket();
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo } = dataUser(); //自分のユーザー情報をインポート
     const { PreviewChannelData } = dataChannel();
     const { MsgDB } = dataMsg();
-    return { PreviewChannelData, myUserinfo, MsgDB, Serverinfo };
+    return { mobile, PreviewChannelData, myUserinfo, MsgDB, Serverinfo };
   },
 
   data() {
@@ -49,6 +51,12 @@ export default {
       },
       deep: true, //JSONの階層ごと監視するため
     },
+  },
+
+  computed: {
+    isMobile() {
+      return this.mobile;
+    }
   },
 
   methods: {
@@ -275,7 +283,19 @@ export default {
   <!-- ここから表示部分 -->
   <div style="margin: 2% auto; width: 85%; height: 97.5%">
     <div style="height: 10%" class="d-flex justify-space-around align-center">
-      <p class="text-h4 me-auto">チャンネルブラウザー</p>
+      <v-btn
+        v-if="isMobile"
+        @click="$emit('toggleSidebar')"
+        icon=""
+        class="rounded-lg flex-shrink-0"
+        variant="text"
+        size="small"
+      >
+        <v-icon>mdi:mdi-menu-open</v-icon>
+      </v-btn>
+      <v-divider v-if="isMobile" vertical inset></v-divider>
+
+      <p class="me-auto" :class="isMobile?'text-h6':'text-h4'">チャンネルブラウザー</p>
       <!-- チャンネル作成ボタン -->
       <v-btn
         @click="overlayChannelCreate = true"
