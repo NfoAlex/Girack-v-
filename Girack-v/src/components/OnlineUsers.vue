@@ -129,13 +129,13 @@ export default {
         v-if="isMobile"
         @click="$emit('toggleSidebar')"
         icon=""
-        class="rounded-lg"
+        class="rounded-lg flex-shrink-0"
         variant="text"
         size="small"
       >
         <v-icon>mdi:mdi-menu-open</v-icon>
       </v-btn>
-      <v-divier vertical inset></v-divier>
+      <v-divider v-if="isMobile" vertical inset></v-divider>
       <p
         style="font-size: min(4vh, 16px); margin-left: 8px"
         class="text-truncate me-auto flex-shrink-1"
@@ -145,17 +145,19 @@ export default {
       <!-- メンバーページへ行くボタン -->
       <v-btn
         @click="$router.push({ path: '/menu/members' })"
-        class="ma-3 rounded-lg"
+        class="ma-2 rounded-lg flex-shrink-0"
         size="large"
         color="secondary"
       >
         <v-icon class="ma-1">mdi:mdi-account-group</v-icon>
-        全メンバー
+        <v-tooltip activator="parent" location="bottom">
+          全ユーザーを見る
+        </v-tooltip>
       </v-btn>
     </div>
 
     <!-- リスト表示 -->
-    <div style="overflow-y: auto; margin-top: 3vh">
+    <div style="overflow-y: auto; margin-top: 3vh; width: 100%;">
       <v-virtual-scroll height="90vh" :items="userListDisplay">
         <template v-slot:default="{ item }">
           <v-card
@@ -167,6 +169,7 @@ export default {
             "
             class="rounded-lg card mx-auto pa-3 d-flex align-center"
             width="97.5%"
+            style="margin: 16px 0;"
             color="grey"
           >
             <v-avatar
@@ -177,7 +180,7 @@ export default {
               {{ item.name }}
             </span>
 
-            <span v-if="item.role !== 'Member'" style="float: right">
+            <span v-if="item.role !== 'Member'">
               <v-chip :color="item.role === 'Admin' ? 'purple' : 'blue'">
                 {{ item.role }}
               </v-chip>
@@ -190,8 +193,4 @@ export default {
 </template>
 
 <style scoped>
-.card {
-  width: 100%;
-  margin: 16px 0;
-}
 </style>
