@@ -38,7 +38,6 @@ export default {
 
       disconnected: false,
 
-      path: "",
       loggedin: false,
       channelJoined: [],
       displaychannelList: [],
@@ -48,7 +47,6 @@ export default {
   watch: {
     //URLの変更を検知
     $route(r) {
-      this.path = r.path; //変数へ取り込む
       //もしスマホならサイドバーを閉じる
       if (this.isMobile) {
         this.$emit("closeSidebar");
@@ -265,7 +263,7 @@ export default {
           <v-card
             v-if="myUserinfo.role === 'Admin'"
             class="d-flex pa-2 justify-center align-center rounded-pill"
-            :variant="path.indexOf('jsonviewer') !== -1 ? 'tonal' : 'text'"
+            :variant="$route.params.id.indexOf('jsonviewer') !== -1 ? 'tonal' : 'text'"
             style="font-size: calc(6px + 0.55vb)"
           >
             <v-icon>mdi:mdi-shield-bug</v-icon>
@@ -276,7 +274,7 @@ export default {
         <RouterLink :to="'/browser'">
           <v-card
             class="d-flex pa-2 justify-center align-center rounded-lg"
-            :variant="path.indexOf('browser') !== -1 ? 'tonal' : 'text'"
+            :variant="$route.params.id.indexOf('browser') !== -1 ? 'tonal' : 'text'"
             style="font-size: calc(6px + 0.55vb)"
           >
             <v-icon>mdi:mdi-text-search</v-icon>
@@ -295,8 +293,9 @@ export default {
         <div style="margin-top: 1%" v-for="l in displaychannelList" :key="l">
           <RouterLink :to="'/c/' + l.id">
             <v-card
+              @click="$emit('closeSidebar')"
               class="rounded-lg pa-2 d-flex align-center"
-              :variant="path.indexOf(l.id) !== -1 ? 'tonal' : 'text'"
+              :variant="$route.params.id.indexOf(l.id) !== -1 ? 'tonal' : 'text'"
               style="font-size: calc(6px + 0.75vb)"
             >
               <!-- チャンネル名前の#の部分 -->
@@ -315,7 +314,7 @@ export default {
                 :class="
                   checkReadTime(l.id, 'new') ||
                   checkReadTime(l.id, 'mention') ||
-                  path.indexOf(l.id) !== -1
+                  $route.params.id.indexOf(l.id) !== -1
                     ? 'text-high-emphasis'
                     : 'text-disabled'
                 "
