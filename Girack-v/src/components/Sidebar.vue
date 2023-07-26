@@ -271,7 +271,7 @@ export default {
         <!-- FOR DEBUGGING ONLY -->
         <RouterLink :to="'/jsonviewer'">
           <v-card
-            v-if="myUserinfo.role === 'Admin'"
+            v-if="myUserinfo.role === 'Admin' && !isMobile"
             :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
             class="d-flex justify-center align-center rounded-pill"
             :class="isMobile?'pa-3':'pa-2'"
