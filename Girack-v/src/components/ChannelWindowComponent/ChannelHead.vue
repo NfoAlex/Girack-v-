@@ -126,7 +126,7 @@ export default {
     >
       <!-- チャンネル情報(チャンネル名、概要) -->
       <div style="white-space: nowrap">
-        <div class="overflow-x-hidden text-truncate" style="font-size: 3vh">
+        <div class="overflow-x-hidden text-truncate text-h5">
           <span
             v-if="channelInfo.scope === 'private'"
             class="mdi mdi-lock"
