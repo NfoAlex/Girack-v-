@@ -167,7 +167,7 @@ export default {
         class="rounded-lg"
         style="padding: 2px 16px"
       >
-        <p class="text-truncate" style="font-size: 2vh">
+        <p class="text-truncate text-h6">
           {{ channelInfo.description }}
         </p>
       </div>
