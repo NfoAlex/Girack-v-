@@ -185,7 +185,7 @@ export default {
       </v-dialog>
 
       <!-- メイン画面（右側） -->
-      <div style="height:100vh; min-width:0;">
+      <div style="height:100vh; min-width:0;" class="flex-grow-1">
         <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
       </div>
 
