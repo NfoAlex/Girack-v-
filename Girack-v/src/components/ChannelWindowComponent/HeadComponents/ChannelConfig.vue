@@ -575,8 +575,8 @@ export default {
 
 .channelConfigCardDesk {
   width: 50vw;
-  max-width: 650px;
-  height: 75vh;
+  max-width: 700px;
+  height: 80vh;
 }
 
 .hideOnlineIcon {
