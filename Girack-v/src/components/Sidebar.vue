@@ -300,7 +300,7 @@ export default {
       <!-- ここからチャンネルボタン描写  -->
       <div
         class="mx-auto scroll"
-        style="overflow-y: auto; width: 97%; margin-bottom: 8px"
+        style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
         <div style="margin-top: 1%" v-for="l in displaychannelList" :key="l">
           <RouterLink :to="'/c/' + l.id">
