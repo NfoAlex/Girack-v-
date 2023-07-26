@@ -169,7 +169,7 @@ export default {
     </v-snackbar>
 
     <!-- ログイン後(Main) -->
-    <div v-if="loggedin" class="d-flex" style="width:100vw; height:100vh;">
+    <div v-if="loggedin" class="d-flex pa-0 ma-0" style="width:100vw; height:100vh;">
 
       <!-- サイドバー(左側) -->
         <!-- デスクトップ用 -->
@@ -185,7 +185,7 @@ export default {
       </v-dialog>
 
       <!-- メイン画面（右側） -->
-      <div class="main flex-grow-1">
+      <div style="height:100vh; min-width:0;" class="flex-grow-1">
         <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
       </div>
 
@@ -209,6 +209,8 @@ html {
   background: rgb(var(--v-theme-background));
   overflow-y: hidden !important;
   font-family: "Noto Sans CJK JP", "Roboto", "BIZ UDPGothic", "sans-serif" !important;
+  width:100vw;
+  height:100vh;
 }
 
 a {

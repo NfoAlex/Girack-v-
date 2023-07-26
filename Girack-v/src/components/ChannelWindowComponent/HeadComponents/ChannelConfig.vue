@@ -275,6 +275,7 @@ export default {
     :transition="isMobile?'dialog-bottom-transition':'dialog-transition'"
     :fullscreen="isMobile?true:false"
     style="overflow-y: auto;"
+    :class="isMobile?'ChannelConfigCardMobile':'channelConfigCardDesk'"
   >
     <!-- ユーザーページ用 -->
     <Userpage
@@ -347,7 +348,11 @@ export default {
       </div>
     </v-dialog>
 
-    <span class="d-flex flex-column mx-auto justify-center " :style="isMobile?'height:100vh':'width:fit-content'">
+    <span 
+      class="d-flex flex-column mx-auto justify-center"
+      :style="isMobile?'height:100vh':'height:100%;'"
+      style="width:100%;"
+    >
       <!-- スマホレイアウト時の空白ホルダー -->
       <span
         @click="$emit('closeDialog')"
@@ -357,14 +362,11 @@ export default {
       </span>
 
       <!-- チャンネルメニュー本体 -->
-      <v-card
-        :class="isMobile?['channelConfigCardMobile','flex-grow-1']:'channelConfigCardDesk'"
-        class="d-flex flex-column text-center rounded-lg pa-3"
-      >
+      <v-card :style="isMobile?'height:85vh':null" class="d-flex flex-column text-center rounded-lg pa-3">
         <div>
           <!-- チャンネル名とバッジ -->
           <div class="ma-5">
-            <div class="text-h4">
+            <div :class="isMobile?'text-h6':'text-h4'">
               <!-- プライベートチャンネル用アイコン -->
               <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
 
@@ -567,13 +569,14 @@ export default {
 <style scoped>
 
 .channelConfigCardMobile {
-  width:100vw;
+  width: 100vw;
+  height: 100vh;
 }
 
 .channelConfigCardDesk {
   width: 50vw;
-  max-width: 650px;
-  height: fit-content;
+  max-width: 700px;
+  height: 80vh;
 }
 
 .hideOnlineIcon {

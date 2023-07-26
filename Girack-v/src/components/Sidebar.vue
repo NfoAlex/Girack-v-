@@ -271,7 +271,7 @@ export default {
         <!-- FOR DEBUGGING ONLY -->
         <RouterLink :to="'/jsonviewer'">
           <v-card
-            v-if="myUserinfo.role === 'Admin'"
+            v-if="myUserinfo.role === 'Admin' && !isMobile"
             :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
             class="d-flex justify-center align-center rounded-pill"
             :class="isMobile?'pa-3':'pa-2'"
@@ -300,7 +300,7 @@ export default {
       <!-- ここからチャンネルボタン描写  -->
       <div
         class="mx-auto scroll"
-        style="overflow-y: auto; width: 97%; margin-bottom: 8px"
+        style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
         <div style="margin-top: 1%" v-for="l in displaychannelList" :key="l">
           <RouterLink :to="'/c/' + l.id">
