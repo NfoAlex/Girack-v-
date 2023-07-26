@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="text-center pa-5" style="width:80%">
     <span class="d-flex">
-      <p class="text-h3">wtfLayout</p>
+      <p class="text-h3">StableLayout</p>
     </span>
     
     <br>
