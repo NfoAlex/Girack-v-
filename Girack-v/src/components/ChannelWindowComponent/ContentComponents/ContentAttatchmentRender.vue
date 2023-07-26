@@ -126,7 +126,7 @@ export default {
   <div>
     <v-card
       class="rounded-lg pa-3 ma-2 d-flex align-center justify-space-between"
-      style="width: fit-content; max-width: 800px"
+      style="width: fit-content; max-width: 95%;"
       v-for="file in fileData.attatchmentData"
       :key="file"
     >
@@ -164,7 +164,7 @@ export default {
       </span>
 
       <!-- ファイル情報の表示 -->
-      <span class="flex-grow-1" style="margin-left: 16px">
+      <span class="flex-grow-1 overflow-x-hidden" style="margin-left: 16px; max-width: max-content;">
         <p class="text-subtitle-1">
           {{
             file.name
