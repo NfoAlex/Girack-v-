@@ -222,13 +222,19 @@ export default {
           (userrole !== 'Admin' && myUserinfo.role === 'Moderator') ||
           m.userid === myUserinfo.userid
         "
-        @click="messageAction(m.messageid, 'delete')"
+        @dblclick="messageAction(m.messageid, 'delete')"
         style="margin-right: 3px"
         variant="tonal"
         rounded="pill"
         size="x-small"
       >
         削除
+        <v-tooltip
+          activator="parent"
+          location="top center"
+        >
+          ダブルクリックで削除
+        </v-tooltip>
       </v-btn>
     </span>
   </v-card>

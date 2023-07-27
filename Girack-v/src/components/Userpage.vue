@@ -406,11 +406,23 @@ export default {
           ></v-select>
 
           <!-- BANボタン -->
-          <v-btn @click="banUser" v-if="!targetinfo.banned" color="error">
+          <v-btn @dblclick="banUser" v-if="!targetinfo.banned" color="error">
             <v-icon>mdi:mdi-account-cancel</v-icon> BAN
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              ダブルクリックでBAN
+            </v-tooltip>
           </v-btn>
-          <v-btn @click="banUser" v-if="targetinfo.banned" color="info">
+          <v-btn @dblclick="banUser" v-if="targetinfo.banned" color="info">
             <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              ダブルクリックで解除
+            </v-tooltip>
           </v-btn>
         </v-window-item>
 
@@ -418,23 +430,35 @@ export default {
         <v-window-item value="delete" class="ma-5">
           <v-btn
             v-if="!deleteConfirmCheckDisplay"
-            @click="deleteConfirmCheckDisplay = true"
+            @dblclick="deleteConfirmCheckDisplay = true"
             class="rounded-lg"
             color="error"
             size="large"
             variant="tonal"
           >
             このユーザーを削除
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              ダブルクリックで確認へ
+            </v-tooltip>
           </v-btn>
           <v-btn
             v-if="deleteConfirmCheckDisplay"
-            @click="deleteUser()"
+            @dblclick="deleteUser()"
             class="rounded-lg"
             color="error"
             size="large"
             elevation="12"
           >
             本当にいいの?
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              ダブルクリックで削除
+            </v-tooltip>
           </v-btn>
         </v-window-item>
       </v-window>
