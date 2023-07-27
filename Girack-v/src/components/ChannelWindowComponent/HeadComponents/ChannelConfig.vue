@@ -362,7 +362,7 @@ export default {
       </span>
 
       <!-- チャンネルメニュー本体 -->
-      <v-card :style="isMobile?'height:85vh':null" class="d-flex flex-column text-center rounded-lg pa-3">
+      <v-card :style="isMobile?'height:85vh':'max-height:80vh'" class="d-flex flex-column text-center rounded-lg pa-3">
         <div>
           <!-- チャンネル名とバッジ -->
           <div class="ma-5">
@@ -464,7 +464,7 @@ export default {
         <!-- タブの中身を知りたくて─────────── -->
         <v-window v-model="tab" style="margin-top: 8px; overflow-y: auto">
           <!-- チャンネル参加者リスト -->
-          <v-window-item value="userJoined" class="channelScrollbar">
+          <v-window-item value="userJoined" class="channelScrollbar" style="padding-bottom: 5%;">
             <!-- ユーザー招待ボタン -->
             <span>
               <v-btn
@@ -492,7 +492,7 @@ export default {
                 }
               "
               class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
-              style="width: 75%; margin-top: 8px"
+              style="width: 75%; margin-top: 8px;"
               variant="tonal"
               v-for="u in channelJoinedUser"
               :key="u"
@@ -533,6 +533,7 @@ export default {
             </v-card>
           </v-window-item>
 
+          <!-- チャンネル管理タブ -->
           <v-window-item value="manage" class="mx-auto" style="overflow-y: auto">
             <!-- プラベチャンネルのスイッチ -->
             <v-checkbox
@@ -576,7 +577,6 @@ export default {
 .channelConfigCardDesk {
   width: 50vw;
   max-width: 700px;
-  height: 80vh;
 }
 
 .hideOnlineIcon {
