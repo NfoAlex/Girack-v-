@@ -1053,6 +1053,7 @@ export default {
                 <div>
                   <v-chip
                     @click="messageAction(m.messageid, 'reaction', r[0])"
+                    :ripple="false"
                     style="
                       margin-top: 4px;
                       margin-right: 8px;
