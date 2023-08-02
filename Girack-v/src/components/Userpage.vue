@@ -394,7 +394,7 @@ export default {
         </v-window-item>
 
         <!-- ユーザー管理タブ -->
-        <v-window-item value="mod" class="ma-5">
+        <v-window-item value="mod" class="ma-5 d-flex flex-column align-center">
           <!-- ロール選択 -->
           <v-select
             class="mx-auto"
@@ -405,8 +405,30 @@ export default {
             :items="roleList"
           ></v-select>
 
-          <!-- BANボタン -->
-          <v-btn @dblclick="banUser" v-if="!targetinfo.banned" color="error">
+          <v-btn
+            @click="changeTargetUsername"
+            width="50%"
+            class="ma-3 rounded-lg"
+            color="grey"
+          >
+            ユーザー名を初期化
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              乱数にします
+            </v-tooltip>
+          </v-btn>
+
+          <v-divider></v-divider>
+
+          <!-- BANボタン(と解除ボタン) -->
+          <v-btn
+            @dblclick="banUser"
+            v-if="!targetinfo.banned" 
+            width="50%"
+            color="error"
+          >
             <v-icon>mdi:mdi-account-cancel</v-icon> BAN
             <v-tooltip
               activator="parent"
@@ -469,8 +491,8 @@ export default {
 <style scoped>
 .userPageDesk {
   width: 100%;
-  max-width: 550px;
-  height: 70vh;
+  max-width: 650px;
+  height: 80vh;
   width: 50vw;
   max-height: 85vh;
 }
