@@ -113,6 +113,7 @@ export default {
       //名前更新
       socket.emit("changeProfile", {
         name: nameUpdating, //更新する名前
+        targetid: this.myUserinfo.userid, //対象ユーザーID(自分)
         reqSender: {
           //セッション認証に必要な情報送信
           userid: this.myUserinfo.userid,

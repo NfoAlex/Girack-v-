@@ -588,7 +588,7 @@ export default {
           {{ getHistoryDate(index) }}
         </p>
       </div>
-
+      
       <!-- メッセージそのもの-->
       <ContentRender
         :m="m"
