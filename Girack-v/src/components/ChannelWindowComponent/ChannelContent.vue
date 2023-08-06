@@ -16,7 +16,7 @@ import ContentHoverMenu from "./ContentComponents/ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
 import ContentURLpreview from "./ContentComponents/ContentURLpreview.vue";
 import ContentMessageRender from "./ContentComponents/ContentMessageRender.vue";
-import ContentMessageEditing from "./ContentComponents/ContentMessageEditing.vue";
+import ContentEditing from "./ContentComponents/ContentEditing.vue";
 import ContentNewMessageLine from "./ContentComponents/ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentComponents/ContentSystemMessageRender.vue";
 import ContentAttatchmentRender from "./ContentComponents/ContentAttatchmentRender.vue";
@@ -49,7 +49,7 @@ export default {
     ContentURLpreview,
     ContentHoverMenu,
     ContentMessageRender,
-    ContentMessageEditing,
+    ContentEditing,
     ContentSystemMessageRender,
     ContentAttatchmentRender,
     ContentNewMessageLine,
@@ -1025,14 +1025,14 @@ export default {
 
                 <!-- メッセージ本文と編集中表示 -->
                 <ContentMessageRender v-if="msgIdEditing!==m.messageid" :content="m.content" />
-                <ContentMessageEditing
+                <ContentEditing
                   v-else
                   @update-editing-message="(mID)=>{msgIdEditing=mID}"
                   :channelid="m.channelid"
                   :content="m.content"
                   :messageid="m.messageid"
                 >
-                </ContentMessageEditing>
+                </ContentEditing>
 
                 <!-- メッセージが編集されていたら -->
                 <p v-if="m.isEdited" class="text-disabled text-caption">
