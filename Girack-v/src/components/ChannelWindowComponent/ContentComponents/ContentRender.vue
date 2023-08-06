@@ -431,7 +431,6 @@ export default {
 </script>
 
 <template>
-  <span>
   <div
     v-if="m.isSystemMessage === undefined || m.isSystemMessage === false"
     :id="m.messageid"
@@ -662,7 +661,6 @@ export default {
       </v-menu>
     </span>
   </div>
-</span>
 </template>
 
 <style scoped>
