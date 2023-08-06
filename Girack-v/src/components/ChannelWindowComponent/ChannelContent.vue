@@ -12,14 +12,11 @@ import { getReplyState } from "./ChannelInput.vue";
 import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
-import ContentHoverMenu from "./ContentComponents/ContentHoverMenu.vue";
 import Userpage from "../Userpage.vue";
+import ContentRender from "./ContentComponents/ContentRender.vue";
 import ContentURLpreview from "./ContentComponents/ContentURLpreview.vue";
-import ContentMessageRender from "./ContentComponents/ContentMessageRender.vue";
-import ContentEditing from "./ContentComponents/ContentEditing.vue";
 import ContentNewMessageLine from "./ContentComponents/ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentComponents/ContentSystemMessageRender.vue";
-import ContentAttatchmentRender from "./ContentComponents/ContentAttatchmentRender.vue";
 
 const socket = getSocket();
 
@@ -47,11 +44,8 @@ export default {
   components: {
     Userpage,
     ContentURLpreview,
-    ContentHoverMenu,
-    ContentMessageRender,
-    ContentEditing,
+    ContentRender,
     ContentSystemMessageRender,
-    ContentAttatchmentRender,
     ContentNewMessageLine,
   },
 
@@ -836,7 +830,7 @@ export default {
         v-if="checkDateDifference(index)"
         style="width: 100%; padding: 12px 0"
       >
-        <v-divider>asdf</v-divider>
+        <v-divider></v-divider>
         <p
           class="text-subtitle-1"
           :class="
@@ -851,236 +845,14 @@ export default {
       </div>
 
       <!-- ここからflexで表示するメッセージ-->
-      <div
-        v-if="m.isSystemMessage === undefined || m.isSystemMessage === false"
-        :id="m.messageid"
-        class="d-flex justify-end"
-        style="margin: 0px 12px"
-      >
-        <!-- アバター -->
-        <v-avatar
-          v-if="checkShowAvatar(m.userid, index)"
-          class="mx-auto flex-shrink-1"
-          width="5vw"
-          style="max-width: 20%"
-        >
-          <v-img
-            v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
-            @click="
-              () => {
-                userDialogShow = true;
-                userDialogUserid = m.userid;
-              }
-            "
-            class="pointed"
-            :alt="m.userid"
-            :src="uri + '/img/' + m.userid"
-          >
-          </v-img>
+      
 
-          <!-- 消去されているユーザーなら -->
-          <v-img v-else :alt="m.userid" :src="uri + '/img/' + m.userid">
-          </v-img>
-        </v-avatar>
-
-        <!-- アバターを表示しないときの空欄ホルダー -->
-        <v-avatar
-          v-else
-          class="mx-auto flex-shrink-1"
-          width="5vw"
-          style="max-width: 20%; height: 0 !important"
-        >
-          <v-img
-            v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
-            :alt="m.userid"
-          >
-          </v-img>
-        </v-avatar>
-
-        <!-- メッセージ本体 -->
-        <span
-          :class="[
-            msgHovered && msgIdHovering === m.messageid ? 'hovered' : null,
-            checkMsgPosition(m.userid, index),
-          ]"
-          class="flex-grow-1"
-          style="
-            width: 90%;
-            margin-left: 8px;
-            padding-left: 1.5%;
-            padding-right: 1.5%;
-          "
-        >
-          <!-- メッセージ本体 -->
-          <!-- v-menuはホバーメニュー用 -->
-          <v-menu
-            open-on-hover
-            :open-on-click="false"
-            open-delay="100"
-            close-delay="0"
-            transition="none"
-            :close-on-content-click="false"
-            location="end top"
-            origin="overlap"
-          >
-            <!-- ホバーで反応する範囲 -->
-            <template v-slot:activator="{ props }">
-              <div
-                v-bind="props"
-                @mouseover="mouseOverMsg(m.messageid, 'on')"
-                @mouseleave="mouseOverMsg(m.messageid, 'off')"
-              >
-                <!-- 過去を表示していたら -->
-                <span
-                  v-if="index === msgDisplayNum - 25 && msgDisplayNum !== 25"
-                  class="d-flex align-center"
-                >
-                  <v-divider class="flex-grow-0 flex-shrink-1"></v-divider>
-                  <span class="flex-grow-1 flex-shrink-0" style="margin: 0 8px"
-                    >ここから過去</span
-                  >
-                  <v-divider class="flex-grow-0 flex-shrink-1"></v-divider>
-                </span>
-
-                <!-- ユーザー名と時間表記 -->
-                <div
-                  class="text-h6 d-flex align-center"
-                  v-if="checkShowAvatar(m.userid, index)"
-                >
-                  <!-- ユーザー名 -->
-                  <span class="text-truncate">
-                    {{
-                      UserIndex[m.userid] !== undefined
-                        ? UserIndex[m.userid].username
-                        : m.userid
-                    }}
-                  </span>
-
-                  <!-- ロールバッジ -->
-                  <v-chip
-                    v-if="
-                      getUserStats(m.userid, 'role') !== 'Member' &&
-                      CONFIG_DISPLAY.CONTENT_SHOW_ROLE
-                    "
-                    style="margin-left: 8px"
-                    :color="this.userRoleColor[getUserStats(m.userid, 'role')]"
-                    size="x-small"
-                    :elevation="6"
-                  >
-                    {{ getUserStats(m.userid, "role") }}
-                  </v-chip>
-
-                  <!-- BANされたバッジ -->
-                  <v-chip
-                    v-if="getUserStats(m.userid, 'banned')"
-                    color="red"
-                    style="margin-left: 8px"
-                    size="x-small"
-                    :elevation="6"
-                  >
-                    BANNED
-                  </v-chip>
-
-                  <!-- タイムスタンプ -->
-                  <span
-                    class="text-caption"
-                    style="margin-left: 8px; color: #999"
-                  >
-                    {{ printDate(m.time) }}
-                  </span>
-                </div>
-
-                <!-- 返信データ -->
-                <p
-                  class="text-truncate ma-0"
-                  style="margin-top: 8px !important"
-                  v-if="
-                    m.replyData !== undefined ? m.replyData.isReplying : false
-                  "
-                >
-                  <a :href="'#' + m.replyData.messageid">
-                    <!-- 返信アイコン -->
-                    <v-icon>mdi:mdi-reply</v-icon>
-                    <!-- 返信する人の名前 -->
-                    <v-chip
-                      size="small"
-                      color="grey"
-                      variant="flat"
-                      style="cursor: pointer"
-                    >
-                      {{
-                        UserIndex[m.replyData.userid] !== undefined
-                          ? UserIndex[m.replyData.userid].username
-                          : m.replyData.userid
-                      }}
-                    </v-chip>
-                  </a>
-                  <!-- 返信内容 -->
-                  :
-                  <ContentMessageRender
-                    class="text-medium-emphasis"
-                    :content="m.replyData.content"
-                  />
-                </p>
-
-                <!-- メッセージ本文と編集中表示 -->
-                <ContentMessageRender v-if="msgIdEditing!==m.messageid" :content="m.content" />
-                <ContentEditing
-                  v-else
-                  @update-editing-message="(mID)=>{msgIdEditing=mID}"
-                  :channelid="m.channelid"
-                  :content="m.content"
-                  :messageid="m.messageid"
-                >
-                </ContentEditing>
-
-                <!-- メッセージが編集されていたら -->
-                <p v-if="m.isEdited" class="text-disabled text-caption">
-                  編集済み
-                </p>
-
-                <!-- ファイル添付表示 -->
-                <ContentAttatchmentRender
-                  v-if="m.fileData"
-                  :fileData="m.fileData"
-                  :channelid="getPath"
-                />
-
-                <!-- URLプレビュー用 -->
-                <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
-
-                <!-- リアクション -->
-                <div>
-                  <v-chip
-                    @click="messageAction(m.messageid, 'reaction', r[0])"
-                    style="
-                      margin-top: 4px;
-                      margin-right: 8px;
-                      margin-bottom: 4px;
-                      user-select: none;
-                      -webkit-user-select: none;
-                    "
-                    size="small"
-                    color="white"
-                    v-for="r in Object.entries(m.reaction)"
-                    :key="r"
-                  >
-                    {{ getReaction(r[0]) }} {{ r[1] }}
-                  </v-chip>
-                </div>
-              </div>
-            </template>
-            <!-- ここからホバーメニュー -->
-            <ContentHoverMenu
-              @update-editing-message="(mID)=>{msgIdEditing=mID}"
-              style="z-index: 30"
-              :m="m"
-              :userrole="getUserStats(m.userid, 'role')"
-              :channelid="getPath"
-            />
-          </v-menu>
-        </span>
-      </div>
+      <ContentRender
+        :m="m"
+        :index="index"
+        :MsgDBActive="MsgDBActive"
+        :msgDisplayNum="msgDisplayNum"
+      ></ContentRender>
 
       <!-- システムメッセージ -->
       <div style="width: 100%" v-if="m.isSystemMessage === true">
