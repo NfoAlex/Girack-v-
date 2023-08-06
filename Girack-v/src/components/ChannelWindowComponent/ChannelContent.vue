@@ -589,9 +589,7 @@ export default {
         </p>
       </div>
 
-      <!-- ここからflexで表示するメッセージ-->
-      
-
+      <!-- メッセージそのもの-->
       <ContentRender
         :m="m"
         :index="index"
