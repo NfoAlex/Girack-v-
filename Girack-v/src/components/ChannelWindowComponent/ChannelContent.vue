@@ -654,50 +654,8 @@ export default {
 
   background-color: #49454f;
 }
-
-.hovered {
-  background-color: #444 !important;
-}
-
 .pointed {
   cursor: pointer;
-}
-
-.msgBackgroundMid {
-  border-radius: 0px;
-  background-color: #333;
-
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
-}
-
-.msgBackgroundTop {
-  border-top-right-radius: 12px;
-  border-top-left-radius: 12px;
-  background-color: #333;
-
-  margin-top: 6px;
-  padding-top: 8px !important;
-  padding-bottom: 2px !important;
-}
-
-.msgBackgroundEnd {
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  background-color: #333;
-
-  margin-bottom: 6px;
-  padding-bottom: 8px !important;
-  padding-top: 2px !important;
-}
-
-.msgBackgroundSingle {
-  border-radius: 12px;
-  background-color: #333;
-
-  margin: 6px 0;
-  padding-top: 8px;
-  padding-bottom: 8px;
 }
 
 /* スクロールバー用 */
