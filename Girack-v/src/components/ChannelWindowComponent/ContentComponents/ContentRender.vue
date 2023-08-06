@@ -44,13 +44,13 @@ export default {
     }
   },
 
-  components: [
+  components: {
     ContentHoverMenu,
     ContentEditing,
     ContentURLpreview,
     ContentMessageRender,
     ContentAttatchmentRender
-  ],
+  },
 
   props: ["m", "MsgDBActive", "msgDisplayNum", "index"], 
 
@@ -602,22 +602,22 @@ export default {
               </a>
               <!-- 返信内容 -->
               :
-              <!-- <ContentMessageRender
+              <ContentMessageRender
                 class="text-medium-emphasis"
                 :content="m.replyData.content"
-              /> -->
+              />
             </p>
 
             <!-- メッセージ本文と編集中表示 -->
             <ContentMessageRender v-if="msgIdEditing!==m.messageid" :content="m.content" />
-            <!-- <ContentEditing
+            <ContentEditing
               v-else
               @update-editing-message="(mID)=>{msgIdEditing=mID}"
               :channelid="m.channelid"
               :content="m.content"
               :messageid="m.messageid"
             >
-            </ContentEditing> -->
+            </ContentEditing>
 
             <!-- メッセージが編集されていたら -->
             <p v-if="m.isEdited" class="text-disabled text-caption">
@@ -625,14 +625,14 @@ export default {
             </p>
 
             <!-- ファイル添付表示 -->
-            <!-- <ContentAttatchmentRender
+            <ContentAttatchmentRender
               v-if="m.fileData"
               :fileData="m.fileData"
               :channelid="getPath"
-            /> -->
+            />
 
             <!-- URLプレビュー用 -->
-            <!-- <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" /> -->
+            <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
 
             <!-- リアクション -->
             <div>
@@ -656,13 +656,13 @@ export default {
           </div>
         </template>
         <!-- ここからホバーメニュー -->
-        <!-- <ContentHoverMenu
+        <ContentHoverMenu
           @update-editing-message="(mID)=>{msgIdEditing=mID}"
           style="z-index: 30"
           :m="m"
           :userrole="getUserStats(m.userid, 'role')"
           :channelid="getPath"
-        /> -->
+        />
       </v-menu>
     </span>
   </div>

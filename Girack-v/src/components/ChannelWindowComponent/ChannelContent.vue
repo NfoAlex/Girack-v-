@@ -852,7 +852,7 @@ export default {
         :index="index"
         :MsgDBActive="MsgDBActive"
         :msgDisplayNum="msgDisplayNum"
-      ></ContentRender>
+      />
 
       <!-- システムメッセージ -->
       <div style="width: 100%" v-if="m.isSystemMessage === true">
