@@ -14,7 +14,6 @@ import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
 import Userpage from "../Userpage.vue";
 import ContentRender from "./ContentComponents/ContentRender.vue";
-import ContentURLpreview from "./ContentComponents/ContentURLpreview.vue";
 import ContentNewMessageLine from "./ContentComponents/ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentComponents/ContentSystemMessageRender.vue";
 
@@ -43,7 +42,6 @@ export default {
 
   components: {
     Userpage,
-    ContentURLpreview,
     ContentRender,
     ContentSystemMessageRender,
     ContentNewMessageLine,
@@ -77,8 +75,6 @@ export default {
         Member: "white",
         Deleted: "black",
       },
-
-      goBottom: "goBottom", //下に行くボタン用CSSクラス
     };
   },
 
@@ -235,52 +231,6 @@ export default {
   },
 
   methods: {
-    //ユーザーの情報取得するだけ
-    getUserStats(userid, category) {
-      switch (category) {
-        //ロールを返す
-        case "role":
-          try {
-            return this.UserIndex[userid].role;
-          } catch (e) {
-            return "Member";
-          }
-
-        //BANされたかどうかを返す
-        case "banned":
-          try {
-            return this.UserIndex[userid].banned;
-          } catch (e) {
-            return false;
-          }
-
-        //変なエラー避け
-        default:
-          console.log("なにもないね");
-          return null;
-      }
-    },
-
-    //絵文字を取得するだけ(ToDo:別コンポーネントとして独立)
-    getReaction(reaction) {
-      switch (reaction) {
-        case "smile":
-          return "😀";
-
-        case "thinking_face":
-          return "🤔";
-
-        case "smirk":
-          return "😏";
-
-        case "cold_sweat":
-          return "😰";
-
-        default:
-          return reaction;
-      }
-    },
-
     //さらに過去の履歴(10件)を取得する
     getHistory() {
       console.log(
@@ -309,180 +259,6 @@ export default {
       //もし表示する数が履歴の長さより長かったらさらに深い履歴をサーバーから取得する
       if (this.msgDisplayNum + 15 > this.MsgDBActive.length) this.getHistory();
       this.msgDisplayNum += 15;
-    },
-
-    //アバターを表示するかどうか
-    checkShowAvatar(userid, index) {
-      try {
-        //分(min)差計算
-        let msgTimeMinBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(10, 12)
-        );
-        let msgTimeMinThis = parseInt(
-          this.cropMessage[index].time.slice(10, 12)
-        );
-        //分差計算
-        let timeMinDifference = msgTimeMinThis - msgTimeMinBefore;
-
-        //時(h)差計算
-        let msgTimeHourBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(8, 10)
-        );
-        let msgTimeHourThis = parseInt(
-          this.cropMessage[index].time.slice(8, 10)
-        );
-        //時差計算
-        let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
-
-        //日付がそもそも違うなら見せる
-        if (this.checkDateDifference(index)) return true;
-
-        //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-        if (this.cropMessage[index - 1].userid === userid) {
-          //このメッセージの一つ前のメッセージのユーザーID
-          //条件でアバターを見せるか見せないか決める
-          if (
-            timeMinDifference < -55 ||
-            timeMinDifference > 4 ||
-            timeHourDifference !== 0
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return true; //違うから表示する
-        }
-      } catch (e) {
-        return true; //最初だったりするときはとにかく表示する
-      }
-    },
-
-    //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
-    checkMsgPosition(userid, index) {
-      if (this.MsgDBActive === undefined || this.cropMessage.length <= 0)
-        return;
-
-      let AvatarNeedToShowBefore = false;
-      let AvatarNeedToShow = false;
-      let AvatarNeedToShowNext = false;
-
-      //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
-      //前
-      try {
-        //そもそも一つ前のメッセージが存在するか確認
-        if (this.cropMessage[index - 1] !== undefined) {
-          AvatarNeedToShowBefore = this.checkShowAvatar(
-            this.cropMessage[index - 1].userid,
-            index - 1
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //今の位置
-      try {
-        AvatarNeedToShow = this.checkShowAvatar(userid, index);
-      } catch (e) {
-        console.error(e);
-      }
-
-      //次
-      try {
-        //そもそも次のメッセージが存在するか確認
-        if (this.cropMessage[index + 1] !== undefined) {
-          AvatarNeedToShowNext = this.checkShowAvatar(
-            this.cropMessage[index + 1].userid,
-            index + 1
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      let SameWithBefore = false; //ひとつ前と送信者が同じかどうか
-      let SameWithNext = false; //次と送信者同じかどうか
-
-      //一つ前と送信者が今のと同じならそう記録
-      try {
-        //まず一つ前のメッセージがあるか確認
-        if (this.cropMessage[index - 1] !== undefined) {
-          if (this.cropMessage[index - 1].userid === userid) {
-            SameWithBefore = true;
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //次の送信者が今のと同じならそう記録
-      try {
-        //まず次のメッセージがあるか確認
-        if (this.cropMessage[index + 1] !== undefined) {
-          if (this.cropMessage[index + 1].userid === userid) {
-            SameWithNext = true;
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //ここから条件処理
-      if (AvatarNeedToShowBefore) {
-        //一つ前でアバター出てるか
-        if (AvatarNeedToShow) {
-          if (SameWithNext) {
-            if (AvatarNeedToShowNext) {
-              return "msgBackgroundSingle";
-            } else {
-              return "msgBackgroundTop";
-            }
-          } else {
-            return "msgBackgroundSingle";
-          }
-        } else {
-          if (AvatarNeedToShowNext) {
-            return "msgBackgroundEnd";
-          }
-
-          if (SameWithBefore) {
-            if (SameWithNext) {
-              return "msgBackgroundMid";
-            } else {
-              return "msgBackgroundEnd";
-            }
-          } else {
-            return "msgBackgroundEnd";
-          }
-        }
-      } else if (AvatarNeedToShowNext) {
-        if (AvatarNeedToShow) {
-          if (AvatarNeedToShowNext) {
-            return "msgBackgroundSingle";
-          } else {
-            return "msgBackgroundTop";
-          }
-        } else {
-          return "msgBackgroundEnd";
-        }
-      } else {
-        if (AvatarNeedToShow) {
-          if (SameWithNext) {
-            return "msgBackgroundTop";
-          } else {
-            return "msgBackgroundSingle";
-          }
-        } else {
-          if (SameWithNext) {
-            return "msgBackgroundMid";
-          } else if (SameWithBefore) {
-            return "msgBackgroundEnd";
-          } else {
-            return "msgBackgroundSingle";
-          }
-        }
-      }
     },
 
     //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
@@ -527,37 +303,6 @@ export default {
         channelWindow.scrollTo(0, channelWindow.scrollHeight); //スクロール
         this.setScrollState(true); //スクロール状態を"した"と設定
       });
-    },
-
-    //ホバー時アクション
-    mouseOverMsg(msgId, bool) {
-      if (bool === "on") {
-        this.msgHovered = true;
-        this.msgIdHovering = msgId;
-      }
-
-      if (bool === "off") {
-        this.msgHovered = false;
-        this.msgIdHovering = null;
-      }
-    },
-
-    //削除したりリアクションしたり編集(ToDo)したり
-    messageAction(msgId, act, reaction) {
-      //リアクションする
-      if (act === "reaction") {
-        //リアクションしたことを送信
-        socket.emit("actMessage", {
-          action: "reaction",
-          channelid: this.getPath,
-          messageid: msgId,
-          reaction: reaction, //送るリアクション
-          reqSender: {
-            userid: this.myUserinfo.userid,
-            sessionid: this.myUserinfo.sessionid,
-          },
-        });
-      }
     },
 
     //スクロール位置によって既読にしたり"下に行く"ボタンを表示させたりする
