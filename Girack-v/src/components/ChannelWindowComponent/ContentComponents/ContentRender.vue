@@ -671,6 +671,10 @@ export default {
 
 <style scoped>
 
+.hovered {
+  background-color: #444 !important;
+}
+
 .pointed {
   cursor: pointer;
 }
