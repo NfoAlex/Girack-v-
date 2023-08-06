@@ -1,4 +1,5 @@
 <script>
+import { getSocket } from "../../../data/socket.js";
 import { dataUser } from "../../../data/dataUserinfo";
 import { getCONFIG } from "../../../config.js";
 import ContentHoverMenu from "./ContentHoverMenu.vue";
@@ -6,6 +7,8 @@ import ContentEditing from "./ContentEditing.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
+
+const socket = getSocket();
 
 export default {
   setup() {
