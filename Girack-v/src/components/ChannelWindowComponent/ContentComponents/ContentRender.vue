@@ -17,12 +17,7 @@ export default {
   data() {
     return {
       uri: window.location.origin, //バックエンドのURI
-      StateFocus: true, //Girackにフォーカスしているかどうか
       msgIdEditing: "xxxxxxx",
-
-      //watchする時のハンドラ用
-      watcherRoute: {},
-      watcherMsgDB: {},
 
       //ホバー処理用
       msgHovered: false, //ホバーされたかどうか
@@ -39,8 +34,6 @@ export default {
         Member: "white",
         Deleted: "black",
       },
-
-      goBottom: "goBottom", //下に行くボタン用CSSクラス
     }
   },
 
