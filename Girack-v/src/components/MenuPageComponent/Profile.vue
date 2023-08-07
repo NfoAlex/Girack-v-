@@ -23,8 +23,11 @@ export default {
       imgsrc: window.location.origin + "/img/",
 
       //ユーザー名
-      nameDisplaying: "...",
-      nameEditing: false, //名前編集しているかどうか
+      nameChangeDialog: false, //ユーザー名変更用のダイアログ
+      nameChangingValue: "...", //変更するためのユーザー名変数
+      canUseThisName: false, //変更にこの名前を使えるかどうか
+      resultNameNotAvailable: false,
+      resultNameTooShort: true,
 
       //パスワード変更用
       changePasswordDialog: false,
@@ -53,13 +56,26 @@ export default {
   },
 
   watch: {
-    //ユーザー情報の監視
-    myUserinfo: {
-      //変更を検知したら表示名を変更
-      handler(U) {
-        this.nameDisplaying = U.username; //表示名を更新
-      },
-      deep: true, //階層ごと監視するため
+    //変更するユーザー名変数
+    nameChangingValue: {
+      handler() {
+        //名前の長さが２文字以上なら検索開始
+        if (this.nameChangingValue.length >= 2) {
+          //名前検索
+          socket.emit("searchUserDynamic", {
+            query: this.nameChangingValue,
+            reqSender: {
+              userid: this.myUserinfo.userid,
+              sessionid: this.myUserinfo.sessionid
+            }
+          });
+          this.resultNameTooShort = false;
+        } else {
+          this.canUseThisName = false;
+          this.resultNameNotAvailable = false;
+          this.resultNameTooShort = true;
+        }
+      }
     },
 
     //ファイルのアップロード状態を監視してアップロードできるかどうかを設定
@@ -109,7 +125,7 @@ export default {
 
     //名前更新
     updateName() {
-      let nameUpdating = this.nameDisplaying; //更新する名前
+      let nameUpdating = this.nameChangingValue; //更新する名前
       //名前更新
       socket.emit("changeProfile", {
         name: nameUpdating, //更新する名前
@@ -120,14 +136,6 @@ export default {
           sessionid: this.myUserinfo.sessionid,
         },
       });
-      this.nameEditing = false; //編集モードを閉じる
-      console.log("名前更新します -> " + this.nameDisplaying);
-    },
-
-    //編集しているかどうかを切り替えする
-    toggleEditing() {
-      this.nameDisplaying = this.myUserinfo.username;
-      this.nameEditing = !this.nameEditing; //編集モード
     },
 
     //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
@@ -201,20 +209,41 @@ export default {
     reloadPage() {
       window.location.reload();
     },
+
+    //ユーザー名検索のハンドラ
+    SOCKETinfoSearchUser(result) {
+      //結果を一つずつ調べる
+      for (let index in result) {
+        if (result[index].username === this.nameChangingValue) {
+          this.canUseThisName = false;
+          this.resultNameNotAvailable = true;
+
+          console.log('名前あるわ');
+
+          return;
+        }
+      }
+
+      this.resultNameNotAvailable = false;
+      this.canUseThisName = true;
+    }
   },
 
   mounted() {
-    this.nameDisplaying = this.myUserinfo.username; //名前更新
+    this.nameChangingValue = this.myUserinfo.username;
 
     //結果の受け取り
     socket.on("changePasswordResult", (result) => {
       this.changePasswordResult = result;
     });
+    socket.on("infoSearchUser", this.SOCKETinfoSearchUser);
+
   },
 
   unmounted() {
     //通信重複防止
     socket.off("changePasswordResult");
+    socket.off("infoSearchUser", this.SOCKETinfoSearchUser);
   },
 };
 </script>
@@ -387,6 +416,59 @@ export default {
       </v-card>
     </v-dialog>
 
+    <!-- ユーザー変更用ダイアログ -->
+    <v-dialog
+      v-model="nameChangeDialog"
+      style="max-width:650px;"
+      width="50vh"
+    >
+      <v-card class="rounded-lg">
+        <v-card-title>
+          ユーザー名変更
+        </v-card-title>
+
+        <!-- 入力欄 -->
+        <v-card-item>
+          <p class="mb-1">新しいユーザー名</p>
+          <v-text-field v-model="nameChangingValue"></v-text-field>
+          <v-alert>
+            名前の空き :
+            <span v-if="resultNameTooShort">
+              名前を入力してください(２文字以上)
+            </span>
+            <span v-if="!resultNameTooShort&&resultNameNotAvailable">
+              この名前はすでに使われています。
+            </span>
+            <span v-if="!resultNameTooShort&&!resultNameNotAvailable">
+              使えます!
+            </span>
+          </v-alert>
+        </v-card-item>
+
+        <!-- ボタン -->
+        <v-card-item class="d-flex flex-row-reverse mb-2">
+          <v-btn
+            @click="nameChangeDialog=false;"
+            class="ma-1 rounded-lg"
+            variant="flat"
+            color=""
+          >
+            キャンセル
+          </v-btn>
+          <v-btn
+            @click="updateName();nameChangeDialog=false;"
+            :disabled="!canUseThisName"
+            class="ma-1 rounded-lg"
+            variant="flat"
+            color="primary"
+          >
+            変更する
+          </v-btn>
+        </v-card-item>
+
+      </v-card>
+    </v-dialog>
+
     <!-- プロフィールメイン画面 -->
     <div style="height:100vh; overflow-y:auto; padding:3vh 0vh;">
       <v-container>
@@ -415,64 +497,21 @@ export default {
           <v-col cols="10">
             <div variant="tonal" :class="cd" style="padding: 1% 10%">
               <span class="d-flex flex-column" style="width: 100%">
+
                 <!-- ユーザーID -->
                 <p class="text-left text-h6"># {{ myUserinfo.userid }}</p>
 
                 <!-- ユーザー名 -->
-                <p
-                  v-if="!nameEditing"
-                  @dblclick="toggleEditing"
-                  class="text-h4 text-left text-truncate"
-                >
+                <p class="text-h4 text-left text-truncate">
                   {{ myUserinfo.username }}
                   <v-btn
-                    v-if="!nameEditing"
                     color="primary"
                     icon="mdi:mdi-pencil"
-                    @click="toggleEditing"
+                    @click="nameChangeDialog=true;"
                     class="rounded-lg ma-5"
                   ></v-btn>
                 </p>
 
-                <span class="auto" style="width: 100%">
-                  <!-- ユーザー名編集時 -->
-                  <v-text-field
-                    v-if="nameEditing"
-                    style="width: 100%"
-                    class="me-auto"
-                    v-model="nameDisplaying"
-                    counter
-                    :maxlength="
-                      Serverinfo.config.PROFILE.PROFILE_USERNAME_MAXLENGTH
-                    "
-                    variant="solo"
-                  >
-                    <template v-slot:append-inner>
-                      <v-btn
-                        @click="updateName"
-                        :disabled="
-                          nameDisplaying.length >=
-                          Serverinfo.config.PROFILE.PROFILE_USERNAME_MAXLENGTH
-                        "
-                        color="secondary"
-                        size="x-small"
-                        icon="mdi:mdi-check-bold"
-                        class="rounded-lg"
-                        style="margin: 0 4px 0 8px; float: right"
-                      >
-                      </v-btn>
-                      <v-btn
-                        @click="toggleEditing"
-                        color="secondary"
-                        size="x-small"
-                        icon="mdi:mdi-window-close"
-                        class="rounded-lg"
-                        style="margin: 0 8px 0 4px; float: right"
-                      >
-                      </v-btn>
-                    </template>
-                  </v-text-field>
-                </span>
               </span>
             </div>
           </v-col>
