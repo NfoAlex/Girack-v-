@@ -568,8 +568,8 @@ export default {
         :index="index"
         :MsgDBActive="MsgDBActive"
         :msgDisplayNum="msgDisplayNum"
-        :msgEditing="msgIdEditing===m.messageid"
-        @clearEditing="msgIdEditing='xxxxxx'"
+        :msgEditing="msgIdEditing===m.messageid?true:false"
+        @close-editing="msgIdEditing='xxxxxx';"
       />
 
       <!-- システムメッセージ -->

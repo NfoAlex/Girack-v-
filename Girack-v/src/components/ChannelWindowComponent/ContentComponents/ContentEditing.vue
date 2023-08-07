@@ -90,7 +90,7 @@ export default {
         });
       }
       //編集モードから抜ける
-      this.$emit('updateEditingMessage','xxxxxx');
+      this.$emit('closeEditing');
     },
 
     //メッセージの削除
@@ -139,7 +139,7 @@ export default {
     document.removeEventListener("keydown", this.enterTrigger);
     document.removeEventListener("keydown", this.escTrigger);
     //メッセージの入力欄にフォーカスするように
-    document.getElementById("inp").focus()
+    document.getElementById("inp").focus();
   }
 }
 
@@ -178,7 +178,7 @@ export default {
           </span>
         </v-btn>
         <v-btn
-          @click="$emit('updateEditingMessage','waaaa')"
+          @click="$emit('closeEditing')"
           class="rounded-lg ma-1"
           size="x-small"
           icon="mdi:mdi-window-close"
