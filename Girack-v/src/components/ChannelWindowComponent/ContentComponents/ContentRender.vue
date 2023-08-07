@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       uri: window.location.origin, //バックエンドのURI
-      msgIdEditing: "xxxxxxx",
+      //msgIdEditing: "xxxxxxx",
 
       //ホバー処理用
       msgHovered: false, //ホバーされたかどうか
@@ -50,7 +50,13 @@ export default {
     ContentAttatchmentRender
   },
 
-  props: ["m", "MsgDBActive", "msgDisplayNum", "index"], 
+  props: [
+    "m",
+    "MsgDBActive",
+    "msgDisplayNum",
+    "index",
+    "msgEditing"
+  ],
 
   computed: {
     //現在いるパス(チャンネルID)を返すだけ
@@ -447,7 +453,7 @@ export default {
         :userid="userDialogUserid"
       />
     </div>
-    
+
     <!-- アバター -->
     <v-avatar
       v-if="checkShowAvatar(m.userid, index)"
@@ -615,15 +621,14 @@ export default {
             </p>
 
             <!-- メッセージ本文と編集中表示 -->
-            <ContentMessageRender v-if="msgIdEditing!==m.messageid" :content="m.content" />
+            <ContentMessageRender v-if="!msgEditing" :content="m.content" />
             <ContentEditing
               v-else
-              @update-editing-message="(mID)=>{msgIdEditing=mID}"
+              @close-editing="$emit('closeEditing'); msgEditing=false;"
               :channelid="m.channelid"
               :content="m.content"
               :messageid="m.messageid"
-            >
-            </ContentEditing>
+            />
 
             <!-- メッセージが編集されていたら -->
             <p v-if="m.isEdited" class="text-disabled text-caption">
@@ -663,7 +668,8 @@ export default {
         </template>
         <!-- ここからホバーメニュー -->
         <ContentHoverMenu
-          @update-editing-message="(mID)=>{msgIdEditing=mID}"
+          @update-editing-message="msgEditing=true"
+          @cancelEditing="msgEditing=false"
           style="z-index: 30"
           :m="m"
           :userrole="getUserStats(m.userid, 'role')"

@@ -70,7 +70,7 @@ export default {
         this.dialogCheckToDelete = false;
       } else { //確認中じゃないなら
         //メッセージ編集を止める
-        this.$emit('updateEditingMessage','waaaa');
+        this.$emit('closeEditing');
       }
     },
 
@@ -90,7 +90,7 @@ export default {
         });
       }
       //編集モードから抜ける
-      this.$emit('updateEditingMessage','xxxxxx');
+      this.$emit('closeEditing');
     },
 
     //メッセージの削除
@@ -138,6 +138,8 @@ export default {
     //キーの監視停止
     document.removeEventListener("keydown", this.enterTrigger);
     document.removeEventListener("keydown", this.escTrigger);
+    //メッセージの入力欄にフォーカスするように
+    document.getElementById("inp").focus();
   }
 }
 
@@ -176,7 +178,7 @@ export default {
           </span>
         </v-btn>
         <v-btn
-          @click="$emit('updateEditingMessage','waaaa')"
+          @click="$emit('closeEditing')"
           class="rounded-lg ma-1"
           size="x-small"
           icon="mdi:mdi-window-close"
