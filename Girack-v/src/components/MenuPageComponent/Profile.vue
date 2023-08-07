@@ -146,8 +146,6 @@ export default {
           sessionid: this.myUserinfo.sessionid,
         },
       });
-      this.nameEditing = false; //編集モードを閉じる
-      console.log("名前更新します -> " + this.nameDisplaying);
     },
 
     //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
@@ -515,16 +513,12 @@ export default {
                 <p class="text-left text-h6"># {{ myUserinfo.userid }}</p>
 
                 <!-- ユーザー名 -->
-                <p
-                  v-if="!nameEditing"
-                  class="text-h4 text-left text-truncate"
-                >
+                <p class="text-h4 text-left text-truncate">
                   {{ myUserinfo.username }}
                   <v-btn
-                    v-if="!nameEditing"
                     color="primary"
                     icon="mdi:mdi-pencil"
-                    @click="nameChangeDialog=true;/*toggleEditing*/"
+                    @click="nameChangeDialog=true;"
                     class="rounded-lg ma-5"
                   ></v-btn>
                 </p>
