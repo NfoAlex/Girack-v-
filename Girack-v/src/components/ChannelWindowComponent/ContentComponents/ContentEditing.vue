@@ -138,6 +138,8 @@ export default {
     //キーの監視停止
     document.removeEventListener("keydown", this.enterTrigger);
     document.removeEventListener("keydown", this.escTrigger);
+    //メッセージの入力欄にフォーカスするように
+    document.getElementById("inp").focus()
   }
 }
 

@@ -121,11 +121,10 @@ export default {
         console.error(e);
       }
 
-      //レンダーを待ってからスクロール
+      //チャンネルのロード判別
       this.$nextTick(() => {
         //チャンネル以外のページ場合、これ以降の処理をスキップする
         if (!newPage.path.startsWith("/c/")) {
-          //console.log("Content :: watch($route) : スクロールしないわ", this.channelInfo.channelid, newPage.params.id);
           return 0;
         }
 
