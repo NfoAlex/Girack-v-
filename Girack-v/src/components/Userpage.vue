@@ -72,7 +72,6 @@ export default {
 
   computed: {
     isMobile() {
-      console.log("isMobile->", this.mobile);
       return this.mobile;
     }
   },
@@ -114,7 +113,6 @@ export default {
 
     //ユーザー名の変更を強制にする
     changeTargetUsername() {
-      console.log("userpage :: methods: まだ途中...");
       socketUserpage.emit("changeProfile", {
         name: "User" + (Math.floor(Math.random()*999999)).toString().padStart(6,0), //更新する名前
         targetid: this.userid, //対象ユーザーID(自分)
@@ -179,8 +177,6 @@ export default {
       if (dat.userid === this.userid) {
         this.targetinfo = dat; //表示する情報に設定
 
-        console.log("Userpage :: infoUser : data ", dat);
-
         //ターゲットユーザーの情報を設定
         this.targetUserRole = this.targetinfo.role;
         this.targetUserBanned = this.targetinfo.banned;
@@ -222,11 +218,6 @@ export default {
         description: dat.description,
         scope: dat.scope,
       });
-
-      console.log(
-        "Userpage :: mounted : チャンネル情報リスト->",
-        this.targetUserJoinedChannelList
-      );
     },
   },
 
@@ -278,8 +269,6 @@ export default {
         }
       }
     });
-
-    console.log("Userpage :: mounted");
   },
 
   unmounted() {
