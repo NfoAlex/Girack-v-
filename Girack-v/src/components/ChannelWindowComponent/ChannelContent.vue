@@ -12,7 +12,6 @@ import { getReplyState } from "./ChannelInput.vue";
 import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
-import Userpage from "../Userpage.vue";
 import ContentRender from "./ContentComponents/ContentRender.vue";
 import ContentNewMessageLine from "./ContentComponents/ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentComponents/ContentSystemMessageRender.vue";
@@ -41,7 +40,6 @@ export default {
   },
 
   components: {
-    Userpage,
     ContentRender,
     ContentSystemMessageRender,
     ContentNewMessageLine,
@@ -59,22 +57,6 @@ export default {
       //watchする時のハンドラ用
       watcherRoute: {},
       watcherMsgDB: {},
-
-      //ホバー処理用
-      msgHovered: false, //ホバーされたかどうか
-      msgIdHovering: 0, //ホバーされたメッセージのID
-
-      //ユーザーページ用
-      userDialogShow: false,
-      userDialogUserid: "00000001",
-
-      //ユーザーロールの色を返す
-      userRoleColor: {
-        Admin: "purple",
-        Moderator: "blue",
-        Member: "white",
-        Deleted: "black",
-      },
     };
   },
 
@@ -524,14 +506,7 @@ export default {
     @scroll="setScrollState"
     style="height: 100%; width: 100%; overflow-y: auto"
   >
-    <!-- ユーザーページ用 -->
-    <div>
-      <Userpage
-        v-if="userDialogShow"
-        v-model="userDialogShow"
-        :userid="userDialogUserid"
-      />
-    </div>
+    
 
     <!-- 履歴が空なら -->
     <div

@@ -112,6 +112,11 @@ export default {
       this.$emit("closeUserpage");
     },
 
+    //ユーザー名の変更を強制にする
+    changeTargetUsername() {
+      console.log("userpage :: methods: まだ途中...");
+    },
+
     //ロールの色を返す
     getRoleColor(role) {
       switch (role) {
@@ -394,58 +399,62 @@ export default {
         </v-window-item>
 
         <!-- ユーザー管理タブ -->
-        <v-window-item value="mod" class="ma-5 d-flex flex-column align-center">
-          <!-- ロール選択 -->
-          <v-select
-            class="mx-auto"
-            v-model="targetUserRole"
-            style="width: 100%; max-width: 200px"
-            density="compact"
-            label="ロール"
-            :items="roleList"
-          ></v-select>
+        <v-window-item value="mod" class="ma-5">
+          <div class="d-flex flex-column align-center">
+            <!-- ロール選択 -->
+            <v-select
+              class="mx-auto"
+              v-model="targetUserRole"
+              style="width: 100%; max-width: 200px"
+              density="compact"
+              label="ロール"
+              :items="roleList"
+            ></v-select>
 
-          <v-btn
-            @click="changeTargetUsername"
-            width="50%"
-            class="ma-3 rounded-lg"
-            color="grey"
-          >
-            ユーザー名を初期化
-            <v-tooltip
-              activator="parent"
-              location="top center"
+            <!-- ユーザー名変更させるボタン -->
+            <v-btn
+              @click="changeTargetUsername"
+              width="50%"
+              class="ma-3 rounded-lg"
+              color="grey"
+              disabled
             >
-              乱数にします
-            </v-tooltip>
-          </v-btn>
+              ユーザー名を初期化
+              <v-tooltip
+                activator="parent"
+                location="top center"
+              >
+                乱数にします
+              </v-tooltip>
+            </v-btn>
 
-          <v-divider></v-divider>
+            <v-divider width="50%" class="ma-3"></v-divider>
 
-          <!-- BANボタン(と解除ボタン) -->
-          <v-btn
-            @dblclick="banUser"
-            v-if="!targetinfo.banned" 
-            width="50%"
-            color="error"
-          >
-            <v-icon>mdi:mdi-account-cancel</v-icon> BAN
-            <v-tooltip
-              activator="parent"
-              location="top center"
+            <!-- BANボタン(と解除ボタン) -->
+            <v-btn
+              @dblclick="banUser"
+              v-if="!targetinfo.banned" 
+              width="50%"
+              color="error"
             >
-              ダブルクリックでBAN
-            </v-tooltip>
-          </v-btn>
-          <v-btn @dblclick="banUser" v-if="targetinfo.banned" color="info">
-            <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
-            <v-tooltip
-              activator="parent"
-              location="top center"
-            >
-              ダブルクリックで解除
-            </v-tooltip>
-          </v-btn>
+              <v-icon>mdi:mdi-account-cancel</v-icon> BAN
+              <v-tooltip
+                activator="parent"
+                location="top center"
+              >
+                ダブルクリックでBAN
+              </v-tooltip>
+            </v-btn>
+            <v-btn @dblclick="banUser" v-if="targetinfo.banned" color="info">
+              <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
+              <v-tooltip
+                activator="parent"
+                location="top center"
+              >
+                ダブルクリックで解除
+              </v-tooltip>
+            </v-btn>
+          </div>
         </v-window-item>
 
         <!-- ユーザー削除タブ(メンバーページからだけ) -->
