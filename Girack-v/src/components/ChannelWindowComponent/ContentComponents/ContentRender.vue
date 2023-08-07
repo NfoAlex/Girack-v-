@@ -2,6 +2,7 @@
 import { getSocket } from "../../../data/socket.js";
 import { dataUser } from "../../../data/dataUserinfo";
 import { getCONFIG } from "../../../config.js";
+import Userpage from "../../Userpage.vue";
 import ContentHoverMenu from "./ContentHoverMenu.vue";
 import ContentEditing from "./ContentEditing.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
@@ -41,6 +42,7 @@ export default {
   },
 
   components: {
+    Userpage,
     ContentHoverMenu,
     ContentEditing,
     ContentURLpreview,
@@ -437,6 +439,15 @@ export default {
     class="d-flex justify-end"
     style="margin: 0px 12px"
   >
+    <!-- ユーザーページ用 -->
+    <div>
+      <Userpage
+        v-if="userDialogShow"
+        v-model="userDialogShow"
+        :userid="userDialogUserid"
+      />
+    </div>
+    
     <!-- アバター -->
     <v-avatar
       v-if="checkShowAvatar(m.userid, index)"
