@@ -70,7 +70,7 @@ export default {
         this.dialogCheckToDelete = false;
       } else { //確認中じゃないなら
         //メッセージ編集を止める
-        this.$emit('updateEditingMessage','waaaa');
+        this.$emit('closeEditing');
       }
     },
 
