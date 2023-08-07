@@ -16,8 +16,8 @@ export default {
 
 <template>
   <div class="text-center pa-5" style="width:80%">
-    <span class="d-flex">
-      <p class="text-h3">LittleCompact</p>
+    <span>
+      <p class="text-h3">OnlyOne</p>
     </span>
     
     <br>
