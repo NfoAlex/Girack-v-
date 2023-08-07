@@ -23,6 +23,7 @@ export default {
       imgsrc: window.location.origin + "/img/",
 
       //ユーザー名
+      nameChangeDialog: false, //ユーザー名変更用のダイアログ
       nameDisplaying: "...",
       nameEditing: false, //名前編集しているかどうか
 
@@ -387,6 +388,19 @@ export default {
       </v-card>
     </v-dialog>
 
+    <!-- ユーザー変更用ダイアログ -->
+    <v-dialog
+      v-model="nameChangeDialog"
+      style="max-width:650px;"
+      width="50vh"
+    >
+      <v-card>
+        <v-card-title>
+          ユーザー名変更
+        </v-card-title>
+      </v-card>
+    </v-dialog>
+
     <!-- プロフィールメイン画面 -->
     <div style="height:100vh; overflow-y:auto; padding:3vh 0vh;">
       <v-container>
@@ -429,7 +443,7 @@ export default {
                     v-if="!nameEditing"
                     color="primary"
                     icon="mdi:mdi-pencil"
-                    @click="toggleEditing"
+                    @click="nameChangeDialog=true;/*toggleEditing*/"
                     class="rounded-lg ma-5"
                   ></v-btn>
                 </p>
