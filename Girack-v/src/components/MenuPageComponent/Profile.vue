@@ -29,7 +29,6 @@ export default {
       resultNameNotAvailable: false,
       resultNameTooShort: true,
       nameDisplaying: "...",
-      nameEditing: false, //名前編集しているかどうか
 
       //パスワード変更用
       changePasswordDialog: false,
@@ -149,12 +148,6 @@ export default {
       });
       this.nameEditing = false; //編集モードを閉じる
       console.log("名前更新します -> " + this.nameDisplaying);
-    },
-
-    //編集しているかどうかを切り替えする
-    toggleEditing() {
-      this.nameDisplaying = this.myUserinfo.username;
-      this.nameEditing = !this.nameEditing; //編集モード
     },
 
     //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
@@ -524,7 +517,6 @@ export default {
                 <!-- ユーザー名 -->
                 <p
                   v-if="!nameEditing"
-                  @dblclick="toggleEditing"
                   class="text-h4 text-left text-truncate"
                 >
                   {{ myUserinfo.username }}
