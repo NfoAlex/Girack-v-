@@ -115,6 +115,15 @@ export default {
     //ユーザー名の変更を強制にする
     changeTargetUsername() {
       console.log("userpage :: methods: まだ途中...");
+      socketUserpage.emit("changeProfile", {
+        name: "User" + (Math.floor(Math.random()*999999)).toString().padStart(6,0), //更新する名前
+        targetid: this.userid, //対象ユーザーID(自分)
+        reqSender: {
+          //セッション認証に必要な情報送信
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
+        },
+      });
     },
 
     //ロールの色を返す
@@ -417,14 +426,13 @@ export default {
               width="50%"
               class="ma-3 rounded-lg"
               color="grey"
-              disabled
             >
               ユーザー名を初期化
               <v-tooltip
                 activator="parent"
                 location="top center"
               >
-                乱数にします
+                User_[ユーザーID]にします
               </v-tooltip>
             </v-btn>
 
