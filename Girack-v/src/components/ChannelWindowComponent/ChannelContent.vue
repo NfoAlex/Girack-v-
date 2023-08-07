@@ -49,7 +49,6 @@ export default {
 
   data() {
     return {
-      uri: window.location.origin, //バックエンドのURI
       StateFocus: true, //Girackにフォーカスしているかどうか
       msgDisplayNum: 25,
       msgIdEditing: "xxxxxxx",
