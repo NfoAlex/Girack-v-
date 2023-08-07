@@ -569,7 +569,6 @@ export default {
         :index="index"
         :MsgDBActive="MsgDBActive"
         :msgDisplayNum="msgDisplayNum"
-        :msgIdEditing="msgIdEditing"
         :msgEditing="msgIdEditing===m.messageid"
         @clearEditing="msgIdEditing='xxxxxx'"
       />
