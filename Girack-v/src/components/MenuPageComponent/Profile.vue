@@ -28,7 +28,6 @@ export default {
       canUseThisName: false, //変更にこの名前を使えるかどうか
       resultNameNotAvailable: false,
       resultNameTooShort: true,
-      nameDisplaying: "...",
 
       //パスワード変更用
       changePasswordDialog: false,
@@ -57,15 +56,6 @@ export default {
   },
 
   watch: {
-    //ユーザー情報の監視
-    myUserinfo: {
-      //変更を検知したら表示名を変更
-      handler(U) {
-        this.nameDisplaying = U.username; //表示名を更新
-      },
-      deep: true, //階層ごと監視するため
-    },
-
     //変更するユーザー名変数
     nameChangingValue: {
       handler() {
@@ -240,7 +230,6 @@ export default {
   },
 
   mounted() {
-    this.nameDisplaying = this.myUserinfo.username; //名前更新
     this.nameChangingValue = this.myUserinfo.username;
 
     //結果の受け取り
