@@ -24,6 +24,10 @@ export default {
 
       //ユーザー名
       nameChangeDialog: false, //ユーザー名変更用のダイアログ
+      nameChangingValue: "...", //変更するためのユーザー名変数
+      canUseThisName: false, //変更にこの名前を使えるかどうか
+      resultNameNotAvailable: false,
+      resultNameTooShort: true,
       nameDisplaying: "...",
       nameEditing: false, //名前編集しているかどうか
 
@@ -61,6 +65,28 @@ export default {
         this.nameDisplaying = U.username; //表示名を更新
       },
       deep: true, //階層ごと監視するため
+    },
+
+    //変更するユーザー名変数
+    nameChangingValue: {
+      handler() {
+        //名前の長さが２文字以上なら検索開始
+        if (this.nameChangingValue.length >= 2) {
+          //名前検索
+          socket.emit("searchUserDynamic", {
+            query: this.nameChangingValue,
+            reqSender: {
+              userid: this.myUserinfo.userid,
+              sessionid: this.myUserinfo.sessionid
+            }
+          });
+          this.resultNameTooShort = false;
+        } else {
+          this.canUseThisName = false;
+          this.resultNameNotAvailable = false;
+          this.resultNameTooShort = true;
+        }
+      }
     },
 
     //ファイルのアップロード状態を監視してアップロードできるかどうかを設定
@@ -202,6 +228,26 @@ export default {
     reloadPage() {
       window.location.reload();
     },
+
+    //ユーザー名検索のハンドラ
+    SOCKETinfoSearchUser(result) {
+      console.log("Profile :: SOCKETinforSearchUser : result->", result);
+
+      //結果を一つずつ調べる
+      for (let index in result) {
+        if (result[index].username === this.nameChangingValue) {
+          this.canUseThisName = false;
+          this.resultNameNotAvailable = true;
+
+          console.log('名前あるわ');
+
+          return;
+        }
+      }
+
+      this.resultNameNotAvailable = false;
+      this.canUseThisName = true;
+    }
   },
 
   mounted() {
@@ -211,11 +257,14 @@ export default {
     socket.on("changePasswordResult", (result) => {
       this.changePasswordResult = result;
     });
+    socket.on("infoSearchUser", this.SOCKETinfoSearchUser);
+
   },
 
   unmounted() {
     //通信重複防止
     socket.off("changePasswordResult");
+    socket.off("infoSearchUser", this.SOCKETinfoSearchUser);
   },
 };
 </script>
@@ -394,10 +443,50 @@ export default {
       style="max-width:650px;"
       width="50vh"
     >
-      <v-card>
+      <v-card class="rounded-lg">
         <v-card-title>
           ユーザー名変更
         </v-card-title>
+
+        <!-- 入力欄 -->
+        <v-card-item>
+          <p class="mb-1">新しいユーザー名</p>
+          <v-text-field v-model="nameChangingValue"></v-text-field>
+          <v-alert>
+            名前の空き :
+            <span v-if="resultNameTooShort">
+              名前を入力してください
+            </span>
+            <span v-if="!resultNameTooShort&&resultNameNotAvailable">
+              この名前はすでに使われています。
+            </span>
+            <span v-if="!resultNameTooShort&&!resultNameNotAvailable">
+              使えます!
+            </span>
+          </v-alert>
+        </v-card-item>
+
+        <!-- ボタン -->
+        <v-card-item class="d-flex flex-row-reverse mb-2">
+          <v-btn
+            @click="nameChangeDialog=false;"
+            class="ma-1 rounded-lg"
+            variant="flat"
+            color=""
+          >
+            キャンセル
+          </v-btn>
+          <v-btn
+            @click="updateName"
+            :disabled="!canUseThisName"
+            class="ma-1 rounded-lg"
+            variant="flat"
+            color="primary"
+          >
+            変更する
+          </v-btn>
+        </v-card-item>
+
       </v-card>
     </v-dialog>
 
