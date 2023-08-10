@@ -73,9 +73,9 @@ export default {
       try {
         //return video[0].url;
         if (typeof video === "object") {
-          return video[0]; //表示するものを設定
+          return video[0].url; //表示するものを設定
         } else {
-          return video; //画像一つでも配列へ追加
+          return video.url; //画像一つでも配列へ追加
         }
       } catch(e) {
         return "";
