@@ -24,6 +24,7 @@ export default {
         userDelete: "ユーザーを削除",
         userPardon: "ユーザーのBANを解除",
         userChangeRole: "ユーザーの権限を変更",
+        userChangeName: "ユーザー名を変更",
         userKickFromChannel: "ユーザーをチャンネルからキック",
 
         channelEditName: "チャンネル名を変更",
@@ -280,13 +281,18 @@ export default {
               </p>
 
               <!-- チャンネルが変更に関係があるなら表示 -->
-              <p v-if="item.actionTo.channelid !== ''" class="pa-2">
+              <p v-if="item.actionTo.channelid === 'channel'" class="pa-2">
                 チャンネルID : <code>{{ item.actionTo.channelid }}</code>
               </p>
 
               <!-- 変更されたものがメッセージならIDを表示 -->
               <span v-if="item.actionTo.type === 'message'" class="pa-2">
                 メッセージID : <code>{{ item.actionTo.messageid }}</code>
+              </span>
+
+              <!-- 変更されたものがメッセージならIDを表示 -->
+              <span v-if="item.actionTo.type === 'user'" class="pa-2">
+                ユーザー情報 : 
               </span>
 
               <!-- 無から作られた時の値表示 -->
