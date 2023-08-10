@@ -34,6 +34,19 @@ export default {
       this.imageDialogShow = true; //ダイアログ表示
     },
 
+    checkImageAvailable(link) {
+      try {
+        if (link.img.length !== 0) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      catch(e) {
+        return false;
+      }
+    },
+
     //URLデータから画像を取得する
     getImage(img) {
       if (typeof img === "object") {
@@ -58,7 +71,12 @@ export default {
     //URLデータから最初の動画部分を抽出
     getVideo(video) {
       try {
-        return video[0].url;
+        //return video[0].url;
+        if (typeof video === "object") {
+          return video[0]; //表示するものを設定
+        } else {
+          return video; //画像一つでも配列へ追加
+        }
       } catch(e) {
         return "";
       }
@@ -202,19 +220,19 @@ export default {
     >
       <!-- ウェブ記事とかそこらへん用 -->
       <v-card
-        v-if="link.mediaType !== 'image'"
+        v-if="link.mediaType !== 'image' && link.mediaType !== 'video' "
         color="#222"
         class="pa-3 rounded-lg d-flex flex-row"
         style="min-width: 45%; width: 85%"
         :style="
-          link.img !== undefined && link.img.length !== 0
+          link.img !== undefined && checkImageAvailable(link)
             ? 'height:150px'
             : 'height:fit-content;'
         "
       >
         <!-- 埋め込み用画像 -->
         <v-img
-          v-if="link.img !== undefined && link.img.length !== 0"
+          v-if="link.img !== undefined && checkImageAvailable(link)"
           class="flex-shrink-1 rounded-lg"
           @click="toggleImageDialog(index)"
           style="min-width: 30%; width: fit-content; cursor: pointer"
@@ -245,17 +263,27 @@ export default {
 
         <!-- 埋め込み用動画 -->
         <span
-          v-if="link.img.length === 0 && checkVideoAvailable(link)"
+          v-if="!checkImageAvailable(link) && checkVideoAvailable(link)"
           style="max-width: 30%; max-height: 50%; cursor: pointer"
           class="d-flex flex-column align-center justify-center mr-2"
         >
+          <!-- 動画表示ボタン -->
           <v-btn
             v-if="!showVideo"
             @click="showVideo = true"
+            size="large"
+            icon=""
             class="rounded-lg"
-            icon="mdi:mdi-play-box-outline"
           >
+            <v-icon>mdi:mdi-play-box-outline</v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              動画を表示
+            </v-tooltip>
           </v-btn>
+          <!-- 動画 -->
           <video
             v-if="showVideo"
             :src="getVideo(link.video)"
@@ -263,12 +291,21 @@ export default {
             controls
           >
           </video>
+          <!-- 動画を隠すボタン -->
           <v-btn
             v-if="showVideo"
             @click="showVideo = false"
             class="rounded-lg mx-auto mt-1"
-            icon="mdi:mdi-unfold-less-horizontal"
+            icon=""
+            variant="text"
           >
+            <v-icon>mdi:mdi-unfold-less-horizontal</v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              動画を非表示にします
+            </v-tooltip>
           </v-btn>
         </span>
 
@@ -336,6 +373,47 @@ export default {
           v-if="!imageAloneLoadState"
           src="/loading.svg"
         />
+      </div>
+
+      <div
+        v-if="link.mediaType === 'video'"
+        class="rounded-lg"
+        style="max-width: 500px"
+      >
+        <v-btn
+          v-if="!showVideo"
+          @click="showVideo = true"
+          size="large"
+          class="rounded-lg"
+        >
+          <v-icon>mdi:mdi-play-box-outline</v-icon>動画を表示
+        </v-btn>
+
+        <video
+          v-if="showVideo"
+          :src="getVideo(link.video)"
+          style="max-width: 90%; max-height: 90%; cursor: pointer"
+          controls
+        >
+        </video>
+
+        <!-- 動画を隠すボタン -->
+          <v-btn
+            v-if="showVideo"
+            @click="showVideo = false"
+            class="rounded-lg mx-auto mt-1"
+            icon=""
+            variant="text"
+          >
+            <v-icon>mdi:mdi-unfold-less-horizontal</v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              動画を非表示にします
+            </v-tooltip>
+          </v-btn>
+
       </div>
     </div>
   </div>
