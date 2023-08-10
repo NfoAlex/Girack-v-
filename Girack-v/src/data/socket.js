@@ -767,7 +767,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
     userSaveMsgReadState
   );
 
-  //もしクラウド上に設定が保存されていたなら
+  //もしクラウド上に設定が保存されていたなら参加していないチャンネルの既読状態を削除
   if (userSaveMsgReadState.msgReadStateAvailable) {
     //既読状態のチャンネルIDを取り出して配列にする
     let keysUserSaveMsgReadState = Object.keys(
@@ -798,8 +798,20 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
       }
     }
 
+    //既読状態をチャンネルごとに確認して違っていたら更新
+    for (let index in userSaveMsgReadState.msgReadState) {
+      if (dataMsg().MsgReadTime.value[index] !== undefined) {
+        if (dataMsg().MsgReadTime.value[index].time !== userSaveMsgReadState.msgReadState[index].time) {
+          //そのチャンネルの既読状態を更新
+          dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
+        }
+      } else {
+        dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
+      }
+    }
+
     //既読状態を適用
-    dataMsg().MsgReadTime.value = userSaveMsgReadState.msgReadState;
+    //dataMsg().MsgReadTime.value = userSaveMsgReadState.msgReadState;
   }
 
   //メッセージ履歴の取得
