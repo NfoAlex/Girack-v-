@@ -746,6 +746,14 @@ socket.on("authResult", (dat) => {
         },
       });
     }
+
+    //メッセージ履歴の取得
+    for (let index in dataUser().myUserinfo.value.channelJoined) {
+      //チャンネルIDを抽出
+      let channelid = dataUser().myUserinfo.value.channelJoined[index];
+      dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
+      getMessage(channelid, 40); //リクエスト送信する
+    }
   }
 });
 
@@ -800,6 +808,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
 
     //既読状態をチャンネルごとに確認して違っていたら更新
     for (let index in userSaveMsgReadState.msgReadState) {
+      //既読状態があればチェック、ないならとにかく更新
       if (dataMsg().MsgReadTime.value[index] !== undefined) {
         if (dataMsg().MsgReadTime.value[index].time !== userSaveMsgReadState.msgReadState[index].time) {
           //そのチャンネルの既読状態を更新
@@ -815,12 +824,12 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
   }
 
   //メッセージ履歴の取得
-  for (let index in dataUser().myUserinfo.value.channelJoined) {
-    //チャンネルIDを抽出
-    let channelid = dataUser().myUserinfo.value.channelJoined[index];
-    dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
-    getMessage(channelid, 40); //リクエスト送信する
-  }
+  // for (let index in dataUser().myUserinfo.value.channelJoined) {
+  //   //チャンネルIDを抽出
+  //   let channelid = dataUser().myUserinfo.value.channelJoined[index];
+  //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
+  //   getMessage(channelid, 40); //リクエスト送信する
+  // }
 });
 
 //初回処理用のクッキーから設定や既読状態を読み込む
