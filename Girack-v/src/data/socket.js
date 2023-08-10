@@ -15,7 +15,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from "../config.js";
 
-export const CLIENT_VERSION = "alpha_20230807";
+export const CLIENT_VERSION = "alpha_20230810";
 
 const {
   CONFIG_SYNC,
