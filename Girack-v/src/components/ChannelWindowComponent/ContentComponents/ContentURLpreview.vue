@@ -13,6 +13,8 @@ export default {
 
       imageAloneLoadState: false, //画像単体の時のロード状態
 
+      showVideo: false, //動画を表示するかどうか
+
       embedTwitter: false, //Twitter埋め込みを表示するかどうか
     };
   },
@@ -38,6 +40,27 @@ export default {
         return img[0]; //表示するものを設定
       } else {
         return img; //画像一つでも配列へ追加
+      }
+    },
+
+    checkVideoAvailable(link) {
+      try {
+        if (link.video.length !== 0) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch(e) {
+        return false;
+      }
+    },
+
+    //URLデータから最初の動画部分を抽出
+    getVideo(video) {
+      try {
+        return video[0].url;
+      } catch(e) {
+        return "";
       }
     },
 
@@ -189,8 +212,7 @@ export default {
             : 'height:fit-content;'
         "
       >
-        <!-- 画像 -->
-
+        <!-- 埋め込み用画像 -->
         <v-img
           v-if="link.img !== undefined && link.img.length !== 0"
           class="flex-shrink-1 rounded-lg"
@@ -220,6 +242,35 @@ export default {
           >
           </v-badge>
         </v-img>
+
+        <!-- 埋め込み用動画 -->
+        <span
+          v-if="link.img.length === 0 && checkVideoAvailable(link)"
+          style="max-width: 30%; max-height: 50%; cursor: pointer"
+          class="d-flex flex-column align-center justify-center mr-2"
+        >
+          <v-btn
+            v-if="!showVideo"
+            @click="showVideo = true"
+            class="rounded-lg"
+            icon="mdi:mdi-play-box-outline"
+          >
+          </v-btn>
+          <video
+            v-if="showVideo"
+            :src="getVideo(link.video)"
+            style="max-width: 90%; max-height: 90%; cursor: pointer"
+            controls
+          >
+          </video>
+          <v-btn
+            v-if="showVideo"
+            @click="showVideo = false"
+            class="rounded-lg mx-auto mt-1"
+            icon="mdi:mdi-unfold-less-horizontal"
+          >
+          </v-btn>
+        </span>
 
         <!-- タイトル、概要 -->
         <div class="d-flex flex-column flex-grow-1">
