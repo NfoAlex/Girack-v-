@@ -375,9 +375,10 @@ export default {
         />
       </div>
 
+      <!-- 動画単体用 -->
       <div
         v-if="link.mediaType === 'video'"
-        class="rounded-lg"
+        class="rounded-lg d-flex flex-column justify-start"
         style="max-width: 500px"
       >
         <v-btn
@@ -391,28 +392,22 @@ export default {
 
         <video
           v-if="showVideo"
-          :src="getVideo(link.video)"
+          :src="link.url"
           style="max-width: 90%; max-height: 90%; cursor: pointer"
           controls
         >
         </video>
 
         <!-- 動画を隠すボタン -->
-          <v-btn
-            v-if="showVideo"
-            @click="showVideo = false"
-            class="rounded-lg mx-auto mt-1"
-            icon=""
-            variant="text"
-          >
-            <v-icon>mdi:mdi-unfold-less-horizontal</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top center"
-            >
-              動画を非表示にします
-            </v-tooltip>
-          </v-btn>
+        <v-btn
+          v-if="showVideo"
+          @click="showVideo = false"
+          class="rounded-lg mt-1"
+          variant="text"
+          style="width:fit-content;"
+        >
+          <v-icon>mdi:mdi-unfold-less-horizontal</v-icon>動画を非表示にします
+        </v-btn>
 
       </div>
     </div>
