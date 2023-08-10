@@ -1,4 +1,5 @@
 <script>
+import { useDisplay } from "vuetify";
 import { getSocket } from "../../../data/socket.js";
 import { dataUser } from "../../../data/dataUserinfo";
 import { getCONFIG } from "../../../config.js";
@@ -13,9 +14,10 @@ const socket = getSocket();
 
 export default {
   setup() {
+    const { mobile } = useDisplay();
     const { myUserinfo, UserIndex } = dataUser(); //ユーザー情報
     const { CONFIG_DISPLAY } = getCONFIG();
-    return { myUserinfo, UserIndex, CONFIG_DISPLAY };
+    return { mobile, myUserinfo, UserIndex, CONFIG_DISPLAY };
   },
 
   data() {
@@ -62,6 +64,11 @@ export default {
     //現在いるパス(チャンネルID)を返すだけ
     getPath() {
       return this.$route.params.id;
+    },
+
+    //スマホかどうかを返す
+    isMobile() {
+      return this.mobile;
     },
 
     //表示する履歴数を設定
@@ -656,7 +663,7 @@ export default {
                   user-select: none;
                   -webkit-user-select: none;
                 "
-                size="small"
+                :size="isMobile?'default':'small'"
                 color="white"
                 v-for="r in Object.entries(m.reaction)"
                 :key="r"
