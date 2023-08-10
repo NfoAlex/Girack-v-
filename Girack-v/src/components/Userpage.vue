@@ -421,7 +421,7 @@ export default {
                 activator="parent"
                 location="top center"
               >
-                User_[ユーザーID]にします
+                User_[乱数]にします
               </v-tooltip>
             </v-btn>
 
