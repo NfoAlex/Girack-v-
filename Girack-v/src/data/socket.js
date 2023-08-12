@@ -988,22 +988,24 @@ export function checkMsgNewCount(channelid) {
   //確認した回数
   let checkCount = 0;
 
+  console.log("socket :: checkMsgNewCount : 確認するチャンネル->", channelid);
+
+  //既読状態がそもそも無ければ作る
+  if (dataMsg().MsgReadTime.value[channelid] === undefined) {
+    dataMsg().MsgReadTime.value[channelid] = {
+      mention: 0,
+      new: 0
+    };
+  };
+
+  //新着数初期化
+  dataMsg().MsgReadTime.value[channelid].mention = 0;
+  dataMsg().MsgReadTime.value[channelid].new = 0;
+
   //受信した履歴の中で新着のものかどうか調べて新着数を加算(30まで)
   for (let index in msgDBChecking) {
     //30回以上の確認なら停止
     if (checkCount >= 30) return 0;
-
-    //既読状態がそもそも無ければ作る
-    if (dataMsg().MsgReadTime.value[channelid] === undefined) {
-      dataMsg().MsgReadTime.value[channelid] = {
-        mention: 0,
-        new: 0
-      };
-    };
-
-    //新着数初期化
-    dataMsg().MsgReadTime.value[channelid].mention = 0;
-    dataMsg().MsgReadTime.value[channelid].new = 0;
 
     //もしユーザーの名前リストに名前がなかったら
     if (dataUser().UserIndex.value[msgDBChecking[index].userid] === undefined) {
