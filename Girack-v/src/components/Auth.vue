@@ -295,6 +295,7 @@ export default {
               <v-text-field
                 style="width: 100%"
                 v-model="usernameForRegister"
+                hint="3文字以上"
                 clearable
               >
                 <span style="margin-right: 6px" class="mdi mdi-account"></span>
@@ -312,7 +313,7 @@ export default {
 
               <br />
               <v-btn
-                :disabled="!Connected && serverinfo.registration.available"
+                :disabled="(!Connected && serverinfo.registration.available) || (usernameForRegister.length <= 3)"
                 @click="requestRegister"
                 class="rounded-lg mx-auto"
                 color="primary"
