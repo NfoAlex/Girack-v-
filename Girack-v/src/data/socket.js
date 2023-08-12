@@ -1004,9 +1004,6 @@ export function checkMsgNewCount(channelid) {
 
   //受信した履歴の中で新着のものかどうか調べて新着数を加算(30まで)
   for (let index in msgDBChecking) {
-    //30回以上の確認なら停止
-    if (checkCount >= 30) return 0;
-
     //もしユーザーの名前リストに名前がなかったら
     if (dataUser().UserIndex.value[msgDBChecking[index].userid] === undefined) {
       //データ受け取るまでのホルダー
