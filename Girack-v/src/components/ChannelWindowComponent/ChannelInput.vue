@@ -525,7 +525,7 @@ export default {
     });
     
     //プレビューじゃないならにフォーカスする
-    if (this.channelInfo.previewmode) this.$el.querySelector("#inp").focus();
+    if (!this.channelInfo.previewmode) this.$el.querySelector("#inp").focus();
   },
 
   unmounted() {
