@@ -523,8 +523,9 @@ export default {
         sessionid: this.myUserinfo.sessionid,
       },
     });
-    //入力欄にフォーカスする
-    this.$el.querySelector("#inp").focus();
+    
+    //プレビューじゃないならにフォーカスする
+    if (this.channelInfo.previewmode) this.$el.querySelector("#inp").focus();
   },
 
   unmounted() {
