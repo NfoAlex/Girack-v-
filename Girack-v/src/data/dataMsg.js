@@ -25,7 +25,7 @@ const MsgDB = ref({
 //ユーザーが最後に読んだ時間リスト
 const MsgReadTime = ref({
   "0001": {
-    time: "202301011210938424",
+    time: "200101010000000000",
     new: 0,
     mention: 0,
   },
