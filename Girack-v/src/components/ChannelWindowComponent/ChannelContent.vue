@@ -308,7 +308,7 @@ export default {
       ) {
         this.StateScrolled = true; //スクロールしきったと保存
 
-        //プレビューあるいは新着メッセージが来ているのなら
+        //プレビューなら
         if (this.channelInfo.previewmode) return -1;
 
         try {
@@ -583,7 +583,7 @@ export default {
       </div>
 
       <!-- 新着メッセージ線 -->
-      <ContentNewMessageLine :m="m" :index="index" :MsgDBActive="MsgDBActive" />
+      <ContentNewMessageLine v-if="!channelInfo.previewmode" :m="m" :index="index" :MsgDBActive="MsgDBActive" />
     </div>
 
     <!-- 一番下にスクロールするボタン -->
