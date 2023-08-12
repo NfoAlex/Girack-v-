@@ -63,10 +63,10 @@ export default {
 
     //登録申請
     requestRegister() {
-      socket.emit("register", [
-        this.usernameForRegister,
-        this.invcodeForRegister,
-      ]);
+      socket.emit("register", {
+        username: this.usernameForRegister,
+        code: this.invcodeForRegister,
+      });
       this.success = false;
       this.error = false;
       this.registerResult = 0;
@@ -84,14 +84,15 @@ export default {
     },
 
     SOCKETregisterEnd(resultPassword) {
+      console.log(resultPassword);
       //結果がダメならそう表示
-      if (resultPassword === -1) {
-        this.registerResult = -1;
+      if (resultPassword.result !== "SUCCESS") {
+        this.registerResult = resultPassword.result;
         return;
       }
 
-      this.pwFromRegister = resultPassword; //パスワード更新
-      this.registerResult = 1; //結果成功ととして表示
+      this.pwFromRegister = resultPassword.pass; //パスワード更新
+      this.registerResult = resultPassword.result; //結果成功ととして表示
     },
 
     SOCKETinfoServer(dat) {
@@ -286,7 +287,7 @@ export default {
               text="サーバーつながってなくない?"
             ></v-alert>
 
-            <div v-if="registerResult <= 0">
+            <div v-if="registerResult !== 'SUCCESS'">
               <!--登録前用-->
 
               <p>ユーザー名</p>
@@ -294,6 +295,7 @@ export default {
               <v-text-field
                 style="width: 100%"
                 v-model="usernameForRegister"
+                hint="3文字以上"
                 clearable
               >
                 <span style="margin-right: 6px" class="mdi mdi-account"></span>
@@ -311,7 +313,7 @@ export default {
 
               <br />
               <v-btn
-                :disabled="!Connected && serverinfo.registration.available"
+                :disabled="(!Connected && serverinfo.registration.available) || (usernameForRegister.length <= 3)"
                 @click="requestRegister"
                 class="rounded-lg mx-auto"
                 color="primary"
@@ -322,7 +324,7 @@ export default {
               <br />
 
               <v-alert
-                v-if="registerResult === -1"
+                v-if="registerResult === 'FAILED'"
                 style="width: 100%; margin: 3% auto"
                 icon="mdi:mdi-alert-circle"
                 type="error"
@@ -330,7 +332,7 @@ export default {
                 text="登録失敗、招待コード合ってる?"
               ></v-alert>
             </div>
-            <div v-if="registerResult === 1">
+            <div v-if="registerResult === 'SUCCESS'">
               <!--登録後-->
               <p class="text-h4 ma-2 text-center">🥰</p>
               <p class="text-h5 ma-3 text-center d-flex">👉<span class="text-truncate">{{ usernameForRegister }}</span>👈</p>
