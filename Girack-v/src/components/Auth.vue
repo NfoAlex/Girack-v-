@@ -63,10 +63,10 @@ export default {
 
     //登録申請
     requestRegister() {
-      socket.emit("register", [
-        this.usernameForRegister,
-        this.invcodeForRegister,
-      ]);
+      socket.emit("register", {
+        username: this.usernameForRegister,
+        code: this.invcodeForRegister,
+      });
       this.success = false;
       this.error = false;
       this.registerResult = 0;
