@@ -31,11 +31,6 @@ const MsgReadTime = ref({
   },
 });
 
-//ユーザー情報(名前とかロールとか)
-// const UserIndex = ref({
-
-// });
-
 //スクロールしきっているかどうか(別コンポーネントでも使えるように独立させている)
 const StateScrolled = ref(false);
 
