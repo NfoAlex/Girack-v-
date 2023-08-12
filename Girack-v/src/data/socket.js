@@ -1041,10 +1041,6 @@ export function checkMsgNewCount(channelid) {
       document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
     }
 
-    if (checkCount % 5 === 0) {
-      console.log("socket :: checkMsgNewCount : 確認した回数->", checkCount);
-    }
-
     //確認カウント
     checkCount++;
   }
