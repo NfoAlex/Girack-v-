@@ -993,8 +993,13 @@ export function checkMsgNewCount(channelid) {
     //30回以上の確認なら停止
     if (checkCount >= 30) return 0;
 
-    //既読状態がそもそも無ければやらない
-    if (dataMsg().MsgReadTime.value[channelid] === undefined) break;
+    //既読状態がそもそも無ければ作る
+    if (dataMsg().MsgReadTime.value[channelid] === undefined) {
+      dataMsg().MsgReadTime.value[channelid] = {
+        mention: 0,
+        new: 0
+      };
+    };
 
     //新着数初期化
     dataMsg().MsgReadTime.value[channelid].mention = 0;
