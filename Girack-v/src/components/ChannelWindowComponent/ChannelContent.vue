@@ -163,9 +163,13 @@ export default {
               if (this.channelInfo.previewmode) return 0;
               //もしフォーカスしているなら
               if (this.StateFocus) {
-                //比較用既読時間を更新
-                let latestTime = this.MsgDBActive.slice(-1)[0].time;
-                this.MsgReadTime[this.getPath].timeBefore = latestTime;
+                try {
+                  //比較用既読時間を更新
+                  let latestTime = this.MsgDBActive.slice(-1)[0].time;
+                  this.MsgReadTime[this.getPath].timeBefore = latestTime;
+                } catch(e) {
+                  console.log("ChannelContent :: watch(MsgDBActive) : 履歴DB更新->", e);
+                }
               }
             });
           }
@@ -269,6 +273,7 @@ export default {
     //新着メッセージ数を返す
     checkReadTime(channelid) {
       try {
+        console.log("ChannelContent :: checkReadTime : 既読状態のトリガーになってる");
         return this.MsgReadTime[channelid].new; //データ返す
       } catch (e) {
         return 0;
