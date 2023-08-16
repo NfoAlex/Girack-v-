@@ -80,6 +80,19 @@ export default {
           return "file";
       }
     },
+
+    //ファイルをダウンロードさせる
+    downloadFile(file) {
+      let objAnchor = document.createElement("a"); //アンカーオブジェクト作成
+      objAnchor.href = this.filesrc + this.channelid + '/' + file.fileid; //URL設定
+      objAnchor.type = file.type; //ファイルタイプを設定
+      objAnchor.download = file.name; //ファイル名追加
+      document.body.appendChild(objAnchor); //DOMとして追加
+      objAnchor.click(); //クリック処理をしてダウンロード
+
+      //アンカーを削除
+      objAnchor.parentNode.removeChild(objAnchor);
+    }
   },
 };
 </script>
@@ -165,14 +178,14 @@ export default {
 
       <!-- ファイル情報の表示 -->
       <span class="flex-grow-1 overflow-x-hidden" style="margin-left: 16px; max-width: max-content;">
-        <a :href="filesrc + channelid + '/' + file.fileid" class="d-flex align-center">
+        <div @click="downloadFile(file)" class="d-flex align-center" style="cursor:pointer;">
           <p class="text-subtitle-1">
             {{
               file.name
             }}
           </p>
           <v-icon size="small">mdi:mdi-download</v-icon>
-        </a>
+        </div>
         <p class="text-medium-emphasis d-flex">
           <span class="d-flex">
             サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
