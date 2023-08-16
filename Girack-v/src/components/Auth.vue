@@ -183,7 +183,7 @@ export default {
 
   <div style="height:100vh;" class="d-flex flex-column">
     <!-- インスタンス名 -->
-    <p class="text-h4" style="margin: 5% auto; text-align: center">
+    <p class="text-h4" style="margin: 3vh auto; text-align: center">
       {{ serverinfoLoaded.servername }}
     </p>
 
