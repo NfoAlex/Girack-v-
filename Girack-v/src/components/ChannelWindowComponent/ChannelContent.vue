@@ -146,9 +146,7 @@ export default {
       });
     });
       //メッセージDB更新の監視
-    this.watcherMsgDB = this.$watch(
-      "MsgDBActive",
-      function () {
+    this.watcherMsgDB = this.$watch("MsgDBActive", function () {
         //console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
         //フォーカスしていることが前提
         if (this.StateScrolled) {
