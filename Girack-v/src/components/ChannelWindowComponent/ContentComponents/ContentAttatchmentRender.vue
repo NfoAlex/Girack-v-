@@ -165,11 +165,14 @@ export default {
 
       <!-- ファイル情報の表示 -->
       <span class="flex-grow-1 overflow-x-hidden" style="margin-left: 16px; max-width: max-content;">
-        <p class="text-subtitle-1">
-          {{
-            file.name
-          }}
-        </p>
+        <a :href="filesrc + channelid + '/' + file.fileid" class="d-flex align-center">
+          <p class="text-subtitle-1">
+            {{
+              file.name
+            }}
+          </p>
+          <v-icon size="small">mdi:mdi-download</v-icon>
+        </a>
         <p class="text-medium-emphasis">
           サイズ: <v-chip size="small">{{ humanFileSize(file.size) }}</v-chip> |
           種類: <v-chip size="small">{{ file.type }}</v-chip>
