@@ -88,9 +88,6 @@ socket.on("messageReceive", (msg) => {
     if (dataMsg().MsgReadTime.value[msg.channelid] === null)
       dataMsg().MsgReadTime.value[msg.channelid].mention = 0;
 
-    //ここから下は全部通知カウント、そのため自分のメッセージならここで停止
-    if (msg.userid === dataUser().myUserinfo.value.userid) return;
-
     //メンション判別する文字列
     let ContentChecking = "";
     //システムメッセージなら
@@ -147,9 +144,6 @@ socket.on("messageReceive", (msg) => {
         document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
       }
     }
-
-    //既読状態をサーバーへ同期させる
-    updateMsgReadState();
 
     //新着のメッセージを通知
     if (
