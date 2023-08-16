@@ -101,26 +101,23 @@ export default {
   <!-- 画像拡大ダイアログ -->
   <v-dialog
     v-model="imageDialogShow"
-    style="max-width: 90vw; max-height:100vh;"
+    style="max-width: 90vw; height:100vh;"
     @dblclick="imageDialogShow = false"
   >
-    <div style="overflow-y: auto">
-      <!-- ダイアログ閉じるボタン -->
-      <span
-        style="width: 99%; position:sticky; top: 0px; z-index: 10;"
-        class="d-flex flex-row-reverse"
+    <div style="height:5vh;" class="d-flex align-center justify-end">
+      <v-btn
+        @click="imageDialogShow = false"
+        icon="mdi:mdi-close"
+        color="rgba(0,0,0,0.75)"
+        style="height:4vh; width:4vh; top:0px; right:0%; z-index:10; float:right;"
       >
-        <v-btn
-          @click="imageDialogShow = false"
-          class="rounded-pill"
-          color="rgba(0,0,0,0.75)"
-        >
-          <v-icon>mdi:mdi-close</v-icon>ダイアログを閉じる
-          <v-tooltip activator="parent" location="bottom">
-            画像のダブルクリックでも閉じます
-          </v-tooltip>
-        </v-btn>
-      </span>
+        <v-icon>mdi:mdi-close</v-icon>
+        <v-tooltip activator="parent" location="bottom">
+          画像のダブルクリックでも閉じます
+        </v-tooltip>
+      </v-btn>
+    </div>
+    <div style="overflow-y: auto;">
       <!-- 画像本編 -->
       <v-card
         style="margin: 32px 0; width: fit-content; height: fit-content;"

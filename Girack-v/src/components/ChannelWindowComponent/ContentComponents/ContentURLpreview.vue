@@ -120,23 +120,21 @@ export default {
     style="max-width:90vw"
     @dblclick="imageDialogShow = false"
   >
-    <div style="overflow-y: auto">
+    <div style="height:5vh;" class="d-flex align-center justify-end">
+      <v-btn
+        @click="imageDialogShow = false"
+        icon="mdi:mdi-close"
+        color="rgba(0,0,0,0.75)"
+        style="height:4vh; width:4vh; top:0px; right:0%; z-index:10; float:right;"
+      >
+        <v-icon>mdi:mdi-close</v-icon>
+        <v-tooltip activator="parent" location="bottom">
+          画像のダブルクリックでも閉じます
+        </v-tooltip>
+      </v-btn>
+    </div>
+    <div style="overflow-y:auto; height:95vh;">
       <div class="mx-auto">
-        <span
-          style="width: 99%; position:sticky; top: 0px; z-index: 10;"
-          class="d-flex flex-row-reverse"
-        >
-          <v-btn
-            @click="imageDialogShow = false"
-            class="rounded-pill"
-            color="rgba(0,0,0,0.75)"
-          >
-            <v-icon>mdi:mdi-close</v-icon>ダイアログを閉じる
-            <v-tooltip activator="parent" location="bottom">
-              画像のダブルクリックでも閉じます
-            </v-tooltip>
-          </v-btn>
-        </span>
         <v-card
           v-for="img in imageDialogUrls"
           style="margin:64px 0; z-index:5; height:fit-content; width:fit-content;"
