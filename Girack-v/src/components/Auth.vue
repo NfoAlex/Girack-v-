@@ -203,8 +203,8 @@ export default {
       <v-window v-model="tab">
         <!-- ログイン -->
         <v-window-item value="login">
-          <p class="text-h6" style="margin: 10% auto; text-align: center">Ayo</p>
-          <div class="d-flex justify-center flex-column" style="margin: 10% 10%">
+          <p class="text-h6" style="margin: 5% 0; text-align: center">Ayo</p>
+          <div class="d-flex justify-center flex-column" style="margin: 5% 10%">
             <v-alert
               v-if="!Connected"
               class="rounded-lg"
