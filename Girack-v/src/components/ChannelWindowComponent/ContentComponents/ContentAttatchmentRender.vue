@@ -126,7 +126,7 @@ export default {
   <div>
     <v-card
       class="rounded-lg pa-3 ma-2 d-flex align-center justify-space-between"
-      style="width: fit-content; max-width: 95%;"
+      style="width:fit-content; max-width:95%;"
       v-for="file in fileData.attatchmentData"
       :key="file"
     >
