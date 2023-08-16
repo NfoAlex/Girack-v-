@@ -173,9 +173,13 @@ export default {
           </p>
           <v-icon size="small">mdi:mdi-download</v-icon>
         </a>
-        <p class="text-medium-emphasis">
-          サイズ: <v-chip size="small">{{ humanFileSize(file.size) }}</v-chip> |
-          種類: <v-chip size="small">{{ file.type }}</v-chip>
+        <p class="text-medium-emphasis d-flex">
+          <span class="d-flex">
+            サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
+          </span>
+          <span class="ml-1 d-flex">
+            種類: <v-chip size="small" class="mx-1">{{ file.type }}</v-chip>
+          </span>
         </p>
       </span>
     </v-card>
