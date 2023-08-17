@@ -97,11 +97,6 @@ export default {
   mounted() {
     //ブラウザ上のタブ名を設定
     document.title = this.channelInfo.channelname;
-
-    //レンダー完了を待ってからスクロール
-    this.$nextTick(() => {
-      this.scrollIt();
-    });
   },
 
   //KeepAliveを通して新しくチャンネルに移動したとき
@@ -147,11 +142,11 @@ export default {
     });
       //メッセージDB更新の監視
     this.watcherMsgDB = this.$watch("MsgDBActive", function () {
-        //console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
+        console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
         //フォーカスしていることが前提
         if (this.StateScrolled) {
           //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
-          if ((this.StateFocus && this.StateScrolled) || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
+          if (this.StateFocus || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
             //レンダーを待ってからスクロール
             this.$nextTick(() => {
               this.scrollIt(); //スクロールする
@@ -295,14 +290,12 @@ export default {
 
       //一番下かどうか調べる？
       if (
+        forcingTrue || //そもそも引数でtrueと渡されているなら
         (
-          forcingTrue || //そもそも引数でtrueと渡されているなら
           channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
             channelWindow.scrollHeight || //スクロール位置を計算
           channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
         )
-          &&
-        this.StateFocus //かつフォーカスされていたら
       ) {
         this.StateScrolled = true; //スクロールしきったと保存
 
@@ -507,7 +500,6 @@ export default {
     @scroll="setScrollState"
     style="height: 100%; width: 100%; overflow-y: auto"
   >
-    
 
     <!-- 履歴が空なら -->
     <div
