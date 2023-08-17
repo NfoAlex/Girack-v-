@@ -358,16 +358,16 @@ export default {
       <div
         v-if="link.mediaType === 'image'"
         class="rounded-lg"
-        style="width: 500px"
       >
         <img
           @click="toggleImageDialog(index)"
-          class="rounded-lg previewSingleImage"
+          class="rounded-lg"
+          style="max-width:90%; max-height:350px;"
           :src="link.img"
           v-on:load="imageAloneLoaded()"
         />
         <img
-          style="height: 150px"
+          style="max-width:90%;"
           v-if="!imageAloneLoadState"
           src="/loading.svg"
         />
