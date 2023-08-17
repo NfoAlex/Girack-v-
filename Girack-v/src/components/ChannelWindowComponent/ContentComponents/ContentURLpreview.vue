@@ -362,7 +362,7 @@ export default {
         <img
           @click="toggleImageDialog(index)"
           class="rounded-lg"
-          style="max-width:90%; max-height:350px;"
+          style="max-width:90%; max-height:250px;"
           :src="link.img"
           v-on:load="imageAloneLoaded()"
         />
