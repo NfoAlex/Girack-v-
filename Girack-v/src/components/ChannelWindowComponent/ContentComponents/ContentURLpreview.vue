@@ -417,17 +417,4 @@ export default {
   display: none;
 }
 
-.previewSingleImage {
-  margin: 4px 8px;
-
-  max-height: 150px;
-  min-height: 30px;
-  height: fit-content;
-
-  min-width: 30%;
-  max-width: 150px;
-  width: fit-content;
-
-  cursor: pointer;
-}
 </style>
