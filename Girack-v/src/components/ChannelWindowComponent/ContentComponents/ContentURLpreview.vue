@@ -367,7 +367,7 @@ export default {
           v-on:load="imageAloneLoaded()"
         />
         <img
-          style="max-width:90%;"
+          style="max-width:90%; height:250px;"
           v-if="!imageAloneLoadState"
           src="/loading.svg"
         />
