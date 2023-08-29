@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="text-center pa-5" style="width:80%">
     <span>
-      <p class="text-h3">LargeImage</p>
+      <p class="text-h3">GetNews</p>
     </span>
     
     <br>
