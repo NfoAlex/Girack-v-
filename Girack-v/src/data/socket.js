@@ -987,6 +987,7 @@ export function checkMsgNewCount(channelid) {
   //既読状態がそもそも無ければ作る
   if (dataMsg().MsgReadTime.value[channelid] === undefined) {
     dataMsg().MsgReadTime.value[channelid] = {
+      time: 0,
       mention: 0,
       new: 0
     };
@@ -995,6 +996,11 @@ export function checkMsgNewCount(channelid) {
   //新着数初期化
   dataMsg().MsgReadTime.value[channelid].mention = 0;
   dataMsg().MsgReadTime.value[channelid].new = 0;
+
+  //もし時間データがなければ0と設定
+  if (dataMsg().MsgReadTime.value[channelid].time === undefined) {
+    dataMsg().MsgReadTime.value[channelid].time = 0;
+  }
 
   //受信した履歴の中で新着のものかどうか調べて新着数を加算(30まで)
   for (let index in msgDBChecking) {
