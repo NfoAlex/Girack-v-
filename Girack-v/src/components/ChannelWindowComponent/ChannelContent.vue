@@ -142,7 +142,7 @@ export default {
     });
       //メッセージDB更新の監視
     this.watcherMsgDB = this.$watch("MsgDBActive", function () {
-        console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
+        //console.log("current state ->", this.StateScrolled, this.StateFocus, this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE);
         //フォーカスしていることが前提
         if (this.StateScrolled) {
           //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
