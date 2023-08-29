@@ -290,12 +290,16 @@ export default {
 
       //一番下かどうか調べる？
       if (
-        forcingTrue || //そもそも引数でtrueと渡されているなら
         (
-          channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
-            channelWindow.scrollHeight || //スクロール位置を計算
-          channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
+          forcingTrue || //そもそも引数でtrueと渡されているなら
+          (
+            channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
+              channelWindow.scrollHeight || //スクロール位置を計算
+            channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
+          )
         )
+        &&
+        this.StateFocus
       ) {
         this.StateScrolled = true; //スクロールしきったと保存
 
