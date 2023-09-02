@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { useDisplay } from "vuetify";
-import { getSocket, Serverinfo } from "../../data/socket.js";
+import { getSocket, Serverinfo, getCookie, setCookie } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
 import { dataChannel } from "../../data/dataChannel";
 import { dataUser } from "../../data/dataUserinfo";
@@ -523,9 +523,11 @@ export default {
         sessionid: this.myUserinfo.sessionid,
       },
     });
-    
     //プレビューじゃないならにフォーカスする
     if (!this.channelInfo.previewmode) this.$el.querySelector("#inp").focus();
+    //cookieに保存している「最後に入力していた値」を入力フォームの初期値に設定
+    let previousText = getCookie("previousText");
+    this.txt = previousText;
   },
 
   unmounted() {
@@ -536,6 +538,8 @@ export default {
     );
     //メニューページなどにいったら返信状態をリセット
     this.resetReply();
+    //直前に入力していた値をcookieに保存。有効期限は1日
+    setCookie("previousText", this.txt, 1);
   },
 };
 </script>
