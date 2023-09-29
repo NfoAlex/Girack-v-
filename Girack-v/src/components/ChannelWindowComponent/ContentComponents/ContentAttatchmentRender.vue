@@ -135,7 +135,7 @@ export default {
 
   <div>
     <v-card
-      class="rounded-lg px-2 py-2 ma-2 d-flex align-center justify-space-between"
+      class="rounded-lg px-2 py-2 ma-2 d-flex align-center justify-start"
       style="max-width:95%;"
       v-for="file in fileData.attatchmentData"
       :key="file"
@@ -163,7 +163,7 @@ export default {
       </v-img>
 
       <!-- 添付ファイルのアイコン表記 -->
-      <span v-if="!file.type.includes('image/') || file.size > 5e6">
+      <span v-if="!file.type.includes('image/') || file.size > 5e6" class="flex-shrink-1">
           <v-icon
             style="margin: 0 16px"
             size="x-large"
