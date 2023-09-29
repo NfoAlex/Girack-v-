@@ -244,16 +244,29 @@ export default {
         //もし一つ前のメッセージが存在しないなら処理を停止
         if (this.cropMessage[index - 1] === undefined) return 0;
 
-        //日を取得
-        let msgDateBefore = parseInt(
+        //一つ前のメッセージの日、月、年を取得
+        let msgDayBefore = parseInt(
           this.cropMessage[index - 1].time.slice(6, 8)
         );
-        let msgDateThis = parseInt(this.cropMessage[index].time.slice(6, 8));
+        let msgMonthBefore = parseInt(
+          this.cropMessage[index - 1].time.slice(4, 6)
+        );
+        let msgYearBefore = parseInt(
+          this.cropMessage[index - 1].time.slice(0, 4)
+        );
+
+        //調べているメッセージの日、月、年を取得
+        let msgDayThis = parseInt(this.cropMessage[index].time.slice(6, 8));
+        let msgMonthThis = parseInt(this.cropMessage[index].time.slice(4, 6));
+        let msgYearThis = parseInt(this.cropMessage[index].time.slice(0, 4));
+
         //日付の差を計算
-        let dateDifference = msgDateBefore - msgDateThis;
+        let dayDifference = (msgDayBefore !== msgDayThis);
+        let monthIsDifferent = (msgMonthBefore !== msgMonthThis);
+        let yearIsDifferent = (msgYearBefore !== msgYearThis);
 
         //条件で日付線出すか決める
-        if (dateDifference !== 0) {
+        if (dayDifference  || monthIsDifferent || yearIsDifferent) {
           return true; //表示する
         } else {
           return false; //表示しない
