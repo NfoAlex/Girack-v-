@@ -135,8 +135,8 @@ export default {
 
   <div>
     <v-card
-      class="rounded-lg pa-3 ma-2 d-flex align-center justify-space-between"
-      style="width:fit-content; max-width:95%;"
+      class="rounded-lg px-2 py-2 ma-2 d-flex align-center justify-space-between"
+      style="max-width:95%;"
       v-for="file in fileData.attatchmentData"
       :key="file"
     >
@@ -147,8 +147,8 @@ export default {
           imageDialogShow = true;
           imageDialogSrc = filesrc + channelid + '/' + file.fileid;
         "
-        class="flex-shrink-1"
-        style="height: 150px; min-width: 30%; max-width: 150px; cursor: pointer"
+        class="pa-2"
+        style="height: fit-content; max-height: 150px; width: 100%; max-width: 250px; cursor: pointer"
         :src="filesrc + channelid + '/' + file.fileid"
       >
         <template v-slot:error>
@@ -163,9 +163,8 @@ export default {
       </v-img>
 
       <!-- 添付ファイルのアイコン表記 -->
-      <span>
+      <span v-if="!file.type.includes('image/') || file.size > 5e6">
           <v-icon
-            v-if="!file.type.includes('image/') || file.size > 5e6"
             style="margin: 0 16px"
             size="x-large"
           >
@@ -174,7 +173,7 @@ export default {
       </span>
 
       <!-- ファイル情報の表示 -->
-      <span class="flex-grow-1 overflow-x-hidden" style="margin-left: 16px; max-width: max-content;">
+      <span class="flex-grow-1 ml-3" style=" max-width: max-content;">
         <div @click="downloadFile(file)" class="d-flex align-center" style="cursor:pointer;">
           <p class="text-subtitle-1">
             {{
@@ -183,14 +182,14 @@ export default {
           </p>
           <v-icon size="small">mdi:mdi-download</v-icon>
         </div>
-        <p class="text-medium-emphasis d-flex">
+        <span class="text-medium-emphasis d-flex">
           <span class="d-flex">
             サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
           </span>
           <span class="ml-1 d-flex">
             種類: <v-chip size="small" class="mx-1">{{ file.type }}</v-chip>
           </span>
-        </p>
+        </span>
       </span>
     </v-card>
   </div>
