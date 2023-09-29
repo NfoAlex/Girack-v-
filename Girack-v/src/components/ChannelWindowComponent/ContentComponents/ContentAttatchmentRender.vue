@@ -163,9 +163,8 @@ export default {
       </v-img>
 
       <!-- 添付ファイルのアイコン表記 -->
-      <span>
+      <span v-if="!file.type.includes('image/') || file.size > 5e6">
           <v-icon
-            v-if="!file.type.includes('image/') || file.size > 5e6"
             style="margin: 0 16px"
             size="x-large"
           >
