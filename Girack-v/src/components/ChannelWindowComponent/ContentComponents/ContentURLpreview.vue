@@ -152,6 +152,32 @@ export default {
     </div>
   </v-dialog>
 
+  <!-- 動画拡大ダイアログ -->
+  <v-dialog
+    v-model="showVideo"
+    style="max-width:90vw"
+    @dblclick="showVideo = false"
+  >
+    <div style="overflow-y:auto; height:95vh;">
+      <div class="mx-auto">
+        <v-card
+          style="margin:64px 0; z-index:5; height:fit-content; width:fit-content;"
+          color="rgba(0,0,0,0.75)"
+          class="rounded-b-lg rounded-t-0 mx-auto text-center pa-0"
+          :key="img"
+        >
+          <video
+            v-if="showVideo"
+            :src="getVideo(video)"
+            style="max-width: 90%; max-height: 90%; cursor: pointer"
+            controls
+          >
+          </video>
+        </v-card>
+      </div>
+    </div>
+  </v-dialog>
+
   <div v-for="(link, index) in urlData.data" :key="link">
     <!-- Twitterリンク用 -->
     <div
