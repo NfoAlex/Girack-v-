@@ -168,13 +168,15 @@ export default {
         >
           <v-btn
             @click="showVideo = false;"
-            class="rounded-lg my-1"
+            class="rounded my-1"
             block
           >
             閉じまくり
           </v-btn>
+          <!-- 動画本体 -->
           <video
             v-if="showVideo"
+            class="rounded"
             :src="showVideoLink"
             style="width:100%; cursor: pointer"
             controls
