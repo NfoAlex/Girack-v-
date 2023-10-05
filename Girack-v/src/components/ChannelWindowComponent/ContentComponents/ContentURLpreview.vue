@@ -14,6 +14,7 @@ export default {
       imageAloneLoadState: false, //画像単体の時のロード状態
 
       showVideo: false, //動画を表示するかどうか
+      showVideoLink: "", //動画のURL保存用
 
       embedTwitter: false, //Twitter埋め込みを表示するかどうか
     };
@@ -168,7 +169,7 @@ export default {
         >
           <video
             v-if="showVideo"
-            :src="getVideo(video)"
+            :src="showVideoLink"
             style="max-width: 90%; max-height: 90%; cursor: pointer"
             controls
           >
