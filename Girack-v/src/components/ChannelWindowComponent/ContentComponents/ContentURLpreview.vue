@@ -314,30 +314,6 @@ export default {
               動画を表示
             </v-tooltip>
           </v-btn>
-          <!-- 動画 -->
-          <video
-            v-if="showVideo"
-            :src="getVideo(link.video)"
-            style="max-width: 90%; max-height: 90%; cursor: pointer"
-            controls
-          >
-          </video>
-          <!-- 動画を隠すボタン -->
-          <v-btn
-            v-if="showVideo"
-            @click="showVideo = false"
-            class="rounded-lg mx-auto mt-1"
-            icon=""
-            variant="text"
-          >
-            <v-icon>mdi:mdi-unfold-less-horizontal</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top center"
-            >
-              動画を非表示にします
-            </v-tooltip>
-          </v-btn>
         </span>
 
         <!-- タイトル、概要 -->
