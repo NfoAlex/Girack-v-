@@ -241,7 +241,7 @@ export default {
         this.searchMode.enabled = false;
 
         //もし250文字以内ならメッセージ送信
-      } else if (this.txt.length <= 250) {
+      } else if (this.txt.length <= this.Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH) {
         //メッセージ送信開始
         this.msgSend(event);
       }
