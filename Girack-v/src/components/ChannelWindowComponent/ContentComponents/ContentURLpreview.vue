@@ -159,22 +159,28 @@ export default {
     style="max-width:90vw"
     @dblclick="showVideo = false"
   >
-    <div style="overflow-y:auto; height:95vh;">
+    <div style="height:100vh;">
       <div class="mx-auto">
-        <v-card
-          style="margin:64px 0; z-index:5; height:fit-content; width:fit-content;"
+        <span
+          style="z-index:5; height:fit-content; width:fit-content;"
           color="rgba(0,0,0,0.75)"
           class="rounded-b-lg rounded-t-0 mx-auto text-center pa-0"
-          :key="img"
         >
+          <v-btn
+            @click="showVideo = false;"
+            class="rounded-lg my-1"
+            block
+          >
+            閉じまくり
+          </v-btn>
           <video
             v-if="showVideo"
             :src="showVideoLink"
-            style="max-width: 90%; max-height: 90%; cursor: pointer"
+            style="width:100%; cursor: pointer"
             controls
           >
           </video>
-        </v-card>
+        </span>
       </div>
     </div>
   </v-dialog>
@@ -295,7 +301,7 @@ export default {
           <!-- 動画表示ボタン -->
           <v-btn
             v-if="!showVideo"
-            @click="showVideo = true"
+            @click="showVideo=true;showVideoLink=getVideo(link.video);"
             size="large"
             icon=""
             class="rounded-lg"
