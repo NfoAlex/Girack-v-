@@ -152,7 +152,7 @@ export default {
         :src="filesrc + channelid + '/' + file.fileid"
       >
         <template v-slot:error>
-          <div class="mx-auto" style="width: fit-content; min-height: 150px">
+          <div class="mx-auto d-flex justify-center align-center" style="width: fit-content; min-height: 150px">
             <v-icon size="large"> mdi:mdi-file-image-remove </v-icon>
           </div>
         </template>
