@@ -148,11 +148,11 @@ export default {
           imageDialogSrc = filesrc + channelid + '/' + file.fileid;
         "
         class="pa-2"
-        style="height: fit-content; max-height: 150px; width: 100%; max-width: 250px; cursor: pointer"
+        style="height: 150px; width: 100%; max-width: 250px; cursor: pointer"
         :src="filesrc + channelid + '/' + file.fileid"
       >
         <template v-slot:error>
-          <div class="mx-auto" style="width: fit-content; min-height: 150px">
+          <div class="mx-auto d-flex justify-center align-center" style="width: fit-content; min-height: 150px">
             <v-icon size="large"> mdi:mdi-file-image-remove </v-icon>
           </div>
         </template>
