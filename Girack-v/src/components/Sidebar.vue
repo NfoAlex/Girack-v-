@@ -16,7 +16,7 @@ export default {
     const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { MsgReadTime } = dataMsg();
-    const { ChannelIndex } = dataChannel();
+    const { ChannelIndex, ChannelOrder } = dataChannel();
     const { CONFIG_DISPLAY } = getCONFIG();
 
     return {
@@ -24,6 +24,7 @@ export default {
       myUserinfo,
       MsgReadTime,
       ChannelIndex,
+      ChannelOrder,
       Serverinfo,
       CONFIG_DISPLAY,
     };
@@ -66,19 +67,19 @@ export default {
     },
 
     //チャンネルの順番の変化を監視
-    displaychannelList: {
-      handler() {
-        //チャンネルの順番を送信して同期させる
-        socket.emit("updateUserSaveChannelOrder", {
-          displaychannelList: this.displaychannelList,
-          reqSender: {
-            userid: this.myUserinfo.userid,
-            sessionid: this.myUserinfo.sessionid
-          }
-        });
-      },
-      deep: true
-    },
+    // displaychannelList: {
+    //   handler() {
+    //     //チャンネルの順番を送信して同期させる
+    //     socket.emit("updateUserSaveChannelOrder", {
+    //       displaychannelList: this.displaychannelList,
+    //       reqSender: {
+    //         userid: this.myUserinfo.userid,
+    //         sessionid: this.myUserinfo.sessionid
+    //       }
+    //     });
+    //   },
+    //   deep: true
+    // },
 
     //チャンネルの表示設定を監視
     "CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY": {
@@ -320,24 +321,25 @@ export default {
         class="mx-auto scroll"
         style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
+        {{ ChannelOrder }}
         <draggable
-          v-model="displaychannelList"
+          v-model="ChannelOrder"
           item-key="id"
         >
           <template #item="{element}">
             <div>
-              <RouterLink :to="'/c/' + element.id">
+              <RouterLink :to="'/c/' + element">
                 <v-card
                   @click="$emit('closeSidebar')"
                   :ripple="false"
-                  :variant="checkSameLocation(element.id) ? 'tonal' : 'text'"
+                  :variant="checkSameLocation(element) ? 'tonal' : 'text'"
                   class="rounded-lg d-flex align-center my-1"
                   :class="isMobile?'pa-3':'pa-2'"
                   :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
                 >
                   <!-- チャンネル名前の#の部分 -->
                   <div class="flex-shrink-1">
-                    <v-icon v-if="element.scope !== 'private'" size="small"
+                    <v-icon v-if="ChannelIndex[element].scope !== 'private'" size="small"
                       >mdi:mdi-pound
                     </v-icon>
                     <v-icon v-else size="small">mdi:mdi-lock-outline</v-icon>
@@ -349,28 +351,28 @@ export default {
                     style="margin-left: 4px"
                     class="me-auto text-truncate"
                     :class="
-                      checkReadTime(element.id, 'new') ||
-                      checkReadTime(element.id, 'mention') ||
-                      checkSameLocation(element.id)
+                      checkReadTime(element, 'new') ||
+                      checkReadTime(element, 'mention') ||
+                      checkSameLocation(element)
                         ?
                       'text-high-emphasis' : 'text-disabled'
                     "
                   >
-                    {{ element.channelname }}
+                    {{ ChannelIndex[element].channelname }}
                   </div>
 
                   <!-- メンションマーク -->
                   <v-badge
-                    v-if="checkReadTime(element.id, 'mention')"
-                    :content="checkReadTime(element.id, 'mention')"
+                    v-if="checkReadTime(element, 'mention')"
+                    :content="checkReadTime(element, 'mention')"
                     color="orange"
                     inline
                   ></v-badge>
 
                   <!-- 新着マーク -->
                   <v-badge
-                    v-if="checkReadTime(element.id, 'new')"
-                    :content="checkReadTime(element.id, 'new')"
+                    v-if="checkReadTime(element, 'new')"
+                    :content="checkReadTime(element, 'new')"
                     inline
                   ></v-badge>
                 </v-card>
