@@ -457,6 +457,11 @@ socket.on("infoChannel", (dat) => {
     ...dat,
   };
 
+  //もし受け取ったチャンネルIDが順番のやつに入ってなければ追加
+  if (!dataChannel().ChannelOrder.value.includes(dat.channelid)) {
+    dataChannel().ChannelOrder.value.push(dat.channelid);
+  }
+
   //自分の参加チャンネル数と受け取ったチャンネルデータの数が一致したらロードできたと設定
   if (dataUser().myUserinfo.value.channelJoined.length === Object.keys(dataChannel().ChannelIndex.value).length) {
     CLIENT_FULL_LOADED.value = true;
