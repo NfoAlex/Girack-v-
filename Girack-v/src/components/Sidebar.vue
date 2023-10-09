@@ -7,6 +7,7 @@ import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
 import { getCONFIG } from "../config";
+import draggable from 'vuedraggable';
 
 const socket = getSocket();
 
@@ -29,6 +30,8 @@ export default {
   },
 
   props: ["sessionOnlineNum"], //オンライン人数用
+
+  components: { draggable },
 
   data() {
     return {
