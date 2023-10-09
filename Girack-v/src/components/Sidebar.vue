@@ -328,7 +328,7 @@ export default {
           item-key="id"
         >
           <template #item="{element}">
-            <div>
+            <div v-if="ChannelIndex[element]!==undefined">
               <RouterLink :to="'/c/' + element">
                 <v-card
                   @click="$emit('closeSidebar')"
