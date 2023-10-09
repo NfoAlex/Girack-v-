@@ -617,62 +617,6 @@ socket.on("messageHistory", (history) => {
     dataMsg().MsgReadTime.value[channelid].mention = 0;
   }
 
-  //受信した履歴の中で新着のものかどうか調べて新着数を加算
-  // for (index in history) {
-  //   //既読状態がそもそも無ければやらない
-  //   if (dataMsg().MsgReadTime.value[channelid] === undefined) break;
-
-  //   //もしユーザーの名前リストに名前がなかったら
-  //   if (dataUser().UserIndex.value[history[index].userid] === undefined) {
-  //     //データ受け取るまでのホルダー
-  //     dataUser().UserIndex.value[history[index].userid] = {
-  //       username: "loading...",
-  //     };
-  //     //名前をリクエスト
-  //     socket.emit("getInfoUser", {
-  //       targetid: history[index].userid,
-  //       reqSender: {
-  //         userid: dataUser().myUserinfo.value.userid, //ユーザーID
-  //         sessionid: dataUser().myUserinfo.value.sessionid, //セッションID
-  //       },
-  //     });
-  //   }
-
-  //   //システムメッセージじゃないなら既読状態の時間から新着メッセージ数を加算
-  //   if (
-  //     parseInt(history[index].time) >
-  //       parseInt(dataMsg().MsgReadTime.value[channelid].time) &&
-  //     !history[index].isSystemMessage
-  //   ) {
-  //     //メンションされていたかどうかにあわせて既読状態を更新
-  //     if (
-  //       history[index].content.includes(
-  //         "@/" + dataUser().myUserinfo.value.userid + "/"
-  //       )
-  //     ) {
-  //       dataMsg().MsgReadTime.value[channelid].mention++; //メンション数を加算
-  //     } else {
-  //       dataMsg().MsgReadTime.value[channelid].new++; //新着数を加算
-  //     }
-
-  //     //faviconをドット表示に
-  //     document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
-  //   }
-  // }
-
-  //これいる？
-  // try {
-  //   if (
-  //     dataMsg().MsgReadTime.value[channelid].mention !== 0 &&
-  //     dataMsg().MsgReadTime.value[channelid].new !== 0
-  //   ) {
-  //     //既読状態を同期させる
-  //     updateMsgReadState();
-  //   }
-  // } catch (e) {
-  //   console.error(e);
-  // }
-
   //履歴が存在しているなら履歴を頭から追加
   if (dataChannel().ChannelIndex.value[channelid].historyReadCount !== 0) {
     //データの追加順的に逆だからここでソートしておく
