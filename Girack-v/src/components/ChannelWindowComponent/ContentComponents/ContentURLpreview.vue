@@ -14,6 +14,7 @@ export default {
       imageAloneLoadState: false, //画像単体の時のロード状態
 
       showVideo: false, //動画を表示するかどうか
+      showVideoLink: "", //動画のURL保存用
 
       embedTwitter: false, //Twitter埋め込みを表示するかどうか
     };
@@ -152,6 +153,40 @@ export default {
     </div>
   </v-dialog>
 
+  <!-- 動画拡大ダイアログ -->
+  <v-dialog
+    v-model="showVideo"
+    style="max-width:90vw"
+    @dblclick="showVideo = false"
+  >
+    <div style="height:100vh;">
+      <div class="mx-auto">
+        <span
+          style="z-index:5; height:fit-content; width:fit-content;"
+          color="rgba(0,0,0,0.75)"
+          class="rounded-b-lg rounded-t-0 mx-auto text-center pa-0"
+        >
+          <v-btn
+            @click="showVideo = false;"
+            class="rounded my-1"
+            block
+          >
+            閉じまくり
+          </v-btn>
+          <!-- 動画本体 -->
+          <video
+            v-if="showVideo"
+            class="rounded"
+            :src="showVideoLink"
+            style="width:100%; cursor: pointer"
+            controls
+          >
+          </video>
+        </span>
+      </div>
+    </div>
+  </v-dialog>
+
   <div v-for="(link, index) in urlData.data" :key="link">
     <!-- Twitterリンク用 -->
     <div
@@ -268,7 +303,7 @@ export default {
           <!-- 動画表示ボタン -->
           <v-btn
             v-if="!showVideo"
-            @click="showVideo = true"
+            @click="showVideo=true;showVideoLink=getVideo(link.video);"
             size="large"
             icon=""
             class="rounded-lg"
@@ -279,30 +314,6 @@ export default {
               location="top center"
             >
               動画を表示
-            </v-tooltip>
-          </v-btn>
-          <!-- 動画 -->
-          <video
-            v-if="showVideo"
-            :src="getVideo(link.video)"
-            style="max-width: 90%; max-height: 90%; cursor: pointer"
-            controls
-          >
-          </video>
-          <!-- 動画を隠すボタン -->
-          <v-btn
-            v-if="showVideo"
-            @click="showVideo = false"
-            class="rounded-lg mx-auto mt-1"
-            icon=""
-            variant="text"
-          >
-            <v-icon>mdi:mdi-unfold-less-horizontal</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top center"
-            >
-              動画を非表示にします
             </v-tooltip>
           </v-btn>
         </span>
