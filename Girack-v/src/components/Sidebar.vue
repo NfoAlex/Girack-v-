@@ -2,7 +2,7 @@
 <script lang="js">
 //Sidebar.vue
 import { useDisplay } from "vuetify";
-import { getSocket, Serverinfo } from "../data/socket";
+import { getSocket, Serverinfo, CLIENT_FULL_LOADED } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
@@ -26,6 +26,7 @@ export default {
       ChannelIndex,
       ChannelOrder,
       Serverinfo,
+      CLIENT_FULL_LOADED,
       CONFIG_DISPLAY,
     };
   },
@@ -318,6 +319,7 @@ export default {
 
       <!-- ここからチャンネルボタン描写  -->
       <div
+        v-if="CLIENT_FULL_LOADED"
         class="mx-auto scroll"
         style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >

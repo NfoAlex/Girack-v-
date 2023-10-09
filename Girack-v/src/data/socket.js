@@ -847,7 +847,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
 //チャンネル順番データの受け取り、適用
 socket.on("infoUserSaveChannelOrder", (userSaveChannelOrder) => {
   console.log("socket :: userSaveChannelOrder->", userSaveChannelOrder);
-  dataChannel().ChannelOrder.value = userSaveChannelOrder.channelOrder;
+  dataChannel().ChannelOrder.value = userSaveChannelOrder.channelOrder; //チャンネル順番を適用
 });
 
 //初回処理用のクッキーから設定や既読状態を読み込む
