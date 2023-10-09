@@ -305,57 +305,62 @@ export default {
         class="mx-auto scroll"
         style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
-        <div style="margin-top: 1%" v-for="l in displaychannelList" :key="l">
-          <RouterLink :to="'/c/' + l.id">
-            <v-card
-              @click="$emit('closeSidebar')"
-              :ripple="false"
-              :variant="checkSameLocation(l.id) ? 'tonal' : 'text'"
-              class="rounded-lg d-flex align-center"
-              :class="isMobile?'pa-3':'pa-2'"
-              :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
-            >
-              <!-- チャンネル名前の#の部分 -->
-              <div class="flex-shrink-1">
-                <v-icon v-if="l.scope !== 'private'" size="small"
-                  >mdi:mdi-pound</v-icon
-                >
-                <v-icon v-else size="small">mdi:mdi-lock-outline</v-icon>
-                <!-- プライベートチャンネル用鍵マーク -->
-              </div>
-
-              <!-- チャンネル名 -->
-              <div
-                style="margin-left: 4px"
-                class="me-auto text-truncate"
-                :class="
-                  checkReadTime(l.id, 'new') ||
-                  checkReadTime(l.id, 'mention') ||
-                  checkSameLocation(l.id)
-                    ?
-                  'text-high-emphasis' : 'text-disabled'
-                "
+        <draggable
+          v-model="displaychannelList"
+          item-key="id"
+        >
+          <template #item="{element}">
+            <RouterLink :to="'/c/' + element.id">
+              <v-card
+                @click="$emit('closeSidebar')"
+                :ripple="false"
+                :variant="checkSameLocation(element.id) ? 'tonal' : 'text'"
+                class="rounded-lg d-flex align-center"
+                :class="isMobile?'pa-3':'pa-2'"
+                :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
               >
-                {{ l.channelname }}
-              </div>
+                <!-- チャンネル名前の#の部分 -->
+                <div class="flex-shrink-1">
+                  <v-icon v-if="element.scope !== 'private'" size="small"
+                    >mdi:mdi-pound
+                  </v-icon>
+                  <v-icon v-else size="small">mdi:mdi-lock-outline</v-icon>
+                  <!-- プライベートチャンネル用鍵マーク -->
+                </div>
 
-              <!-- メンションマーク -->
-              <v-badge
-                v-if="checkReadTime(l.id, 'mention')"
-                :content="checkReadTime(l.id, 'mention')"
-                color="orange"
-                inline
-              ></v-badge>
+                <!-- チャンネル名 -->
+                <div
+                  style="margin-left: 4px"
+                  class="me-auto text-truncate"
+                  :class="
+                    checkReadTime(element.id, 'new') ||
+                    checkReadTime(element.id, 'mention') ||
+                    checkSameLocation(element.id)
+                      ?
+                    'text-high-emphasis' : 'text-disabled'
+                  "
+                >
+                  {{ element.channelname }}
+                </div>
 
-              <!-- 新着マーク -->
-              <v-badge
-                v-if="checkReadTime(l.id, 'new')"
-                :content="checkReadTime(l.id, 'new')"
-                inline
-              ></v-badge>
-            </v-card>
-          </RouterLink>
-        </div>
+                <!-- メンションマーク -->
+                <v-badge
+                  v-if="checkReadTime(element.id, 'mention')"
+                  :content="checkReadTime(element.id, 'mention')"
+                  color="orange"
+                  inline
+                ></v-badge>
+
+                <!-- 新着マーク -->
+                <v-badge
+                  v-if="checkReadTime(element.id, 'new')"
+                  :content="checkReadTime(element.id, 'new')"
+                  inline
+                ></v-badge>
+              </v-card>
+            </RouterLink>
+          </template>
+        </draggable>
       </div>
     </div>
   </div>
