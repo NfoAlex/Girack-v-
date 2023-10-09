@@ -569,9 +569,7 @@ socket.on("messageHistory", (history) => {
   if (history === 0) {
     return;
   }
-
-  //console.log("socket :: messageHistory : history -> ", history);
-
+  
   let channelid = ""; //履歴を入れるチャンネルID
 
   try {
