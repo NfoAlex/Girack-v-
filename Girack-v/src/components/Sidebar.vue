@@ -321,7 +321,6 @@ export default {
         class="mx-auto scroll"
         style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
-        {{ ChannelOrder }}
         <draggable
           v-model="ChannelOrder"
           item-key="id"
