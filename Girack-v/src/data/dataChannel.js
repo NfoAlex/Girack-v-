@@ -22,8 +22,19 @@ const PreviewChannelData = ref({
     */
 });
 
+//チャンネルの順番データ
+const ChannelOrder = ref({
+    /*
+    [
+        "0001",
+        "3928",
+        "9182"
+    ]
+    */
+});
+
 //チャンネル情報を返すだけ
 export function dataChannel() {
-    return { ChannelIndex, PreviewChannelData };
+    return { ChannelIndex, PreviewChannelData, ChannelOrder };
 
 }

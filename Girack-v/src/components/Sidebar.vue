@@ -2,11 +2,12 @@
 <script lang="js">
 //Sidebar.vue
 import { useDisplay } from "vuetify";
-import { getSocket, Serverinfo } from "../data/socket";
+import { getSocket, Serverinfo, CLIENT_FULL_LOADED } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
 import { getCONFIG } from "../config";
+import draggable from 'vuedraggable';
 
 const socket = getSocket();
 
@@ -15,7 +16,7 @@ export default {
     const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { MsgReadTime } = dataMsg();
-    const { ChannelIndex } = dataChannel();
+    const { ChannelIndex, ChannelOrder } = dataChannel();
     const { CONFIG_DISPLAY } = getCONFIG();
 
     return {
@@ -23,12 +24,16 @@ export default {
       myUserinfo,
       MsgReadTime,
       ChannelIndex,
+      ChannelOrder,
       Serverinfo,
+      CLIENT_FULL_LOADED,
       CONFIG_DISPLAY,
     };
   },
 
   props: ["sessionOnlineNum"], //オンライン人数用
+
+  components: { draggable },
 
   data() {
     return {
@@ -60,6 +65,21 @@ export default {
         this.sortChannelList;
       },
       deep: true,
+    },
+
+    //チャンネルの順番の変化を監視
+    ChannelOrder: {
+      handler() {
+        //チャンネルの順番を送信して同期させる
+        socket.emit("updateUserSaveChannelOrder", {
+          channelOrder: this.ChannelOrder,
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid
+          }
+        });
+      },
+      deep: true
     },
 
     //チャンネルの表示設定を監視
@@ -299,60 +319,68 @@ export default {
 
       <!-- ここからチャンネルボタン描写  -->
       <div
+        v-if="CLIENT_FULL_LOADED"
         class="mx-auto scroll"
         style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
-        <div style="margin-top: 1%" v-for="l in displaychannelList" :key="l">
-          <RouterLink :to="'/c/' + l.id">
-            <v-card
-              @click="$emit('closeSidebar')"
-              :ripple="false"
-              :variant="checkSameLocation(l.id) ? 'tonal' : 'text'"
-              class="rounded-lg d-flex align-center"
-              :class="isMobile?'pa-3':'pa-2'"
-              :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
-            >
-              <!-- チャンネル名前の#の部分 -->
-              <div class="flex-shrink-1">
-                <v-icon v-if="l.scope !== 'private'" size="small"
-                  >mdi:mdi-pound</v-icon
+        <draggable
+          v-model="ChannelOrder"
+          item-key="id"
+        >
+          <template #item="{element}">
+            <div v-if="ChannelIndex[element]!==undefined">
+              <RouterLink :to="'/c/' + element">
+                <v-card
+                  @click="$emit('closeSidebar')"
+                  :ripple="false"
+                  :variant="checkSameLocation(element) ? 'tonal' : 'text'"
+                  class="rounded-lg d-flex align-center my-1"
+                  :class="isMobile?'pa-3':'pa-2'"
+                  :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
                 >
-                <v-icon v-else size="small">mdi:mdi-lock-outline</v-icon>
-                <!-- プライベートチャンネル用鍵マーク -->
-              </div>
+                  <!-- チャンネル名前の#の部分 -->
+                  <div class="flex-shrink-1">
+                    <v-icon v-if="ChannelIndex[element].scope !== 'private'" size="small"
+                      >mdi:mdi-pound
+                    </v-icon>
+                    <v-icon v-else size="small">mdi:mdi-lock-outline</v-icon>
+                    <!-- プライベートチャンネル用鍵マーク -->
+                  </div>
 
-              <!-- チャンネル名 -->
-              <div
-                style="margin-left: 4px"
-                class="me-auto text-truncate"
-                :class="
-                  checkReadTime(l.id, 'new') ||
-                  checkReadTime(l.id, 'mention') ||
-                  checkSameLocation(l.id)
-                    ?
-                  'text-high-emphasis' : 'text-disabled'
-                "
-              >
-                {{ l.channelname }}
-              </div>
+                  <!-- チャンネル名 -->
+                  <div
+                    style="margin-left: 4px"
+                    class="me-auto text-truncate"
+                    :class="
+                      checkReadTime(element, 'new') ||
+                      checkReadTime(element, 'mention') ||
+                      checkSameLocation(element)
+                        ?
+                      'text-high-emphasis' : 'text-disabled'
+                    "
+                  >
+                    {{ ChannelIndex[element].channelname }}
+                  </div>
 
-              <!-- メンションマーク -->
-              <v-badge
-                v-if="checkReadTime(l.id, 'mention')"
-                :content="checkReadTime(l.id, 'mention')"
-                color="orange"
-                inline
-              ></v-badge>
+                  <!-- メンションマーク -->
+                  <v-badge
+                    v-if="checkReadTime(element, 'mention')"
+                    :content="checkReadTime(element, 'mention')"
+                    color="orange"
+                    inline
+                  ></v-badge>
 
-              <!-- 新着マーク -->
-              <v-badge
-                v-if="checkReadTime(l.id, 'new')"
-                :content="checkReadTime(l.id, 'new')"
-                inline
-              ></v-badge>
-            </v-card>
-          </RouterLink>
-        </div>
+                  <!-- 新着マーク -->
+                  <v-badge
+                    v-if="checkReadTime(element, 'new')"
+                    :content="checkReadTime(element, 'new')"
+                    inline
+                  ></v-badge>
+                </v-card>
+              </RouterLink>
+            </div>
+          </template>
+        </draggable>
       </div>
     </div>
   </div>

@@ -21,6 +21,7 @@
     "vue-router": "^4.1.6",
     "vue-tweet": "^2.0.2",
     "vue-virtual-scroller": "^2.0.0-beta.8",
+    "vuedraggable": "^4.1.0",
     "vuetify": "^3.1.6"
   },
   "devDependencies": {

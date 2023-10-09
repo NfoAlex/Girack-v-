@@ -15,7 +15,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from "../config.js";
 
-export const CLIENT_VERSION = "alpha_20231006";
+export const CLIENT_VERSION = "alpha_20231009";
 
 const {
   CONFIG_SYNC,
@@ -457,6 +457,11 @@ socket.on("infoChannel", (dat) => {
     ...dat,
   };
 
+  //もし受け取ったチャンネルIDが順番のやつに入ってなければ追加
+  if (!dataChannel().ChannelOrder.value.includes(dat.channelid)) {
+    dataChannel().ChannelOrder.value.push(dat.channelid);
+  }
+
   //自分の参加チャンネル数と受け取ったチャンネルデータの数が一致したらロードできたと設定
   if (dataUser().myUserinfo.value.channelJoined.length === Object.keys(dataChannel().ChannelIndex.value).length) {
     CLIENT_FULL_LOADED.value = true;
@@ -716,6 +721,14 @@ socket.on("authResult", (dat) => {
       },
     });
 
+    //チャンネル順番の取得
+    socket.emit("getUserSaveChannelOrder", {
+      reqSender: {
+        userid: dat.userid,
+        sessionid: dat.sessionid,
+      },
+    });
+
     //ユーザー情報をさらに取得
     socket.emit("getInfoUser", {
       targetid: dat.userid,
@@ -834,6 +847,12 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
   //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
   //   getMessage(channelid, 40); //リクエスト送信する
   // }
+});
+
+//チャンネル順番データの受け取り、適用
+socket.on("infoUserSaveChannelOrder", (userSaveChannelOrder) => {
+  console.log("socket :: userSaveChannelOrder->", userSaveChannelOrder);
+  dataChannel().ChannelOrder.value = userSaveChannelOrder.channelOrder; //チャンネル順番を適用
 });
 
 //初回処理用のクッキーから設定や既読状態を読み込む
