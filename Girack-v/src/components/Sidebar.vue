@@ -67,19 +67,19 @@ export default {
     },
 
     //チャンネルの順番の変化を監視
-    // displaychannelList: {
-    //   handler() {
-    //     //チャンネルの順番を送信して同期させる
-    //     socket.emit("updateUserSaveChannelOrder", {
-    //       displaychannelList: this.displaychannelList,
-    //       reqSender: {
-    //         userid: this.myUserinfo.userid,
-    //         sessionid: this.myUserinfo.sessionid
-    //       }
-    //     });
-    //   },
-    //   deep: true
-    // },
+    ChannelOrder: {
+      handler() {
+        //チャンネルの順番を送信して同期させる
+        socket.emit("updateUserSaveChannelOrder", {
+          channelOrder: this.ChannelOrder,
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid
+          }
+        });
+      },
+      deep: true
+    },
 
     //チャンネルの表示設定を監視
     "CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY": {
