@@ -716,6 +716,14 @@ socket.on("authResult", (dat) => {
       },
     });
 
+    //チャンネル順番の取得
+    socket.emit("getUserSaveChannelOrder", {
+      reqSender: {
+        userid: dat.userid,
+        sessionid: dat.sessionid,
+      },
+    });
+
     //ユーザー情報をさらに取得
     socket.emit("getInfoUser", {
       targetid: dat.userid,
@@ -834,6 +842,12 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
   //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
   //   getMessage(channelid, 40); //リクエスト送信する
   // }
+});
+
+//チャンネル順番データの受け取り、適用
+socket.on("infoUserSaveChannelOrder", (userSaveChannelOrder) => {
+  console.log("socket :: userSaveChannelOrder->", userSaveChannelOrder);
+  dataChannel().ChannelOrder.value = userSaveChannelOrder.channelOrder;
 });
 
 //初回処理用のクッキーから設定や既読状態を読み込む
