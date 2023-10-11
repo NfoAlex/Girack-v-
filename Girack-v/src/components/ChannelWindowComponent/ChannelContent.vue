@@ -563,7 +563,13 @@ export default {
       </div>
 
       <!-- 新着メッセージ線 -->
-      <ContentNewMessageLine v-if="!channelInfo.previewmode" :m="m" :index="index" :MsgDBActive="MsgDBActive" />
+      <ContentNewMessageLine
+        v-if="!channelInfo.previewmode"
+        :m="m" 
+        :index="index"
+        :MsgDBActive="MsgDBActive"
+        :msgDisplayNum="msgDisplayNum"
+      />
     </div>
 
     <!-- 履歴が空なら -->
