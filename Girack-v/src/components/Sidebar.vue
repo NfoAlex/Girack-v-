@@ -15,7 +15,7 @@ export default {
   setup() {
     const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
-    const { MsgReadTime } = dataMsg();
+    const { MsgReadTime, MsgDB } = dataMsg();
     const { ChannelIndex, ChannelOrder } = dataChannel();
     const { CONFIG_DISPLAY } = getCONFIG();
 
@@ -23,6 +23,7 @@ export default {
       mobile,
       myUserinfo,
       MsgReadTime,
+      MsgDB,
       ChannelIndex,
       ChannelOrder,
       Serverinfo,
