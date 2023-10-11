@@ -87,7 +87,7 @@ export default {
         */
 
         //履歴を削って返す
-        return this.MsgDBActive.slice(displayStartPosition);
+        return this.MsgDBActive.slice(displayStartPosition).reverse();
       } catch (e) {
         console.log("Content :: cropMessage : MsgDBが空...?");
       }
@@ -514,6 +514,7 @@ export default {
 <template>
   <div
     id="channelWindow"
+    class="d-flex flex-column-reverse"
     @scroll="setScrollState"
     style="height: 100%; width: 100%; overflow-y: auto"
   >
@@ -551,8 +552,8 @@ export default {
 
     <!-- !!!こっからメッセージ表示!!! -->
     <div
-      style="z-index: 1"
       v-for="(m, index) in cropMessage"
+      style="z-index: 1"
       :key="m.messageid"
     >
       <!-- 日付線 -->
