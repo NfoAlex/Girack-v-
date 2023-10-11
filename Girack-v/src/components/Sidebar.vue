@@ -40,6 +40,7 @@ export default {
     return {
       servername: "",
       displayusername: "Null",
+      visibleReadAllButton: false,
       thisURL: window.location.origin,
 
       disconnected: false,
@@ -138,6 +139,20 @@ export default {
 
       //既読状態を更新させる
       updateMsgReadState();
+    },
+
+    //Shiftキーが押された時全既読ボタンの表示
+    showReadAllButton(event) {
+      if (event.code === "ShiftLeft") {
+        this.visibleReadAllButton = true;
+      }
+    },
+
+  //Shiftキーを離した時全既読ボタンの非表示
+    hideReadAllButton(event) {
+      if (event.code === "ShiftLeft") {
+        this.visibleReadAllButton = false;
+      }
     }
   },
 
@@ -157,12 +172,19 @@ export default {
     socket.on("connect", () => {
       this.disconnected = false;
     });
+
+    //Shiftキーおしっぱの時だけ全既読ボタンを表示
+    document.addEventListener("keydown", this.showReadAllButton);
+    document.addEventListener("keyup", this.hideReadAllButton);
   },
 
   unmounted() {
     //通信重複防止
     socket.off("sessionOnlineUpdate");
     socket.off("serverinfo");
+    //Shiftキーの監視停止
+    document.removeEventListener("keydown", this.showReadAllButton);
+    document.removeEventListener("keyup", this.hideReadAllButton);
   },
 };
 </script>
@@ -288,6 +310,7 @@ export default {
         <!-- 全チャンネルを既読するボタン -->
         <v-btn
           @click="readAllChannels"
+          v-if="visibleReadAllButton"
           elevation="0"
           variant="text"
           size="x-small"
