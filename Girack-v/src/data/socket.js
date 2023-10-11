@@ -68,7 +68,7 @@ socket.on("messageReceive", (msg) => {
     //DB配列の存在を確認してから追加
     if (dataMsg().MsgDB.value[msg.channelid] !== undefined) {
       //undefinedじゃないなら追加
-      dataMsg().MsgDB.value[msg.channelid].push({
+      dataMsg().MsgDB.value[msg.channelid].unshift({
         ...msg,
       });
     } else {
@@ -618,11 +618,11 @@ socket.on("messageHistory", (history) => {
   //履歴が存在しているなら履歴を頭から追加
   if (dataChannel().ChannelIndex.value[channelid].historyReadCount !== 0) {
     //データの追加順的に逆だからここでソートしておく
-    history = history.reverse();
+    //history = history.reverse();
 
     //履歴用配列の先頭から一つずつ履歴を追加
     for (let index in history) {
-      dataMsg().MsgDB.value[channelid].unshift(history[index]);
+      dataMsg().MsgDB.value[channelid].push(history[index]);
     }
 
     //履歴の長さを計算
@@ -630,7 +630,7 @@ socket.on("messageHistory", (history) => {
       history.length;
   } else {
     //存在しないなら新しく追加
-    dataMsg().MsgDB.value[channelid] = history;
+    dataMsg().MsgDB.value[channelid] = history.reverse();
     dataChannel().ChannelIndex.value[channelid].historyReadCount +=
       history.length;
   }
