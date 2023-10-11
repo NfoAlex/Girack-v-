@@ -649,40 +649,40 @@ export default {
       multiple
     />
 
+    <!-- メンションウィンドウ -->
+    <v-card
+      v-if="searchMode.enabled"
+      width="90%"
+      position="absolute"
+      max-height="30vh"
+      ref="optionsList"
+      style="bottom:5%;"
+    >
+      <v-list-item
+        ref="optionsItem"
+        v-for="(i, index) in searchDisplayArray"
+        :key="index"
+      >
+        <span
+          @click="replaceQueryWithName(i.userid)"
+          style="cursor: pointer"
+        >
+          <v-avatar size="3%">
+            <v-img :src="uri + '/img/' + i.userid"> </v-img>
+          </v-avatar>
+
+          <span style="margin-left: 8px">
+            <span v-if="index === searchMode.selectedIndex"> ⇒ </span>
+            {{ i.username }}
+          </span>
+        </span>
+      </v-list-item>
+    </v-card>
+
     <div
       style="width: 90%; height: fit-content"
       class="mx-auto d-flex align-center"
     >
-      <!-- メンションウィンドウ -->
-      <v-card
-        v-if="searchMode.enabled"
-        width="90%"
-        position="absolute"
-        max-height="30vh"
-        ref="optionsList"
-        style="bottom:8px;"
-      >
-        afdsa
-        <v-list-item
-          ref="optionsItem"
-          v-for="(i, index) in searchDisplayArray"
-          :key="index"
-        >
-          <span
-            @click="replaceQueryWithName(i.userid)"
-            style="cursor: pointer"
-          >
-            <v-avatar size="3%">
-              <v-img :src="uri + '/img/' + i.userid"> </v-img>
-            </v-avatar>
-
-            <span style="margin-left: 8px">
-              <span v-if="index === searchMode.selectedIndex"> ⇒ </span>
-              {{ i.username }}
-            </span>
-          </span>
-        </v-list-item>
-      </v-card>
 
       <!-- 入力部分 -->
       <v-container fill-height fluid class="d-flex">
