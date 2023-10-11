@@ -525,6 +525,18 @@ export default {
       v-for="(m, index) in cropMessage"
       :key="m.messageid"
     >
+      
+      
+      <!-- メッセージそのもの-->
+      <ContentRender
+        :m="m"
+        :index="index"
+        :MsgDBActive="MsgDBActive"
+        :msgDisplayNum="msgDisplayNum"
+        :msgEditing="msgIdEditing===m.messageid?true:false"
+        @close-editing="msgIdEditing='xxxxxx';"
+      />
+
       <!-- 日付線 -->
       <div
         v-if="checkDateDifference(index)"
@@ -543,16 +555,6 @@ export default {
           {{ getHistoryDate(index) }}
         </p>
       </div>
-      
-      <!-- メッセージそのもの-->
-      <ContentRender
-        :m="m"
-        :index="index"
-        :MsgDBActive="MsgDBActive"
-        :msgDisplayNum="msgDisplayNum"
-        :msgEditing="msgIdEditing===m.messageid?true:false"
-        @close-editing="msgIdEditing='xxxxxx';"
-      />
 
       <!-- システムメッセージ -->
       <div style="width: 100%" v-if="m.isSystemMessage === true">
