@@ -650,7 +650,7 @@ export default {
     />
 
     <div
-      style="width: 95%; height: fit-content; position: relative;"
+      style="width:95%; height:fit-content; position:relative;"
       class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
 
@@ -662,7 +662,7 @@ export default {
         max-height="30vh"
         ref="optionsList"
         class="rounded-lg"
-        style="bottom:101%;"
+        style="bottom:101%; overflow-y:auto;"
       >
         <v-list-item
           ref="optionsItem"
