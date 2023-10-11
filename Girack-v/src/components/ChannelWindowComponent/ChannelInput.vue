@@ -653,85 +653,89 @@ export default {
       style="width: 90%; height: fit-content"
       class="mx-auto d-flex align-center"
     >
+      <!-- メンションウィンドウ -->
+      <v-card
+        v-if="searchMode.enabled"
+        width="90%"
+        position="absolute"
+        max-height="30vh"
+        ref="optionsList"
+        style="bottom:8px;"
+      >
+        afdsa
+        <v-list-item
+          ref="optionsItem"
+          v-for="(i, index) in searchDisplayArray"
+          :key="index"
+        >
+          <span
+            @click="replaceQueryWithName(i.userid)"
+            style="cursor: pointer"
+          >
+            <v-avatar size="3%">
+              <v-img :src="uri + '/img/' + i.userid"> </v-img>
+            </v-avatar>
+
+            <span style="margin-left: 8px">
+              <span v-if="index === searchMode.selectedIndex"> ⇒ </span>
+              {{ i.username }}
+            </span>
+          </span>
+        </v-list-item>
+      </v-card>
+
+      <!-- 入力部分 -->
       <v-container fill-height fluid class="d-flex">
-        <!-- 入力欄 -->
-        <v-menu label="list" location="top" :close-on-content-click="false">
-          <template v-slot:activator="{ props }">
-            <!-- 入力部分 -->
-            <v-textarea
-              id="inp"
-              ref="inp"
-              :disabled="!checkCanITalk()"
-              :placeholder="
-                checkCanITalk()
-                  ? channelInfo.channelname + 'へ送信'
-                  : channelInfo.channelname +
-                    ' : ' +
-                    channelInfo.canTalk +
-                    '以上が発言可能'
-              "
-              @keydown.enter.prevent="EnterTrigger"
-              @keydown.@="AtsignTrigger"
-              @keydown.up="changeMentionUserSelect"
-              @keydown.down="changeMentionUserSelect"
-              @paste="fileInputFromClipboard"
-              variant="solo"
-              max-rows="5"
-              clearable
-              no-resize
-              auto-grow
-              v-model="txt"
-              v-bind="props"
-              rows="1"
+        <!-- textarea -->
+        <v-textarea
+          id="inp"
+          ref="inp"
+          :disabled="!checkCanITalk()"
+          :placeholder="
+            checkCanITalk()
+              ? channelInfo.channelname + 'へ送信'
+              : channelInfo.channelname +
+                ' : ' +
+                channelInfo.canTalk +
+                '以上が発言可能'
+          "
+          @keydown.enter.prevent="EnterTrigger"
+          @keydown.@="AtsignTrigger"
+          @keydown.up="changeMentionUserSelect"
+          @keydown.down="changeMentionUserSelect"
+          @paste="fileInputFromClipboard"
+          variant="solo"
+          max-rows="5"
+          clearable
+          no-resize
+          auto-grow
+          v-model="txt"
+          v-bind="props"
+          rows="1"
+        >
+          <!-- ファイルアップロード部分 -->
+          <template v-slot:prepend-inner>
+            <!-- ファイルアップロードボタン -->
+            <v-btn
+              @click="fileInputRef"
+              color="white"
+              variant="text"
+              size="x-small"
+              icon="mdi:mdi-plus"
+              class="rounded-lg"
             >
-              <!-- ファイルアップロード部分 -->
-              <template v-slot:prepend-inner>
-                <!-- ファイルアップロードボタン -->
-                <v-btn
-                  @click="fileInputRef"
-                  color="white"
-                  variant="text"
-                  size="x-small"
-                  icon="mdi:mdi-plus"
-                  class="rounded-lg"
-                >
-                  <v-icon> mdi:mdi-plus </v-icon>
-                  <v-tooltip activator="parent" location="top">
-                    {{
-                      humanFileSize(
-                        Serverinfo.config.MESSAGE.MESSAGE_FILE_MAXSIZE,
-                        true
-                      )
-                    }}まで
-                  </v-tooltip>
-                </v-btn>
-              </template>
-            </v-textarea>
+              <v-icon> mdi:mdi-plus </v-icon>
+              <v-tooltip activator="parent" location="top">
+                {{
+                  humanFileSize(
+                    Serverinfo.config.MESSAGE.MESSAGE_FILE_MAXSIZE,
+                    true
+                  )
+                }}まで
+              </v-tooltip>
+            </v-btn>
           </template>
-
-          <!-- ユーザー検索候補の表示 -->
-          <v-list max-height="30vh" v-if="searchMode.enabled" ref="optionsList">
-            <v-list-item
-              ref="optionsItem"
-              v-for="(i, index) in searchDisplayArray"
-              :key="index"
-            >
-              <span
-                @click="replaceQueryWithName(i.userid)"
-                style="cursor: pointer"
-              >
-                <v-avatar size="3%">
-                  <v-img :src="uri + '/img/' + i.userid"> </v-img>
-                </v-avatar>
-
-                <span style="margin-left: 8px">
-                  <span v-if="index === searchMode.selectedIndex"> ⇒ </span>
-                  {{ i.username }}
-                </span>
-              </span>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        </v-textarea>
 
         <!-- 送信ボタン -->
         <v-btn
