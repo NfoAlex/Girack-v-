@@ -519,37 +519,6 @@ export default {
     style="height: 100%; width: 100%; overflow-y: auto"
   >
 
-    <!-- 履歴が空なら -->
-    <div
-      id="rirekikara"
-      style="padding: 10%"
-      v-if="MsgDBActive === undefined || MsgDBActive.length === 0"
-    >
-      <p class="text-subtitle-1" style="text-align: center">あなたが最初!</p>
-    </div>
-
-    <!-- 履歴読み込みボタン -->
-    <div
-      v-if="MsgDBActive !== undefined"
-      style="
-        display: flex;
-        margin: 8px 0;
-        flex-direction: row;
-        justify-content: space-around;
-      "
-    >
-      <v-btn
-        v-if="!channelInfo.previewmode"
-        size="small"
-        @click="cropMessageExtend"
-        variant="text"
-        >↑過去を読み込む</v-btn
-      >
-      <v-btn v-else class="rounded-lg" size="small" variant="text"
-        >履歴を読み込むにはチャンネルに参加してください...</v-btn
-      >
-    </div>
-
     <!-- !!!こっからメッセージ表示!!! -->
     <div
       style="z-index: 1"
@@ -592,6 +561,37 @@ export default {
 
       <!-- 新着メッセージ線 -->
       <ContentNewMessageLine v-if="!channelInfo.previewmode" :m="m" :index="index" :MsgDBActive="MsgDBActive" />
+    </div>
+
+    <!-- 履歴が空なら -->
+    <div
+      id="rirekikara"
+      style="padding: 10%"
+      v-if="MsgDBActive === undefined || MsgDBActive.length === 0"
+    >
+      <p class="text-subtitle-1" style="text-align: center">あなたが最初!</p>
+    </div>
+
+    <!-- 履歴読み込みボタン -->
+    <div
+      v-if="MsgDBActive !== undefined"
+      style="
+        display: flex;
+        margin: 8px 0;
+        flex-direction: row;
+        justify-content: space-around;
+      "
+    >
+      <v-btn
+        v-if="!channelInfo.previewmode"
+        size="small"
+        @click="cropMessageExtend"
+        variant="text"
+        >↑過去を読み込む</v-btn
+      >
+      <v-btn v-else class="rounded-lg" size="small" variant="text"
+        >履歴を読み込むにはチャンネルに参加してください...</v-btn
+      >
     </div>
 
     <!-- 一番下にスクロールするボタン -->
