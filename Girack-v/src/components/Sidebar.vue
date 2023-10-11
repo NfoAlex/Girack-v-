@@ -290,7 +290,7 @@ export default {
           @click="readAllChannels"
           elevation="0"
           variant="text"
-          size="small"
+          size="x-small"
           class="rounded-pill text-disabled"
           style="width:100%;"
         >
