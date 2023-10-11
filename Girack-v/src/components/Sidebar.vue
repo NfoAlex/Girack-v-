@@ -279,17 +279,24 @@ export default {
         <v-divider style="margin: 5% 0"></v-divider>
       </nav>
 
-      <!-- ここからチャンネルボタン描写  -->
+      <!-- ここからチャンネルボタン部分  -->
       <div
         v-if="CLIENT_FULL_LOADED"
         class="mx-auto scroll"
         style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
+        <!-- 全チャンネルを既読するボタン -->
         <v-btn
           @click="readAllChannels"
+          elevation="0"
+          variant="text"
+          size="small"
+          class="rounded-pill text-disabled"
+          style="width:100%;"
         >
-          前記毒
+          全部既読にする
         </v-btn>
+        <!-- ここからチャンネルボタン連続表示 -->
         <draggable
           v-model="ChannelOrder"
           item-key="id"
