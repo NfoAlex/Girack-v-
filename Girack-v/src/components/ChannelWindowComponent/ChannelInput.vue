@@ -656,6 +656,7 @@ export default {
       position="absolute"
       max-height="30vh"
       ref="optionsList"
+      class="rounded-lg"
       style="bottom:5%;"
     >
       <v-list-item
