@@ -119,7 +119,6 @@ export default {
         try {
           //そのチャンネルの最新メッセージの時間を読み込む
           let latestTime = this.MsgDB[channelid].slice(-1)[0].time;
-          console.log("これ時間->", latestTime);
           
           //既読状態を最新へセット
           this.MsgReadTime[channelid] = {
@@ -137,6 +136,7 @@ export default {
         }
       }
 
+      //既読状態を更新させる
       updateMsgReadState();
     }
   },
