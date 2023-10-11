@@ -325,6 +325,7 @@ export default {
               <v-checkbox
                 :disabled="!CONFIG_NOTIFICATION.ENABLE"
                 v-model="CONFIG_NOTIFICATION.NOTIFY_ALL"
+                class="ml-3"
                 label="すべてのメッセージを通知する"
                 density="compact"
               >
@@ -332,6 +333,7 @@ export default {
               <v-checkbox
                 :disabled="!CONFIG_NOTIFICATION.ENABLE"
                 v-model="CONFIG_NOTIFICATION.NOTIFY_MENTION"
+                class="ml-3"
                 label="メンションで通知する"
                 density="compact"
                 messages="'@<あなたの名前>'が含まれると通知"
@@ -414,6 +416,20 @@ export default {
                 :items="['alphabetical', 'id']"
               >
               </v-select>
+              <v-checkbox
+                v-model="CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_ENABLED"
+                label="全チャンネル既読ボタンを有効化"
+                density="compact"
+              >
+              </v-checkbox>
+              <v-checkbox
+                v-model="CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY"
+                :disabled="!CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_ENABLED"
+                class="ml-3"
+                label="Shiftキーが押された間だけ全チャンネル既読ボタンを表示する"
+                density="compact"
+              >
+              </v-checkbox>
             </v-card>
           </v-card>
 

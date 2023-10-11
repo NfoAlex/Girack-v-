@@ -2,7 +2,7 @@
 <script lang="js">
 //Sidebar.vue
 import { useDisplay } from "vuetify";
-import { getSocket, Serverinfo, CLIENT_FULL_LOADED } from "../data/socket";
+import { getSocket, updateMsgReadState, Serverinfo, CLIENT_FULL_LOADED } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
@@ -15,7 +15,7 @@ export default {
   setup() {
     const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
-    const { MsgReadTime } = dataMsg();
+    const { MsgReadTime, MsgDB } = dataMsg();
     const { ChannelIndex, ChannelOrder } = dataChannel();
     const { CONFIG_DISPLAY } = getCONFIG();
 
@@ -23,6 +23,7 @@ export default {
       mobile,
       myUserinfo,
       MsgReadTime,
+      MsgDB,
       ChannelIndex,
       ChannelOrder,
       Serverinfo,
@@ -39,6 +40,7 @@ export default {
     return {
       servername: "",
       displayusername: "Null",
+      visibleReadAllButton: false,
       thisURL: window.location.origin,
 
       disconnected: false,
@@ -109,6 +111,48 @@ export default {
       } else {
         return false;
       }
+    },
+
+    //全チャンネルを既読にする
+    readAllChannels() {
+      //チャンネルの数分既読にする
+      for (let channelid in this.ChannelIndex) {
+        try {
+          //そのチャンネルの最新メッセージの時間を読み込む
+          let latestTime = this.MsgDB[channelid].slice(-1)[0].time;
+          
+          //既読状態を最新へセット
+          this.MsgReadTime[channelid] = {
+            //既読時間を最新メッセージの時間に設定
+            time: latestTime,
+            //新着線基準時間を最新メッセージの時間に設定
+            timeBefore: latestTime,
+            //新着メッセージ数を0に
+            new: 0,
+            //メンション数を0に
+            mention: 0,
+          };
+        } catch(e) {
+          console.log("Sidebar :: readAllChannels : e->", e); //何もしない
+        }
+      }
+
+      //既読状態を更新させる
+      updateMsgReadState();
+    },
+
+    //Shiftキーが押された時全既読ボタンの表示
+    showReadAllButton(event) {
+      if (event.code === "ShiftLeft" && this.CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY) {
+        this.visibleReadAllButton = true;
+      }
+    },
+
+  //Shiftキーを離した時全既読ボタンの非表示
+    hideReadAllButton(event) {
+      if (event.code === "ShiftLeft") {
+        this.visibleReadAllButton = false;
+      }
     }
   },
 
@@ -128,12 +172,19 @@ export default {
     socket.on("connect", () => {
       this.disconnected = false;
     });
+
+    //Shiftキーおしっぱの時だけ全既読ボタンを表示
+    document.addEventListener("keydown", this.showReadAllButton);
+    document.addEventListener("keyup", this.hideReadAllButton);
   },
 
   unmounted() {
     //通信重複防止
     socket.off("sessionOnlineUpdate");
     socket.off("serverinfo");
+    //Shiftキーの監視停止
+    document.removeEventListener("keydown", this.showReadAllButton);
+    document.removeEventListener("keyup", this.hideReadAllButton);
   },
 };
 </script>
@@ -250,12 +301,25 @@ export default {
         <v-divider style="margin: 5% 0"></v-divider>
       </nav>
 
-      <!-- ここからチャンネルボタン描写  -->
+      <!-- ここからチャンネルボタン部分  -->
       <div
         v-if="CLIENT_FULL_LOADED"
         class="mx-auto scroll"
         style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
+        <!-- 全チャンネルを既読するボタン -->
+        <v-btn
+          @click="readAllChannels"
+          v-if="(visibleReadAllButton||!CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY)&&CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_ENABLED"
+          elevation="0"
+          variant="text"
+          size="x-small"
+          class="rounded-pill text-disabled"
+          style="width:100%;"
+        >
+          全部既読にする
+        </v-btn>
+        <!-- ここからチャンネルボタン連続表示 -->
         <draggable
           v-model="ChannelOrder"
           item-key="id"

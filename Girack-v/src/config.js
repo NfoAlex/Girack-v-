@@ -27,6 +27,8 @@ const CONFIG_DISPLAY = ref({
     CONTENT_GOBOTTOMFAB_SHOW: false,
     CONTENT_SCROLL_ONNEWMESSAGE: true,
     SIDEBAR_CHANNEL_ORDERBY: "alphabetical", //"id","alphabetical"
+    SIDEBAR_SHOWREADALL_ENABLED: true,
+    SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY: true,
 });
 
 //設定とデータを返す
