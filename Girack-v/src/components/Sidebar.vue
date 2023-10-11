@@ -2,7 +2,7 @@
 <script lang="js">
 //Sidebar.vue
 import { useDisplay } from "vuetify";
-import { getSocket, Serverinfo, CLIENT_FULL_LOADED } from "../data/socket";
+import { getSocket, updateMsgReadState, Serverinfo, CLIENT_FULL_LOADED } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
@@ -110,6 +110,34 @@ export default {
       } else {
         return false;
       }
+    },
+
+    //全チャンネルを既読にする
+    readAllChannels() {
+      //チャンネルの数分既読にする
+      for (let channelid in this.ChannelIndex) {
+        try {
+          //そのチャンネルの最新メッセージの時間を読み込む
+          let latestTime = this.MsgDB[channelid].slice(-1)[0].time;
+          console.log("これ時間->", latestTime);
+          
+          //既読状態を最新へセット
+          this.MsgReadTime[channelid] = {
+            //既読時間を最新メッセージの時間に設定
+            time: latestTime,
+            //新着線基準時間を最新メッセージの時間に設定
+            timeBefore: latestTime,
+            //新着メッセージ数を0に
+            new: 0,
+            //メンション数を0に
+            mention: 0,
+          };
+        } catch(e) {
+          console.log("Sidebar :: readAllChannels : e->", e); //何もしない
+        }
+      }
+
+      updateMsgReadState();
     }
   },
 
@@ -257,6 +285,11 @@ export default {
         class="mx-auto scroll"
         style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
       >
+        <v-btn
+          @click="readAllChannels"
+        >
+          前記毒
+        </v-btn>
         <draggable
           v-model="ChannelOrder"
           item-key="id"
