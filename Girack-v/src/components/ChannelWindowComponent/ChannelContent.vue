@@ -182,7 +182,7 @@ export default {
 
     //レンダーを待ってからスクロールする
     this.$nextTick(() => {
-      this.scrollIt();
+      //this.scrollIt();
     });
   },
 
@@ -519,7 +519,7 @@ export default {
     style="height: 100%; width: 100%; overflow-y: auto"
   >
 
-    <!-- !!!こっからメッセージ表示!!! -->
+    <!-- !!!このdivでメッセージ表示!!! -->
     <div
       style="z-index: 1"
       v-for="(m, index) in cropMessage"
