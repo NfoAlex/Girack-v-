@@ -650,19 +650,19 @@ export default {
     />
 
     <div
-      style="width: 95%; height: fit-content"
+      style="width: 95%; height: fit-content; position: relative;"
       class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
 
       <!-- メンションウィンドウ -->
       <v-card
         v-if="searchMode.enabled"
-        width="70%"
+        width="100%"
         position="absolute"
         max-height="30vh"
         ref="optionsList"
         class="rounded-lg"
-        style="bottom:6rem;"
+        style="bottom:101%;"
       >
         <v-list-item
           ref="optionsItem"
