@@ -410,12 +410,6 @@ export default {
 
             <p><v-icon>mdi:mdi-format-list-group</v-icon>サイドバー</p>
             <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
-              <p class="pa-1">チャンネルの表示順番</p>
-              <v-select
-                v-model="CONFIG_DISPLAY.SIDEBAR_CHANNEL_ORDERBY"
-                :items="['alphabetical', 'id']"
-              >
-              </v-select>
               <v-checkbox
                 v-model="CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_ENABLED"
                 label="全チャンネル既読ボタンを有効化"
