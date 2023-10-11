@@ -306,8 +306,9 @@ export default {
         (
           forcingTrue || //そもそも引数でtrueと渡されているなら
           (
-            channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
-              channelWindow.scrollHeight || //スクロール位置を計算
+            //channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
+            //  channelWindow.scrollHeight || //スクロール位置を計算
+            channelWindow.scrollTop >= -4 ||
             channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
           )
         )
