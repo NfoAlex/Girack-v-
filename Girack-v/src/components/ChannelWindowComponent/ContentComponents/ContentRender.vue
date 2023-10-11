@@ -170,11 +170,11 @@ export default {
     checkDateDifference(index) {
       try {
         //もし一つ前のメッセージが存在しないなら処理を停止
-        if (this.cropMessage[index - 1] === undefined) return 0;
+        if (this.cropMessage[index + 1] === undefined) return 0;
 
         //日を取得
         let msgDateBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(6, 8)
+          this.cropMessage[index + 1].time.slice(6, 8)
         );
         let msgDateThis = parseInt(this.cropMessage[index].time.slice(6, 8));
         //日付の差を計算
@@ -196,29 +196,29 @@ export default {
       try {
         //分(min)差計算
         let msgTimeMinBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(10, 12)
+          this.cropMessage[index + 1].time.slice(10, 12)
         );
         let msgTimeMinThis = parseInt(
           this.cropMessage[index].time.slice(10, 12)
         );
         //分差計算
-        let timeMinDifference = msgTimeMinThis - msgTimeMinBefore;
+        let timeMinDifference = msgTimeMinBefore - msgTimeMinThis;
 
         //時(h)差計算
         let msgTimeHourBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(8, 10)
+          this.cropMessage[index + 1].time.slice(8, 10)
         );
         let msgTimeHourThis = parseInt(
           this.cropMessage[index].time.slice(8, 10)
         );
         //時差計算
-        let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
+        let timeHourDifference = msgTimeHourBefore - msgTimeHourThis;
 
         //日付がそもそも違うなら見せる
         if (this.checkDateDifference(index)) return true;
 
         //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-        if (this.cropMessage[index - 1].userid === userid) {
+        if (this.cropMessage[index + 1].userid === userid) {
           //このメッセージの一つ前のメッセージのユーザーID
           //条件でアバターを見せるか見せないか決める
           if (
@@ -251,9 +251,9 @@ export default {
       //前
       try {
         //そもそも一つ前のメッセージが存在するか確認
-        if (this.cropMessage[index - 1] !== undefined) {
+        if (this.cropMessage[index + 1] !== undefined) {
           AvatarNeedToShowBefore = this.checkShowAvatar(
-            this.cropMessage[index - 1].userid,
+            this.cropMessage[index + 1].userid,
             index - 1
           );
         }
