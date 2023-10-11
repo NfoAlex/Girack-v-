@@ -182,7 +182,7 @@ export default {
 
     //レンダーを待ってからスクロールする
     this.$nextTick(() => {
-      //this.scrollIt();
+      this.scrollIt();
     });
   },
 
