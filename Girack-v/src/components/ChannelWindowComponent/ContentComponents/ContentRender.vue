@@ -178,7 +178,7 @@ export default {
         );
         let msgDateThis = parseInt(this.cropMessage[index].time.slice(6, 8));
         //日付の差を計算
-        let dateDifference = msgDateBefore - msgDateThis;
+        let dateDifference = msgDateThis - msgDateBefore;
 
         //条件で日付線出すか決める
         if (dateDifference !== 0) {
@@ -202,7 +202,7 @@ export default {
           this.cropMessage[index].time.slice(10, 12)
         );
         //分差計算
-        let timeMinDifference = msgTimeMinBefore - msgTimeMinThis;
+        let timeMinDifference = msgTimeMinThis - msgTimeMinBefore;
 
         //時(h)差計算
         let msgTimeHourBefore = parseInt(
@@ -212,7 +212,7 @@ export default {
           this.cropMessage[index].time.slice(8, 10)
         );
         //時差計算
-        let timeHourDifference = msgTimeHourBefore - msgTimeHourThis;
+        let timeHourDifference = msgTimeHourThis - msgTimeHourBefore;
 
         //日付がそもそも違うなら見せる
         if (this.checkDateDifference(index)) return true;
@@ -254,7 +254,7 @@ export default {
         if (this.cropMessage[index + 1] !== undefined) {
           AvatarNeedToShowBefore = this.checkShowAvatar(
             this.cropMessage[index + 1].userid,
-            index - 1
+            index + 1
           );
         }
       } catch (e) {
@@ -271,10 +271,10 @@ export default {
       //次
       try {
         //そもそも次のメッセージが存在するか確認
-        if (this.cropMessage[index + 1] !== undefined) {
+        if (this.cropMessage[index - 1] !== undefined) {
           AvatarNeedToShowNext = this.checkShowAvatar(
-            this.cropMessage[index + 1].userid,
-            index + 1
+            this.cropMessage[index - 1].userid,
+            index - 1
           );
         }
       } catch (e) {
@@ -287,8 +287,8 @@ export default {
       //一つ前と送信者が今のと同じならそう記録
       try {
         //まず一つ前のメッセージがあるか確認
-        if (this.cropMessage[index - 1] !== undefined) {
-          if (this.cropMessage[index - 1].userid === userid) {
+        if (this.cropMessage[index + 1] !== undefined) {
+          if (this.cropMessage[index + 1].userid === userid) {
             SameWithBefore = true;
           }
         }
@@ -299,8 +299,8 @@ export default {
       //次の送信者が今のと同じならそう記録
       try {
         //まず次のメッセージがあるか確認
-        if (this.cropMessage[index + 1] !== undefined) {
-          if (this.cropMessage[index + 1].userid === userid) {
+        if (this.cropMessage[index - 1] !== undefined) {
+          if (this.cropMessage[index - 1].userid === userid) {
             SameWithNext = true;
           }
         }
