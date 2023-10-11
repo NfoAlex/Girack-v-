@@ -618,7 +618,7 @@ socket.on("messageHistory", (history) => {
   //履歴が存在しているなら履歴を頭から追加
   if (dataChannel().ChannelIndex.value[channelid].historyReadCount !== 0) {
     //データの追加順的に逆だからここでソートしておく
-    //history = history.reverse();
+    history = history.reverse();
 
     //履歴用配列の先頭から一つずつ履歴を追加
     for (let index in history) {
