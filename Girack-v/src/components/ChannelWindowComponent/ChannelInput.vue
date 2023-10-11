@@ -650,115 +650,120 @@ export default {
     />
 
     <div
-      style="width: 90%; height: fit-content"
-      class="mx-auto d-flex align-center"
+      style="width:95%; height:fit-content; position:relative;"
+      class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
-      <v-container fill-height fluid class="d-flex">
-        <!-- 入力欄 -->
-        <v-menu label="list" location="top" :close-on-content-click="false">
-          <template v-slot:activator="{ props }">
-            <!-- 入力部分 -->
-            <v-textarea
-              id="inp"
-              ref="inp"
-              :disabled="!checkCanITalk()"
-              :placeholder="
-                checkCanITalk()
-                  ? channelInfo.channelname + 'へ送信'
-                  : channelInfo.channelname +
-                    ' : ' +
-                    channelInfo.canTalk +
-                    '以上が発言可能'
-              "
-              @keydown.enter.prevent="EnterTrigger"
-              @keydown.@="AtsignTrigger"
-              @keydown.up="changeMentionUserSelect"
-              @keydown.down="changeMentionUserSelect"
-              @paste="fileInputFromClipboard"
-              variant="solo"
-              max-rows="5"
-              clearable
-              no-resize
-              auto-grow
-              v-model="txt"
-              v-bind="props"
-              rows="1"
-            >
-              <!-- ファイルアップロード部分 -->
-              <template v-slot:prepend-inner>
-                <!-- ファイルアップロードボタン -->
-                <v-btn
-                  @click="fileInputRef"
-                  color="white"
-                  variant="text"
-                  size="x-small"
-                  icon="mdi:mdi-plus"
-                  class="rounded-lg"
-                >
-                  <v-icon> mdi:mdi-plus </v-icon>
-                  <v-tooltip activator="parent" location="top">
-                    {{
-                      humanFileSize(
-                        Serverinfo.config.MESSAGE.MESSAGE_FILE_MAXSIZE,
-                        true
-                      )
-                    }}まで
-                  </v-tooltip>
-                </v-btn>
-              </template>
-            </v-textarea>
-          </template>
 
-          <!-- ユーザー検索候補の表示 -->
-          <v-list max-height="30vh" v-if="searchMode.enabled" ref="optionsList">
-            <v-list-item
-              ref="optionsItem"
-              v-for="(i, index) in searchDisplayArray"
-              :key="index"
-            >
-              <span
-                @click="replaceQueryWithName(i.userid)"
-                style="cursor: pointer"
-              >
-                <v-avatar size="3%">
-                  <v-img :src="uri + '/img/' + i.userid"> </v-img>
-                </v-avatar>
+      <!-- メンションウィンドウ -->
+      <v-card
+        v-if="searchMode.enabled"
+        width="100%"
+        position="absolute"
+        max-height="30vh"
+        ref="optionsList"
+        class="rounded-lg"
+        style="bottom:101%; overflow-y:auto;"
+      >
+        <v-list-item
+          ref="optionsItem"
+          v-for="(i, index) in searchDisplayArray"
+          :key="index"
+        >
+          <span
+            @click="replaceQueryWithName(i.userid)"
+            style="cursor: pointer"
+          >
+            <v-avatar size="3%">
+              <v-img :src="uri + '/img/' + i.userid"> </v-img>
+            </v-avatar>
 
-                <span style="margin-left: 8px">
-                  <span v-if="index === searchMode.selectedIndex"> ⇒ </span>
-                  {{ i.username }}
-                </span>
-              </span>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+            <span style="margin-left: 8px">
+              <span v-if="index === searchMode.selectedIndex"> ⇒ </span>
+              {{ i.username }}
+            </span>
+          </span>
+        </v-list-item>
+      </v-card>
+
+      <!-- textarea -->
+      <v-textarea
+        id="inp"
+        ref="inp"
+        :disabled="!checkCanITalk()"
+        :placeholder="
+          checkCanITalk()
+            ? channelInfo.channelname + 'へ送信'
+            : channelInfo.channelname +
+              ' : ' +
+              channelInfo.canTalk +
+              '以上が発言可能'
+        "
+        @keydown.enter.prevent="EnterTrigger"
+        @keydown.@="AtsignTrigger"
+        @keydown.up="changeMentionUserSelect"
+        @keydown.down="changeMentionUserSelect"
+        @paste="fileInputFromClipboard"
+        variant="solo"
+        max-rows="5"
+        clearable
+        no-resize
+        auto-grow
+        v-model="txt"
+        v-bind="props"
+        rows="1"
+      >
+        <!-- ファイルアップロード部分 -->
+        <template v-slot:prepend-inner>
+          <!-- ファイルアップロードボタン -->
+          <v-btn
+            @click="fileInputRef"
+            color="white"
+            variant="text"
+            size="x-small"
+            icon="mdi:mdi-plus"
+            class="rounded-lg"
+          >
+            <v-icon> mdi:mdi-plus </v-icon>
+            <v-tooltip activator="parent" location="top">
+              {{
+                humanFileSize(
+                  Serverinfo.config.MESSAGE.MESSAGE_FILE_MAXSIZE,
+                  true
+                )
+              }}まで
+            </v-tooltip>
+          </v-btn>
+          <!-- 線 -->
+          <v-divider vertical thickness="2" class="my-2 mr-1"></v-divider>
+        </template>
 
         <!-- 送信ボタン -->
-        <v-btn
-          @click="msgSend(null, 'byBtn')"
-          :disabled="
-            txt.length > Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH
-          "
-          icon=""
-          size="large"
-          class="rounded-lg"
-          style="margin: 0 1vw"
-          elevation="0"
-          color="primary"
-        >
-          <v-icon
-            v-if="txt.length <= Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH"
-            icon="mdi:mdi-send-outline"
-          ></v-icon>
-          <span
-            v-if="txt.length > Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH"
-            >{{
-              Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH - txt.length
-            }}</span
+        <template v-slot:append-inner>
+          <v-btn
+            @click="msgSend(null, 'byBtn')"
+            :disabled="
+              txt.length > Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH
+            "
+            icon=""
+            size="small"
+            class="rounded-lg ml-1"
+            elevation="0"
+            color="primary"
           >
-          <v-tooltip activator="parent" location="top"> 送信! </v-tooltip>
-        </v-btn>
-      </v-container>
+            <v-icon
+              v-if="txt.length <= Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH"
+              icon="mdi:mdi-send-outline"
+            ></v-icon>
+            <span
+              v-if="txt.length > Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH"
+              >{{
+                Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH - txt.length
+              }}</span
+            >
+            <v-tooltip activator="parent" location="top"> 送信! </v-tooltip>
+          </v-btn>
+        </template>
+      </v-textarea>
     </div>
   </div>
 </template>
