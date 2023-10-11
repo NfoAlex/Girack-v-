@@ -650,7 +650,7 @@ export default {
     />
 
     <div
-      style="width: 90%; height: fit-content"
+      style="width: 95%; height: fit-content"
       class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
 
@@ -736,6 +736,7 @@ export default {
           <!-- 線 -->
           <v-divider vertical thickness="2" class="my-2 mr-1"></v-divider>
         </template>
+
         <!-- 送信ボタン -->
         <template v-slot:append-inner>
           <v-btn
