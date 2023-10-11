@@ -514,6 +514,7 @@ export default {
 <template>
   <div
     id="channelWindow"
+    class="d-flex flex-column-reverse"
     @scroll="setScrollState"
     style="height: 100%; width: 100%; overflow-y: auto"
   >
