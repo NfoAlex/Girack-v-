@@ -143,6 +143,7 @@ export default {
             //レンダーを待ってからスクロール
             this.$nextTick(() => {
               //this.scrollIt(); //スクロールする
+              this.setScrollState();
               this.msgDisplayNum = 40; //メッセージの表示数の初期化
 
               //プレビューならここで停止
@@ -519,7 +520,6 @@ export default {
       v-for="(m, index) in cropMessage"
       :key="m.messageid"
     >
-      
       
       <!-- メッセージそのもの-->
       <ContentRender
