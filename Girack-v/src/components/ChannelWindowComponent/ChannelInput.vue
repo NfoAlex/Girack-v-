@@ -662,7 +662,7 @@ export default {
         max-height="30vh"
         ref="optionsList"
         class="rounded-lg"
-        style="bottom:101%; overflow-y:auto;"
+        style="bottom:101%; overflow-y:auto; z-index:100;"
       >
         <v-list-item
           ref="optionsItem"
