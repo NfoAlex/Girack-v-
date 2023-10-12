@@ -372,6 +372,11 @@ export default {
           //faviconを通常表示に
           document.querySelector("link[rel~='icon']").href = "/icon.svg";
         }
+      } else if ( //もし一番上にスクロールしているなら履歴読み込み
+        channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight
+       ) {
+        console.log("一番上やね");
+        this.cropMessageExtend();
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
       }
@@ -572,7 +577,7 @@ export default {
     </div>
 
     <!-- 履歴読み込みボタン -->
-    <div
+    <!-- <div
       v-if="MsgDBActive !== undefined"
       style="
         display: flex;
@@ -591,6 +596,10 @@ export default {
       <v-btn v-else class="rounded-lg" size="small" variant="text"
         >履歴を読み込むにはチャンネルに参加してください...</v-btn
       >
+    </div> -->
+
+    <div class="d-flex justify-center mt-5">
+      スクロールしろー
     </div>
 
     <!-- 一番下にスクロールするボタン -->
