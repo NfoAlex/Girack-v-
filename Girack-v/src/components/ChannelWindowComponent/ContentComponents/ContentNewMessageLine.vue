@@ -7,7 +7,7 @@ export default {
     return { MsgReadTime };
   },
 
-  props: ["m", "index", "MsgDBActive"],
+  props: ["m", "index", "MsgDBActive", "msgDisplayNum"],
 
   computed: {
     //現在いるパス(チャンネルID)を返すだけ
@@ -21,11 +21,10 @@ export default {
     checkShowNewMessageLine(m, index) {
       try {
         if (
-          //メッセージの表示分最後でなく、比較時間がメッセージと同じならtrue
-          (m.time === this.MsgReadTime[this.getPath].timeBefore &&
-            this.MsgDBActive.length - 1 !== index &&
-            index !== 24) || //表示している最初のメッセージで、時間が比較時間より後ならとにかくtrue
-          (index === 0 && m.time > this.MsgReadTime[this.getPath].timeBefore)
+          //表示部分が最新のでなく、比較時間がメッセージと同じならtrue
+          m.time === this.MsgReadTime[this.getPath].timeBefore &&
+          //this.MsgDBActive.length - 1 !== index &&
+          index !== 0
         ) {
           return true;
         } else {
@@ -50,8 +49,8 @@ export default {
       class="pa-2 flex-grow-1 flex-shrink-0"
       size="x-small"
     >
-      <span v-if="index === 0"> 過去に更に新着があります... </span>
-      <span v-else> ここから新着 </span>
+      <span v-if="index === msgDisplayNum"> 過去に更に新着があります... </span>
+      <span v-if="index !== 0"> ここから新着 </span>
     </v-chip>
     <v-divider color="white" thickness="2px" class="flex-shrink-1"></v-divider>
   </span>

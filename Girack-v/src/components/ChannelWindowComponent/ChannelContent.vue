@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       StateFocus: true, //Girackにフォーカスしているかどうか
-      msgDisplayNum: 25,
+      msgDisplayNum: 65,
       msgIdEditing: "xxxxxxx",
 
       //watchする時のハンドラ用
@@ -75,19 +75,12 @@ export default {
     cropMessage() {
       try {
         //履歴を表示し始める位置数計算
-        let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
+        //let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
         //もし開始位置が0未満なら0にする
-        if (displayStartPosition < 0) displayStartPosition = 0;
-
-        /*
-        console.log(
-          "Content :: cropMessage : 履歴を出力します 範囲->",
-          this.msgDisplayNum
-        );
-        */
+        //if (displayStartPosition < 0) displayStartPosition = 0;
 
         //履歴を削って返す
-        return this.MsgDBActive.slice(displayStartPosition);
+        return this.MsgDBActive.slice(0,this.msgDisplayNum);
       } catch (e) {
         console.log("Content :: cropMessage : MsgDBが空...?");
       }
@@ -133,7 +126,7 @@ export default {
         try {
           if (this.MsgDB[newPage.params.id].length === 0) return 0; //履歴の長さが0なら
           //比較用既読時間を更新
-          let latestTime = this.MsgDB[oldPage.params.id].slice(-1)[0].time;
+          let latestTime = this.MsgDB[oldPage.params.id][0].time;
           this.MsgReadTime[oldPage.params.id].timeBefore = latestTime;
         } catch (e) {
           return 0; //エラーでも止める
@@ -147,10 +140,10 @@ export default {
         if (this.StateScrolled) {
           //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
           if (this.StateFocus || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
-            //レンダーを待ってからスクロール
+            //レンダーを待ってから処理
             this.$nextTick(() => {
-              this.scrollIt(); //スクロールする
-              this.msgDisplayNum = 25; //メッセージの表示数の初期化
+              this.setScrollState();
+              this.msgDisplayNum = 65; //メッセージの表示数の初期化
 
               //プレビューならここで停止
               if (this.channelInfo.previewmode) return 0;
@@ -158,7 +151,7 @@ export default {
               if (this.StateFocus) {
                 try {
                   //比較用既読時間を更新
-                  let latestTime = this.MsgDBActive.slice(-1)[0].time;
+                  let latestTime = this.MsgDBActive[0].time;
                   this.MsgReadTime[this.getPath].timeBefore = latestTime;
                 } catch(e) {
                   console.log("ChannelContent :: watch(MsgDBActive) : 履歴DB更新->", e);
@@ -234,25 +227,25 @@ export default {
     //表示する履歴を拡張する
     cropMessageExtend() {
       //もし表示する数が履歴の長さより長かったらさらに深い履歴をサーバーから取得する
-      if (this.msgDisplayNum + 15 > this.MsgDBActive.length) this.getHistory();
-      this.msgDisplayNum += 15;
+      if (this.msgDisplayNum + 30 > this.MsgDBActive.length) this.getHistory();
+      this.msgDisplayNum += 30;
     },
 
     //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
     checkDateDifference(index) {
       try {
         //もし一つ前のメッセージが存在しないなら処理を停止
-        if (this.cropMessage[index - 1] === undefined) return 0;
+        if (this.cropMessage[index + 1] === undefined) return 0;
 
         //一つ前のメッセージの日、月、年を取得
         let msgDayBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(6, 8)
+          this.cropMessage[index + 1].time.slice(6, 8)
         );
         let msgMonthBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(4, 6)
+          this.cropMessage[index + 1].time.slice(4, 6)
         );
         let msgYearBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(0, 4)
+          this.cropMessage[index + 1].time.slice(0, 4)
         );
 
         //調べているメッセージの日、月、年を取得
@@ -306,8 +299,7 @@ export default {
         (
           forcingTrue || //そもそも引数でtrueと渡されているなら
           (
-            channelWindow.scrollTop + channelWindow.clientHeight + 32 >=
-              channelWindow.scrollHeight || //スクロール位置を計算
+            channelWindow.scrollTop >= -4 ||
             channelWindow.scrollHeight <= channelWindow.clientHeight //もし縦幅がそもそも画面におさまっているなら
           )
         )
@@ -326,7 +318,7 @@ export default {
             this.MsgReadTime[this.getPath].mention !== 0
           ) {
             //最新のメッセージを取得するために履歴の長さを予め取得
-            let latestTime = this.MsgDBActive.slice(-1)[0].time;
+            let latestTime = this.MsgDBActive[0].time;
             //スクロールだけでは新着線は消さないため保存
             let timeBefore = this.MsgReadTime[this.getPath].timeBefore;
 
@@ -380,6 +372,13 @@ export default {
           //faviconを通常表示に
           document.querySelector("link[rel~='icon']").href = "/icon.svg";
         }
+      } else if ( //もし一番上にスクロールしているなら履歴読み込み
+        channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight + 1
+        &&
+        this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
+       ) {
+        //表示拡張させて履歴取得させる
+        this.cropMessageExtend();
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
       }
@@ -414,15 +413,8 @@ export default {
     startEditingMyRecentMessage(event) {
       //押されたのが上矢印キー、かつ入力中でないのなら
       if (event.key === "ArrowUp" && !this.InputState.isTyping) {
-        //メッセージ履歴の長さ
-        let msgLength = this.MsgDBActive.length-1;
-        //調べるメッセージのインデックス始まり(表示し始めてるところ)
-        let msgLookingNum = this.MsgDBActive.length - this.msgDisplayNum;
-        //表示インデックスが0未満なら0に設定
-        if (msgLength < msgLookingNum) msgLookingNum = 0;
-
         //配列を逆から探してユーザーIDが一致するものを探す
-        for (let i = msgLength; i >= msgLookingNum; i--) {
+        for (let i = 0; i <= this.msgDisplayNum; i++) {
           if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
             //編集中のメッセージIDを設定
             this.msgIdEditing = this.MsgDBActive[i].messageid;
@@ -514,47 +506,18 @@ export default {
 <template>
   <div
     id="channelWindow"
+    class="d-flex flex-column-reverse"
     @scroll="setScrollState"
     style="height: 100%; width: 100%; overflow-y: auto"
   >
 
-    <!-- 履歴が空なら -->
-    <div
-      id="rirekikara"
-      style="padding: 10%"
-      v-if="MsgDBActive === undefined || MsgDBActive.length === 0"
-    >
-      <p class="text-subtitle-1" style="text-align: center">あなたが最初!</p>
-    </div>
-
-    <!-- 履歴読み込みボタン -->
-    <div
-      v-if="MsgDBActive !== undefined"
-      style="
-        display: flex;
-        margin: 8px 0;
-        flex-direction: row;
-        justify-content: space-around;
-      "
-    >
-      <v-btn
-        v-if="!channelInfo.previewmode"
-        size="small"
-        @click="cropMessageExtend"
-        variant="text"
-        >↑過去を読み込む</v-btn
-      >
-      <v-btn v-else class="rounded-lg" size="small" variant="text"
-        >履歴を読み込むにはチャンネルに参加してください...</v-btn
-      >
-    </div>
-
-    <!-- !!!こっからメッセージ表示!!! -->
+    <!-- !!!このdivでメッセージ表示!!! -->
     <div
       style="z-index: 1"
       v-for="(m, index) in cropMessage"
       :key="m.messageid"
     >
+
       <!-- 日付線 -->
       <div
         v-if="checkDateDifference(index)"
@@ -584,13 +547,56 @@ export default {
         @close-editing="msgIdEditing='xxxxxx';"
       />
 
+      
+
       <!-- システムメッセージ -->
       <div style="width: 100%" v-if="m.isSystemMessage === true">
         <ContentSystemMessageRender :content="m.content" />
       </div>
 
       <!-- 新着メッセージ線 -->
-      <ContentNewMessageLine v-if="!channelInfo.previewmode" :m="m" :index="index" :MsgDBActive="MsgDBActive" />
+      <ContentNewMessageLine
+        v-if="!channelInfo.previewmode"
+        :m="m" 
+        :index="index"
+        :MsgDBActive="MsgDBActive"
+        :msgDisplayNum="msgDisplayNum"
+      />
+    </div>
+
+    <!-- 履歴が空なら -->
+    <div
+      id="rirekikara"
+      style="padding: 10%"
+      v-if="MsgDBActive === undefined || MsgDBActive.length === 0"
+    >
+      <p class="text-subtitle-1" style="text-align: center">あなたが最初!</p>
+    </div>
+
+    <!-- 履歴読み込みボタン -->
+    <div
+      v-if="MsgDBActive !== undefined && !CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY"
+      style="
+        display: flex;
+        margin: 8px 0;
+        flex-direction: row;
+        justify-content: space-around;
+      "
+    >
+      <v-btn
+        v-if="!channelInfo.previewmode"
+        size="small"
+        @click="cropMessageExtend"
+        variant="text"
+        >↑過去を読み込む</v-btn
+      >
+      <v-btn v-else class="rounded-lg" size="small" variant="text"
+        >履歴を読み込むにはチャンネルに参加してください...</v-btn
+      >
+    </div>
+
+    <div v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY" class="d-flex justify-center my-5">
+      スクロールしろー
     </div>
 
     <!-- 一番下にスクロールするボタン -->

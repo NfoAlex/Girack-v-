@@ -399,6 +399,12 @@ export default {
               >
               </v-checkbox>
               <v-checkbox
+                v-model="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY"
+                label="一番上へのスクロールで自動的に履歴を取得する"
+                density="compact"
+              >
+              </v-checkbox>
+              <v-checkbox
                 v-model="CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE"
                 label="新着メッセージが来た時にフォーカスしていなくてもスクロールする"
                 density="compact"

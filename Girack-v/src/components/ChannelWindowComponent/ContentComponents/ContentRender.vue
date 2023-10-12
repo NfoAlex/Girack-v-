@@ -76,12 +76,12 @@ export default {
     cropMessage() {
       try {
         //履歴を表示し始める位置数計算
-        let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
+        //let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
         //もし開始位置が0未満なら0にする
-        if (displayStartPosition < 0) displayStartPosition = 0;
+        //if (displayStartPosition < 0) displayStartPosition = 0;
 
         //履歴を削って返す
-        return this.MsgDBActive.slice(displayStartPosition);
+        return this.MsgDBActive.slice(0,this.msgDisplayNum);
       } catch (e) {
         console.log("Content :: cropMessage : MsgDBが空...?");
       }
@@ -170,15 +170,15 @@ export default {
     checkDateDifference(index) {
       try {
         //もし一つ前のメッセージが存在しないなら処理を停止
-        if (this.cropMessage[index - 1] === undefined) return 0;
+        if (this.cropMessage[index + 1] === undefined) return 0;
 
         //日を取得
         let msgDateBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(6, 8)
+          this.cropMessage[index + 1].time.slice(6, 8)
         );
         let msgDateThis = parseInt(this.cropMessage[index].time.slice(6, 8));
         //日付の差を計算
-        let dateDifference = msgDateBefore - msgDateThis;
+        let dateDifference = msgDateThis - msgDateBefore;
 
         //条件で日付線出すか決める
         if (dateDifference !== 0) {
@@ -196,7 +196,7 @@ export default {
       try {
         //分(min)差計算
         let msgTimeMinBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(10, 12)
+          this.cropMessage[index + 1].time.slice(10, 12)
         );
         let msgTimeMinThis = parseInt(
           this.cropMessage[index].time.slice(10, 12)
@@ -206,7 +206,7 @@ export default {
 
         //時(h)差計算
         let msgTimeHourBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(8, 10)
+          this.cropMessage[index + 1].time.slice(8, 10)
         );
         let msgTimeHourThis = parseInt(
           this.cropMessage[index].time.slice(8, 10)
@@ -218,7 +218,7 @@ export default {
         if (this.checkDateDifference(index)) return true;
 
         //メッセージ履歴のインデックス番号より一つ前と同じユーザーIDなら表示しない(false)と返す
-        if (this.cropMessage[index - 1].userid === userid) {
+        if (this.cropMessage[index + 1].userid === userid) {
           //このメッセージの一つ前のメッセージのユーザーID
           //条件でアバターを見せるか見せないか決める
           if (
@@ -251,10 +251,10 @@ export default {
       //前
       try {
         //そもそも一つ前のメッセージが存在するか確認
-        if (this.cropMessage[index - 1] !== undefined) {
+        if (this.cropMessage[index + 1] !== undefined) {
           AvatarNeedToShowBefore = this.checkShowAvatar(
-            this.cropMessage[index - 1].userid,
-            index - 1
+            this.cropMessage[index + 1].userid,
+            index + 1
           );
         }
       } catch (e) {
@@ -271,24 +271,24 @@ export default {
       //次
       try {
         //そもそも次のメッセージが存在するか確認
-        if (this.cropMessage[index + 1] !== undefined) {
+        if (this.cropMessage[index - 1] !== undefined) {
           AvatarNeedToShowNext = this.checkShowAvatar(
-            this.cropMessage[index + 1].userid,
-            index + 1
+            this.cropMessage[index - 1].userid,
+            index - 1
           );
         }
       } catch (e) {
         console.error(e);
       }
 
-      let SameWithBefore = false; //ひとつ前と送信者が同じかどうか
-      let SameWithNext = false; //次と送信者同じかどうか
+      let SameWithBefore = false; //ひとつ前と送信者が同じかどうかを格納
+      let SameWithNext = false; //次と送信者同じかどうかを格納
 
       //一つ前と送信者が今のと同じならそう記録
       try {
         //まず一つ前のメッセージがあるか確認
-        if (this.cropMessage[index - 1] !== undefined) {
-          if (this.cropMessage[index - 1].userid === userid) {
+        if (this.cropMessage[index + 1] !== undefined) {
+          if (this.cropMessage[index + 1].userid === userid) {
             SameWithBefore = true;
           }
         }
@@ -299,8 +299,8 @@ export default {
       //次の送信者が今のと同じならそう記録
       try {
         //まず次のメッセージがあるか確認
-        if (this.cropMessage[index + 1] !== undefined) {
-          if (this.cropMessage[index + 1].userid === userid) {
+        if (this.cropMessage[index - 1] !== undefined) {
+          if (this.cropMessage[index - 1].userid === userid) {
             SameWithNext = true;
           }
         }
@@ -534,17 +534,6 @@ export default {
             @mouseover="mouseOverMsg(m.messageid, 'on')"
             @mouseleave="mouseOverMsg(m.messageid, 'off')"
           >
-            <!-- 過去を表示していたら -->
-            <span
-              v-if="index === msgDisplayNum - 25 && msgDisplayNum !== 25"
-              class="d-flex align-center"
-            >
-              <v-divider class="flex-grow-0 flex-shrink-1"></v-divider>
-              <span class="flex-grow-1 flex-shrink-0" style="margin: 0 8px"
-                >ここから過去</span
-              >
-              <v-divider class="flex-grow-0 flex-shrink-1"></v-divider>
-            </span>
 
             <!-- ユーザー名と時間表記 -->
             <div
