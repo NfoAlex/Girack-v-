@@ -119,7 +119,7 @@ export default {
       for (let channelid in this.ChannelIndex) {
         try {
           //そのチャンネルの最新メッセージの時間を読み込む
-          let latestTime = this.MsgDB[channelid].slice(-1)[0].time;
+          let latestTime = this.MsgDB[channelid][0].time;
           
           //既読状態を最新へセット
           this.MsgReadTime[channelid] = {
