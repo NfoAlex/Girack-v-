@@ -374,6 +374,8 @@ export default {
         }
       } else if ( //もし一番上にスクロールしているなら履歴読み込み
         channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight
+        &&
+        this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY
        ) {
         console.log("一番上やね");
         this.cropMessageExtend();
@@ -576,7 +578,29 @@ export default {
       <p class="text-subtitle-1" style="text-align: center">あなたが最初!</p>
     </div>
 
-    <div class="d-flex justify-center my-5">
+    <!-- 履歴読み込みボタン -->
+    <div
+      v-if="MsgDBActive !== undefined && !CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY"
+      style="
+        display: flex;
+        margin: 8px 0;
+        flex-direction: row;
+        justify-content: space-around;
+      "
+    >
+      <v-btn
+        v-if="!channelInfo.previewmode"
+        size="small"
+        @click="cropMessageExtend"
+        variant="text"
+        >↑過去を読み込む</v-btn
+      >
+      <v-btn v-else class="rounded-lg" size="small" variant="text"
+        >履歴を読み込むにはチャンネルに参加してください...</v-btn
+      >
+    </div>
+
+    <div v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY" class="d-flex justify-center my-5">
       スクロールしろー
     </div>
 
