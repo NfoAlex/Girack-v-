@@ -598,7 +598,7 @@ export default {
       >
     </div> -->
 
-    <div class="d-flex justify-center mt-5">
+    <div class="d-flex justify-center my-5">
       スクロールしろー
     </div>
 
