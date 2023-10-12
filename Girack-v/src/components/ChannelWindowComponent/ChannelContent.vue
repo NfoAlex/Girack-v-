@@ -151,7 +151,7 @@ export default {
               if (this.StateFocus) {
                 try {
                   //比較用既読時間を更新
-                  let latestTime = this.MsgDBActive.slice(-1)[0].time;
+                  let latestTime = this.MsgDBActive[0].time;
                   this.MsgReadTime[this.getPath].timeBefore = latestTime;
                 } catch(e) {
                   console.log("ChannelContent :: watch(MsgDBActive) : 履歴DB更新->", e);
@@ -320,7 +320,7 @@ export default {
             this.MsgReadTime[this.getPath].mention !== 0
           ) {
             //最新のメッセージを取得するために履歴の長さを予め取得
-            let latestTime = this.MsgDBActive.slice(-1)[0].time;
+            let latestTime = this.MsgDBActive[0].time;
             //スクロールだけでは新着線は消さないため保存
             let timeBefore = this.MsgReadTime[this.getPath].timeBefore;
 
