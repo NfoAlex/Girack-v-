@@ -23,7 +23,7 @@ export default {
         if (
           //表示部分が最新のでなく、比較時間がメッセージと同じならtrue
           m.time === this.MsgReadTime[this.getPath].timeBefore &&
-          //this.MsgDBActive.length - 1 !== index &&
+          this.MsgDBActive.length - 1 !== index &&
           index !== 0
         ) {
           return true;
