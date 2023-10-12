@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       StateFocus: true, //Girackにフォーカスしているかどうか
-      msgDisplayNum: 40,
+      msgDisplayNum: 65,
       msgIdEditing: "xxxxxxx",
 
       //watchする時のハンドラ用
@@ -143,7 +143,7 @@ export default {
             //レンダーを待ってからスクロール
             this.$nextTick(() => {
               this.setScrollState();
-              this.msgDisplayNum = 40; //メッセージの表示数の初期化
+              this.msgDisplayNum = 65; //メッセージの表示数の初期化
 
               //プレビューならここで停止
               if (this.channelInfo.previewmode) return 0;
