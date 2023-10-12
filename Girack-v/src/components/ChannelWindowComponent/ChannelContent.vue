@@ -140,7 +140,7 @@ export default {
         if (this.StateScrolled) {
           //もしスクロールしきった状態、または新着が来るととにかくスクロールするという設定なら
           if (this.StateFocus || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
-            //レンダーを待ってからスクロール
+            //レンダーを待ってから処理
             this.$nextTick(() => {
               this.setScrollState();
               this.msgDisplayNum = 65; //メッセージの表示数の初期化
