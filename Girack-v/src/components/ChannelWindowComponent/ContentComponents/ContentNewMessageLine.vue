@@ -21,13 +21,10 @@ export default {
     checkShowNewMessageLine(m, index) {
       try {
         if (
-          //メッセージの表示分最後でなく、比較時間がメッセージと同じならtrue
-          (
-            m.time === this.MsgReadTime[this.getPath].timeBefore &&
-            this.MsgDBActive.length - 1 !== index &&
-            index !== 40
-          ) || //表示している最初のメッセージで、時間が比較時間より後ならとにかくtrue
-          (index === 0 && m.time > this.MsgReadTime[this.getPath].timeBefore)
+          //表示部分が最新のでなく、比較時間がメッセージと同じならtrue
+          m.time === this.MsgReadTime[this.getPath].timeBefore &&
+          this.MsgDBActive.length - 1 !== index &&
+          index !== 0
         ) {
           return true;
         } else {
