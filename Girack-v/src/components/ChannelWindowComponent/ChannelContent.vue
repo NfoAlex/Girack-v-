@@ -413,9 +413,6 @@ export default {
     startEditingMyRecentMessage(event) {
       //押されたのが上矢印キー、かつ入力中でないのなら
       if (event.key === "ArrowUp" && !this.InputState.isTyping) {
-        //メッセージ履歴の長さ
-        let msgLength = this.MsgDBActive.length-1;
-
         //配列を逆から探してユーザーIDが一致するものを探す
         for (let i = 0; i <= this.msgDisplayNum; i++) {
           if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
