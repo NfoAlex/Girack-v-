@@ -235,17 +235,17 @@ export default {
     checkDateDifference(index) {
       try {
         //もし一つ前のメッセージが存在しないなら処理を停止
-        if (this.cropMessage[index - 1] === undefined) return 0;
+        if (this.cropMessage[index + 1] === undefined) return 0;
 
         //一つ前のメッセージの日、月、年を取得
         let msgDayBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(6, 8)
+          this.cropMessage[index + 1].time.slice(6, 8)
         );
         let msgMonthBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(4, 6)
+          this.cropMessage[index + 1].time.slice(4, 6)
         );
         let msgYearBefore = parseInt(
-          this.cropMessage[index - 1].time.slice(0, 4)
+          this.cropMessage[index + 1].time.slice(0, 4)
         );
 
         //調べているメッセージの日、月、年を取得
@@ -524,16 +524,6 @@ export default {
       v-for="(m, index) in cropMessage"
       :key="m.messageid"
     >
-      
-      <!-- メッセージそのもの-->
-      <ContentRender
-        :m="m"
-        :index="index"
-        :MsgDBActive="MsgDBActive"
-        :msgDisplayNum="msgDisplayNum"
-        :msgEditing="msgIdEditing===m.messageid?true:false"
-        @close-editing="msgIdEditing='xxxxxx';"
-      />
 
       <!-- 日付線 -->
       <div
@@ -553,6 +543,18 @@ export default {
           {{ getHistoryDate(index) }}
         </p>
       </div>
+      
+      <!-- メッセージそのもの-->
+      <ContentRender
+        :m="m"
+        :index="index"
+        :MsgDBActive="MsgDBActive"
+        :msgDisplayNum="msgDisplayNum"
+        :msgEditing="msgIdEditing===m.messageid?true:false"
+        @close-editing="msgIdEditing='xxxxxx';"
+      />
+
+      
 
       <!-- システムメッセージ -->
       <div style="width: 100%" v-if="m.isSystemMessage === true">
