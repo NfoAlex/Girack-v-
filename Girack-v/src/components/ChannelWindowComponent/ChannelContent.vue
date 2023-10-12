@@ -375,9 +375,9 @@ export default {
       } else if ( //もし一番上にスクロールしているなら履歴読み込み
         channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight
         &&
-        this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY
+        this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
        ) {
-        console.log("一番上やね");
+        //表示拡張させて履歴取得させる
         this.cropMessageExtend();
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
