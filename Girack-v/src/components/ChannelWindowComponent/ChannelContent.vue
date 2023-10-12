@@ -75,19 +75,12 @@ export default {
     cropMessage() {
       try {
         //履歴を表示し始める位置数計算
-        let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
+        //let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
         //もし開始位置が0未満なら0にする
-        if (displayStartPosition < 0) displayStartPosition = 0;
-
-        /*
-        console.log(
-          "Content :: cropMessage : 履歴を出力します 範囲->",
-          this.msgDisplayNum
-        );
-        */
+        //if (displayStartPosition < 0) displayStartPosition = 0;
 
         //履歴を削って返す
-        return this.MsgDBActive.slice(displayStartPosition);
+        return this.MsgDBActive.slice(0,this.msgDisplayNum);
       } catch (e) {
         console.log("Content :: cropMessage : MsgDBが空...?");
       }
