@@ -597,8 +597,18 @@ export default {
       >
     </div>
 
-    <div v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY" class="d-flex justify-center my-5">
+    <div
+      v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY && !ChannelIndex[getPath].haveAllHistory"
+      class="d-flex justify-center my-5"
+    >
       スクロールしろー
+    </div>
+
+    <div 
+      v-if="ChannelIndex[getPath].haveAllHistory"
+      class="d-flex justify-center my-5"
+    >
+      これで最後
     </div>
 
     <!-- 一番下にスクロールするボタン -->
