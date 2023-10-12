@@ -100,7 +100,11 @@ export default {
 </script>
 
 <template>
-  <div v-if="CLIENT_FULL_LOADED" style="height:100vh; width:100%;" class="d-flex mb-2 flex-column">
+  <div
+    v-if="CLIENT_FULL_LOADED"
+    style="height:100vh; width:100%;"
+    class="d-flex flex-column justify-start"
+  >
     <div class="w head flex-grow-0 flex-shrink-0">
       <ChannelHead :channelInfo="getChannelInfo" @toggleSidebar="$emit('toggleSidebar')" />
     </div>
