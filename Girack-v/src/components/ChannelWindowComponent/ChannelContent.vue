@@ -576,28 +576,6 @@ export default {
       <p class="text-subtitle-1" style="text-align: center">あなたが最初!</p>
     </div>
 
-    <!-- 履歴読み込みボタン -->
-    <!-- <div
-      v-if="MsgDBActive !== undefined"
-      style="
-        display: flex;
-        margin: 8px 0;
-        flex-direction: row;
-        justify-content: space-around;
-      "
-    >
-      <v-btn
-        v-if="!channelInfo.previewmode"
-        size="small"
-        @click="cropMessageExtend"
-        variant="text"
-        >↑過去を読み込む</v-btn
-      >
-      <v-btn v-else class="rounded-lg" size="small" variant="text"
-        >履歴を読み込むにはチャンネルに参加してください...</v-btn
-      >
-    </div> -->
-
     <div class="d-flex justify-center my-5">
       スクロールしろー
     </div>
