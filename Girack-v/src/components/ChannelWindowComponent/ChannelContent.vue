@@ -376,6 +376,8 @@ export default {
         channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight + 1
         &&
         this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
+        &&
+        !this.ChannelIndex[this.getPath].haveAllHistory
        ) {
         //表示拡張させて履歴取得させる
         this.cropMessageExtend();
