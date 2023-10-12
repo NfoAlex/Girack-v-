@@ -373,7 +373,7 @@ export default {
           document.querySelector("link[rel~='icon']").href = "/icon.svg";
         }
       } else if ( //もし一番上にスクロールしているなら履歴読み込み
-        channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight
+        channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight + 1
         &&
         this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
        ) {
