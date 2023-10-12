@@ -126,7 +126,7 @@ export default {
         try {
           if (this.MsgDB[newPage.params.id].length === 0) return 0; //履歴の長さが0なら
           //比較用既読時間を更新
-          let latestTime = this.MsgDB[oldPage.params.id].slice(-1)[0].time;
+          let latestTime = this.MsgDB[oldPage.params.id][0].time;
           this.MsgReadTime[oldPage.params.id].timeBefore = latestTime;
         } catch (e) {
           return 0; //エラーでも止める
