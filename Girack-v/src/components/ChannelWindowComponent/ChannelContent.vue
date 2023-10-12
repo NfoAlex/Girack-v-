@@ -415,13 +415,9 @@ export default {
       if (event.key === "ArrowUp" && !this.InputState.isTyping) {
         //メッセージ履歴の長さ
         let msgLength = this.MsgDBActive.length-1;
-        //調べるメッセージのインデックス始まり(表示し始めてるところ)
-        let msgLookingNum = this.MsgDBActive.length - this.msgDisplayNum;
-        //表示インデックスが0未満なら0に設定
-        if (msgLength < msgLookingNum) msgLookingNum = 0;
 
         //配列を逆から探してユーザーIDが一致するものを探す
-        for (let i = msgLength; i >= msgLookingNum; i--) {
+        for (let i = 0; i <= this.msgDisplayNum; i++) {
           if (this.MsgDBActive[i].userid === this.myUserinfo.userid) {
             //編集中のメッセージIDを設定
             this.msgIdEditing = this.MsgDBActive[i].messageid;
