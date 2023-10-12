@@ -406,6 +406,7 @@ socket.on("infoChannel", (dat) => {
     scope: "public", //チャンネルの公開範囲
     canTalk: "Member", //喋るのに必要なロール
     historyReadCount: 0, //すでに読んだ履歴の数
+    haveAllHistory: false, //履歴をすべて読み込んだかどうか
   };
 
   //もしプレビュー用のチャンネル情報、かつロードができていたら
@@ -564,11 +565,12 @@ socket.on("infoUser", (dat) => {
 });
 
 //メッセージの履歴受け取り
-socket.on("messageHistory", (history) => {
-  //履歴がそもそも空なら何もしない
-  if (history === 0) {
-    return;
-  }
+socket.on("messageHistory", (historyData) => {
+  //履歴データから抽出
+  let history = historyData.dat;
+  let endOfHistory = historyData.endOfHistory;
+
+  console.log("socket :: messageHistory : historyData->", historyData);
   
   let channelid = ""; //履歴を入れるチャンネルID
 
@@ -578,6 +580,11 @@ socket.on("messageHistory", (history) => {
     console.log("socket :: messageHistory : 履歴受け取りエラー", e);
     console.log(history);
     return;
+  }
+
+  //もし履歴の末端まで行ったのならそう記録
+  if (endOfHistory) {
+    dataChannel().ChannelIndex.value[channelid].haveAllHistory = true;
   }
 
   //プレビュー用の履歴データなら読み込むだけで処理を終える

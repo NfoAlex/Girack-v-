@@ -376,6 +376,8 @@ export default {
         channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight + 1
         &&
         this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
+        &&
+        !this.ChannelIndex[this.getPath].haveAllHistory
        ) {
         //表示拡張させて履歴取得させる
         this.cropMessageExtend();
@@ -595,8 +597,18 @@ export default {
       >
     </div>
 
-    <div v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY" class="d-flex justify-center my-5">
+    <div
+      v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY && !ChannelIndex[getPath].haveAllHistory"
+      class="d-flex justify-center my-5"
+    >
       スクロールしろー
+    </div>
+
+    <div 
+      v-if="ChannelIndex[getPath].haveAllHistory"
+      class="d-flex justify-center my-5"
+    >
+      これで最後
     </div>
 
     <!-- 一番下にスクロールするボタン -->
