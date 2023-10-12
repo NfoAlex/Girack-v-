@@ -142,7 +142,6 @@ export default {
           if (this.StateFocus || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
             //レンダーを待ってからスクロール
             this.$nextTick(() => {
-              //this.scrollIt(); //スクロールする
               this.setScrollState();
               this.msgDisplayNum = 40; //メッセージの表示数の初期化
 
