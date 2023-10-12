@@ -515,7 +515,6 @@ export default {
 
     <!-- !!!このdivでメッセージ表示!!! -->
     <div
-      style="z-index: 1"
       v-for="(m, index) in cropMessage"
       :key="m.messageid"
     >
