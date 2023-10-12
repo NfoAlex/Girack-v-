@@ -549,8 +549,6 @@ export default {
         @close-editing="msgIdEditing='xxxxxx';"
       />
 
-      
-
       <!-- システムメッセージ -->
       <div style="width: 100%" v-if="m.isSystemMessage === true">
         <ContentSystemMessageRender :content="m.content" />
