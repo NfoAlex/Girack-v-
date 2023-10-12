@@ -76,12 +76,12 @@ export default {
     cropMessage() {
       try {
         //履歴を表示し始める位置数計算
-        let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
+        //let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
         //もし開始位置が0未満なら0にする
-        if (displayStartPosition < 0) displayStartPosition = 0;
+        //if (displayStartPosition < 0) displayStartPosition = 0;
 
         //履歴を削って返す
-        return this.MsgDBActive.slice(displayStartPosition);
+        return this.MsgDBActive.slice(0,this.msgDisplayNum);
       } catch (e) {
         console.log("Content :: cropMessage : MsgDBが空...?");
       }
@@ -281,8 +281,8 @@ export default {
         console.error(e);
       }
 
-      let SameWithBefore = false; //ひとつ前と送信者が同じかどうか
-      let SameWithNext = false; //次と送信者同じかどうか
+      let SameWithBefore = false; //ひとつ前と送信者が同じかどうかを格納
+      let SameWithNext = false; //次と送信者同じかどうかを格納
 
       //一つ前と送信者が今のと同じならそう記録
       try {
