@@ -664,6 +664,7 @@ export default {
         </template>
         <!-- ここからホバーメニュー -->
         <ContentHoverMenu
+          v-if="!msgEditing"
           @update-editing-message="msgEditing=true"
           @cancelEditing="msgEditing=false"
           style="z-index: 30"
