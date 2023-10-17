@@ -33,13 +33,6 @@ export default {
         //現在の入力欄上のカーソル位置
         let currentTxtCursor = document.getElementById("editingTextArea").selectionStart;
 
-        //テキストを現在のカーソル位置をもとに分裂させる
-        let txtBefore = this.editTxt.slice(0, currentTxtCursor);
-        let txtAfter = this.editTxt.slice(currentTxtCursor);
-
-        //改行を挿入
-        this.editTxt = txtBefore + "\n" + txtAfter;
-
         //カーソル位置を改行のすぐ次へ移動
         this.$nextTick(() => {
           document.getElementById("editingTextArea").setSelectionRange(currentTxtCursor + 1, currentTxtCursor + 1);
@@ -150,7 +143,9 @@ export default {
     <!-- 編集部分 -->
     <v-textarea
       id="editingTextArea"
-      @keydown.enter.prevent="null"
+      auto-grow
+      max-rows="5"
+      rows="1"
       v-model="editTxt"
       variant="outlined"
     >
@@ -188,6 +183,7 @@ export default {
       </template>
     </v-textarea>
 
+    <!-- 削除の確認 -->
     <v-dialog
       v-model="dialogCheckToDelete"
       class="ma-3 mx-auto"
