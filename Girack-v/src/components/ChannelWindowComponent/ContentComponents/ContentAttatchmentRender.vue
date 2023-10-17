@@ -148,7 +148,7 @@ export default {
           imageDialogSrc = filesrc + channelid + '/' + file.fileid;
         "
         class="pa-2"
-        style="height: 150px; width: 100%; max-width: 250px; cursor: pointer"
+        style="width: 100%; max-width: 250px; max-height: 200px; cursor: pointer"
         :src="filesrc + channelid + '/' + file.fileid"
       >
         <template v-slot:error>
