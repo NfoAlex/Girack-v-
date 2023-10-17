@@ -188,6 +188,7 @@ export default {
       </template>
     </v-textarea>
 
+    <!-- 削除の確認 -->
     <v-dialog
       v-model="dialogCheckToDelete"
       class="ma-3 mx-auto"
