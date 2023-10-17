@@ -150,7 +150,6 @@ export default {
     <!-- 編集部分 -->
     <v-textarea
       id="editingTextArea"
-      @keydown.enter.prevent="null"
       :rows="(editTxt.match(/\n/g) || []).length+1"
       v-model="editTxt"
       variant="outlined"
