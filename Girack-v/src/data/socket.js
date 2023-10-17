@@ -784,18 +784,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
         checkMsgNewCount(index);
       }
     }
-
-    //既読状態を適用
-    //dataMsg().MsgReadTime.value = userSaveMsgReadState.msgReadState;
   }
-
-  //メッセージ履歴の取得
-  // for (let index in dataUser().myUserinfo.value.channelJoined) {
-  //   //チャンネルIDを抽出
-  //   let channelid = dataUser().myUserinfo.value.channelJoined[index];
-  //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
-  //   getMessage(channelid, 40); //リクエスト送信する
-  // }
 });
 
 //チャンネル順番データの受け取り、適用
