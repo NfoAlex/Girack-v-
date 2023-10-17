@@ -379,8 +379,8 @@ export default {
         &&
         !this.ChannelIndex[this.getPath].haveAllHistory
        ) {
-        //表示拡張させて履歴取得させる
-        this.cropMessageExtend();
+        //表示拡張させて履歴取得させる(スクロール位置が残ってしまわないように遅延はさむ)
+        setTimeout(this.cropMessageExtend, 50);
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
       }
