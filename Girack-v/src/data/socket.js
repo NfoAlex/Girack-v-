@@ -635,6 +635,8 @@ socket.on("messageHistory", (historyData) => {
       history.length;
   }
 
+  console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
+
   //もしメッセージ履歴が全部あり、
   if (!CLIENT_FULL_LOADED.value) {checkPreparedToLoad()};
 });
@@ -727,8 +729,8 @@ socket.on("infoUserSaveConfig", (userSaveConfig) => {
 //既読状態データの受け取り、適用
 socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
   console.log(
-    "socket :: infoUserSaveMsgReadState : 既読状態受信",
-    userSaveMsgReadState
+    "socket :: infoUserSaveMsgReadState : 既読状態受信->", userSaveMsgReadState,
+    " チャンネルIndex->", dataUser().myUserinfo.value.channelJoined
   );
 
   //もしクラウド上に設定が保存されていたなら参加していないチャンネルの既読状態を削除
@@ -764,7 +766,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
 
     //既読状態をチャンネルごとに確認して違っていたら更新
     for (let index in userSaveMsgReadState.msgReadState) {
-      //既読状態があればチェック、ないならとにかく更新
+      //既読状態があればチェック、ないならとにかく作って更新
       if (dataMsg().MsgReadTime.value[index] !== undefined) {
         if (dataMsg().MsgReadTime.value[index].time !== userSaveMsgReadState.msgReadState[index].time) {
           //そのチャンネルの既読状態を更新
@@ -788,6 +790,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
     }
   }
 
+  console.log("socket :: infoUserSaveMsgReadState : これ受け取った時点の既読状態->", dataMsg().MsgReadTime.value);
 
   //ロード確認
   if (!CLIENT_FULL_LOADED.value) {checkPreparedToLoad()};
@@ -945,7 +948,10 @@ export function checkMsgNewCount(channelid) {
   //確認した回数
   let checkCount = 0;
 
-  console.log("socket :: checkMsgNewCount : 確認するチャンネル->", channelid);
+  console.log("socket :: checkMsgNewCount :",
+    " 確認するチャンネル->", channelid,
+    " 既読状態->", dataMsg().MsgReadTime.value[channelid]
+  );
 
   //既読状態がそもそも無ければ作る
   if (dataMsg().MsgReadTime.value[channelid] === undefined) {
@@ -955,18 +961,24 @@ export function checkMsgNewCount(channelid) {
       new: 0
     };
   };
+  console.log("1");
 
   //新着数初期化
   dataMsg().MsgReadTime.value[channelid].mention = 0;
   dataMsg().MsgReadTime.value[channelid].new = 0;
+
+  console.log("2");
 
   //もし時間データがなければ0と設定
   if (dataMsg().MsgReadTime.value[channelid].time === undefined) {
     dataMsg().MsgReadTime.value[channelid].time = 0;
   }
 
+  console.log("3");
+
   //受信した履歴の中で新着のものかどうか調べて新着数を加算(30まで)
   for (let index in msgDBChecking) {
+    console.log("4");
     //もしユーザーの名前リストに名前がなかったら
     if (dataUser().UserIndex.value[msgDBChecking[index].userid] === undefined) {
       //データ受け取るまでのホルダー
@@ -982,6 +994,8 @@ export function checkMsgNewCount(channelid) {
         },
       });
     }
+
+    console.log("socket :: checkMsgNewCount : 比較するメッセ時間->", parseInt(msgDBChecking[index].time), " 既読時間->", parseInt(dataMsg().MsgReadTime.value[channelid].time))
 
     //システムメッセージじゃないなら既読状態の時間から新着メッセージ数を加算
     if (
