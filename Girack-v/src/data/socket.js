@@ -635,9 +635,8 @@ socket.on("messageHistory", (historyData) => {
       history.length;
   }
 
-  checkPreparedToLoad();
-  //新着数を確認
-  //checkMsgNewCount(channelid);
+  //もしメッセージ履歴が全部あり、
+  if (!CLIENT_FULL_LOADED.value) {checkPreparedToLoad()};
 });
 
 //認証結果
@@ -786,9 +785,9 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
     }
   }
 
-  //ロード確認
-  checkPreparedToLoad();
 
+  //ロード確認
+  if (!CLIENT_FULL_LOADED.value) {checkPreparedToLoad()};
 });
 
 //チャンネル順番データの受け取り、適用
