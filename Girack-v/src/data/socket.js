@@ -788,6 +788,10 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
       }
     }
   }
+
+  //ロード確認
+  checkPreparedToLoad();
+
 });
 
 //チャンネル順番データの受け取り、適用
@@ -917,14 +921,21 @@ export function updateMsgReadState() {
 //履歴データが参加チャンネル分あり、既読状態が揃っているならロードできたとマークする
 function checkPreparedToLoad() {
   if (
-    dataMsg().MsgDB.value.length
-      ===
-    dataUser().myUserinfo.value.channelJoined.length
+    (
+      Object.keys(dataMsg().MsgDB.value).length
+        ===
+      dataUser().myUserinfo.value.channelJoined.length
+    )
       &&
-    Object.keys(dataMsg().MsgReadTime.value).length !== 0
+    (Object.keys(dataMsg().MsgReadTime.value).length !== 0)
   ) {
+    //履歴の数分新着数確認する
+    for (let index in dataMsg().MsgReadTime.value) {
+      checkMsgNewCount(index);
+    }
+
     //ロードできたとマーク
-    this.CLIENT_FULL_LOADED = true;
+    CLIENT_FULL_LOADED.value = true;
   }
 }
 
