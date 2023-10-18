@@ -643,7 +643,7 @@ socket.on("messageHistory", (historyData) => {
   }
 
   //新着数を確認
-  checkMsgNewCount(channelid);
+  //checkMsgNewCount(channelid);
 });
 
 //認証結果
@@ -777,11 +777,14 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
           //そのチャンネルの既読状態を更新
           dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
           //新着確認
-          checkMsgNewCount(index);
+          //checkMsgNewCount(index);
         }
       } else {
-        dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
-        checkMsgNewCount(index);
+        try {
+          dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
+          //checkMsgNewCount(index);
+          console.log("socket :: socket(infoUserSaveMsgReadState) : 確認する既読状態->", index);
+        } catch(e) {}
       }
     }
   }
