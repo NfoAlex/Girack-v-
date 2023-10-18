@@ -462,11 +462,6 @@ socket.on("infoChannel", (dat) => {
   if (!dataChannel().ChannelOrder.value.includes(dat.channelid)) {
     dataChannel().ChannelOrder.value.push(dat.channelid);
   }
-
-  //自分の参加チャンネル数と受け取ったチャンネルデータの数が一致したらロードできたと設定
-  if (dataUser().myUserinfo.value.channelJoined.length === Object.keys(dataChannel().ChannelIndex.value).length) {
-    //CLIENT_FULL_LOADED.value = true;
-  }
 });
 
 //プロフィール情報の受け取り
@@ -613,8 +608,6 @@ socket.on("messageHistory", (historyData) => {
     dataMsg().MsgDB.value[channelid] = history;
     return;
   }
-
-  let index = 0; //チャンネル参照インデックス変数
 
   if (dataMsg().MsgReadTime.value[channelid] !== undefined) {
     //既読状態の時間から計算するから予め新着数初期化
