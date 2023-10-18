@@ -911,6 +911,20 @@ export function updateMsgReadState() {
   });
 }
 
+//履歴データが参加チャンネル分あり、既読状態が揃っているならロードできたとマークする
+function checkPreparedToLoad() {
+  if (
+    dataMsg().MsgDB.value.length
+      ===
+    dataUser().myUserinfo.value.channelJoined.length
+      &&
+    Object.keys(dataMsg().MsgReadTime.value).length !== 0
+  ) {
+    //ロードできたとマーク
+    this.CLIENT_FULL_LOADED = true;
+  }
+}
+
 //指定のチャンネルでの履歴をまるごと対象にして新着数をカウントする
 export function checkMsgNewCount(channelid) {
   //新着数を確認する履歴
