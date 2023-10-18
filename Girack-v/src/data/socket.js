@@ -642,6 +642,7 @@ socket.on("messageHistory", (historyData) => {
       history.length;
   }
 
+  checkPreparedToLoad();
   //新着数を確認
   //checkMsgNewCount(channelid);
 });
