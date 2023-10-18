@@ -777,13 +777,10 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
         if (dataMsg().MsgReadTime.value[index].time !== userSaveMsgReadState.msgReadState[index].time) {
           //そのチャンネルの既読状態を更新
           dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
-          //新着確認
-          //checkMsgNewCount(index);
         }
       } else {
         try {
           dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
-          //checkMsgNewCount(index);
           console.log("socket :: socket(infoUserSaveMsgReadState) : 確認する既読状態->", index);
         } catch(e) {}
       }
