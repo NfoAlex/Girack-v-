@@ -2,7 +2,7 @@ import { ref } from "vue";
 
 //メッセージ履歴DB
 const MsgDB = ref({
-  // "001": [
+  // "0001": [
   //     {
   //         id: 0,
   //         username: "asdf",
