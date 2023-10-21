@@ -784,7 +784,6 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
           //ここで上書き
           dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
           dataMsg().MsgReadTime.value[index].timeBefore = userSaveMsgReadState.msgReadState[index].timeBefore;
-          console.log("socket :: socket(infoUserSaveMsgReadState) : 確認する既読状態->", index);
         } catch(e) {}
       }
     }
@@ -923,14 +922,17 @@ export function updateMsgReadState() {
 //履歴データが参加チャンネル分あり、既読状態が揃っているならロードできたとマークする
 function checkPreparedToLoad() {
   if (
-    (
+    ( //取得した履歴の数と参加チャンネルの数が一致して
       Object.keys(dataMsg().MsgDB.value).length
         ===
       dataUser().myUserinfo.value.channelJoined.length
     )
       &&
+    //かつ既読状態が取得できていたら
     (Object.keys(dataMsg().MsgReadTime.value).length !== 0)
   ) {
+    console.log("ロードできたな 履歴->", dataMsg().MsgDB.value);
+    console.log("試し          履歴->", dataMsg().MsgDB.value["0001"]);
     //履歴の数分新着数確認する
     for (let index in dataMsg().MsgReadTime.value) {
       checkMsgNewCount(index);
@@ -950,7 +952,9 @@ export function checkMsgNewCount(channelid) {
 
   console.log("socket :: checkMsgNewCount :",
     " 確認するチャンネル->", channelid,
-    " 既読状態->", dataMsg().MsgReadTime.value[channelid]
+    " 既読状態->", dataMsg().MsgReadTime.value[channelid],
+    " 履歴全部->", dataMsg().MsgDB.value,
+    " 履歴->", msgDBChecking
   );
 
   //既読状態がそもそも無ければ作る
