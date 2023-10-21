@@ -778,8 +778,8 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
           dataMsg().MsgReadTime.value[index] = {
             time: "0",
             timeBefore: "0",
-            new: 0,
-            mention: 0
+            new: "0",
+            mention: "0"
           };
           //ここで上書き
           dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
