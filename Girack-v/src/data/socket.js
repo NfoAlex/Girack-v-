@@ -931,8 +931,6 @@ function checkPreparedToLoad() {
     //かつ既読状態が取得できていたら
     (Object.keys(dataMsg().MsgReadTime.value).length !== 0)
   ) {
-    console.log("ロードできたな 履歴->", dataMsg().MsgDB.value);
-    console.log("試し          履歴->", dataMsg().MsgDB.value["0001"]);
     //履歴の数分新着数確認する
     for (let index in dataMsg().MsgReadTime.value) {
       checkMsgNewCount(index);
@@ -965,24 +963,18 @@ export function checkMsgNewCount(channelid) {
       new: 0
     };
   };
-  console.log("1");
 
   //新着数初期化
   dataMsg().MsgReadTime.value[channelid].mention = 0;
   dataMsg().MsgReadTime.value[channelid].new = 0;
-
-  console.log("2");
 
   //もし時間データがなければ0と設定
   if (dataMsg().MsgReadTime.value[channelid].time === undefined) {
     dataMsg().MsgReadTime.value[channelid].time = 0;
   }
 
-  console.log("3");
-
   //受信した履歴の中で新着のものかどうか調べて新着数を加算(30まで)
   for (let index in msgDBChecking) {
-    console.log("4");
     //もしユーザーの名前リストに名前がなかったら
     if (dataUser().UserIndex.value[msgDBChecking[index].userid] === undefined) {
       //データ受け取るまでのホルダー
@@ -998,8 +990,6 @@ export function checkMsgNewCount(channelid) {
         },
       });
     }
-
-    console.log("socket :: checkMsgNewCount : 比較するメッセ時間->", parseInt(msgDBChecking[index].time), " 既読時間->", parseInt(dataMsg().MsgReadTime.value[channelid].time))
 
     //システムメッセージじゃないなら既読状態の時間から新着メッセージ数を加算
     if (
