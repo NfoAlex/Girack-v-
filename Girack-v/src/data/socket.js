@@ -638,7 +638,8 @@ socket.on("messageHistory", (historyData) => {
   console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
 
   //もしメッセージ履歴が全部あり、
-  if (!CLIENT_FULL_LOADED.value) {checkPreparedToLoad()};
+  //if (!CLIENT_FULL_LOADED.value) {checkPreparedToLoad();}
+  checkPreparedToLoad();
 });
 
 //認証結果
