@@ -323,6 +323,7 @@ export default {
         <draggable
           v-model="ChannelOrder"
           item-key="id"
+          :disabled="isMobile"
         >
           <template #item="{element}">
             <div v-if="ChannelIndex[element]!==undefined">
