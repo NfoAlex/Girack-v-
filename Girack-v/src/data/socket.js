@@ -666,6 +666,7 @@ socket.on("messageHistory", (historyData) => {
 
   checkMsgNewCount(channelid);
 
+  //履歴の初回ロードがまだできていなかったら取得できたから確認して既読状態の取得
   if (!CLIENT_LOAD_FLAG.value["T2_HISTORY_LOADED"]) {
     //チャンネルの履歴がまだ全部ないと保存する変数
     let StillNotReady = false;
@@ -847,9 +848,7 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
     // }
   }
 
-  console.log("socket :: infoUserSaveMsgReadState : これ受け取った時点の既読状態->", dataMsg().MsgReadTime.value);
-
-  //ロード確認して新着カウント(ロードできててもやる)
+  //参加しているチャンネル分新着カウント(ロードできててもやる)
   for (let index in dataUser().myUserinfo.value.channelJoined) {
     //チャンネルID取り出し
     let channelid = dataUser().myUserinfo.value.channelJoined[index];
