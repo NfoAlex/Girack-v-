@@ -985,28 +985,6 @@ export function updateMsgReadState() {
   });
 }
 
-//履歴データが参加チャンネル分あり、既読状態が揃っているならロードできたとマークする
-function checkPreparedToLoad() {
-  if (
-    ( //取得した履歴の数と参加チャンネルの数が一致して
-      Object.keys(dataMsg().MsgDB.value).length
-        ===
-      dataUser().myUserinfo.value.channelJoined.length
-    )
-      &&
-    //かつ既読状態が取得できていたら
-    (Object.keys(dataMsg().MsgReadTime.value).length !== 0)
-  ) {
-    //履歴の数分新着数確認する
-    for (let index in dataMsg().MsgReadTime.value) {
-      checkMsgNewCount(index);
-    }
-
-    //ロードできたとマーク
-    CLIENT_FULL_LOADED.value = true;
-  }
-}
-
 //指定のチャンネルでの履歴をまるごと対象にして新着数をカウントする
 export function checkMsgNewCount(channelid) {
   //新着数を確認する履歴
