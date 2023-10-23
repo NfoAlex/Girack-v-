@@ -468,6 +468,27 @@ socket.on("infoChannel", (dat) => {
   if (!dataChannel().ChannelOrder.value.includes(dat.channelid)) {
     dataChannel().ChannelOrder.value.push(dat.channelid);
   }
+
+  //チャンネル情報の数と参加チャンネルの数が一致していて、かつロードがまだされていなかったなら
+  if (
+    (
+      Object.keys(dataChannel().ChannelIndex.value).length
+      ===
+      dataUser().myUserinfo.value.channelJoined.length
+    )
+    &&
+    !CLIENT_LOAD_FLAG.value["T1_CHANNELINFO_LOADED"]
+  ) {
+    //チャンネル情報をロードできたとマーク
+    CLIENT_LOAD_FLAG.value["T1_CHANNELINFO_LOADED"] = true;
+    //履歴を取得する
+    for (let index in dataUser().myUserinfo.value.channelJoined) {
+      //チャンネルIDを抽出
+      let channelid = dataUser().myUserinfo.value.channelJoined[index];
+      dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
+      getMessage(channelid, 40); //リクエスト送信する
+    }
+  }
 });
 
 //プロフィール情報の受け取り
@@ -645,8 +666,45 @@ socket.on("messageHistory", (historyData) => {
 
   checkMsgNewCount(channelid);
 
-  //ロード確認
-  //checkPreparedToLoad();
+  if (!CLIENT_LOAD_FLAG.value["T2_HISTORY_LOADED"]) {
+    //チャンネルの履歴がまだ全部ないと保存する変数
+    let StillNotReady = false;
+
+    //もし参加しているチャンネル分履歴データがあればロードできたと設定
+    for (let index in dataUser().myUserinfo.value.channelJoined) {
+      //チャンネルID取り出し
+      let channelid = dataUser().myUserinfo.value.channelJoined[index];
+      try {
+        //履歴がなく、またその履歴の最後まで読み込めていないことを確認(履歴0の時用)
+        if (
+          dataMsg().MsgDB.value[channelid] === undefined
+          &&
+          !dataChannel().ChannelIndex.value[channelid].haveAllHistory
+        ) {
+          StillNotReady = true; //ロードできていないとマーク
+          break; //履歴ないやんってなったらループ停止
+        }
+      }
+      catch(e) {
+        //そもそもChannelIndexにすらないならそのまま停止してロードできないとマーク
+        StillNotReady = true;
+        break;
+      }
+    }
+
+    //チャンネルがロードできているなら
+    if (!StillNotReady) {
+      //履歴のロードができたとマーク
+      CLIENT_LOAD_FLAG.value["T2_HISTORY_LOADED"] = true;
+      //既読状態の取得
+      socket.emit("getUserSaveMsgReadState", {
+        reqSender: {
+          userid: dataUser().myUserinfo.value["userid"],
+          sessionid: dataUser().myUserinfo.value["sessionid"],
+        },
+      });
+    }
+  }
 });
 
 //認証結果
@@ -664,14 +722,6 @@ socket.on("authResult", (dat) => {
 
     //クッキーから設定を読み込み
     loadDataFromCookie();
-
-    //既読状態の取得
-    socket.emit("getUserSaveMsgReadState", {
-      reqSender: {
-        userid: dat.userid,
-        sessionid: dat.sessionid,
-      },
-    });
 
     //チャンネル順番の取得
     socket.emit("getUserSaveChannelOrder", {
@@ -712,14 +762,6 @@ socket.on("authResult", (dat) => {
         },
       });
     }
-
-    //メッセージ履歴の取得
-    // for (let index in dataUser().myUserinfo.value.channelJoined) {
-    //   //チャンネルIDを抽出
-    //   let channelid = dataUser().myUserinfo.value.channelJoined[index];
-    //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
-    //   getMessage(channelid, 40); //リクエスト送信する
-    // }
   }
 });
 
@@ -797,18 +839,27 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
     }
 
     //メッセージ履歴の取得
-    for (let index in dataUser().myUserinfo.value.channelJoined) {
-      //チャンネルIDを抽出
-      let channelid = dataUser().myUserinfo.value.channelJoined[index];
-      dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
-      getMessage(channelid, 40); //リクエスト送信する
-    }
+    // for (let index in dataUser().myUserinfo.value.channelJoined) {
+    //   //チャンネルIDを抽出
+    //   let channelid = dataUser().myUserinfo.value.channelJoined[index];
+    //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
+    //   getMessage(channelid, 40); //リクエスト送信する
+    // }
   }
 
   console.log("socket :: infoUserSaveMsgReadState : これ受け取った時点の既読状態->", dataMsg().MsgReadTime.value);
 
   //ロード確認して新着カウント(ロードできててもやる)
-  checkPreparedToLoad();
+  for (let index in dataUser().myUserinfo.value.channelJoined) {
+    //チャンネルID取り出し
+    let channelid = dataUser().myUserinfo.value.channelJoined[index];
+    //メッセージの新着数を確認する
+    checkMsgNewCount(channelid);
+
+    //クライアントがロードできたとマーク
+    CLIENT_FULL_LOADED.value = true;
+  }
+  
 });
 
 //チャンネル順番データの受け取り、適用
