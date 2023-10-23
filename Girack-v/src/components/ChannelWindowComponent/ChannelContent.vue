@@ -350,7 +350,7 @@ export default {
         }
 
         //既読状態をCookieへ書き込み
-        setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
+        //setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
         let FLAGThereIsNewMessages = false; //新着アリという印
 
         //新着を確認してfaviconを戻すかどうか決める
