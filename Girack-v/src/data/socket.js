@@ -26,6 +26,12 @@ const {
 
 //クライアントがロードできたかどうかのフラグ
 export const CLIENT_FULL_LOADED = ref(false);
+//初期ロード用に必要な情報のロードフラグ管理用
+export const CLIENT_LOAD_FLAG = ref({
+  T1_CHANNELINFO_LOADED: false,
+  T2_HISTORY_LOADED: false,
+  T3_READSTATE_LOADED: false
+});
 
 //サーバー(インスタンス)情報
 export const Serverinfo = ref({
