@@ -26,6 +26,12 @@ const {
 
 //クライアントがロードできたかどうかのフラグ
 export const CLIENT_FULL_LOADED = ref(false);
+//初期ロード用に必要な情報のロードフラグ管理用
+export const CLIENT_LOAD_FLAG = ref({
+  T1_CHANNELINFO_LOADED: false,
+  T2_HISTORY_LOADED: false,
+  T3_READSTATE_LOADED: false
+});
 
 //サーバー(インスタンス)情報
 export const Serverinfo = ref({
@@ -463,9 +469,25 @@ socket.on("infoChannel", (dat) => {
     dataChannel().ChannelOrder.value.push(dat.channelid);
   }
 
-  //自分の参加チャンネル数と受け取ったチャンネルデータの数が一致したらロードできたと設定
-  if (dataUser().myUserinfo.value.channelJoined.length === Object.keys(dataChannel().ChannelIndex.value).length) {
-    CLIENT_FULL_LOADED.value = true;
+  //チャンネル情報の数と参加チャンネルの数が一致していて、かつロードがまだされていなかったなら
+  if (
+    (
+      Object.keys(dataChannel().ChannelIndex.value).length
+      ===
+      dataUser().myUserinfo.value.channelJoined.length
+    )
+    &&
+    !CLIENT_LOAD_FLAG.value["T1_CHANNELINFO_LOADED"]
+  ) {
+    //チャンネル情報をロードできたとマーク
+    CLIENT_LOAD_FLAG.value["T1_CHANNELINFO_LOADED"] = true;
+    //履歴を取得する
+    for (let index in dataUser().myUserinfo.value.channelJoined) {
+      //チャンネルIDを抽出
+      let channelid = dataUser().myUserinfo.value.channelJoined[index];
+      dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
+      getMessage(channelid, 40); //リクエスト送信する
+    }
   }
 });
 
@@ -614,8 +636,6 @@ socket.on("messageHistory", (historyData) => {
     return;
   }
 
-  let index = 0; //チャンネル参照インデックス変数
-
   if (dataMsg().MsgReadTime.value[channelid] !== undefined) {
     //既読状態の時間から計算するから予め新着数初期化
     dataMsg().MsgReadTime.value[channelid].new = 0;
@@ -642,8 +662,50 @@ socket.on("messageHistory", (historyData) => {
       history.length;
   }
 
-  //新着数を確認
+  console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
+
   checkMsgNewCount(channelid);
+
+  //履歴の初回ロードがまだできていなかったら取得できたから確認して既読状態の取得
+  if (!CLIENT_LOAD_FLAG.value["T2_HISTORY_LOADED"]) {
+    //チャンネルの履歴がまだ全部ないと保存する変数
+    let StillNotReady = false;
+
+    //もし参加しているチャンネル分履歴データがあればロードできたと設定
+    for (let index in dataUser().myUserinfo.value.channelJoined) {
+      //チャンネルID取り出し
+      let channelid = dataUser().myUserinfo.value.channelJoined[index];
+      try {
+        //履歴がなく、またその履歴の最後まで読み込めていないことを確認(履歴0の時用)
+        if (
+          dataMsg().MsgDB.value[channelid] === undefined
+          &&
+          !dataChannel().ChannelIndex.value[channelid].haveAllHistory
+        ) {
+          StillNotReady = true; //ロードできていないとマーク
+          break; //履歴ないやんってなったらループ停止
+        }
+      }
+      catch(e) {
+        //そもそもChannelIndexにすらないならそのまま停止してロードできないとマーク
+        StillNotReady = true;
+        break;
+      }
+    }
+
+    //チャンネルがロードできているなら
+    if (!StillNotReady) {
+      //履歴のロードができたとマーク
+      CLIENT_LOAD_FLAG.value["T2_HISTORY_LOADED"] = true;
+      //既読状態の取得
+      socket.emit("getUserSaveMsgReadState", {
+        reqSender: {
+          userid: dataUser().myUserinfo.value["userid"],
+          sessionid: dataUser().myUserinfo.value["sessionid"],
+        },
+      });
+    }
+  }
 });
 
 //認証結果
@@ -661,14 +723,6 @@ socket.on("authResult", (dat) => {
 
     //クッキーから設定を読み込み
     loadDataFromCookie();
-
-    //既読状態の取得
-    socket.emit("getUserSaveMsgReadState", {
-      reqSender: {
-        userid: dat.userid,
-        sessionid: dat.sessionid,
-      },
-    });
 
     //チャンネル順番の取得
     socket.emit("getUserSaveChannelOrder", {
@@ -709,14 +763,6 @@ socket.on("authResult", (dat) => {
         },
       });
     }
-
-    //メッセージ履歴の取得
-    for (let index in dataUser().myUserinfo.value.channelJoined) {
-      //チャンネルIDを抽出
-      let channelid = dataUser().myUserinfo.value.channelJoined[index];
-      dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
-      getMessage(channelid, 40); //リクエスト送信する
-    }
   }
 });
 
@@ -734,8 +780,8 @@ socket.on("infoUserSaveConfig", (userSaveConfig) => {
 //既読状態データの受け取り、適用
 socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
   console.log(
-    "socket :: infoUserSaveMsgReadState : 既読状態受信",
-    userSaveMsgReadState
+    "socket :: infoUserSaveMsgReadState : 既読状態受信->", userSaveMsgReadState,
+    " チャンネルIndex->", dataUser().myUserinfo.value.channelJoined
   );
 
   //もしクラウド上に設定が保存されていたなら参加していないチャンネルの既読状態を削除
@@ -771,31 +817,48 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
 
     //既読状態をチャンネルごとに確認して違っていたら更新
     for (let index in userSaveMsgReadState.msgReadState) {
-      //既読状態があればチェック、ないならとにかく更新
+      //既読状態があればチェック、ないならとにかく作って更新
       if (dataMsg().MsgReadTime.value[index] !== undefined) {
         if (dataMsg().MsgReadTime.value[index].time !== userSaveMsgReadState.msgReadState[index].time) {
           //そのチャンネルの既読状態を更新
           dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
-          //新着確認
-          checkMsgNewCount(index);
         }
       } else {
-        dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
-        checkMsgNewCount(index);
+        try {
+          //既読状態がないので作る
+          dataMsg().MsgReadTime.value[index] = {
+            time: "0",
+            timeBefore: "0",
+            new: "0",
+            mention: "0"
+          };
+          //ここで上書き
+          dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
+          dataMsg().MsgReadTime.value[index].timeBefore = userSaveMsgReadState.msgReadState[index].timeBefore;
+        } catch(e) {}
       }
     }
 
-    //既読状態を適用
-    //dataMsg().MsgReadTime.value = userSaveMsgReadState.msgReadState;
+    //メッセージ履歴の取得
+    // for (let index in dataUser().myUserinfo.value.channelJoined) {
+    //   //チャンネルIDを抽出
+    //   let channelid = dataUser().myUserinfo.value.channelJoined[index];
+    //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
+    //   getMessage(channelid, 40); //リクエスト送信する
+    // }
   }
 
-  //メッセージ履歴の取得
-  // for (let index in dataUser().myUserinfo.value.channelJoined) {
-  //   //チャンネルIDを抽出
-  //   let channelid = dataUser().myUserinfo.value.channelJoined[index];
-  //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
-  //   getMessage(channelid, 40); //リクエスト送信する
-  // }
+  //参加しているチャンネル分新着カウント(ロードできててもやる)
+  for (let index in dataUser().myUserinfo.value.channelJoined) {
+    //チャンネルID取り出し
+    let channelid = dataUser().myUserinfo.value.channelJoined[index];
+    //メッセージの新着数を確認する
+    checkMsgNewCount(channelid);
+
+    //クライアントがロードできたとマーク
+    CLIENT_FULL_LOADED.value = true;
+  }
+  
 });
 
 //チャンネル順番データの受け取り、適用
@@ -806,27 +869,6 @@ socket.on("infoUserSaveChannelOrder", (userSaveChannelOrder) => {
 
 //初回処理用のクッキーから設定や既読状態を読み込む
 function loadDataFromCookie() {
-  //既読状態をクッキーから取得して設定に適用
-  try {
-    //クッキーから既読状態を取得
-    let COOKIE_MsgReadTime = JSON.parse(getCookie("MsgReadTime"));
-    console.log("socket :: authResult : クッキーからのMsgReadTime ->");
-    console.log(Object.entries(COOKIE_MsgReadTime));
-
-    //既読状態のJSONを配列化して使いやすくする
-    let objCOOKIE_MsgReadTime = Object.entries(COOKIE_MsgReadTime);
-    //既読状態の新着数とメンション数を0へ初期化(ToDoこれを記録する時点で0になるようにする)
-    for (let index in objCOOKIE_MsgReadTime) {
-      COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].new = 0;
-      COOKIE_MsgReadTime[objCOOKIE_MsgReadTime[index][0]].mention = 0;
-    }
-
-    //既読状態をクッキーから取得
-    dataMsg().MsgReadTime.value = COOKIE_MsgReadTime;
-  } catch (e) {
-    console.error(e);
-  }
-
   //クッキーからチャンネルミュートリストを取得して設定に適用
   try {
     //クッキーからチャンネルミュートリストを取得
@@ -943,6 +985,28 @@ export function updateMsgReadState() {
   });
 }
 
+//履歴データが参加チャンネル分あり、既読状態が揃っているならロードできたとマークする
+function checkPreparedToLoad() {
+  if (
+    ( //取得した履歴の数と参加チャンネルの数が一致して
+      Object.keys(dataMsg().MsgDB.value).length
+        ===
+      dataUser().myUserinfo.value.channelJoined.length
+    )
+      &&
+    //かつ既読状態が取得できていたら
+    (Object.keys(dataMsg().MsgReadTime.value).length !== 0)
+  ) {
+    //履歴の数分新着数確認する
+    for (let index in dataMsg().MsgReadTime.value) {
+      checkMsgNewCount(index);
+    }
+
+    //ロードできたとマーク
+    CLIENT_FULL_LOADED.value = true;
+  }
+}
+
 //指定のチャンネルでの履歴をまるごと対象にして新着数をカウントする
 export function checkMsgNewCount(channelid) {
   //新着数を確認する履歴
@@ -950,7 +1014,12 @@ export function checkMsgNewCount(channelid) {
   //確認した回数
   let checkCount = 0;
 
-  console.log("socket :: checkMsgNewCount : 確認するチャンネル->", channelid);
+  console.log("socket :: checkMsgNewCount :",
+    " 確認するチャンネル->", channelid,
+    " 既読状態->", dataMsg().MsgReadTime.value[channelid],
+    " 履歴全部->", dataMsg().MsgDB.value,
+    " 履歴->", msgDBChecking
+  );
 
   //既読状態がそもそも無ければ作る
   if (dataMsg().MsgReadTime.value[channelid] === undefined) {
