@@ -637,8 +637,10 @@ socket.on("messageHistory", (historyData) => {
 
   console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
 
+  checkMsgNewCount(channelid);
+
   //ロード確認
-  checkPreparedToLoad();
+  //checkPreparedToLoad();
 });
 
 //認証結果
@@ -706,12 +708,12 @@ socket.on("authResult", (dat) => {
     }
 
     //メッセージ履歴の取得
-    for (let index in dataUser().myUserinfo.value.channelJoined) {
-      //チャンネルIDを抽出
-      let channelid = dataUser().myUserinfo.value.channelJoined[index];
-      dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
-      getMessage(channelid, 40); //リクエスト送信する
-    }
+    // for (let index in dataUser().myUserinfo.value.channelJoined) {
+    //   //チャンネルIDを抽出
+    //   let channelid = dataUser().myUserinfo.value.channelJoined[index];
+    //   dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
+    //   getMessage(channelid, 40); //リクエスト送信する
+    // }
   }
 });
 
@@ -787,12 +789,20 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
         } catch(e) {}
       }
     }
+
+    //メッセージ履歴の取得
+    for (let index in dataUser().myUserinfo.value.channelJoined) {
+      //チャンネルIDを抽出
+      let channelid = dataUser().myUserinfo.value.channelJoined[index];
+      dataMsg().MsgDB.value[channelid] = [];//メッセージDBを初期化
+      getMessage(channelid, 40); //リクエスト送信する
+    }
   }
 
   console.log("socket :: infoUserSaveMsgReadState : これ受け取った時点の既読状態->", dataMsg().MsgReadTime.value);
 
-  //ロード確認
-  if (!CLIENT_FULL_LOADED.value) {checkPreparedToLoad()};
+  //ロード確認して新着カウント(ロードできててもやる)
+  checkPreparedToLoad();
 });
 
 //チャンネル順番データの受け取り、適用
