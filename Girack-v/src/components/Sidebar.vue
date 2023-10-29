@@ -310,12 +310,18 @@ export default {
         <!-- 全チャンネルを既読するボタン -->
         <v-btn
           @click="readAllChannels"
-          v-if="(visibleReadAllButton||!CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY)&&CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_ENABLED"
           elevation="0"
           variant="text"
           size="x-small"
           class="rounded-pill text-disabled"
           style="width:100%;"
+          :style="
+            (
+              (visibleReadAllButton||!CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY)
+              &&
+              CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_ENABLED
+            ) ? 'visibility:visible;' : 'visibility:hidden;'
+          "
         >
           全部既読にする
         </v-btn>
