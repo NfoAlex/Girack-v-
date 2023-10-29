@@ -310,7 +310,11 @@ export default {
         <!-- 全チャンネルを既読するボタン -->
         <v-btn
           @click="readAllChannels"
-          v-if="(visibleReadAllButton||!CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY)&&CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_ENABLED"
+          v-show="
+            (visibleReadAllButton||!CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY)
+            &&
+            CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_ENABLED
+          "
           elevation="0"
           variant="text"
           size="x-small"
