@@ -591,10 +591,9 @@ socket.on("messageHistory", (historyData) => {
   //履歴データから抽出
   let history = historyData.dat;
   let endOfHistory = historyData.endOfHistory;
+  let channelid = historyData.channelid;
 
   console.log("socket :: messageHistory : historyData->", historyData);
-
-  let channelid = historyData.channelid;
 
   //もし履歴の末端まで行ったのならそう記録
   if (endOfHistory) {
