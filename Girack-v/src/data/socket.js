@@ -593,16 +593,8 @@ socket.on("messageHistory", (historyData) => {
   let endOfHistory = historyData.endOfHistory;
 
   console.log("socket :: messageHistory : historyData->", historyData);
-  
-  let channelid = ""; //履歴を入れるチャンネルID
 
-  try {
-    channelid = history[0].channelid; //受け取ったデータの中身使っちゃうんだよね
-  } catch (e) {
-    console.log("socket :: messageHistory : 履歴受け取りエラー", e);
-    console.log(history);
-    return;
-  }
+  let channelid = historyData.channelid;
 
   //もし履歴の末端まで行ったのならそう記録
   if (endOfHistory) {
