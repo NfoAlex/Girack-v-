@@ -67,11 +67,6 @@ export default {
     socket.on("disconnect", () => {
       this.disconnectSnackbar = true;
       this.disconnected = true;
-
-      //３秒以上経っても直らないなら同期が必要と設定
-      setTimeout(() => {
-        if (this.disconnected) this.disconnectedForEnoughTime = true;
-      }, 3000);
     });
 
     //再接続できたら接続できたと表示
@@ -95,7 +90,7 @@ export default {
         });
 
         //3秒以上切断されていたのなら履歴を再同期
-        if (this.disconnectedForEnoughTime) this.syncAllMsgDB();
+        this.syncAllMsgDB();
 
         //切断状態をオフ
         this.disconnected = false;
