@@ -53,6 +53,7 @@ export default {
           description: this.PreviewChannelData.description,
           scope: this.PreviewChannelData.scope,
           canTalk: this.PreviewChannelData.canTalk,
+          haveAllHistory: this.PreviewChannelData.haveAllHistory,
           previewmode: true,
         };
 
