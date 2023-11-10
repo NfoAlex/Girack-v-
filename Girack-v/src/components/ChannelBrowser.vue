@@ -99,6 +99,7 @@ export default {
         description: this.channelList[channelid].description,
         scope: this.channelList[channelid].scope,
         canTalk: this.channelList[channelid].canTalk,
+        haveAllHistory: false,
         previewmode: true,
       };
 
