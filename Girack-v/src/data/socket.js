@@ -627,8 +627,13 @@ socket.on("messageHistory", (historyData) => {
     if (dataMsg().MsgDB.value[channelid] === undefined) {
       dataMsg().MsgDB.value[channelid] = history.reverse();
     } else {
-      dataMsg().MsgDB.value[channelid].push(history.reverse());
+      history = history.reverse();
+      //履歴用配列の先頭から一つずつ履歴を追加
+      for (let index in history) {
+        dataMsg().MsgDB.value[channelid].push(history[index]);
+      }
     }
+
     return;
   }
 
