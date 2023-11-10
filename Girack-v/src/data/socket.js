@@ -420,7 +420,7 @@ socket.on("infoChannel", (dat) => {
     dataChannel().PreviewChannelData.value.channelid === dat.channelid &&
     CLIENT_FULL_LOADED
   ) {
-    console.log("socket :: infoChannel : preview用チャンネル情報取得 -> ", dat);
+    console.log("socket :: infoChannel : preview用チャンネル情報取得 -> ", { ...channelDataTemplate, ...dat });
     dataChannel().PreviewChannelData.value = { ...channelDataTemplate, ...dat };
 
     //チャンネルに渡す時にプレビュー中と処理する用
