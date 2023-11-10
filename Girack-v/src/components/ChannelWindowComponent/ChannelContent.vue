@@ -112,7 +112,7 @@ export default {
         }
 
         //ブラウザ上のタブ名を設定
-        document.title = this.ChannelIndex[newPage.params.id].channelname;
+        document.title = this.channelInfo.channelname;
 
         //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
         if (!Object.keys(this.ChannelIndex).includes(newPage.params.id))
@@ -372,7 +372,7 @@ export default {
         &&
         this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
         &&
-        !this.ChannelIndex[this.getPath].haveAllHistory
+        !this.channelInfo.haveAllHistory
        ) {
         //表示拡張させて履歴取得させる(スクロール位置が残ってしまわないように遅延はさむ)
         setTimeout(this.cropMessageExtend, 50);
@@ -590,14 +590,14 @@ export default {
     </div>
 
     <div
-      v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY && !ChannelIndex[getPath].haveAllHistory"
+      v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY && !channelInfo.haveAllHistory"
       class="d-flex justify-center my-5"
     >
       スクロールしろー
     </div>
 
     <div 
-      v-if="ChannelIndex[getPath].haveAllHistory"
+      v-if="channelInfo.haveAllHistory"
       class="d-flex justify-center my-5"
     >
       これで最後
