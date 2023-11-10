@@ -1,5 +1,5 @@
 <script>
-import { getSocket, CLIENT_FULL_LOADED } from "./data/socket.js";
+import { getSocket, CLIENT_FULL_LOADED, CLIENT_LOAD_FLAG } from "./data/socket.js";
 import { dataUser } from "./data/dataUserinfo.js";
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
@@ -12,7 +12,13 @@ export default {
     const theme = useTheme();
     const { myUserinfo } = dataUser();
 
-    return { mobile, theme, myUserinfo, CLIENT_FULL_LOADED };
+    return {
+      mobile,
+      theme,
+      myUserinfo,
+      CLIENT_FULL_LOADED,
+      CLIENT_LOAD_FLAG
+    };
   },
 
   components: { Sidebar, Auth },
@@ -45,13 +51,24 @@ export default {
   methods: {
     //すべてのメッセージ履歴を初期化した取得しなおす
     syncAllMsgDB() {
-      //既読状態の取得(受け取る時にMsgDBを初期化している)
-      socket.emit("getUserSaveMsgReadState", {
-        reqSender: {
-          userid: this.myUserinfo.userid,
-          sessionid: this.myUserinfo.sessionid,
-        },
-      });
+      this.CLIENT_FULL_LOADED = false;
+      //初期ロード用フラグ全部初期化
+      this.CLIENT_LOAD_FLAG.T1_CHANNELINFO_LOADED = false;
+      this.CLIENT_LOAD_FLAG.T2_HISTORY_LOADED = false;
+      this.CLIENT_LOAD_FLAG.T3_READSTATE_LOADED = false;
+
+      //チャンネル情報を取得しなおす
+      for (let c in this.myUserinfo.channelJoined) {
+        socket.emit("getInfoChannel", {
+          //リクエスト送信
+          targetid: this.myUserinfo.channelJoined[c],
+          reqSender: {
+            userid: this.myUserinfo.userid, //ユーザーID
+            sessionid: this.myUserinfo.sessionid, //セッションID
+          },
+        });
+      }
+      
       //スナックバーを非表示
       this.askResyncSnackbar = false;
     }
@@ -67,11 +84,6 @@ export default {
     socket.on("disconnect", () => {
       this.disconnectSnackbar = true;
       this.disconnected = true;
-
-      //３秒以上経っても直らないなら同期が必要と設定
-      setTimeout(() => {
-        if (this.disconnected) this.disconnectedForEnoughTime = true;
-      }, 3000);
     });
 
     //再接続できたら接続できたと表示
@@ -94,8 +106,8 @@ export default {
           },
         });
 
-        //3秒以上切断されていたのなら履歴を再同期
-        if (this.disconnectedForEnoughTime) this.syncAllMsgDB();
+        //履歴を再同期
+        this.syncAllMsgDB();
 
         //切断状態をオフ
         this.disconnected = false;
