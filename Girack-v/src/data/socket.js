@@ -623,7 +623,7 @@ socket.on("messageHistory", (historyData) => {
 
     console.log("messageHistory :: プレビュー用に読み込まれました...");
 
-    dataMsg().MsgDB.value[channelid] = history;
+    dataMsg().MsgDB.value[channelid] = history.reverse();
     return;
   }
 
