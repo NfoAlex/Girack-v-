@@ -74,11 +74,6 @@ export default {
     // eslint-disable-next-line vue/return-in-computed-property
     cropMessage() {
       try {
-        //履歴を表示し始める位置数計算
-        //let displayStartPosition = this.MsgDBActive.length - this.msgDisplayNum;
-        //もし開始位置が0未満なら0にする
-        //if (displayStartPosition < 0) displayStartPosition = 0;
-
         //履歴を削って返す
         return this.MsgDBActive.slice(0,this.msgDisplayNum);
       } catch (e) {
