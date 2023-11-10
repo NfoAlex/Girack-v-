@@ -595,11 +595,6 @@ socket.on("messageHistory", (historyData) => {
 
   console.log("socket :: messageHistory : historyData->", historyData);
 
-  //もし履歴の末端まで行ったのならそう記録
-  if (endOfHistory) {
-    dataChannel().ChannelIndex.value[channelid].haveAllHistory = true;
-  }
-
   //プレビュー用の履歴データなら読み込むだけで処理を終える
   if (dataChannel().PreviewChannelData.value.channelid === channelid) {
     //履歴分ユーザーデータを持っているか調べて持ってなければ取得する
@@ -621,10 +616,20 @@ socket.on("messageHistory", (historyData) => {
       }
     }
 
+    //もし履歴の末端まで行ったのならそう記録
+    if (endOfHistory) {
+      dataChannel().PreviewChannelData.value.haveAllHistory = true;
+    }
+
     console.log("messageHistory :: プレビュー用に読み込まれました...");
 
     dataMsg().MsgDB.value[channelid] = history;
     return;
+  }
+
+  //もし履歴の末端まで行ったのならそう記録
+  if (endOfHistory) {
+    dataChannel().ChannelIndex.value[channelid].haveAllHistory = true;
   }
 
   if (dataMsg().MsgReadTime.value[channelid] !== undefined) {
