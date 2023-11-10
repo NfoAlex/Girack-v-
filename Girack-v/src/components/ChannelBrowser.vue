@@ -92,9 +92,6 @@ export default {
         console.error(e);
       }
 
-      //プレビュー用のチャンネルIDの設定
-      this.PreviewChannelData.channelid = channelid;
-
       //プレビュー用にチャンネルデータを横流し
       this.PreviewChannelData = {
         channelid: channelid,
