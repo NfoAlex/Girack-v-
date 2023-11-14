@@ -594,7 +594,7 @@ socket.on("messageHistory", (historyData) => {
   let endOfHistory = historyData.endOfHistory;
   let channelid = historyData.channelid;
 
-  console.log("socket :: messageHistory : historyData->", historyData);
+  //console.log("socket :: messageHistory : historyData->", historyData);
 
   //プレビュー用の履歴データなら読み込むだけで処理を終える
   if (dataChannel().PreviewChannelData.value.channelid === channelid) {
@@ -622,7 +622,7 @@ socket.on("messageHistory", (historyData) => {
       dataChannel().PreviewChannelData.value.haveAllHistory = true;
     }
 
-    console.log("messageHistory :: プレビュー用に読み込まれました...");
+    //console.log("messageHistory :: プレビュー用に読み込まれました...");
 
     //履歴追加
     if (dataMsg().MsgDB.value[channelid] === undefined) {
