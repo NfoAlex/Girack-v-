@@ -49,6 +49,7 @@ export default {
     return {
       uri: window.location.origin,
       txt: "", //入力した文字
+      fxTwitButtonDisplay: false, //fxTwitter化するボタンを表示するかどうか
       fileInputData: [], //アップロードするファイル
 
       dialogChannelMove: false, //チャンネル移動確認ダイアログ
@@ -130,6 +131,32 @@ export default {
         this.InputState.isTyping = true;
       } else {
         this.InputState.isTyping = false;
+      }
+
+      //TwitterURLを判別するための正規表現条件
+      const twtRegexes = [
+        /https?:\/\/twitter\.com\/(\w+)\/status(es)?\/(\d+)/g,
+        /https?:\/\/x\.com\/(\w+)\/status(es)?\/(\d+)/,
+      ];
+      //ツイートの存在記録用変数
+      let twitterURLAvailable = false;
+      //正規表現条件を一つずつ確認
+      for (let reg in twtRegexes) {
+        //検査
+        let matchResult = this.txt.match(twtRegexes[reg]);
+        //見つかったらツイートがあると記録
+        if (matchResult!==null) {
+          twitterURLAvailable = true;
+          break;
+        }
+        console.log("ChannelInput :: watch(txt) : twitterRegextest->", matchResult);
+      }
+
+      //もしツイートのURLがあるんだったらボタンを表示、そうでなければ非表示
+      if (twitterURLAvailable) {
+        this.fxTwitButtonDisplay = true; //表示
+      } else {
+        this.fxTwitButtonDisplay = false; //非表示
       }
 
       //@が入力されたら検索モードに入る
@@ -574,6 +601,7 @@ export default {
         </div>
       </v-card>
     </v-dialog>
+
 
     <!-- 返信部分 -->
     <div
