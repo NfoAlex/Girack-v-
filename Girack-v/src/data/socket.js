@@ -678,6 +678,7 @@ socket.on("messageHistory", (historyData) => {
 
   //console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
 
+  //新着数確認
   checkMsgNewCount(channelid);
 
   //履歴の初回ロードがまだできていなかったら取得できたから確認して既読状態の取得
