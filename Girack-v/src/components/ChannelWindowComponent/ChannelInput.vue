@@ -602,6 +602,10 @@ export default {
       </v-card>
     </v-dialog>
 
+    <!-- fxTwitter化ボタン -->
+    <div v-if="fxTwitButtonDisplay">
+      {{ fxTwitButtonDisplay }}
+    </div>
 
     <!-- 返信部分 -->
     <div
