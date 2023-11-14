@@ -635,6 +635,9 @@ socket.on("messageHistory", (historyData) => {
       }
     }
 
+    //履歴の取得状態を初期化
+    dataChannel().PreviewChannelData.value.fetchingHistory = false;
+
     return;
   }
 
