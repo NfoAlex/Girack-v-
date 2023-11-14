@@ -643,11 +643,15 @@ socket.on("messageHistory", (historyData) => {
     dataChannel().ChannelIndex.value[channelid].haveAllHistory = true;
   }
 
+  //履歴データがホルダーごとないなら作成、初期化
   if (dataMsg().MsgReadTime.value[channelid] !== undefined) {
     //既読状態の時間から計算するから予め新着数初期化
     dataMsg().MsgReadTime.value[channelid].new = 0;
     dataMsg().MsgReadTime.value[channelid].mention = 0;
   }
+
+  //履歴の取得中であることをfalseへ
+  dataChannel().ChannelIndex.value[channelid].fetchingHistory = false;
 
   //履歴が存在しているなら履歴を頭から追加
   if (dataChannel().ChannelIndex.value[channelid].historyReadCount !== 0) {
