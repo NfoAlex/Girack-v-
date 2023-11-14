@@ -54,6 +54,7 @@ export default {
           scope: this.PreviewChannelData.scope,
           canTalk: this.PreviewChannelData.canTalk,
           haveAllHistory: this.PreviewChannelData.haveAllHistory,
+          fetchingHistory: false, //履歴の取得待ち状態であるかどうか
           previewmode: true,
         };
 
