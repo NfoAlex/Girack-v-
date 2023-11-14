@@ -83,7 +83,7 @@ export default {
         //履歴を削って返す
         return this.MsgDBActive.slice(0,this.msgDisplayNum);
       } catch (e) {
-        console.log("Content :: cropMessage : MsgDBが空...?");
+        console.log("ContentRender :: cropMessage : MsgDBが空...?");
       }
     },
   },
@@ -110,7 +110,7 @@ export default {
 
         //変なエラー避け
         default:
-          console.log("なにもないね");
+          console.log("ContentRender :: getUserStats : なにもないね");
           return null;
       }
     },
