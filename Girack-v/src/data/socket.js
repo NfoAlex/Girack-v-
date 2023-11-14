@@ -412,6 +412,7 @@ socket.on("infoChannel", (dat) => {
     scope: "public", //チャンネルの公開範囲
     canTalk: "Member", //喋るのに必要なロール
     historyReadCount: 0, //すでに読んだ履歴の数
+    fetchingHistory: false, //履歴の取得待ち状態であるかどうか
     haveAllHistory: false, //履歴をすべて読み込んだかどうか
   };
 
