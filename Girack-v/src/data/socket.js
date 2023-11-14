@@ -673,7 +673,7 @@ socket.on("messageHistory", (historyData) => {
       history.length;
   }
 
-  console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
+  //console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
 
   checkMsgNewCount(channelid);
 
@@ -1003,12 +1003,12 @@ export function checkMsgNewCount(channelid) {
   //確認した回数
   let checkCount = 0;
 
-  console.log("socket :: checkMsgNewCount :",
-    " 確認するチャンネル->", channelid,
-    " 既読状態->", dataMsg().MsgReadTime.value[channelid],
-    " 履歴全部->", dataMsg().MsgDB.value,
-    " 履歴->", msgDBChecking
-  );
+  // console.log("socket :: checkMsgNewCount :",
+  //   " 確認するチャンネル->", channelid,
+  //   " 既読状態->", dataMsg().MsgReadTime.value[channelid],
+  //   " 履歴全部->", dataMsg().MsgDB.value,
+  //   " 履歴->", msgDBChecking
+  // );
 
   //既読状態がそもそも無ければ作る
   if (dataMsg().MsgReadTime.value[channelid] === undefined) {
