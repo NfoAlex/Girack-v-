@@ -104,7 +104,7 @@ export default {
         console.error(e);
       }
 
-      //チャンネルのロード判別
+      //チャンネルのロードを待ってからやつ処理
       this.$nextTick(() => {
         //チャンネル以外のページ場合、これ以降の処理をスキップする
         if (!newPage.path.startsWith("/c/")) {
@@ -112,7 +112,7 @@ export default {
         }
 
         //ブラウザ上のタブ名を設定
-        document.title = this.channelInfo.channelname;
+        document.title = this.ChannelIndex[newPage.params.id].channelname;
 
         //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
         if (!Object.keys(this.ChannelIndex).includes(newPage.params.id))
