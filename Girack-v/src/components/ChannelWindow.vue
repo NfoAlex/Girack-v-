@@ -72,6 +72,7 @@ export default {
           },
         });
 
+        this.PreviewChannelData.fetchingHistory = true;
         getMessage(this.$route.params.id, 25, 0); //履歴を取得
 
         return this.PreviewChannelData;
