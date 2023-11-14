@@ -104,7 +104,7 @@ export default {
         console.error(e);
       }
 
-      //チャンネルのロード判別
+      //チャンネルのロードを待ってからやつ処理
       this.$nextTick(() => {
         //チャンネル以外のページ場合、これ以降の処理をスキップする
         if (!newPage.path.startsWith("/c/")) {
