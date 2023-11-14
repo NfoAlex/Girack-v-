@@ -45,6 +45,7 @@ export default {
           "ChannelWindow :: getChannelInfo : 元からプレビューする予定のものだな"
         );
 
+        this.PreviewChannelData.fetchingHistory = true;
         //履歴を取得
         getMessage(this.$route.params.id, 25, 0);
 
@@ -54,7 +55,7 @@ export default {
           scope: this.PreviewChannelData.scope,
           canTalk: this.PreviewChannelData.canTalk,
           haveAllHistory: this.PreviewChannelData.haveAllHistory,
-          fetchingHistory: false, //履歴の取得待ち状態であるかどうか
+          fetchingHistory: this.PreviewChannelData.fetchingHistory, //履歴の取得待ち状態であるかどうか
           previewmode: true,
         };
 
