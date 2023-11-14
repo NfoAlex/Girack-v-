@@ -100,6 +100,7 @@ export default {
         scope: this.channelList[channelid].scope,
         canTalk: this.channelList[channelid].canTalk,
         haveAllHistory: false,
+        fetchingHistory: false, //履歴の取得待ち状態であるかどうか
         previewmode: true,
       };
 

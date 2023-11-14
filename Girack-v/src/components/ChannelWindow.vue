@@ -45,15 +45,11 @@ export default {
           "ChannelWindow :: getChannelInfo : 元からプレビューする予定のものだな"
         );
 
-        //履歴を取得
-        getMessage(this.$route.params.id, 25, 0);
+        //履歴取得状態を強制的に初期化
+        this.PreviewChannelData.fetchingHistory = false;
 
         return {
-          channelname: this.PreviewChannelData.channelname,
-          description: this.PreviewChannelData.description,
-          scope: this.PreviewChannelData.scope,
-          canTalk: this.PreviewChannelData.canTalk,
-          haveAllHistory: this.PreviewChannelData.haveAllHistory,
+          ...this.PreviewChannelData,
           previewmode: true,
         };
 
@@ -76,6 +72,7 @@ export default {
           },
         });
 
+        this.PreviewChannelData.fetchingHistory = true;
         getMessage(this.$route.params.id, 25, 0); //履歴を取得
 
         return this.PreviewChannelData;

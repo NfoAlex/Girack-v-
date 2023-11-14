@@ -15,7 +15,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from "../config.js";
 
-export const CLIENT_VERSION = "alpha_20231110";
+export const CLIENT_VERSION = "alpha_20231115";
 
 const {
   CONFIG_SYNC,
@@ -412,6 +412,7 @@ socket.on("infoChannel", (dat) => {
     scope: "public", //チャンネルの公開範囲
     canTalk: "Member", //喋るのに必要なロール
     historyReadCount: 0, //すでに読んだ履歴の数
+    fetchingHistory: false, //履歴の取得待ち状態であるかどうか
     haveAllHistory: false, //履歴をすべて読み込んだかどうか
   };
 
@@ -593,7 +594,7 @@ socket.on("messageHistory", (historyData) => {
   let endOfHistory = historyData.endOfHistory;
   let channelid = historyData.channelid;
 
-  console.log("socket :: messageHistory : historyData->", historyData);
+  //console.log("socket :: messageHistory : historyData->", historyData);
 
   //プレビュー用の履歴データなら読み込むだけで処理を終える
   if (dataChannel().PreviewChannelData.value.channelid === channelid) {
@@ -621,7 +622,7 @@ socket.on("messageHistory", (historyData) => {
       dataChannel().PreviewChannelData.value.haveAllHistory = true;
     }
 
-    console.log("messageHistory :: プレビュー用に読み込まれました...");
+    //console.log("messageHistory :: プレビュー用に読み込まれました...");
 
     //履歴追加
     if (dataMsg().MsgDB.value[channelid] === undefined) {
@@ -634,6 +635,9 @@ socket.on("messageHistory", (historyData) => {
       }
     }
 
+    //履歴の取得状態を初期化
+    dataChannel().PreviewChannelData.value.fetchingHistory = false;
+
     return;
   }
 
@@ -642,11 +646,15 @@ socket.on("messageHistory", (historyData) => {
     dataChannel().ChannelIndex.value[channelid].haveAllHistory = true;
   }
 
+  //履歴データがホルダーごとないなら作成、初期化
   if (dataMsg().MsgReadTime.value[channelid] !== undefined) {
     //既読状態の時間から計算するから予め新着数初期化
     dataMsg().MsgReadTime.value[channelid].new = 0;
     dataMsg().MsgReadTime.value[channelid].mention = 0;
   }
+
+  //履歴の取得中であることをfalseへ
+  dataChannel().ChannelIndex.value[channelid].fetchingHistory = false;
 
   //履歴が存在しているなら履歴を頭から追加
   if (dataChannel().ChannelIndex.value[channelid].historyReadCount !== 0) {
@@ -668,8 +676,9 @@ socket.on("messageHistory", (historyData) => {
       history.length;
   }
 
-  console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
+  //console.log("socket :: messageHistory : 現在の履歴配列->", dataMsg().MsgDB.value);
 
+  //新着数確認
   checkMsgNewCount(channelid);
 
   //履歴の初回ロードがまだできていなかったら取得できたから確認して既読状態の取得
@@ -998,12 +1007,12 @@ export function checkMsgNewCount(channelid) {
   //確認した回数
   let checkCount = 0;
 
-  console.log("socket :: checkMsgNewCount :",
-    " 確認するチャンネル->", channelid,
-    " 既読状態->", dataMsg().MsgReadTime.value[channelid],
-    " 履歴全部->", dataMsg().MsgDB.value,
-    " 履歴->", msgDBChecking
-  );
+  // console.log("socket :: checkMsgNewCount :",
+  //   " 確認するチャンネル->", channelid,
+  //   " 既読状態->", dataMsg().MsgReadTime.value[channelid],
+  //   " 履歴全部->", dataMsg().MsgDB.value,
+  //   " 履歴->", msgDBChecking
+  // );
 
   //既読状態がそもそも無ければ作る
   if (dataMsg().MsgReadTime.value[channelid] === undefined) {

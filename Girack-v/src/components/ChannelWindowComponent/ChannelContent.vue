@@ -204,6 +204,7 @@ export default {
       //     ", hrcount -> " +
       //     this.ChannelIndex[this.getPath].historyReadCount
       // );
+      this.channelInfo.fetchingHistory = true; //履歴を取得中と設定
       getMessage(this.getPath, 15, this.MsgDBActive.length);
     },
 
@@ -374,9 +375,13 @@ export default {
         this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
         &&
         !this.channelInfo.haveAllHistory
-       ) {
+      ) {
         //表示拡張させて履歴取得させる(スクロール位置が残ってしまわないように遅延はさむ)
-        setTimeout(this.cropMessageExtend, 50);
+        
+        if (!this.channelInfo.fetchingHistory) { //そもそも履歴取得中でないことを確認
+          setTimeout(this.cropMessageExtend, 50); //0.05秒待ってから履歴取得
+        }
+          
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
       }
