@@ -112,7 +112,7 @@ export default {
         }
 
         //ブラウザ上のタブ名を設定
-        document.title = this.channelInfo.channelname;
+        document.title = this.ChannelIndex[newPage.params.id].channelname;
 
         //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
         if (!Object.keys(this.ChannelIndex).includes(newPage.params.id))
