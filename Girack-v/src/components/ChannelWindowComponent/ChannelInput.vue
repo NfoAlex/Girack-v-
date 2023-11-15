@@ -606,6 +606,8 @@ export default {
     <!-- fxTwitter化ボタン -->
     <div v-if="fxTwitButtonDisplay">
       {{ fxTwitButtonDisplay }}
+      <v-checkbox v-model="fxTwitternize" label="fx化する">
+      </v-checkbox>
     </div>
 
     <!-- 返信部分 -->
