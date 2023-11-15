@@ -628,9 +628,9 @@ export default {
 
     <!-- 返信部分 -->
     <div
+      v-if="ReplyState.isReplying"
       class="d-flex align-center"
       style="margin: 0 10%; margin-top: 1%; width: 90%"
-      v-if="ReplyState.isReplying"
     >
       <v-icon class="ma-2"> mdi:mdi-reply </v-icon>
       <!-- 返信先 -->
