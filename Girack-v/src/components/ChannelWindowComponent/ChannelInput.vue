@@ -622,8 +622,13 @@ export default {
     </v-dialog>
 
     <!-- fxTwitter化ボタン -->
-    <div v-if="fxTwitButtonDisplay" class="mx-auto" style="width:95%;">
-      <v-checkbox v-model="fxTwitternize" density="compact" label="fx化する">
+    <div v-if="fxTwitButtonDisplay" class="mx-auto" style="width:95%; height:fit-content;">
+      <v-checkbox
+        v-model="fxTwitternize"
+        density="compact"
+        label="fx化する"
+        hide-details="auto"
+      >
       </v-checkbox>
     </div>
 
