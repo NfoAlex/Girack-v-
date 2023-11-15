@@ -405,7 +405,7 @@ export default {
         console.log("ChannelInput :: watch(txt) : twitterRegextest->", matchResult);
 
         //見つかったらツイートがあると記録
-        if (matchResult!==null) {
+        if (matchResult !== null) {
           twitterURLAvailable = true;
           matchResultURLs.push(matchResult);
         }
