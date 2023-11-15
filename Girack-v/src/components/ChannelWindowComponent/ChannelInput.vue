@@ -263,8 +263,10 @@ export default {
 
     //メッセージを送信する
     msgSend() {
-      if (this.fxTwitternize) {
-        this.txt 
+      //fxTwitter化する
+      if (this.fxTwitternize) { //そもそもする設定？
+        this.txt = this.txt.replaceAll("https://x.com/", "https://fxtwitter.com/");
+        this.txt = this.txt.replaceAll("https://twitter.com/", "https://fxtwitter.com/");
       }
 
       //送信ｨﾝ!
