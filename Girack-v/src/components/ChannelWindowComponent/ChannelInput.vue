@@ -134,31 +134,8 @@ export default {
         this.InputState.isTyping = false;
       }
 
-      //TwitterURLを判別するための正規表現条件
-      const twtRegexes = [
-        /https?:\/\/twitter\.com\/(\w+)\/status(es)?\/(\d+)/g,
-        /https?:\/\/x\.com\/(\w+)\/status(es)?\/(\d+)/,
-      ];
-      //ツイートの存在記録用変数
-      let twitterURLAvailable = false;
-      //正規表現条件を一つずつ確認
-      for (let reg in twtRegexes) {
-        //検査
-        let matchResult = this.txt.match(twtRegexes[reg]);
-        //見つかったらツイートがあると記録
-        if (matchResult!==null) {
-          twitterURLAvailable = true;
-          break;
-        }
-        console.log("ChannelInput :: watch(txt) : twitterRegextest->", matchResult);
-      }
-
-      //もしツイートのURLがあるんだったらボタンを表示、そうでなければ非表示
-      if (twitterURLAvailable) {
-        this.fxTwitButtonDisplay = true; //表示
-      } else {
-        this.fxTwitButtonDisplay = false; //非表示
-      }
+      //fxTwitter用のURL判別処理
+      this.checkFxTwitter()
 
       //@が入力されたら検索モードに入る
       if (this.txt[this.txt.length - 1] === "@") {
@@ -286,6 +263,10 @@ export default {
 
     //メッセージを送信する
     msgSend() {
+      if (this.fxTwitternize) {
+        this.txt 
+      }
+
       //送信ｨﾝ!
       socket.emit("msgSend", {
         userid: this.myUserinfo.userid, //名前
@@ -401,6 +382,41 @@ export default {
 
       //入力欄へフォーカスしなおす
       this.$el.querySelector("#inp").focus();
+    },
+
+    //fxTwitter用のURL判別処理(watch(txt)で反応してます)
+    checkFxTwitter() {
+      //TwitterURLを判別するための正規表現条件
+      const twtRegexes = [
+        /https?:\/\/twitter\.com\/(\w+)\/status(es)?\/(\d+)/g,
+        /https?:\/\/x\.com\/(\w+)\/status(es)?\/(\d+)/,
+      ];
+
+      //ツイートの存在記録用変数
+      let twitterURLAvailable = false;
+      //当てはまったURLのリスト
+      let matchResultURLs = [];
+
+      //正規表現条件を一つずつ確認
+      for (let reg in twtRegexes) {
+        //検査
+        let matchResult = this.txt.match(twtRegexes[reg]);
+
+        console.log("ChannelInput :: watch(txt) : twitterRegextest->", matchResult);
+
+        //見つかったらツイートがあると記録
+        if (matchResult!==null) {
+          twitterURLAvailable = true;
+          matchResultURLs.push(matchResult);
+        }
+      }
+
+      //もしツイートのURLがあるんだったらボタンを表示、そうでなければ非表示
+      if (twitterURLAvailable) {
+        this.fxTwitButtonDisplay = true; //表示
+      } else {
+        this.fxTwitButtonDisplay = false; //非表示
+      }
     },
 
     //メンション用のユーザー検索の十字キーでのユーザー選択変更部分
