@@ -50,6 +50,7 @@ export default {
       uri: window.location.origin,
       txt: "", //入力した文字
       fxTwitButtonDisplay: false, //fxTwitter化するボタンを表示するかどうか
+      fxTwitternize: true, //fxTwitter化するかどうか
       fileInputData: [], //アップロードするファイル
 
       dialogChannelMove: false, //チャンネル移動確認ダイアログ
