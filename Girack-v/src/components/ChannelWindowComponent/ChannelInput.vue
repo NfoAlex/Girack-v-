@@ -49,6 +49,8 @@ export default {
     return {
       uri: window.location.origin,
       txt: "", //入力した文字
+      fxTwitButtonDisplay: false, //fxTwitter化するボタンを表示するかどうか
+      fxTwitternize: true, //fxTwitter化するかどうか
       fileInputData: [], //アップロードするファイル
 
       dialogChannelMove: false, //チャンネル移動確認ダイアログ
@@ -123,7 +125,7 @@ export default {
       },
     },
 
-    //(メンション用)入力したテキストを監視してユーザー名を検索しようとしているか調べる
+    //入力したテキストを監視してユーザー名を検索しようとしているか調べる、あとfxTwitter
     txt() {
       //もし１文字以上入力されていたら入力している状態と保存
       if (this.txt.length > 0) {
@@ -131,6 +133,9 @@ export default {
       } else {
         this.InputState.isTyping = false;
       }
+
+      //fxTwitter用のURL判別処理
+      this.checkFxTwitter()
 
       //@が入力されたら検索モードに入る
       if (this.txt[this.txt.length - 1] === "@") {
@@ -258,6 +263,12 @@ export default {
 
     //メッセージを送信する
     msgSend() {
+      //fxTwitter化する
+      if (this.fxTwitternize) { //そもそもする設定？
+        this.txt = this.txt.replaceAll("https://x.com/", "https://fxtwitter.com/");
+        this.txt = this.txt.replaceAll("https://twitter.com/", "https://fxtwitter.com/");
+      }
+
       //送信ｨﾝ!
       socket.emit("msgSend", {
         userid: this.myUserinfo.userid, //名前
@@ -373,6 +384,41 @@ export default {
 
       //入力欄へフォーカスしなおす
       this.$el.querySelector("#inp").focus();
+    },
+
+    //fxTwitter用のURL判別処理(watch(txt)で反応してます)
+    checkFxTwitter() {
+      //TwitterURLを判別するための正規表現条件
+      const twtRegexes = [
+        /https?:\/\/twitter\.com\/(\w+)\/status(es)?\/(\d+)/g,
+        /https?:\/\/x\.com\/(\w+)\/status(es)?\/(\d+)/,
+      ];
+
+      //ツイートの存在記録用変数
+      let twitterURLAvailable = false;
+      //当てはまったURLのリスト
+      let matchResultURLs = [];
+
+      //正規表現条件を一つずつ確認
+      for (let reg in twtRegexes) {
+        //検査
+        let matchResult = this.txt.match(twtRegexes[reg]);
+
+        console.log("ChannelInput :: watch(txt) : twitterRegextest->", matchResult);
+
+        //見つかったらツイートがあると記録
+        if (matchResult !== null) {
+          twitterURLAvailable = true;
+          matchResultURLs.push(matchResult);
+        }
+      }
+
+      //もしツイートのURLがあるんだったらボタンを表示、そうでなければ非表示
+      if (twitterURLAvailable) {
+        this.fxTwitButtonDisplay = true; //表示
+      } else {
+        this.fxTwitButtonDisplay = false; //非表示
+      }
     },
 
     //メンション用のユーザー検索の十字キーでのユーザー選択変更部分
@@ -575,11 +621,22 @@ export default {
       </v-card>
     </v-dialog>
 
+    <!-- fxTwitter化ボタン -->
+    <div v-if="fxTwitButtonDisplay" class="mx-auto" style="width:95%; height:fit-content;">
+      <v-checkbox
+        v-model="fxTwitternize"
+        density="compact"
+        label="fx化する"
+        hide-details="auto"
+      >
+      </v-checkbox>
+    </div>
+
     <!-- 返信部分 -->
     <div
+      v-if="ReplyState.isReplying"
       class="d-flex align-center"
       style="margin: 0 10%; margin-top: 1%; width: 90%"
-      v-if="ReplyState.isReplying"
     >
       <v-icon class="ma-2"> mdi:mdi-reply </v-icon>
       <!-- 返信先 -->
