@@ -155,6 +155,7 @@ socket.on("messageReceive", (msg) => {
     if (
       CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
       msg.userid !== dataUser().myUserinfo.value.userid && //送信者が自分じゃない
+      msg.userid !== "SYSTEM" && //システムメッセージじゃない
       !LIST_NOTIFICATION_MUTE_CHANNEL.value.includes(msg.channelid) && //ミュートリストにチャンネルが入っていない
       (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、または違うタブなら
     ) {
