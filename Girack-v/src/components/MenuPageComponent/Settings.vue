@@ -136,6 +136,40 @@ export default {
       }
     },
 
+    //ファイルサイズの値を読める形の単位に変換(https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string)
+    humanFileSize(bytes, si=false, dp=1) {
+      const thresh = si ? 1000 : 1024;
+
+      console.log("Settings :: humanFileSize : bytes->", bytes);
+
+      //略式サイズなら数字に変換
+      if ( bytes.includes("e") ) {
+        let NumOfZeros = bytes.slice(bytes.length-1); //使う0の数
+        let ZerosInString = ""; //0を入れる変数
+        for ( let i=0; i<NumOfZeros; i++ ) { ZerosInString+="0"; } //追加
+
+        //文字列を統合して数字にする
+        bytes = parseInt(bytes.split("e")[0] + ZerosInString);
+      }
+
+      if (Math.abs(bytes) < thresh) {
+        return bytes + ' B';
+      }
+
+      const units = si 
+          ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] 
+          : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+      let u = -1;
+      const r = 10**dp;
+
+      do {
+        bytes /= thresh;
+        ++u;
+      } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+
+      return bytes.toFixed(dp) + ' ' + units[u];
+    },
+
     //通知テスト
     doNotificationDemo() {
       new Notification("通知だな", {
@@ -410,6 +444,16 @@ export default {
                 density="compact"
               >
               </v-checkbox>
+              <p class="ma-2">添付ファイルの最高サイズ (1e3=1kB)</p>
+                <v-text-field
+                  variant="outlined"
+                  class="mx-auto"
+                  style="width:90%"
+                  :hint="humanFileSize(CONFIG_DISPLAY.CONTENT_DISPLAYIMAGESIZE,true)"
+                  :persistent-hint="true"
+                  v-model="CONFIG_DISPLAY.CONTENT_DISPLAYIMAGESIZE"
+                >
+                </v-text-field>
             </v-card>
 
             <br />
