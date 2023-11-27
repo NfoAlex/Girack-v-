@@ -512,6 +512,34 @@ export default {
     style="height: 100%; width: 100%; overflow-y: auto"
   >
 
+    <!-- 一番下にスクロールするボタン -->
+    <v-btn
+      v-if="!StateScrolled && CONFIG_DISPLAY.CONTENT_GOBOTTOMFAB_SHOW"
+      @click="scrollIt"
+      position="absolute"
+      style="
+        z-index: 20;
+        padding: 0;
+        right: 3vw;
+        bottom: 6em;
+      "
+      icon=""
+      :size="getDisplaySize === 'xxl' ? '128' : 'x-large'"
+      :elevation="6"
+      class="rounded-lg mx-auto"
+    >
+      <v-badge
+        v-if="checkReadTime(getPath) !== 0"
+        color=""
+        :content="checkReadTime(getPath)"
+        inline
+      >
+      </v-badge>
+      <v-icon v-if="!checkReadTime(getPath)" icon="mdi:mdi-arrow-down-thick">
+        mdi:mdi-arrow-down-thick
+      </v-icon>
+    </v-btn>
+
     <!-- !!!このdivでメッセージ表示!!! -->
     <div
       v-for="(m, index) in cropMessage"
@@ -607,35 +635,7 @@ export default {
       これで最後
     </div>
 
-    <!-- 一番下にスクロールするボタン -->
-    <v-btn
-      v-if="!StateScrolled && CONFIG_DISPLAY.CONTENT_GOBOTTOMFAB_SHOW"
-      @click="scrollIt"
-      style="
-        z-index: 20;
-        padding: 0;
-        position: sticky;
-        left: 100%;
-        bottom: 32px;
-        margin-right: 1.5% !important;
-      "
-      icon=""
-      :size="getDisplaySize === 'xxl' ? '128' : 'x-large'"
-      :elevation="6"
-      position="fixed"
-      class="rounded-lg mx-auto"
-    >
-      <v-badge
-        v-if="checkReadTime(getPath) !== 0"
-        color=""
-        :content="checkReadTime(getPath)"
-        inline
-      >
-      </v-badge>
-      <v-icon v-if="!checkReadTime(getPath)" icon="mdi:mdi-arrow-down-thick">
-        mdi:mdi-arrow-down-thick
-      </v-icon>
-    </v-btn>
+    
   </div>
 </template>
 
