@@ -110,6 +110,7 @@ export default {
     style="max-width: 90vw; height:100vh;"
     @dblclick="imageDialogShow = false"
   >
+    <!-- 閉じるボタン -->
     <div style="height:5vh;" class="d-flex align-center justify-end">
       <v-btn
         @click="imageDialogShow = false"
@@ -123,18 +124,17 @@ export default {
         </v-tooltip>
       </v-btn>
     </div>
-    <div style="overflow-y: auto;">
-      <!-- 画像本編 -->
+    <!-- 画像そのもの -->
+    <div class="d-flex justify-center" style="height:80vh; width:100%;">
+      <img :src="imageDialogSrc" style="max-width:100%; max-height:100%;" />
+    </div>
+    <!-- 画像URL -->
+    <div class="d-flex justify-center my-1" style="height:10vh">
       <v-card
-        style="margin: 32px 0; width: fit-content; height: fit-content;"
-        color="rgba(0,0,0,0.75)"
-        class="rounded-b-lg rounded-t-0 mx-auto text-center"
+        class="d-flex align-center rounded-lg"
+        style="height:fit-content"
       >
-        <!-- 画像そのもの -->
-        <!-- <v-img max-height="90vh" :src="imageDialogSrc"> -->
-        <img :src="imageDialogSrc" style="max-width:100%; max-height:100%;" />
-        <!-- 画像URL -->
-        <p class="ma-2 text-subtitle-2">{{ imageDialogSrc }}</p>
+        <p class="ma-1 text-subtitle-2">{{ imageDialogSrc }}</p>
       </v-card>
     </div>
   </v-dialog>

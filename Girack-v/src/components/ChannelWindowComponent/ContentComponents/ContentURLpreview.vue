@@ -139,12 +139,11 @@ export default {
         <v-card
           v-for="img in imageDialogUrls"
           style="margin:64px 0; z-index:5; height:fit-content; width:fit-content;"
-          color="rgba(0,0,0,0.75)"
+          color="rgba(0,0,0,0.55)"
           class="rounded-b-lg rounded-t-0 mx-auto text-center pa-0"
           :key="img"
         >
           <!-- 画像そのもの -->
-          <!-- <v-img style="max-height:90vh;" :src="img"> </v-img> -->
           <img :src="img" style="max-width:100%; max-height:100%;" />
           <!-- 画像URL -->
           <p class="ma-2 text-subtitle-2">{{ img }}</p>
