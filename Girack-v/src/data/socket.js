@@ -15,7 +15,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from "../config.js";
 
-export const CLIENT_VERSION = "alpha_20231122";
+export const CLIENT_VERSION = "alpha_20231127";
 
 const {
   CONFIG_SYNC,
@@ -1054,9 +1054,12 @@ export function checkMsgNewCount(channelid) {
 
     //システムメッセージじゃないなら既読状態の時間から新着メッセージ数を加算
     if (
+      parseInt(dataMsg().MsgReadTime.value[channelid].time) !== 0 //既読時間が0でなく
+        &&
       parseInt(msgDBChecking[index].time) >
-        parseInt(dataMsg().MsgReadTime.value[channelid].time) &&
-      !msgDBChecking[index].isSystemMessage
+        parseInt(dataMsg().MsgReadTime.value[channelid].time) //既読時間後のメッセージで
+        &&
+      !msgDBChecking[index].isSystemMessage //システムメッセージじゃないなら
     ) {
       //メンションされていたかどうかにあわせて既読状態を更新
       if (

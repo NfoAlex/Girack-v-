@@ -291,7 +291,7 @@ export default {
       //s => bool
       const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-      //一番下かどうか調べる？
+      //一番下であり、かつフォーカスしているかどうか調べる
       if (
         (
           forcingTrue || //そもそも引数でtrueと渡されているなら
@@ -346,8 +346,6 @@ export default {
           };
         }
 
-        //既読状態をCookieへ書き込み
-        //setCookie("MsgReadTime", JSON.stringify(this.MsgReadTime), 7);
         let FLAGThereIsNewMessages = false; //新着アリという印
 
         //新着を確認してfaviconを戻すかどうか決める
@@ -361,7 +359,7 @@ export default {
               FLAGThereIsNewMessages = true; //メッセージあるぜと登録
               break;
             }
-          } catch(e) {console.log(e)}
+          } catch(e) {console.log("ChannelContent :: setScrollState : e-> ", e)}
         }
 
         //もしメッセージがアリじゃないのなら通常faviconに
