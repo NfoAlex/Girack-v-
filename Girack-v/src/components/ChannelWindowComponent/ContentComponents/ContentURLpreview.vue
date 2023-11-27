@@ -144,7 +144,6 @@ export default {
           :key="img"
         >
           <!-- 画像そのもの -->
-          <!-- <v-img style="max-height:90vh;" :src="img"> </v-img> -->
           <img :src="img" style="max-width:100%; max-height:100%;" />
           <!-- 画像URL -->
           <p class="ma-2 text-subtitle-2">{{ img }}</p>
