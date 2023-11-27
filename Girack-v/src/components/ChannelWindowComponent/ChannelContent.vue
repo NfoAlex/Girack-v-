@@ -359,7 +359,7 @@ export default {
               FLAGThereIsNewMessages = true; //メッセージあるぜと登録
               break;
             }
-          } catch(e) {console.log(e)}
+          } catch(e) {console.log("ChannelContent :: setScrollState : e-> ", e)}
         }
 
         //もしメッセージがアリじゃないのなら通常faviconに
