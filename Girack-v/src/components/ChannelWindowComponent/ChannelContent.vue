@@ -269,7 +269,7 @@ export default {
     //新着メッセージ数を返す
     checkReadTime(channelid) {
       try {
-        console.log("ChannelContent :: checkReadTime : 既読状態のトリガーになってる");
+        //console.log("ChannelContent :: checkReadTime : 既読状態のトリガーになってる");
         return this.MsgReadTime[channelid].new; //データ返す
       } catch (e) {
         return 0;
