@@ -126,7 +126,7 @@ export default {
     </div>
     <!-- 画像そのもの -->
     <div class="d-flex justify-center" style="height:80vh; width:100%;">
-      <img :src="imageDialogSrc" style="width:100%; height:100%;" />
+      <img :src="imageDialogSrc" style="max-width:100%; max-height:100%;" />
     </div>
     <!-- 画像URL -->
     <div class="d-flex justify-center my-1" style="height:10vh">
