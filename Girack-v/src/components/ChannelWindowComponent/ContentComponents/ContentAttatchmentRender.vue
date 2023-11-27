@@ -139,41 +139,6 @@ export default {
     </div>
   </v-dialog>
 
-  <!-- 画像拡大ダイアログ(バックアップ) -->
-  <v-dialog
-    v-model="imageDialogShowwwwwww"
-    style="max-width: 90vw; height:100vh;"
-    @dblclick="imageDialogShow = false"
-  >
-    <div style="height:5vh;" class="d-flex align-center justify-end">
-      <v-btn
-        @click="imageDialogShow = false"
-        icon="mdi:mdi-close"
-        color="rgba(0,0,0,0.75)"
-        style="height:4vh; width:4vh; top:0px; right:0%; z-index:10; float:right;"
-      >
-        <v-icon>mdi:mdi-close</v-icon>
-        <v-tooltip activator="parent" location="bottom">
-          画像のダブルクリックでも閉じます
-        </v-tooltip>
-      </v-btn>
-    </div>
-    <div style="overflow-y: auto;">
-      <!-- 画像本編 -->
-      <v-card
-        style="margin: 32px 0; width: fit-content; height: fit-content;"
-        color="rgba(0,0,0,0.75)"
-        class="rounded-b-lg rounded-t-0 mx-auto text-center"
-      >
-        <!-- 画像そのもの -->
-        <!-- <v-img max-height="90vh" :src="imageDialogSrc"> -->
-        <img :src="imageDialogSrc" style="max-width:100%; max-height:100%;" />
-        <!-- 画像URL -->
-        <p class="ma-2 text-subtitle-2">{{ imageDialogSrc }}</p>
-      </v-card>
-    </div>
-  </v-dialog>
-
   <div>
     <v-card
       class="rounded-lg px-2 py-2 ma-2 d-flex align-center justify-start"
