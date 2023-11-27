@@ -28,19 +28,8 @@ export default {
       //削除確認中だったらメッセージの消去を行う
       if (this.dialogCheckToDelete) this.deleteMessage();
 
-      //もしShiftキーも押されていたら
-      if (event.shiftKey) {
-        //現在の入力欄上のカーソル位置
-        let currentTxtCursor = document.getElementById("editingTextArea").selectionStart;
-
-        //カーソル位置を改行のすぐ次へ移動
-        this.$nextTick(() => {
-          document.getElementById("editingTextArea").setSelectionRange(currentTxtCursor + 1, currentTxtCursor + 1);
-        });
-
-        //ここでトリガー処理を停止
-        return;
-      }
+      //もしShiftキーも押されていたらここで停止
+      if (event.shiftKey) return;
 
       //もし空なら消去するかどうか確認
       if (this.editTxt === "") {
