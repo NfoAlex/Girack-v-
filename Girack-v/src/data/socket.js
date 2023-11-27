@@ -15,7 +15,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from "../config.js";
 
-export const CLIENT_VERSION = "alpha_20231115";
+export const CLIENT_VERSION = "alpha_20231122";
 
 const {
   CONFIG_SYNC,
@@ -788,8 +788,9 @@ socket.on("infoUserSaveConfig", (userSaveConfig) => {
 
   //もしクラウド上に設定が保存されていたなら
   if (userSaveConfig.configAvailable) {
-    CONFIG_NOTIFICATION.value = userSaveConfig.config.CONFIG_NOTIFICATION;
-    CONFIG_DISPLAY.value = userSaveConfig.config.CONFIG_DISPLAY;
+    //設定を適用
+    CONFIG_DISPLAY.value = {...CONFIG_DISPLAY.value, ...userSaveConfig.config.CONFIG_DISPLAY};
+    CONFIG_NOTIFICATION.value = {...CONFIG_NOTIFICATION.value, ...userSaveConfig.config.CONFIG_NOTIFICATION};
   }
 });
 

@@ -1,6 +1,12 @@
 <script>
+import { getCONFIG } from "../../../config.js";
 
 export default {
+  setup() {
+    const { CONFIG_DISPLAY } = getCONFIG();
+    return { CONFIG_DISPLAY };
+  },
+
   props: ["fileData", "channelid"],
 
   data() {
@@ -142,7 +148,7 @@ export default {
     >
       <!-- 画像ファイルだった時のプレビュー表示 -->
       <v-img
-        v-if="file.type.includes('image/') && file.size < 5e6"
+        v-if="file.type.includes('image/') && file.size < CONFIG_DISPLAY.CONTENT_DISPLAYIMAGESIZE"
         @click="
           imageDialogShow = true;
           imageDialogSrc = filesrc + channelid + '/' + file.fileid;
