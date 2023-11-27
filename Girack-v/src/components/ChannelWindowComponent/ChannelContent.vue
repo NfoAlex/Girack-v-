@@ -291,7 +291,7 @@ export default {
       //s => bool
       const channelWindow = document.querySelector("#channelWindow"); //スクロール制御用
 
-      //一番下かどうか調べる？
+      //一番下であり、かつフォーカスしているかどうか調べる
       if (
         (
           forcingTrue || //そもそも引数でtrueと渡されているなら
