@@ -72,7 +72,7 @@ export default {
         });
       }
       //編集モードから抜ける
-      this.$emit('closeEditing');
+      setTimeout(() => {this.$emit('closeEditing');}, 10);
     },
 
     //メッセージの削除
