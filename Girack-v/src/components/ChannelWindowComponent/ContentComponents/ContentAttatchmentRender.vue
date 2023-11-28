@@ -125,7 +125,7 @@ export default {
       </v-btn>
     </div>
     <!-- 画像そのもの -->
-    <div class="d-flex justify-center" style="height:80vh; width:100%;">
+    <div class="d-flex justify-center align-center" style="height:80vh; width:100%;">
       <img :src="imageDialogSrc" style="max-width:100%; max-height:100%;" />
     </div>
     <!-- 画像URL -->
