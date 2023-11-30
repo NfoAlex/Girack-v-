@@ -1,5 +1,6 @@
 <script>
 import { getCONFIG } from "../../../config.js";
+import { saveAs } from "file-saver";
 
 export default {
   setup() {
@@ -87,18 +88,17 @@ export default {
       }
     },
 
-    //ファイルをダウンロードさせる
     downloadFile(file) {
-      let objAnchor = document.createElement("a"); //アンカーオブジェクト作成
-      objAnchor.href = this.filesrc + this.channelid + '/' + file.fileid; //URL設定
-      objAnchor.type = file.type; //ファイルタイプを設定
-      objAnchor.download = file.name; //ファイル名追加
-      document.body.appendChild(objAnchor); //DOMとして追加
-      objAnchor.click(); //クリック処理をしてダウンロード
-
-      //アンカーを削除
-      objAnchor.parentNode.removeChild(objAnchor);
+      fetch(this.filesrc + this.channelid + '/' + file.fileid)
+      .then(response => response.blob())
+      .then(blob => {
+        saveAs(blob, file.name); //保存する
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     }
+
   },
 };
 </script>
