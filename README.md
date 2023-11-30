@@ -1,5 +1,6 @@
 # Girack-v
-Slackのクローン
+Slackのクローン。
+Vueの学習用、趣味として開発中。
 
 ![202311281146100003480000000193450941](https://github.com/NfoAlex/Girack-v-/assets/40430040/03875cce-1c6d-45d4-8af6-ff8590a59780)
 
