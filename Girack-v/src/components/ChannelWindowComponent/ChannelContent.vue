@@ -137,13 +137,18 @@ export default {
           if (this.StateFocus || this.CONFIG_DISPLAY.CONTENT_SCROLL_ONNEWMESSAGE) {
             //レンダーを待ってから処理
             this.$nextTick(() => {
-              this.setScrollState();
               this.msgDisplayNum = 65; //メッセージの表示数の初期化
+
+              //作成したチャンネルで履歴の長さが表示数を超えたとき、フェッチできる履歴があると設定
+              if (this.MsgDBActive.length >= this.msgDisplayNum) {
+                this.channelInfo.haveAllHistory = false;
+              }
 
               //プレビューならここで停止
               if (this.channelInfo.previewmode) return 0;
               //もしフォーカスしているなら
               if (this.StateFocus) {
+                this.setScrollState(); //スクロール状態の確認
                 try {
                   //比較用既読時間を更新
                   let latestTime = this.MsgDBActive[0].time;
@@ -196,18 +201,6 @@ export default {
   },
 
   methods: {
-    //さらに過去の履歴(10件)を取得する
-    getHistory() {
-      // console.log(
-      //   "履歴ほしいね :  path -> " +
-      //     this.getPath +
-      //     ", hrcount -> " +
-      //     this.ChannelIndex[this.getPath].historyReadCount
-      // );
-      this.channelInfo.fetchingHistory = true; //履歴を取得中と設定
-      getMessage(this.getPath, 15, this.MsgDBActive.length);
-    },
-
     //指定された履歴の日付を取得
     getHistoryDate(index) {
       let time = this.cropMessage[index].time;
@@ -223,8 +216,15 @@ export default {
     //表示する履歴を拡張する
     cropMessageExtend() {
       //もし表示する数が履歴の長さより長かったらさらに深い履歴をサーバーから取得する
-      if (this.msgDisplayNum + 30 > this.MsgDBActive.length) this.getHistory();
-      this.msgDisplayNum += 30;
+      if (
+        this.msgDisplayNum + 30 > this.MsgDBActive.length
+          &&
+        !this.channelInfo.fetchingHistory
+      ) {
+        this.channelInfo.fetchingHistory = true; //履歴取得中と設定
+        getMessage(this.getPath, 15, this.MsgDBActive.length); //履歴の取得
+      }
+      this.msgDisplayNum += 30; //表示数拡大
     },
 
     //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
@@ -369,29 +369,28 @@ export default {
         }
       } else if ( //もし一番上にスクロールしているなら履歴読み込み
         channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight + 1
-        &&
+          &&
         this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
-        &&
-        !this.channelInfo.haveAllHistory
+          &&
+        !this.channelInfo.haveAllHistory //履歴をすべて持っていない
+          &&
+        !this.channelInfo.fetchingHistory //履歴取得中でない
       ) {
+        //console.log("ChannelContent :: setScrollState : 履歴拡張します...");
         //表示拡張させて履歴取得させる(スクロール位置が残ってしまわないように遅延はさむ)
-        
-        if (!this.channelInfo.fetchingHistory) { //そもそも履歴取得中でないことを確認
-          setTimeout(this.cropMessageExtend, 50); //0.05秒待ってから履歴取得
-        }
-          
+        setTimeout(this.cropMessageExtend, 50); //0.05秒待ってから履歴取得
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
       }
     },
 
-    //このウィンドウにいるかどうかを設定する
+    //このウィンドウにいるかどうかを設定する(true)
     setFocusStateTrue() {
       this.StateFocus = true;
       this.setScrollState(); //既読チェック
     },
 
-    //このウィンドウにいるかどうかを設定する
+    //このウィンドウにいるかどうかを設定する(false)
     setFocusStateFalse() {
       this.StateFocus = false;
     },
@@ -621,11 +620,19 @@ export default {
       >
     </div>
 
+    <!-- 履歴取得状態表示 -->
     <div
-      v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY && !channelInfo.haveAllHistory"
+      v-if="
+        CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY
+          &&
+        !channelInfo.haveAllHistory
+          &&
+        (channelInfo.fetchingHistory !== true)
+      "
       class="d-flex justify-center my-5"
     >
-      スクロールしろー
+      <p v-if="!channelInfo.fetchingHistory">スクロールして履歴を取得</p>
+      <p v-else>ロード中...</p>
     </div>
 
     <div 

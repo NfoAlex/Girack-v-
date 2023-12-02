@@ -15,7 +15,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from "../config.js";
 
-export const CLIENT_VERSION = "alpha_20231130";
+export const CLIENT_VERSION = "alpha_20231203";
 
 const {
   CONFIG_SYNC,
@@ -150,6 +150,9 @@ socket.on("messageReceive", (msg) => {
         document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
       }
     }
+
+    //履歴数を加算
+    dataChannel().ChannelIndex.value[msg.channelid].historyReadCount++;
 
     //新着のメッセージを通知
     if (
@@ -460,11 +463,24 @@ socket.on("infoChannel", (dat) => {
     return;
   }
 
-  //チャンネルデータをテンプレに上書きするように更新
-  dataChannel().ChannelIndex.value[dat.channelid] = {
-    ...channelDataTemplate,
-    ...dat,
-  };
+  //チャンネルデータがあるなら一部の値だけをを変える、そうでないなら全部適用
+  if (dataChannel().ChannelIndex.value[dat.channelid] !== undefined) {
+    //チャンネルデータの一部だけ変更 (履歴状態と履歴の長さを変えてない)
+      //チャンネル名
+    dataChannel().ChannelIndex.value[dat.channelid].channelname = dat.channelname;
+      //チャンネル概要
+    dataChannel().ChannelIndex.value[dat.channelid].description = dat.description;
+      //チャンネルの公開範囲
+    dataChannel().ChannelIndex.value[dat.channelid].scope = dat.scope;
+      //喋るのに必要なロール
+    dataChannel().ChannelIndex.value[dat.channelid].canTalk = dat.canTalk;
+  } else { //チャンネルデータがないなら
+    //チャンネルデータをテンプレに上書きするように更新
+    dataChannel().ChannelIndex.value[dat.channelid] = {
+      ...channelDataTemplate,
+      ...dat,
+    };
+  }
 
   //もし受け取ったチャンネルIDが順番のやつに入ってなければ追加
   if (!dataChannel().ChannelOrder.value.includes(dat.channelid)) {
