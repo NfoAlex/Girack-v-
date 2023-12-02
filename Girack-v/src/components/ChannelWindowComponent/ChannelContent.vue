@@ -140,6 +140,11 @@ export default {
               this.setScrollState();
               this.msgDisplayNum = 65; //メッセージの表示数の初期化
 
+              //作成したチャンネルで履歴の長さが表示数を超えたとき、フェッチできる履歴があると設定
+              if (this.MsgDBActive.length >= this.msgDisplayNum) {
+                this.channelInfo.haveAllHistory = false;
+              }
+
               //プレビューならここで停止
               if (this.channelInfo.previewmode) return 0;
               //もしフォーカスしているなら
