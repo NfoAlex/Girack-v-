@@ -631,10 +631,18 @@ export default {
         CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY
           &&
         !channelInfo.haveAllHistory
+          &&
+        (channelInfo.fetchingHistory !== true)
       "
       class="d-flex justify-center my-5"
     >
       スクロールしろー
+    </div>
+    <div
+      v-if="channelInfo.fetchingHistory"
+      class="d-flex justify-center my-5"
+    >
+      ロード中...
     </div>
 
     <div 
