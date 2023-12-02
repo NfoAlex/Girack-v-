@@ -380,13 +380,13 @@ export default {
       }
     },
 
-    //このウィンドウにいるかどうかを設定する
+    //このウィンドウにいるかどうかを設定する(true)
     setFocusStateTrue() {
       this.StateFocus = true;
       this.setScrollState(); //既読チェック
     },
 
-    //このウィンドウにいるかどうかを設定する
+    //このウィンドウにいるかどうかを設定する(false)
     setFocusStateFalse() {
       this.StateFocus = false;
     },
