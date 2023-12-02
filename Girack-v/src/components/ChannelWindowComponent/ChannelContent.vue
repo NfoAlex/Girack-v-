@@ -228,8 +228,11 @@ export default {
     //表示する履歴を拡張する
     cropMessageExtend() {
       //もし表示する数が履歴の長さより長かったらさらに深い履歴をサーバーから取得する
-      if (this.msgDisplayNum + 30 > this.MsgDBActive.length) this.getHistory();
-      this.msgDisplayNum += 30;
+      if (this.msgDisplayNum + 30 > this.MsgDBActive.length) {
+        this.channelInfo.fetchingHistory = true; //履歴取得中と設定
+        this.getHistory(); //取得
+      }
+      this.msgDisplayNum += 30; //表示数拡大
     },
 
     //一つ前の履歴から１日が空いてるなら日付の線みたいなのを出す
