@@ -376,6 +376,7 @@ export default {
           &&
         !this.channelInfo.fetchingHistory //履歴取得中でない
       ) {
+        //console.log("ChannelContent :: setScrollState : 履歴拡張します...");
         //表示拡張させて履歴取得させる(スクロール位置が残ってしまわないように遅延はさむ)
         setTimeout(this.cropMessageExtend, 50); //0.05秒待ってから履歴取得
       } else {
