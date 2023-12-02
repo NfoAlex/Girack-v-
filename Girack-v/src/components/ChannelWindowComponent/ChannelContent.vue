@@ -201,18 +201,6 @@ export default {
   },
 
   methods: {
-    //さらに過去の履歴(10件)を取得する
-    getHistory() {
-      // console.log(
-      //   "履歴ほしいね :  path -> " +
-      //     this.getPath +
-      //     ", hrcount -> " +
-      //     this.ChannelIndex[this.getPath].historyReadCount
-      // );
-      this.channelInfo.fetchingHistory = true; //履歴を取得中と設定
-      getMessage(this.getPath, 15, this.MsgDBActive.length);
-    },
-
     //指定された履歴の日付を取得
     getHistoryDate(index) {
       let time = this.cropMessage[index].time;
@@ -230,7 +218,7 @@ export default {
       //もし表示する数が履歴の長さより長かったらさらに深い履歴をサーバーから取得する
       if (this.msgDisplayNum + 30 > this.MsgDBActive.length) {
         this.channelInfo.fetchingHistory = true; //履歴取得中と設定
-        this.getHistory(); //取得
+        getMessage(this.getPath, 15, this.MsgDBActive.length); //履歴の取得
       }
       this.msgDisplayNum += 30; //表示数拡大
     },
