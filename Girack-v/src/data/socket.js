@@ -151,6 +151,9 @@ socket.on("messageReceive", (msg) => {
       }
     }
 
+    //履歴数を加算
+    dataChannel().ChannelIndex.value[msg.channelid].historyReadCount++;
+
     //新着のメッセージを通知
     if (
       CONFIG_NOTIFICATION.value.ENABLE && //通知が有効である
