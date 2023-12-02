@@ -377,7 +377,6 @@ export default {
       ) {
         //表示拡張させて履歴取得させる(スクロール位置が残ってしまわないように遅延はさむ)
         setTimeout(this.cropMessageExtend, 50); //0.05秒待ってから履歴取得
-          
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
       }
