@@ -148,6 +148,7 @@ export default {
               if (this.channelInfo.previewmode) return 0;
               //もしフォーカスしているなら
               if (this.StateFocus) {
+                this.setScrollState(); //スクロール状態の確認
                 try {
                   //比較用既読時間を更新
                   let latestTime = this.MsgDBActive[0].time;
