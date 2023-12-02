@@ -635,13 +635,8 @@ export default {
       "
       class="d-flex justify-center my-5"
     >
-      スクロールしろー
-    </div>
-    <div
-      v-if="channelInfo.fetchingHistory"
-      class="d-flex justify-center my-5"
-    >
-      ロード中...
+      <p v-if="!channelInfo.fetchingHistory">スクロールしろー</p>
+      <p v-else>ロード中...</p>
     </div>
 
     <div 
