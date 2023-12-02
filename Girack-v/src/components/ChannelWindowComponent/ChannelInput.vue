@@ -404,7 +404,7 @@ export default {
         //検査
         let matchResult = this.txt.match(twtRegexes[reg]);
 
-        console.log("ChannelInput :: watch(txt) : twitterRegextest->", matchResult);
+        //console.log("ChannelInput :: watch(txt) : twitterRegextest->", matchResult);
 
         //見つかったらツイートがあると記録
         if (matchResult !== null) {
@@ -472,7 +472,7 @@ export default {
       //今いるチャンネルの履歴を取得
       let MsgDBHere = this.MsgDB[this.getPath];
 
-      console.log("Input getMessage : using ", MsgDBHere);
+      //console.log("Input getMessage : using ", MsgDBHere);
 
       //履歴から一致するメッセージIDのものを探す
       for (let index in MsgDBHere) {
