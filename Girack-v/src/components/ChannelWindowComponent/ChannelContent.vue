@@ -215,7 +215,11 @@ export default {
     //表示する履歴を拡張する
     cropMessageExtend() {
       //もし表示する数が履歴の長さより長かったらさらに深い履歴をサーバーから取得する
-      if (this.msgDisplayNum + 30 > this.MsgDBActive.length) {
+      if (
+        this.msgDisplayNum + 30 > this.MsgDBActive.length
+          &&
+        !this.channelInfo.fetchingHistory
+      ) {
         this.channelInfo.fetchingHistory = true; //履歴取得中と設定
         getMessage(this.getPath, 15, this.MsgDBActive.length); //履歴の取得
       }
