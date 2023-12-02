@@ -622,7 +622,11 @@ export default {
     </div>
 
     <div
-      v-if="CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY && !channelInfo.haveAllHistory"
+      v-if="
+        CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY
+          &&
+        !channelInfo.haveAllHistory
+      "
       class="d-flex justify-center my-5"
     >
       スクロールしろー
