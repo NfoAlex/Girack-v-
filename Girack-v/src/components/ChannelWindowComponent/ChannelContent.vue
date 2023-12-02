@@ -616,6 +616,7 @@ export default {
       >
     </div>
 
+    <!-- 履歴取得状態表示 -->
     <div
       v-if="
         CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY
@@ -626,7 +627,7 @@ export default {
       "
       class="d-flex justify-center my-5"
     >
-      <p v-if="!channelInfo.fetchingHistory">スクロールしろー</p>
+      <p v-if="!channelInfo.fetchingHistory">スクロールして履歴を取得</p>
       <p v-else>ロード中...</p>
     </div>
 
