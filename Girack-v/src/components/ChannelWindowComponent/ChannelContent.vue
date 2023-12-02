@@ -374,16 +374,15 @@ export default {
         }
       } else if ( //もし一番上にスクロールしているなら履歴読み込み
         channelWindow.scrollHeight + channelWindow.scrollTop <= channelWindow.clientHeight + 1
-        &&
+          &&
         this.CONFIG_DISPLAY.CONTENT_SCROLL_AUTOFETCHHISTORY //自動で履歴取得するように設定してるなら
-        &&
-        !this.channelInfo.haveAllHistory
+          &&
+        !this.channelInfo.haveAllHistory //履歴をすべて持っていない
+          &&
+        !this.channelInfo.fetchingHistory //履歴取得中でない
       ) {
         //表示拡張させて履歴取得させる(スクロール位置が残ってしまわないように遅延はさむ)
-        
-        if (!this.channelInfo.fetchingHistory) { //そもそも履歴取得中でないことを確認
-          setTimeout(this.cropMessageExtend, 50); //0.05秒待ってから履歴取得
-        }
+        setTimeout(this.cropMessageExtend, 50); //0.05秒待ってから履歴取得
           
       } else {
         this.StateScrolled = false; //スクロールしきってないと保存
