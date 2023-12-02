@@ -297,7 +297,10 @@ socket.on("messageUpdate", (dat) => {
             }
           }
 
-          dataMsg().MsgDB.value[dat.channelid].splice(index, 1); //削除
+          //履歴長を一つ減らす
+          dataChannel().ChannelIndex.value[dat.channelid].historyReadCount--;
+          //削除
+          dataMsg().MsgDB.value[dat.channelid].splice(index, 1);
         }
       }
       break;
