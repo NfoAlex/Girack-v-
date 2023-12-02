@@ -460,11 +460,23 @@ socket.on("infoChannel", (dat) => {
     return;
   }
 
+  //元からチャンネルデータを保持しているなら履歴の保持状態と取得状態を後で上書きするために保存しておく
+  let fetchingHistoryCurrent = false; //履歴の取得待ち状態であるかどうか
+  let haveAllHistoryCurrent = false; //履歴をすべて読み込んだかどうか
+  if (dataChannel().ChannelIndex.value[dat.channelid] !== undefined) { //チャンネルデータを持っているかどうか
+    fetchingHistoryCurrent = dataChannel().ChannelIndex.value[dat.channelid].fetchingHistory;
+    haveAllHistoryCurrent = dataChannel().ChannelIndex.value[dat.channelid].haveAllHistory;
+  }
+
   //チャンネルデータをテンプレに上書きするように更新
   dataChannel().ChannelIndex.value[dat.channelid] = {
     ...channelDataTemplate,
     ...dat,
   };
+
+  //履歴状態を保存していたものに上書き更新
+  dataChannel().ChannelIndex.value[dat.channelid].fetchingHistory = fetchingHistoryCurrent;
+  dataChannel().ChannelIndex.value[dat.channelid].haveAllHistory = haveAllHistoryCurrent;
 
   //もし受け取ったチャンネルIDが順番のやつに入ってなければ追加
   if (!dataChannel().ChannelOrder.value.includes(dat.channelid)) {
