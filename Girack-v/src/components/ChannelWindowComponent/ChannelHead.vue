@@ -204,6 +204,18 @@ export default {
         ブラウザへ戻る
       </v-btn>
 
+      <!-- ピン留め表示ボタン -->
+      <v-btn
+        v-if="!isMobile"
+        @click="() => (channelDialogShow = !channelDialogShow)"
+        :size="getDisplaySize"
+        icon=""
+        class="rounded-lg ma-0"
+        variant="text"
+      >
+        <v-icon>mdi:mdi-pin</v-icon>
+      </v-btn>
+
       <!-- チャンネルメニューボタン -->
       <v-btn
         v-if="!isMobile"
