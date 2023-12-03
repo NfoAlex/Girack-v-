@@ -56,7 +56,12 @@ export default {
 <template>
 
   <div style="border:2px solid black;">
-    <i>ContentReplyRender :: {{ msgReply.userid }} : {{ msgReply.content }}</i>
+    <i>ContentReplyRender
+       :: 
+      {{ UserIndex[msgReply.userid]!==undefined?UserIndex[msgReply.userid].username:"ロード中" }}
+       : 
+      {{ msgReply.content }}
+    </i>
   </div>
 
 </template>
