@@ -39,6 +39,8 @@ export default {
       });
       //JSON変数から削除
       delete this.msgPinDB[msgid];
+      //ハンドラを外す
+      socket.off("messageSingle_" + msgid, this.SOCKETmessageSingle);
     },
 
     //メッセージ受け取り
