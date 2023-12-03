@@ -8,17 +8,55 @@ const socket = getSocket();
 export default {
 
   setup() {
-    const { UserIndex } = dataUser();
+    const { myUserinfo, UserIndex } = dataUser();
 
-    return { UserIndex };
+    return { myUserinfo, UserIndex };
   },
 
   props: ["messageid", "channelid"],
+
+  data() {
+    return {
+      msgReply: {} //受信したメッセージデータの格納用
+    }
+  },
+
+  methods: {
+
+    //メッセージデータ受け取り
+    SOCKETmessageSingle(dat) {
+      console.log("ContentReplyRender :: SOCKETmessageSingle : データ->", dat);
+      this.msgReply = dat; //格納
+    }
+
+  },
+
+  mounted() {
+    //メッセージ取得
+    socket.emit("getMessageSingle", {
+      reqSender: {
+        userid: this.myUserinfo.userid,
+        sessionid: this.myUserinfo.sessionid
+      },
+      messageid: this.messageid,
+      channelid: this.channelid
+    });
+
+    socket.on("messageSingle_" + this.messageid, this.SOCKETmessageSingle);
+  },
+
+  unmounted() {
+    socket.off("messageSingle_" + this.messageid, this.SOCKETmessageSingle);
+  }
 
 }
 
 </script>
 
 <template>
+
+  <div style="border:2px solid black;">
+    <i>ContentReplyRender :: {{ msgReply.userid }} : {{ msgReply.content }}</i>
+  </div>
 
 </template>
