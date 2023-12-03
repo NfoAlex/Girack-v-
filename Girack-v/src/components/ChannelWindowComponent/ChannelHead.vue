@@ -96,6 +96,7 @@ export default {
 </script>
 
 <template>
+
   <!-- チャンネル設定ダイアログ -->
   <ChannelConfig
     v-if="channelDialogShow"
@@ -110,6 +111,8 @@ export default {
     v-if="channelPinsShow"
     v-model="channelPinsShow"
     :pins="channelInfo.pins!==undefined?channelInfo.pins:[]"
+    :channelname="channelInfo.channelname"
+    :channelid="getPath"
     @closePin="channelPinsShow=false"
   />
 
@@ -239,6 +242,7 @@ export default {
       </v-btn>
     </div>
   </div>
+
 </template>
 
 <style scoped></style>
