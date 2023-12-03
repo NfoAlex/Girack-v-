@@ -153,10 +153,10 @@ export default {
   <v-card
     class="pa-2 rounded-lg"
     color="#222"
-    style="width: fit-content; margin-top: -16px; max-width: 500px"
+    style="width:fit-content; margin-top:-16px; max-width:500px"
   >
     <!-- ここからホバーメニュー -->
-    <span style="position: relative; float: right">
+    <span style="position:relative; float:right" class="d-flex align-center">
       <!-- 時間表示 -->
       <span style="margin-right: 12px" class="text-body-2 font-italic">
         {{ printDate() }}
