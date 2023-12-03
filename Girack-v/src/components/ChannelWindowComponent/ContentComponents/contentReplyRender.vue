@@ -2,6 +2,7 @@
 
 import { getSocket } from "../../../data/socket.js";
 import { dataUser } from "../../../data/dataUserinfo";
+import ContentMessageRender from "./ContentMessageRender.vue";
 
 const socket = getSocket();
 
@@ -14,6 +15,8 @@ export default {
   },
 
   props: ["messageid", "channelid"],
+
+  components: { ContentMessageRender },
 
   data() {
     return {
@@ -55,13 +58,35 @@ export default {
 
 <template>
 
-  <div style="border:2px solid black;">
-    <i>ContentReplyRender
-       :: 
-      {{ UserIndex[msgReply.userid]!==undefined?UserIndex[msgReply.userid].username:"ロード中" }}
-       : 
-      {{ msgReply.content }}
-    </i>
+  <div>
+    <p
+      class="text-truncate ma-0"
+      style="margin-top: 8px !important"
+    >
+      <a :href="'#' + msgReply.messageid">
+        <!-- 返信アイコン -->
+        <v-icon>mdi:mdi-reply</v-icon>
+        <!-- 返信する人の名前 -->
+        <v-chip
+          size="small"
+          color="grey"
+          variant="flat"
+          style="cursor: pointer"
+        >
+          {{
+            UserIndex[msgReply.userid] !== undefined
+              ? UserIndex[msgReply.userid].username
+              : msgReply.userid
+          }}
+        </v-chip>
+      </a>
+      <!-- 返信内容 -->
+      :
+      <ContentMessageRender
+        class="text-medium-emphasis"
+        :content="msgReply.content"
+      />
+    </p>
   </div>
 
 </template>
