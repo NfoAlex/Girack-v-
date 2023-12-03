@@ -119,7 +119,7 @@ export default {
             <v-btn
               @click="unpin(message.messageid)"
               class="rounded-lg"
-              icon="mdi:mdi-close"
+              icon="mdi:mdi-minus-circle-outline"
               variant="text"
               size="small"
             ></v-btn>
