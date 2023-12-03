@@ -76,7 +76,7 @@ export default {
       </v-card-title>
 
       <v-card-subtitle>
-        <div class="ml-3 me-auto">ピン留め一覧</div>
+        <div class="ml-3 mb-1 me-auto">ピン留め一覧</div>
       </v-card-subtitle>
 
       <v-card-text style="overflow-y:auto; padding-bottom:5%">
