@@ -37,25 +37,25 @@ export default {
     getDisplaySize() {
       switch (useDisplay().name.value) {
         case "xs":
-          return "small";
+          return "x-small";
 
         case "sm":
-          return "default";
+          return "small";
 
         case "md":
-          return "48";
+          return "default";
 
         case "lg":
-          return "64";
+          return "48";
 
         case "xl":
-          return "x-large";
+          return "large";
 
         case "xxl":
           return "96";
 
         default:
-          return "";
+          return "small";
       }
     },
 
@@ -183,8 +183,8 @@ export default {
         @click="toggleMuteChannel"
         :size="getDisplaySize"
         icon=""
-        class="rounded-lg ma-1"
-        color="secondary"
+        class="rounded-lg ma-0"
+        variant="text"
       >
         <v-icon
           v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)"
@@ -210,8 +210,8 @@ export default {
         @click="() => (channelDialogShow = !channelDialogShow)"
         :size="getDisplaySize"
         icon=""
-        class="rounded-lg ma-1"
-        color="secondary"
+        class="rounded-lg ma-0"
+        variant="text"
       >
         <v-icon>mdi:mdi-menu</v-icon>
       </v-btn>
