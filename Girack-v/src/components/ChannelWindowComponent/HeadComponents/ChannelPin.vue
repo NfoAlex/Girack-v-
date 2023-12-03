@@ -67,7 +67,12 @@ export default {
       <v-card-title class="d-flex align-center">
         <v-icon>mdi:mdi-pound</v-icon>
         <div class="me-auto text-truncate">{{ channelname }}</div>
-        <v-btn @click="$emit('closePin')" class="rounded-lg" variant="tonal" icon="mdi:mdi-close"></v-btn>
+        <v-btn
+          @click="$emit('closePin')"
+          class="rounded-lg"
+          color="secondary"
+          icon="mdi:mdi-close"
+        ></v-btn>
       </v-card-title>
 
       <v-card-subtitle>
@@ -78,7 +83,7 @@ export default {
 
         <v-card
           v-for="message in msgPinDB"
-          class="my-2 pa-3 rounded-lg"
+          class="my-3 pa-3 rounded-lg"
           variant="tonal"
         >
           <span class="d-flex align-center">
@@ -91,9 +96,8 @@ export default {
             </v-avatar>
             <p>{{ UserIndex[message.userid].username }}</p>
           </span>
-          <div class="my-2">
+          <div class="my-2 py-1 px-2">
             <ContentMessageRender
-              class="pa-2"
               :content="message.content"
             />
           </div>
