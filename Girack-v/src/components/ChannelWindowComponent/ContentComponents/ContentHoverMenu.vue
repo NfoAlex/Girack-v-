@@ -96,6 +96,20 @@ export default {
 
     //削除したりリアクションしたり編集(ToDo)したり
     messageAction(msgId, act, reaction) {
+      //ピン留めする
+      if (act === "pin") {
+        //ピン
+        socket.emit("actMessage", {
+          action: "pin",
+          channelid: this.channelid,
+          messageid: msgId,
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid,
+          },
+        });
+      }
+
       //削除する
       if (act === "delete") {
         console.log("messageAction :: 削除します");
@@ -187,6 +201,17 @@ export default {
         size="x-small"
       >
         😰
+      </v-btn>
+
+      <!-- ピン留め -->
+      <v-btn
+        @click="messageAction(m.messageid, 'pin')"
+        style="margin-right: 3px"
+        variant="tonal"
+        rounded="pill"
+        size="x-small"
+      >
+        <v-icon> mdi:mdi-pin </v-icon>
       </v-btn>
 
       <!-- 返信 -->
