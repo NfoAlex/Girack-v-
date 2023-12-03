@@ -177,7 +177,7 @@ export default {
       </span>
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'smile')"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -186,7 +186,7 @@ export default {
       </v-btn>
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'thinking_face')"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -195,7 +195,7 @@ export default {
       </v-btn>
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'cold_sweat')"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -206,7 +206,7 @@ export default {
       <!-- ピン留め -->
       <v-btn
         @click="messageAction(m.messageid, 'pin')"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -217,7 +217,7 @@ export default {
       <!-- 返信 -->
       <v-btn
         @click="reply"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -229,7 +229,7 @@ export default {
       <v-btn
         v-if="m.userid===myUserinfo.userid"
         @click="$emit('updateEditingMessage',m.messageid)"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -237,30 +237,35 @@ export default {
         <v-icon> mdi:mdi-pencil </v-icon>
       </v-btn>
 
-      <v-divider vertical></v-divider>
-
-      <!-- 削除ボタン -->
-      <v-btn
-        prepend-icon="mdi:mdi-delete-forever"
+      <span
         v-if="
           myUserinfo.role === 'Admin' ||
           (userrole !== 'Admin' && myUserinfo.role === 'Moderator') ||
           m.userid === myUserinfo.userid
         "
-        @dblclick="messageAction(m.messageid, 'delete')"
-        style="margin-right: 3px"
-        variant="tonal"
-        rounded="pill"
-        size="x-small"
+        class="d-flex align-center"
       >
-        削除
-        <v-tooltip
-          activator="parent"
-          location="top center"
+        <v-divider vertical class="mx-1"></v-divider>
+
+        <!-- 削除ボタン -->
+        <v-btn
+          prepend-icon="mdi:mdi-delete-forever"
+          
+          @dblclick="messageAction(m.messageid, 'delete')"
+          style="margin-right: 3px"
+          variant="tonal"
+          rounded="pill"
+          size="x-small"
         >
-          ダブルクリックで削除
-        </v-tooltip>
-      </v-btn>
+          削除
+          <v-tooltip
+            activator="parent"
+            location="top center"
+          >
+            ダブルクリックで削除
+          </v-tooltip>
+        </v-btn>
+      </span>
     </span>
   </v-card>
 </template>
