@@ -8,7 +8,7 @@ import ContentHoverMenu from "./ContentHoverMenu.vue";
 import ContentEditing from "./ContentEditing.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
-import contentReplyRender from "./contentReplyRender.vue";
+import ContentReplyRender from "./contentReplyRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
 
 const socket = getSocket();
@@ -50,6 +50,7 @@ export default {
     ContentEditing,
     ContentURLpreview,
     ContentMessageRender,
+    ContentReplyRender,
     ContentAttatchmentRender
   },
 
@@ -616,6 +617,11 @@ export default {
                 :content="m.replyData.content"
               />
             </p>
+            <ContentReplyRender
+              v-if="m.replyData.isReplying"
+              :messageid="m.replyData.messageid"
+              :channelid="m.channelid"
+            />
 
             <!-- メッセージ本文と編集中表示 -->
             <ContentMessageRender v-if="!msgEditing" :content="m.content" />
