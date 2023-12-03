@@ -98,6 +98,7 @@ export default {
       <v-card-text style="overflow-y:auto; padding-bottom:5%">
 
         <v-card
+          v-if="Object.keys(msgPinDB).length!==0"
           v-for="message in msgPinDB"
           class="my-3 pa-3 rounded-lg"
           variant="tonal"
@@ -125,6 +126,7 @@ export default {
             />
           </div>
         </v-card>
+        <div v-else class="mx-auto my-5 text-center">ピン留めがありません</div>
 
       </v-card-text>
     </v-card>
