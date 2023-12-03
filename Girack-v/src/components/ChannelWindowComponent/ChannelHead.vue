@@ -110,6 +110,7 @@ export default {
     v-if="channelPinsShow"
     v-model="channelPinsShow"
     :pins="channelInfo.pins!==undefined?channelInfo.pins:[]"
+    @closePin="channelPinsShow=false"
   />
 
   <!-- ヘッダの表示部分(メイン) -->
