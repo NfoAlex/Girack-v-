@@ -99,12 +99,14 @@ export default {
 
       <v-card-text style="overflow-y:auto; padding-bottom:5%">
 
+        <!-- ピン留め内容表示 -->
         <v-card
           v-if="Object.keys(msgPinDB).length!==0"
           v-for="message in msgPinDB"
           class="my-3 pa-3 rounded-lg"
           variant="tonal"
         >
+          <!-- アバターと名前とボタン表示 -->
           <span class="d-flex align-center">
             <v-avatar class="mr-3" size="small">
               <v-img
@@ -122,6 +124,7 @@ export default {
               size="small"
             ></v-btn>
           </span>
+          <!-- メッセージ内容 -->
           <div class="my-2 py-1 px-2">
             <ContentMessageRender
               :content="message.content"
