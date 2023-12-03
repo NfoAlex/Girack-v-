@@ -416,6 +416,7 @@ socket.on("infoChannel", (dat) => {
   let channelDataTemplate = {
     channelname: "channel", //チャンネル名
     description: "desc", //チャンネル概要
+    pins: [], //ピン留めされたメッセージ
     scope: "public", //チャンネルの公開範囲
     canTalk: "Member", //喋るのに必要なロール
     historyReadCount: 0, //すでに読んだ履歴の数
