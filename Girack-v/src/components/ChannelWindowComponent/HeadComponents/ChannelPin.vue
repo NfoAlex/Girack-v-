@@ -115,15 +115,30 @@ export default {
               >
               </v-img>
             </v-avatar>
-            <p class="me-auto">{{ UserIndex[message.userid]!==undefined?UserIndex[message.userid].username:message.userid }}</p>
+            <p class="me-auto">
+              {{ UserIndex[message.userid]!==undefined?UserIndex[message.userid].username:message.userid }}
+            </p>
+            <!-- 外しボタン -->
             <v-btn
               @click="unpin(message.messageid)"
               class="rounded-lg"
-              icon="mdi:mdi-minus-circle-outline"
+              icon
               variant="text"
               size="small"
-            ></v-btn>
+            >
+              <v-icon>
+                mdi:mdi-minus-circle-outline
+              </v-icon>
+              <v-tooltip
+                activator="parent"
+                location="left"
+              >
+                ピンを外す
+              </v-tooltip>
+            </v-btn>
+
           </span>
+
           <!-- メッセージ内容 -->
           <div class="my-2 py-1 px-2">
             <ContentMessageRender
