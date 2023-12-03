@@ -5,6 +5,7 @@ import { getCONFIG } from "../../config.js";
 import { setCookie } from "../../data/socket";
 import { dataUser } from "../../data/dataUserinfo";
 import ChannelConfig from "./HeadComponents/ChannelConfig.vue";
+import ChannelPin from "./HeadComponents/ChannelPin.vue";
 
 export default {
   setup() {
@@ -14,7 +15,7 @@ export default {
     return { mobile, myUserinfo, LIST_NOTIFICATION_MUTE_CHANNEL };
   },
 
-  components: { ChannelConfig },
+  components: { ChannelConfig, ChannelPin },
   props: ["channelInfo"],
 
   data() {
@@ -22,6 +23,7 @@ export default {
       //チャンネルメニューダイアログ用
       channelDialogShow: false,
       channelDialogId: "0001",
+      channelPinsShow: false,
     };
   },
 
@@ -37,25 +39,25 @@ export default {
     getDisplaySize() {
       switch (useDisplay().name.value) {
         case "xs":
-          return "small";
+          return "x-small";
 
         case "sm":
-          return "default";
+          return "small";
 
         case "md":
-          return "48";
+          return "default";
 
         case "lg":
-          return "64";
+          return "48";
 
         case "xl":
-          return "x-large";
+          return "large";
 
         case "xxl":
           return "96";
 
         default:
-          return "";
+          return "small";
       }
     },
 
@@ -94,6 +96,7 @@ export default {
 </script>
 
 <template>
+
   <!-- チャンネル設定ダイアログ -->
   <ChannelConfig
     v-if="channelDialogShow"
@@ -101,6 +104,16 @@ export default {
     v-model="channelDialogShow"
     :channelid="getPath"
     :channelInfo="channelInfo"
+  />
+
+  <!-- チャンネルのピン留め表示ダイアログ -->
+  <ChannelPin
+    v-if="channelPinsShow"
+    v-model="channelPinsShow"
+    :pins="channelInfo.pins!==undefined?channelInfo.pins:[]"
+    :channelname="channelInfo.channelname"
+    :channelid="getPath"
+    @closePin="channelPinsShow=false"
   />
 
   <!-- ヘッダの表示部分(メイン) -->
@@ -183,8 +196,8 @@ export default {
         @click="toggleMuteChannel"
         :size="getDisplaySize"
         icon=""
-        class="rounded-lg ma-1"
-        color="secondary"
+        class="rounded-lg ma-0"
+        variant="text"
       >
         <v-icon
           v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)"
@@ -204,19 +217,32 @@ export default {
         ブラウザへ戻る
       </v-btn>
 
+      <!-- ピン留め表示ボタン -->
+      <v-btn
+        v-if="!isMobile"
+        @click="() => (channelPinsShow = !channelPinsShow)"
+        :size="getDisplaySize"
+        icon=""
+        class="rounded-lg ma-0"
+        variant="text"
+      >
+        <v-icon>mdi:mdi-pin</v-icon>
+      </v-btn>
+
       <!-- チャンネルメニューボタン -->
       <v-btn
         v-if="!isMobile"
         @click="() => (channelDialogShow = !channelDialogShow)"
         :size="getDisplaySize"
         icon=""
-        class="rounded-lg ma-1"
-        color="secondary"
+        class="rounded-lg ma-0"
+        variant="text"
       >
         <v-icon>mdi:mdi-menu</v-icon>
       </v-btn>
     </div>
   </div>
+
 </template>
 
 <style scoped></style>

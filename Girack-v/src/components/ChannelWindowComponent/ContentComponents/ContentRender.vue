@@ -506,7 +506,8 @@ export default {
     <!-- メッセージ本体 -->
     <span
       :class="[
-        msgHovered && msgIdHovering === m.messageid ? 'hovered' : null,
+        m.pinned?'pinned':null,
+        msgHovered && msgIdHovering === m.messageid ? 'hovered' : null, //ホバー
         checkMsgPosition(m.userid, index),
       ]"
       class="flex-grow-1"
@@ -592,6 +593,16 @@ export default {
               :channelid="m.channelid"
             />
 
+            <!-- ピン留めされているかどうか -->
+            <div class="my-1">
+              <v-chip v-if="m.pinned" size="x-small">
+                <v-icon  size="small">
+                  mdi:mdi-pin
+                </v-icon>
+                ピン留め済み
+              </v-chip>
+            </div>
+
             <!-- メッセージ本文と編集中表示 -->
             <ContentMessageRender v-if="!msgEditing" :content="m.content" />
             <ContentEditing
@@ -655,8 +666,14 @@ export default {
 
 <style scoped>
 
+/* ホバーされたメッセージ */
 .hovered {
   background-color: #444 !important;
+}
+
+/* ピン留めされたメッセージ */
+.pinned {
+  background-color: #334 !important;
 }
 
 .pointed {

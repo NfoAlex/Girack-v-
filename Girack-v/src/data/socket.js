@@ -259,17 +259,33 @@ socket.on("messageUpdate", (dat) => {
   //メッセージ消したりリアクションされたり
   /*
     {
-        action: "delete"|"reaction|"urlData",
-        channelid: dat.channelid,
-        messageid: dat.messageid,
-        ["reaction"だったら]
-        reaction: dat.reaction
-        ["urlData"だったら]
-        urlData: dat.urlData
+      action: "pin"|"delete"|"reaction|"urlData",
+      channelid: dat.channelid,
+      messageid: dat.messageid,
+      ["reaction"だったら]
+      reaction: dat.reaction
+      ["urlData"だったら]
+      urlData: dat.urlData
     }
-    */
+  */
+
+  //console.log("socket :: messageUpdate : 更新->", dat);
 
   switch (dat.action) {
+    //ピン留め状態更新
+    case "pin":
+      //ループでIDが一致するメッセージを探す
+      for (let index in dataMsg().MsgDB.value[dat.channelid]) {
+        if (
+          dataMsg().MsgDB.value[dat.channelid][index].messageid ===
+          dat.messageid
+        ) {
+          //ピン留め状態を更新
+          dataMsg().MsgDB.value[dat.channelid][index].pinned = dat.pinned;
+        }
+      }
+      break;
+
     //削除する
     case "delete":
       //ループでIDが一致するメッセージを探す
@@ -408,7 +424,6 @@ socket.on("infoServer", (dat) => {
 socket.on("infoChannel", (dat) => {
   console.log(
     "socket :: infoChannel : ",
-    dataChannel().PreviewChannelData.value.channelid,
     dat
   );
 
@@ -416,6 +431,7 @@ socket.on("infoChannel", (dat) => {
   let channelDataTemplate = {
     channelname: "channel", //チャンネル名
     description: "desc", //チャンネル概要
+    pins: [], //ピン留めされたメッセージ
     scope: "public", //チャンネルの公開範囲
     canTalk: "Member", //喋るのに必要なロール
     historyReadCount: 0, //すでに読んだ履歴の数
@@ -473,6 +489,8 @@ socket.on("infoChannel", (dat) => {
     dataChannel().ChannelIndex.value[dat.channelid].channelname = dat.channelname;
       //チャンネル概要
     dataChannel().ChannelIndex.value[dat.channelid].description = dat.description;
+      //ピン留め
+    dataChannel().ChannelIndex.value[dat.channelid].pins = dat.pins;
       //チャンネルの公開範囲
     dataChannel().ChannelIndex.value[dat.channelid].scope = dat.scope;
       //喋るのに必要なロール

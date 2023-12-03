@@ -96,6 +96,20 @@ export default {
 
     //削除したりリアクションしたり編集(ToDo)したり
     messageAction(msgId, act, reaction) {
+      //ピン留めする
+      if (act === "pin") {
+        //ピン
+        socket.emit("actMessage", {
+          action: "pin",
+          channelid: this.channelid,
+          messageid: msgId,
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid,
+          },
+        });
+      }
+
       //削除する
       if (act === "delete") {
         console.log("messageAction :: 削除します");
@@ -153,17 +167,17 @@ export default {
   <v-card
     class="pa-2 rounded-lg"
     color="#222"
-    style="width: fit-content; margin-top: -16px; max-width: 500px"
+    style="width:fit-content; margin-top:-16px; max-width:500px"
   >
     <!-- ここからホバーメニュー -->
-    <span style="position: relative; float: right">
+    <span style="position:relative; float:right" class="d-flex align-center">
       <!-- 時間表示 -->
-      <span style="margin-right: 12px" class="text-body-2 font-italic">
+      <span style="margin-right:12px" class="text-body-2">
         {{ printDate() }}
       </span>
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'smile')"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -172,7 +186,7 @@ export default {
       </v-btn>
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'thinking_face')"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -181,7 +195,7 @@ export default {
       </v-btn>
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'cold_sweat')"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -189,10 +203,21 @@ export default {
         😰
       </v-btn>
 
+      <!-- ピン留め -->
+      <v-btn
+        @click="messageAction(m.messageid, 'pin')"
+        class="ml-1"
+        variant="tonal"
+        rounded="pill"
+        size="x-small"
+      >
+        <v-icon> mdi:mdi-pin </v-icon>
+      </v-btn>
+
       <!-- 返信 -->
       <v-btn
         @click="reply"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -204,7 +229,7 @@ export default {
       <v-btn
         v-if="m.userid===myUserinfo.userid"
         @click="$emit('updateEditingMessage',m.messageid)"
-        style="margin-right: 3px"
+        class="ml-1"
         variant="tonal"
         rounded="pill"
         size="x-small"
@@ -212,30 +237,36 @@ export default {
         <v-icon> mdi:mdi-pencil </v-icon>
       </v-btn>
 
-      <v-divider vertical></v-divider>
-
-      <!-- 削除ボタン -->
-      <v-btn
-        prepend-icon="mdi:mdi-delete-forever"
+      <span
         v-if="
           myUserinfo.role === 'Admin' ||
           (userrole !== 'Admin' && myUserinfo.role === 'Moderator') ||
           m.userid === myUserinfo.userid
         "
-        @dblclick="messageAction(m.messageid, 'delete')"
-        style="margin-right: 3px"
-        variant="tonal"
-        rounded="pill"
-        size="x-small"
+        class="d-flex align-center"
       >
-        削除
-        <v-tooltip
-          activator="parent"
-          location="top center"
+        <v-divider vertical class="mx-1"></v-divider>
+
+        <!-- 削除ボタン -->
+        <v-btn
+          prepend-icon="mdi:mdi-delete-forever"
+          
+          @dblclick="messageAction(m.messageid, 'delete')"
+          style="margin-right: 3px"
+          variant="tonal"
+          rounded="pill"
+          size="x-small"
         >
-          ダブルクリックで削除
-        </v-tooltip>
-      </v-btn>
+          削除
+          <v-tooltip
+            activator="parent"
+            location="top center"
+          >
+            ダブルクリックで削除
+          </v-tooltip>
+        </v-btn>
+      </span>
+      
     </span>
   </v-card>
 </template>
