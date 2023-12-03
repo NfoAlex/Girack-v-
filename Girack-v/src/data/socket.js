@@ -424,7 +424,6 @@ socket.on("infoServer", (dat) => {
 socket.on("infoChannel", (dat) => {
   console.log(
     "socket :: infoChannel : ",
-    dataChannel().PreviewChannelData.value.channelid,
     dat
   );
 
@@ -490,6 +489,8 @@ socket.on("infoChannel", (dat) => {
     dataChannel().ChannelIndex.value[dat.channelid].channelname = dat.channelname;
       //チャンネル概要
     dataChannel().ChannelIndex.value[dat.channelid].description = dat.description;
+      //ピン留め
+    dataChannel().ChannelIndex.value[dat.channelid].pins = dat.pins;
       //チャンネルの公開範囲
     dataChannel().ChannelIndex.value[dat.channelid].scope = dat.scope;
       //喋るのに必要なロール
