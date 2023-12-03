@@ -25,6 +25,22 @@ export default {
 
   methods: {
 
+    //ピン留めを外す
+    unpin(msgid) {
+      //ピンを外す
+      socket.emit("actMessage", {
+        action: "pin",
+        channelid: this.channelid,
+        messageid: msgid,
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
+        },
+      });
+      //JSON変数から削除
+      delete this.msgPinDB[msgid];
+    },
+
     //メッセージ受け取り
     SOCKETmessageSingle(dat) {
       //メッセ用の変数へデータ追加
@@ -94,7 +110,14 @@ export default {
               >
               </v-img>
             </v-avatar>
-            <p>{{ UserIndex[message.userid]!==undefined?UserIndex[message.userid].username:message.userid }}</p>
+            <p class="me-auto">{{ UserIndex[message.userid]!==undefined?UserIndex[message.userid].username:message.userid }}</p>
+            <v-btn
+              @click="unpin(message.messageid)"
+              class="rounded-lg"
+              icon="mdi:mdi-close"
+              variant="text"
+              size="small"
+            ></v-btn>
           </span>
           <div class="my-2 py-1 px-2">
             <ContentMessageRender
