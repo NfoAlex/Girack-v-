@@ -2,6 +2,7 @@
 
 import { getSocket, Serverinfo } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
+import ContentMessageRender from "../ContentComponents/ContentMessageRender.vue";
 
 const socket = getSocket();
 
@@ -14,11 +15,13 @@ export default {
 
   data() {
     return {
+      uri: window.location.origin, //バックエンドのURI
       msgPinDB: {}
     }
   },
 
   props: ["pins", "channelid", "channelname"],
+  components: { ContentMessageRender },
 
   methods: {
 
@@ -71,17 +74,31 @@ export default {
         <div class="ml-3 me-auto">ピン留め一覧</div>
       </v-card-subtitle>
 
-      <v-card-text>
+      <v-card-text style="overflow-y:auto; padding-bottom:5%">
 
         <v-card
           v-for="message in msgPinDB"
-          class="my-2 pa-2 rounded-lg"
+          class="my-2 pa-3 rounded-lg"
           variant="tonal"
         >
-          {{ message.content }}
+          <span class="d-flex align-center">
+            <v-avatar class="mr-3" size="small">
+              <v-img
+                :alt="message.userid"
+                :src="uri + '/img/' + message.userid"
+              >
+              </v-img>
+            </v-avatar>
+            <p>{{ UserIndex[message.userid].username }}</p>
+          </span>
+          <div class="my-2">
+            <ContentMessageRender
+              class="pa-2"
+              :content="message.content"
+            />
+          </div>
         </v-card>
 
-        {{ pins }}
       </v-card-text>
     </v-card>
   </v-dialog>
