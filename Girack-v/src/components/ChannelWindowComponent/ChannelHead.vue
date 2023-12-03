@@ -5,6 +5,7 @@ import { getCONFIG } from "../../config.js";
 import { setCookie } from "../../data/socket";
 import { dataUser } from "../../data/dataUserinfo";
 import ChannelConfig from "./HeadComponents/ChannelConfig.vue";
+import ChannelPin from "./HeadComponents/ChannelPin.vue";
 
 export default {
   setup() {
@@ -14,7 +15,7 @@ export default {
     return { mobile, myUserinfo, LIST_NOTIFICATION_MUTE_CHANNEL };
   },
 
-  components: { ChannelConfig },
+  components: { ChannelConfig, ChannelPin },
   props: ["channelInfo"],
 
   data() {
@@ -22,6 +23,7 @@ export default {
       //チャンネルメニューダイアログ用
       channelDialogShow: false,
       channelDialogId: "0001",
+      channelPinsShow: false,
     };
   },
 
@@ -101,6 +103,13 @@ export default {
     v-model="channelDialogShow"
     :channelid="getPath"
     :channelInfo="channelInfo"
+  />
+
+  <!-- チャンネルのピン留め表示ダイアログ -->
+  <ChannelPin
+    v-if="channelPinsShow"
+    v-model="channelPinsShow"
+    :pins="channelInfo.pins!==undefined?channelInfo.pins:[]"
   />
 
   <!-- ヘッダの表示部分(メイン) -->
@@ -207,7 +216,7 @@ export default {
       <!-- ピン留め表示ボタン -->
       <v-btn
         v-if="!isMobile"
-        @click="() => (channelDialogShow = !channelDialogShow)"
+        @click="() => (channelPinsShow = !channelPinsShow)"
         :size="getDisplaySize"
         icon=""
         class="rounded-lg ma-0"
