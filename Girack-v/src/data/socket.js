@@ -259,17 +259,33 @@ socket.on("messageUpdate", (dat) => {
   //メッセージ消したりリアクションされたり
   /*
     {
-        action: "delete"|"reaction|"urlData",
-        channelid: dat.channelid,
-        messageid: dat.messageid,
-        ["reaction"だったら]
-        reaction: dat.reaction
-        ["urlData"だったら]
-        urlData: dat.urlData
+      action: "pin"|"delete"|"reaction|"urlData",
+      channelid: dat.channelid,
+      messageid: dat.messageid,
+      ["reaction"だったら]
+      reaction: dat.reaction
+      ["urlData"だったら]
+      urlData: dat.urlData
     }
-    */
+  */
+
+  //console.log("socket :: messageUpdate : 更新->", dat);
 
   switch (dat.action) {
+    //ピン留め状態更新
+    case "pin":
+      //ループでIDが一致するメッセージを探す
+      for (let index in dataMsg().MsgDB.value[dat.channelid]) {
+        if (
+          dataMsg().MsgDB.value[dat.channelid][index].messageid ===
+          dat.messageid
+        ) {
+          //ピン留め状態を更新
+          dataMsg().MsgDB.value[dat.channelid][index].pinned = dat.pinned;
+        }
+      }
+      break;
+
     //削除する
     case "delete":
       //ループでIDが一致するメッセージを探す
