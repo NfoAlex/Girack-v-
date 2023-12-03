@@ -8,6 +8,7 @@ import ContentHoverMenu from "./ContentHoverMenu.vue";
 import ContentEditing from "./ContentEditing.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
+import ContentReplyRender from "./contentReplyRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
 
 const socket = getSocket();
@@ -49,6 +50,7 @@ export default {
     ContentEditing,
     ContentURLpreview,
     ContentMessageRender,
+    ContentReplyRender,
     ContentAttatchmentRender
   },
 
@@ -584,37 +586,11 @@ export default {
             </div>
 
             <!-- 返信データ -->
-            <p
-              class="text-truncate ma-0"
-              style="margin-top: 8px !important"
-              v-if="
-                m.replyData !== undefined ? m.replyData.isReplying : false
-              "
-            >
-              <a :href="'#' + m.replyData.messageid">
-                <!-- 返信アイコン -->
-                <v-icon>mdi:mdi-reply</v-icon>
-                <!-- 返信する人の名前 -->
-                <v-chip
-                  size="small"
-                  color="grey"
-                  variant="flat"
-                  style="cursor: pointer"
-                >
-                  {{
-                    UserIndex[m.replyData.userid] !== undefined
-                      ? UserIndex[m.replyData.userid].username
-                      : m.replyData.userid
-                  }}
-                </v-chip>
-              </a>
-              <!-- 返信内容 -->
-              :
-              <ContentMessageRender
-                class="text-medium-emphasis"
-                :content="m.replyData.content"
-              />
-            </p>
+            <ContentReplyRender
+              v-if="m.replyData.isReplying"
+              :messageid="m.replyData.messageid"
+              :channelid="m.channelid"
+            />
 
             <!-- メッセージ本文と編集中表示 -->
             <ContentMessageRender v-if="!msgEditing" :content="m.content" />
