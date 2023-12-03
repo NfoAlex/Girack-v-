@@ -94,7 +94,7 @@ export default {
               >
               </v-img>
             </v-avatar>
-            <p>{{ UserIndex[message.userid].username }}</p>
+            <p>{{ UserIndex[message.userid]!==undefined?UserIndex[message.userid].username:message.userid }}</p>
           </span>
           <div class="my-2 py-1 px-2">
             <ContentMessageRender
