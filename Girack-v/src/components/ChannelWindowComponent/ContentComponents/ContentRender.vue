@@ -594,9 +594,14 @@ export default {
             />
 
             <!-- ピン留めされているかどうか -->
-            <v-icon v-if="m.pinned" size="small">
-              mdi:mdi-pin
-            </v-icon>
+            <div class="my-1">
+              <v-chip v-if="m.pinned" size="x-small">
+                <v-icon  size="small">
+                  mdi:mdi-pin
+                </v-icon>
+                ピン留め済み
+              </v-chip>
+            </div>
 
             <!-- メッセージ本文と編集中表示 -->
             <ContentMessageRender v-if="!msgEditing" :content="m.content" />
