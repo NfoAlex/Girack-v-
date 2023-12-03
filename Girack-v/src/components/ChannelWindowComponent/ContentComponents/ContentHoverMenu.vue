@@ -158,7 +158,7 @@ export default {
     <!-- ここからホバーメニュー -->
     <span style="position:relative; float:right" class="d-flex align-center">
       <!-- 時間表示 -->
-      <span style="margin-right: 12px" class="text-body-2 font-italic">
+      <span style="margin-right:12px" class="text-body-2">
         {{ printDate() }}
       </span>
       <v-btn
