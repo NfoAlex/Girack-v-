@@ -253,7 +253,8 @@ export default {
           <!-- メッセージ内容 -->
           <div class="my-2 py-1 px-2">
             <ContentReplyRender
-              :messageid="message.messageid"
+              v-if="message.replyData.isReplying"
+              :messageid="message.replyData.messageid"
               :channelid="channelid"
             />
             <ContentMessageRender
