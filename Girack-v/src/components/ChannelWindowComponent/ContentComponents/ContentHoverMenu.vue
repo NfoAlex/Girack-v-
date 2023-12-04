@@ -243,7 +243,7 @@ export default {
         <v-btn
           @click="messageAction(m.messageid, 'pin')"
           class="ml-1"
-          variant="text"
+          :variant="m.pinned?'tonal':'text'"
           rounded="lg"
           size="x-small"
           icon
