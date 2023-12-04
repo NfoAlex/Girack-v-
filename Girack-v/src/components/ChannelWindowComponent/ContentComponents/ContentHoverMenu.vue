@@ -178,27 +178,30 @@ export default {
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'smile')"
         class="ml-1"
-        variant="tonal"
-        rounded="pill"
+        variant="text"
+        rounded="lg"
         size="x-small"
+        icon
       >
         😀
       </v-btn>
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'thinking_face')"
         class="ml-1"
-        variant="tonal"
-        rounded="pill"
+        variant="text"
+        rounded="lg"
         size="x-small"
+        icon
       >
         🤔
       </v-btn>
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'cold_sweat')"
         class="ml-1"
-        variant="tonal"
-        rounded="pill"
+        variant="text"
+        rounded="lg"
         size="x-small"
+        icon
       >
         😰
       </v-btn>
@@ -207,9 +210,10 @@ export default {
       <v-btn
         @click="messageAction(m.messageid, 'pin')"
         class="ml-1"
-        variant="tonal"
-        rounded="pill"
+        variant="text"
+        rounded="lg"
         size="x-small"
+        icon
       >
         <v-icon> mdi:mdi-pin </v-icon>
       </v-btn>
@@ -218,9 +222,10 @@ export default {
       <v-btn
         @click="reply"
         class="ml-1"
-        variant="tonal"
-        rounded="pill"
+        variant="text"
+        rounded="lg"
         size="x-small"
+        icon
       >
         <v-icon> mdi:mdi-reply </v-icon>
       </v-btn>
@@ -230,9 +235,10 @@ export default {
         v-if="m.userid===myUserinfo.userid"
         @click="$emit('updateEditingMessage',m.messageid)"
         class="ml-1"
-        variant="tonal"
-        rounded="pill"
+        variant="text"
+        rounded="lg"
         size="x-small"
+        icon
       >
         <v-icon> mdi:mdi-pencil </v-icon>
       </v-btn>
@@ -249,15 +255,16 @@ export default {
 
         <!-- 削除ボタン -->
         <v-btn
-          prepend-icon="mdi:mdi-delete-forever"
-          
           @dblclick="messageAction(m.messageid, 'delete')"
           style="margin-right: 3px"
-          variant="tonal"
-          rounded="pill"
+          variant="text"
+          rounded="lg"
           size="x-small"
+          icon
         >
-          削除
+          <v-icon>
+            mdi:mdi-delete-forever
+          </v-icon>
           <v-tooltip
             activator="parent"
             location="top center"
