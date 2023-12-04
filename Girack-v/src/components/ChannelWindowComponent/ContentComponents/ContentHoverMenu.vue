@@ -227,15 +227,16 @@ export default {
           {{ printDate() }}
         </span>
 
+        <!-- 絵文字ボタン -->
         <v-btn
           @click="()=>{emojiMode=true}"
           class="ml-1"
           variant="text"
           rounded="lg"
           size="x-small"
+          color="orange"
           icon="mdi:mdi-emoticon-outline"
         >
-          
         </v-btn>
 
         <!-- ピン留め -->
@@ -292,6 +293,7 @@ export default {
             variant="text"
             rounded="lg"
             size="x-small"
+            color="red"
             icon
           >
             <v-icon>
