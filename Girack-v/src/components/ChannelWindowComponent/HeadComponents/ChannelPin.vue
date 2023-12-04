@@ -81,7 +81,7 @@ export default {
 
 <template>
 
-  <v-dialog width="65vw" height="75vh">
+  <v-dialog width="65vw" height="85vh">
     <v-card class="rounded-lg mx-0 pa-4" width="100%" height="100%">
 
       <v-card-title class="d-flex align-center">
