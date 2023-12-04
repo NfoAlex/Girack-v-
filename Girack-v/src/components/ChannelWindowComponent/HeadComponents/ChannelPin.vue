@@ -3,6 +3,7 @@
 import { getSocket, Serverinfo } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
 import ContentMessageRender from "../ContentComponents/ContentMessageRender.vue";
+import ContentAttatchmentRender from "../ContentComponents/ContentAttatchmentRender.vue";
 
 const socket = getSocket();
 
@@ -21,7 +22,7 @@ export default {
   },
 
   props: ["pins", "channelid", "channelname"],
-  components: { ContentMessageRender },
+  components: { ContentMessageRender, ContentAttatchmentRender },
 
   methods: {
 
@@ -144,8 +145,13 @@ export default {
             <ContentMessageRender
               :content="message.content"
             />
+            <ContentAttatchmentRender
+              :fileData="message.fileData"
+              :channelid="channelid"
+            />
           </div>
         </v-card>
+
         <div v-else class="mx-auto my-5 text-center">ピン留めがありません</div>
 
       </v-card-text>
