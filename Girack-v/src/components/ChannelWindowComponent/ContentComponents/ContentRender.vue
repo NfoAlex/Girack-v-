@@ -8,7 +8,7 @@ import ContentHoverMenu from "./ContentHoverMenu.vue";
 import ContentEditing from "./ContentEditing.vue";
 import ContentURLpreview from "./ContentURLpreview.vue";
 import ContentMessageRender from "./ContentMessageRender.vue";
-import ContentReplyRender from "./contentReplyRender.vue";
+import ContentReplyRender from "./ContentReplyRender.vue";
 import ContentAttatchmentRender from "./ContentAttatchmentRender.vue";
 
 const socket = getSocket();
