@@ -282,7 +282,19 @@ export default {
 
                 <!-- メッセージ設定 -->
                 <p class="text-h6 ma-2">メッセージ</p>
+                
                 <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                    <p class="ma-2">ピン留めができるロール
+                    </p>
+                    <v-select
+                        v-model="displaySettings.config.MESSAGE.MESSAGE_PIN_ROLE"
+                        style="width: 90%;"
+                        class="mx-auto"
+                        density="compact"
+                        label="このロール以上がピン留めできる"
+                        :items="['Admin','Moderator','Member']"
+                    ></v-select>
+
                     <p class="ma-2">メッセージの最大文字数</p>
                     <v-text-field
                         variant="outlined"
