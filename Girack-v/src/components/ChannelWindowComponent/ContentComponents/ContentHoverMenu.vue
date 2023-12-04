@@ -1,6 +1,6 @@
 <script>
 
-import { getSocket } from "../../../data/socket";
+import { getSocket, Serverinfo } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
 import { getReplyState } from "../ChannelInput.vue";
 
@@ -12,7 +12,7 @@ export default {
     const { myUserinfo } = dataUser();
     const { ReplyState } = getReplyState();
 
-    return { myUserinfo, ReplyState };
+    return { myUserinfo, ReplyState, Serverinfo };
   },
 
   props: ["m", "userrole", "channelid"],
@@ -100,6 +100,25 @@ export default {
         ":" +
         time.slice(12, 14)
       );
+    },
+
+    //ピンできるロールかどうかを確認
+    pinRoleCheck() {
+      if (
+        this.Serverinfo.config.MESSAGE.MESSAGE_PIN_ROLE === "Admin"
+          &&
+        this.myUserinfo.role !== "Admin"
+      ) {
+        return false;
+      } else if (
+        this.Serverinfo.config.MESSAGE.MESSAGE_PIN_ROLE === "Moderator"
+          &&
+        this.myUserinfo.role === "Member"
+      ) {
+        return false;
+      }
+
+      return true;
     },
 
     //削除したりリアクションしたり編集(ToDo)したり
@@ -241,6 +260,7 @@ export default {
 
         <!-- ピン留め -->
         <v-btn
+          v-if="pinRoleCheck()"
           @click="messageAction(m.messageid, 'pin')"
           class="ml-1"
           :variant="m.pinned?'tonal':'text'"

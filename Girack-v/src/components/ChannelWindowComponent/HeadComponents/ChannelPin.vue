@@ -13,7 +13,7 @@ export default {
 
   setup() {
     const { myUserinfo, UserIndex } = dataUser();
-    return { myUserinfo, UserIndex };
+    return { myUserinfo, UserIndex, Serverinfo };
   },
 
   data() {
@@ -49,6 +49,25 @@ export default {
       delete this.msgPinDB[msgid];
       //ハンドラを外す
       socket.off("messageSingle_" + msgid, this.SOCKETmessageSingle);
+    },
+
+    //ピンできるロールかどうかを確認
+    pinRoleCheck() {
+      if (
+        this.Serverinfo.config.MESSAGE.MESSAGE_PIN_ROLE === "Admin"
+          &&
+        this.myUserinfo.role !== "Admin"
+      ) {
+        return false;
+      } else if (
+        this.Serverinfo.config.MESSAGE.MESSAGE_PIN_ROLE === "Moderator"
+          &&
+        this.myUserinfo.role === "Member"
+      ) {
+        return false;
+      }
+
+      return true;
     },
 
     //メッセージの時間を出力する関数
@@ -211,6 +230,7 @@ export default {
             </span>
             <!-- 外しボタン -->
             <v-btn
+              v-if="pinRoleCheck()"
               @click="unpin(message.messageid)"
               class="rounded-lg"
               icon
