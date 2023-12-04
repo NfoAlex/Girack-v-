@@ -5,6 +5,7 @@ import { dataUser } from "../../../data/dataUserinfo";
 import ContentMessageRender from "../ContentComponents/ContentMessageRender.vue";
 import ContentAttatchmentRender from "../ContentComponents/ContentAttatchmentRender.vue";
 import ContentURLpreview from "../ContentComponents/ContentURLpreview.vue";
+import ContentReplyRender from "../ContentComponents/ContentReplyRender.vue";
 
 const socket = getSocket();
 
@@ -23,7 +24,12 @@ export default {
   },
 
   props: ["pins", "channelid", "channelname"],
-  components: { ContentMessageRender, ContentAttatchmentRender, ContentURLpreview },
+  components: {
+    ContentMessageRender,
+    ContentAttatchmentRender,
+    ContentURLpreview,
+    ContentReplyRender
+  },
 
   methods: {
 
@@ -143,6 +149,10 @@ export default {
 
           <!-- メッセージ内容 -->
           <div class="my-2 py-1 px-2">
+            <ContentReplyRender
+              :messageid="message.messageid"
+              :channelid="channelid"
+            />
             <ContentMessageRender
               :content="message.content"
             />
