@@ -1,4 +1,5 @@
 <script>
+
 import { getSocket } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
 import { getReplyState } from "../ChannelInput.vue";
@@ -6,6 +7,7 @@ import { getReplyState } from "../ChannelInput.vue";
 const socket = getSocket();
 
 export default {
+
   setup() {
     const { myUserinfo } = dataUser();
     const { ReplyState } = getReplyState();
@@ -14,6 +16,12 @@ export default {
   },
 
   props: ["m", "userrole", "channelid"],
+
+  data() {
+    return {
+      emojiMode: false, //絵文字選択モード
+    }
+  },
 
   methods: {
     //メッセージの時間を出力する関数
@@ -160,21 +168,20 @@ export default {
       this.ReplyState.messageid = this.m.messageid; //返信するメッセージのID
     },
   },
+
 };
+
 </script>
 
 <template>
-  <v-card
-    class="pa-2 rounded-lg"
-    color="#222"
-    style="width:fit-content; margin-top:-16px; max-width:500px"
-  >
-    <!-- ここからホバーメニュー -->
-    <span style="position:relative; float:right" class="d-flex align-center">
-      <!-- 時間表示 -->
-      <span style="margin-right:12px" class="text-body-2">
-        {{ printDate() }}
-      </span>
+  <div>
+    <!-- 絵文字パネル -->
+    <v-card
+      v-if="emojiMode"
+      class="pa-2 rounded-lg"
+      color="#222"
+      style="width:fit-content; margin-top:-16px; max-width:500px"
+    >
       <v-btn
         @click="messageAction(m.messageid, 'reaction', 'smile')"
         class="ml-1"
@@ -205,77 +212,103 @@ export default {
       >
         😰
       </v-btn>
+    </v-card>
+    <!-- 通常パネル -->
+    <v-card
+      v-else
+      class="pa-2 rounded-lg"
+      color="#222"
+      style="width:fit-content; margin-top:-16px; max-width:500px"
+    >
+      <!-- ここからホバーメニュー -->
+      <span style="position:relative; float:right" class="d-flex align-center">
+        <!-- 時間表示 -->
+        <span style="margin-right:12px" class="text-body-2">
+          {{ printDate() }}
+        </span>
 
-      <!-- ピン留め -->
-      <v-btn
-        @click="messageAction(m.messageid, 'pin')"
-        class="ml-1"
-        variant="text"
-        rounded="lg"
-        size="x-small"
-        icon
-      >
-        <v-icon> mdi:mdi-pin </v-icon>
-      </v-btn>
-
-      <!-- 返信 -->
-      <v-btn
-        @click="reply"
-        class="ml-1"
-        variant="text"
-        rounded="lg"
-        size="x-small"
-        icon
-      >
-        <v-icon> mdi:mdi-reply </v-icon>
-      </v-btn>
-
-      <!-- 編集 -->
-      <v-btn
-        v-if="m.userid===myUserinfo.userid"
-        @click="$emit('updateEditingMessage',m.messageid)"
-        class="ml-1"
-        variant="text"
-        rounded="lg"
-        size="x-small"
-        icon
-      >
-        <v-icon> mdi:mdi-pencil </v-icon>
-      </v-btn>
-
-      <span
-        v-if="
-          myUserinfo.role === 'Admin' ||
-          (userrole !== 'Admin' && myUserinfo.role === 'Moderator') ||
-          m.userid === myUserinfo.userid
-        "
-        class="d-flex align-center"
-      >
-        <v-divider vertical class="mx-1"></v-divider>
-
-        <!-- 削除ボタン -->
         <v-btn
-          @dblclick="messageAction(m.messageid, 'delete')"
-          style="margin-right: 3px"
+          @click="()=>{emojiMode=true}"
+          class="ml-1"
+          variant="text"
+          rounded="lg"
+          size="x-small"
+          icon="mdi:mdi-emoticon-outline"
+        >
+          
+        </v-btn>
+
+        <!-- ピン留め -->
+        <v-btn
+          @click="messageAction(m.messageid, 'pin')"
+          class="ml-1"
           variant="text"
           rounded="lg"
           size="x-small"
           icon
         >
-          <v-icon>
-            mdi:mdi-delete-forever
-          </v-icon>
-          <v-tooltip
-            activator="parent"
-            location="top center"
-          >
-            ダブルクリックで削除
-          </v-tooltip>
+          <v-icon> mdi:mdi-pin </v-icon>
         </v-btn>
+
+        <!-- 返信 -->
+        <v-btn
+          @click="reply"
+          class="ml-1"
+          variant="text"
+          rounded="lg"
+          size="x-small"
+          icon
+        >
+          <v-icon> mdi:mdi-reply </v-icon>
+        </v-btn>
+
+        <!-- 編集 -->
+        <v-btn
+          v-if="m.userid===myUserinfo.userid"
+          @click="$emit('updateEditingMessage',m.messageid)"
+          class="ml-1"
+          variant="text"
+          rounded="lg"
+          size="x-small"
+          icon
+        >
+          <v-icon> mdi:mdi-pencil </v-icon>
+        </v-btn>
+
+        <span
+          v-if="
+            myUserinfo.role === 'Admin' ||
+            (userrole !== 'Admin' && myUserinfo.role === 'Moderator') ||
+            m.userid === myUserinfo.userid
+          "
+          class="d-flex align-center"
+        >
+          <v-divider vertical class="mx-1"></v-divider>
+
+          <!-- 削除ボタン -->
+          <v-btn
+            @dblclick="messageAction(m.messageid, 'delete')"
+            style="margin-right: 3px"
+            variant="text"
+            rounded="lg"
+            size="x-small"
+            icon
+          >
+            <v-icon>
+              mdi:mdi-delete-forever
+            </v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top center"
+            >
+              ダブルクリックで削除
+            </v-tooltip>
+          </v-btn>
+        </span>
+        
       </span>
-      
-    </span>
-  </v-card>
+    </v-card>
+  </div>
 </template>
 
 <style scoped></style>
