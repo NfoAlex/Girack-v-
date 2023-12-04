@@ -284,7 +284,8 @@ export default {
                 <p class="text-h6 ma-2">メッセージ</p>
                 
                 <v-card color="cardInner" class="rounded-lg cardInner pa-2">
-                    <p class="ma-2">ピン留めができるロール
+                    <p class="ma-2">
+                        ピン留めができるロール
                     </p>
                     <v-select
                         v-model="displaySettings.config.MESSAGE.MESSAGE_PIN_ROLE"
