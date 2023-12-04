@@ -51,6 +51,82 @@ export default {
       socket.off("messageSingle_" + msgid, this.SOCKETmessageSingle);
     },
 
+    //メッセージの時間を出力する関数
+    printDate(time) {
+      let t = new Date(); //時間取得用
+      let y = t.getFullYear().toString(); //今年 (４桁)
+      let m = (t.getMonth() + 1).toString().padStart(2, 0); //月 (0も含めて２桁に)
+      let d = t.getDate().toString().padStart(2, 0); //日 (0も含めて２桁に)
+
+      let timestamp = ""; //出力予定の文字列
+
+      //もし去年以上からのメッセージだったら
+      if (time.slice(0, 4) !== y) {
+        //今年とデータのタイムスタンプが違っていたら
+        timestamp += time.slice(0, 4) + "/";
+        timestamp += time.slice(4, 6) + "/";
+        timestamp += time.slice(6, 8);
+
+        //表記を返す(時間を足して)
+        return (
+          timestamp +
+          " " +
+          time.slice(8, 10) +
+          ":" +
+          time.slice(10, 12) +
+          ":" +
+          time.slice(12, 14)
+        );
+      }
+
+      //↓これいる？
+      //もし先月以上前のメッセージだったら
+      if (time.slice(4, 6) !== m) {
+        //今月とデータのタイムスタンプが違っていたら
+        timestamp += time.slice(4, 6) + "/";
+        timestamp += time.slice(6, 8);
+
+        //表記を返す(時間を足して)
+        return (
+          timestamp +
+          " " +
+          time.slice(8, 10) +
+          ":" +
+          time.slice(10, 12) +
+          ":" +
+          time.slice(12, 14)
+        );
+      }
+
+      //もし昨日以上前のメッセージだったら
+      if (time.slice(6, 8) !== d) {
+        //今日とデータのタイムスタンプが違っていたら
+        timestamp += time.slice(4, 6) + "/";
+        timestamp += time.slice(6, 8);
+
+        //表記を返す(時間を足して)
+        return (
+          timestamp +
+          " " +
+          time.slice(8, 10) +
+          ":" +
+          time.slice(10, 12) +
+          ":" +
+          time.slice(12, 14)
+        );
+      }
+
+      //普通に今日だったら
+      return (
+        " 今日 " +
+        time.slice(8, 10) +
+        ":" +
+        time.slice(10, 12) +
+        ":" +
+        time.slice(12, 14)
+      );
+    },
+
     //メッセージ受け取り
     SOCKETmessageSingle(dat) {
       //メッセ用の変数へデータ追加
@@ -123,9 +199,16 @@ export default {
               >
               </v-img>
             </v-avatar>
-            <p class="me-auto">
+            <p>
               {{ UserIndex[message.userid]!==undefined?UserIndex[message.userid].username:message.userid }}
             </p>
+            <!-- タイムスタンプ -->
+            <span
+              class="text-caption me-auto"
+              style="margin-left: 8px; color: #999"
+            >
+              {{ printDate(message.time) }}
+            </span>
             <!-- 外しボタン -->
             <v-btn
               @click="unpin(message.messageid)"
