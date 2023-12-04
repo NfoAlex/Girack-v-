@@ -3,6 +3,9 @@
 import { getSocket, Serverinfo } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
 import ContentMessageRender from "../ContentComponents/ContentMessageRender.vue";
+import ContentAttatchmentRender from "../ContentComponents/ContentAttatchmentRender.vue";
+import ContentURLpreview from "../ContentComponents/ContentURLpreview.vue";
+import ContentReplyRender from "../ContentComponents/ContentReplyRender.vue";
 
 const socket = getSocket();
 
@@ -21,7 +24,12 @@ export default {
   },
 
   props: ["pins", "channelid", "channelname"],
-  components: { ContentMessageRender },
+  components: {
+    ContentMessageRender,
+    ContentAttatchmentRender,
+    ContentURLpreview,
+    ContentReplyRender
+  },
 
   methods: {
 
@@ -41,6 +49,82 @@ export default {
       delete this.msgPinDB[msgid];
       //ハンドラを外す
       socket.off("messageSingle_" + msgid, this.SOCKETmessageSingle);
+    },
+
+    //メッセージの時間を出力する関数
+    printDate(time) {
+      let t = new Date(); //時間取得用
+      let y = t.getFullYear().toString(); //今年 (４桁)
+      let m = (t.getMonth() + 1).toString().padStart(2, 0); //月 (0も含めて２桁に)
+      let d = t.getDate().toString().padStart(2, 0); //日 (0も含めて２桁に)
+
+      let timestamp = ""; //出力予定の文字列
+
+      //もし去年以上からのメッセージだったら
+      if (time.slice(0, 4) !== y) {
+        //今年とデータのタイムスタンプが違っていたら
+        timestamp += time.slice(0, 4) + "/";
+        timestamp += time.slice(4, 6) + "/";
+        timestamp += time.slice(6, 8);
+
+        //表記を返す(時間を足して)
+        return (
+          timestamp +
+          " " +
+          time.slice(8, 10) +
+          ":" +
+          time.slice(10, 12) +
+          ":" +
+          time.slice(12, 14)
+        );
+      }
+
+      //↓これいる？
+      //もし先月以上前のメッセージだったら
+      if (time.slice(4, 6) !== m) {
+        //今月とデータのタイムスタンプが違っていたら
+        timestamp += time.slice(4, 6) + "/";
+        timestamp += time.slice(6, 8);
+
+        //表記を返す(時間を足して)
+        return (
+          timestamp +
+          " " +
+          time.slice(8, 10) +
+          ":" +
+          time.slice(10, 12) +
+          ":" +
+          time.slice(12, 14)
+        );
+      }
+
+      //もし昨日以上前のメッセージだったら
+      if (time.slice(6, 8) !== d) {
+        //今日とデータのタイムスタンプが違っていたら
+        timestamp += time.slice(4, 6) + "/";
+        timestamp += time.slice(6, 8);
+
+        //表記を返す(時間を足して)
+        return (
+          timestamp +
+          " " +
+          time.slice(8, 10) +
+          ":" +
+          time.slice(10, 12) +
+          ":" +
+          time.slice(12, 14)
+        );
+      }
+
+      //普通に今日だったら
+      return (
+        " 今日 " +
+        time.slice(8, 10) +
+        ":" +
+        time.slice(10, 12) +
+        ":" +
+        time.slice(12, 14)
+      );
     },
 
     //メッセージ受け取り
@@ -79,7 +163,7 @@ export default {
 
 <template>
 
-  <v-dialog width="65vw" height="75vh">
+  <v-dialog width="65vw" height="85vh">
     <v-card class="rounded-lg mx-0 pa-4" width="100%" height="100%">
 
       <v-card-title class="d-flex align-center">
@@ -115,9 +199,16 @@ export default {
               >
               </v-img>
             </v-avatar>
-            <p class="me-auto">
+            <p>
               {{ UserIndex[message.userid]!==undefined?UserIndex[message.userid].username:message.userid }}
             </p>
+            <!-- タイムスタンプ -->
+            <span
+              class="text-caption me-auto"
+              style="margin-left: 8px; color: #999"
+            >
+              {{ printDate(message.time) }}
+            </span>
             <!-- 外しボタン -->
             <v-btn
               @click="unpin(message.messageid)"
@@ -141,11 +232,21 @@ export default {
 
           <!-- メッセージ内容 -->
           <div class="my-2 py-1 px-2">
+            <ContentReplyRender
+              :messageid="message.messageid"
+              :channelid="channelid"
+            />
             <ContentMessageRender
               :content="message.content"
             />
+            <ContentAttatchmentRender
+              :fileData="message.fileData"
+              :channelid="channelid"
+            />
+            <ContentURLpreview v-if="message.hasUrl" :urlData="message.urlData" />
           </div>
         </v-card>
+
         <div v-else class="mx-auto my-5 text-center">ピン留めがありません</div>
 
       </v-card-text>
