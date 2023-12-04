@@ -4,6 +4,7 @@ import { getSocket, Serverinfo } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
 import ContentMessageRender from "../ContentComponents/ContentMessageRender.vue";
 import ContentAttatchmentRender from "../ContentComponents/ContentAttatchmentRender.vue";
+import ContentURLpreview from "../ContentComponents/ContentURLpreview.vue";
 
 const socket = getSocket();
 
@@ -22,7 +23,7 @@ export default {
   },
 
   props: ["pins", "channelid", "channelname"],
-  components: { ContentMessageRender, ContentAttatchmentRender },
+  components: { ContentMessageRender, ContentAttatchmentRender, ContentURLpreview },
 
   methods: {
 
@@ -149,6 +150,7 @@ export default {
               :fileData="message.fileData"
               :channelid="channelid"
             />
+            <ContentURLpreview v-if="message.hasUrl" :urlData="message.urlData" />
           </div>
         </v-card>
 
