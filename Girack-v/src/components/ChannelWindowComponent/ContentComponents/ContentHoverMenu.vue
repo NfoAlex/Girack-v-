@@ -257,7 +257,7 @@ export default {
 
         <!-- 絵文字ボタン -->
         <v-btn
-          v-if="CONFIG_DISPLAY.CONTENT_USE_EMOJI_PICKER == true"
+          v-if="CONFIG_DISPLAY.CONTENT_USE_EMOJI_PICKER === true"
           @click="()=>{emojiMode=true}"
           class="ml-1"
           variant="text"
@@ -268,7 +268,7 @@ export default {
         >
         </v-btn>
 
-        <div v-if="CONFIG_DISPLAY.CONTENT_USE_EMOJI_PICKER == false">
+        <div v-if="CONFIG_DISPLAY.CONTENT_USE_EMOJI_PICKER === false">
           <v-btn
           @click="messageAction(m.messageid, 'reaction', 'smile')"
           class="ml-1"
