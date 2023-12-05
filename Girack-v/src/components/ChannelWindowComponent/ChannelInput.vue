@@ -73,6 +73,10 @@ export default {
         searchingQuery: "", //検索してる文字列
       },
 
+      channelLinkWindow: {
+        enabled: false, //チャンネルリンクウィンドウを表示するかどうか
+      },
+
       searchDisplayArray: [], //検索するときに表示する配列
       userHereArray: [], //このチャンネルに参加しているユーザー配列
     };
@@ -151,6 +155,8 @@ export default {
             sessionid: this.myUserinfo.sessionid,
           },
         });
+      } else if (this.txt[this.txt.length - 1] === "#") {
+        this.channelLinkWindow.enabled = true;
       }
 
       //スペースが入力された、あるいは文字が空になったら検索モードを終了
@@ -160,6 +166,7 @@ export default {
         this.txt.length === 0
       ) {
         this.searchMode.enabled = false;
+        this.channelLinkWindow.enabled = false;
       }
 
       //検索モードに入っているなら検索する
@@ -710,8 +717,9 @@ export default {
       style="width:95%; height:fit-content; position:relative;"
       class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
-      <!-- チャンネルウィンドウ -->
+      <!-- チャンネルリンクウィンドウ -->
       <v-card
+        v-if="channelLinkWindow.enabled"
         width="100%"
         position="absolute"
         max-height="30vh"
