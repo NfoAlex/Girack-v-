@@ -98,6 +98,7 @@ export default {
 
         <v-icon
           v-if="content.term==='KICKED'"
+          color="red"
           size="small"
         >
           mdi:mdi-karate
@@ -119,6 +120,7 @@ export default {
 
         <v-icon
           v-if="content.term==='MESSAGE_PINNED'"
+          color="orange"
           size="small"
         >
           mdi:mdi-pin
