@@ -202,6 +202,13 @@ export default {
       style="width:fit-content; margin-top:-16px; max-width:500px"
     >
       <v-btn
+        @click="()=>{emojiMode=false}"
+        icon="mdi:mdi-arrow-left"
+        rounded="lg"
+        size="x-small"
+        elevated="0"
+      />
+      <v-btn
         @click="messageAction(m.messageid, 'reaction', 'smile')"
         class="ml-1"
         variant="text"
