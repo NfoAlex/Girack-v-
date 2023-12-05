@@ -710,6 +710,16 @@ export default {
       style="width:95%; height:fit-content; position:relative;"
       class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
+      <!-- チャンネルウィンドウ -->
+      <v-card
+        width="100%"
+        position="absolute"
+        max-height="30vh"
+        class="rounded-lg"
+        style="bottom:101%; overflow-y:auto; z-index:100;"
+      >
+        <v-list-item v-for="(value) in ChannelIndex"> {{ value.channelname }} </v-list-item>
+      </v-card> 
 
       <!-- メンションウィンドウ -->
       <v-card
