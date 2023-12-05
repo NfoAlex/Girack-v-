@@ -12,6 +12,8 @@ Girack-v-Backend(バックエンド) : https://github.com/NfoAlex/Girack-v-Backe
 
 ## 環境構築
 
+使用しているNodeJS バージョン : `v20.10.0`
+
 ```sh
 cd .\Girack-v\
 npm install
