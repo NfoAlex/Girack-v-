@@ -104,6 +104,20 @@ export default {
         </v-icon>
 
         <v-icon
+          v-if="content.term==='DESCRIPTION_UPDATED'"
+          size="small"
+        >
+          mdi:mdi-text-box-edit
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='CHANNELNAME_UPDATED'"
+          size="small"
+        >
+          mdi:mdi-rename
+        </v-icon>
+
+        <v-icon
           v-if="content.term==='MESSAGE_PINNED'"
           size="small"
         >
