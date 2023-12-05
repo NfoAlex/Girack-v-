@@ -13,6 +13,7 @@ Girack-v-Backend(バックエンド) : https://github.com/NfoAlex/Girack-v-Backe
 ## 環境構築
 
 ```sh
+cd .\Girack-v\
 npm install
 ```
 
