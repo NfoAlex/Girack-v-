@@ -3,6 +3,7 @@
 import { getSocket, Serverinfo } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
 import { getReplyState } from "../ChannelInput.vue";
+import { getCONFIG } from "../../../config.js";
 
 const socket = getSocket();
 
@@ -11,8 +12,9 @@ export default {
   setup() {
     const { myUserinfo } = dataUser();
     const { ReplyState } = getReplyState();
+    const { CONFIG_DISPLAY } = getCONFIG();
 
-    return { myUserinfo, ReplyState, Serverinfo };
+    return { myUserinfo, ReplyState, Serverinfo, CONFIG_DISPLAY };
   },
 
   props: ["m", "userrole", "channelid"],
@@ -255,6 +257,7 @@ export default {
 
         <!-- 絵文字ボタン -->
         <v-btn
+          v-if="CONFIG_DISPLAY.CONTENT_USE_EMOJI_PICKER === true"
           @click="()=>{emojiMode=true}"
           class="ml-1"
           variant="text"
@@ -264,6 +267,39 @@ export default {
           icon="mdi:mdi-emoticon-outline"
         >
         </v-btn>
+
+        <div v-if="CONFIG_DISPLAY.CONTENT_USE_EMOJI_PICKER === false">
+          <v-btn
+          @click="messageAction(m.messageid, 'reaction', 'smile')"
+          class="ml-1"
+          variant="text"
+          rounded="lg"
+          size="x-small"
+          icon
+          >
+            😀
+          </v-btn>
+          <v-btn
+            @click="messageAction(m.messageid, 'reaction', 'thinking_face')"
+            class="ml-1"
+            variant="text"
+            rounded="lg"
+            size="x-small"
+            icon
+          >
+            🤔
+          </v-btn>
+          <v-btn
+            @click="messageAction(m.messageid, 'reaction', 'cold_sweat')"
+            class="ml-1"
+            variant="text"
+            rounded="lg"
+            size="x-small"
+            icon
+          >
+            😰
+          </v-btn>
+        </div>
 
         <!-- ピン留め -->
         <v-btn

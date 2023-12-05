@@ -444,6 +444,12 @@ export default {
                 density="compact"
               >
               </v-checkbox>
+              <v-checkbox
+                v-model="CONFIG_DISPLAY.CONTENT_USE_EMOJI_PICKER"
+                label="絵文字タブを使用する"
+                density="compact"
+              >
+              </v-checkbox>
               <p class="ma-2">添付ファイルの最高サイズ (1e3=1kB)</p>
                 <v-text-field
                   variant="outlined"
