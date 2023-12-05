@@ -65,6 +65,32 @@ export default {
       class="mx-auto d-flex justify-center text-medium-emphasis"
     >
 
+    <!-- アイコン群 -->
+      <span>
+
+        <v-icon
+          v-if="content.term==='MESSAGE_PINNED'"
+          size="small"
+        >
+          mdi:mdi-pin
+        </v-icon>
+
+        <span
+          v-if="content.term==='WELCOME'"
+          size="small"
+        >
+          🎉
+        </span>
+
+        <v-icon
+          v-if="content.term==='KICKED'"
+          size="small"
+        >
+          mdi:mdi-karate
+        </v-icon>
+
+      </span>
+
       <span class="text-truncate flex-shrink-1">
         {{
           UserIndex[content.triggeredUser] !== undefined
