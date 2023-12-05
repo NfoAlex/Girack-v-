@@ -68,13 +68,6 @@ export default {
     <!-- アイコン群 -->
       <span>
 
-        <v-icon
-          v-if="content.term==='MESSAGE_PINNED'"
-          size="small"
-        >
-          mdi:mdi-pin
-        </v-icon>
-
         <span
           v-if="content.term==='WELCOME'"
           size="small"
@@ -83,10 +76,38 @@ export default {
         </span>
 
         <v-icon
+          v-if="content.term==='JOINED'"
+          size="small"
+        >
+          mdi:mdi-pound
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='LEFT'"
+          size="small"
+        >
+          mdi:mdi-exit-run
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='INVITED'"
+          size="small"
+        >
+          mdi:mdi-email-heart-outline
+        </v-icon>
+
+        <v-icon
           v-if="content.term==='KICKED'"
           size="small"
         >
           mdi:mdi-karate
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='MESSAGE_PINNED'"
+          size="small"
+        >
+          mdi:mdi-pin
         </v-icon>
 
       </span>
