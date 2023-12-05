@@ -65,6 +65,69 @@ export default {
       class="mx-auto d-flex justify-center text-medium-emphasis"
     >
 
+    <!-- アイコン群 -->
+      <span>
+
+        <span
+          v-if="content.term==='WELCOME'"
+          size="small"
+        >
+          🎉
+        </span>
+
+        <v-icon
+          v-if="content.term==='JOINED'"
+          size="small"
+        >
+          mdi:mdi-pound
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='LEFT'"
+          size="small"
+        >
+          mdi:mdi-exit-run
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='INVITED'"
+          size="small"
+        >
+          mdi:mdi-email-heart-outline
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='KICKED'"
+          color="red"
+          size="small"
+        >
+          mdi:mdi-karate
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='DESCRIPTION_UPDATED'"
+          size="small"
+        >
+          mdi:mdi-text-box-edit
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='CHANNELNAME_UPDATED'"
+          size="small"
+        >
+          mdi:mdi-rename
+        </v-icon>
+
+        <v-icon
+          v-if="content.term==='MESSAGE_PINNED'"
+          color="orange"
+          size="small"
+        >
+          mdi:mdi-pin
+        </v-icon>
+
+      </span>
+
       <span class="text-truncate flex-shrink-1">
         {{
           UserIndex[content.triggeredUser] !== undefined
