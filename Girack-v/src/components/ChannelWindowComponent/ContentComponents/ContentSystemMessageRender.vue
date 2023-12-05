@@ -23,7 +23,8 @@ export default {
         KICKED: ["が", "をこのチャンネルからキックしました"],
         DESCRIPTION_UPDATED: ["がチャンネル概要を更新しました"],
         CHANNELNAME_UPDATED: ["がチャンネル名を変更しました"],
-        SCOPE_UPDATED: ["がチャンネルの公開範囲を更新しました"]
+        SCOPE_UPDATED: ["がチャンネルの公開範囲を更新しました"],
+        MESSAGE_PINNED: ["がメッセージを新しくピン留めしました"]
       },
     };
   },
