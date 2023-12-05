@@ -186,8 +186,8 @@ export default {
 
         //検索語で配列をフィルターして標示用の配列へ設定
         this.searchDisplayArray = this.channelJoinedUserArray.filter((u) => {
-          //ユーザー名に検索語が含まれていたら表示する配列へ追加
-          if (u.username.includes(this.searchMode.searchingQuery)) {
+          //ユーザー名に検索語が含まれていたら表示する配列へ追加(全部小文字にしてる)
+          if ((u.username).toLowerCase().includes((this.searchMode.searchingQuery).toLowerCase())) {
             return u.username;
           }
         });
