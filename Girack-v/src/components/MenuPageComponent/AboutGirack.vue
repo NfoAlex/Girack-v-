@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="text-center pa-5" style="width:80%">
     <span>
-      <p class="text-h3">PinIt</p>
+      <p class="text-h3">SystemMessageIcons</p>
     </span>
     
     <br>
