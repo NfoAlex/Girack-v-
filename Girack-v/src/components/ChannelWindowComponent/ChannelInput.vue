@@ -63,6 +63,10 @@ export default {
         content: "",
       },
 
+      textarea: {
+        cursorPosition: 0, //入力フォームのカーソル位置
+      },
+
       searchMode: {
         enabled: false, //検索モードに入っているかどうか
         selectedIndex: 0, //選択しているもの
@@ -74,7 +78,8 @@ export default {
       },
 
       channelLinkWindow: {
-        enabled: false, //チャンネルリンクウィンドウを表示するかどうか
+        isDisplay: false, //チャンネルリンクウィンドウを表示するかどうか
+        regexPattern: /(\s|^)#[^#\s]*(\s|$)/g, //チャンネルリンクの可能性がある文字列の正規表現
       },
 
       searchDisplayArray: [], //検索するときに表示する配列
@@ -155,8 +160,6 @@ export default {
             sessionid: this.myUserinfo.sessionid,
           },
         });
-      } else if (this.txt[this.txt.length - 1] === "#") {
-        this.channelLinkWindow.enabled = true;
       }
 
       //スペースが入力された、あるいは文字が空になったら検索モードを終了
@@ -166,7 +169,6 @@ export default {
         this.txt.length === 0
       ) {
         this.searchMode.enabled = false;
-        this.channelLinkWindow.enabled = false;
       }
 
       //検索モードに入っているなら検索する
@@ -215,6 +217,35 @@ export default {
   },
 
   methods: {
+    // 入力フォームのカーソル位置の監視
+    checkCursorPosition() {
+      this.textarea.cursorPosition = this.$refs.inp.selectionStart;
+
+      //チャンネルリンク用ウィンドウの表示判別処理
+      this.checkChannelLinkWindowDisplay();
+    },
+    
+    //チャンネルリンク用ウィンドウの表示判別処理
+    checkChannelLinkWindowDisplay() {
+      //チャンネルリンクの可能性がある文字列の上にカーソルがあるか確認
+      let isCursorAboveMatch = false; //チャンネルリンクの可能性がある文字列の上にカーソルがある場合true
+      let match;
+      while ((match = this.channelLinkWindow.regexPattern.exec(this.txt)) !== null) {
+        const start = match.index + match[1].length; // マッチした部分の開始位置
+        const end = this.channelLinkWindow.regexPattern.lastIndex - match[2].length; // マッチした部分の終了位置
+        if (start < this.textarea.cursorPosition && this.textarea.cursorPosition <= end) {
+          isCursorAboveMatch = true;
+        }
+      }
+
+      //チャンネルリンクの可能性がある文字列の上にカーソルがある場合チャンネルリンク用ウィンドウを表示する
+      if (isCursorAboveMatch) {
+        this.channelLinkWindow.isDisplay = true;
+      } else {
+        this.channelLinkWindow.isDisplay = false;
+      }
+    },
+
     //Enterキーのトリガー処理
     EnterTrigger(event) {
       //変換中のEnterなら処理させない
@@ -728,7 +759,7 @@ export default {
     >
       <!-- チャンネルリンクウィンドウ -->
       <v-card
-        v-if="channelLinkWindow.enabled"
+        v-if="channelLinkWindow.isDisplay"
         width="100%"
         position="absolute"
         max-height="30vh"
@@ -787,6 +818,7 @@ export default {
               channelInfo.canTalk +
               '以上が発言可能'
         "
+        @selectionchange="checkCursorPosition"
         @keydown.enter.prevent="EnterTrigger"
         @keydown.@="AtsignTrigger"
         @keydown.up="changeMentionUserSelect"
