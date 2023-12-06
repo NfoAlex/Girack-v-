@@ -393,6 +393,15 @@ export default {
       this.$el.querySelector("#inp").focus();
     },
 
+    //チャンネルリンクウィンドウの要素をクリックされたらチャンネルリンクに置き換える処理
+    replaceChannelLink(targetChannelInfo) {
+      this.txt = 
+        "#/" + targetChannelInfo.channelid + "/ ";
+
+      //入力欄へフォーカスしなおす
+      this.$el.querySelector("#inp").focus();
+    },
+
     //fxTwitter用のURL判別処理(watch(txt)で反応してます)
     checkFxTwitter() {
       //TwitterURLを判別するための正規表現条件
@@ -726,7 +735,12 @@ export default {
         class="rounded-lg"
         style="bottom:101%; overflow-y:auto; z-index:100;"
       >
-        <v-list-item v-for="(value) in ChannelIndex"> {{ value.channelname }} </v-list-item>
+        <v-list-item 
+          v-for="(value) in ChannelIndex"
+          @click="replaceChannelLink(value)"
+        > 
+          {{ value.channelname }} 
+        </v-list-item>
       </v-card> 
 
       <!-- メンションウィンドウ -->
