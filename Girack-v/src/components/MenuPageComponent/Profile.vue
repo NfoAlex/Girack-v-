@@ -519,42 +519,27 @@ export default {
       </v-container>
 
       <v-container>
-        <p class="text-h6">パスワード変更</p>
         <!-- パスワード変更 -->
         <v-row no-gutters>
           <v-card variant="tonal" :class="cd" style="width: 100%">
             <v-btn
               @click="changePasswordDialog = true"
-              class="rounded-lg"
+              class="rounded-lg mb-5"
               color="secondary"
-              height="40vh"
-              style="font-size:3vmax;"
               block
             >
-              クソデカパスワード変更ボタン
+              パスワードを変更
             </v-btn>
-          </v-card>
-        </v-row>
-      </v-container>
-
-      <v-container>
         <!-- ログアウトボタン -->
-        <v-row no-gutters>
-          <p class="text-h6">ログアウト</p>
-          <v-card
-            variant="tonal"
-            :class="cd"
-            class="rounded-lg"
-            style="width: 100%"
-          >
             <v-btn
               prepend-icon="mdi:mdi-logout"
               class="rounded-lg"
               color="error"
               block
               @click="snackbar = true"
-              >Logout</v-btn
             >
+              Logout
+            </v-btn>
             <v-snackbar v-model="snackbar">
               ログアウトしていいの？
 
