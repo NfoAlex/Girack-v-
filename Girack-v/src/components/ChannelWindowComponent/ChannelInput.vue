@@ -441,12 +441,11 @@ export default {
     },
 
     //チャンネルリンクウィンドウの要素をクリックされたらチャンネルリンクに置き換える処理
-    replaceChannelLink(targetChannelInfo) {
+    replaceChannelLink(targetChannelId) {
       this.txt = 
         this.txt.slice(0, this.channelLinkWindow.replaceStartIndex) +
-        "#/" + targetChannelInfo.channelid + "/ " +
+        "#/" + targetChannelId + "/ " +
         this.txt.slice(this.channelLinkWindow.replaceEndIndex);
-
       //入力欄へフォーカスしなおす
       this.$el.querySelector("#inp").focus();
     },
@@ -811,8 +810,8 @@ export default {
         style="bottom:101%; overflow-y:auto; z-index:100;"
       >
         <v-list-item 
-          v-for="(value) in channelLinkWindow.channelList"
-          @click="replaceChannelLink(value)"
+          v-for="(value, key) in channelLinkWindow.channelList"
+          @click="replaceChannelLink(key)"
         > 
           {{ value.name }} 
         </v-list-item>
