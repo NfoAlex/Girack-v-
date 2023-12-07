@@ -80,6 +80,8 @@ export default {
       channelLinkWindow: {
         isDisplay: false, //チャンネルリンクウィンドウを表示するかどうか
         regexPattern: /(\s|^)#[^#\s]*(\s|$)/g, //チャンネルリンクの可能性がある文字列の正規表現
+        replaceStartIndex: 0, //置換される対象の文字列の開始位置
+        replaceEndIndex: 0, //置換される対象の文字列の終了位置
       },
 
       searchDisplayArray: [], //検索するときに表示する配列
@@ -235,6 +237,8 @@ export default {
         const end = this.channelLinkWindow.regexPattern.lastIndex - match[2].length; // マッチした部分の終了位置
         if (start < this.textarea.cursorPosition && this.textarea.cursorPosition <= end) {
           isCursorAboveMatch = true;
+          this.channelLinkWindow.replaceStartIndex = start;
+          this.channelLinkWindow.replaceEndIndex = end;
         }
       }
 
@@ -427,7 +431,9 @@ export default {
     //チャンネルリンクウィンドウの要素をクリックされたらチャンネルリンクに置き換える処理
     replaceChannelLink(targetChannelInfo) {
       this.txt = 
-        "#/" + targetChannelInfo.channelid + "/ ";
+        this.txt.slice(0, this.channelLinkWindow.replaceStartIndex) +
+        "#/" + targetChannelInfo.channelid + "/ " +
+        this.txt.slice(this.channelLinkWindow.replaceEndIndex);
 
       //入力欄へフォーカスしなおす
       this.$el.querySelector("#inp").focus();
