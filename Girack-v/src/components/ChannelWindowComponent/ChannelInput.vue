@@ -52,6 +52,7 @@ export default {
       fxTwitButtonDisplay: false, //fxTwitter化するボタンを表示するかどうか
       fxTwitternize: true, //fxTwitter化するかどうか
       fileInputData: [], //アップロードするファイル
+      channelList: {}, //参加できるチャンネルのリスト
 
       dialogChannelMove: false, //チャンネル移動確認ダイアログ
       confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -82,6 +83,7 @@ export default {
         regexPattern: /(\s|^)#[^#\s]*(\s|$)/g, //チャンネルリンクの可能性がある文字列の正規表現
         replaceStartIndex: 0, //置換される対象の文字列の開始位置
         replaceEndIndex: 0, //置換される対象の文字列の終了位置
+        channelList: {}, //チャンネルリンク用ウィンドウで表示するチャンネルリスト
       },
 
       searchDisplayArray: [], //検索するときに表示する配列
@@ -241,6 +243,9 @@ export default {
           this.channelLinkWindow.replaceEndIndex = end;
         }
       }
+
+      //チャンネルリンク用ウィンドウで表示するチャンネルリンクのリストの作成
+      this.channelLinkWindow.channelList = this.channelList;
 
       //チャンネルリンクの可能性がある文字列の上にカーソルがある場合チャンネルリンク用ウィンドウを表示する
       if (isCursorAboveMatch) {
@@ -606,6 +611,20 @@ export default {
     SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
       this.channelJoinedUserArray = channelJoinedUserList;
     },
+
+    //チャンネルリストの取得
+    SOCKETinfoList(dat) {
+      //型が違うかデータが無効なら関数を終わらせる
+      if (dat.type !== "channel" || dat === -1) {
+        console.log("ChannelBrwoser :: infoList : データ違うっぽい???");
+        return;
+      }
+
+      this.channelList = dat.channelList; //リスト追加
+
+      console.log("ChannelBrwoser :: infoList : dat ↓ ");
+      console.log(dat);
+    },
   },
 
   mounted() {
@@ -627,6 +646,16 @@ export default {
     //cookieに保存している「最後に入力していた値」を入力フォームの初期値に設定
     let previousText = getCookie("previousText");
     this.txt = previousText;
+
+    //チャンネルリストの取得
+    socket.emit("getInfoList", {
+      target: "channel",
+      reqSender: {
+        userid: this.myUserinfo.userid, //ユーザーID
+        sessionid: this.myUserinfo.sessionid, //セッションID
+      },
+    });
+    socket.on("infoList", this.SOCKETinfoList);
   },
 
   unmounted() {
@@ -635,6 +664,8 @@ export default {
       "infoChannelJoinedUserList",
       this.SOCKETinfoChannelJoinedUserList
     );
+    socket.off("infoList", this.SOCKETinfoList);
+
     //メニューページなどにいったら返信状態をリセット
     this.resetReply();
     //直前に入力していた値をcookieに保存。有効期限は1日
@@ -773,10 +804,10 @@ export default {
         style="bottom:101%; overflow-y:auto; z-index:100;"
       >
         <v-list-item 
-          v-for="(value) in ChannelIndex"
+          v-for="(value) in channelLinkWindow.channelList"
           @click="replaceChannelLink(value)"
         > 
-          {{ value.channelname }} 
+          {{ value.name }} 
         </v-list-item>
       </v-card> 
 
