@@ -244,11 +244,18 @@ export default {
         }
       }
 
-      //チャンネルリンク用ウィンドウで表示するチャンネルリンクのリストの作成
-      this.channelLinkWindow.channelList = this.channelList;
-
       //チャンネルリンクの可能性がある文字列の上にカーソルがある場合チャンネルリンク用ウィンドウを表示する
       if (isCursorAboveMatch) {
+        //チャンネルリンク用ウィンドウで表示するチャンネルリンクのリストの作成
+        this.channelLinkWindow.channelList = {};
+        //部分一致検索で使用する検索文字列（#を抜いたチャンネルリンクの可能性がある文字列）
+        const searchString = this.txt.substring(this.channelLinkWindow.replaceStartIndex + 1, this.channelLinkWindow.replaceEndIndex);
+        for (let key in this.channelList) {
+          const targetChannelName = this.channelList[key]["name"];
+          if (targetChannelName.includes(searchString)) {
+            this.channelLinkWindow.channelList[key] = this.channelList[key];
+          }
+        }
         this.channelLinkWindow.isDisplay = true;
       } else {
         this.channelLinkWindow.isDisplay = false;
