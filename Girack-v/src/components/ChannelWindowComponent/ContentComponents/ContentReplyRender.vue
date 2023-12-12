@@ -20,7 +20,8 @@ export default {
 
   data() {
     return {
-      msgReply: {} //受信したメッセージデータの格納用
+      msgReply: {}, //受信したメッセージデータの格納用
+      contentDisplay: "" //最終的に表示する本文
     }
   },
 
@@ -28,8 +29,17 @@ export default {
 
     //メッセージデータ受け取り
     SOCKETmessageSingle(dat) {
-      console.log("ContentReplyRender :: SOCKETmessageSingle : データ->", dat);
+      //console.log("ContentReplyRender :: SOCKETmessageSingle : データ->", dat);
       this.msgReply = dat; //格納
+
+      //表示したい本文
+      let content = this.msgReply.content;
+      //もし本文に改行が二つ以上あれば削る
+      if (content.split("\n").length >= 2) {
+        this.contentDisplay = content.split('\n')[0] + "\n" + content.split('\n')[1] + " ...";
+      } else {
+        this.contentDisplay = content;
+      }
     }
 
   },
@@ -84,7 +94,7 @@ export default {
       :
       <ContentMessageRender
         class="text-medium-emphasis"
-        :content="msgReply.content"
+        :content="contentDisplay"
       />
     </p>
   </div>
