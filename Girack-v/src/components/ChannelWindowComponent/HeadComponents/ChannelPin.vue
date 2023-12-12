@@ -186,7 +186,7 @@ export default {
     //メッセージ受け取り
     SOCKETmessageSingle(dat) {
       //メッセ用の変数へデータ追加
-      this.msgPinDB.push(dat);
+      this.msgPinDB.unshift(dat);
 
       //ピンの数が揃っているなら完了のマークする
       if (this.msgPinDB.length === this.pins.length) {
