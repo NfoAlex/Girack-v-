@@ -59,11 +59,12 @@ export default {
       socket.off("messageSingle_" + msgid, this.SOCKETmessageSingle);
     },
 
-    //ピンの表示方法を変える
+    //ピンの表示、ソート
     pinDisplayFormat(rule="timePinned") {
       //ピン留めされた順番基準
       if (rule === "timePinned") {
         console.log("ChannelPin :: pinDisplayFormat : 返すもの(timePinned)->", this.msgPinDB);
+        //完全にコピーするため空スライス
         this.pinDisplayArray = this.msgPinDB.slice();
         return;
       }
@@ -184,6 +185,7 @@ export default {
       //メッセ用の変数へデータ追加
       this.msgPinDB.push(dat);
 
+      //ピンの数が揃っているなら完了のマークする
       if (this.msgPinDB.length === this.pins.length) {
         this.loaded = true;
       }
@@ -194,7 +196,9 @@ export default {
   mounted() {
     //ピン留めのメッセージ受け取り用
     for (let index in this.pins) {
+      //受け取りハンドラ
       socket.on("messageSingle_" + this.pins[index], this.SOCKETmessageSingle);
+      //リクエスト送信
       socket.emit("getMessageSingle", {
         channelid: this.channelid,
         messageid: this.pins[index],
