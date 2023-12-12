@@ -8,7 +8,7 @@ import {
 } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
 import { dataChannel } from "../../data/dataChannel";
-import { getReplyState } from "./ChannelInput.vue";
+import { getInputState } from "./ChannelInput.vue";
 import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
@@ -20,7 +20,7 @@ const socket = getSocket();
 
 export default {
   setup() {
-    const { InputState } = getReplyState();
+    const { InputState } = getInputState();
     const { myUserinfo, UserIndex } = dataUser(); //ユーザー情報
     const { MsgDB, StateScrolled, MsgReadTime } = dataMsg(); //履歴用DB
     const { PreviewChannelData, ChannelIndex } = dataChannel();

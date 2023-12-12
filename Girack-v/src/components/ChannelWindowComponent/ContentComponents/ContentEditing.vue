@@ -1,14 +1,16 @@
 <script>
 import { getSocket, Serverinfo } from '../../../data/socket.js';
 import { dataUser } from '../../../data/dataUserinfo.js';
+import { getInputState } from "../ChannelInput.vue";
 
 const socket = getSocket();
 
 export default {
   setup() {
     const { myUserinfo } = dataUser();
+    const { InputState } = getInputState();
 
-    return { myUserinfo, Serverinfo };
+    return { myUserinfo, Serverinfo, InputState };
   },
 
   props: ["content", "messageid", "channelid"],
@@ -95,6 +97,8 @@ export default {
   mounted() {
     //propsからメッセージ分を取得、格納
     this.editTxt = this.content;
+    //入力中と設定
+    this.InputState.isTyping = true;
 
     //キーの監視開始
     document.addEventListener("keydown", this.enterTrigger);
@@ -117,6 +121,8 @@ export default {
   },
 
   unmounted() {
+    //入力中という設定を無効化
+    this.InputState.isTyping = false;
     //キーの監視停止
     document.removeEventListener("keydown", this.enterTrigger);
     document.removeEventListener("keydown", this.escTrigger);

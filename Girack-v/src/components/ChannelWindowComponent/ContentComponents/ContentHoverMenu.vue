@@ -2,7 +2,7 @@
 
 import { getSocket, Serverinfo } from "../../../data/socket";
 import { dataUser } from "../../../data/dataUserinfo";
-import { getReplyState } from "../ChannelInput.vue";
+import { getInputState } from "../ChannelInput.vue";
 import { getCONFIG } from "../../../config.js";
 
 const socket = getSocket();
@@ -11,7 +11,7 @@ export default {
 
   setup() {
     const { myUserinfo } = dataUser();
-    const { ReplyState } = getReplyState();
+    const { ReplyState } = getInputState();
     const { CONFIG_DISPLAY } = getCONFIG();
 
     return { myUserinfo, ReplyState, Serverinfo, CONFIG_DISPLAY };

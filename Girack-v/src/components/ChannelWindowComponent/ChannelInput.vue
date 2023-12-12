@@ -19,14 +19,14 @@ const InputState = ref({
   isTyping: false,
 });
 
-export function getReplyState() {
+export function getInputState() {
   return { ReplyState, InputState };
 }
 
 export default {
   setup() {
     const { mobile } = useDisplay();
-    const { ReplyState, InputState } = getReplyState();
+    const { ReplyState, InputState } = getInputState();
     const { myUserinfo, UserIndex } = dataUser();
     const { ChannelIndex } = dataChannel();
     const { MsgDB } = dataMsg();
