@@ -187,7 +187,8 @@ export default {
 
       //ピンの数が揃っているなら完了のマークする
       if (this.msgPinDB.length === this.pins.length) {
-        this.loaded = true;
+        this.loaded = true; //ロード完了
+        this.pinDisplayFormat(); //ソート開始
       }
     }
 
