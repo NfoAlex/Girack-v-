@@ -19,7 +19,14 @@ export default {
   data() {
     return {
       uri: window.location.origin, //バックエンドのURI
-      msgPinDB: {}
+
+      //ピンの表示順
+      pinDisplayOptions: ["date", "timePinned"], //ピンの表示順選択肢
+      pinDisplayRule: "timePinned", //ピンの表示規則
+      pinDisplayArray: [], //表示するピン
+
+      //ピン用JSON
+      msgPinDB: []
     }
   },
 
@@ -49,6 +56,28 @@ export default {
       delete this.msgPinDB[msgid];
       //ハンドラを外す
       socket.off("messageSingle_" + msgid, this.SOCKETmessageSingle);
+    },
+
+    //ピンの表示方法を変える
+    pinDisplayFormat(rule) {
+      //ピン留めされた順番基準
+      if (rule === "timePinned") {
+        console.log("ChannelPin :: pinDisplayFormat : 返すもの(timePinned)->", this.msgPinDB);
+        return this.msgPinDB;
+      }
+
+      //時間基準
+      if (rule === "date") {
+        let arr = this.msgPinDB;
+        //時間軸で比較する
+        arr.sort((a,b) => {
+          return a.time > b.time;
+        });
+
+        console.log("ChannelPin :: pinDisplayFormat : 返すもの(date)->", arr);
+
+        return arr;
+      }
     },
 
     //ピンできるロールかどうかを確認
@@ -149,7 +178,7 @@ export default {
     //メッセージ受け取り
     SOCKETmessageSingle(dat) {
       //メッセ用の変数へデータ追加
-      this.msgPinDB[dat.messageid] = dat;
+      this.msgPinDB.push(dat);
     }
 
   },
@@ -197,15 +226,38 @@ export default {
       </v-card-title>
 
       <v-card-subtitle>
-        <div class="ml-3 mb-1 me-auto">ピン留め一覧</div>
+        <div class=" me-auto">ピン留め一覧</div>
+        <div class="d-flex align-center my-2">
+          <p class="text-subtitle">表示順 : </p>
+          <v-btn
+            @click="pinDisplayFormat('date')"
+            class="mx-1"
+            rounded
+            color="primary"
+          >
+            時間
+          </v-btn>
+          <v-btn
+            @click="pinDisplayFormat('timePinned')"
+            class="mx-1"
+            rounded
+            color="primary"
+          >
+            ピン留めされた順
+          </v-btn>
+        </div>
       </v-card-subtitle>
+
+      
 
       <v-card-text style="overflow-y:auto; padding-bottom:5%">
 
+        
+
         <!-- ピン留め内容表示 -->
         <v-card
-          v-if="Object.keys(msgPinDB).length!==0"
-          v-for="message in msgPinDB"
+          v-if="msgPinDB.length!==0"
+          v-for="message in pinDisplayFormat('timePinned')"
           class="my-3 pa-3 rounded-lg"
           variant="tonal"
         >
