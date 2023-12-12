@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       uri: window.location.origin, //バックエンドのURI
+      loaded: false, //ロードできたかどうか
 
       //ピンの表示順
       pinDisplayOptions: ["date", "timePinned"], //ピンの表示順選択肢
@@ -59,16 +60,18 @@ export default {
     },
 
     //ピンの表示方法を変える
-    pinDisplayFormat(rule) {
+    pinDisplayFormat(rule="timePinned") {
       //ピン留めされた順番基準
       if (rule === "timePinned") {
         console.log("ChannelPin :: pinDisplayFormat : 返すもの(timePinned)->", this.msgPinDB);
-        return this.msgPinDB;
+        this.pinDisplayArray = this.msgPinDB.slice();
+        return;
       }
 
       //時間基準
       if (rule === "date") {
-        let arr = this.msgPinDB;
+        //完全にコピーするため空スライス
+        let arr = this.msgPinDB.slice();
         //時間軸で比較する
         arr.sort((a,b) => {
           return a.time > b.time;
@@ -76,7 +79,8 @@ export default {
 
         console.log("ChannelPin :: pinDisplayFormat : 返すもの(date)->", arr);
 
-        return arr;
+        this.pinDisplayArray = arr;
+        return;
       }
     },
 
@@ -179,6 +183,10 @@ export default {
     SOCKETmessageSingle(dat) {
       //メッセ用の変数へデータ追加
       this.msgPinDB.push(dat);
+
+      if (this.msgPinDB.length === this.pins.length) {
+        this.loaded = true;
+      }
     }
 
   },
@@ -252,12 +260,15 @@ export default {
 
       <v-card-text style="overflow-y:auto; padding-bottom:5%">
 
-        
+        <!-- ロード中処理 -->
+        <v-card v-if="!loaded" loading variant="text" class="pa-3 text-center">
+          ロード中...
+        </v-card>
 
         <!-- ピン留め内容表示 -->
         <v-card
-          v-if="msgPinDB.length!==0"
-          v-for="message in pinDisplayFormat('timePinned')"
+          v-if="msgPinDB.length!==0 && loaded"
+          v-for="message in pinDisplayArray"
           class="my-3 pa-3 rounded-lg"
           variant="tonal"
         >
