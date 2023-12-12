@@ -29,7 +29,7 @@ export default {
 
     //メッセージデータ受け取り
     SOCKETmessageSingle(dat) {
-      console.log("ContentReplyRender :: SOCKETmessageSingle : データ->", dat);
+      //console.log("ContentReplyRender :: SOCKETmessageSingle : データ->", dat);
       this.msgReply = dat; //格納
 
       //表示したい本文
