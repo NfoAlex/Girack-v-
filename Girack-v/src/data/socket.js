@@ -1118,6 +1118,16 @@ export function checkMsgNewCount(channelid) {
   }
 }
 
+//MsgDBの指定したチャンネル分の履歴を削除
+export function deleteMsgHistory(channelid) {
+  try {
+    //履歴削除
+    delete dataMsg().MsgDB.value[channelid];
+  } catch(e) {
+    console.log("socket :: deleteMsgHistory : 履歴削除を中止");
+  }
+}
+
 //クッキー設定するやつ(MDNから参考)
 export function setCookie(cname, cvalue, exdays) {
   const d = new Date();
