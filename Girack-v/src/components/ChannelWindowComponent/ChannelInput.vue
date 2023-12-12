@@ -265,7 +265,7 @@ export default {
         document.querySelector("#inp").selectionStart;
     },
 
-    //下十字キーのトリガー
+    //下十字キーのトリガー(メンション時のユーザー検索用)
     arrowDownTrigger(e) {
       if (this.searchMode.enabled) {
         e.preventDefault();
@@ -273,7 +273,7 @@ export default {
       }
     },
 
-    //上十字キーのトリガー
+    //上十字キーのトリガー(メンション時のユーザー検索用)
     arrowUpTrigger(e) {
       if (this.searchMode.enabled) {
         e.preventDefault();
