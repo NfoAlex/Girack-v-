@@ -89,6 +89,9 @@ export default {
 
   //KeepAliveを通して新しくチャンネルに移動したとき
   activated() {
+    //ブラウザ上のタブ名を設定
+    document.title = this.channelInfo.channelname;
+
     //watch開始
       //チャンネル移動の監視
     this.watcherRoute = this.$watch("$route", function (newPage, oldPage) {
@@ -99,8 +102,7 @@ export default {
           return 0;
         }
 
-        //ブラウザ上のタブ名を設定
-        document.title = this.ChannelIndex[newPage.params.id].channelname;
+        
 
         //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
         if (!Object.keys(this.ChannelIndex).includes(newPage.params.id))
