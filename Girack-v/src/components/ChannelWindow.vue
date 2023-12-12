@@ -41,10 +41,6 @@ export default {
 
         //あるいはプレビュー用としてチャンネルを登録しているなら
       } else if (this.PreviewChannelData.channelid === this.$route.params.id) {
-        console.log(
-          "ChannelWindow :: getChannelInfo : 元からプレビューする予定のものだな"
-        );
-
         //履歴取得状態を強制的に初期化
         this.PreviewChannelData.fetchingHistory = false;
 
