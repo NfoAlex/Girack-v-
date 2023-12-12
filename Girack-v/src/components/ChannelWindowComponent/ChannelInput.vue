@@ -442,26 +442,18 @@ export default {
     },
 
     //メンション用のユーザー検索の十字キーでのユーザー選択変更部分
-    changeMentionUserSelect(e) {
-      //上下の十字キーの入力からのテキストのカーソル移動を防ぐ(メンション検索中限定)
-      if (this.searchMode.enabled) {
-        e.preventDefault();
-        //フォーカスが外れるからフォーカスしなおすように
-        this.$nextTick(() => {
-          this.$el.querySelector("#inp").focus();
-        });
-      }
-
+    changeMentionUserSelect(pickDireciton) {
       //もしキー入力が下矢印で、かつ選択しているインデックス番号が(検索結果配列の長さ-1)未満なら
       if (
-        e.code === "ArrowDown" &&
+        pickDireciton === "down"
+          &&
         this.searchDisplayArray.length - 1 > this.searchMode.selectedIndex
       ) {
         this.searchMode.selectedIndex += 1; //インデックスを進める
       }
 
       //もしキー入力が上矢印で、かつ選択しているインデックス番号が0より上だったら
-      if (e.code === "ArrowUp" && this.searchMode.selectedIndex > 0) {
+      if (pickDireciton === "up" && this.searchMode.selectedIndex > 0) {
         this.searchMode.selectedIndex -= 1; //インデックスを戻す
       }
 
