@@ -19,7 +19,15 @@ export default {
   data() {
     return {
       uri: window.location.origin, //バックエンドのURI
-      msgPinDB: {}
+      loaded: false, //ロードできたかどうか
+
+      //ピンの表示順
+      pinDisplayOptions: ["date", "timePinned"], //ピンの表示順選択肢
+      pinDisplayRule: "timePinned", //ピンの表示規則
+      pinDisplayArray: [], //表示するピン
+
+      //ピン用JSON
+      msgPinDB: []
     }
   },
 
@@ -49,6 +57,35 @@ export default {
       delete this.msgPinDB[msgid];
       //ハンドラを外す
       socket.off("messageSingle_" + msgid, this.SOCKETmessageSingle);
+    },
+
+    //ピンの表示、ソート
+    pinDisplayFormat(rule="timePinned") {
+      //表示規則を格納
+      this.pinDisplayRule = rule;
+      
+      //ピン留めされた順番基準
+      if (rule === "timePinned") {
+        console.log("ChannelPin :: pinDisplayFormat : 返すもの(timePinned)->", this.msgPinDB);
+        //完全にコピーするため空スライス
+        this.pinDisplayArray = this.msgPinDB.slice();
+        return;
+      }
+
+      //時間基準
+      if (rule === "date") {
+        //完全にコピーするため空スライス
+        let arr = this.msgPinDB.slice();
+        //時間軸で比較する
+        arr.sort((a,b) => {
+          return a.time < b.time;
+        });
+
+        console.log("ChannelPin :: pinDisplayFormat : 返すもの(date)->", arr);
+
+        this.pinDisplayArray = arr;
+        return;
+      }
     },
 
     //ピンできるロールかどうかを確認
@@ -149,7 +186,13 @@ export default {
     //メッセージ受け取り
     SOCKETmessageSingle(dat) {
       //メッセ用の変数へデータ追加
-      this.msgPinDB[dat.messageid] = dat;
+      this.msgPinDB.unshift(dat);
+
+      //ピンの数が揃っているなら完了のマークする
+      if (this.msgPinDB.length === this.pins.length) {
+        this.loaded = true; //ロード完了
+        this.pinDisplayFormat(); //ソート開始
+      }
     }
 
   },
@@ -157,7 +200,9 @@ export default {
   mounted() {
     //ピン留めのメッセージ受け取り用
     for (let index in this.pins) {
+      //受け取りハンドラ
       socket.on("messageSingle_" + this.pins[index], this.SOCKETmessageSingle);
+      //リクエスト送信
       socket.emit("getMessageSingle", {
         channelid: this.channelid,
         messageid: this.pins[index],
@@ -197,15 +242,41 @@ export default {
       </v-card-title>
 
       <v-card-subtitle>
-        <div class="ml-3 mb-1 me-auto">ピン留め一覧</div>
+        <div class=" me-auto">ピン留め一覧</div>
+        <div class="d-flex align-center my-2">
+          <p class="text-subtitle">表示順 : </p>
+          <v-btn
+            @click="pinDisplayFormat('date')"
+            class="mx-1"
+            rounded
+            :variant="pinDisplayRule==='date'?'tonal':null"
+          >
+            時間
+          </v-btn>
+          <v-btn
+            @click="pinDisplayFormat('timePinned')"
+            class="mx-1"
+            rounded
+            :variant="pinDisplayRule==='timePinned'?'tonal':null"
+          >
+            ピン留めされた順
+          </v-btn>
+        </div>
       </v-card-subtitle>
+
+      
 
       <v-card-text style="overflow-y:auto; padding-bottom:5%">
 
+        <!-- ロード中処理 -->
+        <v-card v-if="!loaded" loading variant="text" class="pa-3 text-center">
+          ロード中...
+        </v-card>
+
         <!-- ピン留め内容表示 -->
         <v-card
-          v-if="Object.keys(msgPinDB).length!==0"
-          v-for="message in msgPinDB"
+          v-if="msgPinDB.length!==0 && loaded"
+          v-for="message in pinDisplayArray"
           class="my-3 pa-3 rounded-lg"
           variant="tonal"
         >
