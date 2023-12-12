@@ -89,30 +89,18 @@ export default {
 
   //KeepAliveを通して新しくチャンネルに移動したとき
   activated() {
+    //ブラウザ上のタブ名を設定
+    document.title = this.channelInfo.channelname;
+
     //watch開始
       //チャンネル移動の監視
     this.watcherRoute = this.$watch("$route", function (newPage, oldPage) {
-      //ページが切り替わったらユーザーページを閉じるように
-      this.userDialogShow = false;
-      //もしひとつ前がプレビューのものだったなら履歴データと既読状態を削除
-      try {
-        if (this.PreviewChannelData.channelid === oldPage.params.id) {
-          delete this.MsgDB[oldPage.params.id];
-          delete this.MsgReadTime[oldPage.params.id];
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
       //チャンネルのロードを待ってからやつ処理
       this.$nextTick(() => {
         //チャンネル以外のページ場合、これ以降の処理をスキップする
         if (!newPage.path.startsWith("/c/")) {
           return 0;
         }
-
-        //ブラウザ上のタブ名を設定
-        document.title = this.ChannelIndex[newPage.params.id].channelname;
 
         //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
         if (!Object.keys(this.ChannelIndex).includes(newPage.params.id))
