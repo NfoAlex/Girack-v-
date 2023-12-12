@@ -198,6 +198,9 @@ export default {
   },
 
   mounted() {
+    //ピンがなければ最初からロード完了とマーク
+    if (this.pins.length === 0) this.loaded = true;
+
     //ピン留めのメッセージ受け取り用
     for (let index in this.pins) {
       //受け取りハンドラ
