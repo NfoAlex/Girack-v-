@@ -88,19 +88,6 @@ export default {
       //一つ前のプレビュー用履歴を削除する
       this.deleteMsgHistory(channelid);
 
-      //プレビュー用にチャンネルデータを横流し
-      this.PreviewChannelData = {
-        channelid: channelid,
-        channelname: this.channelList[channelid].name,
-        description: this.channelList[channelid].description,
-        scope: this.channelList[channelid].scope,
-        canTalk: this.channelList[channelid].canTalk,
-        haveAllHistory: false,
-        fetchingHistory: false, //履歴の取得待ち状態であるかどうか
-        previewmode: true,
-      };
-
-      getMessage(channelid, 25, 0); //履歴を取得
       this.$router.push({ path: "/c/" + channelid }); //そのページへ移動
     },
 
