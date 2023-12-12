@@ -568,13 +568,14 @@ export default {
       </div>
 
       <!-- 新着メッセージ線 -->
-      <ContentNewMessageLine
-        v-if="!channelInfo.previewmode"
-        :m="m" 
-        :index="index"
-        :MsgDBActive="MsgDBActive"
-        :msgDisplayNum="msgDisplayNum"
-      />
+      <span v-if="!channelInfo.previewmode">
+        <ContentNewMessageLine
+          :m="m"
+          :index="index"
+          :MsgDBActive="MsgDBActive"
+          :msgDisplayNum="msgDisplayNum"
+        />
+      </span>
     </div>
 
     <!-- 履歴が空なら -->
