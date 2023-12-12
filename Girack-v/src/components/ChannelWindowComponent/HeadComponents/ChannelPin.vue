@@ -61,6 +61,9 @@ export default {
 
     //ピンの表示、ソート
     pinDisplayFormat(rule="timePinned") {
+      //表示規則を設定
+      this.pinDisplayRule = rule;
+      
       //ピン留めされた順番基準
       if (rule === "timePinned") {
         console.log("ChannelPin :: pinDisplayFormat : 返すもの(timePinned)->", this.msgPinDB);
@@ -246,7 +249,7 @@ export default {
             @click="pinDisplayFormat('date')"
             class="mx-1"
             rounded
-            color="primary"
+            :variant="pinDisplayRule==='date'?'tonal':null"
           >
             時間
           </v-btn>
@@ -254,7 +257,7 @@ export default {
             @click="pinDisplayFormat('timePinned')"
             class="mx-1"
             rounded
-            color="primary"
+            :variant="pinDisplayRule==='timePinned'?'tonal':null"
           >
             ピン留めされた順
           </v-btn>
