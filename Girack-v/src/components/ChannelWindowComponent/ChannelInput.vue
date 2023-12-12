@@ -265,6 +265,23 @@ export default {
         document.querySelector("#inp").selectionStart;
     },
 
+    //下十字キーのトリガー
+    arrowDownTrigger() {
+      console.log("down");
+      // if (this.searchMode.enabled) {
+      //   e.preventDefault();
+      //   this.changeMentionUserSelect("up");
+      // }
+    },
+
+    //上十字キーのトリガー
+    arrowUpTrigger() {
+      if (this.searchMode.enabled) {
+        e.preventDefault();
+        this.changeMentionUserSelect("up");
+      }
+    },
+
     //メッセージを送信する
     msgSend() {
       //fxTwitter化する
