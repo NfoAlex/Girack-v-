@@ -61,7 +61,7 @@ export default {
 
     //ピンの表示、ソート
     pinDisplayFormat(rule="timePinned") {
-      //表示規則を設定
+      //表示規則を格納
       this.pinDisplayRule = rule;
       
       //ピン留めされた順番基準
@@ -78,7 +78,7 @@ export default {
         let arr = this.msgPinDB.slice();
         //時間軸で比較する
         arr.sort((a,b) => {
-          return a.time > b.time;
+          return a.time < b.time;
         });
 
         console.log("ChannelPin :: pinDisplayFormat : 返すもの(date)->", arr);
