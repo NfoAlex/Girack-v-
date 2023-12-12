@@ -178,7 +178,7 @@ export default {
     window.removeEventListener("blur", this.setFocusStateFalse);
     //キーの監視終了
     window.removeEventListener("keydown", this.initMsgReadTimeBefore);
-    window.addEventListener("keydown", this.startEditingMyRecentMessage);
+    window.removeEventListener("keydown", this.startEditingMyRecentMessage);
   },
 
   //マウント外れた時
