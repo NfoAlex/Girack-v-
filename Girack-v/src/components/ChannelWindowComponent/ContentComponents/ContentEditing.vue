@@ -107,7 +107,7 @@ export default {
     //カーソルを最後に持ってくる
     this.$nextTick(() => {
       let DOMeditingTextArea = document.getElementById("editingTextArea");
-      console.log("ContentMessageEditing :: mounted : 先頭へ移動したい->", this.editTxt.length, DOMeditingTextArea);
+      //console.log("ContentMessageEditing :: mounted : 先頭へ移動したい->", this.editTxt.length, DOMeditingTextArea);
       //テキスト入力欄の取得
       DOMeditingTextArea.focus();
       //きしょすぎやろ
