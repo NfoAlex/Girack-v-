@@ -1,6 +1,6 @@
 <script>
 import { useDisplay } from "vuetify";
-import { getSocket, getMessage, Serverinfo } from "../data/socket";
+import { getSocket, getMessage, Serverinfo, deleteMsgHistory } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
@@ -13,7 +13,7 @@ export default {
     const { myUserinfo } = dataUser(); //自分のユーザー情報をインポート
     const { PreviewChannelData } = dataChannel();
     const { MsgDB } = dataMsg();
-    return { mobile, PreviewChannelData, myUserinfo, MsgDB, Serverinfo };
+    return { mobile, PreviewChannelData, myUserinfo, MsgDB, Serverinfo, deleteMsgHistory };
   },
 
   data() {
@@ -85,12 +85,8 @@ export default {
 
     //チャンネルのプレビューをする
     channelPreview(channelid) {
-      try {
-        //ひとつ前にプレビューしていた履歴を消す
-        delete this.MsgDB[this.PreviewChannelData.channelid];
-      } catch (e) {
-        console.error(e);
-      }
+      //一つ前のプレビュー用履歴を削除する
+      this.deleteMsgHistory(channelid);
 
       //プレビュー用にチャンネルデータを横流し
       this.PreviewChannelData = {
