@@ -120,8 +120,12 @@ export default {
         //入力欄に表示するためのチャンネル名を取得
         this.channelname = this.channelInfo.channelname;
 
-        //チャンネルを移動するごとに入力欄へフォーカス
-        if (!this.isMobile) this.$el.querySelector("#inp").focus();
+        //レンダーを待ってから入力欄へフォーカス
+        this.$nextTick(() => {
+          try { //プレビューから戻ってくることを想定してtry
+            if (!this.isMobile) this.$el.querySelector("#inp").focus();
+          } catch(e) {}
+        });
       },
     },
 
