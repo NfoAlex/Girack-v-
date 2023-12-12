@@ -266,16 +266,15 @@ export default {
     },
 
     //下十字キーのトリガー
-    arrowDownTrigger() {
-      console.log("down");
-      // if (this.searchMode.enabled) {
-      //   e.preventDefault();
-      //   this.changeMentionUserSelect("up");
-      // }
+    arrowDownTrigger(e) {
+      if (this.searchMode.enabled) {
+        e.preventDefault();
+        this.changeMentionUserSelect("down");
+      }
     },
 
     //上十字キーのトリガー
-    arrowUpTrigger() {
+    arrowUpTrigger(e) {
       if (this.searchMode.enabled) {
         e.preventDefault();
         this.changeMentionUserSelect("up");
