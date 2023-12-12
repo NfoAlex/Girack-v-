@@ -102,8 +102,6 @@ export default {
           return 0;
         }
 
-        
-
         //プレビューモードならここで止める(チャンネルインデックスにあるかどうか)
         if (!Object.keys(this.ChannelIndex).includes(newPage.params.id))
           return 0;
