@@ -28,11 +28,6 @@ export default {
     getChannelInfo() {
       //もしチャンネルリストにあるなら
       if (this.ChannelIndex[this.$route.params.id] !== undefined) {
-        console.log(
-          "ChannelWindow :: getChannelInfo : infos ->",
-          this.ChannelIndex[this.$route.params.id]
-        );
-
         //チャンネルデータを返す
         return {
           ...this.ChannelIndex[this.$route.params.id],
@@ -54,10 +49,6 @@ export default {
         //プレビュー用チャンネルデータにチャンネルIDを設定
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.PreviewChannelData.channelid = this.$route.params.id;
-        console.log(
-          "ChannelWindow :: getChannelInfo : channelid->",
-          this.PreviewChannelData.channelid
-        );
 
         //チャンネル情報の取得
         socket.emit("getInfoChannel", {
@@ -67,9 +58,6 @@ export default {
             sessionid: this.myUserinfo.sessionid,
           },
         });
-
-        this.PreviewChannelData.fetchingHistory = true;
-        getMessage(this.$route.params.id, 25, 0); //履歴を取得
 
         return this.PreviewChannelData;
       }

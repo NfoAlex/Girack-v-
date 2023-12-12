@@ -89,6 +89,11 @@ export default {
 
   //KeepAliveを通して新しくチャンネルに移動したとき
   activated() {
+    //プレビューならこのタイミングで履歴取得
+    if (this.channelInfo.previewmode) {
+      getMessage(this.getPath, 25, 0); //履歴を取得
+    }
+
     //ブラウザ上のタブ名を設定
     document.title = this.channelInfo.channelname;
 
