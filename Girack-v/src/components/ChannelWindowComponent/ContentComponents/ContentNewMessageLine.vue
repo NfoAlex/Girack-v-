@@ -31,7 +31,7 @@ export default {
           return false;
         }
       } catch (e) {
-        console.log("Content :: checkShowNewMessageLine : エラー", e);
+        //console.log("Content :: checkShowNewMessageLine : エラー", e);
         return false;
       }
     },
