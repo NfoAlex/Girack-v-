@@ -20,7 +20,6 @@ export default {
         apiName: "",
         apiActionOnServer: {
           USER_GETINFO: false,
-          SERVER_GETCONFIG: false,
           CHANNEL_GETINFO: false,
           CHANNEL_GETLIST: false
         }
