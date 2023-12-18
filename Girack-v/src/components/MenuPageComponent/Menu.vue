@@ -115,7 +115,6 @@ export default {
       </RouterLink>
       <RouterLink to="/menu/apiconfigure">
         <v-card
-          v-if="myUserinfo.role === 'Admin'"
           class="rounded-lg menu-card"
           :color="isThisActive('apiconfigure') ? 'primary' : 'secondary'"
           v-ripple
