@@ -70,7 +70,10 @@ export default {
   <div>
 
     <!-- API申請用 -->
-    <v-dialog v-model="displayDialogRegister" style="max-width:650px; width:55vw; height:80vh;">
+    <v-dialog
+      v-model="displayDialogRegister"
+      style="max-width:650px; width:55vw; height:80vh;"
+    >
       <v-card class="rounded-lg pa-4 mx-0" height="100%" width="100%">
         
         <v-card-title>
