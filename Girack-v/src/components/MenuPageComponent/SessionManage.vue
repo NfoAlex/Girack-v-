@@ -116,7 +116,7 @@ export default {
 <template>
   <div>
     <div class="mx-auto d-flex flex-column" style="width: 90%; height:100vh;">
-      <div class="d-flex align-center" style="padding-top: 3%; margin-bottom: 16px">
+      <div class="d-flex align-center my-3" style="margin-bottom: 16px">
         <p class="text-truncate me-auto" style="font-size: min(4vh, 36px)">
         セッション管理
         </p>
