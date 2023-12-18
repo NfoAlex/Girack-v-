@@ -35,6 +35,10 @@ const router = createRouter({
           component: () => import('../components/MenuPageComponent/Settings.vue'),
         },
         {
+          path: "apiconfigure",
+          component: () => import('../components/MenuPageComponent/APIConfigure.vue'),
+        },
+        {
           path: "modlog",
           component: () => import('../components/MenuPageComponent/Modlog.vue'),
         },
