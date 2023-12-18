@@ -190,9 +190,10 @@ export default {
                 {{ api.apiName }}
               </span>
               <v-chip :color="api.status==='active'?'primary':null" size="small">
-                {{ api.status }}
+                状態 : {{ api.status }}
               </v-chip>
-              <v-chip size="small" class="mx-5">
+              <v-divider class="mx-2" vertical />
+              <v-chip size="small" class="mr-5">
                 {{ api.type }}
               </v-chip>
             </v-expansion-panel-title>
