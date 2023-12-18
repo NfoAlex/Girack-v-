@@ -222,7 +222,7 @@ export default {
       <v-divider class="ma-3"></v-divider>
 
       <!-- 他のセッション -->
-      <v-expansion-panels v-if="sessionData!=={}" style="overflow-y:auto; padding-bottom:5%">
+      <v-expansion-panels style="overflow-y:auto; padding-bottom:5%">
         <v-expansion-panel
           v-for="(session,index) in Object.entries(sessionData)"
           :key="index"
