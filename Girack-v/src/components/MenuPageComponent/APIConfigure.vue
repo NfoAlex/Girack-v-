@@ -15,12 +15,15 @@ export default {
     return {
       displayDialogRegister: false,
 
-      registerApiName: "",
-      registerApiActionOnServer: {
-        USER_GETINFO: false,
-        SERVER_GETCONFIG: false,
-        CHANNEL_GETINFO: false,
-        CHANNEL_GETLIST: false
+      registerApiData: {
+        type: "user",
+        apiName: "",
+        apiActionOnServer: {
+          USER_GETINFO: false,
+          SERVER_GETCONFIG: false,
+          CHANNEL_GETINFO: false,
+          CHANNEL_GETLIST: false
+        }
       }
     }
   },
