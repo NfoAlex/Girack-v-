@@ -113,6 +113,18 @@ export default {
           メンバー
         </v-card>
       </RouterLink>
+      <RouterLink to="/menu/apiconfigure">
+        <v-card
+          v-if="myUserinfo.role === 'Admin'"
+          class="rounded-lg menu-card"
+          :color="isThisActive('apiconfigure') ? 'primary' : 'secondary'"
+          v-ripple
+        >
+          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-api </v-icon>
+          <br />
+          APi管理
+        </v-card>
+      </RouterLink>
       <RouterLink to="/menu/serversettings">
         <v-card
           v-if="myUserinfo.role === 'Admin'"
