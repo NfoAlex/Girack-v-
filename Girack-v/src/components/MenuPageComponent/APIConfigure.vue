@@ -64,7 +64,7 @@ export default {
       <v-card class="rounded-lg pa-4 mx-0" height="100%" width="100%">
         
         <v-card-title>
-          APIの登録申請
+          APIの登録申請 {{ registerApiData.apiName.length!==0?" - "+registerApiData.apiName:"" }}
         </v-card-title>
 
         <v-card-text class="my-5" style="overflow-y:auto">
