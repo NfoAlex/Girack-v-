@@ -186,16 +186,20 @@ export default {
           >
 
             <v-expansion-panel-title class="d-flex align-center">
+              
               <span class="flex-grow-1">
                 {{ api.apiName }}
               </span>
-              <v-chip :color="api.status==='active'?'primary':null" size="small">
-                状態 : {{ api.status }}
+
+              状態 :  
+              <v-chip :color="api.status==='active'?'primary':null" size="small" class="ml-2">
+                <i>{{ api.status }}</i>
               </v-chip>
               <v-divider class="mx-2" vertical />
               <v-chip size="small" class="mr-5">
                 {{ api.type }}
               </v-chip>
+
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
