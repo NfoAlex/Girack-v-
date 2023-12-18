@@ -15,7 +15,9 @@ export default {
     return {
       displayDialogRegister: false,
 
-      registerApiData: {
+      myApi: [], //自分のAPIデータ
+
+      registerApiData: { //登録するAPIデータ
         type: "user",
         apiName: "",
         apiActionOnServer: {
@@ -50,8 +52,11 @@ export default {
       });
     },
 
+    //APIリストの受け取りハンドラ
     SOCKETInfoApiList(dat) {
       console.log("APIConfigure :: SOCKETInfoApiList : dat->", dat);
+      //データ格納
+      this.myApi = dat;
     }
   },
 
@@ -173,7 +178,31 @@ export default {
 
       <!-- メインフレーム -->
       <div>
-        {{ Serverinfo.config.API }}
+        <v-expansion-panels style="width: 100%">
+          <v-expansion-panel
+            v-for="(api,index) in myApi"
+            :key="index"
+            class="rounded-lg"
+          >
+
+            <v-expansion-panel-title class="d-flex align-center">
+              <span class="flex-grow-1">
+                {{ api.apiName }}
+              </span>
+              <v-chip :color="api.status==='active'?'primary':null" size="small">
+                {{ api.status }}
+              </v-chip>
+              <v-chip size="small" class="mx-5">
+                {{ api.type }}
+              </v-chip>
+            </v-expansion-panel-title>
+
+            <v-expansion-panel-text>
+              {{ api }}
+            </v-expansion-panel-text>
+
+          </v-expansion-panel>
+        </v-expansion-panels>
       </div>
 
     </div>
