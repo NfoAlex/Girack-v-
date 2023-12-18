@@ -124,13 +124,15 @@ export default {
           <v-btn
             @click="() => { displayDialogRegister=false; }"
             variant="text"
-            class="rounded-lg"
+            size="large"
+            class="rounded-lg ml-2"
           >
             キャンセル
           </v-btn>
           <v-btn
             @click="registerApi"
             class="rounded-lg"
+            size="large"
             color="primary"
           >
             登録する
