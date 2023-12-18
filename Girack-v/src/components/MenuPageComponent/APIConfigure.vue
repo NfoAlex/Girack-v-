@@ -39,6 +39,17 @@ export default {
       });
     },
 
+    //APIを新規登録する
+    registerApi() {
+      socket.emit("registerApi", {
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid,
+        },
+        registerApiData: this.registerApiData
+      });
+    },
+
     SOCKETInfoApiList(dat) {
       console.log("APIConfigure :: SOCKETInfoApiList : dat->", dat);
     }
@@ -68,34 +79,44 @@ export default {
 
         <v-card-text class="my-5" style="overflow-y:auto">
           <h4>登録名</h4>
-          <v-card class="pa-3 mt-2 mb-5 rounded-lg" variant="tonal">
-            asdf
+          <v-card class="pa-0 mt-2 mb-5 rounded-lg" variant="tonal">
+            <v-text-field
+              v-model="registerApiData.apiName"
+              class="ma-0 pa-0"
+              variant="solo"
+              hide-details
+            />
           </v-card>
+          
 
           <h4>APIタイプ</h4>
-          <v-card class="pa-3 mt-2 mb-5 rounded-lg" variant="tonal">
-            Bot or human?
-          </v-card>
+          <v-select
+              v-model="registerApiData.type"
+              class="mt-2 mb-5 rounded-lg"
+              :items="['user', 'bot']"
+            />
 
-          <h4>サーバーのアクセス</h4>
+          <h4>アクセス権限の設定</h4>
           <v-card class="pa-3 mt-2 mb-5 rounded-lg" variant="tonal">
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
-            <p>asdf</p>
+            <p>サーバーデータへのアクション</p>
+            <v-checkbox
+              v-model="registerApiData.apiActionOnServer.USER_GETINFO"
+              label="ユーザー単体の情報"
+            />
+            <v-checkbox
+              v-model="registerApiData.apiActionOnServer.CHANNEL_GETINFO"
+              class="my-n5"
+              label="チャンネル単体の情報"
+            />
+            <v-checkbox
+              v-model="registerApiData.apiActionOnServer.CHANNEL_GETLIST"
+              label="チャンネルリストの情報"
+            />
+
+            <v-divider class="my-3" />
+
+            <p>チャンネルへのアクション</p>
+            <i class="text-disabled">Coming soon...</i>
           </v-card>
         </v-card-text>
 
@@ -108,6 +129,7 @@ export default {
             キャンセル
           </v-btn>
           <v-btn
+            @click="registerApi"
             class="rounded-lg"
             color="primary"
           >
@@ -119,6 +141,7 @@ export default {
     </v-dialog>
 
     <div class="mx-auto d-flex flex-column" style="width:90%;height:100vh;">
+      <!-- ページヘッダ -->
       <div class="d-flex align-center my-3">
         <p class="text-truncate me-auto" style="font-size: min(4vh, 36px)">
         API管理
