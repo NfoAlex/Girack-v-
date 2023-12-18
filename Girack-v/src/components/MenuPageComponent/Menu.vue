@@ -122,7 +122,7 @@ export default {
         >
           <v-icon size="large" style="margin: 0 auto"> mdi:mdi-api </v-icon>
           <br />
-          APi管理
+          API管理
         </v-card>
       </RouterLink>
       <RouterLink to="/menu/serversettings">
