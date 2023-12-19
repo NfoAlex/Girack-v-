@@ -225,6 +225,16 @@ export default {
 
       <!-- メインフレーム -->
       <div>
+        <!-- サーバーがAPI切ってた時の表示 -->
+        <v-alert
+          v-if="!Serverinfo.config.API.API_ENABLED"
+          color="error"
+          class="mb-5 rounded-lg"
+          type="warning"
+          title="注意"
+          text="現在サーバーではAPIへのアクセスが無効化されております。APIの登録自体は可能ですが、使用することができません。"
+        />
+
         <v-expansion-panels style="width: 100%">
           <v-expansion-panel
             v-for="(api,key,index) in myApi"
