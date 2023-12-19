@@ -15,7 +15,7 @@ export default {
     return {
       displayDialogRegister: false,
 
-      myApi: [], //自分のAPIデータ
+      myApi: {}, //自分のAPIデータ
 
       registerApiData: { //登録するAPIデータ
         type: "user",
@@ -193,7 +193,7 @@ export default {
       <div>
         <v-expansion-panels style="width: 100%">
           <v-expansion-panel
-            v-for="(api,index) in myApi"
+            v-for="(api,key,index) in myApi"
             :key="index"
             class="rounded-lg"
           >
