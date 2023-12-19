@@ -204,16 +204,21 @@ export default {
                 {{ api.apiName }}
               </span>
 
-              状態 :  
-              <v-chip
-                :color="api.status==='active'?'primary':null"
-                size="small"
-                class="ml-2"
-              >
-                <i v-if="api.status=='PENDING'" class="text-disabled">{{ api.status }}</i>
-                <span v-else :color="api.status=='ACTIVE'?'success':null">{{ api.status }}</span>
-              </v-chip>
+              <span v-if="api.status.approved">
+                状態 :  
+                <v-chip
+                  :color="api.status.active?'primary':'grey'"
+                  size="small"
+                  class="ml-2"
+                  variant="flat"
+                >
+                  <i v-if="!api.status.active" class="text-disabled">無効</i>
+                  <span v-else>有効</span>
+                </v-chip>
+              </span>
+
               <v-divider class="mx-2" vertical />
+
               <v-chip size="small" class="mr-5" :color="api.type=='user'?'blue':null">
                 {{ api.type }}
               </v-chip>
@@ -221,26 +226,36 @@ export default {
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
-              <p>登録名 : {{ api.apiName }}</p>
-              <p>状態 : 
-                <v-chip size="small" class="mr-5" :color="api.type=='user'?'blue':null">
-                  {{ api.type }}
-                </v-chip>
-              </p>
-              <p>操作内容 : 
-                <code>
-                  {{ api.actionOnServer }}
-                </code>
-              </p>
-              <p>トークン : </p>
-              <v-btn
-                @click="copyToClipboard(api.token)"
+              <v-switch
+                v-model="api.status.active"
+                :disabled="!api.status.approved"
+                class="mx-auto mb-n3"
+                label="APIの有効化"
                 color="primary"
-                class="my-1 rounded-lg"
-                block
-              >
-                クリップボードへコピー
-              </v-btn>
+              />
+
+              <v-card class="pa-3 rounded-lg" color="secondary">
+                <p>タイプ : 
+                  <v-chip size="small" class="mr-5" :color="api.type=='user'?'blue':null">
+                    {{ api.type }}
+                  </v-chip>
+                </p>
+                <p>操作内容 : 
+                  <code>
+                    {{ api.actionOnServer }}
+                  </code>
+                </p>
+                <p>トークン : </p>
+                <v-btn
+                  @click="copyToClipboard(api.token)"
+                  color="primary"
+                  class="my-1 rounded-lg"
+                  block
+                >
+                  クリップボードへコピー
+                </v-btn>
+              </v-card>
+
               {{ api }}
             </v-expansion-panel-text>
 
