@@ -54,6 +54,17 @@ export default {
       this.displayDialogRegister = false;
     },
 
+    //APIを削除する
+    removeApi(apiId) {
+      socket.emit("removeApi", {
+        reqSender: {
+          userid: this.myUserinfo.userid,
+          sessionid: this.myUserinfo.sessionid
+        },
+        apiId: apiId
+      });
+    },
+
     //APIを有効化
     toggleApiStatus(apiId) {
       console.log("APIconfigure :: activateApi : apiId->", apiId);
@@ -285,7 +296,14 @@ export default {
                 </v-btn>
               </v-card>
 
-              {{ api }}
+              <!-- 削除ボタン -->
+              <v-btn
+                @dblclick="removeApi(key)"
+                class="rounded-lg my-5"
+                color="error"
+                block
+              >ダブルクリックで削除</v-btn>
+
             </v-expansion-panel-text>
 
           </v-expansion-panel>
