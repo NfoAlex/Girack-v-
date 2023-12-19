@@ -54,6 +54,29 @@ export default {
       this.displayDialogRegister = false;
     },
 
+    //APIを有効化
+    toggleApiStatus(apiId) {
+      console.log("APIconfigure :: activateApi : apiId->", apiId);
+      //もしアクティブなら無効化、逆なら逆に
+      if ( this.myApi[apiId].status.active ) {
+        socket.emit("disableApi", {
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid
+          },
+          apiId: apiId
+        });
+      } else {
+        socket.emit("activateApi", {
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid
+          },
+          apiId: apiId
+        });
+      }
+    },
+
     //クリップボードにコピーする
     copyToClipboard(text) {
       navigator.clipboard.writeText(text)
@@ -226,7 +249,9 @@ export default {
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
+              <!-- 有効スイッチ -->
               <v-switch
+                @click="toggleApiStatus(key)"
                 v-model="api.status.active"
                 :disabled="!api.status.approved"
                 class="mx-auto mb-n3"
