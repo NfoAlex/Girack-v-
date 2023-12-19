@@ -278,8 +278,9 @@ export default {
 
         <!-- ピン留め内容表示 -->
         <v-card
-          v-if="msgPinDB.length!==0 && loaded"
-          v-for="message in pinDisplayArray"
+          v-if="(msgPinDB.length!==0 && loaded)"
+          v-for="(message, key) in pinDisplayArray"
+          :key="key"
           class="my-3 pa-3 rounded-lg"
           variant="tonal"
         >
