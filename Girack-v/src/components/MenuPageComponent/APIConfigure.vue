@@ -194,11 +194,16 @@ export default {
               </span>
 
               状態 :  
-              <v-chip :color="api.status==='active'?'primary':null" size="small" class="ml-2">
-                <i>{{ api.status }}</i>
+              <v-chip
+                :color="api.status==='active'?'primary':null"
+                size="small"
+                class="ml-2"
+              >
+                <i v-if="api.status=='PENDING'" class="text-disabled">{{ api.status }}</i>
+                <span v-else :color="api.status=='ACTIVE'?'success':null">{{ api.status }}</span>
               </v-chip>
               <v-divider class="mx-2" vertical />
-              <v-chip size="small" class="mr-5">
+              <v-chip size="small" class="mr-5" :color="api.type=='user'?'blue':null">
                 {{ api.type }}
               </v-chip>
 
