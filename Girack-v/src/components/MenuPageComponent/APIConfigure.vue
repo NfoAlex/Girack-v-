@@ -50,6 +50,8 @@ export default {
         },
         registerApiData: this.registerApiData
       });
+      //ダイアログを閉じる
+      this.displayDialogRegister = false;
     },
 
     //APIリストの受け取りハンドラ
