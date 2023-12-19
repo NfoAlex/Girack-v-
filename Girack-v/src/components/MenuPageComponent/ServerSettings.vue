@@ -442,6 +442,28 @@ export default {
                     </v-text-field>
                 </v-card>
 
+                <!-- API設定 -->
+                <p class="text-h6 ma-2">API設定</p>
+                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                    <v-switch
+                        v-model="displaySettings.config.API.API_ENABLED"
+                        label="APIの有効化"
+                    />
+                    <v-switch
+                        v-model="displaySettings.config.API.API_NEEDAPPROVE"
+                        class="ml-4"
+                        label="APIの登録を許可制にする"
+                    />
+                    <div class="ma-2 ml-4">
+                        <p>APIを登録できるロール</p>
+                        <v-select
+                            v-model="displaySettings.config.API.API_CANREGISTER_ROLE"
+                            label="このロール以上が登録可能"
+                            :items="['Member', 'Moderator', 'Admin']"
+                        />
+                    </div>
+                </v-card>
+
             </v-card>
 
         </div>
