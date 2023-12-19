@@ -210,6 +210,26 @@ export default {
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
+              <p>登録名 : {{ api.apiName }}</p>
+              <p>状態 : 
+                <v-chip size="small" class="mr-5" :color="api.type=='user'?'blue':null">
+                  {{ api.type }}
+                </v-chip>
+              </p>
+              <p>操作内容 : 
+                <code>
+                  {{ api.actionOnServer }}
+                </code>
+              </p>
+              <p>トークン : </p>
+              <v-btn
+                variant="outlined"
+                class="my-1"
+                color="error"
+                block
+              >
+                表示する
+              </v-btn>
               {{ api }}
             </v-expansion-panel-text>
 
