@@ -54,6 +54,17 @@ export default {
       this.displayDialogRegister = false;
     },
 
+    //クリップボードにコピーする
+    copyToClipboard(text) {
+      navigator.clipboard.writeText(text)
+      .then(() => {
+        console.log("APIConfigure :: copyToClipboard : コピーした");
+      })
+      .catch(e => {
+        console.error(e)
+      })
+    },
+
     //APIリストの受け取りハンドラ
     SOCKETInfoApiList(dat) {
       console.log("APIConfigure :: SOCKETInfoApiList : dat->", dat);
@@ -223,12 +234,12 @@ export default {
               </p>
               <p>トークン : </p>
               <v-btn
-                variant="outlined"
-                class="my-1"
-                color="error"
+                @click="copyToClipboard(api.token)"
+                color="primary"
+                class="my-1 rounded-lg"
                 block
               >
-                表示する
+                クリップボードへコピー
               </v-btn>
               {{ api }}
             </v-expansion-panel-text>
