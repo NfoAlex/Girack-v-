@@ -70,7 +70,7 @@ export default defineConfig({
         target: "http://localhost:33333/",
         changeOrigin: true,
       },
-      "/api/": {
+      "/api": {
         target: "ws://localhost:22222/",
         ws: true,
       }
