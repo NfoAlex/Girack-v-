@@ -240,11 +240,15 @@ export default {
                     {{ api.type }}
                   </v-chip>
                 </p>
+                <v-divider class="my-2" />
                 <p>操作内容 : 
-                  <code>
-                    {{ api.actionOnServer }}
-                  </code>
+                  <v-card class="pa-2 rounded-lg">
+                    <code>
+                      {{ api.actionOnServer }}
+                    </code>
+                  </v-card>
                 </p>
+                <v-divider class="my-2" />
                 <p>トークン : </p>
                 <v-btn
                   @click="copyToClipboard(api.token)"
