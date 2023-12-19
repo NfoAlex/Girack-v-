@@ -186,6 +186,7 @@ export default {
           </v-btn>
           <v-btn
             @click="registerApi"
+            :disabled="registerApiData.apiName===''"
             class="rounded-lg"
             size="large"
             color="primary"
