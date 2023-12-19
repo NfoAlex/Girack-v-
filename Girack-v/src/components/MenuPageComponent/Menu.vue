@@ -2,12 +2,13 @@
 <script>
 import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
+import { Serverinfo } from "../../data/socket";
 
 export default {
   setup() {
     const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
-    return { mobile, myUserinfo };
+    return { mobile, myUserinfo, Serverinfo };
   },
 
   data() {
@@ -115,6 +116,17 @@ export default {
       </RouterLink>
       <RouterLink to="/menu/apiconfigure">
         <v-card
+          v-if="
+            myUserinfo.role === 'Admin'
+              ||
+            Serverinfo.config.API.API_CANREGISTER_ROLE === 'Member'
+              ||
+            (
+              Serverinfo.config.API.API_CANREGISTER_ROLE === 'Moderator'
+                &&
+              myUserinfo.role === 'Moderator'
+            )
+          "
           class="rounded-lg menu-card"
           :color="isThisActive('apiconfigure') ? 'primary' : 'secondary'"
           v-ripple
