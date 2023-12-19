@@ -153,7 +153,7 @@ export default {
         icon="mdi:mdi-refresh"
         size="large"
         class="rounded-lg"
-        color="primary"
+        variant="text"
       >
       </v-btn>
     </div>
