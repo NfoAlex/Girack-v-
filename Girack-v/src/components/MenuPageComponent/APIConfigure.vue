@@ -135,10 +135,10 @@ export default {
 
           <h4>APIタイプ</h4>
           <v-select
-              v-model="registerApiData.type"
-              class="mt-2 mb-5 rounded-lg"
-              :items="['user', 'bot']"
-            />
+            v-model="registerApiData.type"
+            class="mt-2 mb-5 rounded-lg"
+            :items="['user', 'bot']"
+          />
 
           <h4>アクセス権限の設定</h4>
           <v-card class="pa-3 mt-2 mb-5 rounded-lg" variant="tonal">
