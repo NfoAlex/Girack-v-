@@ -95,7 +95,7 @@ export default {
     >
       <KeepAlive :max="10" :exclude="'Userpage'">
         <component
-          :is="ChannelContent"
+          is="ChannelContent"
           :MsgDBActive="getMsgDB()"
           :channelInfo="getChannelInfo"
           :key="$route.params.id"
