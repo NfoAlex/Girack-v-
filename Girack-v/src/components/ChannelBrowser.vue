@@ -1,6 +1,6 @@
 <script>
 import { useDisplay } from "vuetify";
-import { getSocket, getMessage, Serverinfo, deleteMsgHistory } from "../data/socket";
+import { getSocket, Serverinfo, deleteMsgHistory } from "../data/socket";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";

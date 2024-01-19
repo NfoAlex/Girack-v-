@@ -1043,8 +1043,6 @@ export function updateMsgReadState() {
 export function checkMsgNewCount(channelid) {
   //新着数を確認する履歴
   let msgDBChecking = dataMsg().MsgDB.value[channelid];
-  //確認した回数
-  let checkCount = 0;
 
   // console.log("socket :: checkMsgNewCount :",
   //   " 確認するチャンネル->", channelid,
@@ -1060,7 +1058,7 @@ export function checkMsgNewCount(channelid) {
       mention: 0,
       new: 0
     };
-  };
+  }
 
   //新着数初期化
   dataMsg().MsgReadTime.value[channelid].mention = 0;
@@ -1112,9 +1110,6 @@ export function checkMsgNewCount(channelid) {
       //faviconをドット表示に
       document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
     }
-
-    //確認カウント
-    checkCount++;
   }
 }
 
