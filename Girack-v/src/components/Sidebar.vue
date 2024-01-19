@@ -226,7 +226,7 @@ export default {
             </v-avatar>
           </div>
 
-          <div class="d-flex flex-column mx-2">
+          <div class=" d-inline-flex flex-column mx-2">
             <!-- ロールバッジ-->
             <v-chip
               v-if="myUserinfo.role !== 'Member'"
@@ -249,9 +249,9 @@ export default {
       <!-- オンライン人数表示 -->
       <RouterLink :to="'/onlineuser'">
         <v-card
-          style="font-size: calc(6px + 0.65vb); margin-top: 8px; width: 80%"
-          class="mx-auto pa-2 rounded-lg d-flex justify-center align-center"
-          color="#222"
+          style="font-size:calc(6px + 0.65vb); width: 80%"
+          class="mx-auto pa-2 mt-2 rounded-lg d-flex justify-center align-center"
+          elevation="false"
           v-ripple
         >
           <v-icon
@@ -286,7 +286,7 @@ export default {
         <!-- チャンネルブラウザ -->
         <RouterLink :to="'/browser'">
           <v-card
-            class="d-flex justify-start align-center rounded-lg"
+            class="d-flex justify-start align-center"
             :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
             :class="isMobile?'pa-3':'pa-2'"
             :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
