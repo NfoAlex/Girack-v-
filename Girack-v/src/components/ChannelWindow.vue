@@ -123,10 +123,5 @@ export default {
 
 .head {
   max-height: 10vh;
-  border-bottom: solid 0.1px #424242;
-}
-
-.input {
-  border-top: solid 0.1px #424242;
 }
 </style>
