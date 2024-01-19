@@ -259,9 +259,9 @@ export default {
             </v-chip>
 
             <!-- ユーザー名-->
-            <span class="text-subtitle-2 text-truncate">
+            <p class="text-subtitle-2 text-truncate" style="max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
               {{ myUserinfo.username }}
-            </span>
+            </p>
           </div>
 
         </v-card>
