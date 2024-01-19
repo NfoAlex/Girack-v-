@@ -94,9 +94,8 @@ export default {
       class="w me-auto flex-grow-1 flex-shrink-1"
     >
       <KeepAlive :max="10" :exclude="'Userpage'">
-        // eslint-disable-next-line vue/require-component-is
         <component
-          is="ChannelContent"
+          :is="ChannelContent"
           :MsgDBActive="getMsgDB()"
           :channelInfo="getChannelInfo"
           :key="$route.params.id"
