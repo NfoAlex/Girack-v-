@@ -240,133 +240,6 @@ export default {
       }
     },
 
-    //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
-    checkMsgPosition(userid, index) {
-      if (this.MsgDBActive === undefined || this.cropMessage.length <= 0)
-        return;
-
-      let AvatarNeedToShowBefore = false;
-      let AvatarNeedToShow = false;
-      let AvatarNeedToShowNext = false;
-
-      //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
-      //前
-      try {
-        //そもそも一つ前のメッセージが存在するか確認
-        if (this.cropMessage[index + 1] !== undefined) {
-          AvatarNeedToShowBefore = this.checkShowAvatar(
-            this.cropMessage[index + 1].userid,
-            index + 1
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //今の位置
-      try {
-        AvatarNeedToShow = this.checkShowAvatar(userid, index);
-      } catch (e) {
-        console.error(e);
-      }
-
-      //次
-      try {
-        //そもそも次のメッセージが存在するか確認
-        if (this.cropMessage[index - 1] !== undefined) {
-          AvatarNeedToShowNext = this.checkShowAvatar(
-            this.cropMessage[index - 1].userid,
-            index - 1
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      let SameWithBefore = false; //ひとつ前と送信者が同じかどうかを格納
-      let SameWithNext = false; //次と送信者同じかどうかを格納
-
-      //一つ前と送信者が今のと同じならそう記録
-      try {
-        //まず一つ前のメッセージがあるか確認
-        if (this.cropMessage[index + 1] !== undefined) {
-          if (this.cropMessage[index + 1].userid === userid) {
-            SameWithBefore = true;
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //次の送信者が今のと同じならそう記録
-      try {
-        //まず次のメッセージがあるか確認
-        if (this.cropMessage[index - 1] !== undefined) {
-          if (this.cropMessage[index - 1].userid === userid) {
-            SameWithNext = true;
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //ここから条件処理
-      if (AvatarNeedToShowBefore) {
-        //一つ前でアバター出てるか
-        if (AvatarNeedToShow) {
-          if (SameWithNext) {
-            if (AvatarNeedToShowNext) {
-              return "msgBackgroundSingle";
-            } else {
-              return "msgBackgroundTop";
-            }
-          } else {
-            return "msgBackgroundSingle";
-          }
-        } else {
-          if (AvatarNeedToShowNext) {
-            return "msgBackgroundEnd";
-          }
-
-          if (SameWithBefore) {
-            if (SameWithNext) {
-              return "msgBackgroundMid";
-            } else {
-              return "msgBackgroundEnd";
-            }
-          } else {
-            return "msgBackgroundEnd";
-          }
-        }
-      } else if (AvatarNeedToShowNext) {
-        if (AvatarNeedToShow) {
-          if (AvatarNeedToShowNext) {
-            return "msgBackgroundSingle";
-          } else {
-            return "msgBackgroundTop";
-          }
-        } else {
-          return "msgBackgroundEnd";
-        }
-      } else {
-        if (AvatarNeedToShow) {
-          if (SameWithNext) {
-            return "msgBackgroundTop";
-          } else {
-            return "msgBackgroundSingle";
-          }
-        } else {
-          if (SameWithNext) {
-            return "msgBackgroundMid";
-          } else if (SameWithBefore) {
-            return "msgBackgroundEnd";
-          } else {
-            return "msgBackgroundSingle";
-          }
-        }
-      }
-    },
-
     //メッセージの時間を出力する関数
     printDate(time) {
       let t = new Date(); //時間取得用
@@ -508,7 +381,6 @@ export default {
       :class="[
         m.pinned?'pinned':null,
         msgHovered && msgIdHovering === m.messageid ? 'hovered' : null, //ホバー
-        checkMsgPosition(m.userid, index),
       ]"
       class="flex-grow-1"
       style="
@@ -680,41 +552,5 @@ export default {
   cursor: pointer;
 }
 
-.msgBackgroundMid {
-  border-radius: 0px;
-  background-color: #444;
-
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
-}
-
-.msgBackgroundTop {
-  border-top-right-radius: 12px;
-  border-top-left-radius: 12px;
-  background-color: #444;
-
-  margin-top: 6px;
-  padding-top: 8px !important;
-  padding-bottom: 2px !important;
-}
-
-.msgBackgroundEnd {
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  background-color: #444;
-
-  margin-bottom: 6px;
-  padding-bottom: 8px !important;
-  padding-top: 2px !important;
-}
-
-.msgBackgroundSingle {
-  border-radius: 12px;
-  background-color: #444;
-
-  margin: 6px 0;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
 
 </style>
