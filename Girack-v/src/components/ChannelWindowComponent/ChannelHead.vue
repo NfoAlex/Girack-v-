@@ -136,7 +136,7 @@ export default {
       :ripple="isMobile"
       :class="isMobile?'pa-2':null"
       class="d-flex flex-column justify-start rounded-lg ma-1"
-      color="#222"
+      variant="tonal"
       style=" padding: 0 16px; width: 100%;"
     >
       <!-- チャンネル情報(チャンネル名、概要) -->
