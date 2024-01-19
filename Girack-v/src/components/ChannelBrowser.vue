@@ -201,10 +201,10 @@ export default {
     class="align-center justify-center"
     style="width: 50%"
   >
-    <v-card>
-      <v-card-title class="ma-2"> チャンネル作成 </v-card-title>
+    <v-card class="pa-4">
+      <v-card-title> チャンネル作成 </v-card-title>
 
-      <v-card-text class="ma-2">
+      <v-card-text>
         <p>チャンネル名</p>
         <v-text-field
           v-model="channelCreateName"
@@ -230,10 +230,11 @@ export default {
         ></v-checkbox>
       </v-card-text>
 
-      <v-divider width="100%" class="my-2"></v-divider>
+      <v-divider class="my-2"></v-divider>
 
-      <v-card-action class="ma-2">
-        <v-btn color="primary" @click="channelCreate"> 作成! </v-btn>
+      <v-card-action>
+        <v-btn color="primary" variant="tonal" @click="channelCreate"> 作成! </v-btn>
+        <v-btn color="" @click="() => overlayChannelCreate=false">キャンセル</v-btn>
       </v-card-action>
     </v-card>
   </v-dialog>

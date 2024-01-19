@@ -247,7 +247,7 @@ export default {
             </v-avatar>
           </div>
 
-          <div class=" d-inline-flex flex-column mx-2">
+          <div class="d-flex flex-column mx-2">
             <!-- ロールバッジ-->
             <v-chip
               v-if="myUserinfo.role !== 'Member'"
@@ -259,7 +259,7 @@ export default {
             </v-chip>
 
             <!-- ユーザー名-->
-            <p class="text-subtitle-2 text-truncate" style="max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+            <p class="text-subtitle-2 text-truncate">
               {{ myUserinfo.username }}
             </p>
           </div>
