@@ -87,7 +87,7 @@ export default {
     class="d-flex flex-column justify-start"
   >
     <div class="w head flex-grow-0 flex-shrink-0">
-      <ChannelHead :channelInfo="getChannelInfo" @toggleSidebar="$emit('toggleSidebar')" />
+      <ChannelHead :channelInfo="getChannelInfo()" @toggleSidebar="$emit('toggleSidebar')" />
     </div>
     <div
       style="overflow-y: auto"
@@ -97,13 +97,13 @@ export default {
         <component
           is="ChannelContent"
           :MsgDBActive="getMsgDB()"
-          :channelInfo="getChannelInfo"
+          :channelInfo="getChannelInfo()"
           :key="$route.params.id"
         />
       </KeepAlive>
     </div>
     <div class="w input flex-grow-0 flex-shrink-1">
-      <ChannelInput :channelInfo="getChannelInfo" />
+      <ChannelInput :channelInfo="getChannelInfo()" />
     </div>
   </div>
   <div v-else>
