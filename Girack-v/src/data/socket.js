@@ -889,7 +889,9 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
           //ここで上書き
           dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
           dataMsg().MsgReadTime.value[index].timeBefore = userSaveMsgReadState.msgReadState[index].timeBefore;
-        } catch(e) {}
+        } catch(e) {
+          console.log("socket :: infoUserSaveMsgReadState : 既読状態の上書きに失敗");
+        }
       }
     }
 
