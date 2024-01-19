@@ -225,10 +225,9 @@ export default {
       </RouterLink>
 
       <!-- メニューボタン/プロフィールカード -->
-      <RouterLink to="/menu/profile" style="width:80%;" class="mx-auto">
+      <RouterLink to="/menu/profile" style="width:100%" class="mx-auto">
         <v-card
-          class="rounded d-flex justify-start align-center py-2 text-truncate"
-          variant="tonal"
+          class="rounded-0 d-flex justify-start align-center py-2 text-truncate"
           v-ripple
         >
           <!-- 三点メニューアイコン -->
@@ -304,7 +303,7 @@ export default {
       <div
         v-if="CLIENT_FULL_LOADED"
         class="mx-auto scroll"
-        style="overflow-y: auto; width: 97%;;"
+        style="overflow-y: auto; width: 100%;"
       >
         <!-- 全チャンネルを既読するボタン -->
         <v-btn
@@ -340,7 +339,8 @@ export default {
                   @click="$emit('closeSidebar')"
                   :ripple="false"
                   :variant="checkSameLocation(element) ? 'tonal' : 'text'"
-                  class="rounded d-flex align-center my-1"
+                  class="rounded-0 d-flex align-center my-1"
+                  variant="tonal"
                   :class="isMobile?'pa-3':'pa-2'"
                   :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
                 >
