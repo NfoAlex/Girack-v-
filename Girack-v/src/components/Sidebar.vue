@@ -296,14 +296,16 @@ export default {
           </v-card>
         </RouterLink>
 
-        <v-divider style="margin: 5% 0"></v-divider>
+        
       </nav>
 
+      <v-divider></v-divider>
+      
       <!-- ここからチャンネルボタン部分  -->
       <div
         v-if="CLIENT_FULL_LOADED"
         class="mx-auto scroll"
-        style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
+        style="overflow-y: auto; width: 97%;;"
       >
         <!-- 全チャンネルを既読するボタン -->
         <v-btn
