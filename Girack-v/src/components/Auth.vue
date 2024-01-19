@@ -168,7 +168,7 @@ export default {
       </p>
       <v-card
         color="grey"
-        class="pa-3 ma-4 rounded-lg flex-column d-flex justify-center align-center"
+        class="pa-3 ma-4 flex-column d-flex justify-center align-center"
       >
         <p>
           サーバーのバージョン :
@@ -189,7 +189,7 @@ export default {
 
     <v-card
       :class="isMobile?['authWindowMobile','flex-grow-1']:'authWindowDesk'"
-      class="mx-auto rounded-lg"
+      class="mx-auto"
       variant="tonal"
     >
       <!-- タブ表示 -->
@@ -311,7 +311,7 @@ export default {
               <v-btn
                 :disabled="(!Connected && serverinfo.registration.available) || (usernameForRegister.length <= 3)"
                 @click="requestRegister"
-                class="rounded-lg mx-auto"
+                class="mx-auto"
                 color="primary"
                 block
               >
