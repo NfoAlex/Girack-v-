@@ -416,13 +416,13 @@ export default {
               class="text-h6 d-flex align-center"
             >
               <!-- ユーザー名 -->
-              <span class="text-truncate">
+              <p class="text-truncate font-weight-medium">
                 {{
                   UserIndex[m.userid] !== undefined
                     ? UserIndex[m.userid].username
                     : m.userid
                 }}
-              </span>
+              </p>
 
               <!-- ロールバッジ -->
               <v-chip
@@ -448,10 +448,9 @@ export default {
               >
                 BANNED
               </v-chip>
-
               
             </div>
-            
+
             <!-- タイムスタンプ -->
             <span
               v-if="checkShowAvatar(m.userid, index)"
