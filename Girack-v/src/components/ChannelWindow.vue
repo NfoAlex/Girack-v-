@@ -23,7 +23,20 @@ export default {
     ChannelInput
   },
 
-  computed: {
+  methods: {
+    //メッセージ履歴を返す
+    getMsgDB() {
+      //チャンネルインデックスにあるか、またはプレビューにあるかでデータを返し、無ければブラウザに戻す
+      if (
+        this.ChannelIndex[this.$route.params.id] !== undefined ||
+        this.PreviewChannelData.channelid === this.$route.params.id
+      ) {
+        return this.MsgDB[this.$route.params.id];
+      } else {
+        this.$router.push({ path: "/browser" });
+      }
+    },
+
     //チャンネル情報を返す
     getChannelInfo() {
       //もしチャンネルリストにあるなら
@@ -61,22 +74,8 @@ export default {
 
         return this.PreviewChannelData;
       }
-    },
-  },
+    }
 
-  methods: {
-    //メッセージ履歴を返す
-    getMsgDB() {
-      //チャンネルインデックスにあるか、またはプレビューにあるかでデータを返し、無ければブラウザに戻す
-      if (
-        this.ChannelIndex[this.$route.params.id] !== undefined ||
-        this.PreviewChannelData.channelid === this.$route.params.id
-      ) {
-        return this.MsgDB[this.$route.params.id];
-      } else {
-        this.$router.push({ path: "/browser" });
-      }
-    },
   },
 };
 </script>
