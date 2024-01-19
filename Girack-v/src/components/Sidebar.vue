@@ -197,7 +197,7 @@ export default {
       style=""
     >
       <!-- インスタンス名 -->
-      <div class="mx-auto" style="margin: 16px 0; width: 90%">
+      <div class="mx-auto my-3" style="width: 90%">
         <p style="text-align: center" class="mx-auto text-truncate text-h6">
           {{ Serverinfo.servername || "..." }}
         </p>
@@ -207,8 +207,9 @@ export default {
       <RouterLink to="/onlineuser">
         <v-card
           style="font-size:calc(6px + 0.65vb); width: 80%"
-          class="mx-auto pa-2 rounded-lg d-flex justify-center align-center"
+          class="mx-auto pa-2 mb-4 rounded-pill d-flex justify-center align-center"
           elevation="false"
+          variant="tonal"
           v-ripple
         >
           <v-icon
