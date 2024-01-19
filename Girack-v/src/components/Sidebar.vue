@@ -228,6 +228,7 @@ export default {
       <RouterLink to="/menu/profile" style="width:100%" class="mx-auto">
         <v-card
           class="rounded-0 d-flex justify-start align-center py-2 text-truncate"
+          :variant="$route.path.includes('menu')?'tonal':'text'"
           v-ripple
         >
           <!-- 三点メニューアイコン -->
