@@ -668,12 +668,12 @@ export default {
 
 /* ホバーされたメッセージ */
 .hovered {
-  background-color: #444 !important;
+  background-color: #555 !important;
 }
 
 /* ピン留めされたメッセージ */
 .pinned {
-  background-color: #334 !important;
+  background-color: #445 !important;
 }
 
 .pointed {
@@ -682,7 +682,7 @@ export default {
 
 .msgBackgroundMid {
   border-radius: 0px;
-  background-color: #333;
+  background-color: #444;
 
   padding-top: 2px !important;
   padding-bottom: 2px !important;
@@ -691,7 +691,7 @@ export default {
 .msgBackgroundTop {
   border-top-right-radius: 12px;
   border-top-left-radius: 12px;
-  background-color: #333;
+  background-color: #444;
 
   margin-top: 6px;
   padding-top: 8px !important;
@@ -701,7 +701,7 @@ export default {
 .msgBackgroundEnd {
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
-  background-color: #333;
+  background-color: #444;
 
   margin-bottom: 6px;
   padding-bottom: 8px !important;
@@ -710,7 +710,7 @@ export default {
 
 .msgBackgroundSingle {
   border-radius: 12px;
-  background-color: #333;
+  background-color: #444;
 
   margin: 6px 0;
   padding-top: 8px;
