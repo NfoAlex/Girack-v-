@@ -108,7 +108,7 @@ export default {
     </div>
   </div>
   <div v-else>
-      <v-card width="40vw" class="pa-4 mx-auto d-flex flex-column rounded-lg" style="margin-top:10vh;">
+      <v-card width="40vw" class="pa-4 mx-auto d-flex flex-column" style="margin-top:10vh;">
         <v-img src="/loading.svg"></v-img>
         <h3 class="text-center">Loading...</h3>
       </v-card>
