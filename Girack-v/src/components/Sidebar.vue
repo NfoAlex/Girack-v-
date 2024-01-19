@@ -194,7 +194,7 @@ export default {
     <div
       :class="isMobile?'channelBarMobile':'channelBarDesk'"
       class="d-flex flex-column"
-      style="background-color: #1c1b1e"
+      style=""
     >
       <!-- インスタンス名 -->
       <div class="mx-auto" style="margin: 16px 0; width: 90%">
