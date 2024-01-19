@@ -285,6 +285,7 @@ export default {
           </v-card>
         </RouterLink>
 
+        <!-- チャンネルブラウザ -->
         <RouterLink :to="'/browser'">
           <v-card
             class="d-flex justify-start align-center rounded-lg"
@@ -324,15 +325,18 @@ export default {
         >
           全部既読にする
         </v-btn>
+
         <!-- ここからチャンネルボタン連続表示 -->
         <draggable
           v-model="ChannelOrder"
           item-key="id"
           :disabled="isMobile"
         >
+
           <template #item="{element}">
             <div v-if="ChannelIndex[element]!==undefined">
               <RouterLink :to="'/c/' + element">
+                
                 <v-card
                   @click="$emit('closeSidebar')"
                   :ripple="false"
@@ -378,11 +382,14 @@ export default {
                     :content="checkReadTime(element, 'new')"
                     inline
                   ></v-badge>
+
                 </v-card>
               </RouterLink>
             </div>
           </template>
+
         </draggable>
+
       </div>
     </div>
   </div>
