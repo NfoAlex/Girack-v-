@@ -188,7 +188,6 @@ export default {
       </div>
     </v-card>
 
-    <v-divider class="mx-2" vertical inset></v-divider>
 
     <!-- ボタン群 -->
     <div class="d-flex align-center">
