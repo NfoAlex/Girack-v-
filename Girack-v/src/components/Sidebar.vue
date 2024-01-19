@@ -275,25 +275,25 @@ export default {
         <RouterLink :to="'/jsonviewer'">
           <v-card
             v-if="myUserinfo.role === 'Admin' && !isMobile"
+            class="d-flex justify-start px-3 align-center rounded-pill"
             :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
-            class="d-flex justify-center align-center rounded-pill"
             :class="isMobile?'pa-3':'pa-2'"
             :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
           >
-            <v-icon>mdi:mdi-shield-bug</v-icon>
-            <span class="text-truncate"> JSONviewer </span>
+            <v-icon size="small">mdi:mdi-shield-bug</v-icon>
+            <span class="text-truncate ml-1"> JSONviewer </span>
           </v-card>
         </RouterLink>
 
         <RouterLink :to="'/browser'">
           <v-card
-            class="d-flex justify-center align-center rounded-lg"
+            class="d-flex justify-start align-center rounded-lg"
             :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
             :class="isMobile?'pa-3':'pa-2'"
             :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
           >
-            <v-icon>mdi:mdi-text-search</v-icon>
-            <span class="text-truncate"> チャンネルブラウザ </span>
+            <v-icon size="small">mdi:mdi-text-search</v-icon>
+            <span class="text-truncate ml-1"> チャンネルブラウザ </span>
           </v-card>
         </RouterLink>
 
@@ -352,8 +352,7 @@ export default {
 
                   <!-- チャンネル名 -->
                   <div
-                    style="margin-left: 4px"
-                    class="me-auto text-truncate"
+                    class="me-auto text-truncate ml-1"
                     :class="
                       checkReadTime(element, 'new') ||
                       checkReadTime(element, 'mention') ||
