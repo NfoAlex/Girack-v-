@@ -124,7 +124,9 @@ export default {
         this.$nextTick(() => {
           try { //プレビューから戻ってくることを想定してtry
             if (!this.isMobile) this.$el.querySelector("#inp").focus();
-          } catch(e) {}
+          } catch(e) {
+            console.log("ChannelInput :: watch($route) : 入力欄へのフォーカスができなかった");
+          }
         });
       },
     },

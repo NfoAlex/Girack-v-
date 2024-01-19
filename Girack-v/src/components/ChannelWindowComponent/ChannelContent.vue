@@ -1,9 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import {
-  getSocket,
   getMessage,
-  setCookie,
   updateMsgReadState
 } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
@@ -15,8 +13,6 @@ import { getCONFIG } from "../../config.js";
 import ContentRender from "./ContentComponents/ContentRender.vue";
 import ContentNewMessageLine from "./ContentComponents/ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentComponents/ContentSystemMessageRender.vue";
-
-const socket = getSocket();
 
 export default {
   setup() {
@@ -134,6 +130,7 @@ export default {
 
               //作成したチャンネルで履歴の長さが表示数を超えたとき、フェッチできる履歴があると設定
               if (this.MsgDBActive.length >= this.msgDisplayNum) {
+                // eslint-disable-next-line vue/no-mutating-props
                 this.channelInfo.haveAllHistory = false;
               }
 
@@ -214,6 +211,7 @@ export default {
           &&
         !this.channelInfo.fetchingHistory
       ) {
+        // eslint-disable-next-line vue/no-mutating-props
         this.channelInfo.fetchingHistory = true; //履歴取得中と設定
         getMessage(this.getPath, 15, this.MsgDBActive.length); //履歴の取得
       }
