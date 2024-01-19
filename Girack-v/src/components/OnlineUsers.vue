@@ -129,7 +129,7 @@ export default {
         v-if="isMobile"
         @click="$emit('toggleSidebar')"
         icon=""
-        class="rounded-lg flex-shrink-0"
+        class="flex-shrink-0"
         variant="text"
         size="small"
       >
@@ -167,7 +167,7 @@ export default {
                 userDialogUserid = item.userid;
               }
             "
-            class="rounded-lg card mx-auto pa-3 d-flex align-center"
+            class="card mx-auto pa-3 d-flex align-center"
             width="97.5%"
             style="margin: 16px 0;"
             color="grey"
