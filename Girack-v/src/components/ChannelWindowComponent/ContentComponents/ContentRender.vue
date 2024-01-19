@@ -412,8 +412,8 @@ export default {
 
             <!-- ユーザー名と時間表記 -->
             <div
-              class="text-h6 d-flex align-center"
               v-if="checkShowAvatar(m.userid, index)"
+              class="text-h6 d-flex align-center"
             >
               <!-- ユーザー名 -->
               <span class="text-truncate">
@@ -449,14 +449,16 @@ export default {
                 BANNED
               </v-chip>
 
-              <!-- タイムスタンプ -->
-              <span
-                class="text-caption"
-                style="margin-left: 8px; color: #999"
+              
+            </div>
+            
+            <!-- タイムスタンプ -->
+            <span
+              v-if="checkShowAvatar(m.userid, index)"
+              style="color:#999; font-size:12px;"
               >
                 {{ printDate(m.time) }}
-              </span>
-            </div>
+            </span>
 
             <!-- 返信データ -->
             <ContentReplyRender
@@ -510,7 +512,7 @@ export default {
                   user-select: none;
                   -webkit-user-select: none;
                 "
-                class="px-2 py-1 mr-1"
+                class="px-2 py-1 mr-1 mb-1"
                 variant="tonal"
                 density="compact"
                 :size="isMobile?'default':'small'"
