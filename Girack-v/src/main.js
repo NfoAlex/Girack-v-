@@ -31,8 +31,8 @@ const vuetify = createVuetify({
             thedark: {
                 dark: true,
                 colors: {
-                    background: "#1c1b22",
-                    primary: "#381E72",
+                    background: "#232323",
+                    primary: "#673AB7",
                     secondary: "#332D41",
                     surface: "#19181b",
                     accent: "#9c27b0",
@@ -40,7 +40,7 @@ const vuetify = createVuetify({
                     warning: "#4caf50",
                     success: "#1B5E20",
                     "grey": "#263238",
-                    "cardInner": "#212121",
+                    "cardInner": "#343434",
                 }
             },
         },
