@@ -336,12 +336,12 @@ export default {
           <template #item="{element}">
             <div v-if="ChannelIndex[element]!==undefined">
               <RouterLink :to="'/c/' + element">
-                
+
                 <v-card
                   @click="$emit('closeSidebar')"
                   :ripple="false"
                   :variant="checkSameLocation(element) ? 'tonal' : 'text'"
-                  class="rounded-lg d-flex align-center my-1"
+                  class="rounded d-flex align-center my-1"
                   :class="isMobile?'pa-3':'pa-2'"
                   :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
                 >
