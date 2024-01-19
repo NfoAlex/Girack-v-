@@ -161,7 +161,7 @@ export default {
     style="width: 50vw; min-width: 400px"
     persistent
   >
-    <v-card class="pa-2 rounded-lg">
+    <v-card class="pa-4">
       <v-card-title> 注意 </v-card-title>
       <p class="pa-3">
         どうやらサーバーとクライアントでバージョンが違うようです
@@ -207,7 +207,6 @@ export default {
           <div class="d-flex justify-center flex-column" style="margin: 5% 10%">
             <v-alert
               v-if="!Connected"
-              class="rounded-lg"
               style="margin: 3% auto"
               icon="mdi:mdi-alert-circle"
               type="error"
@@ -245,7 +244,6 @@ export default {
             <v-btn
               :disabled="!Connected"
               @click="requestAuth"
-              class="rounded-lg"
               color="primary"
               >認証</v-btn
             >
@@ -253,7 +251,6 @@ export default {
 
             <v-alert
               v-if="success"
-              class="rounded-lg"
               style="width: 100%; margin: 3% auto"
               type="success"
               title="ログイン成功"
@@ -262,7 +259,6 @@ export default {
 
             <v-alert
               v-if="error"
-              class="rounded-lg"
               style="width: 100%; margin: 3% auto"
               icon="mdi:mdi-alert-circle"
               type="error"
