@@ -501,23 +501,24 @@ export default {
             <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
 
             <!-- リアクション -->
-            <div>
-              <v-chip
+            <div class="d-flex">
+              <v-card
                 @click="messageAction(m.messageid, 'reaction', r[0])"
                 style="
-                  margin-top: 4px;
-                  margin-right: 8px;
-                  margin-bottom: 4px;
+                  width: fit-content;
+                  font-size: 14px;
                   user-select: none;
                   -webkit-user-select: none;
                 "
+                class="px-2 py-1 mr-1"
+                variant="tonal"
+                density="compact"
                 :size="isMobile?'default':'small'"
-                color="white"
                 v-for="r in Object.entries(m.reaction)"
                 :key="r"
               >
                 {{ getReaction(r[0]) }} {{ r[1] }}
-              </v-chip>
+              </v-card>
             </div>
           </div>
         </template>
