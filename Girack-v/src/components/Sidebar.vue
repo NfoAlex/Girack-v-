@@ -207,7 +207,7 @@ export default {
       <RouterLink to="/menu/profile">
         <v-card
           class="mx-auto rounded d-flex justify-start align-center py-2"
-          color="secondary"
+          variant="tonal"
           width="80%"
           v-ripple
         >
@@ -218,7 +218,7 @@ export default {
 
           <!-- アイコン-->
           <div class="mx-2">
-            <v-avatar>
+            <v-avatar size="24">
               <v-img
                 :alt="myUserinfo.userid"
                 :src="thisURL + '/img/' + myUserinfo.userid"
@@ -228,19 +228,17 @@ export default {
 
           <div class="d-flex flex-column mx-2">
             <!-- ロールバッジ-->
-            <div style="width: fit-content">
-              <v-chip
-                v-if="myUserinfo.role !== 'Member'"
-                :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
-                size="x-small"
-                :elevation="6"
-              >
-                <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
-              </v-chip>
-            </div>
+            <v-chip
+              v-if="myUserinfo.role !== 'Member'"
+              :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
+              size="x-small"
+              :elevation="2"
+            >
+              <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
+            </v-chip>
 
             <!-- ユーザー名-->
-            <span class="text-subtitle-1 text-center">
+            <span class="text-subtitle-2 text-truncate">
               {{ myUserinfo.username }}
             </span>
           </div>
