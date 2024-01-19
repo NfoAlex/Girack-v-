@@ -206,21 +206,19 @@ export default {
       <!-- メニューボタン/プロフィールカード -->
       <RouterLink to="/menu/profile">
         <v-card
-          class="mx-auto rounded-lg"
+          class="mx-auto rounded d-flex justify-start align-center py-2"
           color="secondary"
           width="80%"
           v-ripple
         >
           <!-- 三点メニューアイコン -->
-          <div style="width: fit-content" class="mx-auto">
-            <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
-          </div>
+          <v-icon size="large" class="mx-2">mdi:mdi-dots-vertical</v-icon>
           <!-- ホバーしたら表示するテキスト -->
           <v-tooltip activator="parent" location="top"> メニュー </v-tooltip>
 
           <!-- アイコン-->
-          <div class="mx-auto" style="width: fit-content; margin-top: 10%">
-            <v-avatar style="width: 4vmax; height: auto; margin-bottom: 12px">
+          <div class="mx-2">
+            <v-avatar>
               <v-img
                 :alt="myUserinfo.userid"
                 :src="thisURL + '/img/' + myUserinfo.userid"
@@ -228,24 +226,25 @@ export default {
             </v-avatar>
           </div>
 
-          <!-- ロールバッジ-->
-          <div style="width: fit-content" class="mx-auto">
-            <v-chip
-              v-if="myUserinfo.role !== 'Member'"
-              :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
-              size="x-small"
-              :elevation="6"
-            >
-              <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
-            </v-chip>
-          </div>
+          <div class="d-flex flex-column mx-2">
+            <!-- ロールバッジ-->
+            <div style="width: fit-content">
+              <v-chip
+                v-if="myUserinfo.role !== 'Member'"
+                :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
+                size="x-small"
+                :elevation="6"
+              >
+                <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
+              </v-chip>
+            </div>
 
-          <!-- ユーザー名-->
-          <v-card-text class="text-subtitle-1 text-center mx-auto">
-            <span>
+            <!-- ユーザー名-->
+            <span class="text-subtitle-1 text-center">
               {{ myUserinfo.username }}
             </span>
-          </v-card-text>
+          </div>
+
         </v-card>
       </RouterLink>
 
