@@ -201,12 +201,10 @@ export default {
     class="align-center justify-center"
     style="width: 50%"
   >
-    <v-card class="" style="padding: 5%">
-      <v-card-title> チャンネル作成 </v-card-title>
+    <v-card>
+      <v-card-title class="ma-2"> チャンネル作成 </v-card-title>
 
-      <br />
-
-      <v-card-text>
+      <v-card-text class="ma-2">
         <p>チャンネル名</p>
         <v-text-field
           v-model="channelCreateName"
@@ -232,9 +230,9 @@ export default {
         ></v-checkbox>
       </v-card-text>
 
-      <v-divider></v-divider>
+      <v-divider width="100%" class="my-2"></v-divider>
 
-      <v-card-action>
+      <v-card-action class="ma-2">
         <v-btn color="primary" @click="channelCreate"> 作成! </v-btn>
       </v-card-action>
     </v-card>
@@ -341,7 +339,7 @@ export default {
                 icon=""
                 size="small"
                 style="margin-right: 4px"
-                class=""
+                class="rounded"
               >
                 <v-icon icon="mdi:mdi-delete-forever"></v-icon>
               </v-btn>
@@ -353,12 +351,13 @@ export default {
                 icon=""
                 size="small"
                 style="margin-right: 16px"
-                class=""
+                class="rounded"
                 variant="text"
               >
                 <v-icon> mdi:mdi-eye </v-icon>
               </v-btn>
 
+              <!-- 参加/退出ボタン -->
               <v-btn
                 v-if="!myUserinfo.channelJoined.includes(c[0])"
                 @click="channelJoin(c[0])"
