@@ -202,40 +202,41 @@ export default {
     style="width: 50%"
   >
     <v-card class="" style="padding: 5%">
-      <v-card-title style="margin-bottom: 16px"> チャンネル作成 </v-card-title>
+      <v-card-title> チャンネル作成 </v-card-title>
 
       <br />
 
-      <p style="float: left">チャンネル名</p>
-      <br />
-      <v-text-field
-        variant="outlined"
-        v-model="channelCreateName"
-        maxlength="32"
-        counter
-      >
-      </v-text-field>
+      <v-card-text>
+        <p>チャンネル名</p>
+        <v-text-field
+          v-model="channelCreateName"
+          maxlength="32"
+          counter
+        >
+        </v-text-field>
 
-      <p style="float: left">概要</p>
-      <br />
-      <v-textarea
-        variant="outlined"
-        maxlength="128"
-        rows="3"
-        no-resize
-        counter
-        placeholder="テキストチャンネル。"
-        v-model="channelCreateDescription"
-      >
-      </v-textarea>
+        <p>概要</p>
+        <v-textarea
+          maxlength="128"
+          rows="3"
+          no-resize
+          counter
+          placeholder="テキストチャンネル。"
+          v-model="channelCreateDescription"
+        >
+        </v-textarea>
 
-      <v-checkbox
-        class="mx-auto"
-        v-model="channelCreatePrivate"
-        label="プライベートチャンネル"
-      ></v-checkbox>
+        <v-checkbox
+          v-model="channelCreatePrivate"
+          label="プライベートチャンネル"
+        ></v-checkbox>
+      </v-card-text>
 
-      <v-btn color="primary" @click="channelCreate"> 作成! </v-btn>
+      <v-divider></v-divider>
+
+      <v-card-action>
+        <v-btn color="primary" @click="channelCreate"> 作成! </v-btn>
+      </v-card-action>
     </v-card>
   </v-dialog>
 
