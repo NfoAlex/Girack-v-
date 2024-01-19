@@ -266,12 +266,12 @@ export default {
       </RouterLink>
 
       <!-- ここからボタン群 -->
-      <nav style="margin: 2% auto; width: 97%">
+      <nav style="margin: 2% auto; width: 100%">
         <!-- FOR DEBUGGING ONLY -->
         <RouterLink :to="'/jsonviewer'">
           <v-card
             v-if="myUserinfo.role === 'Admin' && !isMobile"
-            class="d-flex justify-start px-3 align-center rounded-pill"
+            class="d-flex justify-start px-3 align-center rounded-0"
             :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
             :class="isMobile?'pa-3':'pa-2'"
             :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
@@ -284,7 +284,7 @@ export default {
         <!-- チャンネルブラウザ -->
         <RouterLink :to="'/browser'">
           <v-card
-            class="d-flex justify-start align-center"
+            class="d-flex justify-start align-center rounded-0"
             :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
             :class="isMobile?'pa-3':'pa-2'"
             :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
