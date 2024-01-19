@@ -52,7 +52,7 @@ export default {
 
   watch: {
     //URLの変更を検知
-    $route(r) {
+    $route() {
       //もしスマホならサイドバーを閉じる
       if (this.isMobile) {
         this.$emit("closeSidebar");
@@ -340,7 +340,6 @@ export default {
                   :ripple="false"
                   :variant="checkSameLocation(element) ? 'tonal' : 'text'"
                   class="rounded-0 d-flex align-center my-1"
-                  variant="tonal"
                   :class="isMobile?'pa-3':'pa-2'"
                   :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
                 >
