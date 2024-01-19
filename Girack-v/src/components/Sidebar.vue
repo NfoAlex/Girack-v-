@@ -203,6 +203,27 @@ export default {
         </p>
       </div>
 
+      <!-- オンライン人数表示 -->
+      <RouterLink to="/onlineuser">
+        <v-card
+          style="font-size:calc(6px + 0.65vb); width: 80%"
+          class="mx-auto pa-2 rounded-lg d-flex justify-center align-center"
+          elevation="false"
+          v-ripple
+        >
+          <v-icon
+            v-if="sessionOnlineNum >= 2"
+            style="margin-right: 4px"
+            size="small"
+            :color="disconnected ? 'red' : 'green'"
+            >mdi:mdi-circle</v-icon
+          >
+          <span v-else>🥲</span>
+          <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
+          <span v-else>サーバーオフライン</span>
+        </v-card>
+      </RouterLink>
+
       <!-- メニューボタン/プロフィールカード -->
       <RouterLink to="/menu/profile">
         <v-card
@@ -243,27 +264,6 @@ export default {
             </span>
           </div>
 
-        </v-card>
-      </RouterLink>
-
-      <!-- オンライン人数表示 -->
-      <RouterLink :to="'/onlineuser'">
-        <v-card
-          style="font-size:calc(6px + 0.65vb); width: 80%"
-          class="mx-auto pa-2 mt-2 rounded-lg d-flex justify-center align-center"
-          elevation="false"
-          v-ripple
-        >
-          <v-icon
-            v-if="sessionOnlineNum >= 2"
-            style="margin-right: 4px"
-            size="small"
-            :color="disconnected ? 'red' : 'green'"
-            >mdi:mdi-circle</v-icon
-          >
-          <span v-else>🥲</span>
-          <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
-          <span v-else>サーバーオフライン</span>
         </v-card>
       </RouterLink>
 
