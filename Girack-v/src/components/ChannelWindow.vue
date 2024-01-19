@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getMessage, CLIENT_FULL_LOADED } from "../data/socket.js";
+import { getSocket, CLIENT_FULL_LOADED } from "../data/socket.js";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
