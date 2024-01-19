@@ -201,7 +201,7 @@ export default {
     class="align-center justify-center"
     style="width: 50%"
   >
-    <v-card class="rounded-lg" style="padding: 5%">
+    <v-card class="" style="padding: 5%">
       <v-card-title style="margin-bottom: 16px"> チャンネル作成 </v-card-title>
 
       <br />
@@ -245,7 +245,7 @@ export default {
     class="align-center justify-center"
     style="width: 40%"
   >
-    <v-card class="rounded-lg" style="padding: 5%">
+    <v-card style="padding: 5%">
       <v-card-title class="text-h6 text-center">
         チャンネル削除していいの？
       </v-card-title>
@@ -269,7 +269,7 @@ export default {
         v-if="isMobile"
         @click="$emit('toggleSidebar')"
         icon=""
-        class="rounded-lg flex-shrink-0"
+        class="flex-shrink-0"
         variant="text"
         size="small"
       >
@@ -287,7 +287,7 @@ export default {
         "
         color="primary"
         icon=""
-        class="rounded-lg"
+        class="rounded"
       >
         <v-icon icon="mdi:mdi-plus"> </v-icon>
         <v-tooltip activator="parent" location="bottom">
@@ -304,7 +304,7 @@ export default {
       >
         <v-card
           variant="tonal"
-          class="rounded-lg"
+          class=""
           style="padding: 8px 16px; margin-top: 16px"
         >
           <div class="text-h6">
@@ -340,7 +340,7 @@ export default {
                 icon=""
                 size="small"
                 style="margin-right: 4px"
-                class="rounded-lg"
+                class=""
               >
                 <v-icon icon="mdi:mdi-delete-forever"></v-icon>
               </v-btn>
@@ -352,7 +352,7 @@ export default {
                 icon=""
                 size="small"
                 style="margin-right: 16px"
-                class="rounded-lg"
+                class=""
                 variant="text"
               >
                 <v-icon> mdi:mdi-eye </v-icon>
@@ -362,14 +362,14 @@ export default {
                 v-if="!myUserinfo.channelJoined.includes(c[0])"
                 @click="channelJoin(c[0])"
                 variant="tonal"
-                class="rounded-lg"
+                class=""
                 >参加</v-btn
               >
               <v-btn
                 v-else
                 @click="channelLeave(c[0])"
                 variant="outlined"
-                class="rounded-lg"
+                class=""
                 >退出</v-btn
               >
             </div>
