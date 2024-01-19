@@ -118,7 +118,7 @@ export default {
 
   <!-- ヘッダの表示部分(メイン) -->
   <div
-    class="d-flex align-center justify-space-evenly pa-1"
+    class="d-flex align-center justify-space-evenly px-1 pb-1"
     style="max-width: 100%; height: 100%"
   >
     <!-- スマホUIだった時要のサイドバーボタン -->
@@ -126,7 +126,7 @@ export default {
       v-if="isMobile"
       @click="$emit('toggleSidebar')"
       icon="mdi:mdi-menu-open"
-      class="rounded-lg ma-1"
+      class="rounded-lg ma-0"
       variant="text"
     >
     </v-btn>
@@ -135,7 +135,7 @@ export default {
       @click="channelDialogShow = true"
       :ripple="isMobile"
       :class="isMobile?'pa-2':null"
-      class="d-flex flex-column justify-start rounded-lg ma-1"
+      class="d-flex flex-column justify-start rounded-lg"
       variant="tonal"
       style=" padding: 0 16px; width: 100%;"
     >
@@ -188,7 +188,7 @@ export default {
       </div>
     </v-card>
 
-    <v-divider class="ma-2" vertical inset></v-divider>
+    <v-divider class="mx-2" vertical inset></v-divider>
 
     <!-- ボタン群 -->
     <div class="d-flex align-center">
@@ -213,7 +213,7 @@ export default {
         v-if="channelInfo.previewmode"
         @click="$router.push({ path: '/browser' })"
         :size="getDisplaySize"
-        class="rounded-lg ma-1"
+        class="rounded-lg mx-1"
         color="secondary"
       >
         ブラウザへ戻る

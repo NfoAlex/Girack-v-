@@ -115,11 +115,6 @@ export default {
 </template>
 
 <style scoped>
-.w {
-  width: 100%;
-  margin: 0 0;
-  box-sizing: border-box;
-}
 
 .head {
   max-height: 10vh;

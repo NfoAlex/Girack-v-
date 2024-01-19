@@ -516,7 +516,7 @@ export default {
       icon=""
       :size="getDisplaySize === 'xxl' ? '128' : 'x-large'"
       :elevation="6"
-      class="rounded-lg mx-auto"
+      class="rounded mx-auto"
     >
       <v-badge
         v-if="checkReadTime(getPath) !== 0"
