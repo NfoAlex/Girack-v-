@@ -121,6 +121,7 @@ export default {
     class="d-flex align-center justify-space-evenly pa-1"
     style="max-width: 100%; height: 100%"
   >
+    <!-- スマホUIだった時要のサイドバーボタン -->
     <v-btn
       v-if="isMobile"
       @click="$emit('toggleSidebar')"
@@ -129,6 +130,7 @@ export default {
       variant="text"
     >
     </v-btn>
+    <!-- ヘッダ -->
     <v-card
       @click="channelDialogShow = true"
       :ripple="isMobile"
