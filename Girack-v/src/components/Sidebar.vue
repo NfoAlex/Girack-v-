@@ -225,11 +225,10 @@ export default {
       </RouterLink>
 
       <!-- メニューボタン/プロフィールカード -->
-      <RouterLink to="/menu/profile">
+      <RouterLink to="/menu/profile" style="width:80%;" class="mx-auto">
         <v-card
-          class="mx-auto rounded d-flex justify-start align-center py-2"
+          class="rounded d-flex justify-start align-center py-2 text-truncate"
           variant="tonal"
-          width="80%"
           v-ripple
         >
           <!-- 三点メニューアイコン -->
