@@ -186,7 +186,8 @@ export default {
     </div>
   </v-dialog>
 
-  <div v-for="(link, index) in urlData.data" :key="link">
+  <!-- URLプレビュー全表示 -->
+  <div v-for="(link, index) in urlData.data" :key="link" class="mb-2">
     <!-- Twitterリンク用 -->
     <div
       class="pa-3"
