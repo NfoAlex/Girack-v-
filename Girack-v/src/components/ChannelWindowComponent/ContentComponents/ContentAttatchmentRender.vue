@@ -178,7 +178,7 @@ export default {
       <v-divider></v-divider>
     
       <!-- ファイル名表示 -->
-      <v-card-title style="font-size:16px">
+      <v-card-title style="font-size:14px">
         {{ file.name }}
       </v-card-title>
 
