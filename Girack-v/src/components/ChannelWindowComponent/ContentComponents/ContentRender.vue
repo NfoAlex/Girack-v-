@@ -334,6 +334,7 @@ export default {
   <!-- メッセージ本体 -->
   <v-menu
     open-on-hover
+    :close-on-content-click="false"
     transition="none"
     location="top end"
     origin="end bottom"
