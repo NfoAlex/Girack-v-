@@ -419,6 +419,66 @@ export default {
 
       </div>
     </div>
+
+    <v-card
+      v-if="link.mediaType !== 'image' && link.mediaType !== 'video'"
+      style="max-width:85%;"
+      
+    >
+
+      <div
+        style="white-space:initial; font-size:14px;"
+        class="pa-4 d-flex align-center"
+      >
+        <!-- ウェブサイトのファビコン -->
+        <v-avatar
+          :image="link.favicon"
+          size="24"
+          class="mr-3"
+        >
+        </v-avatar>
+
+        <!-- 記事のタイトル -->
+        <p
+          v-if="link.title !== undefined"
+        >
+          <a :href="link.url" target="_blank">
+            {{
+              link.title.length > 60
+                ? link.title.substring(0, 60) + "..."
+                : link.title
+            }}
+
+            <!-- タイトルが60文字以上ならホバーで表示 -->
+            <v-tooltip
+              v-if="link.title.length > 60"
+              activator="parent"
+              location="top"
+            >
+              {{ link.title }}
+            </v-tooltip>
+            
+          </a>
+        </p>
+
+        
+        
+      </div>
+
+      <v-divider></v-divider>
+
+      <v-card-text>
+        <!-- 記事の概要 -->
+        <p
+          v-if="link.description"
+          class="text-body-2 font-weight-light text-medium-emphasis"
+          style="overflow-y:scroll; max-height:100px;"
+        >
+          {{ link.description }}
+        </p>
+      </v-card-text>
+    </v-card>
+
   </div>
 </template>
 
