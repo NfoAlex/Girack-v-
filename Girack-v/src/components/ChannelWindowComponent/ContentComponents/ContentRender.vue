@@ -345,7 +345,7 @@ export default {
         v-if="m.isSystemMessage === undefined || m.isSystemMessage === false"
         v-bind="props"
         :id="m.messageid"
-        class="d-flex justify-end px-3 py-1"
+        class="d-flex px-3 py-1"
         :class="[
           checkShowAvatar(m.userid, index)?'pt-2':null,
           msgHovered && msgIdHovering === m.messageid ? 'hovered' : null,
