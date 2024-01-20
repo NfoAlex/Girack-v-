@@ -141,9 +141,9 @@ export default {
     </div>
   </v-dialog>
 
-  <!-- ファイル添付表示 -->
   <div>
 
+    <!-- ファイル添付表示 -->
     <v-card
       v-for="file in fileData.attatchmentData"
       :key="file.name"
