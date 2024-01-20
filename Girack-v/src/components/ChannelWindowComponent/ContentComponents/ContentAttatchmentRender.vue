@@ -97,7 +97,7 @@ export default {
         saveAs(blob, file.name); //保存する
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error('ContentAttatchmentRender :: donwloadFile : Error->', error);
       });
     }
 
