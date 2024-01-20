@@ -346,8 +346,9 @@ export default {
 
   <v-menu
     open-on-hover
-    location="end top"
-    origin="overlap"
+    transition="none"
+    location="top end"
+    origin="end bottom"
   >
     <!-- ホバーで反応する範囲 -->
     <template v-slot:activator="{ props }">
