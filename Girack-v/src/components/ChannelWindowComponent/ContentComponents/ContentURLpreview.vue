@@ -351,20 +351,20 @@ export default {
         >
         </v-avatar>
 
-        <!-- 記事のタイトル -->
+        <!-- 記事のタイトルテキスト -->
         <p
           v-if="link.title !== undefined"
         >
           <a :href="link.url" target="_blank">
             {{
-              link.title.length > 60
-                ? link.title.substring(0, 60) + "..."
+              link.title.length > 45
+                ? link.title.substring(0, 45) + "..."
                 : link.title
             }}
 
             <!-- タイトルが60文字以上ならホバーで表示 -->
             <v-tooltip
-              v-if="link.title.length > 60"
+              v-if="link.title.length > 45"
               activator="parent"
               location="top"
             >
