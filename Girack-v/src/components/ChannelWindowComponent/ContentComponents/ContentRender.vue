@@ -358,9 +358,8 @@ export default {
         <!-- アバター -->
         <v-avatar
           v-if="checkShowAvatar(m.userid, index)"
-          class="mx-auto flex-shrink-1"
+          class="mx-auto flex-shrink-0"
           size="40"
-          style="max-width: 20%"
         >
           <v-img
             v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
