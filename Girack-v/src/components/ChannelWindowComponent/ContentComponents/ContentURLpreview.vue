@@ -309,7 +309,7 @@ export default {
         v-if="link.img !== undefined && checkImageAvailable(link)"
         @click="toggleImageDialog(index)"
         style="cursor:pointer"
-        height="250"
+        max-height="250"
         :src="getImage(link.img)"
         cover
       >
