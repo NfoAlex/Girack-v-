@@ -145,62 +145,6 @@ export default {
   <div>
 
     <v-card
-      class="py-2 d-flex align-center justify-start"
-      v-for="file in fileData.attatchmentData"
-      :key="file"
-    >
-      <!-- 画像ファイルだった時のプレビュー表示 -->
-      <v-img
-        v-if="file.type.includes('image/') && file.size < CONFIG_DISPLAY.CONTENT_DISPLAYIMAGESIZE"
-        @click="
-          imageDialogShow = true;
-          imageDialogSrc = filesrc + channelid + '/' + file.fileid;
-        "
-        class="pa-2"
-        style="width: 100%; max-width: 250px; max-height: 200px; cursor: pointer"
-        :src="filesrc + channelid + '/' + file.fileid"
-      >
-        <template v-slot:error>
-          <div class="mx-auto d-flex justify-center align-center" style="width: fit-content; min-height: 150px">
-            <v-icon size="large"> mdi:mdi-file-image-remove </v-icon>
-          </div>
-        </template>
-
-        <template v-slot:placeholder>
-          <p style="height: 150px !important; width: 100%">Loading...</p>
-        </template>
-      </v-img>
-
-      <!-- 添付ファイルのアイコン表記 -->
-      <span v-if="!file.type.includes('image/') || file.size > 5e6" class="flex-shrink-1">
-          <v-icon
-            style="margin: 0 16px"
-            size="x-large"
-          >
-            mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
-          </v-icon>
-      </span>
-
-      <!-- ファイル情報の表示 -->
-      <span class="flex-grow-1 ml-3" style=" max-width: max-content;">
-        <div @click="downloadFile(file)" class="d-flex align-center" style="cursor:pointer;">
-          <p class="text-subtitle-1">
-            {{ file.name }}
-          </p>
-          <v-icon size="small">mdi:mdi-download</v-icon>
-        </div>
-        <span class="text-medium-emphasis d-flex">
-          <span class="d-flex">
-            サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
-          </span>
-          <span class="ml-1 d-flex">
-            種類: <v-chip size="small" class="mx-1">{{ file.type }}</v-chip>
-          </span>
-        </span>
-      </span>
-    </v-card>
-
-    <v-card
       v-for="file in fileData.attatchmentData"
       :key="file.name"
       style="max-width:50%;"
