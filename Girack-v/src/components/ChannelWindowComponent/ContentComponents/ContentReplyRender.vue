@@ -70,7 +70,7 @@ export default {
 
   <div>
 
-    <p>
+    <p class="">
       <a :href="'#' + msgReply.messageid">
         <!-- 返信アイコン -->
         <v-icon>mdi:mdi-reply</v-icon>
@@ -95,7 +95,7 @@ export default {
         :content="contentDisplay"
       />
     </p>
-    
+
   </div>
 
 </template>
