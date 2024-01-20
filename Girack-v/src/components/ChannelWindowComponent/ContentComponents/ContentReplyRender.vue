@@ -68,9 +68,10 @@ export default {
 
 <template>
 
-  <div>
+  <v-card class="pt-1 px-3">
+
     <p
-      class="text-truncate ma-0"
+      class="text-truncate"
       style="margin-top: 8px !important"
     >
       <a :href="'#' + msgReply.messageid">
@@ -90,13 +91,16 @@ export default {
           }}
         </v-chip>
       </a>
-      <!-- 返信内容 -->
       :
-      <ContentMessageRender
-        class="text-medium-emphasis"
-        :content="contentDisplay"
-      />
+      
     </p>
-  </div>
+
+    <!-- 返信内容 -->
+    <ContentMessageRender
+      class="text-medium-emphasis text-truncate"
+      :content="contentDisplay"
+    />
+
+  </v-card>
 
 </template>
