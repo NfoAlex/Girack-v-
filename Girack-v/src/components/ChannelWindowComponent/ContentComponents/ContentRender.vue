@@ -324,8 +324,8 @@ export default {
   <div
     v-if="m.isSystemMessage === undefined || m.isSystemMessage === false"
     :id="m.messageid"
-    class="d-flex justify-end"
-    style="margin: 0px 12px"
+    class="d-flex justify-end mx-3"
+    :class="checkShowAvatar(m.userid, index)?'mt-3':null"
   >
     <!-- ユーザーページ用 -->
     <div>
