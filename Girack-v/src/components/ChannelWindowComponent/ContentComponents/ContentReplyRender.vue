@@ -68,12 +68,9 @@ export default {
 
 <template>
 
-  <v-card class="pt-1 px-3">
+  <v-card class="pt-1 px-3 py-2 text-truncate">
 
-    <p
-      class="text-truncate"
-      style="margin-top: 8px !important"
-    >
+    <p>
       <a :href="'#' + msgReply.messageid">
         <!-- 返信アイコン -->
         <v-icon>mdi:mdi-reply</v-icon>
@@ -92,12 +89,11 @@ export default {
         </v-chip>
       </a>
       :
-      
     </p>
 
     <!-- 返信内容 -->
     <ContentMessageRender
-      class="text-medium-emphasis text-truncate"
+      class="text-medium-emphasis ml-3"
       :content="contentDisplay"
     />
 
