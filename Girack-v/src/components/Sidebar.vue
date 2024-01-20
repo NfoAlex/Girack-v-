@@ -199,7 +199,6 @@ export default {
 
       <v-card
         class="elevation-6"
-        height="10vh"
       >
         <!-- インスタンス名 -->
         <div class="mx-auto my-3" style="width: 90%">
