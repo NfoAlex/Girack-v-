@@ -378,8 +378,8 @@ export default {
 
       <v-divider></v-divider>
 
+      <!-- 記事の概要 -->
       <v-card-text>
-        <!-- 記事の概要 -->
         <p
           v-if="link.description"
           class="text-body-2 font-weight-light text-medium-emphasis"
