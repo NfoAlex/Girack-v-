@@ -196,34 +196,40 @@ export default {
       class="d-flex flex-column"
       style=""
     >
-      <!-- インスタンス名 -->
-      <div class="mx-auto my-3" style="width: 90%">
-        <p style="text-align: center" class="mx-auto text-truncate text-h6">
-          {{ Serverinfo.servername || "..." }}
-        </p>
-      </div>
 
-      <!-- オンライン人数表示 -->
-      <RouterLink to="/onlineuser">
-        <v-card
-          style="font-size:calc(6px + 0.65vb); width: 80%"
-          class="mx-auto pa-2 mb-4 rounded-pill d-flex justify-center align-center"
-          elevation="false"
-          variant="tonal"
-          v-ripple
-        >
-          <v-icon
-            v-if="sessionOnlineNum >= 2"
-            style="margin-right: 4px"
-            size="small"
-            :color="disconnected ? 'red' : 'green'"
-            >mdi:mdi-circle</v-icon
+      <v-card
+        class="elevation-6"
+        height="10vh"
+      >
+        <!-- インスタンス名 -->
+        <div class="mx-auto my-3" style="width: 90%">
+          <p style="text-align: center" class="mx-auto text-truncate text-h6">
+            {{ Serverinfo.servername || "..." }}
+          </p>
+        </div>
+
+        <!-- オンライン人数表示 -->
+        <RouterLink to="/onlineuser">
+          <v-card
+            style="font-size:calc(6px + 0.65vb); width: 80%"
+            class="mx-auto pa-2 mb-4 rounded-pill d-flex justify-center align-center"
+            elevation="false"
+            variant="tonal"
+            v-ripple
           >
-          <span v-else>🥲</span>
-          <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
-          <span v-else>サーバーオフライン</span>
-        </v-card>
-      </RouterLink>
+            <v-icon
+              v-if="sessionOnlineNum >= 2"
+              style="margin-right: 4px"
+              size="small"
+              :color="disconnected ? 'red' : 'green'"
+              >mdi:mdi-circle</v-icon
+            >
+            <span v-else>🥲</span>
+            <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
+            <span v-else>サーバーオフライン</span>
+          </v-card>
+        </RouterLink>
+      </v-card>
 
       <!-- メニューボタン/プロフィールカード -->
       <RouterLink to="/menu/profile" style="width:100%" class="mx-auto">
