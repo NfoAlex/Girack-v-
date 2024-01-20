@@ -305,7 +305,7 @@ export default {
       style="max-width:45%;"
     >
 
-      <!-- 埋め込み用画像 -->
+      <!-- 埋め込み用画像/動画サムネ -->
       <v-img
         v-if="link.img !== undefined && checkImageAvailable(link)"
         @click="toggleImageDialog(index)"
