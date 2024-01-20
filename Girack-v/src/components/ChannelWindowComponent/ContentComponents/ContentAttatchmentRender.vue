@@ -158,7 +158,7 @@ export default {
         "
         class="imageCover"
         :src="filesrc + channelid + '/' + file.fileid"
-        height="200"
+        height="250"
         cover
       ></v-img>
 
