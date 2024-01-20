@@ -156,6 +156,7 @@ export default {
           imageDialogShow = true;
           imageDialogSrc = filesrc + channelid + '/' + file.fileid;
         "
+        class="imageCover"
         :src="filesrc + channelid + '/' + file.fileid"
         height="200"
         style="cusor:pointer;"
@@ -189,4 +190,11 @@ export default {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+/* 画像でカーソルを反応させる用 */
+.imageCover {
+  cursor: pointer;
+}
+
+</style>
