@@ -321,20 +321,7 @@ export default {
 </script>
 
 <template>
-  <!-- メッセージ本体 -->
-  <!-- v-menuはホバーメニュー用 -->
-  <!-- 
-  <v-menu
-    open-on-hover
-    :open-on-click="false"
-    open-delay="100"
-    close-delay="0"
-    transition="none"
-    :close-on-content-click="false"
-    location="end top"
-    origin="overlap"
-  >
-  -->
+  
   <!-- ユーザーページ用 -->
   <div>
     <Userpage
@@ -344,6 +331,7 @@ export default {
     />
   </div>
 
+  <!-- メッセージ本体 -->
   <v-menu
     open-on-hover
     transition="none"
@@ -543,6 +531,7 @@ export default {
       />
     
   </v-menu>
+  
 </template>
 
 <style scoped>
