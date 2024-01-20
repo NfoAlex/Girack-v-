@@ -141,6 +141,7 @@ export default {
     </div>
   </v-dialog>
 
+  <!-- ファイル添付表示 -->
   <div>
     <v-card
       class="rounded-lg px-2 py-2 ma-2 d-flex align-center justify-start"
