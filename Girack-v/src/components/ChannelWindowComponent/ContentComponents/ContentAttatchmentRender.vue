@@ -194,7 +194,10 @@ export default {
       <v-divider></v-divider>
 
       <v-card-action>
-        <v-btn class="ma-1">
+        <v-btn
+          @click="downloadFile(file)"
+          class="ma-1"
+        >
           <v-icon size="small">mdi:mdi-download</v-icon>
           ダウンロード
         </v-btn>
