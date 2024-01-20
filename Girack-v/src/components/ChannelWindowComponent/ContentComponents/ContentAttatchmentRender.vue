@@ -147,7 +147,7 @@ export default {
     <v-card
       v-for="file in fileData.attatchmentData"
       :key="file.name"
-      style="max-width:50%;"
+      style="width:50%; max-width:450px"
     >
       <!-- 画像ならカバーとして表示 -->
       <v-img
