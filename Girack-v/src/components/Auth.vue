@@ -201,10 +201,11 @@ export default {
       </v-tabs>
 
       <v-window v-model="tab">
-        <!-- ログイン -->
+        <!-- ログイン画面 -->
         <v-window-item value="login">
           <p class="text-h6" style="margin: 5% 0; text-align: center">Ayo</p>
           <div class="d-flex justify-center flex-column" style="margin: 5% 10%">
+            <!-- 接続無い用アラート -->
             <v-alert
               v-if="!Connected"
               style="margin: 3% auto"
@@ -213,6 +214,7 @@ export default {
               text="🤔サーバーつながってなくない?"
             ></v-alert>
 
+            <!-- 入力欄 -->
             <p>ユーザー名</p>
             <v-text-field
               style="width: 100%"
@@ -241,6 +243,7 @@ export default {
             </v-text-field>
 
             <br />
+            <!-- ログインボタン -->
             <v-btn
               :disabled="!Connected"
               @click="requestAuth"
@@ -268,12 +271,13 @@ export default {
           </div>
         </v-window-item>
 
-        <!-- 登録 -->
+        <!-- 登録画面 -->
         <v-window-item value="register">
           <p class="text-h5 text-center" style="margin: 5% 0;">
             ようこそ!
           </p>
           <div class="d-flex justify-center flex-column" style="margin: 5% 10%">
+            <!-- 接続無い用アラート -->
             <v-alert
               v-if="!Connected"
               style="margin: 3% auto"
@@ -308,6 +312,7 @@ export default {
               </div>
 
               <br />
+
               <v-btn
                 :disabled="(!Connected && serverinfo.registration.available) || (usernameForRegister.length <= 3)"
                 @click="requestRegister"
