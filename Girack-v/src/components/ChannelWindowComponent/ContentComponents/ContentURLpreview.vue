@@ -243,181 +243,59 @@ export default {
       </Tweet>
     </div>
 
-    <!-- それ以外のプレビュー -->
+    <!-- 画像単体用 -->
     <div
-      style="height: fit-content; max-width: 800px; width: 95%; margin: 8px 0"
-      color="#222"
-      class="overflow-y-hidden d-flex flex-row"
-      v-if="!link.url.includes('https://twitter.com/')"
-    >
-      <!-- ウェブ記事とかそこらへん用 -->
-      <v-card
-        v-if="link.mediaType !== 'image' && link.mediaType !== 'video' "
-        color="#222"
-        class="pa-3 rounded-lg d-flex flex-row"
-        style="min-width: 45%; width: 85%"
-        :style="
-          link.img !== undefined && checkImageAvailable(link)
-            ? 'height:150px'
-            : 'height:fit-content;'
-        "
-      >
-        <!-- 埋め込み用画像 -->
-        <v-img
-          v-if="link.img !== undefined && checkImageAvailable(link)"
-          class="flex-shrink-1 rounded-lg"
-          @click="toggleImageDialog(index)"
-          style="min-width: 30%; width: fit-content; cursor: pointer"
-          :src="getImage(link.img)"
-        >
-          <!-- 画像をロード中の時のホルダー -->
-          <template v-slot:placeholder>
-            <span style="height: 100%; width: 150px"> Loading... </span>
-          </template>
-
-          <!-- 画像が２枚以上あるならホバーで表示 -->
-          <v-tooltip
-            v-if="typeof link.img === 'object' && link.img.length >= 2"
-            activator="parent"
-            location="top center"
-            origin="overlap"
-          >
-            {{ link.img.length }}枚の画像を表示
-          </v-tooltip>
-          <!-- 画像が2枚以上あった時の枚数表示 -->
-          <v-badge
-            v-if="typeof link.img === 'object' && link.img.length >= 2"
-            :content="link.img.length"
-            inline
-          >
-          </v-badge>
-        </v-img>
-
-        <!-- 埋め込み用動画 -->
-        <span
-          v-if="!checkImageAvailable(link) && checkVideoAvailable(link)"
-          style="max-width: 30%; max-height: 50%; cursor: pointer"
-          class="d-flex flex-column align-center justify-center mr-2"
-        >
-          <!-- 動画表示ボタン -->
-          <v-btn
-            v-if="!showVideo"
-            @click="showVideo=true;showVideoLink=getVideo(link.video);"
-            size="large"
-            icon=""
-            class="rounded-lg"
-          >
-            <v-icon>mdi:mdi-play-box-outline</v-icon>
-            <v-tooltip
-              activator="parent"
-              location="top center"
-            >
-              動画を表示
-            </v-tooltip>
-          </v-btn>
-        </span>
-
-        <!-- タイトル、概要 -->
-        <div class="d-flex flex-column flex-grow-1">
-          <!-- ファビコンとタイトル用 -->
-          <div style="margin-left: 16px" class="d-flex flex-row align-center">
-            <!-- ウェブサイトのファビコン -->
-            <v-avatar
-              class="rounded-lg"
-              style="margin: 4px 4px"
-              :image="link.favicon"
-              size="24"
-            >
-            </v-avatar>
-
-            <!-- 記事のタイトル -->
-            <p class="text-subtitle-2" v-if="link.title !== undefined">
-              <a :href="link.url" target="_blank">
-                {{
-                  link.title.length > 60
-                    ? link.title.substring(0, 60) + "..."
-                    : link.title
-                }}
-                <!-- タイトルが60文字以上ならホバーで表示 -->
-                <v-tooltip
-                  v-if="link.title.length > 60"
-                  activator="parent"
-                  location="top"
-                >
-                  {{ link.title }}
-                </v-tooltip>
-              </a>
-            </p>
-          </div>
-
-          <!-- 記事の概要 -->
-          <p
-            v-if="link.description"
-            class="text-body-2 ma-3 font-weight-light text-medium-emphasis"
-          >
-            {{
-              link.description.length > 135
-                ? link.description.substring(0, 135) + "..."
-                : link.description
-            }}
-          </p>
-        </div>
-      </v-card>
-
-      <!-- 画像単体用 -->
-      <div
         v-if="link.mediaType === 'image'"
         class="rounded-lg"
       >
-        <img
-          @click="toggleImageDialog(index)"
-          class="rounded-lg"
-          style="max-width:90%; max-height:250px;"
-          :src="link.img"
-          v-on:load="imageAloneLoaded()"
-        />
-        <img
-          style="max-width:90%; height:250px;"
-          v-if="!imageAloneLoadState"
-          src="/loading.svg"
-        />
-      </div>
+      <img
+        @click="toggleImageDialog(index)"
+        class="rounded-lg"
+        style="max-width:90%; max-height:250px;"
+        :src="link.img"
+        v-on:load="imageAloneLoaded()"
+      />
+      <img
+        style="max-width:90%; height:250px;"
+        v-if="!imageAloneLoadState"
+        src="/loading.svg"
+      />
+    </div>
 
-      <!-- 動画単体用 -->
-      <div
-        v-if="link.mediaType === 'video'"
-        class="rounded-lg d-flex flex-column justify-start"
-        style="max-width: 500px"
+    <!-- 動画単体用 -->
+    <div
+      v-if="link.mediaType === 'video'"
+      class="rounded-lg d-flex flex-column justify-start"
+      style="max-width: 500px"
+    >
+      <v-btn
+        v-if="!showVideo"
+        @click="showVideo = true"
+        size="large"
+        class="rounded-lg"
       >
-        <v-btn
-          v-if="!showVideo"
-          @click="showVideo = true"
-          size="large"
-          class="rounded-lg"
-        >
-          <v-icon>mdi:mdi-play-box-outline</v-icon>動画を表示
-        </v-btn>
+        <v-icon>mdi:mdi-play-box-outline</v-icon>動画を表示
+      </v-btn>
 
-        <video
-          v-if="showVideo"
-          :src="link.url"
-          style="max-width: 90%; max-height: 90%; cursor: pointer"
-          controls
-        >
-        </video>
+      <video
+        v-if="showVideo"
+        :src="link.url"
+        style="max-width: 90%; max-height: 90%; cursor: pointer"
+        controls
+      >
+      </video>
 
-        <!-- 動画を隠すボタン -->
-        <v-btn
-          v-if="showVideo"
-          @click="showVideo = false"
-          class="rounded-lg mt-1"
-          variant="text"
-          style="width:fit-content;"
-        >
-          <v-icon>mdi:mdi-unfold-less-horizontal</v-icon>動画を非表示にします
-        </v-btn>
+      <!-- 動画を隠すボタン -->
+      <v-btn
+        v-if="showVideo"
+        @click="showVideo = false"
+        class="rounded-lg mt-1"
+        variant="text"
+        style="width:fit-content;"
+      >
+        <v-icon>mdi:mdi-unfold-less-horizontal</v-icon>動画を非表示にします
+      </v-btn>
 
-      </div>
     </div>
 
     <!-- URLプレビュー -->
@@ -496,8 +374,6 @@ export default {
           </a>
         </p>
 
-        
-        
       </div>
 
       <v-divider></v-divider>
