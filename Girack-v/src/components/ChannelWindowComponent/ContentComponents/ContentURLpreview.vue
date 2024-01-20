@@ -420,12 +420,47 @@ export default {
       </div>
     </div>
 
+    <!-- URLプレビュー -->
     <v-card
       v-if="link.mediaType !== 'image' && link.mediaType !== 'video'"
-      style="max-width:85%;"
-      
+      style="max-width:45%;"
     >
 
+      <!-- 埋め込み用画像 -->
+      <v-img
+        v-if="link.img !== undefined && checkImageAvailable(link)"
+        @click="toggleImageDialog(index)"
+        style="cursor:pointer"
+        height="250"
+        :src="getImage(link.img)"
+        cover
+      >
+        <!-- 画像をロード中の時のホルダー -->
+        <template v-slot:placeholder>
+          <span style="height:100%; width:auto"> Loading... </span>
+        </template>
+
+        <!-- 画像が２枚以上あるならホバーで表示 -->
+        <v-tooltip
+          v-if="typeof link.img === 'object' && link.img.length >= 2"
+          activator="parent"
+          location="top center"
+          origin="overlap"
+        >
+          {{ link.img.length }}枚の画像を表示
+        </v-tooltip>
+        <!-- 画像が2枚以上あった時の枚数表示 -->
+        <v-badge
+          v-if="typeof link.img === 'object' && link.img.length >= 2"
+          :content="link.img.length"
+          inline
+        >
+        </v-badge>
+      </v-img>
+
+      <v-divider></v-divider>
+
+      <!-- タイトル表示 -->
       <div
         style="white-space:initial; font-size:14px;"
         class="pa-4 d-flex align-center"
