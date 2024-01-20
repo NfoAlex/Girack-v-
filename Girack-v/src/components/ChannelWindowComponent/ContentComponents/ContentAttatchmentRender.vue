@@ -164,7 +164,7 @@ export default {
 
       <!-- 添付ファイルのアイコン表記 -->
       <span
-        v-if="!file.type.includes('image/') || file.size > 5e6"
+        v-if="!file.type.includes('image/') || file.size > CONFIG_DISPLAY.CONTENT_DISPLAYIMAGESIZE"
         class="my-3"
       >
         <v-icon
