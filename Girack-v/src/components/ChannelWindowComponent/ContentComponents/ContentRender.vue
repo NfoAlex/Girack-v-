@@ -340,7 +340,7 @@ export default {
     <v-avatar
       v-if="checkShowAvatar(m.userid, index)"
       class="mx-auto flex-shrink-1"
-      width="5vw"
+      size="40"
       style="max-width: 20%"
     >
       <v-img
@@ -365,8 +365,8 @@ export default {
     <!-- アバターを表示しないときの空欄ホルダー -->
     <v-avatar
       v-else
-      class="mx-auto flex-shrink-1"
-      width="5vw"
+      class="mx-auto flex-shrink-0"
+      size="40"
       style="max-width: 20%; height: 0 !important"
     >
       <v-img
@@ -384,7 +384,7 @@ export default {
       ]"
       class="flex-grow-1"
       style="
-        width: 90%;
+        width: max-content;
         margin-left: 8px;
         padding-left: 1.5%;
         padding-right: 1.5%;
