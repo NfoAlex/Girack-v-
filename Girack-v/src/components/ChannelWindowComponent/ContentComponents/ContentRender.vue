@@ -512,7 +512,7 @@ export default {
                 user-select: none;
                 -webkit-user-select: none;
               "
-              class="px-2 py-1 mr-1 mb-1"
+              class="px-2 py-1 mr-1 mt-1 mb-2"
               variant="tonal"
               density="compact"
               :size="isMobile?'default':'small'"
