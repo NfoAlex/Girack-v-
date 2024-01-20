@@ -161,7 +161,23 @@ export default {
         height="200"
         cover
       ></v-img>
+
+      <!-- 添付ファイルのアイコン表記 -->
+      <span
+        v-if="!file.type.includes('image/') || file.size > 5e6"
+        class="my-3"
+      >
+        <v-icon
+          size="64"
+          class="mx-2 my-4"
+        >
+          mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
+        </v-icon>
+      </span>
+
+      <v-divider></v-divider>
     
+      <!-- ファイル名表示 -->
       <v-card-title style="font-size:16px">
         {{ file.name }}
       </v-card-title>
