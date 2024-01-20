@@ -117,8 +117,8 @@ export default {
   />
 
   <!-- ヘッダの表示部分(メイン) -->
-  <div
-    class="d-flex align-center justify-space-evenly px-1 pb-1"
+  <v-card
+    class="d-flex align-center justify-space-evenly rounded-0 px-1 pb-1 elevation-6"
     style="max-width: 100%; height: 100%"
   >
     <!-- スマホUIだった時要のサイドバーボタン -->
@@ -131,13 +131,13 @@ export default {
     >
     </v-btn>
     <!-- ヘッダ -->
-    <v-card
+    <div
       @click="channelDialogShow = true"
       :ripple="isMobile"
       :class="isMobile?'pa-2':null"
-      class="d-flex flex-column justify-start rounded-lg"
+      class="d-flex flex-column justify-start rounded-lg px-4"
       variant="tonal"
-      style=" padding: 0 16px; width: 100%;"
+      style="width: 100%;"
     >
       <!-- チャンネル情報(チャンネル名、概要) -->
       <div style="white-space: nowrap">
@@ -179,15 +179,13 @@ export default {
       <div
         v-if="!isMobile"
         color="grey"
-        class="rounded-lg"
-        style="padding: 2px 16px"
+        class="rounded"
       >
         <p class="text-truncate text-h6">
           {{ channelInfo.description }}
         </p>
       </div>
-    </v-card>
-
+    </div>
 
     <!-- ボタン群 -->
     <div class="d-flex align-center">
@@ -242,7 +240,7 @@ export default {
         <v-icon>mdi:mdi-menu</v-icon>
       </v-btn>
     </div>
-  </div>
+  </v-card>
 
 </template>
 
