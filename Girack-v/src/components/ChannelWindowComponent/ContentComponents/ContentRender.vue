@@ -398,7 +398,7 @@ export default {
         <!-- メッセージ本体 -->
         <span
           class="flex-grow-1 px-3 mr-1"
-          style="width: max-content;"
+          style="width: min-content;"
         >
 
           <!-- ユーザー名と時間表記 -->
