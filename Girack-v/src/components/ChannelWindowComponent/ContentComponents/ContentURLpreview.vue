@@ -299,7 +299,7 @@ export default {
 
     </div>
 
-    <!-- URLプレビュー -->
+    <!-- 普通のURLプレビュー -->
     <v-card
       v-if="link.mediaType !== 'image' && link.mediaType !== 'video'"
       style="max-width:45%;"
@@ -319,7 +319,7 @@ export default {
           <span style="height:100%; width:auto"> Loading... </span>
         </template>
 
-        <!-- 画像が２枚以上あるならホバーで表示 -->
+        <!-- 画像が２枚以上あるならバッジで数表示 -->
         <v-tooltip
           v-if="typeof link.img === 'object' && link.img.length >= 2"
           activator="parent"
@@ -328,6 +328,7 @@ export default {
         >
           {{ link.img.length }}枚の画像を表示
         </v-tooltip>
+
         <!-- 画像が2枚以上あった時の枚数表示 -->
         <v-badge
           v-if="typeof link.img === 'object' && link.img.length >= 2"
@@ -335,6 +336,18 @@ export default {
           inline
         >
         </v-badge>
+
+        <!-- 動画再生用ボタン -->
+        <v-btn
+          v-if="checkVideoAvailable(link)"
+          @click="showVideo=true;showVideoLink=getVideo(link.video);"
+          location="absolute"
+          icon="mdi:mdi-play"
+          color="rgba(0,0,0,0.5)"
+          position="absolute"
+          style="left:5%; bottom:5%;"
+        >
+        </v-btn>
       </v-img>
 
       <v-divider></v-divider>
