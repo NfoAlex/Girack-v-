@@ -143,6 +143,7 @@ export default {
 
   <!-- ファイル添付表示 -->
   <div>
+
     <v-card
       class="py-2 d-flex align-center justify-start"
       v-for="file in fileData.attatchmentData"
@@ -184,9 +185,7 @@ export default {
       <span class="flex-grow-1 ml-3" style=" max-width: max-content;">
         <div @click="downloadFile(file)" class="d-flex align-center" style="cursor:pointer;">
           <p class="text-subtitle-1">
-            {{
-              file.name
-            }}
+            {{ file.name }}
           </p>
           <v-icon size="small">mdi:mdi-download</v-icon>
         </div>
@@ -200,6 +199,49 @@ export default {
         </span>
       </span>
     </v-card>
+
+    <v-card
+      v-for="file in fileData.attatchmentData"
+      :key="file.name"
+      style="max-width:50%;"
+    >
+      <!-- 画像ならカバーとして表示 -->
+      <v-img
+        v-if="file.type.includes('image/') && file.size < CONFIG_DISPLAY.CONTENT_DISPLAYIMAGESIZE"
+        @click="
+          imageDialogShow = true;
+          imageDialogSrc = filesrc + channelid + '/' + file.fileid;
+        "
+        :src="filesrc + channelid + '/' + file.fileid"
+        height="200"
+        style="cusor:pointer;"
+        cover
+      ></v-img>
+    
+      <v-card-title style="font-size:16px">
+        {{ file.name }}
+      </v-card-title>
+
+      <v-card-text class="text-medium-emphasis d-flex">
+        <span class="d-flex align-center">
+          サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
+        </span>
+        <span class="ml-1 d-flex">
+          種類: <v-chip size="small" class="mx-1">{{ file.type }}</v-chip>
+        </span>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-action>
+        <v-btn class="ma-1">
+          <v-icon size="small">mdi:mdi-download</v-icon>
+          ダウンロード
+        </v-btn>
+      </v-card-action>
+
+    </v-card>
+
   </div>
 </template>
 
