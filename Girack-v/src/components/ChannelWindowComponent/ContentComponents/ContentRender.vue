@@ -323,6 +323,7 @@ export default {
 <template>
   <!-- メッセージ本体 -->
   <!-- v-menuはホバーメニュー用 -->
+  <!-- 
   <v-menu
     open-on-hover
     :open-on-click="false"
@@ -330,6 +331,12 @@ export default {
     close-delay="0"
     transition="none"
     :close-on-content-click="false"
+    location="end top"
+    origin="overlap"
+  >
+  -->
+  <v-menu
+    open-on-hover
     location="end top"
     origin="overlap"
   >
