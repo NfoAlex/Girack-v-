@@ -335,6 +335,15 @@ export default {
     origin="overlap"
   >
   -->
+  <!-- ユーザーページ用 -->
+  <div>
+    <Userpage
+      v-if="userDialogShow"
+      v-model="userDialogShow"
+      :userid="userDialogUserid"
+    />
+  </div>
+
   <v-menu
     open-on-hover
     location="end top"
@@ -355,14 +364,6 @@ export default {
         @mouseover="mouseOverMsg(m.messageid, 'on')"
         @mouseleave="mouseOverMsg(m.messageid, 'off')"
       >
-        <!-- ユーザーページ用 -->
-        <div>
-          <Userpage
-            v-if="userDialogShow"
-            v-model="userDialogShow"
-            :userid="userDialogUserid"
-          />
-        </div>
 
         <!-- アバター -->
         <v-avatar
