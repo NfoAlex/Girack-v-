@@ -86,12 +86,12 @@ export default {
     style="height:100vh; width:100%;"
     class="d-flex flex-column justify-start"
   >
-    <div class="w head flex-grow-0 flex-shrink-0">
+    <div class="head flex-grow-0 flex-shrink-0">
       <ChannelHead :channelInfo="getChannelInfo()" @toggleSidebar="$emit('toggleSidebar')" />
     </div>
     <div
-      style="overflow-y: auto"
-      class="w me-auto flex-grow-1 flex-shrink-1"
+      style="overflow-y:auto; width:100%;"
+      class="me-auto flex-grow-1 flex-shrink-1"
     >
       <KeepAlive :max="10" :exclude="'Userpage'">
         <component
@@ -102,7 +102,7 @@ export default {
         />
       </KeepAlive>
     </div>
-    <div class="w input flex-grow-0 flex-shrink-1">
+    <div class="input flex-grow-0 flex-shrink-1">
       <ChannelInput :channelInfo="getChannelInfo()" />
     </div>
   </div>
