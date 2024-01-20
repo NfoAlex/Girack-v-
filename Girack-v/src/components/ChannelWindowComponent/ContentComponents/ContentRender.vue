@@ -357,7 +357,7 @@ export default {
         :id="m.messageid"
         class="d-flex justify-end px-3"
         :class="[
-          checkShowAvatar(m.userid, index)?'mt-3':null,
+          checkShowAvatar(m.userid, index)?'pa-2':null,
           msgHovered && msgIdHovering === m.messageid ? 'hovered' : null,
           m.pinned?'pinned':null
         ]"
