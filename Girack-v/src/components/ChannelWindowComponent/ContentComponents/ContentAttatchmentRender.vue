@@ -144,8 +144,7 @@ export default {
   <!-- ファイル添付表示 -->
   <div>
     <v-card
-      class="rounded-lg px-2 py-2 ma-2 d-flex align-center justify-start"
-      style="max-width:95%;"
+      class="py-2 d-flex align-center justify-start"
       v-for="file in fileData.attatchmentData"
       :key="file"
     >
