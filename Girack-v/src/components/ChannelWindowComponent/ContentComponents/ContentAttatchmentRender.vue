@@ -46,10 +46,12 @@ export default {
 
     //添付ファイルのアイコン表記
     attatchmentDisplayIcon(type) {
+      /*
       console.log(
         "ContentAttatchmentRender :: attachmentDisplayIcon : type",
         type
       );
+      */
 
       //動画ファイルなら動画アイコンを返す
       if (type.includes("video/")) return "file-video";
