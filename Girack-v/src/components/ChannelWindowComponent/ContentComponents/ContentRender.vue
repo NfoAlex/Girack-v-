@@ -343,6 +343,7 @@ export default {
         :class="[
           checkShowAvatar(m.userid, index)?'mt-3':null,
           msgHovered && msgIdHovering === m.messageid ? 'hovered' : null,
+          m.pinned?'pinned':null
         ]"
         @mouseover="mouseOverMsg(m.messageid, 'on')"
         @mouseleave="mouseOverMsg(m.messageid, 'off')"
@@ -398,17 +399,8 @@ export default {
 
         <!-- メッセージ本体 -->
         <span
-          :class="[
-            m.pinned?'pinned':null,
-            
-          ]"
-          class="flex-grow-1"
-          style="
-            width: max-content;
-            margin-left: 8px;
-            padding-left: 1.5%;
-            padding-right: 1.5%;
-          "
+          class="flex-grow-1 px-3 mr-1"
+          style="width: max-content;"
         >
 
           <!-- ユーザー名と時間表記 -->
