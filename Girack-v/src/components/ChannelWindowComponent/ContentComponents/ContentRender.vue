@@ -495,6 +495,8 @@ export default {
           <!-- リアクション -->
           <div class="d-flex">
             <v-card
+              v-for="r in Object.entries(m.reaction)"
+              :key="r"
               @click="messageAction(m.messageid, 'reaction', r[0])"
               style="
                 width: fit-content;
@@ -503,11 +505,10 @@ export default {
                 -webkit-user-select: none;
               "
               class="px-2 py-1 mr-1 mt-1 mb-2"
+              :size="isMobile?'default':'small'"
+              :ripple="false"
               variant="tonal"
               density="compact"
-              :size="isMobile?'default':'small'"
-              v-for="r in Object.entries(m.reaction)"
-              :key="r"
             >
               {{ getReaction(r[0]) }} {{ r[1] }}
             </v-card>
