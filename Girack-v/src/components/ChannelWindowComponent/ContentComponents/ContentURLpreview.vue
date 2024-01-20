@@ -167,10 +167,10 @@ export default {
         >
           <v-btn
             @click="showVideo = false;"
-            class="rounded my-1"
+            class="my-1"
             block
           >
-            閉じまくり
+            閉じる
           </v-btn>
           <!-- 動画本体 -->
           <video
