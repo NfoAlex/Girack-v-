@@ -196,6 +196,7 @@ export default {
       <v-card-action>
         <v-btn
           @click="downloadFile(file)"
+          variant="text"
           class="ma-1"
         >
           <v-icon size="small">mdi:mdi-download</v-icon>
