@@ -380,9 +380,10 @@ export default {
       <v-divider></v-divider>
 
       <!-- 記事の概要 -->
-      <v-card-text>
+      <v-card-text
+        v-if="link.description"
+      >
         <p
-          v-if="link.description"
           class="text-body-2 font-weight-light text-medium-emphasis"
           style="overflow-y:scroll; max-height:100px;"
         >
