@@ -160,7 +160,7 @@ export default {
       </div>
 
       <!-- チャンネルページ用ボタン群 -->
-      <div v-if="viewMode==='CHANNEL'" style="width:100px; height:100%;">
+      <div v-if="viewMode==='CHANNEL'" style="width:100px; height:100%;" class="d-flex align-center">
         <!-- チャンネルの通知オン/オフボタン -->
         <v-btn
           icon=""
