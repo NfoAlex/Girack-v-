@@ -263,8 +263,8 @@ export default {
   </v-dialog>
 
   <!-- ここから表示部分 -->
-  <div style="height:calc(100vh - 100px)">
-    <div style="height: 10%" class="d-flex justify-start align-center pa-3">
+  <div style="height:calc(100vh - 75px)" class="d-flex flex-column">
+    <div class="d-flex justify-start align-center pa-3">
       <!-- スマホ用ボタン -->
       <v-btn
         v-if="isMobile"
@@ -297,7 +297,7 @@ export default {
     </div>
 
     <!-- チャンネルカード -->
-    <div class="channelList ma-1" style="height: 90%; overflow-y: auto">
+    <div class="channelList ma-1 pb-5 flex-grow-1" style="overflow-y: auto">
       <v-list-item
         v-for="c in Object.entries(channelList)"
         :key="c"
