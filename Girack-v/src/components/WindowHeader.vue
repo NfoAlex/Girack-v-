@@ -112,6 +112,7 @@ export default {
   <div>
     <v-card style="height:100%;" class="elevation-6 pa-3 d-flex">
 
+      <!-- サーバー情報表示 -->
       <div class="instanceCardWidth d-flex flex-column">
 
         <!-- インスタンス名 -->
@@ -148,8 +149,8 @@ export default {
           <p>ブラウザ</p>
         </span>
 
-        <span v-if="viewMode==='OTHER'" class="text-h4 pl-3">
-          ページタイトル
+        <span v-if="viewMode==='OTHER'" class="text-h4 pl-3 d-flex align-center">
+          {{ $route.name }}
         </span>
       </div>
 
