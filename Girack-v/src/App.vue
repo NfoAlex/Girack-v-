@@ -26,10 +26,6 @@ export default {
 
   data() {
     return {
-      //css用クラス
-      channelBar: "channelBar", //左のチャンネルバーとか
-      main: "main", //右のチャンネル表示するところ
-
       sideBarMobileDisplay: false, //スマホ用のサイドバー表示をしているかどうか
 
       sessionOnlineNum: 0, //オンラインユーザー数
@@ -185,7 +181,7 @@ export default {
     <div v-if="loggedin" class="d-flex flex-column" style="width:100vw; height:100vh;">
       <WindowHeader class="flex-grow-1" />
 
-      <span class="flex-shrink-0 d-flex pa-0 ma-0">
+      <span class="d-flex pa-0 ma-0">
         <!-- サイドバー(左側) -->
           <!-- デスクトップ用 -->
         <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
@@ -196,11 +192,14 @@ export default {
           fullscreen
           transition="slide-x-transition"
         >
-          <Sidebar :sessionOnlineNum="sessionOnlineNum" @closeSidebar="sideBarMobileDisplay = false" />
+          <Sidebar
+            :sessionOnlineNum="sessionOnlineNum"
+            @closeSidebar="sideBarMobileDisplay = false"
+          />
         </v-dialog>
 
         <!-- メイン画面（右側） -->
-        <div style="height:100vh; min-width:0;" class="flex-grow-1">
+        <div style="height:100%; min-width:0;" class="flex-grow-1">
           <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
         </div>
       </span>
@@ -213,12 +212,6 @@ export default {
     </div>
   </div>
 </template>
-
-<style scoped>
-.main {
-  height: 100vh;
-}
-</style>
 
 <style>
 html {
