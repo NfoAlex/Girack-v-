@@ -135,7 +135,7 @@ export default {
         </RouterLink>
 
         <!-- インスタンス名 -->
-        <p style="font-size:24px;">
+        <p style="font-size:20px;">
           {{ Serverinfo.servername }}
         </p>
 
