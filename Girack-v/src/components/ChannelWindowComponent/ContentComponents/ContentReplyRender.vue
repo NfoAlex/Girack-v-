@@ -70,7 +70,7 @@ export default {
 
   <div>
 
-    <p>
+    <p class="text-truncate">
       <a :href="'#' + msgReply.messageid">
         <!-- 返信アイコン -->
         <v-icon>mdi:mdi-reply</v-icon>
