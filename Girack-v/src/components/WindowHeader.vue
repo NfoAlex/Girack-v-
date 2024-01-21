@@ -248,5 +248,3 @@ export default {
   </v-card>
 
 </template>
-
-<style scoped></style>
