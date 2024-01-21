@@ -193,7 +193,7 @@ export default {
   <div>
     <div
       :class="isMobile?'channelBarMobile':'channelBarDesk'"
-      class="d-flex flex-column"
+      class="d-flex flex-column mt-3"
     >
 
       <!-- メニューボタン/プロフィールカード -->
