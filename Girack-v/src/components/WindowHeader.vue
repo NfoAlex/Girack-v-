@@ -171,6 +171,16 @@ export default {
           >
           <v-icon v-else>mdi:mdi-bell-off</v-icon>
         </v-btn>
+
+        <!-- ピン留め表示ボタン -->
+        <v-btn
+          icon=""
+          class="rounded ma-0"
+          variant="text"
+          size="small"
+        >
+          <v-icon>mdi:mdi-pin</v-icon>
+        </v-btn>
       </div>
 
     </v-card>
