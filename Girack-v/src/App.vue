@@ -178,10 +178,13 @@ export default {
     </v-snackbar>
 
     <!-- ログイン後(Main) -->
-    <div v-if="loggedin" class="d-flex flex-column pa-0 ma-0" style="width:100vw; height:100vh !important;">
-      <WindowHeader style="height:100px; width:100%;" class="flex-grow-1" />
+    <div v-if="loggedin" class="pa-0 ma-0" style="width:100vw; height:100vh !important; ">
+      <WindowHeader
+        :sessionOnlineNum="sessionOnlineNum"
+        style="width:100%; height:100px;"
+      />
 
-      <span style="height:calc(100vh - 100px)" class="d-flex">
+      <div style="height:calc(100vh - 100px);" class="d-flex">
         <!-- サイドバー(左側) -->
           <!-- デスクトップ用 -->
         <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
@@ -202,7 +205,7 @@ export default {
         <div style="min-width:0;" class="flex-grow-1">
           <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
         </div>
-      </span>
+      </div>
 
     </div>
 

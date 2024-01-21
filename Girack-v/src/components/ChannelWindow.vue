@@ -83,14 +83,14 @@ export default {
 <template>
   <div
     v-if="CLIENT_FULL_LOADED"
-    style="height:100vh; width:100%;"
+    style="height:100%; width:100%;"
     class="d-flex flex-column justify-start"
   >
     <div class="head flex-grow-0 flex-shrink-0">
       <ChannelHead :channelInfo="getChannelInfo()" @toggleSidebar="$emit('toggleSidebar')" />
     </div>
     <div
-      style="overflow-y:auto; width:100%;"
+      style="width:100%; overflow-y: auto;"
       class="me-auto flex-grow-1 flex-shrink-1"
     >
       <KeepAlive :max="10" :exclude="'Userpage'">

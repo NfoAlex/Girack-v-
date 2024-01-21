@@ -499,7 +499,7 @@ export default {
     id="channelWindow"
     class="d-flex flex-column-reverse"
     @scroll="setScrollState"
-    style="height: 100%; width: 100%; overflow-y: auto"
+    style="overflow-y:auto; height:100%;"
   >
 
     <!-- 一番下にスクロールするボタン -->
