@@ -150,7 +150,7 @@ export default {
  
         <!-- チャンネルブラウザ -->
         <span v-if="viewMode==='BROWSER'" class="text-h4 pl-3">
-          <p>ブラウザ</p>
+          <p>チャンネルブラウザ</p>
         </span>
 
         <!-- それ以外 -->
