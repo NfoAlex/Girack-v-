@@ -103,6 +103,7 @@ export default {
       this.handlePageInfo();
     });
   }
+
 };
 </script>
 
@@ -111,15 +112,16 @@ export default {
   <div>
     <v-card style="height:100%;" class="elevation-6 pa-3 d-flex">
 
-      <div class="instanceCardWidth">
+      <div class="instanceCardWidth d-flex flex-column">
 
-        {{ Serverinfo.servername }}
+        <!-- インスタンス名 -->
+        <p style="font-size:24px;">
+          {{ Serverinfo.servername }}
+        </p>
+        <!-- オンライン人口表示 -->
         <RouterLink to="/onlineuser">
-          <v-card
-            style="font-size:calc(6px + 0.65vb); width: 80%"
-            class="mx-auto pa-2 mb-4 rounded-pill d-flex justify-center align-center"
-            elevation="false"
-            variant="tonal"
+          <div
+            class="d-flex justify-center"
             v-ripple
           >
             <v-icon
@@ -131,21 +133,22 @@ export default {
             <span v-else>🥲</span>
             <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
             <span v-else>サーバーオフライン</span>
-          </v-card>
+          </div>
         </RouterLink>
 
       </div>
 
+      <!-- ヘッダ表示内容 -->
       <div style="width:calc(100vw - 300px)" class="d-flex flex-column">
         <span v-if="viewMode==='CHANNEL'" class="text-truncate">
           {{ channelInfo.channelname }}
         </span>
  
-        <span v-if="viewMode==='BROWSER'">
+        <span v-if="viewMode==='BROWSER'" class="text-h4 pl-3">
           <p>ブラウザ</p>
         </span>
 
-        <span v-if="viewMode==='OTHER'">
+        <span v-if="viewMode==='OTHER'" class="text-h4 pl-3">
           ページタイトル
         </span>
       </div>
