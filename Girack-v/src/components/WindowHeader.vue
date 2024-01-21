@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { getSocket, Serverinfo } from "../data/socket";
+import { getCONFIG } from "../config.js";
 import { dataUser } from "../data/dataUserinfo";
 import { dataChannel } from "../data/dataChannel";
 
@@ -10,7 +11,8 @@ export default {
   setup() {
     const { myUserinfo } = dataUser();
     const { ChannelIndex } = dataChannel();
-    return { Serverinfo, myUserinfo, ChannelIndex, };
+    const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
+    return { Serverinfo, myUserinfo, ChannelIndex, LIST_NOTIFICATION_MUTE_CHANNEL };
   },
 
   props: ["sessionOnlineNum"], //オンライン人数用
@@ -142,7 +144,7 @@ export default {
       </div>
 
       <!-- ヘッダ表示内容 -->
-      <div style="width:calc(100vw - 300px); height:100%;" class="d-flex flex-column justify-center">
+      <div style="width:calc(100vw - 400px); height:100%;" class="d-flex flex-column justify-center">
         <span v-if="viewMode==='CHANNEL'" class="text-truncate">
           {{ channelInfo.channelname }}
         </span>
@@ -154,6 +156,20 @@ export default {
         <span v-if="viewMode==='OTHER'" class="text-h4 pl-3 d-flex">
           {{ $route.name }}
         </span>
+      </div>
+
+      <div style="width:100px; height:100%;">
+        <v-btn
+          icon=""
+          class="ma-0 rounded"
+          variant="text"
+        >
+          <v-icon
+            v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)"
+            >mdi:mdi-bell</v-icon
+          >
+          <v-icon v-else>mdi:mdi-bell-off</v-icon>
+        </v-btn>
       </div>
 
     </v-card>
