@@ -32,7 +32,7 @@ export default {
 
       //ユーザーページ用
       userDialogShow: false,
-      userDialogUserid: "00000001",
+      userDialogUserid: "00000000",
 
       //ユーザーロールの色を返す
       userRoleColor: {
