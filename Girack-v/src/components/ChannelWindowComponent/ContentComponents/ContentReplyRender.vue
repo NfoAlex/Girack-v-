@@ -20,6 +20,7 @@ export default {
 
   data() {
     return {
+      uri: window.location.origin, //バックエンドのURI
       msgReply: {}, //受信したメッセージデータの格納用
       contentDisplay: "" //最終的に表示する本文
     }
@@ -68,25 +69,39 @@ export default {
 
 <template>
 
-  <div>
+  <div class="d-flex">
+
+    <v-divider
+      vertical
+      class="mr-2"
+      thickness="5"
+    >
+    </v-divider>
 
     <p class="text-truncate">
       <a :href="'#' + msgReply.messageid">
-        <!-- 返信アイコン -->
-        <v-icon>mdi:mdi-reply</v-icon>
-        <!-- 返信する人の名前 -->
-        <v-chip
-          size="small"
-          color="grey"
-          variant="flat"
-          style="cursor: pointer"
+
+        <!-- アバター -->
+        <v-avatar
+          size="24"
         >
+          <v-img
+            class="pointed"
+            :alt="msgReply.userid"
+            :src="uri + '/img/' + msgReply.userid"
+          >
+          </v-img>
+        </v-avatar>
+
+        <!-- ユーザー名表示 -->
+        <span class="ml-2">
           {{
             UserIndex[msgReply.userid] !== undefined
               ? UserIndex[msgReply.userid].username
               : msgReply.userid
           }}
-        </v-chip>
+        </span>
+
       </a>
       :
       <!-- 返信内容 -->
