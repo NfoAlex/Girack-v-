@@ -359,7 +359,6 @@ export default {
         <v-avatar
           v-if="checkShowAvatar(m.userid, index)"
           class="mx-auto flex-shrink-0"
-          size="40"
         >
           <v-img
             v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
@@ -384,8 +383,7 @@ export default {
         <v-avatar
           v-else
           class="mx-auto flex-shrink-0"
-          size="40"
-          style="max-width: 20%; height: 0 !important"
+          style="height: 0 !important"
         >
           <v-img
             v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
@@ -397,7 +395,7 @@ export default {
         <!-- メッセージ本体 -->
         <span
           class="flex-grow-1 px-3 mr-1"
-          style="width: min-content;"
+          style="width: 90%;"
         >
 
           <!-- ユーザー名と時間表記 -->
