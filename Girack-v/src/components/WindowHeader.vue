@@ -142,15 +142,18 @@ export default {
 
       <!-- ヘッダ表示内容 -->
       <div style="width:calc(100vw - 400px); height:100%;" class="d-flex flex-column justify-center">
+        <!-- チャンネルヘッダ -->
         <span v-if="viewMode==='CHANNEL'">
-          <p class="text-truncate">{{ channelInfo.channelname }}</p>
-          <p class="text-truncate">{{ channelInfo.description }}</p>
+          <p class="text-truncate" style="font-size:22px;">{{ channelInfo.channelname }}</p>
+          <p class="text-truncate" style="font-size:16px;">{{ channelInfo.description }}</p>
         </span>
  
+        <!-- チャンネルブラウザ -->
         <span v-if="viewMode==='BROWSER'" class="text-h4 pl-3">
           <p>ブラウザ</p>
         </span>
 
+        <!-- それ以外 -->
         <span v-if="viewMode==='OTHER'" class="text-h4 pl-3 d-flex">
           {{ $route.name }}
         </span>
