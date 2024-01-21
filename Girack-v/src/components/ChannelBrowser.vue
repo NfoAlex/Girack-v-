@@ -263,8 +263,9 @@ export default {
   </v-dialog>
 
   <!-- ここから表示部分 -->
-  <div style="margin: 2% auto; width: 85%; height: 97.5%">
-    <div style="height: 10%" class="d-flex justify-space-around align-center">
+  <div class="pa-1">
+    <div style="height: 10%" class="d-flex justify-start align-center">
+      <!-- スマホ用ボタン -->
       <v-btn
         v-if="isMobile"
         @click="$emit('toggleSidebar')"
@@ -277,7 +278,6 @@ export default {
       </v-btn>
       <v-divider v-if="isMobile" vertical inset></v-divider>
 
-      <p class="me-auto" :class="isMobile?'text-h6':'text-h4'">チャンネルブラウザー</p>
       <!-- チャンネル作成ボタン -->
       <v-btn
         @click="overlayChannelCreate = true"
@@ -296,21 +296,22 @@ export default {
       </v-btn>
     </div>
 
+    <!-- チャンネルカード -->
     <div class="channelList ma-1" style="height: 85%; overflow-y: auto">
       <v-list-item
         v-for="c in Object.entries(channelList)"
-        style="padding: 0; margin: 0 8px"
         :key="c"
       >
         <v-card
           variant="tonal"
-          class=""
-          style="padding: 8px 16px; margin-top: 16px"
+          class="mt-2"
         >
-          <div class="text-h6">
-            <v-icon icon="mdi:mdi-pound"></v-icon>
+          <div class="d-flex align-center py-1 px-3">
+            <v-icon icon="mdi:mdi-pound" class="pr-2"></v-icon>
+            <v-icon icon="mdi:mdi-lock" v-if="c[1].scope === 'private'" class="pr-2"></v-icon>
+
             <!-- チャンネル名 -->
-            <span>
+            <span class="text-h6 me-auto">
               {{
                 c[1].name.length > 50
                   ? c[1].name.substring(60, 0) + "..."
@@ -325,59 +326,63 @@ export default {
                 {{ c[1].name }}
               </v-tooltip>
             </span>
-            <span v-if="c[1].scope === 'private'" class="mdi mdi-lock"></span>
 
             <!-- ボタン群 -->
-            <div style="float: right">
-              <!-- 削除ボタン -->
-              <v-btn
-                @click="channelRemove(c[0])"
-                v-if="
-                  Serverinfo.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER ||
-                  myUserinfo.role !== 'Member'
-                "
-                variant="text"
-                icon=""
-                size="small"
-                style="margin-right: 4px"
-                class="rounded"
-              >
-                <v-icon icon="mdi:mdi-delete-forever"></v-icon>
-              </v-btn>
+            <!-- 削除ボタン -->
+            <v-btn
+              @click="channelRemove(c[0])"
+              v-if="
+                Serverinfo.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER ||
+                myUserinfo.role !== 'Member'
+              "
+              variant="text"
+              icon=""
+              color="red"
+              size="small"
+              style="margin-right: 4px"
+              class="rounded"
+            >
+              <v-icon icon="mdi:mdi-delete-forever"></v-icon>
+            </v-btn>
 
-              <!-- プレビューボタン -->
-              <v-btn
-                v-if="!myUserinfo.channelJoined.includes(c[0])"
-                @click="channelPreview(c[0])"
-                icon=""
-                size="small"
-                style="margin-right: 16px"
-                class="rounded"
-                variant="text"
-              >
-                <v-icon> mdi:mdi-eye </v-icon>
-              </v-btn>
+            <!-- プレビューボタン -->
+            <v-btn
+              v-if="!myUserinfo.channelJoined.includes(c[0])"
+              @click="channelPreview(c[0])"
+              icon=""
+              size="small"
+              class="rounded"
+              variant="text"
+            >
+              <v-icon> mdi:mdi-eye </v-icon>
+            </v-btn>
 
-              <!-- 参加/退出ボタン -->
-              <v-btn
-                v-if="!myUserinfo.channelJoined.includes(c[0])"
-                @click="channelJoin(c[0])"
-                variant="tonal"
-                class=""
-                >参加</v-btn
-              >
-              <v-btn
-                v-else
-                @click="channelLeave(c[0])"
-                variant="outlined"
-                class=""
-                >退出</v-btn
-              >
-            </div>
+            <!-- 参加/退出ボタン -->
+            <v-btn
+              v-if="!myUserinfo.channelJoined.includes(c[0])"
+              @click="channelJoin(c[0])"
+              variant="tonal"
+              class=""
+              size="small"
+              >参加</v-btn
+            >
+            <v-btn
+              v-else
+              @click="channelLeave(c[0])"
+              variant="outlined"
+              class=""
+              size="small"
+              >退出</v-btn
+            >
+
+            
+
           </div>
 
+          <v-divider class=""></v-divider>
+
           <!-- 概要 -->
-          <p style="padding: 1% 2.5%">
+          <p class="py-4 px-3">
             {{
               c[1].description.length > 150
                 ? c[1].description.substring(150, 0) + "..."
