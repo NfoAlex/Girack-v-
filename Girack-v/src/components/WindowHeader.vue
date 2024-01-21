@@ -57,9 +57,8 @@ export default {
           break;
 
         case "Channel":
-          //表示モード切替
           this.viewMode = "CHANNEL";
-          this.findChannel();
+          this.findChannel(); //チャンネル情報取得して表示
           break;
 
         default:
@@ -68,34 +67,32 @@ export default {
       }
     },
 
+    //チャンネルページヘッダ用の情報設定
     findChannel() {
-      //チャンネルページ
-      if (location.pathname.startsWith("/c/")) {
-        //チャンネル情報がないなら取得、設定
-        if (this.ChannelIndex[this.getPath] !== undefined) {
-          //チャンネル情報設定
-          this.channelInfo = this.ChannelIndex[this.getPath];
-        } else {
-          this.ChannelIndex[this.getPath] = {
-            channelid: this.getPath,
-            channelname: "...",
-            description: "...",
-            scope: "public",
-            pins: [],
-            canTalk: "Member",
-            haveAllHistory: false,
-          };
-          //チャンネル情報を取得
-          socket.emit("getInfoChannel", {
-            targetid: this.getPath,
-            reqSender: {
-              userid: this.myUserinfo.userid,
-              sessionid: this.myUserinfo.sessionid
-            }
-          });
-          //チャンネル情報設定
-          this.channelInfo = this.ChannelIndex[this.getPath];
-        }
+      //チャンネル情報がないなら取得、設定
+      if (this.ChannelIndex[this.getPath] !== undefined) {
+        //チャンネル情報設定
+        this.channelInfo = this.ChannelIndex[this.getPath];
+      } else {
+        this.ChannelIndex[this.getPath] = {
+          channelid: this.getPath,
+          channelname: "...",
+          description: "...",
+          scope: "public",
+          pins: [],
+          canTalk: "Member",
+          haveAllHistory: false,
+        };
+        //チャンネル情報を取得
+        socket.emit("getInfoChannel", {
+          targetid: this.getPath,
+          reqSender: {
+            userid: this.myUserinfo.userid,
+            sessionid: this.myUserinfo.sessionid
+          }
+        });
+        //チャンネル情報設定
+        this.channelInfo = this.ChannelIndex[this.getPath];
       }
     }
   },
