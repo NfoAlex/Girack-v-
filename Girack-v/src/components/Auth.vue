@@ -336,8 +336,10 @@ export default {
             <div v-if="registerResult === 'SUCCESS'">
               <!--登録後-->
               <p class="text-h4 ma-2 text-center">🥰</p>
-              <p class="text-h5 ma-3 text-center d-flex">👉<span class="text-truncate">{{ usernameForRegister }}</span>👈</p>
-              <p class="text-h5 ma-1 text-center">ようこそ!</p>
+              <p class="text-h5 ma-1 text-center">登録完了</p>
+              <p class="text-h5 ma-3 text-center">
+                👉<span class="text-truncate">{{ usernameForRegister }}</span>👈
+              </p>
               <br />
               <v-text-field v-model="pwFromRegister" readonly>
                 <span class="mdi mdi-lock"></span>
