@@ -24,37 +24,44 @@ const router = createRouter({
       children: [
         {
           path: "profile",
+          name: "Profile",
           component: () => import('../components/MenuPageComponent/Profile.vue'),
         },
         {
           path: "sessions",
+          name: "Sessions",
           component: () => import('../components/MenuPageComponent/SessionManage.vue'),
         },
         {
           path: "settings",
+          name: "Settings",
           component: () => import('../components/MenuPageComponent/Settings.vue'),
         },
         {
           path: "modlog",
+          name: "Modlog",
           component: () => import('../components/MenuPageComponent/Modlog.vue'),
         },
         {
           path: "serversettings",
+          name: "ServerSettings",
           component: () => import('../components/MenuPageComponent/ServerSettings.vue'),
         },
         {
           path: "members",
+          name: "Members",
           component: () => import('../components/MenuPageComponent/Members.vue'),
         },
         {
           path: "aboutgirack",
+          name: "AboutGirack",
           component: () => import('../components/MenuPageComponent/AboutGirack.vue'),
         },
       ]
     },
     { //チャンネルブラウザ
       path: '/browser',
-      name: 'Channel Browser',
+      name: 'Browser',
       component: () => import('../components/ChannelBrowser.vue')
     },
     { //チャンネル画面
@@ -64,12 +71,12 @@ const router = createRouter({
     },
     { //JSON見るためだけのページ(デバッグ用)
       path: '/jsonviewer/',
-      name: 'JSON viewer',
+      name: 'JSONviewer',
       component: () => import('../components/JSONviewer.vue')
     },
     { //オンラインのユーザーリスト
       path: '/onlineuser/',
-      name: 'Online User',
+      name: 'OnlineUser',
       component: () => import('../components/OnlineUsers.vue')
     }
   ],
