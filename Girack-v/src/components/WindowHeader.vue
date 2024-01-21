@@ -115,14 +115,11 @@ export default {
       <!-- サーバー情報表示 -->
       <div class="instanceCardWidth d-flex flex-column justify-start">
 
-        <!-- インスタンス名 -->
-        <p style="font-size:24px;">
-          {{ Serverinfo.servername }}
-        </p>
         <!-- オンライン人口表示 -->
         <RouterLink to="/onlineuser">
           <div
-            class="d-flex justify-center"
+            style="width:fit-content;"
+            class="rounded-pill"
             v-ripple
           >
             <v-icon
@@ -136,6 +133,11 @@ export default {
             <span v-if="disconnected">サーバーオフライン</span>
           </div>
         </RouterLink>
+
+        <!-- インスタンス名 -->
+        <p style="font-size:24px;">
+          {{ Serverinfo.servername }}
+        </p>
 
       </div>
 
