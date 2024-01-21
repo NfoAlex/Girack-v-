@@ -142,7 +142,7 @@ export default {
       </div>
 
       <!-- ヘッダ表示内容 -->
-      <div style="width:calc(100vw - 300px)" class="d-flex flex-column">
+      <div style="width:calc(100vw - 300px); height:100%;" class="d-flex flex-column justify-center">
         <span v-if="viewMode==='CHANNEL'" class="text-truncate">
           {{ channelInfo.channelname }}
         </span>
@@ -151,7 +151,7 @@ export default {
           <p>ブラウザ</p>
         </span>
 
-        <span v-if="viewMode==='OTHER'" class="text-h4 pl-3 d-flex align-center">
+        <span v-if="viewMode==='OTHER'" class="text-h4 pl-3 d-flex">
           {{ $route.name }}
         </span>
       </div>
