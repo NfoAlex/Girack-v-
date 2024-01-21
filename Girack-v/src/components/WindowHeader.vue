@@ -145,8 +145,9 @@ export default {
 
       <!-- ヘッダ表示内容 -->
       <div style="width:calc(100vw - 400px); height:100%;" class="d-flex flex-column justify-center">
-        <span v-if="viewMode==='CHANNEL'" class="text-truncate">
-          {{ channelInfo.channelname }}
+        <span v-if="viewMode==='CHANNEL'">
+          <p class="text-truncate">{{ channelInfo.channelname }}</p>
+          <p class="text-truncate">{{ channelInfo.description }}</p>
         </span>
  
         <span v-if="viewMode==='BROWSER'" class="text-h4 pl-3">
