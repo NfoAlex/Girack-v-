@@ -132,8 +132,8 @@ export default {
               >mdi:mdi-circle</v-icon
             >
             <span v-else>🥲</span>
-            <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
-            <span v-else>サーバーオフライン</span>
+            <span v-if="!disconnected">{{ sessionOnlineNum }}</span>
+            <span v-if="disconnected">サーバーオフライン</span>
           </div>
         </RouterLink>
 
