@@ -3,6 +3,7 @@ import { getSocket, CLIENT_FULL_LOADED, CLIENT_LOAD_FLAG } from "./data/socket.j
 import { dataUser } from "./data/dataUserinfo.js";
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
+import WindowHeader from "./components/WindowHeader.vue";
 import { useTheme, useDisplay } from "vuetify";
 const socket = getSocket();
 
@@ -21,7 +22,7 @@ export default {
     };
   },
 
-  components: { Sidebar, Auth },
+  components: { Sidebar, Auth, WindowHeader },
 
   data() {
     return {
@@ -181,25 +182,28 @@ export default {
     </v-snackbar>
 
     <!-- ログイン後(Main) -->
-    <div v-if="loggedin" class="d-flex pa-0 ma-0" style="width:100vw; height:100vh;">
+    <div v-if="loggedin" class="d-flex flex-column" style="width:100vw; height:100vh;">
+      <WindowHeader class="flex-grow-1" />
 
-      <!-- サイドバー(左側) -->
-        <!-- デスクトップ用 -->
-      <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
-        <!-- モバイルレイアウト用 -->
-      <v-dialog
-        v-else
-        v-model="sideBarMobileDisplay"
-        fullscreen
-        transition="slide-x-transition"
-      >
-        <Sidebar :sessionOnlineNum="sessionOnlineNum" @closeSidebar="sideBarMobileDisplay = false" />
-      </v-dialog>
+      <span class="flex-shrink-0 d-flex pa-0 ma-0">
+        <!-- サイドバー(左側) -->
+          <!-- デスクトップ用 -->
+        <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
+          <!-- モバイルレイアウト用 -->
+        <v-dialog
+          v-else
+          v-model="sideBarMobileDisplay"
+          fullscreen
+          transition="slide-x-transition"
+        >
+          <Sidebar :sessionOnlineNum="sessionOnlineNum" @closeSidebar="sideBarMobileDisplay = false" />
+        </v-dialog>
 
-      <!-- メイン画面（右側） -->
-      <div style="height:100vh; min-width:0;" class="flex-grow-1">
-        <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
-      </div>
+        <!-- メイン画面（右側） -->
+        <div style="height:100vh; min-width:0;" class="flex-grow-1">
+          <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
+        </div>
+      </span>
 
     </div>
 
