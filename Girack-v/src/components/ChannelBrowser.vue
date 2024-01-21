@@ -263,8 +263,9 @@ export default {
   </v-dialog>
 
   <!-- ここから表示部分 -->
-  <div style="height:calc(100vh - 75px)" class="d-flex flex-column">
-    <div class="d-flex justify-start align-center pa-3">
+  <div style="height:calc(100vh - 75px); width:90%;" class="d-flex mx-auto flex-column">
+    <!-- ボタンと検索バー -->
+    <div class="d-flex justify-start align-center my-3">
       <!-- スマホ用ボタン -->
       <v-btn
         v-if="isMobile"
@@ -296,101 +297,100 @@ export default {
       </v-btn>
     </div>
 
+    <v-divider></v-divider>
+
     <!-- チャンネルカード -->
-    <div class="channelList ma-1 pb-5 flex-grow-1" style="overflow-y: auto">
-      <v-list-item
+    <div class="channelList pb-5 flex-grow-1" style="overflow-y: auto">
+      <v-card
+        variant="tonal"
+        class="mt-4"
         v-for="c in Object.entries(channelList)"
         :key="c"
       >
-        <v-card
-          variant="tonal"
-          class="mt-2"
-        >
-          <div class="d-flex align-center py-1 px-3">
-            <v-icon icon="mdi:mdi-pound" class="pr-2"></v-icon>
-            <v-icon icon="mdi:mdi-lock" v-if="c[1].scope === 'private'" class="pr-2"></v-icon>
+        <div class="d-flex align-center py-1 px-3">
+          <v-icon icon="mdi:mdi-pound" class="pr-2"></v-icon>
+          <v-icon icon="mdi:mdi-lock" v-if="c[1].scope === 'private'" class="pr-2"></v-icon>
 
-            <!-- チャンネル名 -->
-            <span class="text-h6 me-auto">
-              {{
-                c[1].name.length > 50
-                  ? c[1].name.substring(60, 0) + "..."
-                  : c[1].name
-              }}
-              <v-tooltip
-                v-if="c[1].name.length > 50"
-                activator="parent"
-                location="start"
-                class="overflow-x-hidden"
-              >
-                {{ c[1].name }}
-              </v-tooltip>
-            </span>
-
-            <!-- ボタン群 -->
-            <!-- 削除ボタン -->
-            <v-btn
-              @click="channelRemove(c[0])"
-              v-if="
-                Serverinfo.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER ||
-                myUserinfo.role !== 'Member'
-              "
-              variant="text"
-              icon=""
-              color="red"
-              size="small"
-              style="margin-right: 4px"
-              class="rounded"
-            >
-              <v-icon icon="mdi:mdi-delete-forever"></v-icon>
-            </v-btn>
-
-            <!-- プレビューボタン -->
-            <v-btn
-              v-if="!myUserinfo.channelJoined.includes(c[0])"
-              @click="channelPreview(c[0])"
-              icon=""
-              size="small"
-              class="rounded"
-              variant="text"
-            >
-              <v-icon> mdi:mdi-eye </v-icon>
-            </v-btn>
-
-            <!-- 参加/退出ボタン -->
-            <v-btn
-              v-if="!myUserinfo.channelJoined.includes(c[0])"
-              @click="channelJoin(c[0])"
-              variant="tonal"
-              class=""
-              size="small"
-              >参加</v-btn
-            >
-            <v-btn
-              v-else
-              @click="channelLeave(c[0])"
-              variant="outlined"
-              class=""
-              size="small"
-              >退出</v-btn
-            >
-
-            
-
-          </div>
-
-          <v-divider class=""></v-divider>
-
-          <!-- 概要 -->
-          <p class="py-4 px-3">
+          <!-- チャンネル名 -->
+          <span class="text-h6 me-auto">
             {{
-              c[1].description.length > 150
-                ? c[1].description.substring(150, 0) + "..."
-                : c[1].description
+              c[1].name.length > 50
+                ? c[1].name.substring(60, 0) + "..."
+                : c[1].name
             }}
-          </p>
-        </v-card>
-      </v-list-item>
+            <v-tooltip
+              v-if="c[1].name.length > 50"
+              activator="parent"
+              location="start"
+              class="overflow-x-hidden"
+            >
+              {{ c[1].name }}
+            </v-tooltip>
+          </span>
+
+          <!-- ボタン群 -->
+          <!-- 削除ボタン -->
+          <v-btn
+            @click="channelRemove(c[0])"
+            v-if="
+              Serverinfo.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER ||
+              myUserinfo.role !== 'Member'
+            "
+            variant="text"
+            icon=""
+            color="red"
+            size="small"
+            style="margin-right: 4px"
+            class="rounded"
+          >
+            <v-icon icon="mdi:mdi-delete-forever"></v-icon>
+          </v-btn>
+
+          <!-- プレビューボタン -->
+          <v-btn
+            v-if="!myUserinfo.channelJoined.includes(c[0])"
+            @click="channelPreview(c[0])"
+            icon=""
+            size="small"
+            class="rounded"
+            variant="text"
+          >
+            <v-icon> mdi:mdi-eye </v-icon>
+          </v-btn>
+
+          <!-- 参加/退出ボタン -->
+          <v-btn
+            v-if="!myUserinfo.channelJoined.includes(c[0])"
+            @click="channelJoin(c[0])"
+            variant="tonal"
+            class=""
+            size="small"
+            >参加</v-btn
+          >
+          <v-btn
+            v-else
+            @click="channelLeave(c[0])"
+            variant="outlined"
+            class=""
+            size="small"
+            >退出</v-btn
+          >
+
+          
+
+        </div>
+
+        <v-divider class=""></v-divider>
+
+        <!-- 概要 -->
+        <p class="py-4 px-3">
+          {{
+            c[1].description.length > 150
+              ? c[1].description.substring(150, 0) + "..."
+              : c[1].description
+          }}
+        </p>
+      </v-card>
     </div>
   </div>
 </template>
