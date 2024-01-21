@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
-import { getSocket } from "../data/socket";
+import { getSocket, Serverinfo } from "../data/socket";
 import { dataUser } from "../data/dataUserinfo";
 import { dataChannel } from "../data/dataChannel";
 
@@ -10,8 +10,10 @@ export default {
   setup() {
     const { myUserinfo } = dataUser();
     const { ChannelIndex } = dataChannel();
-    return { myUserinfo, ChannelIndex, };
+    return { Serverinfo, myUserinfo, ChannelIndex, };
   },
+
+  props: ["sessionOnlineNum"], //オンライン人数用
 
   data() {
     return {
@@ -19,6 +21,8 @@ export default {
       channelDialogShow: false,
       channelDialogId: "0001",
       channelPinsShow: false,
+
+      disconnected: false,
 
       channelInfo: {}
     };
@@ -65,10 +69,42 @@ export default {
 <template>
 
   <div>
+    <v-card style="height:100%;" class="elevation-6 pa-3">
+      
+      <div class="instanceCardWidth">
+        {{ Serverinfo.servername }}
+        <RouterLink to="/onlineuser">
+          <v-card
+            style="font-size:calc(6px + 0.65vb); width: 80%"
+            class="mx-auto pa-2 mb-4 rounded-pill d-flex justify-center align-center"
+            elevation="false"
+            variant="tonal"
+            v-ripple
+          >
+            <v-icon
+              v-if="sessionOnlineNum >= 2"
+              size="x-small"
+              :color="disconnected ? 'red' : 'green'"
+              >mdi:mdi-circle</v-icon
+            >
+            <span v-else>🥲</span>
+            <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
+            <span v-else>サーバーオフライン</span>
+          </v-card>
+        </RouterLink>
 
-    <v-card class="ma-2">
-      <p>asdf</p>
+      </div>
+
     </v-card>
   </div>
 
 </template>
+
+<style scoped>
+
+.instanceCardWidth {
+  max-width: 300px;
+  width: 25vw;
+}
+
+</style>
