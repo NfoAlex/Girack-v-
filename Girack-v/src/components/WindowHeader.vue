@@ -113,7 +113,7 @@ export default {
     <v-card style="height:100%;" class="elevation-6 pa-3 d-flex">
 
       <!-- サーバー情報表示 -->
-      <div class="instanceCardWidth d-flex flex-column">
+      <div class="instanceCardWidth d-flex flex-column justify-start">
 
         <!-- インスタンス名 -->
         <p style="font-size:24px;">
