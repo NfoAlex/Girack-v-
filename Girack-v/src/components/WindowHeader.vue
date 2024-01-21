@@ -159,11 +159,14 @@ export default {
         </span>
       </div>
 
-      <div style="width:100px; height:100%;">
+      <!-- チャンネルページ用ボタン群 -->
+      <div v-if="viewMode==='CHANNEL'" style="width:100px; height:100%;">
+        <!-- チャンネルの通知オン/オフボタン -->
         <v-btn
           icon=""
           class="ma-0 rounded"
           variant="text"
+          size="small"
         >
           <v-icon
             v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)"
