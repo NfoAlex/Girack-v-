@@ -194,7 +194,9 @@ export default {
 
 <template>
 
+  <!-- メニュー用 -->
   <Menu
+    v-if="menuDialogDisplay"
     v-model="menuDialogDisplay"
   />
 
