@@ -155,15 +155,15 @@ export default {
   <!-- 動画拡大ダイアログ -->
   <v-dialog
     v-model="showVideo"
-    style="max-width:90vw"
+    style="max-width:90vw; max-height:90vh"
     @dblclick="showVideo = false"
   >
     <div style="height:100vh;">
-      <div class="mx-auto">
+      <div class="mx-auto d-flex align-center">
         <span
           style="z-index:5; height:fit-content; width:fit-content;"
           color="rgba(0,0,0,0.75)"
-          class="rounded-b-lg rounded-t-0 mx-auto text-center pa-0"
+          class="rounded-b-lg rounded-t-0 text-center mx-auto"
         >
           <v-btn
             @click="showVideo = false;"
@@ -267,7 +267,7 @@ export default {
     <div
       v-if="link.mediaType === 'video'"
       class="rounded-lg d-flex flex-column justify-start"
-      style="max-width: 500px"
+      style="max-width:500px; max-height:90vh;"
     >
       <v-btn
         v-if="!showVideo"
@@ -281,7 +281,7 @@ export default {
       <video
         v-if="showVideo"
         :src="link.url"
-        style="max-width: 90%; max-height: 90%; cursor: pointer"
+        style="max-width: 90%; max-height: 90vh; cursor: pointer"
         controls
       >
       </video>
@@ -340,7 +340,7 @@ export default {
         <!-- 動画再生用ボタン -->
         <v-btn
           v-if="checkVideoAvailable(link)"
-          @click="showVideo=true;showVideoLink=getVideo(link.video);"
+          @click.stop="showVideo=true;showVideoLink=getVideo(link.video);"
           location="absolute"
           icon="mdi:mdi-play"
           color="rgba(0,0,0,0.5)"
