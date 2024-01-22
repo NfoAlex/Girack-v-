@@ -184,9 +184,9 @@ export default {
 
 <template>
     <div v-if="configReady">
-        <div style="width:90%; height:97.5vh;" class="d-flex flex-column">
+        <div style="width:90%; height:100%;" class="d-flex flex-column">
             <!-- ページタイトル -->
-            <div style="width:90%; padding-top:3%; margin-bottom:16px;" class="d-flex align-center">
+            <div style="width:90%; padding-top:3%;" class="d-flex align-center">
                 <p class="text-left me-auto" style="font-size:min(4vh,36px)">
                     サーバー設定
                 </p>

@@ -470,7 +470,7 @@ export default {
     </v-dialog>
 
     <!-- プロフィールメイン画面 -->
-    <div style="height:100vh; overflow-y:auto; padding:3vh 0vh;">
+    <div style="height:100%; overflow-y:auto; padding:3vh 0vh;">
       <v-container>
         <v-row no-gutters>
           <!-- アバター -->

@@ -230,14 +230,14 @@ export default {
     </v-dialog>
 
     <div
-      style="height: 100vh; width: 90%"
+      style="width: 90%"
       class="d-flex align-center flex-column"
     >
       <div style="width: 90%; padding-top: 3%" class="text-left align-center">
         <p class="text-left" style="font-size: min(4vh, 36px)">設定</p>
       </div>
 
-      <!-- 設定ページボタン -->
+      <!-- 設定ページボタン(サイドバー) -->
       <div style="width: 100%; padding-top: 8px">
         <div class="d-flex align-center">
           <div

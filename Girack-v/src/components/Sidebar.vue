@@ -7,6 +7,7 @@ import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
 import { getCONFIG } from "../config";
+import Menu from "./MenuPageComponent/Menu.vue";
 import draggable from 'vuedraggable';
 
 const socket = getSocket();
@@ -34,7 +35,7 @@ export default {
 
   props: ["sessionOnlineNum"], //オンライン人数用
 
-  components: { draggable },
+  components: { draggable, Menu },
 
   data() {
     return {
@@ -42,6 +43,8 @@ export default {
       displayusername: "Null",
       visibleReadAllButton: false,
       thisURL: window.location.origin,
+
+      menuDialogDisplay: false, //メニュー用
 
       disconnected: false,
 
@@ -190,6 +193,11 @@ export default {
 </script>
 
 <template>
+
+  <Menu
+    v-model="menuDialogDisplay"
+  />
+
   <div>
     <div
       :class="isMobile?'channelBarMobile':'channelBarDesk'"
@@ -230,8 +238,9 @@ export default {
       </v-card>
 
       <!-- メニューボタン/プロフィールカード -->
-      <RouterLink to="/menu/profile" style="width:100%" class="mx-auto">
+      <!-- <RouterLink to="/menu/profile" style="width:100%" class="mx-auto"> -->
         <v-card
+          @click="menuDialogDisplay=true"
           class="rounded-0 d-flex justify-start align-center py-2 text-truncate"
           :variant="$route.path.includes('menu')?'tonal':'text'"
           v-ripple
@@ -269,7 +278,7 @@ export default {
           </div>
 
         </v-card>
-      </RouterLink>
+      <!-- </RouterLink> -->
 
       <!-- ここからボタン群 -->
       <nav style="margin: 2% auto; width: 100%">

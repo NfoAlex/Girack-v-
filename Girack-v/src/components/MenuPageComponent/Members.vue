@@ -135,7 +135,7 @@ export default {
         </div>
       </div>
 
-      <v-virtual-scroll height="80vh" :items="userListDisplay">
+      <v-virtual-scroll :items="userListDisplay">
         <template v-slot:default="{ item }">
           <v-card
             color="grey"
