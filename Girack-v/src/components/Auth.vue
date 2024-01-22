@@ -194,7 +194,7 @@ export default {
         <span class="text-right text-truncate">
           <p class="text-disabled">{{ serverinfoLoaded.serverVersion }}</p>
           <br />
-          <p class="text-h3">{{ serverinfoLoaded.servername || "Girack" }}</p>
+          <p class="text-h4">{{ serverinfoLoaded.servername || "Girack" }}</p>
         </span>
       </div>
 
