@@ -41,18 +41,6 @@ export default {
     }
   },
 
-  methods: {
-    //今いるページが指定のアドレスのものかどうか
-    isThisActive(p) {
-      //現在のパスを取得して引数を含めているか調べる
-      if (this.$route.path.includes(p)) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  },
-
   mounted() {
     this.$nextTick(() => {
       //ブラウザ上のタブ名を設定
