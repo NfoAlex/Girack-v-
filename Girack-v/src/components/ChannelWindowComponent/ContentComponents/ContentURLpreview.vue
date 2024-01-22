@@ -340,7 +340,7 @@ export default {
         <!-- 動画再生用ボタン -->
         <v-btn
           v-if="checkVideoAvailable(link)"
-          @click="showVideo=true;showVideoLink=getVideo(link.video);"
+          @click.stop="showVideo=true;showVideoLink=getVideo(link.video);"
           location="absolute"
           icon="mdi:mdi-play"
           color="rgba(0,0,0,0.5)"
