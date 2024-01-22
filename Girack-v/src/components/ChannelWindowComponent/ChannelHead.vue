@@ -130,7 +130,7 @@ export default {
       variant="text"
     >
     </v-btn>
-    <!-- ヘッダ -->
+    <!-- チャンネル名、概要 -->
     <div
       @click="channelDialogShow = true"
       v-ripple
@@ -139,8 +139,9 @@ export default {
       variant="tonal"
       style="width:100%; cursor:pointer"
     >
-      <!-- チャンネル情報(チャンネル名、概要) -->
+
       <div style="white-space: nowrap">
+
         <div class="overflow-x-hidden text-truncate text-h5">
           <span
             v-if="channelInfo.scope === 'private'"
@@ -171,6 +172,7 @@ export default {
 
           {{ channelInfo.channelname }}
         </div>
+
       </div>
 
       <v-divider v-if="!isMobile"></v-divider>
@@ -185,7 +187,9 @@ export default {
           {{ channelInfo.description }}
         </p>
       </div>
+
     </div>
+    
 
     <!-- ボタン群 -->
     <div class="d-flex align-center">
