@@ -118,43 +118,38 @@ export default {
     :userid="userDialogUserid"
   />
 
-  <!-- ユーザーリストここから -->
-  <div
-    class="mx-auto d-flex flex-column justify-space-evenly"
-    style="width: 95%; height: 100vh"
-  >
-    <!-- ページヘッダ -->
-    <div class="d-flex align-center ma-4" style="height: 5vh">
-      <v-btn
-        v-if="isMobile"
-        @click="$emit('toggleSidebar')"
-        icon=""
-        class="flex-shrink-0"
-        variant="text"
-        size="small"
-      >
-        <v-icon>mdi:mdi-menu-open</v-icon>
-      </v-btn>
-      <v-divider v-if="isMobile" vertical inset></v-divider>
-      <p
-        style="font-size: min(4vh, 16px); margin-left: 8px"
-        class="text-truncate me-auto flex-shrink-1"
-      >
+  <!-- グローバルヘッダ -->
+  <v-card
+      style="height:75px;"
+      class="rounded-0 elevation-6 px-5 d-flex align-center"
+    >
+
+      <!-- タイトル -->
+      <p class="text-h6 me-auto">
         オンラインユーザーリスト
       </p>
+
       <!-- メンバーページへ行くボタン -->
       <v-btn
         @click="$router.push({ path: '/menu/members' })"
         class="ma-2 rounded-lg flex-shrink-0"
         size="large"
         color="secondary"
+        icon=""
       >
         <v-icon class="ma-1">mdi:mdi-account-group</v-icon>
         <v-tooltip activator="parent" location="bottom">
           全ユーザーを見る
         </v-tooltip>
       </v-btn>
-    </div>
+
+    </v-card>
+
+  <!-- ユーザーリストここから -->
+  <div
+    class="mx-auto d-flex flex-column justify-space-evenly"
+    style="width: 95%; height: 100vh"
+  >
 
     <!-- リスト表示 -->
     <div style="overflow-y: auto; margin-top: 3vh; width: 100%;">
