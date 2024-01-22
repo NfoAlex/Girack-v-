@@ -756,7 +756,7 @@ export default {
         </v-list-item>
       </v-card>
 
-      <!-- textarea -->
+      <!-- テキスト入力欄(textarea) -->
       <v-textarea
         id="inp"
         ref="inp"
@@ -792,7 +792,7 @@ export default {
             variant="text"
             size="x-small"
             icon="mdi:mdi-plus"
-            class="rounded-lg"
+            class="rounded-lg mx-1"
           >
             <v-icon> mdi:mdi-plus </v-icon>
             <v-tooltip activator="parent" location="top">
