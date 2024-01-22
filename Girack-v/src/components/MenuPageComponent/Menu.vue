@@ -55,8 +55,12 @@ export default {
         this.displayMenuPage = "Profile";
       }
     });
-    
   },
+
+  unmounted() {
+    //Menuを閉じる際はクエリを空にする
+    this.$router.push({ query: {  } });
+  }
 };
 </script>
 
