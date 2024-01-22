@@ -117,7 +117,7 @@ export default {
 
       <!-- メンバーページへ行くボタン -->
       <v-btn
-        @click="$router.push({ path: '/menu/members' })"
+        @click="$router.push({ query: { menuPage: 'Members' } })"
         class="ma-2 rounded-lg flex-shrink-0"
         size="large"
         color="secondary"
