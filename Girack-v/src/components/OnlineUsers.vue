@@ -40,12 +40,6 @@ export default {
   },
 
   methods: {
-    //表示する用のリストを整形
-    setUsernameFromList() {
-      this.userListDisplay = this.userList.filter((u) =>
-        u.state.loggedin === true ? u : null
-      );
-    },
 
     //オンラインユーザーの受け取り
     SOCKETresultSessionOnline(result) {
@@ -66,7 +60,10 @@ export default {
           }
         });
 
-        this.setUsernameFromList();
+        //リスト整形
+        this.userListDisplay = this.userList.filter((u) =>
+          u.state.loggedin === true ? u : null
+        );
       }
       this.userListReady = true;
     },
