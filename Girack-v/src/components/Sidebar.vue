@@ -193,8 +193,15 @@ export default {
   <div>
     <div
       :class="isMobile?'channelBarMobile':'channelBarDesk'"
-      class="d-flex flex-column pt-3"
+      class="d-flex flex-column"
     >
+
+      <v-card
+        style="height:75px;"
+        class="rounded-0 elevation-6"
+      >
+        asdf
+      </v-card>
 
       <!-- メニューボタン/プロフィールカード -->
       <RouterLink to="/menu/profile" style="width:100%" class="mx-auto">
