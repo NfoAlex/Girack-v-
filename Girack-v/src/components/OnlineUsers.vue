@@ -122,6 +122,7 @@ export default {
   <v-card
       style="height:75px;"
       class="rounded-0 elevation-6 px-5 d-flex align-center"
+      :loading="!userListReady"
     >
 
       <!-- タイトル -->
