@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
