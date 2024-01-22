@@ -26,6 +26,9 @@ export default {
         },
       },
 
+      //背景用CSS
+      backgroundSrc: "url(" + window.location.origin + "/pancake.jpg)",
+
       //見た目
       tab: null, //ログインと登録のタブ用
       Connected: false, //接続状況の保存用
@@ -303,6 +306,7 @@ export default {
                 text="サーバーつながってなくない?"
               ></v-alert>
 
+              <!-- 登録結果によって変わる部分 -->
               <div v-if="registerResult !== 'SUCCESS'">
                 <!--登録前用-->
 
@@ -374,13 +378,13 @@ export default {
 
 .welcomeImage {
   background-size: cover;
-  background-image: linear-gradient(to bottom, rgba(189, 189, 189, 0.02), rgba(0, 0, 0, 0.83)), url(./pancake.jpg);
+  background-image: linear-gradient(to bottom, rgba(189, 189, 189, 0.02), rgba(0, 0, 0, 0.83)), v-bind(backgroundSrc);
 }
 
 .authWindowBackground {
   position: absolute;
   filter: blur(11px) brightness(50%);
-  background-image: url(./pancake.jpg);
+  background-image: v-bind(backgroundSrc);
   z-index: 0;
   height:100%;
   width:100%;
