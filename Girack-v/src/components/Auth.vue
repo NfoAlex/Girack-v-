@@ -227,10 +227,11 @@ export default {
               <!-- 入力欄 -->
               <p>ユーザー名</p>
               <v-text-field
+                v-model="unForAuth"
                 style="width: 100%"
+                variant="solo-filled"
                 type="text"
                 @keydown.enter="requestAuth"
-                v-model="unForAuth"
                 prepend-inner-icon="mdi:mdi-account"
                 clearable
                 :disabled="!Connected"
@@ -239,10 +240,11 @@ export default {
 
               <p>パスワード</p>
               <v-text-field
+                v-model="pwForAuth"
                 style="width: 100%"
+                variant="solo-filled"
                 type="password"
                 @keydown.enter="requestAuth"
-                v-model="pwForAuth"
                 prepend-inner-icon="mdi:mdi-lock"
                 clearable
                 :disabled="!Connected"
@@ -300,8 +302,9 @@ export default {
                 <p>ユーザー名</p>
 
                 <v-text-field
-                  style="width: 100%"
                   v-model="usernameForRegister"
+                  variant="solo-filled"
+                  style="width: 100%"
                   hint="3文字以上"
                   prepend-inner-icon="mdi:mdi-account"
                   clearable
@@ -312,6 +315,7 @@ export default {
                   <p>招待コード</p>
                   <v-text-field
                     v-model="invcodeForRegister"
+                    variant="solo-filled"
                     style="width: 100%"
                     prepend-inner-icon="mdi:mdi-human-edit"
                   >
