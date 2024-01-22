@@ -196,11 +196,32 @@ export default {
       class="d-flex flex-column"
     >
 
+      <!-- グローバルヘッダ -->
       <v-card
         style="height:75px;"
-        class="rounded-0 elevation-6"
+        class="rounded-0 elevation-6 px-2"
       >
-        asdf
+        <p>
+          {{ Serverinfo.servername }}
+        </p>
+        <!-- オンライン人口表示 -->
+        <RouterLink to="/onlineuser">
+          <div
+            style="width:fit-content;"
+            class="rounded-pill"
+            v-ripple
+          >
+            <v-icon
+              v-if="sessionOnlineNum >= 2"
+              size="x-small"
+              :color="disconnected ? 'red' : 'green'"
+              >mdi:mdi-circle</v-icon
+            >
+            <span v-else>🥲</span>
+            <span v-if="!disconnected">{{ sessionOnlineNum }}</span>
+            <span v-if="disconnected">サーバーオフライン</span>
+          </div>
+        </RouterLink>
       </v-card>
 
       <!-- メニューボタン/プロフィールカード -->
