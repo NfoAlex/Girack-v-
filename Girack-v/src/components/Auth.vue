@@ -181,178 +181,191 @@ export default {
     </v-card>
   </v-dialog>
 
-  <div style="height:100vh;" class="d-flex flex-column">
-    <!-- インスタンス名 -->
-    <p class="text-h4" style="margin: 3vh auto; text-align: center">
-      {{ serverinfoLoaded.servername }}
-    </p>
+  <div style="height:100vh" class="d-flex align-center">
 
-    <v-card
-      :class="isMobile?['authWindowMobile','flex-grow-1']:'authWindowDesk'"
-      class="mx-auto"
-      variant="tonal"
-    >
-      <!-- タブ表示 -->
-      <v-tabs v-model="tab" bg-color="primary" align-tabs="center">
-        <v-tab value="login">ログイン</v-tab>
-        <v-tab v-if="serverinfoLoaded.registration.available" value="register"
-          >登録</v-tab
+    <v-card class="mx-auto d-flex" width="75%" height="50vh" style="max-height:600px; max-width:900px">
+
+      <!-- 画像 -->
+      <div class="welcomeImage d-flex align-end justify-end pb-5 pr-3" style="width:50%;">
+        <span class="text-h2">{{ serverinfoLoaded.servername || "Girack" }}</span>
+      </div>
+
+      <!-- 登録/ログイン部分 -->
+      <div style="width:50%;" class="d-flex flex-column justify-space-evenly px-6">
+        <!-- タブ -->
+        <v-tabs
+          v-model="tab"
+          class="mx-auto rounded-lg"
+          bg-color="primary"
+          align-tabs="center"
+          style="width:fit-content"
         >
-      </v-tabs>
+          <v-tab :disabled="!Connected" value="login">ログイン</v-tab>
+          <v-tab
+            v-if="serverinfoLoaded.registration.available"
+            value="register"
+          >登録</v-tab>
+        </v-tabs>
 
-      <v-window v-model="tab">
-        <!-- ログイン画面 -->
-        <v-window-item value="login">
-          <p class="text-h6" style="margin: 5% 0; text-align: center">Ayo</p>
-          <div class="d-flex justify-center flex-column" style="margin: 5% 10%">
-            <!-- 接続無い用アラート -->
-            <v-alert
-              v-if="!Connected"
-              style="margin: 3% auto"
-              icon="mdi:mdi-alert-circle"
-              type="error"
-              text="🤔サーバーつながってなくない?"
-            ></v-alert>
+        <!-- ログイン/登録ウィンドウ -->
+        <v-window v-model="tab" class="">
+          <!-- ログイン画面 -->
+          <v-window-item value="login">
+            <p class="text-h5 text-center my-3">
+              おかえりなさい！
+            </p>
+            <div class="d-flex justify-center flex-column">
+              <!-- 接続無い用アラート -->
+              <v-alert
+                v-if="!Connected"
+                style="margin: 3% auto"
+                icon="mdi:mdi-alert-circle"
+                type="error"
+                text="🤔サーバーつながってなくない?"
+              ></v-alert>
 
-            <!-- 入力欄 -->
-            <p>ユーザー名</p>
-            <v-text-field
-              style="width: 100%"
-              type="text"
-              @keydown.enter="requestAuth"
-              v-model="unForAuth"
-              prepend-inner-icon="mdi:mdi-account"
-              clearable
-              :disabled="!Connected"
-            >
-              <v-icon icon="mdi:mid-account" />
-            </v-text-field>
-
-            <p>パスワード</p>
-            <v-text-field
-              style="width: 100%"
-              type="password"
-              @keydown.enter="requestAuth"
-              v-model="pwForAuth"
-              prepend-inner-icon="mdi:mdi-lock"
-              clearable
-              :disabled="!Connected"
-              hint="乱数のやつ"
-            >
-              <v-icon icon="mdi:mid-lock" />
-            </v-text-field>
-
-            <br />
-            <!-- ログインボタン -->
-            <v-btn
-              :disabled="!Connected"
-              @click="requestAuth"
-              color="primary"
-              >認証</v-btn
-            >
-            <br />
-
-            <v-alert
-              v-if="success"
-              style="width: 100%; margin: 3% auto"
-              type="success"
-              title="ログイン成功"
-              text=""
-            ></v-alert>
-
-            <v-alert
-              v-if="error"
-              style="width: 100%; margin: 3% auto"
-              icon="mdi:mdi-alert-circle"
-              type="error"
-              title="エラー"
-              text="ログイン失敗、パスワードを確認してね（またはBANされてそう）"
-            ></v-alert>
-          </div>
-        </v-window-item>
-
-        <!-- 登録画面 -->
-        <v-window-item value="register">
-          <p class="text-h5 text-center" style="margin: 5% 0;">
-            ようこそ!
-          </p>
-          <div class="d-flex justify-center flex-column" style="margin: 5% 10%">
-            <!-- 接続無い用アラート -->
-            <v-alert
-              v-if="!Connected"
-              style="margin: 3% auto"
-              icon="mdi:mdi-alert-circle"
-              type="error"
-              title="🤔"
-              text="サーバーつながってなくない?"
-            ></v-alert>
-
-            <div v-if="registerResult !== 'SUCCESS'">
-              <!--登録前用-->
-
+              <!-- 入力欄 -->
               <p>ユーザー名</p>
-
               <v-text-field
                 style="width: 100%"
-                v-model="usernameForRegister"
-                hint="3文字以上"
+                type="text"
+                @keydown.enter="requestAuth"
+                v-model="unForAuth"
+                prepend-inner-icon="mdi:mdi-account"
                 clearable
+                :disabled="!Connected"
               >
-                <span style="margin-right: 6px" class="mdi mdi-account"></span>
               </v-text-field>
 
-              <div v-if="serverinfoLoaded.registration.invite.inviteOnly">
-                <p>招待コード</p>
-                <v-text-field style="width: 100%" v-model="invcodeForRegister">
-                  <span
-                    style="margin-right: 6px"
-                    class="mdi mdi-human-edit"
-                  ></span>
-                </v-text-field>
-              </div>
-
-              <br />
-
-              <v-btn
-                :disabled="(!Connected && serverinfo.registration.available) || (usernameForRegister.length <= 3)"
-                @click="requestRegister"
-                class="mx-auto"
-                color="primary"
-                block
+              <p>パスワード</p>
+              <v-text-field
+                style="width: 100%"
+                type="password"
+                @keydown.enter="requestAuth"
+                v-model="pwForAuth"
+                prepend-inner-icon="mdi:mdi-lock"
+                clearable
+                :disabled="!Connected"
+                hint="乱数のやつ"
               >
-                登録
-              </v-btn>
-              <br />
+                <v-icon icon="mdi:mid-lock" />
+              </v-text-field>
+
+              <!-- ログインボタン -->
+              <v-btn
+                :disabled="!Connected"
+                @click="requestAuth"
+                color="primary"
+                >認証</v-btn
+              >
 
               <v-alert
-                v-if="registerResult === 'FAILED'"
+                v-if="success"
+                style="width: 100%; margin: 3% auto"
+                type="success"
+                title="ログイン成功"
+                text=""
+              ></v-alert>
+
+              <v-alert
+                v-if="error"
                 style="width: 100%; margin: 3% auto"
                 icon="mdi:mdi-alert-circle"
                 type="error"
                 title="エラー"
-                text="登録失敗、招待コード合ってる?"
+                text="ログイン失敗、パスワードを確認してね（またはBANされてそう）"
               ></v-alert>
             </div>
-            <div v-if="registerResult === 'SUCCESS'">
-              <!--登録後-->
-              <p class="text-h4 ma-2 text-center">🥰</p>
-              <p class="text-h5 ma-1 text-center">登録完了</p>
-              <p class="text-h5 ma-3 text-center">
-                👉<span class="text-truncate">{{ usernameForRegister }}</span>👈
-              </p>
-              <br />
-              <v-text-field v-model="pwFromRegister" readonly>
-                <span class="mdi mdi-lock"></span>
-              </v-text-field>
+          </v-window-item>
+
+          <!-- 登録画面 -->
+          <v-window-item value="register">
+            <p class="text-h5 text-center my-3">
+              ようこそ!
+            </p>
+            <div class="d-flex justify-center flex-column">
+              <!-- 接続無い用アラート -->
+              <v-alert
+                v-if="!Connected"
+                style="margin: 3% auto"
+                icon="mdi:mdi-alert-circle"
+                type="error"
+                title="🤔"
+                text="サーバーつながってなくない?"
+              ></v-alert>
+
+              <div v-if="registerResult !== 'SUCCESS'">
+                <!--登録前用-->
+
+                <p>ユーザー名</p>
+
+                <v-text-field
+                  style="width: 100%"
+                  v-model="usernameForRegister"
+                  hint="3文字以上"
+                  prepend-inner-icon="mdi:mdi-account"
+                  clearable
+                >
+                </v-text-field>
+
+                <div v-if="serverinfoLoaded.registration.invite.inviteOnly">
+                  <p>招待コード</p>
+                  <v-text-field
+                    v-model="invcodeForRegister"
+                    style="width: 100%"
+                    prepend-inner-icon="mdi:mdi-human-edit"
+                  >
+                  </v-text-field>
+                </div>
+
+                <v-btn
+                  :disabled="(!Connected && serverinfo.registration.available) || (usernameForRegister.length <= 3)"
+                  @click="requestRegister"
+                  class="mx-auto"
+                  color="primary"
+                  block
+                >
+                  登録
+                </v-btn>
+
+                <v-alert
+                  v-if="registerResult === 'FAILED'"
+                  style="width: 100%; margin: 3% auto"
+                  icon="mdi:mdi-alert-circle"
+                  type="error"
+                  title="エラー"
+                  text="登録失敗、招待コード合ってる?"
+                ></v-alert>
+              </div>
+              <div v-if="registerResult === 'SUCCESS'">
+                <!--登録後-->
+                <p class="text-h4 ma-2 text-center">🥰</p>
+                <p class="text-h5 ma-1 text-center">登録完了</p>
+                <p class="text-h5 ma-3 text-center">
+                  👉<span class="text-truncate">{{ usernameForRegister }}</span>👈
+                </p>
+                <br />
+                <v-text-field v-model="pwFromRegister" readonly>
+                  <span class="mdi mdi-lock"></span>
+                </v-text-field>
+              </div>
             </div>
-          </div>
-        </v-window-item>
-      </v-window>
+          </v-window-item>
+        </v-window>
+        
+      </div>
+
     </v-card>
   </div>
 </template>
 
 <style scoped>
+
+.welcomeImage {
+  background-size: cover;
+  background-image: linear-gradient(to bottom, rgba(189, 189, 189, 0.02), rgba(0, 0, 0, 0.83)), url(./pancake.jpg);
+}
+
 .authWindowDesk {
   margin: 3%;
   padding: 3% auto;
