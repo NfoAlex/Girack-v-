@@ -61,7 +61,6 @@ export default {
       this.displayMenuPage = "Profile";
     });
     
-    // this.$router.push("/")
   },
 };
 </script>
