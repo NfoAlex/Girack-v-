@@ -181,7 +181,7 @@ export default {
         color="grey"
         class="rounded"
       >
-        <p class="text-truncate text-h6">
+        <p class="text-truncate">
           {{ channelInfo.description }}
         </p>
       </div>
