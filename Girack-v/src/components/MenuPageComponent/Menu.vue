@@ -16,15 +16,6 @@ export default {
     };
   },
 
-  watch: {
-    displayMenuDialog() {
-      //ダイアログが閉じられていたら一つ前のページに戻る
-      if (!this.displayMenuDialog) {
-        //this.$router.go(-1);
-      }
-    }
-  },
-
   computed: {
     //スマホかどうかだけを返す
     isMobile() {
@@ -55,7 +46,6 @@ export default {
 <template>
   <v-dialog
     v-model="displayMenuDialog"
-    
     scrollable
   >
     <v-card class="d-flex">
