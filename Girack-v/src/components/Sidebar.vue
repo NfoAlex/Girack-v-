@@ -199,11 +199,9 @@ export default {
       <!-- グローバルヘッダ -->
       <v-card
         style="height:75px;"
-        class="rounded-0 elevation-6 px-2"
+        class="rounded-0 elevation-6 px-2 d-flex flex-column justify-end"
       >
-        <p>
-          {{ Serverinfo.servername }}
-        </p>
+        
         <!-- オンライン人口表示 -->
         <RouterLink to="/onlineuser">
           <div
@@ -222,6 +220,11 @@ export default {
             <span v-if="disconnected">サーバーオフライン</span>
           </div>
         </RouterLink>
+
+        <p class="text-h5">
+          {{ Serverinfo.servername }}
+        </p>
+
       </v-card>
 
       <!-- メニューボタン/プロフィールカード -->
