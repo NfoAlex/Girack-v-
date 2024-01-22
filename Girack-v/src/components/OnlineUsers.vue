@@ -18,9 +18,6 @@ export default {
 
   data() {
     return {
-      OnlineSession: [], //オンラインのユーザーが入る配列
-      OnlineSessionReady: false, //初期ロードできたかどうか
-
       userDialogShow: false, //ユーザーページのダイアログ
       userDialogUserid: "", //ユーザーページ用に使うID
       userList: [], //ユーザーリストが入る配列
