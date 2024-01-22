@@ -210,20 +210,21 @@ export default {
       window.location.reload();
     },
 
-    //ユーザー名検索のハンドラ
+    //ユーザー名変更用の名前検索ハンドラ
     SOCKETinfoSearchUser(result) {
       //結果を一つずつ調べる
       for (let index in result) {
+        //名前が検索結果にあったら
         if (result[index].username === this.nameChangingValue) {
+          //この名前を使えないと設定
           this.canUseThisName = false;
           this.resultNameNotAvailable = true;
-
-          console.log('名前あるわ');
 
           return;
         }
       }
 
+      //この名前を使えると設定
       this.resultNameNotAvailable = false;
       this.canUseThisName = true;
     }
