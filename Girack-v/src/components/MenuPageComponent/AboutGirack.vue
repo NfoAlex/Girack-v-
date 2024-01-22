@@ -6,7 +6,7 @@ export default {
 
   data() {
     return {
-        clientVersion: CLIENT_VERSION //バージョン名
+      clientVersion: CLIENT_VERSION //バージョン名
     }
   }
 
