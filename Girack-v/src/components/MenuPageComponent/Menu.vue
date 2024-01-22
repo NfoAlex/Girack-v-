@@ -74,12 +74,24 @@ export default {
     <v-card class="d-flex flex-row" height="75vh">
 
       <!-- サイドバー -->
-      <div class="pa-2 flex-shrink-0" style="width: 30%; max-width: 200px; height: 100%; overflow-y: auto">
+      <div
+        class="pt-2 flex-shrink-0"
+        style="
+          width: 30%;
+          max-width: 200px;
+          height: 75vh;
+          overflow-y: auto;
+          box-sizing: border-box;
+          border-right: 0.1px #424242 solid;
+        "
+      >
+        <p class="pa-2 text-h6">メニュー</p>
+
         <!-- スマホUI用 -->
         <v-card
           v-if="isMobile"
           @click="$emit('toggleSidebar')"
-          class="rounded-lg menu-card"
+          class="rounded-0 d-flex align-center pa-2"
           variant="text"
           v-ripple
         >
@@ -88,18 +100,17 @@ export default {
 
         <v-card
           @click="displayMenuPage='Profile'"
-          class="rounded d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-2"
           :variant="displayMenuPage==='Profile'?'tonal':'text'"
           v-ripple
         >
           <v-icon> mdi:mdi-account </v-icon>
           プロフィール
         </v-card>
-
         
         <v-card
           @click="displayMenuPage='SessionManage'"
-          class="rounded d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-2"
           :variant="displayMenuPage==='SessionManage'?'tonal':'text'"
           v-ripple
         >
@@ -109,7 +120,7 @@ export default {
 
         <v-card
           @click="displayMenuPage='Settings'"
-          class="rounded d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-2"
           :variant="displayMenuPage==='Settings'?'tonal':'text'"
           v-ripple
         >
@@ -119,7 +130,7 @@ export default {
 
         <v-card
           @click="displayMenuPage='Modlog'"
-          class="rounded d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-2"
           :variant="displayMenuPage==='Modlog'?'tonal':'text'"
           v-ripple
         >
@@ -129,7 +140,7 @@ export default {
 
         <v-card
           @click="displayMenuPage='Members'"
-          class="rounded d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-2"
           :variant="displayMenuPage==='Members'?'tonal':'text'"
           v-ripple
         >
@@ -140,7 +151,7 @@ export default {
         <v-card
           v-if="myUserinfo.role === 'Admin'"
           @click="displayMenuPage='ServerSettings'"
-          class="rounded d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-2"
           :variant="displayMenuPage==='ServerSettings'?'tonal':'text'"
           v-ripple
         >
@@ -150,7 +161,7 @@ export default {
       
         <v-card
           @click="displayMenuPage='About'"
-          class="rounded d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-2"
           :variant="displayMenuPage==='About'?'tonal':'text'"
           v-ripple
         >

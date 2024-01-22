@@ -237,7 +237,7 @@ export default {
         <p class="text-left" style="font-size: min(4vh, 36px)">設定</p>
       </div>
 
-      <!-- 設定ページボタン -->
+      <!-- 設定ページボタン(サイドバー) -->
       <div style="width: 100%; padding-top: 8px">
         <div class="d-flex align-center">
           <div
