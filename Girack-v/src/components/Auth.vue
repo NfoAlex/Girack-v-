@@ -193,7 +193,6 @@ export default {
       <div class="welcomeImage d-flex align-end justify-end pb-5 pr-3 pl-1" style="width:50%;">
         <span class="text-right text-truncate">
           <p class="text-disabled">{{ serverinfoLoaded.serverVersion }}</p>
-          <br />
           <p class="text-h4">{{ serverinfoLoaded.servername || "Girack" }}</p>
         </span>
       </div>
