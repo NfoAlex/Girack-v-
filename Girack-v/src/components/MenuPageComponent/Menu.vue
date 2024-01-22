@@ -46,7 +46,14 @@ export default {
       //ブラウザ上のタブ名を設定
       document.title = "メニュー";
       this.displayMenuDialog = true;
-      this.displayMenuPage = "Profile";
+
+      //URLにページを指定するクエリが入っているならそのページに移す
+      if (this.$route.query.menuPage !== undefined) {
+        this.displayMenuPage = this.$route.query.menuPage;
+      } else {
+        //デフォルトはプロフィールページ
+        this.displayMenuPage = "Profile";
+      }
     });
     
   },

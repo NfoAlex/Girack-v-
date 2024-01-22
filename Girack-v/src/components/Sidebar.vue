@@ -60,6 +60,11 @@ export default {
       if (this.isMobile) {
         this.$emit("closeSidebar");
       }
+
+      //メニューページ用クエリがあるならメニューダイアログを展開
+      if (this.$route.query.menuPage !== undefined) {
+        this.menuDialogDisplay = true;
+      }
     },
 
     //チャンネルの順番の変化を監視
