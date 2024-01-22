@@ -230,7 +230,7 @@ export default {
     </v-dialog>
 
     <div
-      style="height: 100vh; width: 90%"
+      style="width: 90%"
       class="d-flex align-center flex-column"
     >
       <div style="width: 90%; padding-top: 3%" class="text-left align-center">
