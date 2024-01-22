@@ -262,22 +262,52 @@ export default {
     </v-card>
   </v-dialog>
 
+  <!-- グローバルヘッダ -->
+  <v-card
+    style="height:75px;"
+    class="rounded-0 elevation-6 px-5 d-flex align-center"
+  >
+    <!-- スマホ用ボタン -->
+    <v-btn
+      v-if="isMobile"
+      @click="$emit('toggleSidebar')"
+      icon=""
+      class="flex-shrink-0"
+      variant="text"
+      size="small"
+    >
+      <v-icon>mdi:mdi-menu-open</v-icon>
+    </v-btn>
+    <v-divider v-if="isMobile" vertical inset></v-divider>
+
+    <p class="text-h6 me-auto">
+      チャンネルブラウザ
+    </p>
+
+    <!-- チャンネル作成ボタン -->
+    <v-btn
+      @click="overlayChannelCreate = true"
+      v-if="
+        Serverinfo.config.CHANNEL.CHANNEL_CREATE_AVAILABLE ||
+        myUserinfo.role === 'Admin'
+      "
+      color="primary"
+      icon=""
+      class="rounded"
+    >
+      <v-icon icon="mdi:mdi-plus"> </v-icon>
+      <v-tooltip activator="parent" location="bottom">
+        チャンネル作成
+      </v-tooltip>
+    </v-btn>
+
+  </v-card>
+
   <!-- ここから表示部分 -->
   <div style="height:100vh; width:90%;" class="d-flex mx-auto flex-column">
+    
     <!-- ボタンと検索バー -->
     <div class="d-flex justify-start align-center my-3">
-      <!-- スマホ用ボタン -->
-      <v-btn
-        v-if="isMobile"
-        @click="$emit('toggleSidebar')"
-        icon=""
-        class="flex-shrink-0"
-        variant="text"
-        size="small"
-      >
-        <v-icon>mdi:mdi-menu-open</v-icon>
-      </v-btn>
-      <v-divider v-if="isMobile" vertical inset></v-divider>
 
       <!-- チャンネル作成ボタン -->
       <v-btn
