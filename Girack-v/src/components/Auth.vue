@@ -181,9 +181,13 @@ export default {
     </v-card>
   </v-dialog>
 
-  <div style="height:100vh" class="d-flex align-center">
+  <!-- 壁紙用 -->
+  <div class="authWindowBackground"></div>
 
-    <v-card class="mx-auto d-flex" width="75%" style="max-width:900px">
+  <!-- メイン -->
+  <div style="height:100vh" class="authWindow d-flex align-center">
+
+    <v-card class="mx-auto d-flex elevation-12" width="75%" style="max-width:900px">
 
       <!-- 画像 -->
       <div class="welcomeImage d-flex align-end justify-end pb-5 pr-3" style="width:50%;">
@@ -371,18 +375,13 @@ export default {
   background-image: linear-gradient(to bottom, rgba(189, 189, 189, 0.02), rgba(0, 0, 0, 0.83)), url(./pancake.jpg);
 }
 
-.authWindowDesk {
-  margin: 3%;
-  padding: 3% auto;
-
-  width: 40%;
-  height: fit-content;
+.authWindowBackground {
+  position: absolute;
+  filter: blur(11px) brightness(50%);
+  background-image: url(./pancake.jpg);
+  z-index: 0;
+  height:100%;
+  width:100%;
 }
 
-.authWindowMobile {
-  margin-top: 5%;
-  padding: 3% auto;
-
-  width: 100vw;
-}
 </style>
