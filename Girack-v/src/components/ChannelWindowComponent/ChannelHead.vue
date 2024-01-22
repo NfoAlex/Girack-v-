@@ -133,11 +133,11 @@ export default {
     <!-- ヘッダ -->
     <div
       @click="channelDialogShow = true"
-      :ripple="isMobile"
+      v-ripple
       :class="isMobile?'pa-2':null"
       class="d-flex flex-column justify-start rounded-lg px-4"
       variant="tonal"
-      style="width: 100%;"
+      style="width:100%; cursor:pointer"
     >
       <!-- チャンネル情報(チャンネル名、概要) -->
       <div style="white-space: nowrap">
