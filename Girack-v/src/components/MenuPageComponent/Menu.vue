@@ -3,6 +3,7 @@ import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
 
 import Profile from "./Profile.vue";
+import SessionManage from "./SessionManage.vue";
 import Settings from "./Settings.vue";
 import Members from "./Members.vue";
 import Modlog from "./Modlog.vue";
@@ -18,6 +19,7 @@ export default {
 
   components: {
     Profile,
+    SessionManage,
     Settings,
     Members,
     Modlog,
@@ -72,7 +74,7 @@ export default {
     <v-card class="d-flex flex-row" height="75vh">
 
       <!-- サイドバー -->
-      <div class="pa-2" style="width: 30%; max-width: 200px; height: 100%; overflow-y: auto">
+      <div class="pa-2 flex-shrink-0" style="width: 30%; max-width: 200px; height: 100%; overflow-y: auto">
         <!-- スマホUI用 -->
         <v-card
           v-if="isMobile"
@@ -84,10 +86,10 @@ export default {
           <v-icon size="large" style="margin: 0 auto"> mdi:mdi-menu-open </v-icon>
         </v-card>
 
-        
         <v-card
+          @click="displayMenuPage='Profile'"
           class="rounded d-flex align-center pa-2"
-          :variant="isThisActive('profile')?'tonal':'text'"
+          :variant="displayMenuPage==='Profile'?'tonal':'text'"
           v-ripple
         >
           <v-icon> mdi:mdi-account </v-icon>
@@ -96,72 +98,64 @@ export default {
 
         
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('sessions') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='SessionManage'"
+          class="rounded d-flex align-center pa-2"
+          :variant="displayMenuPage==='SessionManage'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-folder-key </v-icon>
-          <br />
+          <v-icon> mdi:mdi-folder-key </v-icon>
           セッション管理
         </v-card>
 
-        
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('/settings') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='Settings'"
+          class="rounded d-flex align-center pa-2"
+          :variant="displayMenuPage==='Settings'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-cog </v-icon>
-          <br />
+          <v-icon> mdi:mdi-cog </v-icon>
           設定
         </v-card>
-      
-      
+
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('modlog') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='Modlog'"
+          class="rounded d-flex align-center pa-2"
+          :variant="displayMenuPage==='Modlog'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto">
-            mdi:mdi-security
-          </v-icon>
-          <br />
+          <v-icon> mdi:mdi-security </v-icon>
           監査ログ
         </v-card>
-      
+
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('members') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='Members'"
+          class="rounded d-flex align-center pa-2"
+          :variant="displayMenuPage==='Members'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto">
-            mdi:mdi-account-group
-          </v-icon>
-          <br />
+          <v-icon> mdi:mdi-account-group </v-icon>
           メンバー
         </v-card>
-      
+
         <v-card
           v-if="myUserinfo.role === 'Admin'"
-          class="rounded-lg menu-card"
-          :color="isThisActive('serversettings') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='ServerSettings'"
+          class="rounded d-flex align-center pa-2"
+          :variant="displayMenuPage==='ServerSettings'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-server </v-icon>
-          <br />
+          <v-icon> mdi:mdi-server </v-icon>
           サーバー管理
         </v-card>
       
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('aboutgirack') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='About'"
+          class="rounded d-flex align-center pa-2"
+          :variant="displayMenuPage==='About'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto">
-            mdi:mdi-information
-          </v-icon>
-          <br />
-          Girackとは
+          <v-icon> mdi:mdi-information </v-icon>
+          Girackについて
         </v-card>
         
       </div>
@@ -171,8 +165,13 @@ export default {
         class="flex-grow-1"
         style="overflow-y:auto; height:75vh;"
       >
-        ここがMenuメイン
         <Profile v-if="displayMenuPage==='Profile'" />
+        <SessionManage v-if="displayMenuPage==='SessionManage'" />
+        <Settings v-if="displayMenuPage==='Settings'" />
+        <Modlog v-if="displayMenuPage==='Modlog'" />
+        <Members v-if="displayMenuPage==='Members'" />
+        <ServerSettings v-if="displayMenuPage==='ServerSettings'" />
+        <AboutGirack v-if="displayMenuPage==='About'" />
       </div>
 
     </v-card>
