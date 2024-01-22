@@ -40,13 +40,6 @@ export default {
   },
 
   methods: {
-
-    //オンラインユーザーの受け取り
-    SOCKETresultSessionOnline(result) {
-      this.OnlineSession = result;
-      this.OnlineSessionReady = true;
-    },
-
     //ユーザーリストの受信用
     SOCKETinfoList(dat) {
       //型がユーザーリストだったらデータを登録
@@ -65,14 +58,13 @@ export default {
           u.state.loggedin === true ? u : null
         );
       }
+      //ロード完了とマーク
       this.userListReady = true;
     },
   },
 
   mounted() {
-    //オンラインユーザーの受け取り
-    socket.on("resultSessionOnline", this.SOCKETresultSessionOnline);
-
+    
     //ユーザーリストの受信用
     socket.on("infoList", this.SOCKETinfoList);
 
@@ -99,7 +91,6 @@ export default {
 
   unmounted() {
     //通信重複防止
-    socket.off("resultSessionOnline", this.SOCKETresultSessionOnline);
     socket.off("infoList", this.SOCKETinfoList);
     //ループ削除
     clearInterval(loopGetSessionOnline);
