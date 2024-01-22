@@ -199,7 +199,7 @@ export default {
       <!-- グローバルヘッダ -->
       <v-card
         style="height:75px;"
-        class="rounded-0 elevation-6 px-2 d-flex flex-column justify-end"
+        class="rounded-0 elevation-6 px-2 d-flex flex-column justify-space-evenly"
       >
         
         <!-- オンライン人口表示 -->
