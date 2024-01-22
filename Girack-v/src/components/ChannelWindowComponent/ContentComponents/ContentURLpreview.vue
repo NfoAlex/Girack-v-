@@ -302,7 +302,7 @@ export default {
     <!-- 普通のURLプレビュー -->
     <v-card
       v-if="link.mediaType !== 'image' && link.mediaType !== 'video'"
-      style="max-width:45%;"
+      style="width:45%; max-width:350px;"
     >
 
       <!-- 埋め込み用画像/動画サムネ -->
