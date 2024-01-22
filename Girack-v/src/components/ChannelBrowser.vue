@@ -323,7 +323,7 @@ export default {
   </v-card>
 
   <!-- ここから表示部分 -->
-  <div style="height:100vh; width:90%;" class="d-flex mx-auto flex-column">
+  <div style="height:calc(100vh - 75px); width:90%;" class="d-flex mx-auto flex-column">
     
     <!-- ボタンと検索バー -->
     <div class="d-flex justify-start align-center my-3">
