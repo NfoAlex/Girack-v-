@@ -309,22 +309,8 @@ export default {
     <!-- ボタンと検索バー -->
     <div class="d-flex justify-start align-center my-3">
 
-      <!-- チャンネル作成ボタン -->
-      <v-btn
-        @click="overlayChannelCreate = true"
-        v-if="
-          Serverinfo.config.CHANNEL.CHANNEL_CREATE_AVAILABLE ||
-          myUserinfo.role === 'Admin'
-        "
-        color="primary"
-        icon=""
-        class="rounded"
-      >
-        <v-icon icon="mdi:mdi-plus"> </v-icon>
-        <v-tooltip activator="parent" location="bottom">
-          チャンネル作成
-        </v-tooltip>
-      </v-btn>
+      <v-btn class="rounded">ソートさせる予定のボタン</v-btn>
+      
     </div>
 
     <v-divider></v-divider>
