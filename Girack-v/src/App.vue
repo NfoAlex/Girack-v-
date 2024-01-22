@@ -179,7 +179,7 @@ export default {
 
     <!-- ログイン後(Main) -->
     <div v-if="loggedin" class="pa-0 ma-0" style="width:100vw; height:100vh !important; ">
-      <div class="d-flex">
+      <div style="height:100%;" class="d-flex">
         <!-- サイドバー(左側) -->
           <!-- デスクトップ用 -->
         <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
