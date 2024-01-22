@@ -70,8 +70,9 @@ export default {
   <v-dialog
     v-model="displayMenuDialog"
     scrollable
+    max-width="1100px"
   >
-    <v-card class="d-flex flex-row" height="75vh">
+    <v-card class="d-flex flex-row mx-auto" height="75vh" width="100%">
 
       <!-- サイドバー -->
       <div
@@ -91,7 +92,7 @@ export default {
         <v-card
           v-if="isMobile"
           @click="$emit('toggleSidebar')"
-          class="rounded-0 d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-3"
           variant="text"
           v-ripple
         >
@@ -100,72 +101,72 @@ export default {
 
         <v-card
           @click="displayMenuPage='Profile'"
-          class="rounded-0 d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-3"
           :variant="displayMenuPage==='Profile'?'tonal':'text'"
           v-ripple
         >
-          <v-icon> mdi:mdi-account </v-icon>
+          <v-icon class="mr-2"> mdi:mdi-account </v-icon>
           プロフィール
         </v-card>
         
         <v-card
           @click="displayMenuPage='SessionManage'"
-          class="rounded-0 d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-3"
           :variant="displayMenuPage==='SessionManage'?'tonal':'text'"
           v-ripple
         >
-          <v-icon> mdi:mdi-folder-key </v-icon>
+          <v-icon class="mr-2"> mdi:mdi-folder-key </v-icon>
           セッション管理
         </v-card>
 
         <v-card
           @click="displayMenuPage='Settings'"
-          class="rounded-0 d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-3"
           :variant="displayMenuPage==='Settings'?'tonal':'text'"
           v-ripple
         >
-          <v-icon> mdi:mdi-cog </v-icon>
+          <v-icon class="mr-2"> mdi:mdi-cog </v-icon>
           設定
         </v-card>
 
         <v-card
           @click="displayMenuPage='Modlog'"
-          class="rounded-0 d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-3"
           :variant="displayMenuPage==='Modlog'?'tonal':'text'"
           v-ripple
         >
-          <v-icon> mdi:mdi-security </v-icon>
+          <v-icon class="mr-2"> mdi:mdi-security </v-icon>
           監査ログ
         </v-card>
 
         <v-card
           @click="displayMenuPage='Members'"
-          class="rounded-0 d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-3"
           :variant="displayMenuPage==='Members'?'tonal':'text'"
           v-ripple
         >
-          <v-icon> mdi:mdi-account-group </v-icon>
+          <v-icon class="mr-2"> mdi:mdi-account-group </v-icon>
           メンバー
         </v-card>
 
         <v-card
           v-if="myUserinfo.role === 'Admin'"
           @click="displayMenuPage='ServerSettings'"
-          class="rounded-0 d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-3"
           :variant="displayMenuPage==='ServerSettings'?'tonal':'text'"
           v-ripple
         >
-          <v-icon> mdi:mdi-server </v-icon>
+          <v-icon class="mr-2"> mdi:mdi-server </v-icon>
           サーバー管理
         </v-card>
       
         <v-card
           @click="displayMenuPage='About'"
-          class="rounded-0 d-flex align-center pa-2"
+          class="rounded-0 d-flex align-center pa-3"
           :variant="displayMenuPage==='About'?'tonal':'text'"
           v-ripple
         >
-          <v-icon> mdi:mdi-information </v-icon>
+          <v-icon class="mr-2"> mdi:mdi-information </v-icon>
           Girackについて
         </v-card>
         
@@ -188,11 +189,3 @@ export default {
     </v-card>
   </v-dialog>
 </template>
-
-<style scoped>
-.card-default {
-  padding: 3%;
-  text-align: center;
-}
-
-</style>
