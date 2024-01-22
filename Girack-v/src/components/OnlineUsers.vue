@@ -148,11 +148,11 @@ export default {
   <!-- ユーザーリストここから -->
   <div
     class="mx-auto d-flex flex-column justify-space-evenly"
-    style="width: 95%; height: 100vh"
+    style="width: 95%;"
   >
 
     <!-- リスト表示 -->
-    <div style="overflow-y: auto; margin-top: 3vh; width: 100%;">
+    <div style="overflow-y: auto;width: 100%;">
       <v-virtual-scroll height="90vh" :items="userListDisplay">
         <template v-slot:default="{ item }">
           <v-card
