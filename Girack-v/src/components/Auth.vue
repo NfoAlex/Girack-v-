@@ -183,7 +183,7 @@ export default {
 
   <div style="height:100vh" class="d-flex align-center">
 
-    <v-card class="mx-auto d-flex" width="75%" height="50vh" style="max-height:600px; max-width:900px">
+    <v-card class="mx-auto d-flex" width="75%" style="max-width:900px">
 
       <!-- 画像 -->
       <div class="welcomeImage d-flex align-end justify-end pb-5 pr-3" style="width:50%;">
@@ -191,7 +191,7 @@ export default {
       </div>
 
       <!-- 登録/ログイン部分 -->
-      <div style="width:50%;" class="d-flex flex-column justify-space-evenly px-6">
+      <div style="width:50%;" class="d-flex flex-column justify-space-evenly px-6 py-10">
         <!-- タブ -->
         <v-tabs
           v-model="tab"
@@ -258,8 +258,9 @@ export default {
                 :disabled="!Connected"
                 @click="requestAuth"
                 color="primary"
-                >認証</v-btn
-              >
+                class="my-3"
+              >認証
+              </v-btn>
 
               <v-alert
                 v-if="success"
@@ -325,7 +326,7 @@ export default {
                 <v-btn
                   :disabled="(!Connected && serverinfo.registration.available) || (usernameForRegister.length <= 3)"
                   @click="requestRegister"
-                  class="mx-auto"
+                  class="my-3"
                   color="primary"
                   block
                 >
