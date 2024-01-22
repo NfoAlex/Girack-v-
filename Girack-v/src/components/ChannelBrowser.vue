@@ -233,8 +233,21 @@ export default {
       <v-divider class="my-2"></v-divider>
 
       <v-card-action>
-        <v-btn color="primary" variant="tonal" @click="channelCreate"> 作成! </v-btn>
-        <v-btn color="" @click="() => overlayChannelCreate=false">キャンセル</v-btn>
+        <v-btn
+          @click="channelCreate"
+          color="primary"
+          variant="tonal"
+        >
+          作成!
+        </v-btn>
+        <v-btn
+          @click="() => overlayChannelCreate=false"
+          variant="text"
+          class="mx-2"
+          color=""
+        >
+          キャンセル
+        </v-btn>
       </v-card-action>
     </v-card>
   </v-dialog>
@@ -245,20 +258,26 @@ export default {
     class="align-center justify-center"
     style="width: 40%"
   >
-    <v-card style="padding: 5%">
-      <v-card-title class="text-h6 text-center">
-        チャンネル削除していいの？
+    <v-card class="pa-4">
+      <v-card-title class="">
+        削除の確認
       </v-card-title>
 
-      <p style="margin: 24px 0 24px 0" class="text-h4 text-center">
+      <v-card-text>
+        <p>チャンネル名 :</p>
         {{ channelRemovingName }}
-      </p>
+      </v-card-text>
 
-      <br />
+      <v-divider class="my-2"></v-divider>
 
-      <v-btn color="red" @click="channelRemoveConfirm(channelRemovingId)">
-        削除
-      </v-btn>
+      <v-card-action>
+        <v-btn
+          @click="channelRemoveConfirm(channelRemovingId)"
+          color="red"
+        >
+          削除
+        </v-btn>
+      </v-card-action>
     </v-card>
   </v-dialog>
 
