@@ -257,7 +257,6 @@ export default {
                 :disabled="!Connected"
                 hint="乱数のやつ"
               >
-                <v-icon icon="mdi:mid-lock" />
               </v-text-field>
 
               <!-- ログインボタン -->
