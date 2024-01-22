@@ -202,12 +202,12 @@ export default {
         class="rounded-0 elevation-6 px-2 d-flex flex-column justify-space-evenly"
       >
         
-        <!-- オンライン人口表示 -->
-        <RouterLink to="/onlineuser">
+        <RouterLink to="/onlineuser" class="rounded-lg" v-ripple>
+          <!-- オンライン人口表示 -->
           <div
             style="width:fit-content;"
             class="rounded-pill"
-            v-ripple
+            
           >
             <v-icon
               v-if="sessionOnlineNum >= 2"
@@ -219,11 +219,13 @@ export default {
             <span v-if="!disconnected">{{ sessionOnlineNum }}</span>
             <span v-if="disconnected">サーバーオフライン</span>
           </div>
-        </RouterLink>
+        
 
-        <p class="text-h5">
-          {{ Serverinfo.servername }}
-        </p>
+          <!-- インスタンス名 -->
+          <p class="text-h5 text-truncate">
+            {{ Serverinfo.servername }}
+          </p>
+        </RouterLink>
 
       </v-card>
 
