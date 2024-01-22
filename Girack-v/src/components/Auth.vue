@@ -190,8 +190,12 @@ export default {
     <v-card class="mx-auto d-flex elevation-12" width="75%" style="max-width:900px">
 
       <!-- 画像 -->
-      <div class="welcomeImage d-flex align-end justify-end pb-5 pr-3" style="width:50%;">
-        <span class="text-h2">{{ serverinfoLoaded.servername || "Girack" }}</span>
+      <div class="welcomeImage d-flex align-end justify-end pb-5 pr-3 pl-1" style="width:50%;">
+        <span class="text-right text-truncate">
+          <p class="text-disabled">{{ serverinfoLoaded.serverVersion }}</p>
+          <br />
+          <p class="text-h3">{{ serverinfoLoaded.servername || "Girack" }}</p>
+        </span>
       </div>
 
       <!-- 登録/ログイン部分 -->
