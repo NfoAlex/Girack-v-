@@ -115,8 +115,8 @@ export default {
 
 <template>
   <div>
-    <div class="mx-auto d-flex flex-column" style="width: 90%; height:100%;">
-      <div class="d-flex align-center" style="padding-top: 3%; margin-bottom: 16px">
+    <div class="mx-auto d-flex flex-column pa-6" style="height:100%;">
+      <div class="d-flex align-center">
         <p class="text-truncate me-auto" style="font-size: min(4vh, 36px)">
         セッション管理
         </p>
@@ -222,7 +222,7 @@ export default {
       <v-divider class="ma-3"></v-divider>
 
       <!-- 他のセッション -->
-      <v-expansion-panels v-if="sessionData!=={}" style="overflow-y:auto; padding-bottom:5%">
+      <v-expansion-panels v-if="Object.keys(sessionData).length!==0" style="overflow-y:auto; padding-bottom:5%">
         <v-expansion-panel
           v-for="(session,index) in Object.entries(sessionData)"
           :key="index"
