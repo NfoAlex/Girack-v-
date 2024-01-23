@@ -192,8 +192,8 @@ export default {
             </p>
 
             <!-- インスタンス名部分 -->
-            <v-card color="cardInner" class="d-flex align-center py-4">
-                <p v-if="!servernameEditingMode" class="text-h5 pa-2 me-auto">
+            <v-card color="cardInner" class="d-flex align-center py-4 flex-shrink-0">
+                <p v-if="!servernameEditingMode" class="text-h5 px-4 me-auto">
                     サーバー名{{ displaySettings.servername!==currentSettings.servername?"*":"" }} : {{ displaySettings.servername }}
                 </p>
                 <v-text-field
@@ -216,8 +216,6 @@ export default {
                             size="x-small"
                             icon="mdi:mdi-window-close"
                             class="rounded-lg"
-                            style="margin:0 8px 0 4px;
-                            float:right"
                         >
                         </v-btn>
                     </template>
@@ -226,8 +224,9 @@ export default {
                 <v-btn
                     v-if="!servernameEditingMode"
                     @click="servernameEditingMode=true;"
-                    class="rounded-lg"
+                    class="rounded mr-3"
                     color="primary"
+                    size="small"
                     icon="mdi:mdi-pencil"
                 >
                 </v-btn>
