@@ -215,7 +215,7 @@ export default {
           </v-expansion-panel-title>
 
           <!-- やったことの内容 -->
-          <v-expansion-panel-text color="cardInner">
+          <v-expansion-panel-text color="cardInner elevation-6">
             <!-- 関係にあるユーザーデータを表示 -->
             <p class="ma-1">ユーザー情報</p>
             <v-card

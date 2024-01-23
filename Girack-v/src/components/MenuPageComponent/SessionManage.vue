@@ -235,7 +235,7 @@ export default {
             </v-chip>
           </v-expansion-panel-title>
 
-          <v-expansion-panel-text color="cardInner">
+          <v-expansion-panel-text color="cardInner elevation-6">
             <!-- セッション名変更部分 -->
             <v-btn
               v-if="editingSessionnameIndex!==index"
