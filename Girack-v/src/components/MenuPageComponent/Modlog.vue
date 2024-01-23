@@ -157,8 +157,10 @@ export default {
       </v-btn>
     </div>
 
+    <v-divider class="mt-2"></v-divider>
+
     <div
-      class="d-flex flex-column align-center"
+      class="d-flex flex-column align-center py-2"
       style="overflow-y: auto; width: 100%; padding-bottom: 24px"
     >
       <v-expansion-panels>
