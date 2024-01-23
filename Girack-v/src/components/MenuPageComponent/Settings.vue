@@ -233,9 +233,9 @@ export default {
 
     <div
       style="width:100%; height:100%"
-      class="d-flex align-center flex-column pa-6"
+      class="d-flex  flex-column pa-6"
     >
-      <div style="width: 90%;" class="text-left">
+      <div class="text-left">
         <p class="text-left" style="font-size: min(4vh, 36px)">設定</p>
       </div>
 
@@ -305,11 +305,11 @@ export default {
           <!-- 設定の同期 -->
           <v-card
             v-if="configPage === ('sync' || '')"
-            class="mx-auto rounded-lg card"
+            class="mx-auto rounded-lg"
           >
             <p class="text-h6 ma-2">同期</p>
             <p><v-icon>mdi:mdi-sync</v-icon>設定データの同期状態</p>
-            <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
+            <v-card color="cardInner" class="pa-3 rounded-lg">
               <v-switch v-model="CONFIG_SYNC" label="設定を同期する"></v-switch>
               <p class="text-subtitle-2">
                 同期をオンにする際にサーバー上の設定データと同期するか確認されます。
@@ -534,16 +534,6 @@ export default {
 </template>
 
 <style scoped>
-.cardInner {
-  margin: 8px 0;
-}
-
-.card {
-  width: 95%;
-  margin-top: 16px;
-
-  padding: 16px;
-}
 
 .scroll::-webkit-scrollbar {
   width: 5px;
