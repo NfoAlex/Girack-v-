@@ -378,8 +378,8 @@ export default {
             @click="gotoChannel(item.channelid, index)"
             v-for="(item, index) in targetUserJoinedChannelList"
             variant="tonal"
-            class="mx-auto rounded-lg d-flex align-center"
-            style="margin-top: 8px; padding: 6px 4%; width: 75%"
+            class="mx-auto rounded-lg d-flex align-center ma-3 pa-2"
+            style="width:75%"
             :key="index"
           >
             <!-- プライベートチャンネル用鍵マーク -->
