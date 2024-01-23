@@ -381,32 +381,6 @@ export default {
               </v-checkbox>
             </v-card>
 
-            <br />
-
-            <!-- 
-                        <p><v-icon>mdi:mdi-tab</v-icon>タブ名に表示する通知</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
-                            <v-checkbox
-                                v-model="CONFIG_NOTIFICATION.DISPLAY_TAB_NEW"
-                                label="新着数を表示"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                            <v-checkbox
-                                v-model="CONFIG_NOTIFICATION.DISPLAY_TAB_MENTION"
-                                label="メンション数を表示"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                            <p style="padding:0 5%;">
-                                例:<br>
-                                メンションが2件来てて、新着数が合計で6件なら<br>
-                                <span v-if="CONFIG_NOTIFICATION.DISPLAY_TAB_MENTION">[!2]</span>
-                                <span v-if="CONFIG_NOTIFICATION.DISPLAY_TAB_NEW">[6]</span>
-                                #random
-                            </p>
-                        </v-card>
-                        -->
           </v-card>
 
           <!-- UI表示 -->
