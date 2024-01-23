@@ -383,7 +383,7 @@ export default {
 
 .authWindowBackground {
   position: absolute;
-  filter: blur(11px) brightness(50%);
+  filter: blur(11px) brightness(30%);
   background-image: v-bind(backgroundSrc);
   z-index: 0;
   height:100%;
