@@ -182,7 +182,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div style="height:100%">
     <!-- 同期設定をオンにするときの確認ダイアログ -->
     <v-dialog
       v-model="configSyncTogglingDialog"
@@ -232,14 +232,14 @@ export default {
     </v-dialog>
 
     <div
-      style="width: 100%"
+      style="width:100%; height:100%"
       class="d-flex align-center flex-column pa-6"
     >
       <div style="width: 90%;" class="text-left">
         <p class="text-left" style="font-size: min(4vh, 36px)">設定</p>
       </div>
 
-      <!-- 設定ページボタン(サイドバー) -->
+      <!-- 設定ページボタンバー -->
       <div style="width: 100%;">
         <div class="d-flex align-center">
           <div
@@ -300,7 +300,7 @@ export default {
       </div>
 
       <!-- 設定ページメイン -->
-      <div class="scroll" style="width: 100%; overflow-y: auto">
+      <div class="scroll" style="width:100%; overflow-y:auto">
         <div class="mx-auto">
           <!-- 設定の同期 -->
           <v-card
