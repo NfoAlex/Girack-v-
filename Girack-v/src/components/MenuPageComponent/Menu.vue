@@ -76,8 +76,8 @@ export default {
       <div
         class="pt-2 flex-shrink-0"
         style="
-          width: 30%;
-          max-width: 200px;
+          width: 35%;
+          max-width: 300px;
           height: 75vh;
           overflow-y: auto;
           box-sizing: border-box;
