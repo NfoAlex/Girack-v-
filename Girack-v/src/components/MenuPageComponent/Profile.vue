@@ -18,7 +18,6 @@ export default {
   data() {
     return {
       snackbar: false, //ログアウトアラート出力用
-      cd: ["card-default", "rounded-lg"], //CSS用クラス名
       okayIcon: "",
       imgsrc: window.location.origin + "/img/",
 
@@ -471,12 +470,12 @@ export default {
     </v-dialog>
 
     <!-- プロフィールメイン画面 -->
-    <div style="height:100%; overflow-y:auto; padding:3vh 0vh;">
+    <div class="pa-6" style="height:100%; overflow-y:auto;">
       <v-container>
         <v-row no-gutters>
           <!-- アバター -->
           <v-col cols="2">
-            <v-card variant="tonal" :class="cd" style="padding: 0">
+            <v-card variant="tonal" style="padding: 0">
               <v-img
                 @click="iconUploadDialog = true"
                 class="rounded-lg"
@@ -495,23 +494,29 @@ export default {
           </v-col>
 
           <!-- ユーザー名の部分 -->
-          <v-col cols="10">
-            <div variant="tonal" :class="cd" style="padding: 1% 10%">
-              <span class="d-flex flex-column" style="width: 100%">
+          <v-col cols="10" class="d-flex align-center">
+            <div variant="tonal" class="px-4" style="width: 100%">
+              <span class="d-flex flex-column justify-start" style="width: 100%">
 
                 <!-- ユーザーID -->
                 <p class="text-left text-h6"># {{ myUserinfo.userid }}</p>
 
-                <!-- ユーザー名 -->
-                <p class="text-h4 text-left text-truncate">
-                  {{ myUserinfo.username }}
+                <div class="d-flex align-center" style="width:100%;">
+
+                  <!-- ユーザー名 -->
+                  <p class="text-h4 text-left text-truncate">
+                    {{ myUserinfo.username }}
+                  </p>
+
+                  <!-- ユーザー名編集ボタン -->
                   <v-btn
                     color="primary"
                     icon="mdi:mdi-pencil"
                     @click="nameChangeDialog=true;"
                     class="rounded-lg ma-5"
                   ></v-btn>
-                </p>
+
+                </div>
 
               </span>
             </div>
@@ -519,10 +524,12 @@ export default {
         </v-row>
       </v-container>
 
+      <v-divider></v-divider>
+
       <v-container>
         <!-- パスワード変更 -->
         <v-row no-gutters>
-          <v-card variant="tonal" :class="cd" style="width: 100%">
+          <div style="width: 100%">
             <v-btn
               @click="changePasswordDialog = true"
               class="rounded-lg mb-5"
@@ -531,7 +538,7 @@ export default {
             >
               パスワードを変更
             </v-btn>
-        <!-- ログアウトボタン -->
+          <!-- ログアウトボタン -->
             <v-btn
               prepend-icon="mdi:mdi-logout"
               class="rounded-lg"
@@ -550,7 +557,7 @@ export default {
                 </v-btn>
               </template>
             </v-snackbar>
-          </v-card>
+          </div>
         </v-row>
       </v-container>
     </div>
