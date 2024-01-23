@@ -255,7 +255,7 @@ export default {
             <v-divider></v-divider>
             
             <!-- 設定メイン -->
-            <div style="overflow-y:auto;">
+            <div class="pb-3" style="overflow-y:auto;">
                 
                 <!-- 登録設定 -->
                 <p class="text-h6 my-2">登録</p>
