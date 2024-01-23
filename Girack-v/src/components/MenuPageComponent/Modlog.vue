@@ -136,12 +136,11 @@ export default {
 
 <template>
   <div
-    style="height: 100%; width: 90%"
-    class="d-flex align-center flex-column"
+    style="height: 100%;"
+    class="d-flex flex-column pa-6"
   >
     <!-- ページタイトル -->
     <div
-      style="width: 90%; padding-top: 3%; margin-bottom: 16px"
       class="d-flex align-center"
     >
       <p class="text-left me-auto" style="font-size: min(4vh, 36px)">
@@ -162,7 +161,7 @@ export default {
       class="d-flex flex-column align-center"
       style="overflow-y: auto; width: 100%; padding-bottom: 24px"
     >
-      <v-expansion-panels style="width: 90%">
+      <v-expansion-panels>
         <v-expansion-panel
           v-for="item in modLogDisplay"
           :key="item.actionId"
