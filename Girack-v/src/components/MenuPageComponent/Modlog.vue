@@ -168,7 +168,7 @@ export default {
           class="rounded-lg"
         >
           <!-- カードタイトル -->
-          <v-expansion-panel-title>
+          <v-expansion-panel-title color="cardInner">
             <!-- やった人のアイコン -->
             <v-avatar size="small" style="margin-right: 8px">
               <v-img alt="icon" :src="backendURI + '/img/' + item.actionBy">
@@ -213,7 +213,7 @@ export default {
           </v-expansion-panel-title>
 
           <!-- やったことの内容 -->
-          <v-expansion-panel-text>
+          <v-expansion-panel-text color="cardInner">
             <!-- 関係にあるユーザーデータを表示 -->
             <p class="ma-1">ユーザー情報</p>
             <v-card
