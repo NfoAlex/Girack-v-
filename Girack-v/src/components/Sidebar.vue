@@ -245,7 +245,6 @@ export default {
       </v-card>
 
       <!-- メニューボタン/プロフィールカード -->
-      <!-- <RouterLink to="/menu/profile" style="width:100%" class="mx-auto"> -->
         <v-card
           @click="menuDialogDisplay=true"
           class="rounded-0 d-flex justify-start align-center py-2 text-truncate"
@@ -285,7 +284,6 @@ export default {
           </div>
 
         </v-card>
-      <!-- </RouterLink> -->
 
       <!-- ここからボタン群 -->
       <nav style="margin: 2% auto; width: 100%">
