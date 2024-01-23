@@ -188,13 +188,15 @@ export default {
       v-model="configSyncTogglingDialog"
       style="min-width: 650px; width: 50vh"
     >
-      <v-card class="pa-6 rounded-lg">
+      <v-card class="pa-6">
         <v-card-title> 同期の確認 </v-card-title>
 
-        <p class="text-subtitle-1">
-          設定を同期するようにします。
-          現在の設定をサーバー上の設定へ上書きしますか？
-        </p>
+        <v-card-text>
+          <p class="">
+            設定を同期するようにします。
+            現在の設定をサーバー上の設定へ上書きしますか？
+          </p>
+        </v-card-text>
 
         <v-divider class=""></v-divider>
 
@@ -203,7 +205,7 @@ export default {
             @click="updateConfigWithServer"
             block
             color="error"
-            class="ma-1 rounded-lg"
+            class="my-2 rounded-lg"
           >
             はい。上書きしてください。
           </v-btn>
@@ -211,7 +213,7 @@ export default {
             @click="bringConfigFromServer"
             block
             color="grey"
-            class="ma-1 rounded-lg"
+            class="my-2 rounded-lg"
           >
             いいえ。サーバー上の設定を取得して適用してください。
           </v-btn>
@@ -221,7 +223,7 @@ export default {
               configSyncTogglingDialog = false;
             "
             block
-            class="ma-1 rounded-lg"
+            class="my-2 rounded-lg"
           >
             やっぱキャンセル
           </v-btn>
@@ -230,22 +232,21 @@ export default {
     </v-dialog>
 
     <div
-      style="width: 90%"
-      class="d-flex align-center flex-column"
+      style="width: 100%"
+      class="d-flex align-center flex-column pa-6"
     >
-      <div style="width: 90%; padding-top: 3%" class="text-left align-center">
+      <div style="width: 90%;" class="text-left">
         <p class="text-left" style="font-size: min(4vh, 36px)">設定</p>
       </div>
 
       <!-- 設定ページボタン(サイドバー) -->
-      <div style="width: 100%; padding-top: 8px">
+      <div style="width: 100%;">
         <div class="d-flex align-center">
           <div
             class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll"
             style="
               width: 95%;
               height: 7.5vh;
-              padding: 0 16px;
               overflow-x: auto;
               overflow-y: hidden;
             "
@@ -300,7 +301,7 @@ export default {
 
       <!-- 設定ページメイン -->
       <div class="scroll" style="width: 100%; overflow-y: auto">
-        <div class="mx-auto" style="margin: 1% 0">
+        <div class="mx-auto">
           <!-- 設定の同期 -->
           <v-card
             v-if="configPage === ('sync' || '')"
@@ -315,8 +316,6 @@ export default {
               </p>
             </v-card>
           </v-card>
-
-          <br />
 
           <!-- 通知 -->
           <v-card
@@ -403,8 +402,6 @@ export default {
                         -->
           </v-card>
 
-          <br />
-
           <!-- UI表示 -->
           <v-card
             v-if="configPage === 'interface'"
@@ -483,8 +480,6 @@ export default {
             </v-card>
           </v-card>
 
-          <br />
-
           <!-- プライバシー(ネタ) -->
           <v-card
             v-if="configPage === 'privacy'"
@@ -503,8 +498,6 @@ export default {
               </v-checkbox>
             </v-card>
           </v-card>
-
-          <br />
 
           <v-card
             v-if="configPage === 'game'"
