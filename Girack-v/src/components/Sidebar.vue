@@ -421,6 +421,8 @@ export default {
   width: 25vw;
   height: 100vh;
 
+  background-color: rgb(var(--v-theme-cardInner));
+
   box-sizing: border-box;
   border-right: 0.1px #424242 solid;
 }
@@ -428,6 +430,8 @@ export default {
 .channelBarMobile {
   width:100vw;
   height:100vh;
+
+  background-color: rgb(var(--v-theme-cardInner));
 }
 
 .scroll::-webkit-scrollbar {
