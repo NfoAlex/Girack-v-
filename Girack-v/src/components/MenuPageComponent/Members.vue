@@ -117,7 +117,7 @@ export default {
       <div style="height: 8vh">
         <div>
           <p class="text-truncate" style="font-size: min(4vh, 36px)">
-            愉快なメンバーたち
+            メンバーリスト
           </p>
         </div>
       </div>
