@@ -185,10 +185,11 @@ export default {
 <template>
     <div v-if="configReady" class="pa-6" style="height:100%;">
         <div style="height:100%;" class="d-flex flex-column">
+            
             <!-- ページタイトル -->
-                <p style="font-size:min(4vh,36px)">
-                    サーバー設定
-                </p>
+            <p style="font-size:min(4vh,36px)">
+                サーバー設定
+            </p>
 
             <!-- インスタンス名部分 -->
             <v-card color="cardInner" class="d-flex align-center py-4">
