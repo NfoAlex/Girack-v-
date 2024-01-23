@@ -245,79 +245,75 @@ export default {
       </v-card>
 
       <!-- メニューボタン/プロフィールカード -->
-        <v-card
-          @click="menuDialogDisplay=true"
-          class="rounded-0 d-flex justify-start align-center py-2 text-truncate"
-          :variant="$route.path.includes('menu')?'tonal':'text'"
-          v-ripple
-        >
-          <!-- 三点メニューアイコン -->
-          <v-icon size="large" class="mx-2">mdi:mdi-dots-vertical</v-icon>
-          <!-- ホバーしたら表示するテキスト -->
-          <v-tooltip activator="parent" location="top"> メニュー </v-tooltip>
+      <v-card
+        @click="menuDialogDisplay=true"
+        class="rounded-0 d-flex justify-start align-center py-2 text-truncate"
+        :variant="$route.path.includes('menu')?'tonal':'text'"
+        v-ripple
+      >
+        <!-- 三点メニューアイコン -->
+        <v-icon size="large" class="mx-2">mdi:mdi-dots-vertical</v-icon>
+        <!-- ホバーしたら表示するテキスト -->
+        <v-tooltip activator="parent" location="top"> メニュー </v-tooltip>
 
-          <!-- アイコン-->
-          <div class="mx-2">
-            <v-avatar size="24">
-              <v-img
-                :alt="myUserinfo.userid"
-                :src="thisURL + '/img/' + myUserinfo.userid"
-              ></v-img>
-            </v-avatar>
-          </div>
+        <!-- アイコン-->
+        <div class="mx-2">
+          <v-avatar size="24">
+            <v-img
+              :alt="myUserinfo.userid"
+              :src="thisURL + '/img/' + myUserinfo.userid"
+            ></v-img>
+          </v-avatar>
+        </div>
 
-          <div class="d-flex flex-column mx-2">
-            <!-- ロールバッジ-->
-            <v-chip
-              v-if="myUserinfo.role !== 'Member'"
-              :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
-              size="x-small"
-              :elevation="2"
-            >
-              <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
-            </v-chip>
+        <div class="d-flex flex-column mx-2">
+          <!-- ロールバッジ-->
+          <v-chip
+            v-if="myUserinfo.role !== 'Member'"
+            :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
+            size="x-small"
+            :elevation="2"
+          >
+            <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
+          </v-chip>
 
-            <!-- ユーザー名-->
-            <p class="text-subtitle-2 text-truncate">
-              {{ myUserinfo.username }}
-            </p>
-          </div>
+          <!-- ユーザー名-->
+          <p class="text-subtitle-2 text-truncate">
+            {{ myUserinfo.username }}
+          </p>
+        </div>
 
-        </v-card>
+      </v-card>
 
       <!-- ここからボタン群 -->
-      <nav style="margin: 2% auto; width: 100%">
-        <!-- FOR DEBUGGING ONLY -->
-        <RouterLink :to="'/jsonviewer'">
-          <v-card
-            v-if="myUserinfo.role === 'Admin' && !isMobile"
-            class="d-flex justify-start px-3 align-center rounded-0"
-            :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
-            :class="isMobile?'pa-3':'pa-2'"
-            :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
-          >
-            <v-icon size="small">mdi:mdi-shield-bug</v-icon>
-            <span class="text-truncate ml-1"> JSONviewer </span>
-          </v-card>
-        </RouterLink>
+      <!-- FOR DEBUGGING ONLY -->
+      <RouterLink :to="'/jsonviewer'">
+        <v-card
+          v-if="myUserinfo.role === 'Admin' && !isMobile"
+          class="d-flex justify-start px-3 align-center rounded-0"
+          :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
+          :class="isMobile?'pa-3':'pa-2'"
+          :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
+        >
+          <v-icon size="small">mdi:mdi-shield-bug</v-icon>
+          <span class="text-truncate ml-1"> JSONviewer </span>
+        </v-card>
+      </RouterLink>
 
-        <!-- チャンネルブラウザ -->
-        <RouterLink :to="'/browser'">
-          <v-card
-            class="d-flex justify-start align-center rounded-0"
-            :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
-            :class="isMobile?'pa-3':'pa-2'"
-            :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
-          >
-            <v-icon size="small">mdi:mdi-text-search</v-icon>
-            <span class="text-truncate ml-1"> チャンネルブラウザ </span>
-          </v-card>
-        </RouterLink>
+      <!-- チャンネルブラウザ -->
+      <RouterLink :to="'/browser'">
+        <v-card
+          class="d-flex justify-start align-center rounded-0"
+          :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
+          :class="isMobile?'pa-3':'pa-2'"
+          :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
+        >
+          <v-icon size="small">mdi:mdi-text-search</v-icon>
+          <span class="text-truncate ml-1"> チャンネルブラウザ </span>
+        </v-card>
+      </RouterLink>
 
-        
-      </nav>
-
-      <v-divider></v-divider>
+      <v-divider class="my-2"></v-divider>
       
       <!-- ここからチャンネルボタン部分  -->
       <div
