@@ -17,48 +17,6 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../components/Auth.vue')
     },
-    // {
-    //   path: '/menu/',
-    //   name: 'Menu',
-    //   component: () => import('../components/MenuPageComponent/Menu.vue'),
-    //   children: [
-    //     {
-    //       path: "profile",
-    //       name: "Profile",
-    //       component: () => import('../components/MenuPageComponent/Profile.vue'),
-    //     },
-    //     {
-    //       path: "sessions",
-    //       name: "Sessions",
-    //       component: () => import('../components/MenuPageComponent/SessionManage.vue'),
-    //     },
-    //     {
-    //       path: "settings",
-    //       name: "Settings",
-    //       component: () => import('../components/MenuPageComponent/Settings.vue'),
-    //     },
-    //     {
-    //       path: "modlog",
-    //       name: "Modlog",
-    //       component: () => import('../components/MenuPageComponent/Modlog.vue'),
-    //     },
-    //     {
-    //       path: "serversettings",
-    //       name: "ServerSettings",
-    //       component: () => import('../components/MenuPageComponent/ServerSettings.vue'),
-    //     },
-    //     {
-    //       path: "members",
-    //       name: "Members",
-    //       component: () => import('../components/MenuPageComponent/Members.vue'),
-    //     },
-    //     {
-    //       path: "aboutgirack",
-    //       name: "AboutGirack",
-    //       component: () => import('../components/MenuPageComponent/AboutGirack.vue'),
-    //     },
-    //   ]
-    // },
     { //チャンネルブラウザ
       path: '/browser',
       name: 'Browser',
