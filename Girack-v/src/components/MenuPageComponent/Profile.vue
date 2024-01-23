@@ -495,13 +495,13 @@ export default {
 
           <!-- ユーザー名の部分 -->
           <v-col cols="10" class="d-flex align-center">
-            <div variant="tonal" class="px-4" style="width: 100%">
+            <div variant="tonal" class="pl-4" style="width: 100%">
               <span class="d-flex flex-column justify-start" style="width: 100%">
 
                 <!-- ユーザーID -->
                 <p class="text-left text-h6"># {{ myUserinfo.userid }}</p>
 
-                <div class="d-flex align-center" style="width:100%;">
+                <div class="d-flex align-center justify-space-between " style="width:100%;">
 
                   <!-- ユーザー名 -->
                   <p class="text-h4 text-left text-truncate">
@@ -513,7 +513,7 @@ export default {
                     color="primary"
                     icon="mdi:mdi-pencil"
                     @click="nameChangeDialog=true;"
-                    class="rounded-lg ma-5"
+                    class="rounded ml-2"
                   ></v-btn>
 
                 </div>
@@ -565,11 +565,6 @@ export default {
 </template>
 
 <style scoped>
-.card-default {
-  padding: 3%;
-  text-align: center;
-}
-
 .menu-card {
   margin: 16px 12.5%;
   padding: 7.5% 0;
