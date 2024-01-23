@@ -242,10 +242,9 @@ export default {
       <!-- 設定ページボタンバー -->
       <div style="width: 100%;" class="d-flex align-center">
         <div
-          class="align-center rounded-lg d-flex align-center scroll"
+          class="align-center rounded-lg d-flex align-center scroll my-3"
           style="
             width: 95%;
-            height: 7.5vh;
             overflow-x: auto;
             overflow-y: hidden;
           "
@@ -296,6 +295,8 @@ export default {
           </v-btn>
         </div>
       </div>
+
+      <v-divider></v-divider>
 
       <!-- 設定ページメイン -->
       <div class="scroll pb-3" style="width:100%; overflow-y:auto">
