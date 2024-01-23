@@ -240,62 +240,60 @@ export default {
       </div>
 
       <!-- 設定ページボタンバー -->
-      <div style="width: 100%;">
-        <div class="d-flex align-center">
-          <div
-            class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll"
-            style="
-              width: 95%;
-              height: 7.5vh;
-              overflow-x: auto;
-              overflow-y: hidden;
-            "
+      <div style="width: 100%;" class="d-flex align-center">
+        <div
+          class="align-center rounded-lg d-flex align-center scroll"
+          style="
+            width: 95%;
+            height: 7.5vh;
+            overflow-x: auto;
+            overflow-y: hidden;
+          "
+        >
+          <v-btn
+            @click="configPage = 'sync'"
+            size="large"
+            :color="configPage === 'sync' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
           >
-            <v-btn
-              @click="configPage = 'sync'"
-              size="large"
-              :color="configPage === 'sync' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              同期
-            </v-btn>
+            同期
+          </v-btn>
 
-            <v-btn
-              @click="configPage = 'notification'"
-              size="large"
-              :color="configPage === 'notification' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              通知
-            </v-btn>
+          <v-btn
+            @click="configPage = 'notification'"
+            size="large"
+            :color="configPage === 'notification' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            通知
+          </v-btn>
 
-            <v-btn
-              @click="configPage = 'interface'"
-              size="large"
-              :color="configPage === 'interface' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              表示
-            </v-btn>
+          <v-btn
+            @click="configPage = 'interface'"
+            size="large"
+            :color="configPage === 'interface' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            表示
+          </v-btn>
 
-            <v-btn
-              @click="configPage = 'privacy'"
-              size="large"
-              :color="configPage === 'privacy' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              プライバシー
-            </v-btn>
+          <v-btn
+            @click="configPage = 'privacy'"
+            size="large"
+            :color="configPage === 'privacy' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            プライバシー
+          </v-btn>
 
-            <v-btn
-              @click="configPage = 'game'"
-              size="large"
-              :color="configPage === 'game' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              ?
-            </v-btn>
-          </div>
+          <v-btn
+            @click="configPage = 'game'"
+            size="large"
+            :color="configPage === 'game' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            ?
+          </v-btn>
         </div>
       </div>
 
