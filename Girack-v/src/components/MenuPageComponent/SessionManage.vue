@@ -135,7 +135,7 @@ export default {
       <h3 class="ma-1">現在のセッション</h3>
       <v-expansion-panels v-if="sessionDataCurrentAvailable" style="width: 100%">
         <v-expansion-panel>
-          <v-expansion-panel-title color="grey">
+          <v-expansion-panel-title color="secondary">
             <span class="text-truncate flex-grow-1">
               <b>{{ sessionDataCurrent.sessionName }}</b> ( {{ myUserinfo.sessionid.slice(0,5) }}... )
             </span>
