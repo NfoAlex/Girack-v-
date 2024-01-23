@@ -416,19 +416,19 @@ export default {
       </v-card>
     </v-dialog>
 
-    <!-- ユーザー変更用ダイアログ -->
+    <!-- ユーザー名変更用ダイアログ -->
     <v-dialog
       v-model="nameChangeDialog"
       style="max-width:650px;"
       width="50vh"
     >
-      <v-card class="rounded-lg">
+      <v-card class="rounded-lg pa-4">
         <v-card-title>
           ユーザー名変更
         </v-card-title>
 
         <!-- 入力欄 -->
-        <v-card-item>
+        <v-card-text>
           <p class="mb-1">新しいユーザー名</p>
           <v-text-field v-model="nameChangingValue"></v-text-field>
           <v-alert>
@@ -443,28 +443,28 @@ export default {
               使えます!
             </span>
           </v-alert>
-        </v-card-item>
+        </v-card-text>
 
         <!-- ボタン -->
-        <v-card-item class="d-flex flex-row-reverse mb-2">
-          <v-btn
-            @click="nameChangeDialog=false;"
-            class="ma-1 rounded-lg"
-            variant="flat"
-            color=""
-          >
-            キャンセル
-          </v-btn>
+        <v-card-action>
           <v-btn
             @click="updateName();nameChangeDialog=false;"
             :disabled="!canUseThisName"
-            class="ma-1 rounded-lg"
+            class="ma-1"
             variant="flat"
             color="primary"
           >
             変更する
           </v-btn>
-        </v-card-item>
+          <v-btn
+            @click="nameChangeDialog=false;"
+            class="ma-1 rounded"
+            variant="text"
+            color=""
+          >
+            キャンセル
+          </v-btn>
+        </v-card-action>
 
       </v-card>
     </v-dialog>
