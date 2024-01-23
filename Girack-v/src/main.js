@@ -26,6 +26,8 @@ const vuetify = createVuetify({
                     surface: "#CFD8DC",
                     primary: "#607D8B", // #E53935
                     secondary: "#B0BEC5", // #FFCDD2
+                    "grey": "#263238",
+                    "cardInner": "#343434",
                 }
             },
             thedark: {
