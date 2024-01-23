@@ -226,7 +226,7 @@ export default {
           :key="index"
         >
 
-          <v-expansion-panel-title>
+          <v-expansion-panel-title color="cardInner">
             <span class="text-truncate flex-grow-1">
               <b>{{ session[1].sessionName }}</b> ( {{ session[0].slice(0,5) }}... )
             </span>
@@ -235,7 +235,7 @@ export default {
             </v-chip>
           </v-expansion-panel-title>
 
-          <v-expansion-panel-text>
+          <v-expansion-panel-text color="cardInner">
             <!-- セッション名変更部分 -->
             <v-btn
               v-if="editingSessionnameIndex!==index"
