@@ -104,7 +104,7 @@ export default {
   <!-- 一つ下のDIVのCSS適用するために囲んでいる -->
   <div>
     <div
-      class="mx-auto d-flex flex-column justify-space-evenly pa-6"
+      class="mx-auto d-flex flex-column justify-space-evenly px-6 pt-6"
     >
       <!-- ユーザーページ用 -->
       <Userpage

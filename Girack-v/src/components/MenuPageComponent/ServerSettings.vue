@@ -183,7 +183,7 @@ export default {
 </script>
 
 <template>
-    <div v-if="configReady" class="pa-6" style="height:100%;">
+    <div v-if="configReady" class="px-6 pt-6" style="height:100%;">
         <div style="height:100%;" class="d-flex flex-column">
             
             <!-- ページタイトル -->

@@ -233,7 +233,7 @@ export default {
 
     <div
       style="width:100%; height:100%"
-      class="d-flex  flex-column pa-6"
+      class="d-flex flex-column px-6 pt-6"
     >
       <div class="text-left">
         <p class="text-left" style="font-size: min(4vh, 36px)">設定</p>
@@ -298,7 +298,7 @@ export default {
       </div>
 
       <!-- 設定ページメイン -->
-      <div class="scroll" style="width:100%; overflow-y:auto">
+      <div class="scroll pb-3" style="width:100%; overflow-y:auto">
         <div class="mx-auto">
           <!-- 設定の同期 -->
           <v-card

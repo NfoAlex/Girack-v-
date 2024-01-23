@@ -137,7 +137,7 @@ export default {
 <template>
   <div
     style="height: 100%;"
-    class="d-flex flex-column pa-6"
+    class="d-flex flex-column px-6 pt-6"
   >
     <!-- ページタイトル -->
     <div

@@ -78,7 +78,7 @@ export default {
         style="
           width: 35%;
           max-width: 300px;
-          height: 75vh;
+          height: 80vh;
           overflow-y: auto;
           box-sizing: border-box;
           border-right: 0.1px #424242 solid;
@@ -173,7 +173,7 @@ export default {
       <!-- メインウィンドウ -->
       <div
         class="flex-grow-1"
-        style="overflow-y:auto; height:75vh;"
+        style="overflow-y:auto; height:80vh;"
       >
         <Profile v-if="displayMenuPage==='Profile'" />
         <SessionManage v-if="displayMenuPage==='SessionManage'" />
