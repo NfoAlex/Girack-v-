@@ -537,12 +537,13 @@ export default {
 
 /* ホバーされたメッセージ */
 .hovered {
-  background-color: #555 !important;
+  background-color: rgb(var(--v-theme-hovered));
 }
 
 /* ピン留めされたメッセージ */
 .pinned {
-  background-color: #445 !important;
+  /* background-color: #445 !important; */
+  background-color: rgb(var(--v-theme-secondary));
 }
 
 .pointed {

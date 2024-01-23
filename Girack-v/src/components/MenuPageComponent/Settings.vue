@@ -3,15 +3,23 @@
 import { getCONFIG } from "../../config.js";
 import { getSocket, setCookie } from "../../data/socket.js";
 import { dataUser } from "../../data/dataUserinfo";
+import { useTheme } from "vuetify";
 
 const socket = getSocket();
 
+
 export default {
   setup() {
-    //設定をインポート
+    //テーマ設定インポート
+    const theme = useTheme();
+    //テーマ切り替え
+    function toggleTheme() {
+      theme.global.name.value = theme.global.name.value==='thedark' ? 'thelight' : 'thedark';
+    }
+
     const { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC } = getCONFIG();
     const { myUserinfo } = dataUser();
-    return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
+    return { toggleTheme, CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
   },
 
   data() {
@@ -407,6 +415,8 @@ export default {
             class="mx-auto rounded-lg card"
           >
             <p class="text-h6 ma-2">表示</p>
+
+            <v-btn @click="toggleTheme">テーマ</v-btn>
 
             <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
             <v-card color="cardInner" class="cardInner pa-3 rounded-lg">

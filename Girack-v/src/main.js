@@ -22,12 +22,13 @@ const vuetify = createVuetify({
             thelight: {
                 dark: false,
                 colors: {
-                    background: "#ffffff",
+                    background: "#ddd",
                     surface: "#CFD8DC",
                     primary: "#607D8B", // #E53935
                     secondary: "#B0BEC5", // #FFCDD2
-                    "grey": "#263238",
-                    "cardInner": "#343434",
+                    "hovered": "#eee",
+                    "grey": "#444",
+                    "cardInner": "#eee",
                 }
             },
             thedark: {
@@ -41,6 +42,7 @@ const vuetify = createVuetify({
                     error: "#B71C1C",
                     warning: "#4caf50",
                     success: "#1B5E20",
+                    "hovered": "#555",
                     "grey": "#263238",
                     "cardInner": "#343434",
                 }
