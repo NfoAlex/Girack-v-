@@ -134,9 +134,7 @@ export default {
       <!--今アクティブなセッション -->
       <h3 class="ma-1">現在のセッション</h3>
       <v-expansion-panels v-if="sessionDataCurrentAvailable" style="width: 100%">
-        <v-expansion-panel
-          class="rounded-lg"
-        >
+        <v-expansion-panel>
           <v-expansion-panel-title color="grey">
             <span class="text-truncate flex-grow-1">
               <b>{{ sessionDataCurrent.sessionName }}</b> ( {{ myUserinfo.sessionid.slice(0,5) }}... )
@@ -226,7 +224,6 @@ export default {
         <v-expansion-panel
           v-for="(session,index) in Object.entries(sessionData)"
           :key="index"
-          class="rounded-lg"
         >
 
           <v-expansion-panel-title>
