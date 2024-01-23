@@ -104,8 +104,7 @@ export default {
   <!-- 一つ下のDIVのCSS適用するために囲んでいる -->
   <div>
     <div
-      class="mx-auto d-flex flex-column justify-space-evenly"
-      style="width: 90%"
+      class="mx-auto d-flex flex-column justify-space-evenly pa-6"
     >
       <!-- ユーザーページ用 -->
       <Userpage
@@ -124,11 +123,11 @@ export default {
 
       <div style="">
         <!-- ユーザー検索バー -->
-        <div class="mx-auto" style="width: 90%">
+        <div class="mx-auto">
           <v-text-field
             v-model="nameSearchText"
             density="compact"
-            variant="solo"
+            variant="solo-filled"
             placeholder="名前検索(Aa 区別有り)"
           >
           </v-text-field>
