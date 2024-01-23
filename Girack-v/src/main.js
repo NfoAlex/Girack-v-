@@ -22,13 +22,14 @@ const vuetify = createVuetify({
             thelight: {
                 dark: false,
                 colors: {
-                    background: "#ddd",
+                    background: "#eee",
                     surface: "#CFD8DC",
-                    primary: "#607D8B", // #E53935
-                    secondary: "#B0BEC5", // #FFCDD2
-                    "hovered": "#eee",
-                    "grey": "#444",
-                    "cardInner": "#eee",
+                    primary: "#607D8B",
+                    secondary: "#B0BEC5",
+                    accent: "#bbb",
+                    "hovered": "#ccc",
+                    "grey": "#eee",
+                    "cardInner": "#fff",
                 }
             },
             thedark: {
