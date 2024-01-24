@@ -214,7 +214,7 @@ export default {
       <!-- グローバルヘッダ -->
       <v-card
         style="height:75px;"
-        class="rounded-0 bottomShadow px-2 d-flex flex-column justify-space-evenly"
+        class="rounded-0 bottomShadow px-2 mb-3 d-flex flex-column justify-space-evenly"
       >
         
         <RouterLink to="/onlineuser" class="rounded-lg" v-ripple>
