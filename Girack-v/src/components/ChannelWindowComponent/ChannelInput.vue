@@ -649,10 +649,10 @@ export default {
     <!-- 返信部分 -->
     <div
       v-if="ReplyState.isReplying"
-      class="d-flex align-center"
-      style="margin: 0 10%; margin-top: 1%; width: 90%"
+      class="my-1 d-flex align-center mx-auto"
+      style="width:95%;"
     >
-      <v-icon class="ma-2"> mdi:mdi-reply </v-icon>
+      <v-icon class="mr-1"> mdi:mdi-reply </v-icon>
       <!-- 返信先 -->
       <p class="text-truncate">
         {{ contentDisplay.username }} :: {{ contentDisplay.content }}
