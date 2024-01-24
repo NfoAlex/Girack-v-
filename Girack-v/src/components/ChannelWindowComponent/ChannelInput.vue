@@ -816,7 +816,7 @@ export default {
             "
             icon=""
             size="small"
-            class="rounded-lg ml-1"
+            class="rounded ml-1"
             elevation="0"
             color="primary"
           >
