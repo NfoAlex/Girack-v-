@@ -236,7 +236,6 @@ export default {
         <v-btn
           @click="channelCreate"
           color="primary"
-          variant="tonal"
         >
           作成!
         </v-btn>
