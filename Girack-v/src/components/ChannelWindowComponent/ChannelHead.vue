@@ -118,7 +118,7 @@ export default {
 
   <!-- ヘッダの表示部分(メイン) -->
   <v-card
-    class="d-flex align-center justify-space-evenly rounded-0 px-1 pb-1 elevation-6"
+    class="d-flex align-center justify-space-evenly rounded-0 px-1 pb-1 bottomShadow"
     style="max-width: 100%; height: 100%"
   >
     <!-- スマホUIだった時要のサイドバーボタン -->
@@ -248,4 +248,10 @@ export default {
 
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.bottomShadow {
+  box-shadow: 0px 8px 5px 0px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2));
+}
+
+</style>

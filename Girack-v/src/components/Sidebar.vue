@@ -214,7 +214,7 @@ export default {
       <!-- グローバルヘッダ -->
       <v-card
         style="height:75px;"
-        class="rounded-0 elevation-6 px-2 d-flex flex-column justify-space-evenly"
+        class="rounded-0 bottomShadow px-2 d-flex flex-column justify-space-evenly"
       >
         
         <RouterLink to="/onlineuser" class="rounded-lg" v-ripple>
@@ -426,6 +426,10 @@ export default {
   height:100vh;
 
   background-color: rgb(var(--v-theme-cardInner));
+}
+
+.bottomShadow {
+  box-shadow: 0px 8px 5px 0px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2));
 }
 
 .scroll::-webkit-scrollbar {
