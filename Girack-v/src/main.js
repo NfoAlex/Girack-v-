@@ -30,6 +30,7 @@ const vuetify = createVuetify({
                     "hovered": "#ccc",
                     "grey": "#eee",
                     "cardInner": "#fff",
+                    "textNormal": "#000"
                 }
             },
             thedark: {
@@ -46,6 +47,7 @@ const vuetify = createVuetify({
                     "hovered": "#555",
                     "grey": "#263238",
                     "cardInner": "#343434",
+                    "textNormal": "#fff"
                 }
             },
         },

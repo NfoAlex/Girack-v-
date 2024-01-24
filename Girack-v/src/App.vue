@@ -223,11 +223,11 @@ html {
 a {
   text-decoration: none;
   transition: 0.4s;
-  color: #ede7f6;
+  color: rgb(var(--v-theme-textNormal));
 }
 
 a:visited {
   text-decoration: none;
-  color: #ede7f6;
+  color: rgb(var(--v-theme-textNormal));
 }
 </style>
