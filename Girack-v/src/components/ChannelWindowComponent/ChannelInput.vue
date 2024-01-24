@@ -788,11 +788,10 @@ export default {
           <!-- ファイルアップロードボタン -->
           <v-btn
             @click="fileInputRef"
-            color="white"
             variant="text"
             size="x-small"
             icon="mdi:mdi-plus"
-            class="rounded-lg mx-1"
+            class="rounded-lg mr-2"
           >
             <v-icon> mdi:mdi-plus </v-icon>
             <v-tooltip activator="parent" location="top">
