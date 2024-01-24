@@ -200,7 +200,6 @@ export default {
     <v-card
       v-if="emojiMode"
       class="pa-2 rounded-lg"
-      color="#222"
       style="width:fit-content; margin-top:-16px; max-width:500px"
     >
       <v-btn
@@ -245,7 +244,6 @@ export default {
     <v-card
       v-else
       class="pa-2 rounded-lg"
-      color="#222"
       style="width:fit-content; margin-top:-16px; max-width:500px"
     >
       <!-- ここからホバーメニュー -->
