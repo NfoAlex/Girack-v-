@@ -652,22 +652,22 @@ export default {
       class="my-1 d-flex align-center mx-auto"
       style="width:95%;"
     >
-      <v-icon class="mr-1"> mdi:mdi-reply </v-icon>
-      <!-- 返信先 -->
-      <p class="text-truncate">
-        {{ contentDisplay.username }} :: {{ contentDisplay.content }}
-      </p>
+      <v-icon class=""> mdi:mdi-reply </v-icon>
       <!-- 返信キャンセルボタン -->
       <v-btn
-        style="margin-left: 8px"
-        class="rounded-lg"
+        class="rounded mx-2 elevation-0"
         icon=""
-        color="grey"
+        color="secondary"
         size="x-small"
         @click="resetReply"
       >
         <v-icon> mdi:mdi-close </v-icon>
       </v-btn>
+      <!-- 返信先 -->
+      <p class="text-truncate">
+        {{ contentDisplay.username }} :: {{ contentDisplay.content }}
+      </p>
+      
     </div>
 
     <!-- ファイルアップロードデータの表示 -->
