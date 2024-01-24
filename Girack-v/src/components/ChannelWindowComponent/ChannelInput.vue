@@ -608,30 +608,30 @@ export default {
   <div v-if="!channelInfo.previewmode">
     <!-- 返信する前にチャンネル移動しようとしたときの警告 -->
     <v-dialog v-model="dialogChannelMove" width="40vh">
-      <v-card class="rounded-lg pa-5">
+      <v-card class="pa-5">
         <v-card-title> 確認 </v-card-title>
-        <p class="ma-2">まだ返信が終えていません。チャンネル移動していいの？</p>
-        <div style="margin-top: 10%">
-          <v-btn
-            @click="
-              resetReply();
-              dialogChannelMove = false;
-            "
-            class="rounded-lg ma-1"
-            color="secondary"
-            block
-          >
-            いいよ
-          </v-btn>
-          <v-btn
-            @click="goBackToPreviousChannel()"
-            class="rounded-lg ma-1"
-            variant="text"
-            block
-          >
-            だめ
-          </v-btn>
-        </div>
+        <v-card-text>
+          <p>まだ返信を終えていません。チャンネル移動しますか？</p>
+        </v-card-text>
+        <v-card-action>
+        <v-btn
+          @click="
+            resetReply();
+            dialogChannelMove = false;
+          "
+          class="rounded ma-1"
+          color="primary"
+        >
+          いいよ
+        </v-btn>
+        <v-btn
+          @click="goBackToPreviousChannel()"
+          class="rounded ma-1"
+          variant="text"
+        >
+          だめ
+        </v-btn>
+        </v-card-action>
       </v-card>
     </v-dialog>
 
