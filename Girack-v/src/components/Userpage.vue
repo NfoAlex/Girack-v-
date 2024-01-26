@@ -339,8 +339,6 @@ export default {
             </v-chip>
         </div>
 
-        <v-divider class="my-2"></v-divider>
-
         <!-- タブ -->
         <v-tabs
           fixed-tabs
