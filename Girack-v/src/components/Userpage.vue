@@ -337,7 +337,9 @@ export default {
             >
               あなた
             </v-chip>
-          </div>
+        </div>
+
+        <v-divider class="my-2"></v-divider>
 
         <!-- タブ -->
         <v-tabs
