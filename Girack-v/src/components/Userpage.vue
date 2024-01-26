@@ -275,7 +275,7 @@ export default {
     >
       <div>
         <!-- アバターユーザー名 -->
-        <div class="my-5 d-flex justify-start align-center">
+        <div class="mt-5 d-flex justify-start align-center">
         
           <!-- アバター -->
           <v-avatar
