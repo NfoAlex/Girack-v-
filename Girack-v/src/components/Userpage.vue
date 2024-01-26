@@ -8,7 +8,7 @@ import { dataUser } from "../data/dataUserinfo";
 const socketUserpage = getSocket();
 
 export default {
-  props: ["userid"],
+  props: ["userid", "openedFromMemberpage"],
 
   setup() {
     const { mobile } = useDisplay();
@@ -135,19 +135,6 @@ export default {
 
         case "Member":
           return "white";
-      }
-    },
-
-    //メンバーページから開かれたものか確認
-    checkOpenedFromMemberPage() {
-      //メンバーページから開かれたものなら
-      if (
-        this.$route.path === "/menu/members" &&
-        this.myUserinfo.userid !== this.userid
-      ) {
-        return true;
-      } else {
-        return false;
       }
     },
 
@@ -367,7 +354,7 @@ export default {
             管理
           </v-tab>
           <v-tab
-            v-if="myUserinfo.role === 'Admin' && checkOpenedFromMemberPage()"
+            v-if="myUserinfo.role === 'Admin' && openedFromMemberpage"
             value="delete"
           >
             <p style="color: pink">削除</p>

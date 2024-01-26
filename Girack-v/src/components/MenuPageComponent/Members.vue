@@ -111,6 +111,7 @@ export default {
         v-if="userDialogShow"
         v-model="userDialogShow"
         :userid="userDialogUserid"
+        :openedFromMemberpage="true"
       />
 
       <div style="height: 8vh">
