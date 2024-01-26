@@ -264,7 +264,9 @@ export default {
 
       <v-card-text>
         <p>チャンネル名 :</p>
-        {{ channelRemovingName }}
+        <code>
+          {{ channelRemovingName }}
+        </code>
       </v-card-text>
 
       <v-divider class="my-2"></v-divider>
