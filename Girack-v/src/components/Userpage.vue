@@ -320,7 +320,6 @@ export default {
 
             <v-chip
               v-if="targetinfo.loggedin && userid !== myUserinfo.userid"
-              class="ma-1"
               variant="flat"
               color="success"
             >
