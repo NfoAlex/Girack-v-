@@ -435,8 +435,8 @@ export default {
             <!-- チャンネル概要 -->
             <v-card
               @dblclick="switchEditing('desc', true)"
-              class="channelScrollbar pa-3 elevation-2"
-              style="min-height: 75px; overflow-y: auto; height:100%"
+              class="channelScrollbar pa-6 elevation-2"
+              style="min-height: 75px; overflow-y: auto;"
               height="max-content"
               color="secondary"
             >

@@ -23,9 +23,9 @@ const vuetify = createVuetify({
                 dark: false,
                 colors: {
                     background: "#eee",
-                    surface: "#CFD8DC",
                     primary: "#607D8B",
                     secondary: "#B0BEC5",
+                    surface: "#CFD8DC",
                     accent: "#bbb",
                     "hovered": "#ccc",
                     "grey": "#eee",
