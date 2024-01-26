@@ -362,7 +362,7 @@ export default {
       </span>
 
       <!-- チャンネルメニュー本体 -->
-      <v-card :style="isMobile?'height:85vh':'height:85vh'" class="d-flex flex-column rounded-lg pa-3">
+      <v-card :style="isMobile?'height:85vh':'height:85vh'" class="d-flex flex-column rounded-lg px-4 py-3">
         <!-- タブバー含めて上部分 -->
         <div>
           <!-- チャンネル名とバッジ -->
@@ -469,11 +469,11 @@ export default {
         </div>
 
         <!-- タブの中身を知りたくて─────────── -->
-        <v-window v-model="tab" style="overflow-y:auto; height:100%;" class="pt-1">
+        <v-window v-model="tab" style="overflow-y:auto; height:100%;" class="pt-0">
 
           <!-- チャンネル参加者リスト -->
           <v-window-item value="userJoined" class="channelScrollbar">
-            <v-card color="cardInner" class="py-3 px-2">
+            <div class="py-3">
 
               <!-- ユーザー招待ボタン -->
               <span>
@@ -538,12 +538,12 @@ export default {
                 </span>
               </v-card>
 
-            </v-card>
+            </div>
           </v-window-item>
 
           <!-- チャンネル管理タブ -->
           <v-window-item value="manage" style="overflow-y: auto">
-            <v-card color="cardInner" class="py-3 px-2">
+            <div class="py-3">
 
               <!-- プラベチャンネルのスイッチ -->
               <v-checkbox
@@ -570,7 +570,7 @@ export default {
                 hint="ロールを満たしていなくてもチャンネル閲覧は可能です。"
               ></v-select>
 
-            </v-card>
+            </div>
           </v-window-item>
         </v-window>
 
