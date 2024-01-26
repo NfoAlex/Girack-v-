@@ -421,7 +421,9 @@ export default {
             style="width: fit-content;"
           >
             <v-tab value="info">概要</v-tab>
-            <v-tab value="userJoined">参加者</v-tab>
+            <v-tab value="userJoined">
+              <v-badge floating :content="channelJoinedUser.length">参加者</v-badge>
+            </v-tab>
             <v-tab v-if="!channelInfo.previewmode" value="manage">管理</v-tab>
           </v-tabs>
         </div>
