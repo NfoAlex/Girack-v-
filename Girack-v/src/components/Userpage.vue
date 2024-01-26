@@ -361,117 +361,123 @@ export default {
       <v-window v-model="tab" style="overflow-y:auto; height:100%;">
         <!-- 参加しているチャンネル -->
         <v-window-item value="channel">
-          <v-card
-            @click="gotoChannel(item.channelid, index)"
-            v-for="(item, index) in targetUserJoinedChannelList"
-            variant="text"
-            class="rounded d-flex align-center my-0 pa-2"
-            :key="index"
-          >
-            <!-- プライベートチャンネル用鍵マーク -->
-            <v-icon v-if="item.scope === 'private'" size="small">
-              mdi:mdi-lock-outline
-            </v-icon>
+          <v-card color="cardInner" class="my-3">
+            <v-card
+              @click="gotoChannel(item.channelid, index)"
+              v-for="(item, index) in targetUserJoinedChannelList"
+              variant="text"
+              class="rounded d-flex align-center my-0 pa-2"
+              :key="index"
+            >
+              <!-- プライベートチャンネル用鍵マーク -->
+              <v-icon v-if="item.scope === 'private'" size="small">
+                mdi:mdi-lock-outline
+              </v-icon>
 
-            <!-- 普通のチャンネル -->
-            <v-icon v-else  size="small"> mdi:mdi-pound </v-icon>
+              <!-- 普通のチャンネル -->
+              <v-icon v-else  size="small"> mdi:mdi-pound </v-icon>
 
-            <span class="text-truncate ml-1">
-              {{ item.channelname }}
-            </span>
+              <span class="text-truncate ml-1">
+                {{ item.channelname }}
+              </span>
+            </v-card>
           </v-card>
         </v-window-item>
 
         <!-- ユーザー管理タブ -->
-        <v-window-item value="mod" class="ma-5">
+        <v-window-item value="mod">
           <div class="d-flex flex-column">
-            <!-- ロール選択 -->
-            <v-select
-              v-model="targetUserRole"
-              style="width: 100%; max-width: 200px"
-              density="compact"
-              label="ロール"
-              :items="roleList"
-            ></v-select>
+            <v-card color="cardInner" class="my-3 py-3 px-2">
+              <!-- ロール選択 -->
+              <v-select
+                v-model="targetUserRole"
+                style="width: 100%; max-width: 200px"
+                density="compact"
+                label="ロール"
+                :items="roleList"
+              ></v-select>
 
-            <!-- ユーザー名変更させるボタン -->
-            <v-btn
-              @click="changeTargetUsername"
-              class="rounded"
-              color="grey"
-              block
-            >
-              ユーザー名を初期化
-              <v-tooltip
-                activator="parent"
-                location="top start"
+              <!-- ユーザー名変更させるボタン -->
+              <v-btn
+                @click="changeTargetUsername"
+                class="rounded"
+                color="grey"
+                block
               >
-                User_[乱数]にします
-              </v-tooltip>
-            </v-btn>
+                ユーザー名を初期化
+                <v-tooltip
+                  activator="parent"
+                  location="top start"
+                >
+                  User_[乱数]にします
+                </v-tooltip>
+              </v-btn>
 
-            <v-divider class="my-3"></v-divider>
+              <v-divider class="my-3"></v-divider>
 
-            <!-- BANボタン(と解除ボタン) -->
-            <v-btn
-              @dblclick="banUser"
-              v-if="!targetinfo.banned"
-              color="error"
-              block
-            >
-              <v-icon>mdi:mdi-account-cancel</v-icon> BAN
-              <v-tooltip
-                activator="parent"
-                location="top start"
+              <!-- BANボタン(と解除ボタン) -->
+              <v-btn
+                @dblclick="banUser"
+                v-if="!targetinfo.banned"
+                color="error"
+                block
               >
-                ダブルクリックでBAN
-              </v-tooltip>
-            </v-btn>
-            <v-btn @dblclick="banUser" v-if="targetinfo.banned" color="info">
-              <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
-              <v-tooltip
-                activator="parent"
-                location="top center"
-              >
-                ダブルクリックで解除
-              </v-tooltip>
-            </v-btn>
+                <v-icon>mdi:mdi-account-cancel</v-icon> BAN
+                <v-tooltip
+                  activator="parent"
+                  location="top start"
+                >
+                  ダブルクリックでBAN
+                </v-tooltip>
+              </v-btn>
+              <v-btn @dblclick="banUser" v-if="targetinfo.banned" color="info">
+                <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                >
+                  ダブルクリックで解除
+                </v-tooltip>
+              </v-btn>
+            </v-card>
           </div>
         </v-window-item>
 
         <!-- ユーザー削除タブ(メンバーページからだけ) -->
         <v-window-item value="delete" class="ma-5">
-          <v-btn
-            v-if="!deleteConfirmCheckDisplay"
-            @dblclick="deleteConfirmCheckDisplay = true"
-            class="rounded-lg"
-            color="error"
-            size="large"
-            variant="tonal"
-          >
-            このユーザーを削除
-            <v-tooltip
-              activator="parent"
-              location="top center"
+          <v-card color="cardInner" class="my-3">
+            <v-btn
+              v-if="!deleteConfirmCheckDisplay"
+              @dblclick="deleteConfirmCheckDisplay = true"
+              class="rounded-lg"
+              color="error"
+              size="large"
+              variant="tonal"
             >
-              ダブルクリックで確認へ
-            </v-tooltip>
-          </v-btn>
-          <v-btn
-            v-if="deleteConfirmCheckDisplay"
-            @dblclick="deleteUser()"
-            color="error"
-            size="large"
-            elevation="16"
-          >
-            本当にいいの?
-            <v-tooltip
-              activator="parent"
-              location="top center"
+              このユーザーを削除
+              <v-tooltip
+                activator="parent"
+                location="top center"
+              >
+                ダブルクリックで確認へ
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="deleteConfirmCheckDisplay"
+              @dblclick="deleteUser()"
+              color="error"
+              size="large"
+              elevation="16"
             >
-              ダブルクリックで削除
-            </v-tooltip>
-          </v-btn>
+              本当にいいの?
+              <v-tooltip
+                activator="parent"
+                location="top center"
+              >
+                ダブルクリックで削除
+              </v-tooltip>
+            </v-btn>
+          </v-card>
         </v-window-item>
       </v-window>
     </v-card>
