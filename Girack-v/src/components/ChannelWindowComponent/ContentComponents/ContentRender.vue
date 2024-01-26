@@ -323,13 +323,11 @@ export default {
 <template>
   
   <!-- ユーザーページ用 -->
-  <div>
-    <Userpage
-      v-if="userDialogShow"
-      v-model="userDialogShow"
-      :userid="userDialogUserid"
-    />
-  </div>
+  <Userpage
+    v-if="userDialogShow"
+    v-model="userDialogShow"
+    :userid="userDialogUserid"
+  />
 
   <!-- メッセージ本体 -->
   <v-menu
