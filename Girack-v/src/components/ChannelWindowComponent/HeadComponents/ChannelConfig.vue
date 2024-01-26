@@ -368,12 +368,14 @@ export default {
           <!-- チャンネル名とバッジ -->
           <div class="py-7">
             <div :class="isMobile?'text-h6':'text-h4'">
-              <!-- プライベートチャンネル用アイコン -->
-              <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
+              
 
               <!-- チャンネル名 -->
               <span v-if="!channelnameEditing" class="d-flex align-center">
+                <!-- (#)のアイコン -->
                 <v-icon size="x-small">mdi:mdi-pound</v-icon>
+                <!-- (錠前)プライベートチャンネル用アイコン -->
+                <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
               
                 <p
                   @dblclick="switchEditing('channelname', true)"
