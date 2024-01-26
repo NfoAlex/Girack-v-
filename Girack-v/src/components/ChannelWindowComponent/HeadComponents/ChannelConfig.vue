@@ -422,6 +422,7 @@ export default {
           >
             <v-tab value="info">概要</v-tab>
             <v-tab value="userJoined">
+              <!-- バッジで人数を表示 -->
               <v-badge floating :content="channelJoinedUser.length">参加者</v-badge>
             </v-tab>
             <v-tab v-if="!channelInfo.previewmode" value="manage">管理</v-tab>
