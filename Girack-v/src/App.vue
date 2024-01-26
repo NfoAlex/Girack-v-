@@ -3,7 +3,6 @@ import { getSocket, CLIENT_FULL_LOADED, CLIENT_LOAD_FLAG } from "./data/socket.j
 import { dataUser } from "./data/dataUserinfo.js";
 import Auth from "./components/Auth.vue";
 import Sidebar from "./components/Sidebar.vue";
-import WindowHeader from "./components/WindowHeader.vue";
 import { useTheme, useDisplay } from "vuetify";
 const socket = getSocket();
 
@@ -22,7 +21,7 @@ export default {
     };
   },
 
-  components: { Sidebar, Auth, WindowHeader },
+  components: { Sidebar, Auth },
 
   data() {
     return {
