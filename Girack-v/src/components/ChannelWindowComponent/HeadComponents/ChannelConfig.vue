@@ -368,7 +368,6 @@ export default {
           <!-- チャンネル名とバッジ -->
           <div class="py-7">
             <div :class="isMobile?'text-h6':'text-h4'">
-              
 
               <!-- チャンネル名 -->
               <span v-if="!channelnameEditing" class="d-flex align-center">
