@@ -19,7 +19,7 @@ export default {
 
     const { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC } = getCONFIG();
     const { myUserinfo } = dataUser();
-    return { toggleTheme, CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
+    return { theme, toggleTheme, CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
   },
 
   data() {
@@ -31,6 +31,8 @@ export default {
       guessNum: 0,
       input: "",
       record: 0,
+
+      themeDark: this.theme.global.name.value==="thedark"?true:false,
 
       //表示するページ
       configPage: "sync",
@@ -68,6 +70,14 @@ export default {
       },
       deep: true,
     },
+
+    //テーマの切り替え検知
+    themeDark: {
+      handler() {
+        //テーマの切り替えを行う
+        this.toggleTheme();
+      }
+    }
   },
 
   methods: {
@@ -276,6 +286,15 @@ export default {
           </v-btn>
 
           <v-btn
+            @click="configPage = 'theme'"
+            size="large"
+            :color="configPage === 'theme' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            テーマ
+          </v-btn>
+
+          <v-btn
             @click="configPage = 'interface'"
             size="large"
             :color="configPage === 'interface' ? 'secondary' : 'grey'"
@@ -383,14 +402,163 @@ export default {
 
           </v-card>
 
+          <!-- テーマ -->
+          <v-card
+            v-if="configPage === 'theme'"
+            class="mx-auto rounded-lg card"
+          >
+            <p class="text-h6 ma-2">テーマ</p>
+            <!-- テーマ切り替えスイッチ -->
+            <span style="width:fit-content;" class="d-flex justify-center align-center mx-auto">
+              <v-switch v-model="themeDark" style="">
+                <template v-slot:prepend>
+                  <v-icon>mdi:mdi-weather-sunny</v-icon>
+                </template>
+                <template v-slot:append>
+                  <v-icon>mdi:mdi-weather-night</v-icon>
+                </template>
+              </v-switch>
+            </span>
+
+            <!-- テーマのプレビュー部分 -->
+            <div class="d-flex justify-center">
+              <v-theme-provider theme="thelight">
+                <v-card width="50%" class="pa-5 text-left rounded-e-0">
+                  <div class="mb-3">ライトテーマ</div>
+
+                  <v-card color="cardInner" class="pa-5">
+                    <p>内部カード表示</p>
+                    <v-chip
+                      color="purple"
+                      size="x-small"
+                      elevation="6"
+                    >
+                      Admin
+                    </v-chip>
+                    <v-chip
+                      color="blue"
+                      size="x-small"
+                      elevation="6"
+                    >
+                      Moderator
+                    </v-chip>
+                    <span class="d-flex mt-3">
+                      <v-card
+                        @click="null"
+                        :ripple="false"
+                        density="compact"
+                        variant="tonal"
+                        class="px-2 py-1 mr-1 mt-1 mb-2"
+                        style="
+                          width: fit-content;
+                          font-size: 14px;
+                          user-select: none;
+                          -webkit-user-select: none;
+                        "
+                      >
+                        🤔 1
+                      </v-card>
+                      <v-card
+                        @click="null"
+                        :ripple="false"
+                        density="compact"
+                        variant="tonal"
+                        class="px-2 py-1 mr-1 mt-1 mb-2"
+                        style="
+                          width: fit-content;
+                          font-size: 14px;
+                          user-select: none;
+                          -webkit-user-select: none;
+                        "
+                      >
+                        😏 6
+                      </v-card>
+                    </span>
+                  </v-card>
+
+                  <v-btn color="secondary" class="my-1">
+                    プライマリボタン
+                  </v-btn>
+                  <v-btn color="grey" class="my-1">
+                    セカンダリボタン
+                  </v-btn>
+                  <v-btn variant="text" class="my-1">
+                    取り消し系ボタン
+                  </v-btn>
+                </v-card>
+              </v-theme-provider>
+              <v-theme-provider theme="thedark">
+                <v-card width="50%" class="pa-5 text-right rounded-s-0">
+                  <div class="mb-3">ダークテーマ</div>
+                  <v-card color="cardInner" class="pa-5 my-1">
+                    <p>内部カード表示</p>
+                    <v-chip
+                      color="purple"
+                      size="x-small"
+                      elevation="6"
+                    >
+                      Admin
+                    </v-chip>
+                    <v-chip
+                      color="blue"
+                      size="x-small"
+                      elevation="6"
+                    >
+                      Moderator
+                    </v-chip>
+                    <span class="d-flex justify-end mt-3">
+                      <v-card
+                        @click="null"
+                        :ripple="false"
+                        density="compact"
+                        variant="tonal"
+                        class="px-2 py-1 mr-1 mt-1 mb-2"
+                        style="
+                          width: fit-content;
+                          font-size: 14px;
+                          user-select: none;
+                          -webkit-user-select: none;
+                        "
+                      >
+                        🤔 1
+                      </v-card>
+                      <v-card
+                        @click="null"
+                        :ripple="false"
+                        density="compact"
+                        variant="tonal"
+                        class="px-2 py-1 mr-1 mt-1 mb-2"
+                        style="
+                          width: fit-content;
+                          font-size: 14px;
+                          user-select: none;
+                          -webkit-user-select: none;
+                        "
+                      >
+                        😏 6
+                      </v-card>
+                    </span>
+                  </v-card>
+                  <v-btn color="secondary" class="my-1">
+                    プライマリボタン
+                  </v-btn>
+                  <v-btn color="grey" class="my-1">
+                    セカンダリボタン
+                  </v-btn>
+                  <v-btn variant="text" class="my-1">
+                    取り消し系ボタン
+                  </v-btn>
+                </v-card>
+              </v-theme-provider>
+            </div>
+
+          </v-card>
+
           <!-- UI表示 -->
           <v-card
             v-if="configPage === 'interface'"
             class="mx-auto rounded-lg card"
           >
-            <p class="text-h6 ma-2">表示</p>
-
-            <v-btn @click="toggleTheme">テーマ</v-btn>
 
             <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
             <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
