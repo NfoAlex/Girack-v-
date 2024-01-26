@@ -418,7 +418,7 @@ export default {
   background-color: rgb(var(--v-theme-cardInner));
 
   box-sizing: border-box;
-  border-right: 0.1px #424242 solid;
+  border-right: 0.1px rgb(var(--v-theme-hovered)) solid;
 }
 
 .channelBarMobile {
