@@ -78,7 +78,7 @@ export default {
         style="
           width: 35%;
           max-width: 300px;
-          height: 80vh;
+          height: 85vh;
           overflow-y: auto;
           box-sizing: border-box;
           border-right: 0.1px #424242 solid;
