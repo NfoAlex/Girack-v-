@@ -244,7 +244,7 @@ export default {
     <v-card
       v-else
       class="pa-2 rounded-lg"
-      style="width:fit-content; margin-top:-16px; max-width:500px"
+      style="width:fit-content;"
     >
       <!-- ここからホバーメニュー -->
       <span style="position:relative; float:right" class="d-flex align-center">
