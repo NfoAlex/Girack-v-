@@ -343,7 +343,6 @@ export default {
         <v-tabs
           fixed-tabs
           style="width:fit-content"
-          class="mt-2"
           v-model="tab"
         >
           <v-tab value="channel"> チャンネル </v-tab>
@@ -390,10 +389,9 @@ export default {
 
         <!-- ユーザー管理タブ -->
         <v-window-item value="mod" class="ma-5">
-          <div class="d-flex flex-column align-center">
+          <div class="d-flex flex-column">
             <!-- ロール選択 -->
             <v-select
-              class="mx-auto"
               v-model="targetUserRole"
               style="width: 100%; max-width: 200px"
               density="compact"
@@ -404,32 +402,32 @@ export default {
             <!-- ユーザー名変更させるボタン -->
             <v-btn
               @click="changeTargetUsername"
-              width="50%"
-              class="ma-3 rounded-lg"
+              class="rounded"
               color="grey"
+              block
             >
               ユーザー名を初期化
               <v-tooltip
                 activator="parent"
-                location="top center"
+                location="top start"
               >
                 User_[乱数]にします
               </v-tooltip>
             </v-btn>
 
-            <v-divider width="50%" class="ma-3"></v-divider>
+            <v-divider class="my-3"></v-divider>
 
             <!-- BANボタン(と解除ボタン) -->
             <v-btn
               @dblclick="banUser"
-              v-if="!targetinfo.banned" 
-              width="50%"
+              v-if="!targetinfo.banned"
               color="error"
+              block
             >
               <v-icon>mdi:mdi-account-cancel</v-icon> BAN
               <v-tooltip
                 activator="parent"
-                location="top center"
+                location="top start"
               >
                 ダブルクリックでBAN
               </v-tooltip>
@@ -467,10 +465,9 @@ export default {
           <v-btn
             v-if="deleteConfirmCheckDisplay"
             @dblclick="deleteUser()"
-            class="rounded-lg"
             color="error"
             size="large"
-            elevation="12"
+            elevation="16"
           >
             本当にいいの?
             <v-tooltip
