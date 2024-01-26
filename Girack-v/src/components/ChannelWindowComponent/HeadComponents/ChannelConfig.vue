@@ -473,7 +473,7 @@ export default {
 
           <!-- チャンネル参加者リスト -->
           <v-window-item value="userJoined" class="channelScrollbar">
-            <v-card color="cardInner" class="my-3 py-3 px-2">
+            <v-card color="cardInner" class="py-3 px-2">
 
               <!-- ユーザー招待ボタン -->
               <span>
@@ -543,7 +543,7 @@ export default {
 
           <!-- チャンネル管理タブ -->
           <v-window-item value="manage" style="overflow-y: auto">
-            <v-card color="cardInner" class="my-3 py-3 px-2">
+            <v-card color="cardInner" class="py-3 px-2">
 
               <!-- プラベチャンネルのスイッチ -->
               <v-checkbox
