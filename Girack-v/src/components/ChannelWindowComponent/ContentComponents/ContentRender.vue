@@ -518,16 +518,16 @@ export default {
 
     <!-- ここからホバーメニュー -->
     <ContentHoverMenu
-        v-if="!msgEditing"
-        @mouseover="mouseOverMsg(m.messageid, 'on')"
-        @mouseleave="mouseOverMsg(m.messageid, 'off')"
-        @update-editing-message="msgEditing=true"
-        @cancelEditing="msgEditing=false"
-        style="z-index: 30"
-        :m="m"
-        :userrole="getUserStats(m.userid, 'role')"
-        :channelid="getPath"
-      />
+      v-if="!msgEditing"
+      @mouseover="mouseOverMsg(m.messageid, 'on')"
+      @mouseleave="mouseOverMsg(m.messageid, 'off')"
+      @update-editing-message="msgEditing=true"
+      @cancelEditing="msgEditing=false"
+      style="z-index: 30"
+      :m="m"
+      :userrole="getUserStats(m.userid, 'role')"
+      :channelid="getPath"
+    />
     
   </v-menu>
   

@@ -199,8 +199,8 @@ export default {
     <!-- 絵文字パネル -->
     <v-card
       v-if="emojiMode"
-      class="pa-2 rounded-lg"
-      style="width:fit-content; margin-top:-16px; max-width:500px"
+      class="pa-2"
+      style="width:fit-content;"
     >
       <v-btn
         @click="()=>{emojiMode=false}"
