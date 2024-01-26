@@ -567,9 +567,9 @@ export default {
                 label="話せるロール"
                 :items="roleList"
                 persistent-hint
-                hint="ロールが足りなくてもチャンネル閲覧は可能です。"
+                hint="ロールを満たしていなくてもチャンネル閲覧は可能です。"
               ></v-select>
-              
+
             </v-card>
           </v-window-item>
         </v-window>
