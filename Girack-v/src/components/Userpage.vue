@@ -280,56 +280,42 @@ export default {
 </script>
 
 <template>
-  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" class="mx-auto">
+  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'">
     <v-card
-      elevation="6"
+      elevation="12"
       style="width:100%;"
-      class="mx-auto d-flex flex-column align-self-start pa-1 text-center rounded-lg"
+      class="d-flex flex-column align-self-start pa-4"
     >
       <div>
-        <!-- ユーザー名とアイコンとロール -->
-        <v-card
-          color="secondary"
-          elevation="12"
-          width="70%"
-          style="overflow-y: auto"
-          class="mx-auto boxProfile rounded-lg"
-        >
+        <div class="d-flex justify-start align-center">
+        
           <!-- アバター -->
           <v-avatar
-            style="margin-top: 16px"
-            size="20%"
+            size="10%"
             :image="imgsrc + userid"
           ></v-avatar>
 
-          <!-- ユーザー情報 -->
-          <div class="ma-3">
-            <v-chip v-if="targetinfo.banned" color="red" size="small"
-              >BANされています</v-chip
-            >
+          <!-- ユーザー名とアイコンとロール -->
+          <div
+            style="overflow-y:auto"
+            class="d-flex flex-column mx-3 justify-start rounded-lg"
+          >
+
+            <!-- ユーザー情報 -->
+
             <p class="text-overline"># {{ userid }}</p>
 
-            <p v-if="targetinfo.loggedin && userid !== myUserinfo.userid">
-              <v-chip
-                class="ma-1"
-                variant="flat"
-                color="success"
-                size="x-small"
-              >
-                オンライン
-              </v-chip>
+            <!-- ユーザー名 -->
+            <p class="text-h5 text-truncate">
+              {{ targetinfo.username }}
             </p>
 
-            <p>
-              <v-chip
-                v-if="userid === myUserinfo.userid"
-                color="green"
-                size="small"
-              >
-                あなた
-              </v-chip>
-            </p>
+          </div>
 
+        </div>
+
+        <!-- ロール、ユーザ状態 -->
+        <div class="d-flex align-center">
             <v-chip
               :color="getRoleColor(targetinfo.role)"
               class="ma-1"
@@ -337,17 +323,36 @@ export default {
             >
               {{ targetinfo.role }}
             </v-chip>
+              
+            <v-chip
+              v-if="targetinfo.banned"
+              color="red"
+              size="small"
+            >
+              BANされています
+            </v-chip>
 
-            <p class="text-h5 text-truncate">
-              {{ targetinfo.username }}
-            </p>
+            <v-chip
+              v-if="targetinfo.loggedin && userid !== myUserinfo.userid"
+              class="ma-1"
+              variant="flat"
+              color="success"
+              size="x-small"
+            >
+              オンライン
+            </v-chip>
+
+            <v-chip
+              v-if="userid === myUserinfo.userid"
+              color="green"
+              size="small"
+            >
+              あなた
+            </v-chip>
           </div>
-        </v-card>
 
         <!-- タブ -->
         <v-tabs
-          bg-color="grey"
-          class="mx-auto rounded-lg"
           fixed-tabs
           style="width: fit-content"
           v-model="tab"
@@ -504,11 +509,6 @@ export default {
 }
 .userPageMobile {
   width: 100vw;
-}
-
-.boxProfile {
-  margin-top: 16px;
-  margin-bottom: 24px;
 }
 
 </style>
