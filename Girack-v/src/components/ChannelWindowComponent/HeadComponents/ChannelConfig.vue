@@ -534,7 +534,7 @@ export default {
           </v-window-item>
 
           <!-- チャンネル管理タブ -->
-          <v-window-item value="manage" class="mx-auto" style="overflow-y: auto">
+          <v-window-item value="manage" style="overflow-y: auto">
             <!-- プラベチャンネルのスイッチ -->
             <v-checkbox
               v-model="scopeIsPrivate"
@@ -553,8 +553,7 @@ export default {
               class="mx-auto"
               v-model="channelCanTalk"
               :disabled="myUserinfo.role==='Member'"
-              style="width: 100%; max-width: 200px"
-              density="compact"
+              style="width: 100%;"
               label="話せるロール"
               :items="roleList"
             ></v-select>
