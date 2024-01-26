@@ -435,10 +435,10 @@ export default {
             <!-- チャンネル概要 -->
             <v-card
               @dblclick="switchEditing('desc', true)"
-              class="channelScrollbar pa-6 elevation-2"
+              class="channelScrollbar my-3 pa-6 elevation-2"
               style="min-height: 75px; overflow-y: auto;"
               height="max-content"
-              color="secondary"
+              color="cardInner"
             >
               <!-- 概要欄 -->
               <div v-if="!descriptionEditing">
@@ -476,96 +476,104 @@ export default {
 
           <!-- チャンネル参加者リスト -->
           <v-window-item value="userJoined" class="channelScrollbar">
-            <!-- ユーザー招待ボタン -->
-            <span>
-              <v-btn
-                v-if="!channelInfo.previewmode"
-                @click="
-                  () => {
-                    userSearchShow = !userSearchShow;
-                  }
-                "
-                variant="text"
-                block
-                size="large"
-              >
-                <v-icon>mdi:mdi-account-plus</v-icon>
-              </v-btn>
-            </span>
+            <v-card color="cardInner" class="my-3 py-3 px-2">
 
-            <!-- ここからチャンネル参加者 -->
-            <v-card
-              @click="
-                () => {
-                  userDialogUserid = u.userid;
-                  userDialogShow = true;
-                }
-              "
-              class="mt-1 py-1 px-3 rounded-lg d-flex justify-center align-center"
-              style="width: 100%;"
-              variant="text"
-              v-for="u in channelJoinedUser"
-              :key="u"
-            >
-              <v-avatar
-                size="32"
-                :image="imgsrc + u.userid"
-              ></v-avatar>
-              <!-- オンライン状態 -->
-              <v-icon
-                :class="!u.loggedin ? 'hideOnlineIcon' : null"
-                :color="u.loggedin ? 'green' : null"
-              >
-                mdi:mdi-circle-medium
-              </v-icon>
-              <span
-                class="text-truncate me-auto"
-              >
-                {{ u.username }}
-              </span>
-              <span
-                v-if="myUserinfo.role !== 'Member'"
-                style="float: right"
-                class="text-center"
-              >
+              <!-- ユーザー招待ボタン -->
+              <span>
                 <v-btn
-                  @click.stop="kickUser(u.userid)"
-                  size="small"
-                  class="rounded-lg"
+                  v-if="!channelInfo.previewmode"
+                  @click="
+                    () => {
+                      userSearchShow = !userSearchShow;
+                    }
+                  "
                   variant="text"
-                  icon="mdi:mdi-karate"
+                  block
+                  size="large"
                 >
+                  <v-icon>mdi:mdi-account-plus</v-icon>
                 </v-btn>
               </span>
+
+              <!-- ここからチャンネル参加者 -->
+              <v-card
+                @click="
+                  () => {
+                    userDialogUserid = u.userid;
+                    userDialogShow = true;
+                  }
+                "
+                class="mt-1 py-1 px-3 d-flex justify-center align-center"
+                style="width: 100%;"
+                variant="text"
+                v-for="u in channelJoinedUser"
+                :key="u"
+              >
+                <v-avatar
+                  size="32"
+                  :image="imgsrc + u.userid"
+                ></v-avatar>
+                <!-- オンライン状態 -->
+                <v-icon
+                  :class="!u.loggedin ? 'hideOnlineIcon' : null"
+                  :color="u.loggedin ? 'green' : null"
+                >
+                  mdi:mdi-circle-medium
+                </v-icon>
+                <span
+                  class="text-truncate me-auto"
+                >
+                  {{ u.username }}
+                </span>
+                <span
+                  v-if="myUserinfo.role !== 'Member'"
+                  style="float: right"
+                  class="text-center"
+                >
+                  <v-btn
+                    @click.stop="kickUser(u.userid)"
+                    size="small"
+                    class="rounded-lg"
+                    variant="text"
+                    icon="mdi:mdi-karate"
+                  >
+                  </v-btn>
+                </span>
+              </v-card>
+
             </v-card>
           </v-window-item>
 
           <!-- チャンネル管理タブ -->
           <v-window-item value="manage" style="overflow-y: auto">
-            <!-- プラベチャンネルのスイッチ -->
-            <v-checkbox
-              v-model="scopeIsPrivate"
-              :disabled="myUserinfo.role==='Member'&&!Serverinfo.config.CHANNEL.CHANNEL_PRIVATIZE_AVAILABLEFORMEMBER"
-              @click="
-                scopeIsPrivate = !scopeIsPrivate;
-                updateChannel();
-              "
-              color="grey"
-              label="プライベートチャンネル"
-            >
-            </v-checkbox>
+            <v-card color="cardInner" class="my-3 py-3 px-2">
 
-            <!-- ロール選択 -->
-            <v-select
-              class="mx-auto"
-              v-model="channelCanTalk"
-              :disabled="myUserinfo.role==='Member'"
-              style="width: 100%;"
-              label="話せるロール"
-              :items="roleList"
-              persistent-hint
-              hint="ロールが足りなくてもチャンネル閲覧は可能です。"
-            ></v-select>
+              <!-- プラベチャンネルのスイッチ -->
+              <v-checkbox
+                v-model="scopeIsPrivate"
+                :disabled="myUserinfo.role==='Member'&&!Serverinfo.config.CHANNEL.CHANNEL_PRIVATIZE_AVAILABLEFORMEMBER"
+                @click="
+                  scopeIsPrivate = !scopeIsPrivate;
+                  updateChannel();
+                "
+                color="grey"
+                label="プライベートチャンネル"
+              >
+              </v-checkbox>
+
+              <!-- ロール選択 -->
+              <v-select
+                class="mx-auto"
+                v-model="channelCanTalk"
+                :disabled="myUserinfo.role==='Member'"
+                style="width: 100%;"
+                label="話せるロール"
+                :items="roleList"
+                persistent-hint
+                hint="ロールが足りなくてもチャンネル閲覧は可能です。"
+              ></v-select>
+              
+            </v-card>
           </v-window-item>
         </v-window>
 
