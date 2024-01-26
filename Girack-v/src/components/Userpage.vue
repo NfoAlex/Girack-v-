@@ -345,7 +345,7 @@ export default {
           style="width:fit-content"
           v-model="tab"
         >
-          <v-tab value="channel"> チャンネル </v-tab>
+          <v-tab value="channel"> 参加チャンネル </v-tab>
           <v-tab
             v-if="myUserinfo.role !== 'Member' && !manageDisabled"
             value="mod"
