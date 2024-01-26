@@ -289,8 +289,7 @@ export default {
             class="d-flex flex-column mx-3 justify-start rounded-lg"
           >
 
-            <!-- ユーザー情報 -->
-
+            <!-- ユーザーID -->
             <p class="text-overline"># {{ userid }}</p>
 
             <!-- ユーザー名 -->
@@ -354,6 +353,7 @@ export default {
             <p style="color: pink">削除</p>
           </v-tab>
         </v-tabs>
+        <v-divider></v-divider>
 
       </div>
 
