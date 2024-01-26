@@ -410,6 +410,47 @@ export default {
             </div>
           </div>
 
+          <!-- チャンネル概要 -->
+          <v-card
+            @dblclick="switchEditing('desc', true)"
+            class="channelScrollbar pa-6 elevation-4"
+            style="min-height: 75px; overflow-y: auto;"
+            max-height="50%"
+            color="cardInner"
+          >
+            <!-- 概要欄 -->
+            <div v-if="!descriptionEditing">
+              <ContentMessageRender :content="descriptionText" />
+              <p class="text-caption" style="margin-top: -2px; color: #555">
+                ダブルクリックで編集
+              </p>
+            </div>
+
+            <!-- 編集中の概要欄 -->
+            <div v-if="descriptionEditing">
+              <v-textarea
+                no-resize
+                counter
+                maxlength="128"
+                rows="3"
+                v-model="descriptionText"
+                label="概要"
+              >
+                <!-- 確定とキャンセルのアイコン -->
+                <template v-slot:append-inner>
+                  <v-icon
+                    @click="updateChannel"
+                    :disabled="descriptionText.length >= 128"
+                    >mdi:mdi-check-bold</v-icon
+                  >
+                  <v-icon @click="switchEditing('desc', false)"
+                    >mdi:mdi-window-close</v-icon
+                  >
+                </template>
+              </v-textarea>
+            </div>
+          </v-card>
+
           <v-divider
             class="mx-auto my-2"
           ></v-divider>
@@ -419,7 +460,6 @@ export default {
             v-model="tab"
             style="width: fit-content;"
           >
-            <v-tab value="info">概要</v-tab>
             <v-tab value="userJoined">
               <!-- バッジで人数を表示 -->
               <v-badge floating :content="channelJoinedUser.length">参加者</v-badge>
@@ -429,50 +469,7 @@ export default {
         </div>
 
         <!-- タブの中身を知りたくて─────────── -->
-        <v-window v-model="tab" style="overflow-y:auto; height:100%;" class="pt-2">
-          <!-- チャンネル概要 -->
-          <v-window-item value="info" style="height:100%;">
-            <!-- チャンネル概要 -->
-            <v-card
-              @dblclick="switchEditing('desc', true)"
-              class="channelScrollbar my-3 pa-6 elevation-2"
-              style="min-height: 75px; overflow-y: auto;"
-              height="max-content"
-              color="cardInner"
-            >
-              <!-- 概要欄 -->
-              <div v-if="!descriptionEditing">
-                <ContentMessageRender :content="descriptionText" />
-                <p class="text-caption" style="margin-top: -2px; color: #555">
-                  ダブルクリックで編集
-                </p>
-              </div>
-
-              <!-- 編集中の概要欄 -->
-              <div v-if="descriptionEditing">
-                <v-textarea
-                  no-resize
-                  counter
-                  maxlength="128"
-                  rows="3"
-                  v-model="descriptionText"
-                  label="概要"
-                >
-                  <!-- 確定とキャンセルのアイコン -->
-                  <template v-slot:append-inner>
-                    <v-icon
-                      @click="updateChannel"
-                      :disabled="descriptionText.length >= 128"
-                      >mdi:mdi-check-bold</v-icon
-                    >
-                    <v-icon @click="switchEditing('desc', false)"
-                      >mdi:mdi-window-close</v-icon
-                    >
-                  </template>
-                </v-textarea>
-              </div>
-            </v-card>
-          </v-window-item>
+        <v-window v-model="tab" style="overflow-y:auto; height:100%;" class="pt-1">
 
           <!-- チャンネル参加者リスト -->
           <v-window-item value="userJoined" class="channelScrollbar">
