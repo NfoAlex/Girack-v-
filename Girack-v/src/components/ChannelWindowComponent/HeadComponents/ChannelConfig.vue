@@ -378,14 +378,19 @@ export default {
                 <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
               
                 <p
-                  @dblclick="switchEditing('channelname', true)"
-                  class="text-truncate mx-1"
+                  class="text-truncate mx-1 me-auto"
                 >
-                  <v-tooltip activator="parent" location="top">
-                    ダブルクリックでチャンネル名を変更
-                  </v-tooltip>
                   {{ channelnameText }}
                 </p>
+                <!-- 編集ボタン -->
+                <v-btn
+                  @click="switchEditing('channelname', true)"
+                  icon="mdi:mdi-pencil"
+                  class="rounded"
+                  size="small"
+                  color="grey"
+                >
+                </v-btn>
               </span>
 
               <!-- 編集中のチャンネル名 -->
