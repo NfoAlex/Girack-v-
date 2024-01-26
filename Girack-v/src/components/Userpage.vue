@@ -280,18 +280,19 @@ export default {
 </script>
 
 <template>
-  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'">
+  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" height="65vh">
     <v-card
       elevation="12"
-      style="width:100%;"
+      style="width:100%; height:100%;"
       class="d-flex flex-column align-self-start pa-4"
     >
       <div>
+        <!-- アバターユーザー名 -->
         <div class="d-flex justify-start align-center">
         
           <!-- アバター -->
           <v-avatar
-            size="10%"
+            size="15%"
             :image="imgsrc + userid"
           ></v-avatar>
 
@@ -306,7 +307,7 @@ export default {
             <p class="text-overline"># {{ userid }}</p>
 
             <!-- ユーザー名 -->
-            <p class="text-h5 text-truncate">
+            <p class="text-h4 text-truncate">
               {{ targetinfo.username }}
             </p>
 
@@ -315,7 +316,7 @@ export default {
         </div>
 
         <!-- ロール、ユーザ状態 -->
-        <div class="d-flex align-center">
+        <div class="d-flex align-center mt-3">
             <v-chip
               :color="getRoleColor(targetinfo.role)"
               class="ma-1"
@@ -354,7 +355,8 @@ export default {
         <!-- タブ -->
         <v-tabs
           fixed-tabs
-          style="width: fit-content"
+          style="width:fit-content"
+          class="mt-2"
           v-model="tab"
         >
           <v-tab value="channel"> チャンネル </v-tab>
@@ -371,12 +373,11 @@ export default {
             <p style="color: pink">削除</p>
           </v-tab>
         </v-tabs>
+
       </div>
 
-      <v-divider style="margin-top: 16px"></v-divider>
-
       <!-- タブの中身 -->
-      <v-window v-model="tab" style="overflow-y: auto">
+      <v-window v-model="tab" style="overflow-y:auto;">
         <!-- 参加しているチャンネル -->
         <v-window-item value="channel" class="ma-5">
           <v-card
