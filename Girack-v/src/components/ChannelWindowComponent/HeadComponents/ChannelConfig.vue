@@ -286,7 +286,7 @@ export default {
     />
 
     <!-- チャンネルへユーザーを招待するときのユーザー検索画面 -->
-    <v-dialog v-model="userSearchShow" width="55vw" style="max-width: 600px">
+    <v-dialog v-model="userSearchShow" width="75vw" style="max-width: 600px">
       <v-text-field
         variant="solo"
         placeholder="ユーザー名で検索"
@@ -419,7 +419,7 @@ export default {
         </div>
 
         <!-- タブの中身を知りたくて─────────── -->
-        <v-window v-model="tab" style="overflow-y:auto; height:100%;" class="py-4">
+        <v-window v-model="tab" style="overflow-y:auto; height:100%;" class="pt-2">
           <v-window-item value="info" style="height:100%;">
             <!-- チャンネル概要 -->
             <v-card
@@ -464,7 +464,7 @@ export default {
           </v-window-item>
 
           <!-- チャンネル参加者リスト -->
-          <v-window-item value="userJoined" class="channelScrollbar" style="padding-bottom: 5%;">
+          <v-window-item value="userJoined" class="channelScrollbar">
             <!-- ユーザー招待ボタン -->
             <span>
               <v-btn
@@ -557,7 +557,6 @@ export default {
           </v-window-item>
         </v-window>
 
-        <br />
       </v-card>
     </span>
   </v-dialog>
@@ -571,8 +570,8 @@ export default {
 }
 
 .channelConfigCardDesk {
-  width: 50vw;
-  max-width: 700px;
+  width: 60vw;
+  max-width: 850px;
 }
 
 .hideOnlineIcon {
