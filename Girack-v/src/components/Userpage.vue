@@ -303,7 +303,7 @@ export default {
         </div>
 
         <!-- ロール、ユーザ状態 -->
-        <div class="d-flex align-center mt-3">
+        <div class="d-flex align-center my-1">
             <v-chip
               :color="getRoleColor(targetinfo.role)"
               class="ma-1"
