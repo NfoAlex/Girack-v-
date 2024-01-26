@@ -377,26 +377,25 @@ export default {
       </div>
 
       <!-- タブの中身 -->
-      <v-window v-model="tab" style="overflow-y:auto;">
+      <v-window v-model="tab" style="overflow-y:auto; height:100%;">
         <!-- 参加しているチャンネル -->
-        <v-window-item value="channel" class="ma-5">
+        <v-window-item value="channel">
           <v-card
             @click="gotoChannel(item.channelid, index)"
             v-for="(item, index) in targetUserJoinedChannelList"
-            variant="tonal"
-            class="mx-auto rounded-lg d-flex align-center ma-3 pa-2"
-            style="width:75%"
+            variant="text"
+            class="rounded d-flex align-center my-0 pa-2"
             :key="index"
           >
             <!-- プライベートチャンネル用鍵マーク -->
-            <v-icon v-if="item.scope === 'private'" style="margin-right: 8px">
+            <v-icon v-if="item.scope === 'private'" size="small">
               mdi:mdi-lock-outline
             </v-icon>
 
             <!-- 普通のチャンネル -->
-            <v-icon v-else style="margin-right: 8px"> mdi:mdi-pound </v-icon>
+            <v-icon v-else  size="small"> mdi:mdi-pound </v-icon>
 
-            <span class="text-truncate">
+            <span class="text-truncate ml-1">
               {{ item.channelname }}
             </span>
           </v-card>
