@@ -474,10 +474,9 @@ export default {
                     userSearchShow = !userSearchShow;
                   }
                 "
-                style="width: 75%"
-                icon=""
                 variant="text"
-                class="rounded-lg mx-auto"
+                block
+                size="large"
               >
                 <v-icon>mdi:mdi-account-plus</v-icon>
               </v-btn>
@@ -491,28 +490,25 @@ export default {
                   userDialogShow = true;
                 }
               "
-              class="mx-auto pa-1 rounded-lg d-flex justify-center align-center"
-              style="width: 75%; margin-top: 8px;"
-              variant="tonal"
+              class="mt-1 py-1 px-3 rounded-lg d-flex justify-center align-center"
+              style="width: 100%;"
+              variant="text"
               v-for="u in channelJoinedUser"
               :key="u"
             >
               <v-avatar
                 size="32"
-                style="margin-left: 10%"
                 :image="imgsrc + u.userid"
               ></v-avatar>
               <!-- オンライン状態 -->
               <v-icon
                 :class="!u.loggedin ? 'hideOnlineIcon' : null"
                 :color="u.loggedin ? 'green' : null"
-                style="margin-left: 8px"
               >
                 mdi:mdi-circle-medium
               </v-icon>
               <span
-                style="margin-left: 8px"
-                class="text-center text-truncate me-auto"
+                class="text-truncate me-auto"
               >
                 {{ u.username }}
               </span>
