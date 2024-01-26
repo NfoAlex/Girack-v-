@@ -564,6 +564,8 @@ export default {
               style="width: 100%;"
               label="話せるロール"
               :items="roleList"
+              persistent-hint
+              hint="ロールが足りなくてもチャンネル閲覧は可能です。"
             ></v-select>
           </v-window-item>
         </v-window>
