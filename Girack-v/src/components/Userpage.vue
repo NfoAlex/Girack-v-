@@ -267,7 +267,7 @@ export default {
 </script>
 
 <template>
-  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" height="65vh">
+  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" height="80vh">
     <v-card
       elevation="12"
       style="width:100%; height:100%;"
@@ -487,9 +487,7 @@ export default {
 .userPageDesk {
   width: 100%;
   max-width: 650px;
-  height: 80vh;
   width: 50vw;
-  max-height: 85vh;
 }
 .userPageMobile {
   width: 100vw;
