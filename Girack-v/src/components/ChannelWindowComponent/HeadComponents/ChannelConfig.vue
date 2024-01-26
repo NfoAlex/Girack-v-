@@ -451,14 +451,11 @@ export default {
             </div>
           </v-card>
 
-          <v-divider
-            class="mx-auto my-2"
-          ></v-divider>
-
           <!-- タブ -->
           <v-tabs
             v-model="tab"
             style="width: fit-content;"
+            class="mt-2"
           >
             <v-tab value="userJoined">
               <!-- バッジで人数を表示 -->
@@ -466,6 +463,9 @@ export default {
             </v-tab>
             <v-tab v-if="!channelInfo.previewmode" value="manage">管理</v-tab>
           </v-tabs>
+          <v-divider
+            class=""
+          ></v-divider>
         </div>
 
         <!-- タブの中身を知りたくて─────────── -->
@@ -473,7 +473,7 @@ export default {
 
           <!-- チャンネル参加者リスト -->
           <v-window-item value="userJoined" class="channelScrollbar">
-            <div class="py-3">
+            <div class="pb-3">
 
               <!-- ユーザー招待ボタン -->
               <span>
@@ -543,7 +543,7 @@ export default {
 
           <!-- チャンネル管理タブ -->
           <v-window-item value="manage" style="overflow-y: auto">
-            <div class="py-3">
+            <div class="pb-3">
 
               <!-- プラベチャンネルのスイッチ -->
               <v-checkbox
