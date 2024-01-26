@@ -554,8 +554,11 @@ export default {
                   updateChannel();
                 "
                 color="grey"
-                label="プライベートチャンネル"
               >
+                <template v-slot:label>
+                  <v-icon>mdi:mdi-lock</v-icon>
+                  プライベートチャンネル
+                </template>
               </v-checkbox>
 
               <!-- ロール選択 -->
