@@ -363,9 +363,10 @@ export default {
 
       <!-- チャンネルメニュー本体 -->
       <v-card :style="isMobile?'height:85vh':'height:85vh'" class="d-flex flex-column rounded-lg pa-3">
+        <!-- タブバー含めて上部分 -->
         <div>
           <!-- チャンネル名とバッジ -->
-          <div class="py-5">
+          <div class="py-7">
             <div :class="isMobile?'text-h6':'text-h4'">
               <!-- プライベートチャンネル用アイコン -->
               <v-icon v-if="scopeIsPrivate" size="x-small">mdi:mdi-lock</v-icon>
@@ -420,6 +421,7 @@ export default {
 
         <!-- タブの中身を知りたくて─────────── -->
         <v-window v-model="tab" style="overflow-y:auto; height:100%;" class="pt-2">
+          <!-- チャンネル概要 -->
           <v-window-item value="info" style="height:100%;">
             <!-- チャンネル概要 -->
             <v-card
