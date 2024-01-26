@@ -230,7 +230,7 @@ export default {
         ></v-checkbox>
       </v-card-text>
 
-      <v-divider class="my-2"></v-divider>
+      <v-divider class="mb-2"></v-divider>
 
       <v-card-action>
         <v-btn
