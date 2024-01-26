@@ -307,7 +307,6 @@ export default {
             <v-chip
               :color="getRoleColor(targetinfo.role)"
               class="ma-1"
-              size="small"
             >
               {{ targetinfo.role }}
             </v-chip>
@@ -315,7 +314,6 @@ export default {
             <v-chip
               v-if="targetinfo.banned"
               color="red"
-              size="small"
             >
               BANされています
             </v-chip>
@@ -325,7 +323,6 @@ export default {
               class="ma-1"
               variant="flat"
               color="success"
-              size="x-small"
             >
               オンライン
             </v-chip>
@@ -333,7 +330,6 @@ export default {
             <v-chip
               v-if="userid === myUserinfo.userid"
               color="green"
-              size="small"
             >
               あなた
             </v-chip>
