@@ -293,7 +293,7 @@ export default {
           class="d-flex justify-start px-3 align-center"
           :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
           :class="isMobile?'pa-3':'pa-2'"
-          :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
+          style="font-size:14px;"
         >
           <v-icon size="small">mdi:mdi-shield-bug</v-icon>
           <span class="text-truncate ml-1"> JSONviewer </span>
@@ -306,7 +306,7 @@ export default {
           class="d-flex justify-start align-center"
           :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
           :class="isMobile?'pa-3':'pa-2'"
-          :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
+          style="font-size:14px;"
         >
           <v-icon size="small">mdi:mdi-text-search</v-icon>
           <span class="text-truncate ml-1"> チャンネルブラウザ </span>
@@ -328,7 +328,7 @@ export default {
           variant="text"
           size="x-small"
           class="rounded-pill text-disabled"
-          style="width:100%;"
+          style="width:100%; font-size:12px;"
           :style="
             (
               (visibleReadAllButton||!CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY)
@@ -358,7 +358,8 @@ export default {
                   :variant="checkSameLocation(element) ? 'tonal' : 'text'"
                   class="d-flex align-center"
                   :class="isMobile?'pa-3':'pa-2'"
-                  :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
+                  style="font-size:14px;"
+                  
                 >
                   <!-- チャンネル名前の#の部分 -->
                   <div class="flex-shrink-1">
