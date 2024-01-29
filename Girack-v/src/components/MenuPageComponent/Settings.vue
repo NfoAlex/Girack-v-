@@ -560,6 +560,8 @@ export default {
             class="mx-auto rounded-lg card"
           >
 
+            <p class="text-h6 ma-2">表示</p>
+
             <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
             <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
               <v-checkbox
