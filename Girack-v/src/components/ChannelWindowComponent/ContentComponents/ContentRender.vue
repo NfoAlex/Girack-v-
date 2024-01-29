@@ -463,7 +463,7 @@ export default {
           </div>
 
           <!-- メッセージ本文と編集中表示 -->
-          <ContentMessageRender v-if="!msgEditing" :content="m.content" />
+          <ContentMessageRender style="font-size:14px;" v-if="!msgEditing" :content="m.content" />
           <ContentEditing
             v-else
             @close-editing="$emit('closeEditing'); msgEditing=false;"
