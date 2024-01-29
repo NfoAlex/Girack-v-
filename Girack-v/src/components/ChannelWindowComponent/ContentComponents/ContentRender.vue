@@ -434,16 +434,17 @@ export default {
             >
               BANNED
             </v-chip>
+
+            <!-- タイムスタンプ -->
+            <span
+              v-if="checkShowAvatar(m.userid, index)"
+              style="color:#999; font-size:12px;"
+              class="mx-2"
+              >
+                {{ printDate(m.time) }}
+            </span>
             
           </div>
-
-          <!-- タイムスタンプ -->
-          <span
-            v-if="checkShowAvatar(m.userid, index)"
-            style="color:#999; font-size:12px;"
-            >
-              {{ printDate(m.time) }}
-          </span>
 
           <!-- 返信データ -->
           <ContentReplyRender
