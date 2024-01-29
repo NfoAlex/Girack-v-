@@ -318,7 +318,7 @@ export default {
       <!-- ここからチャンネルボタン部分  -->
       <div
         v-if="CLIENT_FULL_LOADED"
-        class="mx-auto scroll"
+        class="mx-auto scroll pb-4"
         style="overflow-y: auto; width: 100%;"
       >
         <!-- 全チャンネルを既読するボタン -->
