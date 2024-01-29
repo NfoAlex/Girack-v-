@@ -248,7 +248,7 @@ export default {
       <v-card
         @click="menuDialogDisplay=true"
         class="d-flex justify-start align-center py-2 mx-1 elevation-0 text-truncate"
-        color="cardInner"
+        variant="text"
         v-ripple
       >
         <!-- 三点メニューアイコン -->
