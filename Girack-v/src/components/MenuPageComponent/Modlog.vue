@@ -167,7 +167,6 @@ export default {
         <v-expansion-panel
           v-for="item in modLogDisplay"
           :key="item.actionId"
-          class="rounded-lg"
         >
           <!-- カードタイトル -->
           <v-expansion-panel-title color="cardInner">
@@ -221,15 +220,15 @@ export default {
             <v-card
               color="grey"
               style="width: fit-content"
-              class="rounded-lg pa-5 d-flex flex-clumn align-center"
+              class="rounded pa-5 d-flex align-center"
             >
               <!-- やった人のアイコン -->
-              <v-avatar size="x-small" style="margin-right: 8px">
+              <v-avatar size="x-small" class="mr-2">
                 <v-img alt="icon" :src="backendURI + '/img/' + item.actionBy">
                 </v-img>
               </v-avatar>
               <!-- やった人の名前 -->
-              <span style="margin-right: 8px">
+              <span>
                 {{ getUsername(item.actionBy) }}
               </span>
 
@@ -241,13 +240,14 @@ export default {
                 "
               >
                 <!-- 矢印 -->
-                <v-icon style="margin-right: 8px"> mdi:mdi-arrow-right </v-icon>
+                <v-icon class="mx-2"> mdi:mdi-arrow-right </v-icon>
 
                 <!-- 受けた人のアイコン -->
-                <v-avatar size="x-small" style="margin-right: 8px">
+                <v-avatar size="x-small" class="mr-2">
                   <v-img
                     alt="icon"
                     :src="backendURI + '/img/' + item.actionTo.userid"
+                    class="mx-2"
                   >
                   </v-img>
                 </v-avatar>
@@ -261,7 +261,7 @@ export default {
             <br />
 
             <p class="ma-1">変更内容</p>
-            <v-card color="cardInner" class="pa-3 rounded-lg">
+            <v-card color="cardInner" class="pa-3">
               <!-- もし変更情報に出力できる名前が無かったらそのままactionnameを出力 -->
               <p
                 v-if="actionameIndex[item.actionInfo.actionname] === undefined"
