@@ -17,9 +17,22 @@ export default {
       theme.global.name.value = theme.global.name.value==='thedark' ? 'thelight' : 'thedark';
     }
 
-    const { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC } = getCONFIG();
+    const {
+      CONFIG_NOTIFICATION,
+      CONFIG_THEME,
+      CONFIG_DISPLAY,
+      CONFIG_SYNC
+    } = getCONFIG();
     const { myUserinfo } = dataUser();
-    return { theme, toggleTheme, CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
+    return {
+      theme,
+      toggleTheme,
+      CONFIG_NOTIFICATION,
+      CONFIG_THEME,
+      CONFIG_DISPLAY,
+      CONFIG_SYNC,
+      myUserinfo
+    };
   },
 
   data() {
@@ -71,11 +84,14 @@ export default {
       deep: true,
     },
 
-    //テーマの切り替え検知
+    //テーマの切り替え検知、同期
     themeDark: {
       handler() {
         //テーマの切り替えを行う
         this.toggleTheme();
+        //設定値を登録、同期がONなら同期
+        this.CONFIG_THEME = this.themeDark?"DARK":"LIGHT";
+        if (this.CONFIG_SYNC) this.updateConfigWithServer();
       }
     }
   },
@@ -118,6 +134,7 @@ export default {
         config: {
           CONFIG_DISPLAY: this.CONFIG_DISPLAY,
           CONFIG_NOTIFICATION: this.CONFIG_NOTIFICATION,
+          CONFIG_THEME: this.CONFIG_THEME,
           LIST_NOTIFICATION_MUTE_CHANNEL: this.LIST_NOTIFICATION_MUTE_CHANNEL,
         },
         reqSender: {
