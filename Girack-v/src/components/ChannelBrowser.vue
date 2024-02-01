@@ -163,8 +163,8 @@ export default {
 
       this.channelList = dat.channelList; //リスト追加
 
-      console.log("ChannelBrwoser :: infoList : dat ↓ ");
-      console.log(dat);
+      // console.log("ChannelBrwoser :: infoList : dat ↓ ");
+      // console.log(dat);
     },
   },
 
