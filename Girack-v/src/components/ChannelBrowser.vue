@@ -201,10 +201,13 @@ export default {
 
       //チャンネル情報のみを抜き出して配列へ追加
       for (let channelObject of ArrayChannelList) {
+        //あらかじめチャンネルIDを設定しておく
+        channelObject[1].channelid = channelObject[0];
+        //配列化用変数へプッシュ
         ArrayChannelListFiltered.push(channelObject[1]);
       }
 
-      //受信データ保存
+      //受信データを配列化したものを保存
       this.channelListData = ArrayChannelListFiltered;
 
       //ソート、表示
