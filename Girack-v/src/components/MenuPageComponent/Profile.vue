@@ -562,11 +562,3 @@ export default {
     </div>
   </div>
 </template>
-
-<style scoped>
-.menu-card {
-  margin: 16px 12.5%;
-  padding: 7.5% 0;
-  text-align: center;
-}
-</style>
