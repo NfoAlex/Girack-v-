@@ -8,7 +8,7 @@ import { dataUser } from "../data/dataUserinfo";
 const socketUserpage = getSocket();
 
 export default {
-  props: ["userid"],
+  props: ["userid", "openedFromMemberpage"],
 
   setup() {
     const { mobile } = useDisplay();
@@ -135,19 +135,6 @@ export default {
 
         case "Member":
           return "white";
-      }
-    },
-
-    //メンバーページから開かれたものか確認
-    checkOpenedFromMemberPage() {
-      //メンバーページから開かれたものなら
-      if (
-        this.$route.path === "/menu/members" &&
-        this.myUserinfo.userid !== this.userid
-      ) {
-        return true;
-      } else {
-        return false;
       }
     },
 
@@ -280,79 +267,79 @@ export default {
 </script>
 
 <template>
-  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" class="mx-auto">
+  <v-dialog :class="isMobile?'userPageMobile':'userPageDesk'" height="80vh">
     <v-card
-      elevation="6"
-      style="width:100%;"
-      class="mx-auto d-flex flex-column align-self-start pa-1 text-center rounded-lg"
+      elevation="12"
+      style="width:100%; height:100%;"
+      class="d-flex flex-column align-self-start pa-4"
     >
       <div>
-        <!-- ユーザー名とアイコンとロール -->
-        <v-card
-          color="secondary"
-          elevation="12"
-          width="70%"
-          style="overflow-y: auto"
-          class="mx-auto boxProfile rounded-lg"
-        >
+        <!-- アバターユーザー名 -->
+        <div class="mt-5 d-flex justify-start align-center">
+        
           <!-- アバター -->
           <v-avatar
-            style="margin-top: 16px"
-            size="20%"
+            size="15%"
             :image="imgsrc + userid"
           ></v-avatar>
 
-          <!-- ユーザー情報 -->
-          <div class="ma-3">
-            <v-chip v-if="targetinfo.banned" color="red" size="small"
-              >BANされています</v-chip
-            >
+          <!-- ユーザー名とアイコンとロール -->
+          <div
+            style="overflow-y:auto"
+            class="d-flex flex-column mx-3 justify-start rounded-lg"
+          >
+
+            <!-- ユーザーID -->
             <p class="text-overline"># {{ userid }}</p>
 
-            <p v-if="targetinfo.loggedin && userid !== myUserinfo.userid">
-              <v-chip
-                class="ma-1"
-                variant="flat"
-                color="success"
-                size="x-small"
-              >
-                オンライン
-              </v-chip>
+            <!-- ユーザー名 -->
+            <p class="text-h4 text-truncate">
+              {{ targetinfo.username }}
             </p>
 
-            <p>
-              <v-chip
-                v-if="userid === myUserinfo.userid"
-                color="green"
-                size="small"
-              >
-                あなた
-              </v-chip>
-            </p>
+          </div>
 
+        </div>
+
+        <!-- ロール、ユーザ状態 -->
+        <div class="d-flex align-center my-1">
             <v-chip
               :color="getRoleColor(targetinfo.role)"
               class="ma-1"
-              size="small"
             >
               {{ targetinfo.role }}
             </v-chip>
+              
+            <v-chip
+              v-if="targetinfo.banned"
+              color="red"
+            >
+              BANされています
+            </v-chip>
 
-            <p class="text-h5 text-truncate">
-              {{ targetinfo.username }}
-            </p>
-          </div>
-        </v-card>
+            <v-chip
+              v-if="targetinfo.loggedin && userid !== myUserinfo.userid"
+              variant="flat"
+              color="success"
+            >
+              オンライン
+            </v-chip>
+
+            <v-chip
+              v-if="userid === myUserinfo.userid"
+              color="green"
+            >
+              あなた
+            </v-chip>
+        </div>
 
         <!-- タブ -->
         <v-tabs
-          bg-color="grey"
-          class="mx-auto rounded-lg"
           fixed-tabs
-          style="width: fit-content"
+          style="width:fit-content"
           v-model="tab"
         >
-          <v-tab value="channel"> チャンネル </v-tab>
+          <v-tab value="channel"> 参加チャンネル </v-tab>
           <v-tab
             v-if="myUserinfo.role !== 'Member' && !manageDisabled"
             value="mod"
@@ -360,134 +347,141 @@ export default {
             管理
           </v-tab>
           <v-tab
-            v-if="myUserinfo.role === 'Admin' && checkOpenedFromMemberPage()"
+            v-if="myUserinfo.role === 'Admin' && openedFromMemberpage"
             value="delete"
           >
-            <p style="color: pink">削除</p>
+            <p style="color:red">削除</p>
           </v-tab>
         </v-tabs>
+        <v-divider></v-divider>
+
       </div>
 
-      <v-divider style="margin-top: 16px"></v-divider>
-
       <!-- タブの中身 -->
-      <v-window v-model="tab" style="overflow-y: auto">
+      <v-window v-model="tab" style="overflow-y:auto; height:100%;">
         <!-- 参加しているチャンネル -->
-        <v-window-item value="channel" class="ma-5">
-          <v-card
-            @click="gotoChannel(item.channelid, index)"
-            v-for="(item, index) in targetUserJoinedChannelList"
-            variant="tonal"
-            class="mx-auto rounded-lg d-flex align-center"
-            style="margin-top: 8px; padding: 6px 4%; width: 75%"
-            :key="index"
-          >
-            <!-- プライベートチャンネル用鍵マーク -->
-            <v-icon v-if="item.scope === 'private'" style="margin-right: 8px">
-              mdi:mdi-lock-outline
-            </v-icon>
+        <v-window-item value="channel">
+          <v-card color="cardInner" class="my-3">
+            <v-card
+              @click="gotoChannel(item.channelid, index)"
+              v-for="(item, index) in targetUserJoinedChannelList"
+              variant="text"
+              class="rounded d-flex align-center my-0 pa-2"
+              :key="index"
+            >
+              <!-- プライベートチャンネル用鍵マーク -->
+              <v-icon v-if="item.scope === 'private'" size="small">
+                mdi:mdi-lock-outline
+              </v-icon>
 
-            <!-- 普通のチャンネル -->
-            <v-icon v-else style="margin-right: 8px"> mdi:mdi-pound </v-icon>
+              <!-- 普通のチャンネル -->
+              <v-icon v-else  size="small"> mdi:mdi-pound </v-icon>
 
-            <span class="text-truncate">
-              {{ item.channelname }}
-            </span>
+              <span class="text-truncate ml-1">
+                {{ item.channelname }}
+              </span>
+            </v-card>
           </v-card>
         </v-window-item>
 
         <!-- ユーザー管理タブ -->
-        <v-window-item value="mod" class="ma-5">
-          <div class="d-flex flex-column align-center">
-            <!-- ロール選択 -->
-            <v-select
-              class="mx-auto"
-              v-model="targetUserRole"
-              style="width: 100%; max-width: 200px"
-              density="compact"
-              label="ロール"
-              :items="roleList"
-            ></v-select>
+        <v-window-item value="mod">
+          <div class="d-flex flex-column">
+            <v-card color="cardInner" class="my-3 py-3 px-2">
+              <!-- ロール選択 -->
+              <p style="font-size:14px;">ユーザーのロール</p>
+              <v-select
+                v-model="targetUserRole"
+                density="compact"
+                :items="roleList"
+                block
+              ></v-select>
 
-            <!-- ユーザー名変更させるボタン -->
-            <v-btn
-              @click="changeTargetUsername"
-              width="50%"
-              class="ma-3 rounded-lg"
-              color="grey"
-            >
-              ユーザー名を初期化
-              <v-tooltip
-                activator="parent"
-                location="top center"
+              <!-- ユーザー名変更させるボタン -->
+              <v-btn
+                @click="changeTargetUsername"
+                :disabled="myUserinfo.userid===userid"
+                class="rounded"
+                color="grey"
+                block
               >
-                User_[乱数]にします
-              </v-tooltip>
-            </v-btn>
+                ユーザー名を初期化
+                <v-tooltip
+                  activator="parent"
+                  location="top start"
+                >
+                  User_[乱数]にします
+                </v-tooltip>
+              </v-btn>
 
-            <v-divider width="50%" class="ma-3"></v-divider>
+              <v-divider class="my-3"></v-divider>
 
-            <!-- BANボタン(と解除ボタン) -->
-            <v-btn
-              @dblclick="banUser"
-              v-if="!targetinfo.banned" 
-              width="50%"
-              color="error"
-            >
-              <v-icon>mdi:mdi-account-cancel</v-icon> BAN
-              <v-tooltip
-                activator="parent"
-                location="top center"
+              <!-- BANボタン(と解除ボタン) -->
+              <v-btn
+                @dblclick="banUser"
+                v-if="!targetinfo.banned"
+                :disabled="myUserinfo.userid===userid"
+                color="error"
+                block
               >
-                ダブルクリックでBAN
-              </v-tooltip>
-            </v-btn>
-            <v-btn @dblclick="banUser" v-if="targetinfo.banned" color="info">
-              <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
-              <v-tooltip
-                activator="parent"
-                location="top center"
-              >
-                ダブルクリックで解除
-              </v-tooltip>
-            </v-btn>
+                <v-icon>mdi:mdi-account-cancel</v-icon> BAN
+                <v-tooltip
+                  activator="parent"
+                  location="top start"
+                >
+                  ダブルクリックでBAN
+                </v-tooltip>
+              </v-btn>
+              <v-btn @dblclick="banUser" v-if="targetinfo.banned" color="info">
+                <v-icon>mdi:mdi-account-heart</v-icon>BANを解除
+                <v-tooltip
+                  activator="parent"
+                  location="top center"
+                >
+                  ダブルクリックで解除
+                </v-tooltip>
+              </v-btn>
+            </v-card>
           </div>
         </v-window-item>
 
         <!-- ユーザー削除タブ(メンバーページからだけ) -->
-        <v-window-item value="delete" class="ma-5">
-          <v-btn
-            v-if="!deleteConfirmCheckDisplay"
-            @dblclick="deleteConfirmCheckDisplay = true"
-            class="rounded-lg"
-            color="error"
-            size="large"
-            variant="tonal"
-          >
-            このユーザーを削除
-            <v-tooltip
-              activator="parent"
-              location="top center"
+        <v-window-item value="delete">
+          <v-card color="cardInner" class="my-3">
+            <v-btn
+              v-if="!deleteConfirmCheckDisplay"
+              @dblclick="deleteConfirmCheckDisplay = true"
+              :disabled="myUserinfo.userid===userid"
+              color="error"
+              size="large"
+              variant="outlined"
+              block
             >
-              ダブルクリックで確認へ
-            </v-tooltip>
-          </v-btn>
-          <v-btn
-            v-if="deleteConfirmCheckDisplay"
-            @dblclick="deleteUser()"
-            class="rounded-lg"
-            color="error"
-            size="large"
-            elevation="12"
-          >
-            本当にいいの?
-            <v-tooltip
-              activator="parent"
-              location="top center"
+              このユーザーを削除
+              <v-tooltip
+                activator="parent"
+                location="top center"
+              >
+                ダブルクリックで確認へ
+              </v-tooltip>
+            </v-btn>
+            <v-btn
+              v-if="deleteConfirmCheckDisplay"
+              @dblclick="deleteUser()"
+              color="error"
+              size="large"
+              elevation="16"
+              block
             >
-              ダブルクリックで削除
-            </v-tooltip>
-          </v-btn>
+              本当にいいの?
+              <v-tooltip
+                activator="parent"
+                location="top center"
+              >
+                ダブルクリックで削除
+              </v-tooltip>
+            </v-btn>
+          </v-card>
         </v-window-item>
       </v-window>
     </v-card>
@@ -498,17 +492,10 @@ export default {
 .userPageDesk {
   width: 100%;
   max-width: 650px;
-  height: 80vh;
   width: 50vw;
-  max-height: 85vh;
 }
 .userPageMobile {
   width: 100vw;
-}
-
-.boxProfile {
-  margin-top: 16px;
-  margin-bottom: 24px;
 }
 
 </style>

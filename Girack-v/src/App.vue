@@ -25,10 +25,6 @@ export default {
 
   data() {
     return {
-      //css用クラス
-      channelBar: "channelBar", //左のチャンネルバーとか
-      main: "main", //右のチャンネル表示するところ
-
       sideBarMobileDisplay: false, //スマホ用のサイドバー表示をしているかどうか
 
       sessionOnlineNum: 0, //オンラインユーザー数
@@ -181,24 +177,28 @@ export default {
     </v-snackbar>
 
     <!-- ログイン後(Main) -->
-    <div v-if="loggedin" class="d-flex pa-0 ma-0" style="width:100vw; height:100vh;">
+    <div v-if="loggedin" class="pa-0 ma-0" style="width:100vw; height:100vh !important; ">
+      <div style="height:100%;" class="d-flex">
+        <!-- サイドバー(左側) -->
+          <!-- デスクトップ用 -->
+        <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
+          <!-- モバイルレイアウト用 -->
+        <v-dialog
+          v-else
+          v-model="sideBarMobileDisplay"
+          fullscreen
+          transition="slide-x-transition"
+        >
+          <Sidebar
+            :sessionOnlineNum="sessionOnlineNum"
+            @closeSidebar="sideBarMobileDisplay = false"
+          />
+        </v-dialog>
 
-      <!-- サイドバー(左側) -->
-        <!-- デスクトップ用 -->
-      <Sidebar v-if="!isMobile" :sessionOnlineNum="sessionOnlineNum" />
-        <!-- モバイルレイアウト用 -->
-      <v-dialog
-        v-else
-        v-model="sideBarMobileDisplay"
-        fullscreen
-        transition="slide-x-transition"
-      >
-        <Sidebar :sessionOnlineNum="sessionOnlineNum" @closeSidebar="sideBarMobileDisplay = false" />
-      </v-dialog>
-
-      <!-- メイン画面（右側） -->
-      <div style="height:100vh; min-width:0;" class="flex-grow-1">
-        <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
+        <!-- メイン画面（右側） -->
+        <div style="min-width:0;" class="flex-grow-1">
+          <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
+        </div>
       </div>
 
     </div>
@@ -209,12 +209,6 @@ export default {
     </div>
   </div>
 </template>
-
-<style scoped>
-.main {
-  height: 100vh;
-}
-</style>
 
 <style>
 html {
@@ -228,11 +222,11 @@ html {
 a {
   text-decoration: none;
   transition: 0.4s;
-  color: #ede7f6;
+  color: rgb(var(--v-theme-textNormal));
 }
 
 a:visited {
   text-decoration: none;
-  color: #ede7f6;
+  color: rgb(var(--v-theme-textNormal));
 }
 </style>

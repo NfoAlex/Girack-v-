@@ -1,9 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import {
-  getSocket,
   getMessage,
-  setCookie,
   updateMsgReadState
 } from "../../data/socket.js";
 import { dataMsg } from "../../data/dataMsg";
@@ -15,8 +13,6 @@ import { getCONFIG } from "../../config.js";
 import ContentRender from "./ContentComponents/ContentRender.vue";
 import ContentNewMessageLine from "./ContentComponents/ContentNewMessageLine.vue";
 import ContentSystemMessageRender from "./ContentComponents/ContentSystemMessageRender.vue";
-
-const socket = getSocket();
 
 export default {
   setup() {
@@ -134,6 +130,7 @@ export default {
 
               //作成したチャンネルで履歴の長さが表示数を超えたとき、フェッチできる履歴があると設定
               if (this.MsgDBActive.length >= this.msgDisplayNum) {
+                // eslint-disable-next-line vue/no-mutating-props
                 this.channelInfo.haveAllHistory = false;
               }
 
@@ -214,6 +211,7 @@ export default {
           &&
         !this.channelInfo.fetchingHistory
       ) {
+        // eslint-disable-next-line vue/no-mutating-props
         this.channelInfo.fetchingHistory = true; //履歴取得中と設定
         getMessage(this.getPath, 15, this.MsgDBActive.length); //履歴の取得
       }
@@ -501,7 +499,7 @@ export default {
     id="channelWindow"
     class="d-flex flex-column-reverse"
     @scroll="setScrollState"
-    style="height: 100%; width: 100%; overflow-y: auto"
+    style="overflow-y:auto; height:100%;"
   >
 
     <!-- 一番下にスクロールするボタン -->
@@ -518,7 +516,7 @@ export default {
       icon=""
       :size="getDisplaySize === 'xxl' ? '128' : 'x-large'"
       :elevation="6"
-      class="rounded-lg mx-auto"
+      class="rounded mx-auto"
     >
       <v-badge
         v-if="checkReadTime(getPath) !== 0"

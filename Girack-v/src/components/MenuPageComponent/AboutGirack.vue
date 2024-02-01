@@ -6,7 +6,7 @@ export default {
 
   data() {
     return {
-        clientVersion: CLIENT_VERSION //バージョン名
+      clientVersion: CLIENT_VERSION //バージョン名
     }
   }
 
@@ -15,9 +15,9 @@ export default {
 </script>
 
 <template>
-  <div class="text-center pa-5" style="width:80%">
+  <div class="text-center pa-5" style="width:100%">
     <span>
-      <p class="text-h3">JustUpdate</p>
+      <p class="text-h3">Refresh</p>
     </span>
     
     <br>

@@ -7,6 +7,7 @@ import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
 import { getCONFIG } from "../config";
+import Menu from "./MenuPageComponent/Menu.vue";
 import draggable from 'vuedraggable';
 
 const socket = getSocket();
@@ -34,7 +35,7 @@ export default {
 
   props: ["sessionOnlineNum"], //オンライン人数用
 
-  components: { draggable },
+  components: { draggable, Menu },
 
   data() {
     return {
@@ -42,6 +43,8 @@ export default {
       displayusername: "Null",
       visibleReadAllButton: false,
       thisURL: window.location.origin,
+
+      menuDialogDisplay: false, //メニュー用
 
       disconnected: false,
 
@@ -52,10 +55,15 @@ export default {
 
   watch: {
     //URLの変更を検知
-    $route(r) {
+    $route() {
       //もしスマホならサイドバーを閉じる
       if (this.isMobile) {
         this.$emit("closeSidebar");
+      }
+
+      //メニューページ用クエリがあるならメニューダイアログを展開
+      if (this.$route.query.menuPage !== undefined) {
+        this.menuDialogDisplay = true;
       }
     },
 
@@ -190,122 +198,128 @@ export default {
 </script>
 
 <template>
+
+  <!-- メニュー用 -->
+  <Menu
+    v-if="menuDialogDisplay"
+    v-model="menuDialogDisplay"
+  />
+
   <div>
     <div
       :class="isMobile?'channelBarMobile':'channelBarDesk'"
       class="d-flex flex-column"
-      style="background-color: #1c1b1e"
     >
-      <!-- インスタンス名 -->
-      <div class="mx-auto" style="margin: 16px 0; width: 90%">
-        <p style="text-align: center" class="mx-auto text-truncate text-h6">
-          {{ Serverinfo.servername || "..." }}
-        </p>
-      </div>
+
+      <!-- グローバルヘッダ -->
+      <v-card
+        style="height:75px;"
+        class="rounded-0 bottomShadow px-2 mb-3 d-flex flex-column justify-space-evenly"
+      >
+        
+        <RouterLink to="/onlineuser" class="rounded-lg" v-ripple>
+          <!-- オンライン人口表示 -->
+          <div
+            style="width:fit-content;"
+            class="rounded-pill"
+            
+          >
+            <v-icon
+              v-if="sessionOnlineNum >= 2"
+              size="x-small"
+              :color="disconnected ? 'red' : 'green'"
+              >mdi:mdi-circle</v-icon
+            >
+            <span v-else>🥲</span>
+            <span v-if="!disconnected">{{ sessionOnlineNum }}</span>
+            <span v-if="disconnected">サーバーオフライン</span>
+          </div>
+        
+
+          <!-- インスタンス名 -->
+          <p class="text-h5 text-truncate">
+            {{ Serverinfo.servername }}
+          </p>
+        </RouterLink>
+
+      </v-card>
 
       <!-- メニューボタン/プロフィールカード -->
-      <RouterLink to="/menu/profile">
-        <v-card
-          class="mx-auto rounded-lg"
-          color="secondary"
-          width="80%"
-          v-ripple
-        >
-          <!-- 三点メニューアイコン -->
-          <div style="width: fit-content" class="mx-auto">
-            <v-icon size="large">mdi:mdi-dots-horizontal</v-icon>
-          </div>
-          <!-- ホバーしたら表示するテキスト -->
-          <v-tooltip activator="parent" location="top"> メニュー </v-tooltip>
+      <v-card
+        @click="menuDialogDisplay=true"
+        class="d-flex justify-start align-center py-2 mx-1 elevation-0 text-truncate"
+        variant="text"
+        v-ripple
+      >
+        <!-- 三点メニューアイコン -->
+        <v-icon size="large" class="mx-2">mdi:mdi-dots-vertical</v-icon>
+        <!-- ホバーしたら表示するテキスト -->
+        <v-tooltip activator="parent" location="top"> メニュー </v-tooltip>
 
-          <!-- アイコン-->
-          <div class="mx-auto" style="width: fit-content; margin-top: 10%">
-            <v-avatar style="width: 4vmax; height: auto; margin-bottom: 12px">
-              <v-img
-                :alt="myUserinfo.userid"
-                :src="thisURL + '/img/' + myUserinfo.userid"
-              ></v-img>
-            </v-avatar>
-          </div>
+        <!-- アイコン-->
+        <div class="mx-2">
+          <v-avatar size="24">
+            <v-img
+              :alt="myUserinfo.userid"
+              :src="thisURL + '/img/' + myUserinfo.userid"
+            ></v-img>
+          </v-avatar>
+        </div>
 
+        <div class="d-flex flex-column mx-2">
           <!-- ロールバッジ-->
-          <div style="width: fit-content" class="mx-auto">
-            <v-chip
-              v-if="myUserinfo.role !== 'Member'"
-              :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
-              size="x-small"
-              :elevation="6"
-            >
-              <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
-            </v-chip>
-          </div>
+          <v-chip
+            v-if="myUserinfo.role !== 'Member'"
+            :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
+            size="x-small"
+            :elevation="2"
+          >
+            <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
+          </v-chip>
 
           <!-- ユーザー名-->
-          <v-card-text class="text-subtitle-1 text-center mx-auto">
-            <span>
-              {{ myUserinfo.username }}
-            </span>
-          </v-card-text>
-        </v-card>
-      </RouterLink>
+          <p class="text-subtitle-2 text-truncate">
+            {{ myUserinfo.username }}
+          </p>
+        </div>
 
-      <!-- オンライン人数表示 -->
-      <RouterLink :to="'/onlineuser'">
-        <v-card
-          style="font-size: calc(6px + 0.65vb); margin-top: 8px; width: 80%"
-          class="mx-auto pa-2 rounded-lg d-flex justify-center align-center"
-          color="#222"
-          v-ripple
-        >
-          <v-icon
-            v-if="sessionOnlineNum >= 2"
-            style="margin-right: 4px"
-            size="small"
-            :color="disconnected ? 'red' : 'green'"
-            >mdi:mdi-circle</v-icon
-          >
-          <span v-else>🥲</span>
-          <span v-if="!disconnected">{{ sessionOnlineNum }}人がオンライン</span>
-          <span v-else>サーバーオフライン</span>
-        </v-card>
-      </RouterLink>
+      </v-card>
 
       <!-- ここからボタン群 -->
-      <nav style="margin: 2% auto; width: 97%">
-        <!-- FOR DEBUGGING ONLY -->
-        <RouterLink :to="'/jsonviewer'">
-          <v-card
-            v-if="myUserinfo.role === 'Admin' && !isMobile"
-            :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
-            class="d-flex justify-center align-center rounded-pill"
-            :class="isMobile?'pa-3':'pa-2'"
-            :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
-          >
-            <v-icon>mdi:mdi-shield-bug</v-icon>
-            <span class="text-truncate"> JSONviewer </span>
-          </v-card>
-        </RouterLink>
+      <!-- FOR DEBUGGING ONLY -->
+      <RouterLink :to="'/jsonviewer'" class="px-1">
+        <v-card
+          v-if="myUserinfo.role === 'Admin' && !isMobile"
+          class="d-flex justify-start px-3 align-center"
+          :variant="checkSameLocation('jsonviewer') ? 'tonal' : 'text'"
+          :class="isMobile?'pa-3':'pa-2'"
+          style="font-size:14px;"
+        >
+          <v-icon size="small">mdi:mdi-shield-bug</v-icon>
+          <span class="text-truncate ml-1"> JSONviewer </span>
+        </v-card>
+      </RouterLink>
 
-        <RouterLink :to="'/browser'">
-          <v-card
-            class="d-flex justify-center align-center rounded-lg"
-            :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
-            :class="isMobile?'pa-3':'pa-2'"
-            :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
-          >
-            <v-icon>mdi:mdi-text-search</v-icon>
-            <span class="text-truncate"> チャンネルブラウザ </span>
-          </v-card>
-        </RouterLink>
+      <!-- チャンネルブラウザ -->
+      <RouterLink :to="'/browser'" class="px-1">
+        <v-card
+          class="d-flex justify-start align-center"
+          :variant="checkSameLocation('browser') ? 'tonal' : 'text'"
+          :class="isMobile?'pa-3':'pa-2'"
+          style="font-size:14px;"
+        >
+          <v-icon size="small">mdi:mdi-text-search</v-icon>
+          <span class="text-truncate ml-1"> チャンネルブラウザ </span>
+        </v-card>
+      </RouterLink>
 
-        <v-divider style="margin: 5% 0"></v-divider>
-      </nav>
-
+      <v-divider class="my-2"></v-divider>
+      
       <!-- ここからチャンネルボタン部分  -->
       <div
         v-if="CLIENT_FULL_LOADED"
-        class="mx-auto scroll"
-        style="overflow-y: auto; width: 97%; margin-bottom: 8px; padding-bottom: 3vh;"
+        class="mx-auto scroll pb-4"
+        style="overflow-y: auto; width: 100%;"
       >
         <!-- 全チャンネルを既読するボタン -->
         <v-btn
@@ -314,7 +328,7 @@ export default {
           variant="text"
           size="x-small"
           class="rounded-pill text-disabled"
-          style="width:100%;"
+          style="width:100%; font-size:12px;"
           :style="
             (
               (visibleReadAllButton||!CONFIG_DISPLAY.SIDEBAR_SHOWREADALL_BYHOLDSHIFTKEY)
@@ -325,22 +339,27 @@ export default {
         >
           全部既読にする
         </v-btn>
+
         <!-- ここからチャンネルボタン連続表示 -->
         <draggable
           v-model="ChannelOrder"
           item-key="id"
           :disabled="isMobile"
+          class="px-1"
         >
+
           <template #item="{element}">
             <div v-if="ChannelIndex[element]!==undefined">
               <RouterLink :to="'/c/' + element">
+
                 <v-card
                   @click="$emit('closeSidebar')"
                   :ripple="false"
                   :variant="checkSameLocation(element) ? 'tonal' : 'text'"
-                  class="rounded-lg d-flex align-center my-1"
+                  class="d-flex align-center"
                   :class="isMobile?'pa-3':'pa-2'"
-                  :style="isMobile?'font-size: calc(8px + 0.75vb)':'font-size: calc(6px + 0.75vb)'"
+                  style="font-size:14px;"
+                  
                 >
                   <!-- チャンネル名前の#の部分 -->
                   <div class="flex-shrink-1">
@@ -353,8 +372,7 @@ export default {
 
                   <!-- チャンネル名 -->
                   <div
-                    style="margin-left: 4px"
-                    class="me-auto text-truncate"
+                    class="me-auto text-truncate ml-1"
                     :class="
                       checkReadTime(element, 'new') ||
                       checkReadTime(element, 'mention') ||
@@ -380,12 +398,16 @@ export default {
                     :content="checkReadTime(element, 'new')"
                     inline
                   ></v-badge>
+
                 </v-card>
               </RouterLink>
             </div>
           </template>
+
         </draggable>
+
       </div>
+
     </div>
   </div>
 </template>
@@ -396,13 +418,21 @@ export default {
   width: 25vw;
   height: 100vh;
 
+  background-color: rgb(var(--v-theme-cardInner));
+
   box-sizing: border-box;
-  border-right: 0.1px #424242 solid;
+  border-right: 0.1px rgb(var(--v-theme-hovered)) solid;
 }
 
 .channelBarMobile {
   width:100vw;
   height:100vh;
+
+  background-color: rgb(var(--v-theme-cardInner));
+}
+
+.bottomShadow {
+  box-shadow: 0px 8px 5px 0px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2));
 }
 
 .scroll::-webkit-scrollbar {

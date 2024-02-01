@@ -124,7 +124,9 @@ export default {
         this.$nextTick(() => {
           try { //プレビューから戻ってくることを想定してtry
             if (!this.isMobile) this.$el.querySelector("#inp").focus();
-          } catch(e) {}
+          } catch(e) {
+            console.log("ChannelInput :: watch($route) : 入力欄へのフォーカスができなかった");
+          }
         });
       },
     },
@@ -606,30 +608,30 @@ export default {
   <div v-if="!channelInfo.previewmode">
     <!-- 返信する前にチャンネル移動しようとしたときの警告 -->
     <v-dialog v-model="dialogChannelMove" width="40vh">
-      <v-card class="rounded-lg pa-5">
+      <v-card class="pa-5">
         <v-card-title> 確認 </v-card-title>
-        <p class="ma-2">まだ返信が終えていません。チャンネル移動していいの？</p>
-        <div style="margin-top: 10%">
-          <v-btn
-            @click="
-              resetReply();
-              dialogChannelMove = false;
-            "
-            class="rounded-lg ma-1"
-            color="secondary"
-            block
-          >
-            いいよ
-          </v-btn>
-          <v-btn
-            @click="goBackToPreviousChannel()"
-            class="rounded-lg ma-1"
-            variant="text"
-            block
-          >
-            だめ
-          </v-btn>
-        </div>
+        <v-card-text>
+          <p>まだ返信を終えていません。チャンネル移動しますか？</p>
+        </v-card-text>
+        <v-card-action>
+        <v-btn
+          @click="
+            resetReply();
+            dialogChannelMove = false;
+          "
+          class="rounded ma-1"
+          color="primary"
+        >
+          いいよ
+        </v-btn>
+        <v-btn
+          @click="goBackToPreviousChannel()"
+          class="rounded ma-1"
+          variant="text"
+        >
+          だめ
+        </v-btn>
+        </v-card-action>
       </v-card>
     </v-dialog>
 
@@ -647,25 +649,25 @@ export default {
     <!-- 返信部分 -->
     <div
       v-if="ReplyState.isReplying"
-      class="d-flex align-center"
-      style="margin: 0 10%; margin-top: 1%; width: 90%"
+      class="my-1 d-flex align-center mx-auto"
+      style="width:95%;"
     >
-      <v-icon class="ma-2"> mdi:mdi-reply </v-icon>
-      <!-- 返信先 -->
-      <p class="text-truncate">
-        {{ contentDisplay.username }} :: {{ contentDisplay.content }}
-      </p>
+      <v-icon class=""> mdi:mdi-reply </v-icon>
       <!-- 返信キャンセルボタン -->
       <v-btn
-        style="margin-left: 8px"
-        class="rounded-lg"
+        class="rounded mx-2 elevation-0"
         icon=""
-        color="grey"
+        color="secondary"
         size="x-small"
         @click="resetReply"
       >
         <v-icon> mdi:mdi-close </v-icon>
       </v-btn>
+      <!-- 返信先 -->
+      <p class="text-truncate">
+        {{ contentDisplay.username }} :: {{ contentDisplay.content }}
+      </p>
+      
     </div>
 
     <!-- ファイルアップロードデータの表示 -->
@@ -754,7 +756,7 @@ export default {
         </v-list-item>
       </v-card>
 
-      <!-- textarea -->
+      <!-- テキスト入力欄(textarea) -->
       <v-textarea
         id="inp"
         ref="inp"
@@ -786,11 +788,10 @@ export default {
           <!-- ファイルアップロードボタン -->
           <v-btn
             @click="fileInputRef"
-            color="white"
             variant="text"
             size="x-small"
             icon="mdi:mdi-plus"
-            class="rounded-lg"
+            class="rounded-lg mr-2"
           >
             <v-icon> mdi:mdi-plus </v-icon>
             <v-tooltip activator="parent" location="top">
@@ -815,7 +816,7 @@ export default {
             "
             icon=""
             size="small"
-            class="rounded-lg ml-1"
+            class="rounded ml-1"
             elevation="0"
             color="primary"
           >

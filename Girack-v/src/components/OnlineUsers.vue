@@ -18,9 +18,6 @@ export default {
 
   data() {
     return {
-      OnlineSession: [], //オンラインのユーザーが入る配列
-      OnlineSessionReady: false, //初期ロードできたかどうか
-
       userDialogShow: false, //ユーザーページのダイアログ
       userDialogUserid: "", //ユーザーページ用に使うID
       userList: [], //ユーザーリストが入る配列
@@ -40,19 +37,6 @@ export default {
   },
 
   methods: {
-    //表示する用のリストを整形
-    setUsernameFromList() {
-      this.userListDisplay = this.userList.filter((u) =>
-        u.state.loggedin === true ? u : null
-      );
-    },
-
-    //オンラインユーザーの受け取り
-    SOCKETresultSessionOnline(result) {
-      this.OnlineSession = result;
-      this.OnlineSessionReady = true;
-    },
-
     //ユーザーリストの受信用
     SOCKETinfoList(dat) {
       //型がユーザーリストだったらデータを登録
@@ -66,16 +50,18 @@ export default {
           }
         });
 
-        this.setUsernameFromList();
+        //リスト整形
+        this.userListDisplay = this.userList.filter((u) =>
+          u.state.loggedin === true ? u : null
+        );
       }
+      //ロード完了とマーク
       this.userListReady = true;
     },
   },
 
   mounted() {
-    //オンラインユーザーの受け取り
-    socket.on("resultSessionOnline", this.SOCKETresultSessionOnline);
-
+    
     //ユーザーリストの受信用
     socket.on("infoList", this.SOCKETinfoList);
 
@@ -102,7 +88,6 @@ export default {
 
   unmounted() {
     //通信重複防止
-    socket.off("resultSessionOnline", this.SOCKETresultSessionOnline);
     socket.off("infoList", this.SOCKETinfoList);
     //ループ削除
     clearInterval(loopGetSessionOnline);
@@ -118,46 +103,42 @@ export default {
     :userid="userDialogUserid"
   />
 
-  <!-- ユーザーリストここから -->
-  <div
-    class="mx-auto d-flex flex-column justify-space-evenly"
-    style="width: 95%; height: 100vh"
-  >
-    <!-- ページヘッダ -->
-    <div class="d-flex align-center ma-4" style="height: 5vh">
-      <v-btn
-        v-if="isMobile"
-        @click="$emit('toggleSidebar')"
-        icon=""
-        class="rounded-lg flex-shrink-0"
-        variant="text"
-        size="small"
-      >
-        <v-icon>mdi:mdi-menu-open</v-icon>
-      </v-btn>
-      <v-divider v-if="isMobile" vertical inset></v-divider>
-      <p
-        style="font-size: min(4vh, 16px); margin-left: 8px"
-        class="text-truncate me-auto flex-shrink-1"
-      >
+  <!-- グローバルヘッダ -->
+  <v-card
+      style="height:75px;"
+      class="rounded-0 elevation-6 px-5 d-flex align-center"
+      :loading="!userListReady"
+    >
+
+      <!-- タイトル -->
+      <p class="text-h6 me-auto">
         オンラインユーザーリスト
       </p>
+
       <!-- メンバーページへ行くボタン -->
       <v-btn
-        @click="$router.push({ path: '/menu/members' })"
+        @click="$router.push({ query: { menuPage: 'Members' } })"
         class="ma-2 rounded-lg flex-shrink-0"
         size="large"
         color="secondary"
+        icon=""
       >
         <v-icon class="ma-1">mdi:mdi-account-group</v-icon>
         <v-tooltip activator="parent" location="bottom">
           全ユーザーを見る
         </v-tooltip>
       </v-btn>
-    </div>
+
+    </v-card>
+
+  <!-- ユーザーリストここから -->
+  <div
+    class="mx-auto d-flex flex-column justify-space-evenly"
+    style="width: 95%;"
+  >
 
     <!-- リスト表示 -->
-    <div style="overflow-y: auto; margin-top: 3vh; width: 100%;">
+    <div style="overflow-y: auto;width: 100%;">
       <v-virtual-scroll height="90vh" :items="userListDisplay">
         <template v-slot:default="{ item }">
           <v-card
@@ -167,7 +148,7 @@ export default {
                 userDialogUserid = item.userid;
               }
             "
-            class="rounded-lg card mx-auto pa-3 d-flex align-center"
+            class="card mx-auto pa-3 d-flex align-center"
             width="97.5%"
             style="margin: 16px 0;"
             color="grey"

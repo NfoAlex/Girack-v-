@@ -199,9 +199,8 @@ export default {
     <!-- 絵文字パネル -->
     <v-card
       v-if="emojiMode"
-      class="pa-2 rounded-lg"
-      color="#222"
-      style="width:fit-content; margin-top:-16px; max-width:500px"
+      class="pa-2"
+      style="width:fit-content;"
     >
       <v-btn
         @click="()=>{emojiMode=false}"
@@ -245,8 +244,7 @@ export default {
     <v-card
       v-else
       class="pa-2 rounded-lg"
-      color="#222"
-      style="width:fit-content; margin-top:-16px; max-width:500px"
+      style="width:fit-content;"
     >
       <!-- ここからホバーメニュー -->
       <span style="position:relative; float:right" class="d-flex align-center">

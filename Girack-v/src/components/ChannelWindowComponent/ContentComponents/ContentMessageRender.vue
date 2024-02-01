@@ -111,7 +111,7 @@ export default {
 <template>
   <span>
     <span
-      style="width: 100%; word-wrap: break-word"
+      style="width: 100%; word-wrap: break-word;"
       v-html="formatMessage(content)"
     >
     </span>

@@ -1,5 +1,5 @@
 <script>
-import { getSocket, getMessage, CLIENT_FULL_LOADED } from "../data/socket.js";
+import { getSocket, CLIENT_FULL_LOADED } from "../data/socket.js";
 import { dataMsg } from "../data/dataMsg";
 import { dataChannel } from "../data/dataChannel";
 import { dataUser } from "../data/dataUserinfo";
@@ -23,7 +23,20 @@ export default {
     ChannelInput
   },
 
-  computed: {
+  methods: {
+    //メッセージ履歴を返す
+    getMsgDB() {
+      //チャンネルインデックスにあるか、またはプレビューにあるかでデータを返し、無ければブラウザに戻す
+      if (
+        this.ChannelIndex[this.$route.params.id] !== undefined ||
+        this.PreviewChannelData.channelid === this.$route.params.id
+      ) {
+        return this.MsgDB[this.$route.params.id];
+      } else {
+        this.$router.push({ path: "/browser" });
+      }
+    },
+
     //チャンネル情報を返す
     getChannelInfo() {
       //もしチャンネルリストにあるなら
@@ -61,22 +74,8 @@ export default {
 
         return this.PreviewChannelData;
       }
-    },
-  },
+    }
 
-  methods: {
-    //メッセージ履歴を返す
-    getMsgDB() {
-      //チャンネルインデックスにあるか、またはプレビューにあるかでデータを返し、無ければブラウザに戻す
-      if (
-        this.ChannelIndex[this.$route.params.id] !== undefined ||
-        this.PreviewChannelData.channelid === this.$route.params.id
-      ) {
-        return this.MsgDB[this.$route.params.id];
-      } else {
-        this.$router.push({ path: "/browser" });
-      }
-    },
   },
 };
 </script>
@@ -84,31 +83,31 @@ export default {
 <template>
   <div
     v-if="CLIENT_FULL_LOADED"
-    style="height:100vh; width:100%;"
+    style="height:100%; width:100%;"
     class="d-flex flex-column justify-start"
   >
-    <div class="w head flex-grow-0 flex-shrink-0">
-      <ChannelHead :channelInfo="getChannelInfo" @toggleSidebar="$emit('toggleSidebar')" />
+    <div style="height:75px;" class="head flex-grow-0 flex-shrink-0">
+      <ChannelHead :channelInfo="getChannelInfo()" @toggleSidebar="$emit('toggleSidebar')" />
     </div>
     <div
-      style="overflow-y: auto"
-      class="w me-auto flex-grow-1 flex-shrink-1"
+      style="width:100%; overflow-y: auto;"
+      class="me-auto flex-grow-1 flex-shrink-1"
     >
       <KeepAlive :max="10" :exclude="'Userpage'">
         <component
           is="ChannelContent"
           :MsgDBActive="getMsgDB()"
-          :channelInfo="getChannelInfo"
+          :channelInfo="getChannelInfo()"
           :key="$route.params.id"
         />
       </KeepAlive>
     </div>
-    <div class="w input flex-grow-0 flex-shrink-1">
-      <ChannelInput :channelInfo="getChannelInfo" />
+    <div class="input flex-grow-0 flex-shrink-1">
+      <ChannelInput :channelInfo="getChannelInfo()" />
     </div>
   </div>
   <div v-else>
-      <v-card width="40vw" class="pa-4 mx-auto d-flex flex-column rounded-lg" style="margin-top:10vh;">
+      <v-card width="40vw" class="pa-4 mx-auto d-flex flex-column" style="margin-top:10vh;">
         <v-img src="/loading.svg"></v-img>
         <h3 class="text-center">Loading...</h3>
       </v-card>
@@ -116,18 +115,4 @@ export default {
 </template>
 
 <style scoped>
-.w {
-  width: 100%;
-  margin: 0 0;
-  box-sizing: border-box;
-}
-
-.head {
-  max-height: 10vh;
-  border-bottom: solid 0.1px #424242;
-}
-
-.input {
-  border-top: solid 0.1px #424242;
-}
 </style>

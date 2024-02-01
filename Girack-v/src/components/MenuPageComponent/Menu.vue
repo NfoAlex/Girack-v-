@@ -1,7 +1,14 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script>
 import { dataUser } from "../../data/dataUserinfo";
 import { useDisplay } from "vuetify";
+
+import Profile from "./Profile.vue";
+import SessionManage from "./SessionManage.vue";
+import Settings from "./Settings.vue";
+import Members from "./Members.vue";
+import Modlog from "./Modlog.vue";
+import ServerSettings from "./ServerSettings.vue";
+import AboutGirack from "./AboutGirack.vue";
 
 export default {
   setup() {
@@ -10,9 +17,20 @@ export default {
     return { mobile, myUserinfo };
   },
 
+  components: {
+    Profile,
+    SessionManage,
+    Settings,
+    Members,
+    Modlog,
+    ServerSettings,
+    AboutGirack
+  },
+  
   data() {
     return {
-      cd: ["card-default", "rounded-lg"], //CSS用クラス名
+      displayMenuDialog: false, //このメニューページを表示するための変数
+      displayMenuPage: "" //表示するMenuコンポーネント
     };
   },
 
@@ -23,137 +41,149 @@ export default {
     }
   },
 
-  methods: {
-    //今いるページが指定のアドレスのものかどうか
-    isThisActive(p) {
-      //現在のパスを取得して引数を含めているか調べる
-      if (this.$route.path.includes(p)) {
-        return true;
+  mounted() {
+    this.$nextTick(() => {
+      //ブラウザ上のタブ名を設定
+      document.title = "メニュー";
+      this.displayMenuDialog = true;
+
+      //URLにページを指定するクエリが入っているならそのページに移す
+      if (this.$route.query.menuPage !== undefined) {
+        this.displayMenuPage = this.$route.query.menuPage;
       } else {
-        return false;
+        //デフォルトはプロフィールページ
+        this.displayMenuPage = "Profile";
       }
-    },
+    });
   },
 
-  mounted() {
-    //ブラウザ上のタブ名を設定
-    document.title = "メニュー";
-  },
+  unmounted() {
+    //Menuを閉じる際はクエリを空にする
+    this.$router.push({ query: {  } });
+  }
 };
 </script>
 
 <template>
-  <div class="d-flex">
-    <div style="width: 20%; max-width: 200px; height: 100%; overflow-y: auto">
-      <v-card
-        v-if="isMobile"
-        @click="$emit('toggleSidebar')"
-        class="rounded-lg menu-card"
-        variant="text"
-        v-ripple
+  <v-dialog
+    v-model="displayMenuDialog"
+    scrollable
+    max-width="1100px"
+  >
+    <v-card class="d-flex flex-row mx-auto" height="75vh" width="100%">
+
+      <!-- サイドバー -->
+      <div
+        class="pt-2 flex-shrink-0"
+        style="
+          width: 35%;
+          max-width: 300px;
+          height: 85vh;
+          overflow-y: auto;
+          box-sizing: border-box;
+          border-right: 0.1px #424242 solid;
+        "
       >
-        <v-icon size="large" style="margin: 0 auto"> mdi:mdi-menu-open </v-icon>
-      </v-card>
-      <RouterLink to="/menu/profile">
+        <p class="pa-2 text-h6">メニュー</p>
+
+        <!-- スマホUI用 -->
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('profile') ? 'primary' : 'secondary'"
+          v-if="isMobile"
+          @click="$emit('toggleSidebar')"
+          class="rounded-0 d-flex align-center pa-3"
+          variant="text"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-account </v-icon>
-          <br />
+          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-menu-open </v-icon>
+        </v-card>
+
+        <v-card
+          @click="displayMenuPage='Profile'"
+          class="rounded-0 d-flex align-center pa-3"
+          :variant="displayMenuPage==='Profile'?'tonal':'text'"
+          v-ripple
+        >
+          <v-icon class="mr-2"> mdi:mdi-account </v-icon>
           プロフィール
         </v-card>
-      </RouterLink>
-      <RouterLink to="/menu/sessions">
+        
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('sessions') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='SessionManage'"
+          class="rounded-0 d-flex align-center pa-3"
+          :variant="displayMenuPage==='SessionManage'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-folder-key </v-icon>
-          <br />
+          <v-icon class="mr-2"> mdi:mdi-folder-key </v-icon>
           セッション管理
         </v-card>
-      </RouterLink>
-      <RouterLink to="/menu/settings">
+
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('/settings') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='Settings'"
+          class="rounded-0 d-flex align-center pa-3"
+          :variant="displayMenuPage==='Settings'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-cog </v-icon>
-          <br />
+          <v-icon class="mr-2"> mdi:mdi-cog </v-icon>
           設定
         </v-card>
-      </RouterLink>
-      <RouterLink to="/menu/modlog">
+
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('modlog') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='Modlog'"
+          class="rounded-0 d-flex align-center pa-3"
+          :variant="displayMenuPage==='Modlog'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto">
-            mdi:mdi-security
-          </v-icon>
-          <br />
+          <v-icon class="mr-2"> mdi:mdi-security </v-icon>
           監査ログ
         </v-card>
-      </RouterLink>
-      <RouterLink to="/menu/members">
+
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('members') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='Members'"
+          class="rounded-0 d-flex align-center pa-3"
+          :variant="displayMenuPage==='Members'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto">
-            mdi:mdi-account-group
-          </v-icon>
-          <br />
+          <v-icon class="mr-2"> mdi:mdi-account-group </v-icon>
           メンバー
         </v-card>
-      </RouterLink>
-      <RouterLink to="/menu/serversettings">
+
         <v-card
           v-if="myUserinfo.role === 'Admin'"
-          class="rounded-lg menu-card"
-          :color="isThisActive('serversettings') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='ServerSettings'"
+          class="rounded-0 d-flex align-center pa-3"
+          :variant="displayMenuPage==='ServerSettings'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-server </v-icon>
-          <br />
+          <v-icon class="mr-2"> mdi:mdi-server </v-icon>
           サーバー管理
         </v-card>
-      </RouterLink>
-      <RouterLink to="/menu/aboutgirack">
+      
         <v-card
-          class="rounded-lg menu-card"
-          :color="isThisActive('aboutgirack') ? 'primary' : 'secondary'"
+          @click="displayMenuPage='About'"
+          class="rounded-0 d-flex align-center pa-3"
+          :variant="displayMenuPage==='About'?'tonal':'text'"
           v-ripple
         >
-          <v-icon size="large" style="margin: 0 auto">
-            mdi:mdi-information
-          </v-icon>
-          <br />
-          Girackとは
+          <v-icon class="mr-2"> mdi:mdi-information </v-icon>
+          Girackについて
         </v-card>
-      </RouterLink>
-    </div>
-    <router-view
-      style="float: right; width: 80%; overflow-y: auto"
-    ></router-view>
-  </div>
+        
+      </div>
+
+      <!-- メインウィンドウ -->
+      <div
+        class="flex-grow-1"
+        style="overflow-y:auto; height:80vh;"
+      >
+        <Profile v-if="displayMenuPage==='Profile'" />
+        <SessionManage v-if="displayMenuPage==='SessionManage'" />
+        <Settings v-if="displayMenuPage==='Settings'" />
+        <Modlog v-if="displayMenuPage==='Modlog'" />
+        <Members v-if="displayMenuPage==='Members'" />
+        <ServerSettings v-if="displayMenuPage==='ServerSettings'" />
+        <AboutGirack v-if="displayMenuPage==='About'" />
+      </div>
+
+    </v-card>
+  </v-dialog>
 </template>
-
-<style scoped>
-.card-default {
-  padding: 3%;
-  text-align: center;
-}
-
-.menu-card {
-  margin: 16px 12.5%;
-  padding: 7.5% 0;
-  text-align: center;
-}
-</style>

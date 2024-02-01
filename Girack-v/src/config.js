@@ -20,6 +20,9 @@ const CONFIG_NOTIFICATION = ref({
 const LIST_NOTIFICATION_MUTE_CHANNEL = ref([]);
 const LIST_NOTIFICATION_MUTE_USER = ref([]);
 
+//テーマ
+const CONFIG_THEME = ref("DARK"); //"DARK" | "LIGHT"
+
 //UIに関する設定
 const CONFIG_DISPLAY = ref({
     CONTENT_SHOW_ROLE: true,
@@ -40,6 +43,7 @@ export function getCONFIG() {
         CONFIG_NOTIFICATION,
         LIST_NOTIFICATION_MUTE_CHANNEL,
         LIST_NOTIFICATION_MUTE_USER,
+        CONFIG_THEME,
         CONFIG_DISPLAY
     };
 

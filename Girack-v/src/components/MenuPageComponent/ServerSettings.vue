@@ -183,22 +183,23 @@ export default {
 </script>
 
 <template>
-    <div v-if="configReady">
-        <div style="width:90%; height:97.5vh;" class="d-flex flex-column">
+    <div v-if="configReady" class="px-6 pt-6" style="height:100%;">
+        <div style="height:100%;" class="d-flex flex-column">
+            
             <!-- ページタイトル -->
-            <div style="width:90%; padding-top:3%; margin-bottom:16px;" class="d-flex align-center">
-                <p class="text-left me-auto" style="font-size:min(4vh,36px)">
-                    サーバー設定
-                </p>
-            </div>
+            <p style="font-size:min(4vh,36px)">
+                サーバー設定
+            </p>
 
-            <v-card class="card mx-auto rounded-lg d-flex align-center">
-                <p v-if="!servernameEditingMode" class="text-h5 ma-1 me-auto">
+            <!-- インスタンス名部分 -->
+            <v-card color="cardInner" class="d-flex align-center py-4 flex-shrink-0">
+                <p v-if="!servernameEditingMode" class="text-h5 px-4 me-auto">
                     サーバー名{{ displaySettings.servername!==currentSettings.servername?"*":"" }} : {{ displaySettings.servername }}
                 </p>
                 <v-text-field
                     v-if="servernameEditingMode"
                     v-model="servernameEditingTemp"
+                    variant="text"
                 >
                     <template v-slot:append-inner>
                         <v-btn
@@ -207,7 +208,6 @@ export default {
                             size="x-small"
                             icon="mdi:mdi-check-bold"
                             class="rounded-lg"
-                            style="margin:0 4px 0 8px; float:right"
                         >
                         </v-btn>
                         <v-btn
@@ -216,8 +216,6 @@ export default {
                             size="x-small"
                             icon="mdi:mdi-window-close"
                             class="rounded-lg"
-                            style="margin:0 8px 0 4px;
-                            float:right"
                         >
                         </v-btn>
                     </template>
@@ -226,16 +224,16 @@ export default {
                 <v-btn
                     v-if="!servernameEditingMode"
                     @click="servernameEditingMode=true;"
-                    class="rounded-lg"
+                    class="rounded mr-3"
                     color="primary"
+                    size="small"
                     icon="mdi:mdi-pencil"
                 >
                 </v-btn>
             </v-card>
 
-            <br>
             <!-- 設定を適用・キャンセルボタン -->
-            <div class="mx-auto ma-2" style="width:fit-content">
+            <div class="my-3" style="width:fit-content">
                 <v-btn
                     :disabled="!changed"
                     @click="updateServerSettings"
@@ -253,13 +251,15 @@ export default {
                     元に戻す
                 </v-btn>
             </div>
+
+            <v-divider></v-divider>
             
             <!-- 設定メイン -->
-            <v-card class="card mx-auto rounded-lg" style="overflow-y:auto;">
+            <div class="pb-3" style="overflow-y:auto;">
                 
                 <!-- 登録設定 -->
-                <p class="text-h6 ma-2">登録</p>
-                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                <p class="text-h6 my-2">登録</p>
+                <v-card color="cardInner" class="pa-2">
                     <v-switch v-model="displaySettings.registration.available" color="primary" label="登録を受け付ける"></v-switch>
                     <v-checkbox
                         :disabled="!displaySettings.registration.available"
@@ -272,7 +272,6 @@ export default {
                         variant="outlined"
                         label="招待コード"
                         class="mx-auto"
-                        style="width:90%"
                         v-model="displaySettings.registration.invite.inviteCode"
                     >
                     </v-text-field>
@@ -281,9 +280,8 @@ export default {
                 <br>
 
                 <!-- メッセージ設定 -->
-                <p class="text-h6 ma-2">メッセージ</p>
-                
-                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                <p class="text-h6 my-2">メッセージ</p>
+                <v-card color="cardInner" class="pa-2">
                     <p class="ma-2">
                         ピン留めができるロール
                     </p>
@@ -320,8 +318,8 @@ export default {
                 <br>
 
                 <!-- チャンネル関連 -->
-                <p class="text-h6 ma-2">チャンネル関連</p>
-                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                <p class="text-h6 my-2">チャンネル関連</p>
+                <v-card color="cardInner" class="pa-2">
                     <v-switch
                         v-model="displaySettings.config.CHANNEL.CHANNEL_CREATE_AVAILABLE"
                         label="チャンネル作成を可能にする(Adminはいつでも可能)"
@@ -421,8 +419,8 @@ export default {
                 </v-card>
 
                 <!-- プロフィール -->
-                <p class="text-h6 ma-2">プロフィール関連</p>
-                <v-card color="cardInner" class="rounded-lg cardInner pa-2">
+                <p class="text-h6 my-2">プロフィール関連</p>
+                <v-card color="cardInner" class="pa-2">
                     <p class="ma-2">プロフィールアイコンの最大サイズ</p>
                     <v-text-field
                         v-model="displaySettings.config.PROFILE.PROFILE_ICON_MAXSIZE"
@@ -442,26 +440,12 @@ export default {
                     </v-text-field>
                 </v-card>
 
-            </v-card>
+            </div>
 
         </div>
     </div>
 </template>
 
 <style scoped>
-
-.card
-{
-    margin-top: 8px;
-
-    padding: 16px;
-    width: 95%;
-}
-
-.cardInner
-{
-    margin-top: 16px;
-    padding: 4px;
-}
 
 </style>

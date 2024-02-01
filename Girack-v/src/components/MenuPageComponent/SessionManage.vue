@@ -115,8 +115,8 @@ export default {
 
 <template>
   <div>
-    <div class="mx-auto d-flex flex-column" style="width: 90%; height:100vh;">
-      <div class="d-flex align-center" style="padding-top: 3%; margin-bottom: 16px">
+    <div class="mx-auto d-flex flex-column px-6 pt-6" style="height:100%;">
+      <div class="d-flex align-center">
         <p class="text-truncate me-auto" style="font-size: min(4vh, 36px)">
         セッション管理
         </p>
@@ -134,10 +134,8 @@ export default {
       <!--今アクティブなセッション -->
       <h3 class="ma-1">現在のセッション</h3>
       <v-expansion-panels v-if="sessionDataCurrentAvailable" style="width: 100%">
-        <v-expansion-panel
-          class="rounded-lg"
-        >
-          <v-expansion-panel-title color="grey">
+        <v-expansion-panel>
+          <v-expansion-panel-title color="secondary">
             <span class="text-truncate flex-grow-1">
               <b>{{ sessionDataCurrent.sessionName }}</b> ( {{ myUserinfo.sessionid.slice(0,5) }}... )
             </span>
@@ -222,14 +220,13 @@ export default {
       <v-divider class="ma-3"></v-divider>
 
       <!-- 他のセッション -->
-      <v-expansion-panels v-if="sessionData!=={}" style="overflow-y:auto; padding-bottom:5%">
+      <v-expansion-panels v-if="Object.keys(sessionData).length!==0" style="overflow-y:auto;">
         <v-expansion-panel
           v-for="(session,index) in Object.entries(sessionData)"
           :key="index"
-          class="rounded-lg"
         >
 
-          <v-expansion-panel-title>
+          <v-expansion-panel-title color="cardInner">
             <span class="text-truncate flex-grow-1">
               <b>{{ session[1].sessionName }}</b> ( {{ session[0].slice(0,5) }}... )
             </span>
@@ -238,7 +235,7 @@ export default {
             </v-chip>
           </v-expansion-panel-title>
 
-          <v-expansion-panel-text>
+          <v-expansion-panel-text color="cardInner elevation-6">
             <!-- セッション名変更部分 -->
             <v-btn
               v-if="editingSessionnameIndex!==index"

@@ -46,10 +46,12 @@ export default {
 
     //添付ファイルのアイコン表記
     attatchmentDisplayIcon(type) {
+      /*
       console.log(
         "ContentAttatchmentRender :: attachmentDisplayIcon : type",
         type
       );
+      */
 
       //動画ファイルなら動画アイコンを返す
       if (type.includes("video/")) return "file-video";
@@ -95,7 +97,7 @@ export default {
         saveAs(blob, file.name); //保存する
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error('ContentAttatchmentRender :: donwloadFile : Error->', error);
       });
     }
 
@@ -140,65 +142,78 @@ export default {
   </v-dialog>
 
   <div>
+
+    <!-- ファイル添付表示 -->
     <v-card
-      class="rounded-lg px-2 py-2 ma-2 d-flex align-center justify-start"
-      style="max-width:95%;"
       v-for="file in fileData.attatchmentData"
-      :key="file"
+      :key="file.name"
+      style="width:45%; max-width:350px;"
     >
-      <!-- 画像ファイルだった時のプレビュー表示 -->
+      <!-- 画像ならカバーとして表示 -->
       <v-img
         v-if="file.type.includes('image/') && file.size < CONFIG_DISPLAY.CONTENT_DISPLAYIMAGESIZE"
         @click="
           imageDialogShow = true;
           imageDialogSrc = filesrc + channelid + '/' + file.fileid;
         "
-        class="pa-2"
-        style="width: 100%; max-width: 250px; max-height: 200px; cursor: pointer"
+        class="imageCover"
         :src="filesrc + channelid + '/' + file.fileid"
-      >
-        <template v-slot:error>
-          <div class="mx-auto d-flex justify-center align-center" style="width: fit-content; min-height: 150px">
-            <v-icon size="large"> mdi:mdi-file-image-remove </v-icon>
-          </div>
-        </template>
-
-        <template v-slot:placeholder>
-          <p style="height: 150px !important; width: 100%">Loading...</p>
-        </template>
-      </v-img>
+        height="250"
+        cover
+      ></v-img>
 
       <!-- 添付ファイルのアイコン表記 -->
-      <span v-if="!file.type.includes('image/') || file.size > 5e6" class="flex-shrink-1">
-          <v-icon
-            style="margin: 0 16px"
-            size="x-large"
-          >
-            mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
-          </v-icon>
+      <span
+        v-if="!file.type.includes('image/') || file.size > CONFIG_DISPLAY.CONTENT_DISPLAYIMAGESIZE"
+        class="my-3"
+      >
+        <v-icon
+          size="64"
+          class="mx-2 my-4"
+        >
+          mdi:mdi-{{ attatchmentDisplayIcon(file.type) }}
+        </v-icon>
       </span>
 
-      <!-- ファイル情報の表示 -->
-      <span class="flex-grow-1 ml-3" style=" max-width: max-content;">
-        <div @click="downloadFile(file)" class="d-flex align-center" style="cursor:pointer;">
-          <p class="text-subtitle-1">
-            {{
-              file.name
-            }}
-          </p>
-          <v-icon size="small">mdi:mdi-download</v-icon>
-        </div>
-        <span class="text-medium-emphasis d-flex">
-          <span class="d-flex">
-            サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
-          </span>
-          <span class="ml-1 d-flex">
-            種類: <v-chip size="small" class="mx-1">{{ file.type }}</v-chip>
-          </span>
+      <v-divider></v-divider>
+    
+      <!-- ファイル名表示 -->
+      <v-card-title style="font-size:14px">
+        {{ file.name }}
+      </v-card-title>
+
+      <v-card-text class="text-medium-emphasis d-flex">
+        <span class="d-flex align-center">
+          サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
         </span>
-      </span>
+        <span class="ml-1 d-flex">
+          種類: <v-chip size="small" class="mx-1">{{ file.type }}</v-chip>
+        </span>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-action>
+        <v-btn
+          @click="downloadFile(file)"
+          variant="text"
+          class="ma-1"
+        >
+          <v-icon size="small">mdi:mdi-download</v-icon>
+          ダウンロード
+        </v-btn>
+      </v-card-action>
+
     </v-card>
+
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+/* 画像でカーソルを反応させる用 */
+.imageCover {
+  cursor: pointer;
+}
+
+</style>

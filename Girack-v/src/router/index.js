@@ -17,44 +17,9 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../components/Auth.vue')
     },
-    {
-      path: '/menu/',
-      name: 'Menu',
-      component: () => import('../components/MenuPageComponent/Menu.vue'),
-      children: [
-        {
-          path: "profile",
-          component: () => import('../components/MenuPageComponent/Profile.vue'),
-        },
-        {
-          path: "sessions",
-          component: () => import('../components/MenuPageComponent/SessionManage.vue'),
-        },
-        {
-          path: "settings",
-          component: () => import('../components/MenuPageComponent/Settings.vue'),
-        },
-        {
-          path: "modlog",
-          component: () => import('../components/MenuPageComponent/Modlog.vue'),
-        },
-        {
-          path: "serversettings",
-          component: () => import('../components/MenuPageComponent/ServerSettings.vue'),
-        },
-        {
-          path: "members",
-          component: () => import('../components/MenuPageComponent/Members.vue'),
-        },
-        {
-          path: "aboutgirack",
-          component: () => import('../components/MenuPageComponent/AboutGirack.vue'),
-        },
-      ]
-    },
     { //チャンネルブラウザ
       path: '/browser',
-      name: 'Channel Browser',
+      name: 'Browser',
       component: () => import('../components/ChannelBrowser.vue')
     },
     { //チャンネル画面
@@ -64,12 +29,12 @@ const router = createRouter({
     },
     { //JSON見るためだけのページ(デバッグ用)
       path: '/jsonviewer/',
-      name: 'JSON viewer',
+      name: 'JSONviewer',
       component: () => import('../components/JSONviewer.vue')
     },
     { //オンラインのユーザーリスト
       path: '/onlineuser/',
-      name: 'Online User',
+      name: 'OnlineUser',
       component: () => import('../components/OnlineUsers.vue')
     }
   ],

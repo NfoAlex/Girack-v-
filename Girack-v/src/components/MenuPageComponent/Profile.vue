@@ -18,7 +18,6 @@ export default {
   data() {
     return {
       snackbar: false, //ログアウトアラート出力用
-      cd: ["card-default", "rounded-lg"], //CSS用クラス名
       okayIcon: "",
       imgsrc: window.location.origin + "/img/",
 
@@ -210,20 +209,21 @@ export default {
       window.location.reload();
     },
 
-    //ユーザー名検索のハンドラ
+    //ユーザー名変更用の名前検索ハンドラ
     SOCKETinfoSearchUser(result) {
       //結果を一つずつ調べる
       for (let index in result) {
+        //名前が検索結果にあったら
         if (result[index].username === this.nameChangingValue) {
+          //この名前を使えないと設定
           this.canUseThisName = false;
           this.resultNameNotAvailable = true;
-
-          console.log('名前あるわ');
 
           return;
         }
       }
 
+      //この名前を使えると設定
       this.resultNameNotAvailable = false;
       this.canUseThisName = true;
     }
@@ -252,22 +252,22 @@ export default {
   <div>
     <!-- 画像アップロード用ダイアログ -->
     <v-dialog v-model="iconUploadDialog" style="min-width: 650px; width: 50vh">
-      <v-card v-if="!iconUploadDone" class="rounded-lg pa-6">
+      <v-card v-if="!iconUploadDone" class="pa-4">
         <v-card-title> アイコンアップロード </v-card-title>
 
-        <v-alert title="注意" type="info" class="ma-1 rounded-lg">
-          <p class="text-subtitle-2">
-            現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
-            表示がおかしくります。だから予め自分でクロップしてね
-          </p>
-        </v-alert>
+        <v-card-text>
+          <v-alert title="注意" type="info" color="grey">
+            <p class="text-subtitle-2">
+              現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
+              表示がおかしくります。だから予め自分でクロップしてね
+            </p>
+          </v-alert>
 
-        <div style="margin-top: 32px">
           <v-file-input
             accept="image/jpeg, image/gif, image/png"
             :rules="iconUploadRule"
             v-model="iconUploadFile"
-            class="ma-3"
+            variant="underlined"
             :label="
               'アイコン用画像(' +
               humanFileSize(
@@ -278,16 +278,19 @@ export default {
             "
             show-size
           ></v-file-input>
-        </div>
+        </v-card-text>
 
-        <v-btn
-          :disabled="!iconUploadable"
-          @click="uploadIcon"
-          class="rounded-lg"
-          color="primary"
-        >
-          更新
-        </v-btn>
+        <v-card-action>
+          <v-btn
+            :disabled="!iconUploadable"
+            @click="uploadIcon"
+            color="primary"
+            block
+          >
+            更新
+          </v-btn>
+        </v-card-action>
+        
       </v-card>
 
       <v-card v-if="iconUploadDone" class="rounded-lg">
@@ -324,65 +327,63 @@ export default {
     <!-- パスワードを変えるためのダイアログ -->
     <v-dialog
       v-model="changePasswordDialog"
-      class="rounded-lg"
       style="min-width: 650px; width: 50vh"
     >
       <!-- 変更画面 -->
-      <v-card v-if="changePasswordResult !== 1" class="rounded-lg pa-6">
+      <v-card v-if="changePasswordResult !== 1" class="pa-4">
         <v-card-title> パスワードを変更 </v-card-title>
 
-        <p>今のパスワード</p>
-        <v-text-field
-          v-model="currentPassword"
-          class="rounded-lg"
-          variant="outlined"
-          type="password"
-        >
-        </v-text-field>
+        <v-card-text>
+          <p>今のパスワード</p>
+          <v-text-field
+            v-model="currentPassword"
+            variant="outlined"
+            type="password"
+          >
+          </v-text-field>
 
-        <p>新しいパスワード</p>
-        <v-text-field
-          v-model="newPassword"
-          class="rounded-lg"
-          variant="outlined"
-          type="password"
-          maxlength="128"
-          hint="16文字以上"
-          counter
-        >
-        </v-text-field>
+          <p>新しいパスワード</p>
+          <v-text-field
+            v-model="newPassword"
+            variant="outlined"
+            type="password"
+            maxlength="128"
+            hint="16文字以上"
+            counter
+          >
+          </v-text-field>
 
-        <p>確認</p>
-        <v-text-field
-          v-model="newPasswordCheck"
-          class="rounded-lg"
-          variant="outlined"
-          type="password"
-          maxlength="128"
-        >
-        </v-text-field>
+          <p>確認</p>
+          <v-text-field
+            v-model="newPasswordCheck"
+            variant="outlined"
+            type="password"
+            maxlength="128"
+          >
+          </v-text-field>
+        </v-card-text>
 
-        <v-btn
-          @click="changePassword"
-          color="secondary"
-          class="rounded-lg"
-          :disabled="
-            newPasswordCheck !== newPassword ||
-            newPassword.length < 16 ||
-            currentPassword.length === 0
-          "
-          block
-        >
-          パスワード変更
-        </v-btn>
+        <v-card-action>
+          <v-btn
+            @click="changePassword"
+            color="secondary"
+            :disabled="
+              newPasswordCheck !== newPassword ||
+              newPassword.length < 16 ||
+              currentPassword.length === 0
+            "
+            block
+          >
+            パスワード変更
+          </v-btn>
+        </v-card-action>
 
         <v-alert
           v-if="
             newPasswordCheck.length >= 1 && newPasswordCheck !== newPassword
           "
           type="error"
-          class="rounded-lg"
-          style="margin-top: 2.5%"
+          class="mt-3"
         >
           確認用のパスワードが一致しません
         </v-alert>
@@ -390,45 +391,43 @@ export default {
         <v-alert
           v-if="changePasswordResult === -1"
           type="error"
-          class="rounded-lg"
-          style="margin-top: 2.5%"
+          class="mt-3"
         >
           現在のパスワードで認証ができませんでした
         </v-alert>
       </v-card>
 
       <!-- 変更に成功した画面 -->
-      <v-card v-if="changePasswordResult === 1" class="rounded-lg pa-6">
+      <v-card v-if="changePasswordResult === 1" class="pa-4">
         <v-card-title> パスワードを変更 </v-card-title>
-        <span class="d-flex flex-column align-center pa-1 ma-2">
+        <span class="d-flex flex-column align-center pa-1 my-2">
           <p class="text-h4 pa-2">😏</p>
           <p>パスワードの変更ができました!</p>
         </span>
 
         <v-btn
           @click="changePasswordDialog = false"
-          class="rounded-lg ma-2"
           color="secondary"
           block
         >
-          あざ
+          閉じる
         </v-btn>
       </v-card>
     </v-dialog>
 
-    <!-- ユーザー変更用ダイアログ -->
+    <!-- ユーザー名変更用ダイアログ -->
     <v-dialog
       v-model="nameChangeDialog"
       style="max-width:650px;"
       width="50vh"
     >
-      <v-card class="rounded-lg">
+      <v-card class="rounded-lg pa-4">
         <v-card-title>
           ユーザー名変更
         </v-card-title>
 
         <!-- 入力欄 -->
-        <v-card-item>
+        <v-card-text>
           <p class="mb-1">新しいユーザー名</p>
           <v-text-field v-model="nameChangingValue"></v-text-field>
           <v-alert>
@@ -443,39 +442,39 @@ export default {
               使えます!
             </span>
           </v-alert>
-        </v-card-item>
+        </v-card-text>
 
         <!-- ボタン -->
-        <v-card-item class="d-flex flex-row-reverse mb-2">
-          <v-btn
-            @click="nameChangeDialog=false;"
-            class="ma-1 rounded-lg"
-            variant="flat"
-            color=""
-          >
-            キャンセル
-          </v-btn>
+        <v-card-action>
           <v-btn
             @click="updateName();nameChangeDialog=false;"
             :disabled="!canUseThisName"
-            class="ma-1 rounded-lg"
+            class="ma-1"
             variant="flat"
             color="primary"
           >
             変更する
           </v-btn>
-        </v-card-item>
+          <v-btn
+            @click="nameChangeDialog=false;"
+            class="ma-1 rounded"
+            variant="text"
+            color=""
+          >
+            キャンセル
+          </v-btn>
+        </v-card-action>
 
       </v-card>
     </v-dialog>
 
     <!-- プロフィールメイン画面 -->
-    <div style="height:100vh; overflow-y:auto; padding:3vh 0vh;">
+    <div class="px-6 pt-6" style="height:100%; overflow-y:auto;">
       <v-container>
         <v-row no-gutters>
           <!-- アバター -->
           <v-col cols="2">
-            <v-card variant="tonal" :class="cd" style="padding: 0">
+            <v-card variant="tonal" style="padding: 0">
               <v-img
                 @click="iconUploadDialog = true"
                 class="rounded-lg"
@@ -494,23 +493,29 @@ export default {
           </v-col>
 
           <!-- ユーザー名の部分 -->
-          <v-col cols="10">
-            <div variant="tonal" :class="cd" style="padding: 1% 10%">
-              <span class="d-flex flex-column" style="width: 100%">
+          <v-col cols="10" class="d-flex align-center">
+            <div variant="tonal" class="pl-4" style="width: 100%">
+              <span class="d-flex flex-column justify-start" style="width: 100%">
 
                 <!-- ユーザーID -->
                 <p class="text-left text-h6"># {{ myUserinfo.userid }}</p>
 
-                <!-- ユーザー名 -->
-                <p class="text-h4 text-left text-truncate">
-                  {{ myUserinfo.username }}
+                <div class="d-flex align-center justify-space-between " style="width:100%;">
+
+                  <!-- ユーザー名 -->
+                  <p class="text-h4 text-left text-truncate">
+                    {{ myUserinfo.username }}
+                  </p>
+
+                  <!-- ユーザー名編集ボタン -->
                   <v-btn
                     color="primary"
                     icon="mdi:mdi-pencil"
                     @click="nameChangeDialog=true;"
-                    class="rounded-lg ma-5"
+                    class="rounded ml-2"
                   ></v-btn>
-                </p>
+
+                </div>
 
               </span>
             </div>
@@ -518,10 +523,12 @@ export default {
         </v-row>
       </v-container>
 
+      <v-divider></v-divider>
+
       <v-container>
         <!-- パスワード変更 -->
         <v-row no-gutters>
-          <v-card variant="tonal" :class="cd" style="width: 100%">
+          <div style="width: 100%">
             <v-btn
               @click="changePasswordDialog = true"
               class="rounded-lg mb-5"
@@ -530,7 +537,7 @@ export default {
             >
               パスワードを変更
             </v-btn>
-        <!-- ログアウトボタン -->
+          <!-- ログアウトボタン -->
             <v-btn
               prepend-icon="mdi:mdi-logout"
               class="rounded-lg"
@@ -549,22 +556,9 @@ export default {
                 </v-btn>
               </template>
             </v-snackbar>
-          </v-card>
+          </div>
         </v-row>
       </v-container>
     </div>
   </div>
 </template>
-
-<style scoped>
-.card-default {
-  padding: 3%;
-  text-align: center;
-}
-
-.menu-card {
-  margin: 16px 12.5%;
-  padding: 7.5% 0;
-  text-align: center;
-}
-</style>

@@ -32,7 +32,7 @@ export default {
 
       //ユーザーページ用
       userDialogShow: false,
-      userDialogUserid: "00000001",
+      userDialogUserid: "00000000",
 
       //ユーザーロールの色を返す
       userRoleColor: {
@@ -240,133 +240,6 @@ export default {
       }
     },
 
-    //メッセージに背景をつけるために一つの送信者からの最初か、最後かまたは途中のメッセージか調べる
-    checkMsgPosition(userid, index) {
-      if (this.MsgDBActive === undefined || this.cropMessage.length <= 0)
-        return;
-
-      let AvatarNeedToShowBefore = false;
-      let AvatarNeedToShow = false;
-      let AvatarNeedToShowNext = false;
-
-      //アバターを見せる必要があるかどうか前、次、今の位置分調べておく
-      //前
-      try {
-        //そもそも一つ前のメッセージが存在するか確認
-        if (this.cropMessage[index + 1] !== undefined) {
-          AvatarNeedToShowBefore = this.checkShowAvatar(
-            this.cropMessage[index + 1].userid,
-            index + 1
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //今の位置
-      try {
-        AvatarNeedToShow = this.checkShowAvatar(userid, index);
-      } catch (e) {
-        console.error(e);
-      }
-
-      //次
-      try {
-        //そもそも次のメッセージが存在するか確認
-        if (this.cropMessage[index - 1] !== undefined) {
-          AvatarNeedToShowNext = this.checkShowAvatar(
-            this.cropMessage[index - 1].userid,
-            index - 1
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      let SameWithBefore = false; //ひとつ前と送信者が同じかどうかを格納
-      let SameWithNext = false; //次と送信者同じかどうかを格納
-
-      //一つ前と送信者が今のと同じならそう記録
-      try {
-        //まず一つ前のメッセージがあるか確認
-        if (this.cropMessage[index + 1] !== undefined) {
-          if (this.cropMessage[index + 1].userid === userid) {
-            SameWithBefore = true;
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //次の送信者が今のと同じならそう記録
-      try {
-        //まず次のメッセージがあるか確認
-        if (this.cropMessage[index - 1] !== undefined) {
-          if (this.cropMessage[index - 1].userid === userid) {
-            SameWithNext = true;
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-
-      //ここから条件処理
-      if (AvatarNeedToShowBefore) {
-        //一つ前でアバター出てるか
-        if (AvatarNeedToShow) {
-          if (SameWithNext) {
-            if (AvatarNeedToShowNext) {
-              return "msgBackgroundSingle";
-            } else {
-              return "msgBackgroundTop";
-            }
-          } else {
-            return "msgBackgroundSingle";
-          }
-        } else {
-          if (AvatarNeedToShowNext) {
-            return "msgBackgroundEnd";
-          }
-
-          if (SameWithBefore) {
-            if (SameWithNext) {
-              return "msgBackgroundMid";
-            } else {
-              return "msgBackgroundEnd";
-            }
-          } else {
-            return "msgBackgroundEnd";
-          }
-        }
-      } else if (AvatarNeedToShowNext) {
-        if (AvatarNeedToShow) {
-          if (AvatarNeedToShowNext) {
-            return "msgBackgroundSingle";
-          } else {
-            return "msgBackgroundTop";
-          }
-        } else {
-          return "msgBackgroundEnd";
-        }
-      } else {
-        if (AvatarNeedToShow) {
-          if (SameWithNext) {
-            return "msgBackgroundTop";
-          } else {
-            return "msgBackgroundSingle";
-          }
-        } else {
-          if (SameWithNext) {
-            return "msgBackgroundMid";
-          } else if (SameWithBefore) {
-            return "msgBackgroundEnd";
-          } else {
-            return "msgBackgroundSingle";
-          }
-        }
-      }
-    },
-
     //メッセージの時間を出力する関数
     printDate(time) {
       let t = new Date(); //時間取得用
@@ -448,273 +321,233 @@ export default {
 </script>
 
 <template>
-  <div
-    v-if="m.isSystemMessage === undefined || m.isSystemMessage === false"
-    :id="m.messageid"
-    class="d-flex justify-end"
-    style="margin: 0px 12px"
+  
+  <!-- ユーザーページ用 -->
+  <Userpage
+    v-if="userDialogShow"
+    v-model="userDialogShow"
+    :userid="userDialogUserid"
+  />
+
+  <!-- メッセージ本体 -->
+  <v-menu
+    open-on-hover
+    :close-on-content-click="false"
+    transition="none"
+    location="top end"
+    origin="end bottom"
   >
-    <!-- ユーザーページ用 -->
-    <div>
-      <Userpage
-        v-if="userDialogShow"
-        v-model="userDialogShow"
-        :userid="userDialogUserid"
-      />
-    </div>
-
-    <!-- アバター -->
-    <v-avatar
-      v-if="checkShowAvatar(m.userid, index)"
-      class="mx-auto flex-shrink-1"
-      width="5vw"
-      style="max-width: 20%"
-    >
-      <v-img
-        v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
-        @click="
-          () => {
-            userDialogShow = true;
-            userDialogUserid = m.userid;
-          }
-        "
-        class="pointed"
-        :alt="m.userid"
-        :src="uri + '/img/' + m.userid"
+    <!-- ホバーで反応する範囲 -->
+    <template v-slot:activator="{ props }">
+      <div
+        v-if="m.isSystemMessage === undefined || m.isSystemMessage === false"
+        v-bind="props"
+        :id="m.messageid"
+        class="d-flex px-3 py-1"
+        :class="[
+          checkShowAvatar(m.userid, index)?'pt-2':null,
+          msgHovered && msgIdHovering === m.messageid ? 'hovered' : null,
+          m.pinned?'pinned':null
+        ]"
+        @mouseover="mouseOverMsg(m.messageid, 'on')"
+        @mouseleave="mouseOverMsg(m.messageid, 'off')"
       >
-      </v-img>
 
-      <!-- 消去されているユーザーなら -->
-      <v-img v-else :alt="m.userid" :src="uri + '/img/' + m.userid">
-      </v-img>
-    </v-avatar>
-
-    <!-- アバターを表示しないときの空欄ホルダー -->
-    <v-avatar
-      v-else
-      class="mx-auto flex-shrink-1"
-      width="5vw"
-      style="max-width: 20%; height: 0 !important"
-    >
-      <v-img
-        v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
-        :alt="m.userid"
-      >
-      </v-img>
-    </v-avatar>
-
-    <!-- メッセージ本体 -->
-    <span
-      :class="[
-        m.pinned?'pinned':null,
-        msgHovered && msgIdHovering === m.messageid ? 'hovered' : null, //ホバー
-        checkMsgPosition(m.userid, index),
-      ]"
-      class="flex-grow-1"
-      style="
-        width: 90%;
-        margin-left: 8px;
-        padding-left: 1.5%;
-        padding-right: 1.5%;
-      "
-    >
-      <!-- メッセージ本体 -->
-      <!-- v-menuはホバーメニュー用 -->
-      <v-menu
-        open-on-hover
-        :open-on-click="false"
-        open-delay="100"
-        close-delay="0"
-        transition="none"
-        :close-on-content-click="false"
-        location="end top"
-        origin="overlap"
-      >
-        <!-- ホバーで反応する範囲 -->
-        <template v-slot:activator="{ props }">
-          <div
-            v-bind="props"
-            @mouseover="mouseOverMsg(m.messageid, 'on')"
-            @mouseleave="mouseOverMsg(m.messageid, 'off')"
+        <!-- アバター -->
+        <v-avatar
+          v-if="checkShowAvatar(m.userid, index)"
+          class="mx-auto flex-shrink-0"
+        >
+          <v-img
+            v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
+            @click="
+              () => {
+                userDialogShow = true;
+                userDialogUserid = m.userid;
+              }
+            "
+            class="pointed"
+            :alt="m.userid"
+            :src="uri + '/img/' + m.userid"
           >
+          </v-img>
 
-            <!-- ユーザー名と時間表記 -->
-            <div
-              class="text-h6 d-flex align-center"
-              v-if="checkShowAvatar(m.userid, index)"
-            >
-              <!-- ユーザー名 -->
-              <span class="text-truncate">
-                {{
-                  UserIndex[m.userid] !== undefined
-                    ? UserIndex[m.userid].username
-                    : m.userid
-                }}
-              </span>
+          <!-- 消去されているユーザーなら -->
+          <v-img v-else :alt="m.userid" :src="uri + '/img/' + m.userid">
+          </v-img>
+        </v-avatar>
 
-              <!-- ロールバッジ -->
-              <v-chip
-                v-if="
-                  getUserStats(m.userid, 'role') !== 'Member' &&
-                  CONFIG_DISPLAY.CONTENT_SHOW_ROLE
-                "
-                style="margin-left: 8px"
-                :color="this.userRoleColor[getUserStats(m.userid, 'role')]"
-                size="x-small"
-                :elevation="6"
-              >
-                {{ getUserStats(m.userid, "role") }}
-              </v-chip>
+        <!-- アバターを表示しないときの空欄ホルダー -->
+        <v-avatar
+          v-else
+          class="mx-auto flex-shrink-0"
+          style="height: 0 !important"
+        >
+          <v-img
+            v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
+            :alt="m.userid"
+          >
+          </v-img>
+        </v-avatar>
 
-              <!-- BANされたバッジ -->
-              <v-chip
-                v-if="getUserStats(m.userid, 'banned')"
-                color="red"
-                style="margin-left: 8px"
-                size="x-small"
-                :elevation="6"
-              >
-                BANNED
-              </v-chip>
+        <!-- メッセージ本体 -->
+        <span
+          class="flex-grow-1 px-3 mr-1"
+          style="width: 90%;"
+        >
 
-              <!-- タイムスタンプ -->
-              <span
-                class="text-caption"
-                style="margin-left: 8px; color: #999"
-              >
-                {{ printDate(m.time) }}
-              </span>
-            </div>
-
-            <!-- 返信データ -->
-            <ContentReplyRender
-              v-if="m.replyData.isReplying"
-              :messageid="m.replyData.messageid"
-              :channelid="m.channelid"
-            />
-
-            <!-- ピン留めされているかどうか -->
-            <div class="my-1">
-              <v-chip v-if="m.pinned" size="x-small">
-                <v-icon  size="small">
-                  mdi:mdi-pin
-                </v-icon>
-                ピン留め済み
-              </v-chip>
-            </div>
-
-            <!-- メッセージ本文と編集中表示 -->
-            <ContentMessageRender v-if="!msgEditing" :content="m.content" />
-            <ContentEditing
-              v-else
-              @close-editing="$emit('closeEditing'); msgEditing=false;"
-              :channelid="m.channelid"
-              :content="m.content"
-              :messageid="m.messageid"
-            />
-
-            <!-- メッセージが編集されていたら -->
-            <p v-if="m.isEdited" class="text-disabled text-caption">
-              編集済み
+          <!-- ユーザー名と時間表記 -->
+          <div
+            v-if="checkShowAvatar(m.userid, index)"
+            class="text-h6 d-flex align-center"
+          >
+            <!-- ユーザー名 -->
+            <p class="text-truncate font-weight-medium">
+              {{
+                UserIndex[m.userid] !== undefined
+                  ? UserIndex[m.userid].username
+                  : m.userid
+              }}
             </p>
 
-            <!-- ファイル添付表示 -->
-            <ContentAttatchmentRender
-              v-if="m.fileData"
-              :fileData="m.fileData"
-              :channelid="getPath"
-            />
+            <!-- ロールバッジ -->
+            <v-chip
+              v-if="
+                getUserStats(m.userid, 'role') !== 'Member' &&
+                CONFIG_DISPLAY.CONTENT_SHOW_ROLE
+              "
+              style="margin-left: 8px"
+              :color="this.userRoleColor[getUserStats(m.userid, 'role')]"
+              size="x-small"
+              :elevation="6"
+            >
+              {{ getUserStats(m.userid, "role") }}
+            </v-chip>
 
-            <!-- URLプレビュー用 -->
-            <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
+            <!-- BANされたバッジ -->
+            <v-chip
+              v-if="getUserStats(m.userid, 'banned')"
+              color="red"
+              style="margin-left: 8px"
+              size="x-small"
+              :elevation="6"
+            >
+              BANNED
+            </v-chip>
 
-            <!-- リアクション -->
-            <div>
-              <v-chip
-                @click="messageAction(m.messageid, 'reaction', r[0])"
-                style="
-                  margin-top: 4px;
-                  margin-right: 8px;
-                  margin-bottom: 4px;
-                  user-select: none;
-                  -webkit-user-select: none;
-                "
-                :size="isMobile?'default':'small'"
-                color="white"
-                v-for="r in Object.entries(m.reaction)"
-                :key="r"
+            <!-- タイムスタンプ -->
+            <span
+              v-if="checkShowAvatar(m.userid, index)"
+              style="color:#999; font-size:12px;"
+              class="mx-2"
               >
-                {{ getReaction(r[0]) }} {{ r[1] }}
-              </v-chip>
-            </div>
+                {{ printDate(m.time) }}
+            </span>
+            
           </div>
-        </template>
-        <!-- ここからホバーメニュー -->
-        <ContentHoverMenu
-          v-if="!msgEditing"
-          @update-editing-message="msgEditing=true"
-          @cancelEditing="msgEditing=false"
-          style="z-index: 30"
-          :m="m"
-          :userrole="getUserStats(m.userid, 'role')"
-          :channelid="getPath"
-        />
-      </v-menu>
-    </span>
-  </div>
+
+          <!-- 返信データ -->
+          <ContentReplyRender
+            v-if="m.replyData.isReplying"
+            :messageid="m.replyData.messageid"
+            :channelid="m.channelid"
+          />
+
+          <!-- ピン留めされているかどうか -->
+          <div>
+            <v-chip v-if="m.pinned" size="x-small">
+              <v-icon  size="small">
+                mdi:mdi-pin
+              </v-icon>
+              ピン留め済み
+            </v-chip>
+          </div>
+
+          <!-- メッセージ本文と編集中表示 -->
+          <ContentMessageRender style="font-size:14px;" v-if="!msgEditing" :content="m.content" />
+          <ContentEditing
+            v-else
+            @close-editing="$emit('closeEditing'); msgEditing=false;"
+            :channelid="m.channelid"
+            :content="m.content"
+            :messageid="m.messageid"
+          />
+
+          <!-- メッセージが編集されていたら -->
+          <p v-if="m.isEdited" class="text-disabled text-caption">
+            編集済み
+          </p>
+
+          <!-- ファイル添付表示 -->
+          <ContentAttatchmentRender
+            v-if="m.fileData"
+            :fileData="m.fileData"
+            :channelid="getPath"
+          />
+
+          <!-- URLプレビュー用 -->
+          <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
+
+          <!-- リアクション -->
+          <div class="d-flex">
+            <v-card
+              v-for="r in Object.entries(m.reaction)"
+              :key="r"
+              @click="messageAction(m.messageid, 'reaction', r[0])"
+              style="
+                width: fit-content;
+                font-size: 14px;
+                user-select: none;
+                -webkit-user-select: none;
+              "
+              class="px-2 py-1 mr-1 mt-1 mb-2"
+              :size="isMobile?'default':'small'"
+              :ripple="false"
+              variant="tonal"
+              density="compact"
+            >
+              {{ getReaction(r[0]) }} {{ r[1] }}
+            </v-card>
+          </div>
+
+        </span>
+      </div>
+
+    </template>
+
+    <!-- ここからホバーメニュー -->
+    <ContentHoverMenu
+      v-if="!msgEditing"
+      @mouseover="mouseOverMsg(m.messageid, 'on')"
+      @mouseleave="mouseOverMsg(m.messageid, 'off')"
+      @update-editing-message="msgEditing=true"
+      @cancelEditing="msgEditing=false"
+      style="z-index: 30"
+      :m="m"
+      :userrole="getUserStats(m.userid, 'role')"
+      :channelid="getPath"
+    />
+    
+  </v-menu>
+  
 </template>
 
 <style scoped>
 
 /* ホバーされたメッセージ */
 .hovered {
-  background-color: #444 !important;
+  background-color: rgb(var(--v-theme-hovered));
 }
 
 /* ピン留めされたメッセージ */
 .pinned {
-  background-color: #334 !important;
+  /* background-color: #445 !important; */
+  background-color: rgb(var(--v-theme-secondary));
 }
 
 .pointed {
   cursor: pointer;
 }
 
-.msgBackgroundMid {
-  border-radius: 0px;
-  background-color: #333;
-
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
-}
-
-.msgBackgroundTop {
-  border-top-right-radius: 12px;
-  border-top-left-radius: 12px;
-  background-color: #333;
-
-  margin-top: 6px;
-  padding-top: 8px !important;
-  padding-bottom: 2px !important;
-}
-
-.msgBackgroundEnd {
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  background-color: #333;
-
-  margin-bottom: 6px;
-  padding-bottom: 8px !important;
-  padding-top: 2px !important;
-}
-
-.msgBackgroundSingle {
-  border-radius: 12px;
-  background-color: #333;
-
-  margin: 6px 0;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
 
 </style>

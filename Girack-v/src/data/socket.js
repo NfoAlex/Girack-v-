@@ -2,6 +2,7 @@
 //通信とかそこらへん
 
 import { io } from "socket.io-client"; //ウェブソケット通信用
+import vuetify from "../main.js"; //テーマ変更用
 
 //Socket接続
 const socket = io(location.origin, {
@@ -15,7 +16,7 @@ import { ref } from "vue";
 
 import { getCONFIG } from "../config.js";
 
-export const CLIENT_VERSION = "alpha_20240112";
+export const CLIENT_VERSION = "alpha_20240201";
 
 const {
   CONFIG_SYNC,
@@ -828,6 +829,8 @@ socket.on("infoUserSaveConfig", (userSaveConfig) => {
     //設定を適用
     CONFIG_DISPLAY.value = {...CONFIG_DISPLAY.value, ...userSaveConfig.config.CONFIG_DISPLAY};
     CONFIG_NOTIFICATION.value = {...CONFIG_NOTIFICATION.value, ...userSaveConfig.config.CONFIG_NOTIFICATION};
+    //ライトテーマと設定されているならライトにする
+    if (userSaveConfig.config.CONFIG_THEME==="LIGHT") {vuetify.theme.global.name.value="thelight";}
   }
 });
 
@@ -889,7 +892,9 @@ socket.on("infoUserSaveMsgReadState", (userSaveMsgReadState) => {
           //ここで上書き
           dataMsg().MsgReadTime.value[index].time = userSaveMsgReadState.msgReadState[index].time;
           dataMsg().MsgReadTime.value[index].timeBefore = userSaveMsgReadState.msgReadState[index].timeBefore;
-        } catch(e) {}
+        } catch(e) {
+          console.log("socket :: infoUserSaveMsgReadState : 既読状態の上書きに失敗");
+        }
       }
     }
 
@@ -961,8 +966,9 @@ function loadDataFromCookie() {
   let COOKIE_ConfigSync;
   let COOKIE_ConfigDisplay;
   let COOKIE_ConfigNotify;
+  let COOKIE_ConfigTheme;
 
-  //クッキーから通知設定を読み込み
+  //クッキーから設定それぞれ読み込み
   try {
     COOKIE_ConfigSync = getCookie("configSync");
   } catch (e) {
@@ -977,6 +983,15 @@ function loadDataFromCookie() {
     COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
   } catch (e) {
     COOKIE_ConfigNotify = {};
+  }
+  try {
+    COOKIE_ConfigTheme = JSON.parse(getCookie("configTheme"));
+    //ライトテーマと設定されてるならライトにする
+    if (COOKIE_ConfigTheme === "LIGHT") {
+      vuetify.theme.global.name.value="thelight";
+    }
+  } catch (e) {
+    //nothing
   }
 
   //クッキーから表示設定を取得して適用
@@ -1043,8 +1058,6 @@ export function updateMsgReadState() {
 export function checkMsgNewCount(channelid) {
   //新着数を確認する履歴
   let msgDBChecking = dataMsg().MsgDB.value[channelid];
-  //確認した回数
-  let checkCount = 0;
 
   // console.log("socket :: checkMsgNewCount :",
   //   " 確認するチャンネル->", channelid,
@@ -1060,7 +1073,7 @@ export function checkMsgNewCount(channelid) {
       mention: 0,
       new: 0
     };
-  };
+  }
 
   //新着数初期化
   dataMsg().MsgReadTime.value[channelid].mention = 0;
@@ -1112,9 +1125,6 @@ export function checkMsgNewCount(channelid) {
       //faviconをドット表示に
       document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
     }
-
-    //確認カウント
-    checkCount++;
   }
 }
 

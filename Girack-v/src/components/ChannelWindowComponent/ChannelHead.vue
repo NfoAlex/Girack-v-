@@ -117,28 +117,31 @@ export default {
   />
 
   <!-- ヘッダの表示部分(メイン) -->
-  <div
-    class="d-flex align-center justify-space-evenly pa-1"
+  <v-card
+    class="d-flex align-center justify-space-evenly rounded-0 px-1 pb-1 bottomShadow"
     style="max-width: 100%; height: 100%"
   >
+    <!-- スマホUIだった時要のサイドバーボタン -->
     <v-btn
       v-if="isMobile"
       @click="$emit('toggleSidebar')"
       icon="mdi:mdi-menu-open"
-      class="rounded-lg ma-1"
+      class="rounded-lg ma-0"
       variant="text"
     >
     </v-btn>
-    <v-card
+    <!-- チャンネル名、概要 -->
+    <div
       @click="channelDialogShow = true"
-      :ripple="isMobile"
+      v-ripple
       :class="isMobile?'pa-2':null"
-      class="d-flex flex-column justify-start rounded-lg ma-1"
-      color="#222"
-      style=" padding: 0 16px; width: 100%;"
+      class="d-flex flex-column justify-start rounded-lg px-4"
+      variant="tonal"
+      style="width:100%; cursor:pointer"
     >
-      <!-- チャンネル情報(チャンネル名、概要) -->
+
       <div style="white-space: nowrap">
+
         <div class="overflow-x-hidden text-truncate text-h5">
           <span
             v-if="channelInfo.scope === 'private'"
@@ -169,6 +172,7 @@ export default {
 
           {{ channelInfo.channelname }}
         </div>
+
       </div>
 
       <v-divider v-if="!isMobile"></v-divider>
@@ -177,16 +181,15 @@ export default {
       <div
         v-if="!isMobile"
         color="grey"
-        class="rounded-lg"
-        style="padding: 2px 16px"
+        class="rounded"
       >
-        <p class="text-truncate text-h6">
+        <p class="text-truncate">
           {{ channelInfo.description }}
         </p>
       </div>
-    </v-card>
 
-    <v-divider class="ma-2" vertical inset></v-divider>
+    </div>
+    
 
     <!-- ボタン群 -->
     <div class="d-flex align-center">
@@ -211,7 +214,7 @@ export default {
         v-if="channelInfo.previewmode"
         @click="$router.push({ path: '/browser' })"
         :size="getDisplaySize"
-        class="rounded-lg ma-1"
+        class="rounded-lg mx-1"
         color="secondary"
       >
         ブラウザへ戻る
@@ -241,8 +244,14 @@ export default {
         <v-icon>mdi:mdi-menu</v-icon>
       </v-btn>
     </div>
-  </div>
+  </v-card>
 
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.bottomShadow {
+  box-shadow: 0px 8px 5px 0px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2));
+}
+
+</style>

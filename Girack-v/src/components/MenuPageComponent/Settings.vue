@@ -3,15 +3,35 @@
 import { getCONFIG } from "../../config.js";
 import { getSocket, setCookie } from "../../data/socket.js";
 import { dataUser } from "../../data/dataUserinfo";
+import { useTheme } from "vuetify";
 
 const socket = getSocket();
 
 export default {
   setup() {
-    //設定をインポート
-    const { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC } = getCONFIG();
+    //テーマ設定インポート
+    const theme = useTheme();
+    //テーマ切り替え
+    function toggleTheme() {
+      theme.global.name.value = theme.global.name.value==='thedark' ? 'thelight' : 'thedark';
+    }
+
+    const {
+      CONFIG_NOTIFICATION,
+      CONFIG_THEME,
+      CONFIG_DISPLAY,
+      CONFIG_SYNC
+    } = getCONFIG();
     const { myUserinfo } = dataUser();
-    return { CONFIG_NOTIFICATION, CONFIG_DISPLAY, CONFIG_SYNC, myUserinfo };
+    return {
+      theme,
+      toggleTheme,
+      CONFIG_NOTIFICATION,
+      CONFIG_THEME,
+      CONFIG_DISPLAY,
+      CONFIG_SYNC,
+      myUserinfo
+    };
   },
 
   data() {
@@ -23,6 +43,8 @@ export default {
       guessNum: 0,
       input: "",
       record: 0,
+
+      themeDark: this.theme.global.name.value==="thedark"?true:false,
 
       //表示するページ
       configPage: "sync",
@@ -60,6 +82,18 @@ export default {
       },
       deep: true,
     },
+
+    //テーマの切り替え検知、同期
+    themeDark: {
+      handler() {
+        //テーマの切り替えを行う
+        this.toggleTheme();
+        //設定値を登録、同期がONならクッキーに保存、同期
+        this.CONFIG_THEME = this.themeDark?"DARK":"LIGHT";
+        setCookie("configTheme", JSON.stringify(this.CONFIG_THEME), 7);
+        if (this.CONFIG_SYNC) this.updateConfigWithServer();
+      }
+    }
   },
 
   methods: {
@@ -100,6 +134,7 @@ export default {
         config: {
           CONFIG_DISPLAY: this.CONFIG_DISPLAY,
           CONFIG_NOTIFICATION: this.CONFIG_NOTIFICATION,
+          CONFIG_THEME: this.CONFIG_THEME,
           LIST_NOTIFICATION_MUTE_CHANNEL: this.LIST_NOTIFICATION_MUTE_CHANNEL,
         },
         reqSender: {
@@ -182,19 +217,21 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div style="height:100%">
     <!-- 同期設定をオンにするときの確認ダイアログ -->
     <v-dialog
       v-model="configSyncTogglingDialog"
       style="min-width: 650px; width: 50vh"
     >
-      <v-card class="pa-6 rounded-lg">
+      <v-card class="pa-6">
         <v-card-title> 同期の確認 </v-card-title>
 
-        <p class="text-subtitle-1">
-          設定を同期するようにします。
-          現在の設定をサーバー上の設定へ上書きしますか？
-        </p>
+        <v-card-text>
+          <p class="">
+            設定を同期するようにします。
+            現在の設定をサーバー上の設定へ上書きしますか？
+          </p>
+        </v-card-text>
 
         <v-divider class=""></v-divider>
 
@@ -203,7 +240,7 @@ export default {
             @click="updateConfigWithServer"
             block
             color="error"
-            class="ma-1 rounded-lg"
+            class="my-2 rounded-lg"
           >
             はい。上書きしてください。
           </v-btn>
@@ -211,7 +248,7 @@ export default {
             @click="bringConfigFromServer"
             block
             color="grey"
-            class="ma-1 rounded-lg"
+            class="my-2 rounded-lg"
           >
             いいえ。サーバー上の設定を取得して適用してください。
           </v-btn>
@@ -221,7 +258,7 @@ export default {
               configSyncTogglingDialog = false;
             "
             block
-            class="ma-1 rounded-lg"
+            class="my-2 rounded-lg"
           >
             やっぱキャンセル
           </v-btn>
@@ -230,93 +267,98 @@ export default {
     </v-dialog>
 
     <div
-      style="height: 100vh; width: 90%"
-      class="d-flex align-center flex-column"
+      style="width:100%; height:100%"
+      class="d-flex flex-column px-6 pt-6"
     >
-      <div style="width: 90%; padding-top: 3%" class="text-left align-center">
+      <div class="text-left">
         <p class="text-left" style="font-size: min(4vh, 36px)">設定</p>
       </div>
 
-      <!-- 設定ページボタン -->
-      <div style="width: 100%; padding-top: 8px">
-        <div class="d-flex align-center">
-          <div
-            class="ma-1 align-center mx-auto rounded-lg d-flex align-center scroll"
-            style="
-              width: 95%;
-              height: 7.5vh;
-              padding: 0 16px;
-              overflow-x: auto;
-              overflow-y: hidden;
-            "
+      <!-- 設定ページボタンバー -->
+      <div style="width: 100%;" class="d-flex align-center">
+        <div
+          class="align-center rounded-lg d-flex align-center scroll my-3"
+          style="
+            width: 95%;
+            overflow-x: auto;
+            overflow-y: hidden;
+          "
+        >
+          <v-btn
+            @click="configPage = 'sync'"
+            size="large"
+            :color="configPage === 'sync' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
           >
-            <v-btn
-              @click="configPage = 'sync'"
-              size="large"
-              :color="configPage === 'sync' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              同期
-            </v-btn>
+            同期
+          </v-btn>
 
-            <v-btn
-              @click="configPage = 'notification'"
-              size="large"
-              :color="configPage === 'notification' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              通知
-            </v-btn>
+          <v-btn
+            @click="configPage = 'notification'"
+            size="large"
+            :color="configPage === 'notification' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            通知
+          </v-btn>
 
-            <v-btn
-              @click="configPage = 'interface'"
-              size="large"
-              :color="configPage === 'interface' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              表示
-            </v-btn>
+          <v-btn
+            @click="configPage = 'theme'"
+            size="large"
+            :color="configPage === 'theme' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            テーマ
+          </v-btn>
 
-            <v-btn
-              @click="configPage = 'privacy'"
-              size="large"
-              :color="configPage === 'privacy' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              プライバシー
-            </v-btn>
+          <v-btn
+            @click="configPage = 'interface'"
+            size="large"
+            :color="configPage === 'interface' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            表示
+          </v-btn>
 
-            <v-btn
-              @click="configPage = 'game'"
-              size="large"
-              :color="configPage === 'game' ? 'secondary' : 'grey'"
-              class="ma-1 rounded-pill"
-            >
-              ?
-            </v-btn>
-          </div>
+          <v-btn
+            @click="configPage = 'privacy'"
+            size="large"
+            :color="configPage === 'privacy' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            プライバシー
+          </v-btn>
+
+          <v-btn
+            @click="configPage = 'game'"
+            size="large"
+            :color="configPage === 'game' ? 'secondary' : 'grey'"
+            class="ma-1 rounded-pill"
+          >
+            ?
+          </v-btn>
         </div>
       </div>
 
+      <v-divider></v-divider>
+
       <!-- 設定ページメイン -->
-      <div class="scroll" style="width: 100%; overflow-y: auto">
-        <div class="mx-auto" style="margin: 1% 0">
+      <div class="scroll pb-3" style="width:100%; overflow-y:auto">
+        <div class="mx-auto">
           <!-- 設定の同期 -->
           <v-card
             v-if="configPage === ('sync' || '')"
-            class="mx-auto rounded-lg card"
+            class="mx-auto rounded-lg"
           >
             <p class="text-h6 ma-2">同期</p>
             <p><v-icon>mdi:mdi-sync</v-icon>設定データの同期状態</p>
-            <v-card color="cardInner" class="cardInner pa-3 rounded-lg">
+            <v-card color="cardInner" class="pa-3 rounded-lg">
               <v-switch v-model="CONFIG_SYNC" label="設定を同期する"></v-switch>
               <p class="text-subtitle-2">
                 同期をオンにする際にサーバー上の設定データと同期するか確認されます。
               </p>
             </v-card>
           </v-card>
-
-          <br />
 
           <!-- 通知 -->
           <v-card
@@ -375,41 +417,166 @@ export default {
               </v-checkbox>
             </v-card>
 
-            <br />
-
-            <!-- 
-                        <p><v-icon>mdi:mdi-tab</v-icon>タブ名に表示する通知</p>
-                        <v-card class="cardInner pa-3 rounded-lg">
-                            <v-checkbox
-                                v-model="CONFIG_NOTIFICATION.DISPLAY_TAB_NEW"
-                                label="新着数を表示"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                            <v-checkbox
-                                v-model="CONFIG_NOTIFICATION.DISPLAY_TAB_MENTION"
-                                label="メンション数を表示"
-                                density="compact"
-                            >
-                            </v-checkbox>
-                            <p style="padding:0 5%;">
-                                例:<br>
-                                メンションが2件来てて、新着数が合計で6件なら<br>
-                                <span v-if="CONFIG_NOTIFICATION.DISPLAY_TAB_MENTION">[!2]</span>
-                                <span v-if="CONFIG_NOTIFICATION.DISPLAY_TAB_NEW">[6]</span>
-                                #random
-                            </p>
-                        </v-card>
-                        -->
           </v-card>
 
-          <br />
+          <!-- テーマ -->
+          <v-card
+            v-if="configPage === 'theme'"
+            class="mx-auto rounded-lg card"
+          >
+            <p class="text-h6 ma-2">テーマ</p>
+            <!-- テーマ切り替えスイッチ -->
+            <span style="width:fit-content;" class="d-flex justify-center align-center mx-auto">
+              <v-switch v-model="themeDark" style="">
+                <template v-slot:prepend>
+                  <v-icon>mdi:mdi-weather-sunny</v-icon>
+                </template>
+                <template v-slot:append>
+                  <v-icon>mdi:mdi-weather-night</v-icon>
+                </template>
+              </v-switch>
+            </span>
+
+            <!-- テーマのプレビュー部分 -->
+            <div class="d-flex justify-center">
+              <v-theme-provider theme="thelight">
+                <v-card width="50%" class="pa-5 text-left rounded-e-0">
+                  <div class="mb-3">ライトテーマ</div>
+
+                  <v-card color="cardInner" class="pa-5">
+                    <p>内部カード表示</p>
+                    <v-chip
+                      color="purple"
+                      size="x-small"
+                      elevation="6"
+                    >
+                      Admin
+                    </v-chip>
+                    <v-chip
+                      color="blue"
+                      size="x-small"
+                      elevation="6"
+                    >
+                      Moderator
+                    </v-chip>
+                    <span class="d-flex mt-3">
+                      <v-card
+                        @click="null"
+                        :ripple="false"
+                        density="compact"
+                        variant="tonal"
+                        class="px-2 py-1 mr-1 mt-1 mb-2"
+                        style="
+                          width: fit-content;
+                          font-size: 14px;
+                          user-select: none;
+                          -webkit-user-select: none;
+                        "
+                      >
+                        🤔 1
+                      </v-card>
+                      <v-card
+                        @click="null"
+                        :ripple="false"
+                        density="compact"
+                        variant="tonal"
+                        class="px-2 py-1 mr-1 mt-1 mb-2"
+                        style="
+                          width: fit-content;
+                          font-size: 14px;
+                          user-select: none;
+                          -webkit-user-select: none;
+                        "
+                      >
+                        😏 6
+                      </v-card>
+                    </span>
+                  </v-card>
+
+                  <v-btn color="secondary" class="my-1">
+                    プライマリボタン
+                  </v-btn>
+                  <v-btn color="grey" class="my-1">
+                    セカンダリボタン
+                  </v-btn>
+                  <v-btn variant="text" class="my-1">
+                    取り消し系ボタン
+                  </v-btn>
+                </v-card>
+              </v-theme-provider>
+              <v-theme-provider theme="thedark">
+                <v-card width="50%" class="pa-5 text-right rounded-s-0">
+                  <div class="mb-3">ダークテーマ</div>
+                  <v-card color="cardInner" class="pa-5 my-1">
+                    <p>内部カード表示</p>
+                    <v-chip
+                      color="purple"
+                      size="x-small"
+                      elevation="6"
+                    >
+                      Admin
+                    </v-chip>
+                    <v-chip
+                      color="blue"
+                      size="x-small"
+                      elevation="6"
+                    >
+                      Moderator
+                    </v-chip>
+                    <span class="d-flex justify-end mt-3">
+                      <v-card
+                        @click="null"
+                        :ripple="false"
+                        density="compact"
+                        variant="tonal"
+                        class="px-2 py-1 mr-1 mt-1 mb-2"
+                        style="
+                          width: fit-content;
+                          font-size: 14px;
+                          user-select: none;
+                          -webkit-user-select: none;
+                        "
+                      >
+                        🤔 1
+                      </v-card>
+                      <v-card
+                        @click="null"
+                        :ripple="false"
+                        density="compact"
+                        variant="tonal"
+                        class="px-2 py-1 mr-1 mt-1 mb-2"
+                        style="
+                          width: fit-content;
+                          font-size: 14px;
+                          user-select: none;
+                          -webkit-user-select: none;
+                        "
+                      >
+                        😏 6
+                      </v-card>
+                    </span>
+                  </v-card>
+                  <v-btn color="secondary" class="my-1">
+                    プライマリボタン
+                  </v-btn>
+                  <v-btn color="grey" class="my-1">
+                    セカンダリボタン
+                  </v-btn>
+                  <v-btn variant="text" class="my-1">
+                    取り消し系ボタン
+                  </v-btn>
+                </v-card>
+              </v-theme-provider>
+            </div>
+
+          </v-card>
 
           <!-- UI表示 -->
           <v-card
             v-if="configPage === 'interface'"
             class="mx-auto rounded-lg card"
           >
+
             <p class="text-h6 ma-2">表示</p>
 
             <p><v-icon>mdi:mdi-chat</v-icon>チャット画面</p>
@@ -483,8 +650,6 @@ export default {
             </v-card>
           </v-card>
 
-          <br />
-
           <!-- プライバシー(ネタ) -->
           <v-card
             v-if="configPage === 'privacy'"
@@ -503,8 +668,6 @@ export default {
               </v-checkbox>
             </v-card>
           </v-card>
-
-          <br />
 
           <v-card
             v-if="configPage === 'game'"
@@ -541,16 +704,6 @@ export default {
 </template>
 
 <style scoped>
-.cardInner {
-  margin: 8px 0;
-}
-
-.card {
-  width: 95%;
-  margin-top: 16px;
-
-  padding: 16px;
-}
 
 .scroll::-webkit-scrollbar {
   width: 5px;

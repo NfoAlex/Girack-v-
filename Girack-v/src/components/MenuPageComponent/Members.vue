@@ -104,38 +104,38 @@ export default {
   <!-- 一つ下のDIVのCSS適用するために囲んでいる -->
   <div>
     <div
-      class="mx-auto d-flex flex-column justify-space-evenly"
-      style="width: 90%"
+      class="mx-auto d-flex flex-column justify-space-evenly px-6 pt-6"
     >
       <!-- ユーザーページ用 -->
       <Userpage
         v-if="userDialogShow"
         v-model="userDialogShow"
         :userid="userDialogUserid"
+        :openedFromMemberpage="true"
       />
 
       <div style="height: 8vh">
         <div>
           <p class="text-truncate" style="font-size: min(4vh, 36px)">
-            愉快なメンバーたち
+            メンバーリスト
           </p>
         </div>
       </div>
 
       <div style="">
         <!-- ユーザー検索バー -->
-        <div class="mx-auto" style="width: 90%">
+        <div class="mx-auto">
           <v-text-field
             v-model="nameSearchText"
             density="compact"
-            variant="solo"
+            variant="solo-filled"
             placeholder="名前検索(Aa 区別有り)"
           >
           </v-text-field>
         </div>
       </div>
 
-      <v-virtual-scroll height="80vh" :items="userListDisplay">
+      <v-virtual-scroll :items="userListDisplay">
         <template v-slot:default="{ item }">
           <v-card
             color="grey"
