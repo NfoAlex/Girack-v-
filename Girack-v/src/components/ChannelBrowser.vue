@@ -378,7 +378,7 @@ export default {
 
       <!-- 名前順 -->
       <v-btn
-        @click="sortMethod='nameZtoA'"
+        @click="() => { sortMethod='nameZtoA'; sortDisplay(); }"
         v-if="sortMethod==='nameAtoZ'"
         class="rounded"
         icon="mdi:mdi-sort-alphabetical-ascending"
@@ -386,7 +386,7 @@ export default {
 
       <!-- 名前逆順 -->
       <v-btn
-        @click="sortMethod='id1to9'"
+        @click="() => { sortMethod='id1to9'; sortDisplay(); }"
         v-if="sortMethod==='nameZtoA'"
         class="rounded"
         icon="mdi:mdi-sort-alphabetical-descending"
@@ -394,7 +394,7 @@ export default {
 
       <!-- チャンネルID順 -->
       <v-btn
-        @click="sortMethod='id9to1'"
+        @click="() => { sortMethod='id9to1'; sortDisplay(); }"
         v-if="sortMethod==='id1to9'"
         class="rounded"
         icon="mdi:mdi-sort-numeric-ascending"
@@ -402,7 +402,7 @@ export default {
 
       <!-- チャンネルID逆順 -->
       <v-btn
-        @click="sortMethod='nameAtoZ'"
+        @click="() => { sortMethod='nameAtoZ'; sortDisplay(); }"
         v-if="sortMethod==='id9to1'"
         class="rounded"
         icon="mdi:mdi-sort-numeric-descending"
