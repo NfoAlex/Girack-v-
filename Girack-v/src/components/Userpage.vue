@@ -451,6 +451,7 @@ export default {
             <v-btn
               v-if="!deleteConfirmCheckDisplay"
               @dblclick="deleteConfirmCheckDisplay = true"
+              :disabled="myUserinfo.userid===userid"
               color="error"
               size="large"
               variant="outlined"
