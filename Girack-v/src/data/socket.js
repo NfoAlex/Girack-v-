@@ -2,6 +2,7 @@
 //通信とかそこらへん
 
 import { io } from "socket.io-client"; //ウェブソケット通信用
+import vuetify from "../main.js"; //テーマ変更用
 
 //Socket接続
 const socket = io(location.origin, {
@@ -828,6 +829,8 @@ socket.on("infoUserSaveConfig", (userSaveConfig) => {
     //設定を適用
     CONFIG_DISPLAY.value = {...CONFIG_DISPLAY.value, ...userSaveConfig.config.CONFIG_DISPLAY};
     CONFIG_NOTIFICATION.value = {...CONFIG_NOTIFICATION.value, ...userSaveConfig.config.CONFIG_NOTIFICATION};
+    //ライトテーマと設定されているならライトにする
+    if (userSaveConfig.config.CONFIG_THEME==="LIGHT") {vuetify.theme.global.name.value="thelight";}
   }
 });
 
@@ -963,8 +966,9 @@ function loadDataFromCookie() {
   let COOKIE_ConfigSync;
   let COOKIE_ConfigDisplay;
   let COOKIE_ConfigNotify;
+  let COOKIE_ConfigTheme;
 
-  //クッキーから通知設定を読み込み
+  //クッキーから設定それぞれ読み込み
   try {
     COOKIE_ConfigSync = getCookie("configSync");
   } catch (e) {
@@ -979,6 +983,15 @@ function loadDataFromCookie() {
     COOKIE_ConfigNotify = JSON.parse(getCookie("configNotify"));
   } catch (e) {
     COOKIE_ConfigNotify = {};
+  }
+  try {
+    COOKIE_ConfigTheme = JSON.parse(getCookie("configTheme"));
+    //ライトテーマと設定されてるならライトにする
+    if (COOKIE_ConfigTheme === "LIGHT") {
+      vuetify.theme.global.name.value="thelight";
+    }
+  } catch (e) {
+    //nothing
   }
 
   //クッキーから表示設定を取得して適用
