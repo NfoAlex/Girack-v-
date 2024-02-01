@@ -400,6 +400,7 @@ export default {
               <!-- ユーザー名変更させるボタン -->
               <v-btn
                 @click="changeTargetUsername"
+                :disabled="myUserinfo.userid===userid"
                 class="rounded"
                 color="grey"
                 block
@@ -419,6 +420,7 @@ export default {
               <v-btn
                 @dblclick="banUser"
                 v-if="!targetinfo.banned"
+                :disabled="myUserinfo.userid===userid"
                 color="error"
                 block
               >
