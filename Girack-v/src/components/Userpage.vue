@@ -350,7 +350,7 @@ export default {
             v-if="myUserinfo.role === 'Admin' && openedFromMemberpage"
             value="delete"
           >
-            <p style="color: pink">削除</p>
+            <p style="color:red">削除</p>
           </v-tab>
         </v-tabs>
         <v-divider></v-divider>
