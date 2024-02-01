@@ -20,6 +20,7 @@ export default {
     return {
       channelList: {},
       channelJoined: [],
+      sortMethod: "nameAtoZ", //nameAtoZ, nameZtoA, id1to9, id9to1
 
       overlayChannelRemove: false, //チャンネル消去オーバーレイ
       overlayChannelCreate: false, //チャンネル作成オーバーレイ
@@ -329,7 +330,37 @@ export default {
     <!-- ボタンと検索バー -->
     <div class="d-flex justify-start align-center my-3">
 
-      <v-btn class="rounded">ソートさせる予定のボタン</v-btn>
+      <!-- 名前順 -->
+      <v-btn
+        @click="sortMethod='nameZtoA'"
+        v-if="sortMethod==='nameAtoZ'"
+        class="rounded"
+        icon="mdi:mdi-sort-alphabetical-ascending"
+      />
+
+      <!-- 名前逆順 -->
+      <v-btn
+        @click="sortMethod='id1to9'"
+        v-if="sortMethod==='nameZtoA'"
+        class="rounded"
+        icon="mdi:mdi-sort-alphabetical-descending"
+      />
+
+      <!-- チャンネルID順 -->
+      <v-btn
+        @click="sortMethod='id9to1'"
+        v-if="sortMethod==='id1to9'"
+        class="rounded"
+        icon="mdi:mdi-sort-numeric-ascending"
+      />
+
+      <!-- チャンネルID逆順 -->
+      <v-btn
+        @click="sortMethod='nameAtoZ'"
+        v-if="sortMethod==='id9to1'"
+        class="rounded"
+        icon="mdi:mdi-sort-numeric-descending"
+      />
       
     </div>
 
