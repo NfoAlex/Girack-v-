@@ -156,11 +156,9 @@ export default {
     },
 
     sortDisplay() {
-
-      //if (this.sortMethod === "")
       switch (this.sortMethod) {
+        //名前順でソート、表示
         case "nameAtoZ":
-          //名前順でソート、表示
           this.channelList = this.channelListData.sort((channel1, channel2) => {
             //大文字小文字の差を無くす
             let _channel1 = channel1.name.toLowerCase();
@@ -170,14 +168,34 @@ export default {
           });
           break;
 
-          case "nameZtoA":
-          //名前順でソート、表示
+        //名前逆順でソート、表示
+        case "nameZtoA":
           this.channelList = this.channelListData.sort((channel1, channel2) => {
             //大文字小文字の差を無くす
             let _channel1 = channel1.name.toLowerCase();
             let _channel2 = channel2.name.toLowerCase();
 
             return _channel1 > _channel2 ? -1 : _channel1 < _channel2 ? 1 : 0;
+          });
+          break;
+
+        //チャンネルID順でソート、表示
+        case "id1to9":
+          this.channelList = this.channelListData.sort((channel1, channel2) => {
+            console.log("ChannelBrowser :: sortDisplay : データ->", channel1, channel2);
+            let channel1id = channel1.channelid;
+            let channel2id = channel2.channelid;
+            return channel1id < channel2id ? -1 : channel1id > channel2id ? 1 : 0;
+          });
+          break;
+
+          //チャンネルID順でソート、表示
+        case "id9to1":
+          this.channelList = this.channelListData.sort((channel1, channel2) => {
+            console.log("ChannelBrowser :: sortDisplay : データ->", channel1, channel2);
+            let channel1id = channel1.channelid;
+            let channel2id = channel2.channelid;
+            return channel1id > channel2id ? -1 : channel1id < channel2id ? 1 : 0;
           });
           break;
 
