@@ -403,32 +403,64 @@ export default {
         @click="() => { sortMethod='nameZtoA'; sortDisplay(); }"
         v-if="sortMethod==='nameAtoZ'"
         class="rounded"
-        icon="mdi:mdi-sort-alphabetical-ascending"
-      />
+        icon=""
+      >
+        <v-icon>mdi:mdi-sort-alphabetical-ascending</v-icon>
+        <v-tooltip
+          activator="parent"
+          location="top"
+        >
+          名前順 (A→Z)
+        </v-tooltip>
+      </v-btn>
 
       <!-- 名前逆順 -->
       <v-btn
         @click="() => { sortMethod='id1to9'; sortDisplay(); }"
         v-if="sortMethod==='nameZtoA'"
         class="rounded"
-        icon="mdi:mdi-sort-alphabetical-descending"
-      />
+        icon=""
+      >
+        <v-icon>mdi:mdi-sort-alphabetical-descending</v-icon>
+        <v-tooltip
+          activator="parent"
+          location="top"
+        >
+          名前順 (Z→A)
+        </v-tooltip>
+      </v-btn>
 
       <!-- チャンネルID順 -->
       <v-btn
         @click="() => { sortMethod='id9to1'; sortDisplay(); }"
         v-if="sortMethod==='id1to9'"
         class="rounded"
-        icon="mdi:mdi-sort-numeric-ascending"
-      />
+        icon=""
+      >
+        <v-icon>mdi:mdi-sort-numeric-ascending</v-icon>
+        <v-tooltip
+          activator="parent"
+          location="top"
+        >
+          チャンネルID順 (01→99)
+        </v-tooltip>
+      </v-btn>
 
       <!-- チャンネルID逆順 -->
       <v-btn
         @click="() => { sortMethod='nameAtoZ'; sortDisplay(); }"
         v-if="sortMethod==='id9to1'"
         class="rounded"
-        icon="mdi:mdi-sort-numeric-descending"
-      />
+        icon=""
+      >
+        <v-icon>mdi:mdi-sort-numeric-descending</v-icon>
+        <v-tooltip
+          activator="parent"
+          location="top"
+        >
+          チャンネルID順 (99→01)
+        </v-tooltip>
+      </v-btn>
       
     </div>
 
