@@ -7,7 +7,6 @@ import { useTheme } from "vuetify";
 
 const socket = getSocket();
 
-
 export default {
   setup() {
     //テーマ設定インポート
@@ -89,8 +88,9 @@ export default {
       handler() {
         //テーマの切り替えを行う
         this.toggleTheme();
-        //設定値を登録、同期がONなら同期
+        //設定値を登録、同期がONならクッキーに保存、同期
         this.CONFIG_THEME = this.themeDark?"DARK":"LIGHT";
+        setCookie("configTheme", JSON.stringify(this.CONFIG_THEME), 7);
         if (this.CONFIG_SYNC) this.updateConfigWithServer();
       }
     }
