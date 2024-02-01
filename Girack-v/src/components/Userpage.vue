@@ -389,12 +389,12 @@ export default {
           <div class="d-flex flex-column">
             <v-card color="cardInner" class="my-3 py-3 px-2">
               <!-- ロール選択 -->
+              <p style="font-size:14px;">ユーザーのロール</p>
               <v-select
                 v-model="targetUserRole"
-                style="width: 100%; max-width: 200px"
                 density="compact"
-                label="ロール"
                 :items="roleList"
+                block
               ></v-select>
 
               <!-- ユーザー名変更させるボタン -->
