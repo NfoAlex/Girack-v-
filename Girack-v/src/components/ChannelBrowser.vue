@@ -155,6 +155,7 @@ export default {
       });
     },
 
+    //表示するチャンネルデータをソート方法に準じてソートする
     sortDisplay() {
       switch (this.sortMethod) {
         //名前順でソート、表示
@@ -189,7 +190,7 @@ export default {
           });
           break;
 
-          //チャンネルID順でソート、表示
+        //チャンネルID逆順でソート、表示
         case "id9to1":
           this.channelList = this.channelListData.sort((channel1, channel2) => {
             console.log("ChannelBrowser :: sortDisplay : データ->", channel1, channel2);
