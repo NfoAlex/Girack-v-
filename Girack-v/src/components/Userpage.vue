@@ -444,15 +444,15 @@ export default {
         </v-window-item>
 
         <!-- ユーザー削除タブ(メンバーページからだけ) -->
-        <v-window-item value="delete" class="ma-5">
+        <v-window-item value="delete">
           <v-card color="cardInner" class="my-3">
             <v-btn
               v-if="!deleteConfirmCheckDisplay"
               @dblclick="deleteConfirmCheckDisplay = true"
-              class="rounded-lg"
               color="error"
               size="large"
-              variant="tonal"
+              variant="outlined"
+              block
             >
               このユーザーを削除
               <v-tooltip
@@ -468,6 +468,7 @@ export default {
               color="error"
               size="large"
               elevation="16"
+              block
             >
               本当にいいの?
               <v-tooltip
