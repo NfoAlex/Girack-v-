@@ -252,22 +252,22 @@ export default {
   <div>
     <!-- 画像アップロード用ダイアログ -->
     <v-dialog v-model="iconUploadDialog" style="min-width: 650px; width: 50vh">
-      <v-card v-if="!iconUploadDone" class="rounded-lg pa-6">
+      <v-card v-if="!iconUploadDone" class="pa-4">
         <v-card-title> アイコンアップロード </v-card-title>
 
-        <v-alert title="注意" type="info" class="ma-1 rounded-lg">
-          <p class="text-subtitle-2">
-            現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
-            表示がおかしくります。だから予め自分でクロップしてね
-          </p>
-        </v-alert>
+        <v-card-text>
+          <v-alert title="注意" type="info" color="grey">
+            <p class="text-subtitle-2">
+              現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
+              表示がおかしくります。だから予め自分でクロップしてね
+            </p>
+          </v-alert>
 
-        <div style="margin-top: 32px">
           <v-file-input
             accept="image/jpeg, image/gif, image/png"
             :rules="iconUploadRule"
             v-model="iconUploadFile"
-            class="ma-3"
+            variant="underlined"
             :label="
               'アイコン用画像(' +
               humanFileSize(
@@ -278,16 +278,19 @@ export default {
             "
             show-size
           ></v-file-input>
-        </div>
+        </v-card-text>
 
-        <v-btn
-          :disabled="!iconUploadable"
-          @click="uploadIcon"
-          class="rounded-lg"
-          color="primary"
-        >
-          更新
-        </v-btn>
+        <v-card-action>
+          <v-btn
+            :disabled="!iconUploadable"
+            @click="uploadIcon"
+            color="primary"
+            block
+          >
+            更新
+          </v-btn>
+        </v-card-action>
+        
       </v-card>
 
       <v-card v-if="iconUploadDone" class="rounded-lg">
