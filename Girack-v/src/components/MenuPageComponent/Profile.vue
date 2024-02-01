@@ -327,65 +327,63 @@ export default {
     <!-- パスワードを変えるためのダイアログ -->
     <v-dialog
       v-model="changePasswordDialog"
-      class="rounded-lg"
       style="min-width: 650px; width: 50vh"
     >
       <!-- 変更画面 -->
-      <v-card v-if="changePasswordResult !== 1" class="rounded-lg pa-6">
+      <v-card v-if="changePasswordResult !== 1" class="pa-4">
         <v-card-title> パスワードを変更 </v-card-title>
 
-        <p>今のパスワード</p>
-        <v-text-field
-          v-model="currentPassword"
-          class="rounded-lg"
-          variant="outlined"
-          type="password"
-        >
-        </v-text-field>
+        <v-card-text>
+          <p>今のパスワード</p>
+          <v-text-field
+            v-model="currentPassword"
+            variant="outlined"
+            type="password"
+          >
+          </v-text-field>
 
-        <p>新しいパスワード</p>
-        <v-text-field
-          v-model="newPassword"
-          class="rounded-lg"
-          variant="outlined"
-          type="password"
-          maxlength="128"
-          hint="16文字以上"
-          counter
-        >
-        </v-text-field>
+          <p>新しいパスワード</p>
+          <v-text-field
+            v-model="newPassword"
+            variant="outlined"
+            type="password"
+            maxlength="128"
+            hint="16文字以上"
+            counter
+          >
+          </v-text-field>
 
-        <p>確認</p>
-        <v-text-field
-          v-model="newPasswordCheck"
-          class="rounded-lg"
-          variant="outlined"
-          type="password"
-          maxlength="128"
-        >
-        </v-text-field>
+          <p>確認</p>
+          <v-text-field
+            v-model="newPasswordCheck"
+            variant="outlined"
+            type="password"
+            maxlength="128"
+          >
+          </v-text-field>
+        </v-card-text>
 
-        <v-btn
-          @click="changePassword"
-          color="secondary"
-          class="rounded-lg"
-          :disabled="
-            newPasswordCheck !== newPassword ||
-            newPassword.length < 16 ||
-            currentPassword.length === 0
-          "
-          block
-        >
-          パスワード変更
-        </v-btn>
+        <v-card-action>
+          <v-btn
+            @click="changePassword"
+            color="secondary"
+            :disabled="
+              newPasswordCheck !== newPassword ||
+              newPassword.length < 16 ||
+              currentPassword.length === 0
+            "
+            block
+          >
+            パスワード変更
+          </v-btn>
+        </v-card-action>
 
         <v-alert
           v-if="
             newPasswordCheck.length >= 1 && newPasswordCheck !== newPassword
           "
           type="error"
-          class="rounded-lg"
-          style="margin-top: 2.5%"
+          class="mt-3"
         >
           確認用のパスワードが一致しません
         </v-alert>
@@ -393,28 +391,26 @@ export default {
         <v-alert
           v-if="changePasswordResult === -1"
           type="error"
-          class="rounded-lg"
-          style="margin-top: 2.5%"
+          class="mt-3"
         >
           現在のパスワードで認証ができませんでした
         </v-alert>
       </v-card>
 
       <!-- 変更に成功した画面 -->
-      <v-card v-if="changePasswordResult === 1" class="rounded-lg pa-6">
+      <v-card v-if="changePasswordResult === 1" class="pa-4">
         <v-card-title> パスワードを変更 </v-card-title>
-        <span class="d-flex flex-column align-center pa-1 ma-2">
+        <span class="d-flex flex-column align-center pa-1 my-2">
           <p class="text-h4 pa-2">😏</p>
           <p>パスワードの変更ができました!</p>
         </span>
 
         <v-btn
           @click="changePasswordDialog = false"
-          class="rounded-lg ma-2"
           color="secondary"
           block
         >
-          あざ
+          閉じる
         </v-btn>
       </v-card>
     </v-dialog>
