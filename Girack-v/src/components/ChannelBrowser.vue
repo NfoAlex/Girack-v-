@@ -18,7 +18,8 @@ export default {
 
   data() {
     return {
-      channelList: {},
+      channelList: [],
+      channelListData: [],
       channelJoined: [],
       sortMethod: "nameAtoZ", //nameAtoZ, nameZtoA, id1to9, id9to1
 
@@ -154,6 +155,37 @@ export default {
       });
     },
 
+    sortDisplay() {
+
+      //if (this.sortMethod === "")
+      switch (this.sortMethod) {
+        case "nameAtoZ":
+          //名前順でソート、表示
+          this.channelList = this.channelListData.sort((channel1, channel2) => {
+            //大文字小文字の差を無くす
+            let _channel1 = channel1.name.toLowerCase();
+            let _channel2 = channel2.name.toLowerCase();
+
+            return _channel1 < _channel2 ? -1 : _channel1 > _channel2 ? 1 : 0;
+          });
+          break;
+
+          case "nameZtoA":
+          //名前順でソート、表示
+          this.channelList = this.channelListData.sort((channel1, channel2) => {
+            //大文字小文字の差を無くす
+            let _channel1 = channel1.name.toLowerCase();
+            let _channel2 = channel2.name.toLowerCase();
+
+            return _channel1 > _channel2 ? -1 : _channel1 < _channel2 ? 1 : 0;
+          });
+          break;
+
+        default:
+          break;
+      }
+    },
+
     //チャンネルリストの取得
     SOCKETinfoList(dat) {
       //型が違うかデータが無効なら関数を終わらせる
@@ -162,7 +194,21 @@ export default {
         return;
       }
 
-      this.channelList = dat.channelList; //リスト追加
+      //チャンネル情報のJSONを配列化
+      let ArrayChannelList = Object.entries(dat.channelList);
+      //配列化したデータの中のチャンネル情報のみを入れるよう配列
+      let ArrayChannelListFiltered = [];
+
+      //チャンネル情報のみを抜き出して配列へ追加
+      for (let channelObject of ArrayChannelList) {
+        ArrayChannelListFiltered.push(channelObject[1]);
+      }
+
+      //受信データ保存
+      this.channelListData = ArrayChannelListFiltered;
+
+      //ソート、表示
+      this.sortDisplay();
 
       // console.log("ChannelBrwoser :: infoList : dat ↓ ");
       // console.log(dat);
