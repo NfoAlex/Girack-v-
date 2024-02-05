@@ -472,7 +472,7 @@ export default {
         variant="tonal"
         class="mt-4"
         v-for="c in Object.entries(channelList)"
-        :key="c"
+        :key="c[1].channelid"
       >
         <div class="d-flex align-center py-1 px-3">
           <v-icon icon="mdi:mdi-pound" class="pr-2"></v-icon>
@@ -498,7 +498,7 @@ export default {
           <!-- ボタン群 -->
           <!-- 削除ボタン -->
           <v-btn
-            @click="channelRemove(c[0])"
+            @click="channelRemove(c[1].channelid)"
             v-if="
               Serverinfo.config.CHANNEL.CHANNEL_DELETE_AVAILABLEFORMEMBER ||
               myUserinfo.role !== 'Member'
@@ -515,8 +515,8 @@ export default {
 
           <!-- プレビューボタン -->
           <v-btn
-            v-if="!myUserinfo.channelJoined.includes(c[0])"
-            @click="channelPreview(c[0])"
+            v-if="!myUserinfo.channelJoined.includes(c[1].channelid)"
+            @click="channelPreview(c[1].channelid)"
             icon=""
             size="small"
             class="rounded"
@@ -527,8 +527,8 @@ export default {
 
           <!-- 参加/退出ボタン -->
           <v-btn
-            v-if="!myUserinfo.channelJoined.includes(c[0])"
-            @click="channelJoin(c[0])"
+            v-if="!myUserinfo.channelJoined.includes(c[1].channelid)"
+            @click="channelJoin(c[1].channelid)"
             variant="tonal"
             class=""
             size="small"
@@ -536,14 +536,12 @@ export default {
           >
           <v-btn
             v-else
-            @click="channelLeave(c[0])"
+            @click="channelLeave(c[1].channelid)"
             variant="outlined"
             class=""
             size="small"
             >退出</v-btn
           >
-
-          
 
         </div>
 
@@ -556,6 +554,8 @@ export default {
               ? c[1].description.substring(150, 0) + "..."
               : c[1].description
           }}
+          <hr>
+          {{ c }}
         </p>
       </v-card>
     </div>
