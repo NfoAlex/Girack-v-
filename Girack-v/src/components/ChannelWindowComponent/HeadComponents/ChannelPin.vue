@@ -236,12 +236,6 @@ export default {
       <v-card-title class="d-flex align-center">
         <v-icon>mdi:mdi-pound</v-icon>
         <div class="me-auto text-truncate">{{ channelname }}</div>
-        <v-btn
-          @click="$emit('closePin')"
-          class="rounded-lg"
-          color="secondary"
-          icon="mdi:mdi-close"
-        ></v-btn>
       </v-card-title>
 
       <v-card-subtitle>
@@ -266,8 +260,6 @@ export default {
           </v-btn>
         </div>
       </v-card-subtitle>
-
-      
 
       <v-card-text style="overflow-y:auto; padding-bottom:5%">
 
