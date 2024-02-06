@@ -554,8 +554,6 @@ export default {
               ? c[1].description.substring(150, 0) + "..."
               : c[1].description
           }}
-          <hr>
-          {{ c }}
         </p>
       </v-card>
     </div>
