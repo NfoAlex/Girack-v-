@@ -403,14 +403,6 @@ export function getMessage(channelid, readLength, startLength) {
 socket.on("infoServer", (dat) => {
   console.log("socket :: infoServer : ", dat);
 
-  //もしサーバーとクライアントのバージョンが違っていたらページを更新させる
-  if (
-    dat.serverVersion !== CLIENT_VERSION &&
-    dataUser().myUserinfo.value.loggedin
-  ) {
-    location.reload();
-  }
-
   //サーバーの基本情報の更新
   Serverinfo.value = {
     servername: dat.servername, //サーバーの名前
