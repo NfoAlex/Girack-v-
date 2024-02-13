@@ -29,6 +29,9 @@ export default {
       //背景用CSS
       backgroundSrc: "url(" + window.location.origin + "/pancake.jpg)",
 
+      //セッション用クッキーが保存されているかどうか
+      hasSessionCookie: false,
+
       //見た目
       tab: null, //ログインと登録のタブ用
       Connected: false, //接続状況の保存用
@@ -136,6 +139,7 @@ export default {
   mounted() {
     socket.emit("getInfoServer"); //サーバーの情報を取得
 
+    if (getCookie("session") !== "") this.hasSessionCookie = true;
 
     //認証結果の受け取りと処理
     socket.on("authResult", this.SOCKETauthResult);
