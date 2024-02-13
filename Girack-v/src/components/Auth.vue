@@ -200,7 +200,22 @@ export default {
         <v-divider class="my-2"></v-divider>
         <v-card-action>
           <v-btn @click="$router.go(0)" color="secondary">リロードしてみる</v-btn>
-          <v-btn @click="()=>{clientVersionDifference=false}" variant="text" class="ml-2">閉じる</v-btn>
+          <v-btn
+            v-if="hasSessionCookie"
+            @click="requestAuthByCookie"
+            variant="text"
+            class="ml-2"
+          >
+            このまま認証する
+          </v-btn>
+          <v-btn
+            v-if="!hasSessionCookie"
+            @click="()=>{clientVersionDifference=false}"
+            variant="text"
+            class="ml-2"
+          >
+            閉じる
+          </v-btn>
         </v-card-action>
       </v-card-text>
     </v-card>
