@@ -64,6 +64,30 @@ export default {
       this.error = false;
     },
 
+    //クッキーでの認証
+    requestAuthByCookie() {
+      //クッキーに認証情報があるか確認
+      if (getCookie("session") !== "") {
+        try {
+          console.log("Auth :: mounted : クッキーで認証します");
+          
+          //クッキーからユーザー名とセッションIDを抽出
+          let userid = JSON.parse(getCookie("session")).userid;
+          let sessionid = JSON.parse(getCookie("session")).sessionid;
+
+          //認証する
+          socket.emit(
+            "authBySession",
+            {
+              userid: userid,
+              sessionid: sessionid
+            },
+            CLIENT_VERSION
+          );
+        } catch(e) {console.log("Auth :: mounted : クッキー認証エラー->", e);}
+      }
+    },
+
     //登録申請
     requestRegister() {
       socket.emit("register", {
@@ -112,26 +136,6 @@ export default {
   mounted() {
     socket.emit("getInfoServer"); //サーバーの情報を取得
 
-    //クッキーに認証情報があるか確認
-    if (getCookie("session") !== "") {
-      try {
-        console.log("Auth :: mounted : クッキーで認証します");
-        
-        //クッキーからユーザー名とセッションIDを抽出
-        let userid = JSON.parse(getCookie("session")).userid;
-        let sessionid = JSON.parse(getCookie("session")).sessionid;
-
-        //認証する
-        socket.emit(
-          "authBySession",
-          {
-            userid: userid,
-            sessionid: sessionid
-          },
-          CLIENT_VERSION
-        );
-      } catch(e) {console.log("Auth :: mounted : クッキー認証エラー->", e);}
-    }
 
     //認証結果の受け取りと処理
     socket.on("authResult", this.SOCKETauthResult);
