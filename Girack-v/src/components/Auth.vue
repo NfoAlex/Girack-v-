@@ -129,9 +129,11 @@ export default {
       this.serverinfoLoaded = dat; //サーバーの情報
       document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
 
-      //もしサーバーとクライアントがバージョンが違っていたら
+      //もしサーバーとクライアントがバージョンが違っていたらアラート
       if (this.serverinfoLoaded.serverVersion !== CLIENT_VERSION) {
         this.clientVersionDifference = true;
+      } else if (this.hasSessionCookie) {//違っていてクッキーがあれば認証
+        this.requestAuthByCookie();
       }
     },
   },
