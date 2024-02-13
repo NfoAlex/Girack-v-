@@ -166,21 +166,33 @@ export default {
   >
     <v-card class="pa-4">
       <v-card-title> 注意 </v-card-title>
-      <p class="pa-3">
-        どうやらサーバーとクライアントでバージョンが違うようです
-      </p>
-      <v-card
-        color="grey"
-        class="pa-3 ma-4 flex-column d-flex justify-center align-center"
-      >
-        <p>
-          サーバーのバージョン :
-          <code>{{ serverinfoLoaded.serverVersion }}</code>
-        </p>
-        <p>
-          クライアントのバージョン : <code>{{ clientVersion }}</code>
-        </p>
-      </v-card>
+      <v-card-text>
+        <div class="py-2">
+          <p>
+            どうやらサーバーとクライアントでバージョンが違うようです
+          </p>
+          <p>
+            一部機能を使用できない可能性があります。
+          </p>
+        </div>
+        <v-card
+          color="grey"
+          class="pa-3 my-2 flex-column d-flex justify-center align-center"
+        >
+          <p>
+            サーバーのバージョン :
+            <code>{{ serverinfoLoaded.serverVersion }}</code>
+          </p>
+          <p>
+            クライアントのバージョン : <code>{{ clientVersion }}</code>
+          </p>
+        </v-card>
+        <v-divider class="my-2"></v-divider>
+        <v-card-action>
+          <v-btn @click="$router.go(0)" color="secondary">リロードしてみる</v-btn>
+          <v-btn @click="()=>{clientVersionDifference=false}" variant="text" class="ml-2">閉じる</v-btn>
+        </v-card-action>
+      </v-card-text>
     </v-card>
   </v-dialog>
 
