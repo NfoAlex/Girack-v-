@@ -29,6 +29,9 @@ export default {
       //背景用CSS
       backgroundSrc: "url(" + window.location.origin + "/pancake.jpg)",
 
+      //セッション用クッキーが保存されているかどうか
+      hasSessionCookie: false,
+
       //見た目
       tab: null, //ログインと登録のタブ用
       Connected: false, //接続状況の保存用
@@ -62,6 +65,30 @@ export default {
       socket.emit("auth", {username:this.unForAuth, password:this.pwForAuth}, CLIENT_VERSION);
       this.success = false;
       this.error = false;
+    },
+
+    //クッキーでの認証
+    requestAuthByCookie() {
+      //クッキーに認証情報があるか確認
+      if (getCookie("session") !== "") {
+        try {
+          console.log("Auth :: mounted : クッキーで認証します");
+          
+          //クッキーからユーザー名とセッションIDを抽出
+          let userid = JSON.parse(getCookie("session")).userid;
+          let sessionid = JSON.parse(getCookie("session")).sessionid;
+
+          //認証する
+          socket.emit(
+            "authBySession",
+            {
+              userid: userid,
+              sessionid: sessionid
+            },
+            CLIENT_VERSION
+          );
+        } catch(e) {console.log("Auth :: mounted : クッキー認証エラー->", e);}
+      }
     },
 
     //登録申請
@@ -102,9 +129,11 @@ export default {
       this.serverinfoLoaded = dat; //サーバーの情報
       document.title = dat.servername; //ウェブサイトタイトルをインスタンス名に
 
-      //もしサーバーとクライアントがバージョンが違っていたら
+      //もしサーバーとクライアントがバージョンが違っていたらアラート
       if (this.serverinfoLoaded.serverVersion !== CLIENT_VERSION) {
         this.clientVersionDifference = true;
+      } else if (this.hasSessionCookie) {//違っていてクッキーがあれば認証
+        this.requestAuthByCookie();
       }
     },
   },
@@ -112,26 +141,7 @@ export default {
   mounted() {
     socket.emit("getInfoServer"); //サーバーの情報を取得
 
-    //クッキーに認証情報があるか確認
-    if (getCookie("session") !== "") {
-      try {
-        console.log("Auth :: mounted : クッキーで認証します");
-        
-        //クッキーからユーザー名とセッションIDを抽出
-        let userid = JSON.parse(getCookie("session")).userid;
-        let sessionid = JSON.parse(getCookie("session")).sessionid;
-
-        //認証する
-        socket.emit(
-          "authBySession",
-          {
-            userid: userid,
-            sessionid: sessionid
-          },
-          CLIENT_VERSION
-        );
-      } catch(e) {console.log("Auth :: mounted : クッキー認証エラー->", e);}
-    }
+    if (getCookie("session") !== "") this.hasSessionCookie = true;
 
     //認証結果の受け取りと処理
     socket.on("authResult", this.SOCKETauthResult);
@@ -190,7 +200,22 @@ export default {
         <v-divider class="my-2"></v-divider>
         <v-card-action>
           <v-btn @click="$router.go(0)" color="secondary">リロードしてみる</v-btn>
-          <v-btn @click="()=>{clientVersionDifference=false}" variant="text" class="ml-2">閉じる</v-btn>
+          <v-btn
+            v-if="hasSessionCookie"
+            @click="requestAuthByCookie"
+            variant="text"
+            class="ml-2"
+          >
+            このまま認証する
+          </v-btn>
+          <v-btn
+            v-if="!hasSessionCookie"
+            @click="()=>{clientVersionDifference=false}"
+            variant="text"
+            class="ml-2"
+          >
+            閉じる
+          </v-btn>
         </v-card-action>
       </v-card-text>
     </v-card>
