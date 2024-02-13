@@ -329,206 +329,211 @@ export default {
     :userid="userDialogUserid"
   />
 
-  <!-- メッセージ本体 -->
-  <v-menu
-    open-on-hover
-    :close-on-content-click="false"
-    transition="none"
-    location="top end"
-    origin="end bottom"
-  >
-    <!-- ホバーで反応する範囲 -->
-    <template v-slot:activator="{ props }">
-      <div
-        v-if="m.isSystemMessage === undefined || m.isSystemMessage === false"
-        v-bind="props"
-        :id="m.messageid"
-        class="d-flex px-3 py-1"
-        :class="[
-          checkShowAvatar(m.userid, index)?'pt-2':null,
-          msgHovered && msgIdHovering === m.messageid ? 'hovered' : null,
-          m.pinned?'pinned':null
-        ]"
-        @mouseover="mouseOverMsg(m.messageid, 'on')"
-        @mouseleave="mouseOverMsg(m.messageid, 'off')"
-      >
-
-        <!-- アバター -->
-        <v-avatar
-          v-if="checkShowAvatar(m.userid, index)"
-          class="mx-auto flex-shrink-0"
-        >
-          <v-img
-            v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
-            @click="
-              () => {
-                userDialogShow = true;
-                userDialogUserid = m.userid;
-              }
-            "
-            class="pointed"
-            :alt="m.userid"
-            :src="uri + '/img/' + m.userid"
-          >
-          </v-img>
-
-          <!-- 消去されているユーザーなら -->
-          <v-img v-else :alt="m.userid" :src="uri + '/img/' + m.userid">
-          </v-img>
-        </v-avatar>
-
-        <!-- アバターを表示しないときの空欄ホルダー -->
-        <v-avatar
-          v-else
-          class="mx-auto flex-shrink-0"
-          style="height: 0 !important"
-        >
-          <v-img
-            v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
-            :alt="m.userid"
-          >
-          </v-img>
-        </v-avatar>
-
-        <!-- メッセージ本体 -->
-        <span
-          class="flex-grow-1 px-3 mr-1"
-          style="width: 90%;"
+  <div style="width:100%;">
+    <!-- メッセージ本体 -->
+    <v-menu
+      open-on-hover
+      :close-on-content-click="false"
+      transition="none"
+      location="top end"
+      origin="start center"
+    >
+      <!-- ホバーで反応する範囲 -->
+      <template v-slot:activator="{ props }">
+        <div
+          v-if="m.isSystemMessage === undefined || m.isSystemMessage === false"
+          v-bind="props"
+          :id="m.messageid"
+          class="d-flex px-3 py-1"
+          :class="[
+            checkShowAvatar(m.userid, index)?'pt-2':null,
+            msgHovered && msgIdHovering === m.messageid ? 'hovered' : null,
+            m.pinned?'pinned':null
+          ]"
+          @mouseover="mouseOverMsg(m.messageid, 'on')"
+          @mouseleave="mouseOverMsg(m.messageid, 'off')"
         >
 
-          <!-- ユーザー名と時間表記 -->
-          <div
+          <!-- アバター -->
+          <v-avatar
             v-if="checkShowAvatar(m.userid, index)"
-            class="text-h6 d-flex align-center"
+            class="mx-auto flex-shrink-0"
           >
-            <!-- ユーザー名 -->
-            <p class="text-truncate font-weight-medium">
-              {{
-                UserIndex[m.userid] !== undefined
-                  ? UserIndex[m.userid].username
-                  : m.userid
-              }}
+            <v-img
+              v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
+              @click="
+                () => {
+                  userDialogShow = true;
+                  userDialogUserid = m.userid;
+                }
+              "
+              class="pointed"
+              :alt="m.userid"
+              :src="uri + '/img/' + m.userid"
+            >
+            </v-img>
+
+            <!-- 消去されているユーザーなら -->
+            <v-img v-else :alt="m.userid" :src="uri + '/img/' + m.userid">
+            </v-img>
+          </v-avatar>
+
+          <!-- アバターを表示しないときの空欄ホルダー -->
+          <v-avatar
+            v-else
+            class="mx-auto flex-shrink-0"
+            style="height: 0 !important"
+          >
+            <v-img
+              v-if="getUserStats(m.userid, 'role') !== 'Deleted'"
+              :alt="m.userid"
+            >
+            </v-img>
+          </v-avatar>
+
+          <!-- メッセージ本体 -->
+          <span
+            class="flex-grow-1 px-3 mr-1"
+            style="width: 90%;"
+          >
+
+            <!-- ユーザー名と時間表記 -->
+            <div
+              v-if="checkShowAvatar(m.userid, index)"
+              class="text-h6 d-flex align-center"
+            >
+              <!-- ユーザー名 -->
+              <p class="text-truncate font-weight-medium">
+                {{
+                  UserIndex[m.userid] !== undefined
+                    ? UserIndex[m.userid].username
+                    : m.userid
+                }}
+              </p>
+
+              <!-- ロールバッジ -->
+              <v-chip
+                v-if="
+                  getUserStats(m.userid, 'role') !== 'Member' &&
+                  CONFIG_DISPLAY.CONTENT_SHOW_ROLE
+                "
+                style="margin-left: 8px"
+                :color="this.userRoleColor[getUserStats(m.userid, 'role')]"
+                size="x-small"
+                :elevation="6"
+              >
+                {{ getUserStats(m.userid, "role") }}
+              </v-chip>
+
+              <!-- BANされたバッジ -->
+              <v-chip
+                v-if="getUserStats(m.userid, 'banned')"
+                color="red"
+                style="margin-left: 8px"
+                size="x-small"
+                :elevation="6"
+              >
+                BANNED
+              </v-chip>
+
+              <!-- タイムスタンプ -->
+              <span
+                v-if="checkShowAvatar(m.userid, index)"
+                style="color:#999; font-size:12px;"
+                class="mx-2"
+                >
+                  {{ printDate(m.time) }}
+              </span>
+              
+            </div>
+
+            <!-- 返信データ -->
+            <ContentReplyRender
+              v-if="m.replyData.isReplying"
+              :messageid="m.replyData.messageid"
+              :channelid="m.channelid"
+            />
+
+            <!-- ピン留めされているかどうか -->
+            <div>
+              <v-chip v-if="m.pinned" size="x-small">
+                <v-icon  size="small">
+                  mdi:mdi-pin
+                </v-icon>
+                ピン留め済み
+              </v-chip>
+            </div>
+
+            <!-- メッセージ本文と編集中表示 -->
+            <ContentMessageRender style="font-size:14px;" v-if="!msgEditing" :content="m.content" />
+            <ContentEditing
+              v-else
+              @close-editing="$emit('closeEditing'); msgEditing=false;"
+              :channelid="m.channelid"
+              :content="m.content"
+              :messageid="m.messageid"
+            />
+
+            <!-- メッセージが編集されていたら -->
+            <p v-if="m.isEdited" class="text-disabled text-caption">
+              編集済み
             </p>
 
-            <!-- ロールバッジ -->
-            <v-chip
-              v-if="
-                getUserStats(m.userid, 'role') !== 'Member' &&
-                CONFIG_DISPLAY.CONTENT_SHOW_ROLE
-              "
-              style="margin-left: 8px"
-              :color="this.userRoleColor[getUserStats(m.userid, 'role')]"
-              size="x-small"
-              :elevation="6"
-            >
-              {{ getUserStats(m.userid, "role") }}
-            </v-chip>
+            <!-- ファイル添付表示 -->
+            <ContentAttatchmentRender
+              v-if="m.fileData"
+              :fileData="m.fileData"
+              :channelid="getPath"
+            />
 
-            <!-- BANされたバッジ -->
-            <v-chip
-              v-if="getUserStats(m.userid, 'banned')"
-              color="red"
-              style="margin-left: 8px"
-              size="x-small"
-              :elevation="6"
-            >
-              BANNED
-            </v-chip>
+            <!-- URLプレビュー用 -->
+            <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
 
-            <!-- タイムスタンプ -->
-            <span
-              v-if="checkShowAvatar(m.userid, index)"
-              style="color:#999; font-size:12px;"
-              class="mx-2"
+            <!-- リアクション -->
+            <div class="d-flex">
+              <v-card
+                v-for="r in Object.entries(m.reaction)"
+                :key="r"
+                @click="messageAction(m.messageid, 'reaction', r[0])"
+                style="
+                  width: fit-content;
+                  font-size: 14px;
+                  user-select: none;
+                  -webkit-user-select: none;
+                "
+                class="px-2 py-1 mr-1 mt-1 mb-2"
+                :size="isMobile?'default':'small'"
+                :ripple="false"
+                variant="tonal"
+                density="compact"
               >
-                {{ printDate(m.time) }}
-            </span>
-            
-          </div>
+                {{ getReaction(r[0]) }} {{ r[1] }}
+              </v-card>
+            </div>
 
-          <!-- 返信データ -->
-          <ContentReplyRender
-            v-if="m.replyData.isReplying"
-            :messageid="m.replyData.messageid"
-            :channelid="m.channelid"
-          />
+          </span>
+        </div>
 
-          <!-- ピン留めされているかどうか -->
-          <div>
-            <v-chip v-if="m.pinned" size="x-small">
-              <v-icon  size="small">
-                mdi:mdi-pin
-              </v-icon>
-              ピン留め済み
-            </v-chip>
-          </div>
+      </template>
 
-          <!-- メッセージ本文と編集中表示 -->
-          <ContentMessageRender style="font-size:14px;" v-if="!msgEditing" :content="m.content" />
-          <ContentEditing
-            v-else
-            @close-editing="$emit('closeEditing'); msgEditing=false;"
-            :channelid="m.channelid"
-            :content="m.content"
-            :messageid="m.messageid"
-          />
-
-          <!-- メッセージが編集されていたら -->
-          <p v-if="m.isEdited" class="text-disabled text-caption">
-            編集済み
-          </p>
-
-          <!-- ファイル添付表示 -->
-          <ContentAttatchmentRender
-            v-if="m.fileData"
-            :fileData="m.fileData"
-            :channelid="getPath"
-          />
-
-          <!-- URLプレビュー用 -->
-          <ContentURLpreview v-if="m.hasUrl" :urlData="m.urlData" />
-
-          <!-- リアクション -->
-          <div class="d-flex">
-            <v-card
-              v-for="r in Object.entries(m.reaction)"
-              :key="r"
-              @click="messageAction(m.messageid, 'reaction', r[0])"
-              style="
-                width: fit-content;
-                font-size: 14px;
-                user-select: none;
-                -webkit-user-select: none;
-              "
-              class="px-2 py-1 mr-1 mt-1 mb-2"
-              :size="isMobile?'default':'small'"
-              :ripple="false"
-              variant="tonal"
-              density="compact"
-            >
-              {{ getReaction(r[0]) }} {{ r[1] }}
-            </v-card>
-          </div>
-
-        </span>
+      <!-- ホバーメニューの位置を調整するため ml-auto を使用 -->
+      <div class="ml-auto">
+        <!-- ここからホバーメニュー -->
+        <ContentHoverMenu
+          v-if="!msgEditing"
+          @mouseover="mouseOverMsg(m.messageid, 'on')"
+          @mouseleave="mouseOverMsg(m.messageid, 'off')"
+          @update-editing-message="msgEditing=true"
+          @cancelEditing="msgEditing=false"
+          style="z-index:30;"
+          :m="m"
+          :userrole="getUserStats(m.userid, 'role')"
+          :channelid="getPath"
+        />
       </div>
-
-    </template>
-
-    <!-- ここからホバーメニュー -->
-    <ContentHoverMenu
-      v-if="!msgEditing"
-      @mouseover="mouseOverMsg(m.messageid, 'on')"
-      @mouseleave="mouseOverMsg(m.messageid, 'off')"
-      @update-editing-message="msgEditing=true"
-      @cancelEditing="msgEditing=false"
-      style="z-index: 30"
-      :m="m"
-      :userrole="getUserStats(m.userid, 'role')"
-      :channelid="getPath"
-    />
-    
-  </v-menu>
+      
+    </v-menu>
+  </div>
   
 </template>
 
