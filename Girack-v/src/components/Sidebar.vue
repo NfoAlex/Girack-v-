@@ -247,13 +247,13 @@ export default {
       <div class="px-1">
         <v-card
           @click="menuDialogDisplay=true"
-          variant="text"
-          class="d-flex justify-start px-3 align-center"
-          :class="isMobile?'pa-3':'pa-2'"
+          variant="tonal"
+          class="d-flex justify-start px-3 mb-1 elevation-6 align-center"
+          :class="isMobile?'py-4':'py-3'"
           style="font-size:14px;"
         >
           <v-icon size="small" class="mr-1">
-            <v-avatar size="24">
+            <v-avatar size="22">
               <v-img
                 :alt="myUserinfo.userid"
                 :src="thisURL + '/img/' + myUserinfo.userid"
