@@ -329,7 +329,7 @@ export default {
     :userid="userDialogUserid"
   />
 
-  <div style="width:100%;">
+  <div>
     <!-- メッセージ本体 -->
     <v-menu
       open-on-hover
@@ -337,6 +337,8 @@ export default {
       transition="none"
       location="top end"
       origin="start center"
+      @mouseover="mouseOverMsg(m.messageid, 'on')"
+      @mouseleave="mouseOverMsg(m.messageid, 'off')"
     >
       <!-- ホバーで反応する範囲 -->
       <template v-slot:activator="{ props }">
@@ -521,8 +523,6 @@ export default {
         <!-- ここからホバーメニュー -->
         <ContentHoverMenu
           v-if="!msgEditing"
-          @mouseover="mouseOverMsg(m.messageid, 'on')"
-          @mouseleave="mouseOverMsg(m.messageid, 'off')"
           @update-editing-message="msgEditing=true"
           @cancelEditing="msgEditing=false"
           style="z-index:30;"
