@@ -147,7 +147,7 @@ export default {
     <v-card
       v-for="file in fileData.attatchmentData"
       :key="file.name"
-      style="width:45%; max-width:350px;"
+      style="width:50%; max-width:500px; min-width:300px;"
     >
       <!-- 画像ならカバーとして表示 -->
       <v-img
@@ -158,7 +158,8 @@ export default {
         "
         class="imageCover"
         :src="filesrc + channelid + '/' + file.fileid"
-        height="250"
+        height="auto"
+        max-height="300"
         cover
       ></v-img>
 
