@@ -4,7 +4,8 @@ Vueの学習用、趣味として開発中。
 
 Girack-v-Backend(バックエンド) : https://github.com/NfoAlex/Girack-v-Backend
 
-![202311281146100003480000000193450941](https://github.com/NfoAlex/Girack-v-/assets/40430040/03875cce-1c6d-45d4-8af6-ff8590a59780)
+![b0f23841-31a4-47f8-892a-b77382ce0ee0](https://github.com/NfoAlex/Girack-v-/assets/40430040/97e179a4-e652-4eec-9c4f-7e48a544b449)
+
 
 ## 推奨のIDE環境
 
