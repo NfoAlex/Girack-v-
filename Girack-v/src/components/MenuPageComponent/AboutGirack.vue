@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="text-center pa-5" style="width:100%">
     <span>
-      <p class="text-h3">FinalRefresh</p>
+      <p class="text-h3">ValentineUpdate</p>
     </span>
     
     <br>
