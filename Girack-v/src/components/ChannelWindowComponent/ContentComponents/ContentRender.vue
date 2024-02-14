@@ -329,7 +329,7 @@ export default {
     :userid="userDialogUserid"
   />
 
-  <div style="width:100%;">
+  <div>
     <!-- メッセージ本体 -->
     <v-menu
       open-on-hover
