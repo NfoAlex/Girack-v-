@@ -227,18 +227,10 @@ export default {
   <!-- メイン -->
   <div style="height:100vh" class="authWindow d-flex align-center">
 
-    <v-card class="mx-auto d-flex elevation-12" width="75%" style="max-width:900px">
-
-      <!-- 画像 -->
-      <div class="welcomeImage d-flex align-end justify-end pb-5 pr-3 pl-1" style="width:50%;">
-        <span class="text-right text-truncate">
-          <p class="text-disabled">{{ serverinfoLoaded.serverVersion }}</p>
-          <p class="text-h4">{{ serverinfoLoaded.servername || "Girack" }}</p>
-        </span>
-      </div>
+    <v-card class="mx-auto elevation-12" width="45%" style="max-width:600px">
 
       <!-- 登録/ログイン部分 -->
-      <div style="width:50%;" class="d-flex flex-column justify-space-evenly px-6 py-10">
+      <div class="py-10 mx-auto" style="width:80%;">
         <!-- タブ -->
         <v-tabs
           v-model="tab"
