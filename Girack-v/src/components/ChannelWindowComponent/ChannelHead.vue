@@ -118,8 +118,8 @@ export default {
 
   <!-- ヘッダの表示部分(メイン) -->
   <v-card
-    class="d-flex align-center justify-space-evenly rounded-0 px-1 pb-1 bottomShadow"
-    style="max-width: 100%; height: 100%"
+    class="d-flex align-center rounded-0 px-1 pb-1 bottomShadow"
+    style="width: 100%; height: 100%"
   >
     <!-- スマホUIだった時要のサイドバーボタン -->
     <v-btn
@@ -135,12 +135,12 @@ export default {
       @click="channelDialogShow = true"
       v-ripple
       :class="isMobile?'pa-2':null"
-      class="d-flex flex-column justify-start rounded-lg px-4"
+      class="d-flex flex-column justify-start rounded-lg flex-shrink-1 flex-grow-0 px-4"
       variant="tonal"
-      style="width:100%; cursor:pointer"
+      style="width:calc(100% - 130px); cursor:pointer;"
     >
 
-      <div style="white-space: nowrap">
+      <div style="white-space:nowrap;">
 
         <div class="overflow-x-hidden text-truncate text-h5">
           <span
@@ -181,7 +181,6 @@ export default {
       <div
         v-if="!isMobile"
         color="grey"
-        class="rounded"
       >
         <p class="text-truncate">
           {{ channelInfo.description }}
@@ -192,7 +191,7 @@ export default {
     
 
     <!-- ボタン群 -->
-    <div class="d-flex align-center">
+    <div style="width:130px;" class="d-flex align-center flex-grow-1 flex-shrink-0">
       <!-- チャンネルの通知オン/オフボタン -->
       <v-btn
         v-if="!channelInfo.previewmode"
