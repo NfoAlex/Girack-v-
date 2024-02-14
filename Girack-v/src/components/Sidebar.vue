@@ -245,23 +245,24 @@ export default {
 
       <!-- プロフィールカード -->
       <div class="px-1">
-      <v-card
-        @click="menuDialogDisplay=true"
-        variant="text"
-        class="d-flex justify-start px-3 align-center"
-        :class="isMobile?'pa-3':'pa-2'"
-        style="font-size:14px;"
-      >
-        <v-icon size="small" class="mr-1">
-          <v-avatar size="24">
-            <v-img
-              :alt="myUserinfo.userid"
-              :src="thisURL + '/img/' + myUserinfo.userid"
-            ></v-img>
-          </v-avatar>
-        </v-icon>
-        <span class="text-truncate ml-1"> {{ myUserinfo.username }} </span>
-      </v-card></div>
+        <v-card
+          @click="menuDialogDisplay=true"
+          variant="text"
+          class="d-flex justify-start px-3 align-center"
+          :class="isMobile?'pa-3':'pa-2'"
+          style="font-size:14px;"
+        >
+          <v-icon size="small" class="mr-1">
+            <v-avatar size="24">
+              <v-img
+                :alt="myUserinfo.userid"
+                :src="thisURL + '/img/' + myUserinfo.userid"
+              ></v-img>
+            </v-avatar>
+          </v-icon>
+          <span class="text-truncate ml-1"> {{ myUserinfo.username }} </span>
+        </v-card>
+      </div>
 
       <!-- ここからボタン群 -->
       <!-- FOR DEBUGGING ONLY -->
