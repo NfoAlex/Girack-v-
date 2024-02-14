@@ -218,6 +218,11 @@ export default {
       >
         
         <RouterLink to="/onlineuser" class="rounded-lg" v-ripple>
+          <!-- インスタンス名 -->
+          <p class="text-h5 text-truncate">
+            {{ Serverinfo.servername }}
+          </p>
+
           <!-- オンライン人口表示 -->
           <div
             style="width:fit-content;"
@@ -234,12 +239,6 @@ export default {
             <span v-if="!disconnected">{{ sessionOnlineNum }}</span>
             <span v-if="disconnected">サーバーオフライン</span>
           </div>
-        
-
-          <!-- インスタンス名 -->
-          <p class="text-h5 text-truncate">
-            {{ Serverinfo.servername }}
-          </p>
         </RouterLink>
 
       </v-card>
