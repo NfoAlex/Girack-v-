@@ -254,7 +254,7 @@ export default {
         style="font-size:14px;"
       >
         <v-icon size="small" class="mr-1">
-          <v-avatar size="20">
+          <v-avatar size="24">
             <v-img
               :alt="myUserinfo.userid"
               :src="thisURL + '/img/' + myUserinfo.userid"
