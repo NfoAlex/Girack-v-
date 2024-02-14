@@ -249,7 +249,7 @@ export default {
           @click="menuDialogDisplay=true"
           variant="tonal"
           class="d-flex justify-start px-3 mb-1 elevation-6 align-center"
-          :class="isMobile?'py-4':'py-3'"
+          :class="isMobile?'py-3':'py-2'"
           style="font-size:14px;"
         >
           <v-icon size="small" class="mr-1">
@@ -260,7 +260,7 @@ export default {
               ></v-img>
             </v-avatar>
           </v-icon>
-          <span class="text-truncate ml-1"> {{ myUserinfo.username }} </span>
+          <span class="text-truncate ml-1 text-h6"> {{ myUserinfo.username }} </span>
         </v-card>
       </div>
 
