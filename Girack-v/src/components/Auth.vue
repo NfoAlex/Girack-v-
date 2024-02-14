@@ -230,14 +230,13 @@ export default {
     <v-card class="mx-auto elevation-12" width="45%" style="max-width:600px">
 
       <!-- 登録/ログイン部分 -->
-      <div class="py-10 mx-auto" style="width:80%;">
+      <div class="py-10">
         <!-- タブ -->
         <v-tabs
           v-model="tab"
-          class="mx-auto rounded-lg"
-          bg-color="primary"
+          class=""
           align-tabs="center"
-          style="width:fit-content"
+          style="width:100%"
         >
           <v-tab :disabled="!Connected" value="login">ログイン</v-tab>
           <v-tab
@@ -249,7 +248,7 @@ export default {
         <!-- ログイン/登録ウィンドウ -->
         <v-window v-model="tab" class="">
           <!-- ログイン画面 -->
-          <v-window-item value="login">
+          <v-window-item value="login" class="px-9">
             <p class="text-h5 text-center my-3">
               おかえりなさい！
             </p>
@@ -320,7 +319,7 @@ export default {
           </v-window-item>
 
           <!-- 登録画面 -->
-          <v-window-item value="register">
+          <v-window-item value="register" class="px-9">
             <p class="text-h5 text-center my-3">
               ようこそ!
             </p>
