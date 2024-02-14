@@ -244,46 +244,25 @@ export default {
 
       </v-card>
 
-      <!-- メニューボタン/プロフィールカード -->
+      <!-- プロフィールカード -->
+      <div class="px-1">
       <v-card
         @click="menuDialogDisplay=true"
-        class="d-flex justify-start align-center py-2 mx-1 elevation-0 text-truncate"
         variant="text"
-        v-ripple
+        class="d-flex justify-start px-3 align-center"
+        :class="isMobile?'pa-3':'pa-2'"
+        style="font-size:14px;"
       >
-        <!-- 三点メニューアイコン -->
-        <v-icon size="large" class="mx-2">mdi:mdi-dots-vertical</v-icon>
-        <!-- ホバーしたら表示するテキスト -->
-        <v-tooltip activator="parent" location="top"> メニュー </v-tooltip>
-
-        <!-- アイコン-->
-        <div class="mx-2">
-          <v-avatar size="24">
+        <v-icon size="small" class="mr-1">
+          <v-avatar size="20">
             <v-img
               :alt="myUserinfo.userid"
               :src="thisURL + '/img/' + myUserinfo.userid"
             ></v-img>
           </v-avatar>
-        </div>
-
-        <div class="d-flex flex-column mx-2">
-          <!-- ロールバッジ-->
-          <v-chip
-            v-if="myUserinfo.role !== 'Member'"
-            :color="myUserinfo.role === 'Admin' ? 'purple' : 'blue'"
-            size="x-small"
-            :elevation="2"
-          >
-            <!-- ここはロール ⇒⇒⇒ -->{{ myUserinfo.role }}
-          </v-chip>
-
-          <!-- ユーザー名-->
-          <p class="text-subtitle-2 text-truncate">
-            {{ myUserinfo.username }}
-          </p>
-        </div>
-
-      </v-card>
+        </v-icon>
+        <span class="text-truncate ml-1"> {{ myUserinfo.username }} </span>
+      </v-card></div>
 
       <!-- ここからボタン群 -->
       <!-- FOR DEBUGGING ONLY -->
