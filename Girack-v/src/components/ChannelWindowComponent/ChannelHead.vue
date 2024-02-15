@@ -137,7 +137,7 @@ export default {
       :class="isMobile?'pa-2':null"
       class="d-flex flex-column justify-start rounded-lg flex-shrink-1 flex-grow-0 px-4"
       variant="tonal"
-      style="width:calc(100% - 130px); cursor:pointer;"
+      style="width:calc(100% - 150px); cursor:pointer;"
     >
 
       <div style="white-space:nowrap;">
@@ -191,57 +191,59 @@ export default {
     
 
     <!-- ボタン群 -->
-    <div style="width:130px;" class="d-flex align-center flex-grow-1 flex-shrink-0">
-      <!-- チャンネルの通知オン/オフボタン -->
-      <v-btn
-        v-if="!channelInfo.previewmode"
-        @click="toggleMuteChannel"
-        :size="getDisplaySize"
-        icon=""
-        class="rounded-lg ma-0"
-        variant="text"
-      >
-        <v-icon
-          v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)"
-          >mdi:mdi-bell</v-icon
+    <div style="width:150px;">
+      <div class="d-flex align-center flex-grow-1 flex-shrink-0">
+        <!-- チャンネルの通知オン/オフボタン -->
+        <v-btn
+          v-if="!channelInfo.previewmode"
+          @click="toggleMuteChannel"
+          :size="getDisplaySize"
+          icon=""
+          class="rounded-lg ma-0"
+          variant="text"
         >
-        <v-icon v-else>mdi:mdi-bell-off</v-icon>
-      </v-btn>
+          <v-icon
+            v-if="!LIST_NOTIFICATION_MUTE_CHANNEL.includes($route.params.id)"
+            >mdi:mdi-bell</v-icon
+          >
+          <v-icon v-else>mdi:mdi-bell-off</v-icon>
+        </v-btn>
 
-      <!-- プレビュー時用のチャンネルブラウザに戻るボタン -->
-      <v-btn
-        v-if="channelInfo.previewmode"
-        @click="$router.push({ path: '/browser' })"
-        :size="getDisplaySize"
-        class="rounded-lg mx-1"
-        color="secondary"
-      >
-        ブラウザへ戻る
-      </v-btn>
+        <!-- プレビュー時用のチャンネルブラウザに戻るボタン -->
+        <v-btn
+          v-if="channelInfo.previewmode"
+          @click="$router.push({ path: '/browser' })"
+          :size="getDisplaySize"
+          class="rounded-lg mx-1"
+          color="secondary"
+        >
+          ブラウザへ戻る
+        </v-btn>
 
-      <!-- ピン留め表示ボタン -->
-      <v-btn
-        v-if="!isMobile"
-        @click="() => (channelPinsShow = !channelPinsShow)"
-        :size="getDisplaySize"
-        icon=""
-        class="rounded-lg ma-0"
-        variant="text"
-      >
-        <v-icon>mdi:mdi-pin</v-icon>
-      </v-btn>
+        <!-- ピン留め表示ボタン -->
+        <v-btn
+          v-if="!isMobile"
+          @click="() => (channelPinsShow = !channelPinsShow)"
+          :size="getDisplaySize"
+          icon=""
+          class="rounded-lg ma-0"
+          variant="text"
+        >
+          <v-icon>mdi:mdi-pin</v-icon>
+        </v-btn>
 
-      <!-- チャンネルメニューボタン -->
-      <v-btn
-        v-if="!isMobile"
-        @click="() => (channelDialogShow = !channelDialogShow)"
-        :size="getDisplaySize"
-        icon=""
-        class="rounded-lg ma-0"
-        variant="text"
-      >
-        <v-icon>mdi:mdi-menu</v-icon>
-      </v-btn>
+        <!-- チャンネルメニューボタン -->
+        <v-btn
+          v-if="!isMobile"
+          @click="() => (channelDialogShow = !channelDialogShow)"
+          :size="getDisplaySize"
+          icon=""
+          class="rounded-lg ma-0"
+          variant="text"
+        >
+          <v-icon>mdi:mdi-menu</v-icon>
+        </v-btn>
+      </div>
     </div>
   </v-card>
 
