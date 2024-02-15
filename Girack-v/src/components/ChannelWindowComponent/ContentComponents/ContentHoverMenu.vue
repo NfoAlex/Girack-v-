@@ -245,6 +245,7 @@ export default {
       v-else
       class="pa-2 rounded-lg"
       style="width:fit-content;"
+      position="absolute"
     >
       <!-- ここからホバーメニュー -->
       <span style="position:relative; float:right" class="d-flex align-center">
