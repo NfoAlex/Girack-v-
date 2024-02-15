@@ -244,7 +244,7 @@ export default {
     <v-card
       v-else
       class="px-3 py-2 elecation-12"
-      style="width:fit-content; right:0; top:-15px;"
+      style="width:fit-content; right:0; top:-23.5px;"
       position="absolute"
     >
       <!-- ここからホバーメニュー -->
