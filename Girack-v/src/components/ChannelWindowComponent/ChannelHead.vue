@@ -13,9 +13,18 @@ export default {
     const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
+    //ボタンサイズ用
     const buttonSize = ref(useDisplay().name);
+    //ボタン群幅用
+    const buttonGroupWidth = ref(150);
 
-    return { mobile, myUserinfo, LIST_NOTIFICATION_MUTE_CHANNEL, buttonSize };
+    return {
+      mobile,
+      myUserinfo,
+      LIST_NOTIFICATION_MUTE_CHANNEL,
+      buttonSize,
+      buttonGroupWidth
+    };
   },
 
   components: { ChannelConfig, ChannelPin },
@@ -64,6 +73,24 @@ export default {
       }
     },
 
+    //ディスプレイのサイズからボタン群の横幅調整
+    setButtonGroupWidth() {
+      switch (this.buttonSize) {
+        case "xs":
+        case "sm":
+          return 125;
+
+        case "md":
+        case "lg":
+        case "xl":
+        case "xxl":
+          return 150;
+
+        default:
+          return 150;
+      }
+    },
+
     //スマホかどうかを返す
     isMobile() {
       return this.mobile;
@@ -94,6 +121,7 @@ export default {
         7
       );
     },
+
   },
 };
 </script>
@@ -141,6 +169,7 @@ export default {
       class="d-flex flex-column justify-start rounded-lg flex-shrink-1 flex-grow-0 px-4"
       variant="tonal"
       style="width:calc(100% - 150px); cursor:pointer;"
+      :style="{width: 'calc(100% - ' + setButtonGroupWidth + 'px' }"
     >
 
       <div style="white-space:nowrap;">
