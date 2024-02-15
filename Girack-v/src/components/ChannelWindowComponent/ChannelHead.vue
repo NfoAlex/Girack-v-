@@ -1,5 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script>
+import { ref } from "vue";
 import { useDisplay } from "vuetify";
 import { getCONFIG } from "../../config.js";
 import { setCookie } from "../../data/socket";
@@ -12,7 +13,9 @@ export default {
     const { mobile } = useDisplay();
     const { myUserinfo } = dataUser();
     const { LIST_NOTIFICATION_MUTE_CHANNEL } = getCONFIG();
-    return { mobile, myUserinfo, LIST_NOTIFICATION_MUTE_CHANNEL };
+    const buttonSize = ref(useDisplay().name);
+
+    return { mobile, myUserinfo, LIST_NOTIFICATION_MUTE_CHANNEL, buttonSize };
   },
 
   components: { ChannelConfig, ChannelPin },
@@ -37,7 +40,7 @@ export default {
 
     //ディスプレイのサイズから表示するボタンの要素のサイズを取得
     getDisplaySize() {
-      switch (useDisplay().name.value) {
+      switch (this.buttonSize) {
         case "xs":
           return "x-small";
 
