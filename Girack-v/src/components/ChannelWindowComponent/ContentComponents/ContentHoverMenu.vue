@@ -243,8 +243,8 @@ export default {
     <!-- 通常パネル -->
     <v-card
       v-else
-      class="pa-2 rounded-lg"
-      style="width:fit-content;"
+      class="px-3 py-2 elecation-12"
+      style="width:fit-content; right:0; top:-15px;"
       position="absolute"
     >
       <!-- ここからホバーメニュー -->
