@@ -523,7 +523,7 @@ export default {
         v-if="!msgEditing"
         @update-editing-message="msgEditing=true"
         @cancelEditing="msgEditing=false"
-        style="z-index:30; border:solid 1px red; width:fit-content;"
+        style="z-index:30; width:fit-content;"
         :m="m"
         :userrole="getUserStats(m.userid, 'role')"
         :channelid="getPath"
