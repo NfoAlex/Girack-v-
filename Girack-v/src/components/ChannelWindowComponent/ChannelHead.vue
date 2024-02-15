@@ -192,7 +192,7 @@ export default {
 
     <!-- ボタン群 -->
     <div style="width:150px;">
-      <div class="d-flex align-center flex-grow-1 flex-shrink-0">
+      <div class="d-flex align-center justify-center flex-grow-1 flex-shrink-0">
         <!-- チャンネルの通知オン/オフボタン -->
         <v-btn
           v-if="!channelInfo.previewmode"
