@@ -148,7 +148,7 @@ export default {
       v-for="file in fileData.attatchmentData"
       :key="file.name"
       class="mt-2"
-      style="width:50%; max-width:500px; min-width:300px;"
+      style="min-width:100px; width:50%; max-width:550px;"
     >
       <!-- 画像ならカバーとして表示 -->
       <v-img
@@ -178,33 +178,33 @@ export default {
       </span>
 
       <v-divider></v-divider>
-    
-      <!-- ファイル名表示 -->
-      <v-card-title style="font-size:14px">
-        {{ file.name }}
-      </v-card-title>
 
-      <v-card-text class="text-medium-emphasis d-flex">
-        <span class="d-flex align-center">
-          サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
-        </span>
-        <span class="ml-1 d-flex">
-          種類: <v-chip size="small" class="mx-1">{{ file.type }}</v-chip>
-        </span>
-      </v-card-text>
+      <div class="d-flex align-center" style="width:100%;">
+        <div class="d-flex flex-column flex-shrink-1" style="width:calc(100% - 100px);">
+          <!-- ファイル名表示 -->
+          <v-card-title style="font-size:14px">
+            {{ file.name }}
+          </v-card-title>
 
-      <v-divider></v-divider>
-
-      <v-card-action>
-        <v-btn
-          @click="downloadFile(file)"
-          variant="text"
-          class="ma-1"
-        >
-          <v-icon size="small">mdi:mdi-download</v-icon>
-          ダウンロード
-        </v-btn>
-      </v-card-action>
+          <v-card-text class="text-medium-emphasis d-flex">
+            <span class="d-flex align-center">
+              サイズ: <v-chip size="small" class="mx-1">{{ humanFileSize(file.size) }}</v-chip> |
+            </span>
+            <span class="ml-1 d-flex">
+              種類: <v-chip size="small" class="mx-1">{{ file.type }}</v-chip>
+            </span>
+          </v-card-text>
+        </div>
+        <div class="px-5 flex-grow-1" style="width:100px;">
+          <v-btn
+            @click="downloadFile(file)"
+            variant="text"
+            size="large"
+            rounded="lg"
+            icon="mdi:mdi-download"
+          ></v-btn>
+        </div>
+      </div>
 
     </v-card>
 
