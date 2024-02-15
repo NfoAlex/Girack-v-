@@ -518,19 +518,16 @@ export default {
 
       </template>
 
-      <!-- ホバーメニューの位置を調整するため ml-auto を使用 -->
-      <div class="ml-auto">
-        <!-- ここからホバーメニュー -->
-        <ContentHoverMenu
-          v-if="!msgEditing"
-          @update-editing-message="msgEditing=true"
-          @cancelEditing="msgEditing=false"
-          style="z-index:30;"
-          :m="m"
-          :userrole="getUserStats(m.userid, 'role')"
-          :channelid="getPath"
-        />
-      </div>
+      <!-- ここからホバーメニュー -->
+      <ContentHoverMenu
+        v-if="!msgEditing"
+        @update-editing-message="msgEditing=true"
+        @cancelEditing="msgEditing=false"
+        style="z-index:30; border:solid 1px red; width:fit-content;"
+        :m="m"
+        :userrole="getUserStats(m.userid, 'role')"
+        :channelid="getPath"
+      />
       
     </v-menu>
   </div>
