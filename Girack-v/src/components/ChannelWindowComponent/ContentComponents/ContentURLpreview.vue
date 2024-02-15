@@ -302,7 +302,7 @@ export default {
     <!-- 普通のURLプレビュー -->
     <v-card
       v-if="link.mediaType !== 'image' && link.mediaType !== 'video'"
-      style="width:50%; max-width:500px; min-width:300px;"
+      style="width:50%; max-width:500px; min-width:400px;"
     >
 
       <!-- 埋め込み用画像/動画サムネ -->
@@ -310,7 +310,7 @@ export default {
         v-if="link.img !== undefined && checkImageAvailable(link)"
         @click="toggleImageDialog(index)"
         style="cursor:pointer"
-        max-height="250"
+        max-height="200"
         :src="getImage(link.img)"
         cover
       >
