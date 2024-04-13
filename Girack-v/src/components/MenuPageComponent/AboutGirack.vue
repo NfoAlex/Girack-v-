@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="text-center pa-5" style="width:100%">
     <span>
-      <p class="text-h3">HoverIt</p>
+      <p class="text-h3">JustUpdates</p>
     </span>
     
     <br>
