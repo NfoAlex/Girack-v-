@@ -804,7 +804,7 @@ export default {
             </v-tooltip>
           </v-btn>
           <!-- 線 -->
-          <v-divider vertical thickness="2" class="my-2 mr-1"></v-divider>
+          <v-divider vertical thickness="2" class="mr-1"></v-divider>
         </template>
 
         <!-- 送信ボタン -->
