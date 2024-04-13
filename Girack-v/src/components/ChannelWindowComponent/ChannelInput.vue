@@ -803,8 +803,17 @@ export default {
               }}まで
             </v-tooltip>
           </v-btn>
-          <!-- 線 -->
-          <v-divider vertical thickness="2" class="mr-1"></v-divider>
+          <div
+            class="my-auto"
+            :style="txt.indexOf('\n')!==-1 ? 
+              'height:95%;'
+              :
+              'height:75%;'
+            "
+          >
+            <!-- 線 -->
+            <v-divider vertical width="2" />
+          </div>
         </template>
 
         <!-- 送信ボタン -->
