@@ -812,7 +812,7 @@ export default {
             "
           >
             <!-- 線 -->
-            <v-divider vertical width="2" />
+            <v-divider vertical thickness="2" />
           </div>
         </template>
 
