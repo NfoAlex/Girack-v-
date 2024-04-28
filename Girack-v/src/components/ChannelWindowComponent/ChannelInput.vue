@@ -52,6 +52,7 @@ export default {
       fxTwitButtonDisplay: false, //fxTwitter化するボタンを表示するかどうか
       fxTwitternize: true, //fxTwitter化するかどうか
       fileInputData: [], //アップロードするファイル
+      channelList: {}, //参加できるチャンネルのリスト
 
       dialogChannelMove: false, //チャンネル移動確認ダイアログ
       confirmingChannelMove: false, //チャンネル移動中に待つ時用
@@ -63,6 +64,10 @@ export default {
         content: "",
       },
 
+      textarea: {
+        cursorPosition: 0, //入力フォームのカーソル位置
+      },
+
       searchMode: {
         enabled: false, //検索モードに入っているかどうか
         selectedIndex: 0, //選択しているもの
@@ -71,6 +76,14 @@ export default {
         txtLengthWhenStartSearching: 0, //検索をし始めたときの文字列全体の長さ
         searchingTerm: "", //ToDo::(!現在未使用!)検索するもの("user" | "channel")
         searchingQuery: "", //検索してる文字列
+      },
+
+      channelLinkWindow: {
+        isDisplay: false, //チャンネルリンクウィンドウを表示するかどうか
+        regexPattern: /(\s|^)#[^#\s]*(\s|$)/g, //チャンネルリンクの可能性がある文字列の正規表現
+        replaceStartIndex: 0, //置換される対象の文字列の開始位置
+        replaceEndIndex: 0, //置換される対象の文字列の終了位置
+        channelList: {}, //チャンネルリンク用ウィンドウで表示するチャンネルリスト
       },
 
       searchDisplayArray: [], //検索するときに表示する配列
@@ -214,6 +227,47 @@ export default {
   },
 
   methods: {
+    // 入力フォームのカーソル位置の監視
+    checkCursorPosition() {
+      this.textarea.cursorPosition = this.$refs.inp.selectionStart;
+
+      //チャンネルリンク用ウィンドウの表示判別処理
+      this.checkChannelLinkWindowDisplay();
+    },
+    
+    //チャンネルリンク用ウィンドウの表示判別処理
+    checkChannelLinkWindowDisplay() {
+      //チャンネルリンクの可能性がある文字列の上にカーソルがあるか確認
+      let isCursorAboveMatch = false; //チャンネルリンクの可能性がある文字列の上にカーソルがある場合true
+      let match;
+      while ((match = this.channelLinkWindow.regexPattern.exec(this.txt)) !== null) {
+        const start = match.index + match[1].length; // マッチした部分の開始位置
+        const end = this.channelLinkWindow.regexPattern.lastIndex - match[2].length; // マッチした部分の終了位置
+        if (start < this.textarea.cursorPosition && this.textarea.cursorPosition <= end) {
+          isCursorAboveMatch = true;
+          this.channelLinkWindow.replaceStartIndex = start;
+          this.channelLinkWindow.replaceEndIndex = end;
+        }
+      }
+
+      //チャンネルリンクの可能性がある文字列の上にカーソルがある場合チャンネルリンク用ウィンドウを表示する
+      if (isCursorAboveMatch) {
+        //チャンネルリンク用ウィンドウで表示するチャンネルリンクのリストの作成
+        this.channelLinkWindow.channelList = {};
+        //部分一致検索で使用する検索文字列（#を抜いたチャンネルリンクの可能性がある文字列）
+        const searchString = this.txt.substring(this.channelLinkWindow.replaceStartIndex + 1, this.channelLinkWindow.replaceEndIndex);
+        for (let key in this.channelList) {
+          const targetChannelName = this.channelList[key]["name"];
+          if (targetChannelName.includes(searchString)) {
+            this.channelLinkWindow.channelList[key] = this.channelList[key];
+          }
+        }
+        this.channelLinkWindow.isDisplay = true;
+      } else {
+        this.channelLinkWindow.isDisplay = false;
+      }
+    },
+
     //Enterキーのトリガー処理
     EnterTrigger(event) {
       //変換中のEnterなら処理させない
@@ -408,6 +462,16 @@ export default {
       this.$el.querySelector("#inp").focus();
     },
 
+    //チャンネルリンクウィンドウの要素をクリックされたらチャンネルリンクに置き換える処理
+    replaceChannelLink(targetChannelId) {
+      this.txt = 
+        this.txt.slice(0, this.channelLinkWindow.replaceStartIndex) +
+        "#/" + targetChannelId + "/ " +
+        this.txt.slice(this.channelLinkWindow.replaceEndIndex);
+      //入力欄へフォーカスしなおす
+      this.$el.querySelector("#inp").focus();
+    },
+
     //fxTwitter用のURL判別処理(watch(txt)で反応してます)
     checkFxTwitter() {
       //TwitterURLを判別するための正規表現条件
@@ -567,6 +631,20 @@ export default {
     SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
       this.channelJoinedUserArray = channelJoinedUserList;
     },
+
+    //チャンネルリストの取得
+    SOCKETinfoList(dat) {
+      //型が違うかデータが無効なら関数を終わらせる
+      if (dat.type !== "channel" || dat === -1) {
+        console.log("ChannelBrwoser :: infoList : データ違うっぽい???");
+        return;
+      }
+
+      this.channelList = dat.channelList; //リスト追加
+
+      console.log("ChannelBrwoser :: infoList : dat ↓ ");
+      console.log(dat);
+    },
   },
 
   mounted() {
@@ -588,6 +666,16 @@ export default {
     //cookieに保存している「最後に入力していた値」を入力フォームの初期値に設定
     let previousText = getCookie("previousText");
     this.txt = previousText;
+
+    //チャンネルリストの取得
+    socket.emit("getInfoList", {
+      target: "channel",
+      reqSender: {
+        userid: this.myUserinfo.userid, //ユーザーID
+        sessionid: this.myUserinfo.sessionid, //セッションID
+      },
+    });
+    socket.on("infoList", this.SOCKETinfoList);
   },
 
   unmounted() {
@@ -596,6 +684,8 @@ export default {
       "infoChannelJoinedUserList",
       this.SOCKETinfoChannelJoinedUserList
     );
+    socket.off("infoList", this.SOCKETinfoList);
+
     //メニューページなどにいったら返信状態をリセット
     this.resetReply();
     //直前に入力していた値をcookieに保存。有効期限は1日
@@ -724,6 +814,22 @@ export default {
       style="width:95%; height:fit-content; position:relative;"
       class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
+      <!-- チャンネルリンクウィンドウ -->
+      <v-card
+        v-if="channelLinkWindow.isDisplay"
+        width="100%"
+        position="absolute"
+        max-height="30vh"
+        class="rounded-lg"
+        style="bottom:101%; overflow-y:auto; z-index:100;"
+      >
+        <v-list-item 
+          v-for="(value, key) in channelLinkWindow.channelList"
+          @click="replaceChannelLink(key)"
+        > 
+          {{ value.name }} 
+        </v-list-item>
+      </v-card> 
 
       <!-- メンションウィンドウ -->
       <v-card
@@ -769,6 +875,7 @@ export default {
               channelInfo.canTalk +
               '以上が発言可能'
         "
+        @selectionchange="checkCursorPosition"
         @keydown.enter.prevent="EnterTrigger"
         @keydown.@="AtsignTrigger"
         @keydown.up="arrowUpTrigger"
