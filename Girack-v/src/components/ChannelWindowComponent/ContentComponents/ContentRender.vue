@@ -470,7 +470,7 @@ export default {
             <ContentMessageRender style="font-size:14px;" v-if="!msgEditing" :content="m.content" />
             <ContentEditing
               v-else
-              @close-editing="()=>{$emit('closeEditing'); msgEditing=false;}"
+              @close-editing="()=>{$emit('closeEditing')}"
               :channelid="m.channelid"
               :content="m.content"
               :messageid="m.messageid"
@@ -521,8 +521,8 @@ export default {
       <!-- ここからホバーメニュー -->
       <ContentHoverMenu
         v-if="!msgEditing"
-        @update-editing-message="msgEditing=true"
-        @cancelEditing="msgEditing=false"
+        @update-editing-message="$emit('editMessage',m.messageid)"
+        @cancelEditing="$emit('closeEditing')"
         style="z-index:30; width:fit-content;"
         :m="m"
         :userrole="getUserStats(m.userid, 'role')"
