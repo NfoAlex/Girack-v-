@@ -209,6 +209,9 @@ export default {
     <div
       :class="isMobile?'channelBarMobile':'channelBarDesk'"
       class="d-flex flex-column"
+      v-touch="{
+        left: () => $emit('closeSidebar')
+      }"
     >
 
       <!-- グローバルヘッダ -->
