@@ -101,55 +101,55 @@ socket.on("messageReceive", (msg) => {
     if (msg.isSystemMessage) {
       //メンション判別のためにも標的ユーザーを本文扱いする
       ContentChecking = "@" + msg.content.targetUser;
-      //通知処理をしないためにここで終了
-      return;
     } else {
       //普通のメッセージなら
       ContentChecking = msg.content;
     }
 
-    //新着メッセージ数を更新
-    if (dataMsg().MsgReadTime.value[msg.channelid] === undefined) { //セットされてなかったら新しく定義
-      //メンションされているかどうかで設定先を変える
+    //新着メッセージ数を更新(システムメッセじゃなければ行う)
+    if (!msg.isSystemMessage) {
       if (
-        ContentChecking.includes("@" + dataUser().myUserinfo.value.username)
-      ) {
-        dataMsg().MsgReadTime.value[msg.channelid] = {
-          time: msg.time, //最後に読んだ時間
-          new: 1,
-          mention: 0,
-        };
-      } else {
-        dataMsg().MsgReadTime.value[msg.channelid] = {
-          time: msg.time, //最後に読んだ時間
-          new: 0,
-          mention: 1,
-        };
-      }
-
-      //faviconにドット表示
-      document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
-    } else { //すでにあるなら加算
-      //メンションか自分への返信ならメンションを加算
-      if (
-        ContentChecking.includes(
-          "@/" + dataUser().myUserinfo.value.userid + "/"
-        ) ||
-        msg.replyData.userid === dataUser().myUserinfo.value.userid
-      ) {
-        if (dataMsg().MsgReadTime.value[msg.channelid].mention === null) {
-          dataMsg().MsgReadTime.value[msg.channelid].mention = 0;
+        dataMsg().MsgReadTime.value[msg.channelid] === undefined
+      ) { //セットされてなかったら新しく定義
+        //メンションされているかどうかで設定先を変える
+        if (ContentChecking.includes("@" + dataUser().myUserinfo.value.username)) {
+          dataMsg().MsgReadTime.value[msg.channelid] = {
+            time: msg.time, //最後に読んだ時間
+            new: 1,
+            mention: 0,
+          };
         } else {
-          //メンション数加算
-          dataMsg().MsgReadTime.value[msg.channelid].mention++;
+          dataMsg().MsgReadTime.value[msg.channelid] = {
+            time: msg.time, //最後に読んだ時間
+            new: 0,
+            mention: 1,
+          };
+        }
+
+        //faviconにドット表示
+        document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
+      } else { //すでにあるなら加算
+        //メンションか自分への返信ならメンションを加算
+        if (
+          ContentChecking.includes(
+            "@/" + dataUser().myUserinfo.value.userid + "/"
+          ) ||
+          msg.replyData.userid === dataUser().myUserinfo.value.userid
+        ) {
+          if (dataMsg().MsgReadTime.value[msg.channelid].mention === null) {
+            dataMsg().MsgReadTime.value[msg.channelid].mention = 0;
+          } else {
+            //メンション数加算
+            dataMsg().MsgReadTime.value[msg.channelid].mention++;
+            //faviconにドット表示
+            document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
+          }
+        } else {
+          //そうじゃないなら普通に通知を加算
+          dataMsg().MsgReadTime.value[msg.channelid].new++;
           //faviconにドット表示
           document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
         }
-      } else {
-        //そうじゃないなら普通に通知を加算
-        dataMsg().MsgReadTime.value[msg.channelid].new++;
-        //faviconにドット表示
-        document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
       }
     }
 
