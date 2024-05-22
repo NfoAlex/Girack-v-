@@ -39,6 +39,8 @@ export default {
     };
   },
 
+  emits: ["toggleSidebar"],
+
   computed: {
     //今いるパス(チャンネルID)を取得するだけ
     getPath() {
