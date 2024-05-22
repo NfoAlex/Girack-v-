@@ -62,6 +62,8 @@ export default {
     "msgEditing"
   ],
 
+  emits: ["editMessage", "closeEditing"],
+
   computed: {
     //現在いるパス(チャンネルID)を返すだけ
     getPath() {
