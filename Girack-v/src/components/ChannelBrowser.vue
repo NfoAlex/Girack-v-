@@ -301,7 +301,7 @@ export default {
 
       <v-divider class="mb-2"></v-divider>
 
-      <v-card-action>
+      <v-card-actions>
         <v-btn
           @click="channelCreate"
           color="primary"
@@ -316,7 +316,7 @@ export default {
         >
           キャンセル
         </v-btn>
-      </v-card-action>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 
@@ -340,14 +340,14 @@ export default {
 
       <v-divider class="my-2"></v-divider>
 
-      <v-card-action>
+      <v-card-actions>
         <v-btn
           @click="channelRemoveConfirm(channelRemovingId)"
           color="red"
         >
           削除
         </v-btn>
-      </v-card-action>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 
