@@ -29,6 +29,8 @@ export default {
     };
   },
 
+  emits: ["toggleSidebar"],
+
   computed: {
     //スマホかどうかだけを返す
     isMobile() {

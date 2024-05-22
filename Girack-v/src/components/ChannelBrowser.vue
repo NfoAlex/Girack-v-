@@ -37,6 +37,8 @@ export default {
     };
   },
 
+  emits: ["toggleSidebar"],
+
   watch: {
     //ユーザー情報の変更を監視
     myUserinfo: {
