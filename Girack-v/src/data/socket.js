@@ -101,6 +101,8 @@ socket.on("messageReceive", (msg) => {
     if (msg.isSystemMessage) {
       //メンション判別のためにも標的ユーザーを本文扱いする
       ContentChecking = "@" + msg.content.targetUser;
+      //通知処理をしないためにここで終了
+      return;
     } else {
       //普通のメッセージなら
       ContentChecking = msg.content;
