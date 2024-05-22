@@ -219,8 +219,8 @@ export default {
       //変換中のEnterなら処理させない
       if (event.keyCode !== 13) return;
 
-      //Shiftが同時に押されていたら改行するだけ
-      if (event.shiftKey) {
+      //Shiftが同時に押されていたら、あるいはスマホなら改行するだけ
+      if (event.shiftKey || this.isMobile) {
         //現在の入力欄上のカーソル位置
         let currentTxtCursor = this.$el.querySelector("#inp").selectionStart;
 
