@@ -222,7 +222,7 @@ export default {
     checkDateDifference(index) {
       try {
         //もし一つ前のメッセージが存在しないなら処理を停止
-        if (this.cropMessage[index + 1] === undefined) return 0;
+        if (this.cropMessage[index + 1] === undefined || this.cropMessage[index + 1].isSystemMessage) return 0;
 
         //一つ前のメッセージの日、月、年を取得
         let msgDayBefore = parseInt(
@@ -252,7 +252,7 @@ export default {
           return false; //表示しない
         }
       } catch (e) {
-        console.log(e);
+        console.log("ChannelContent :: checkDateDifference : エラー->", this.cropMessage[index + 1], e);
         return false;
       }
     },
