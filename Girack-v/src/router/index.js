@@ -36,7 +36,16 @@ const router = createRouter({
       path: '/onlineuser/',
       name: 'OnlineUser',
       component: () => import('../components/OnlineUsers.vue')
-    }
+    },
+
+    /**
+     * アイコン
+     */
+    { //オンラインのユーザーリスト
+      path: '/img/:userId',
+      name: 'icon',
+      component: null
+    },
   ],
   scrollBehavior(to, from, savedPosition) { //スクロール位置の処理
     if (savedPosition) {
