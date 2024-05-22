@@ -107,7 +107,7 @@ socket.on("messageReceive", (msg) => {
     }
 
     //新着メッセージ数を更新(システムメッセじゃなければ行う)
-    if (!msg.isSystemMessage) {
+    if (!msg.isSystemMessage && msg.userid != dataUser().myUserinfo.value.userid) {
       if (
         dataMsg().MsgReadTime.value[msg.channelid] === undefined
       ) { //セットされてなかったら新しく定義
