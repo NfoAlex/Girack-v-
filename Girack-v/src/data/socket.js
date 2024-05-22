@@ -57,7 +57,7 @@ socket.on("messageReceive", (msg) => {
   )
     return;
 
-  //console.log("socket :: msgReceive : ->", msg);
+  console.log("socket :: msgReceive : ->", msg);
 
   //もしユーザーの名前リストに名前がなかったら
   if (dataUser().UserIndex.value[msg.userid] === undefined) {
@@ -101,14 +101,16 @@ socket.on("messageReceive", (msg) => {
     if (msg.isSystemMessage) {
       //メンション判別のためにも標的ユーザーを本文扱いする
       ContentChecking = "@" + msg.content.targetUser;
+      //通知処理をしないためにここで終了
+      return;
     } else {
       //普通のメッセージなら
       ContentChecking = msg.content;
     }
 
     //新着メッセージ数を更新
-    if (dataMsg().MsgReadTime.value[msg.channelid] === undefined) {
-      //セットされてなかったら新しく定義
+    if (dataMsg().MsgReadTime.value[msg.channelid] === undefined) { //セットされてなかったら新しく定義
+      //メンションされているかどうかで設定先を変える
       if (
         ContentChecking.includes("@" + dataUser().myUserinfo.value.username)
       ) {
@@ -127,8 +129,7 @@ socket.on("messageReceive", (msg) => {
 
       //faviconにドット表示
       document.querySelector("link[rel~='icon']").href = "/icon_w_dot.svg";
-    } else {
-      //すでにあるなら加算
+    } else { //すでにあるなら加算
       //メンションか自分への返信ならメンションを加算
       if (
         ContentChecking.includes(
