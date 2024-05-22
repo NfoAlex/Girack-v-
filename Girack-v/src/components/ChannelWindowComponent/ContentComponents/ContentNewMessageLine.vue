@@ -21,10 +21,11 @@ export default {
     checkShowNewMessageLine(m, index) {
       try {
         if (
-          //表示部分が最新のでなく、比較時間がメッセージと同じならtrue
+          //表示部分が最新のでなく、比較時間がメッセージと同でシステムメッセージじゃないならtrue
           m.time === this.MsgReadTime[this.getPath].timeBefore &&
           this.MsgDBActive.length - 1 !== index &&
-          index !== 0
+          index !== 0 &&
+          !m.isSystemMessage
         ) {
           return true;
         } else {
