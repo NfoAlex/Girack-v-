@@ -236,9 +236,9 @@ export default {
         );
 
         //調べているメッセージの日、月、年を取得
-        let msgDayThis = parseInt(this.cropMessage[index].time.slice(6, 8));
-        let msgMonthThis = parseInt(this.cropMessage[index].time.slice(4, 6));
-        let msgYearThis = parseInt(this.cropMessage[index].time.slice(0, 4));
+        let msgDayThis = parseInt(this.cropMessage[index + 1].time.slice(6, 8));
+        let msgMonthThis = parseInt(this.cropMessage[index + 1].time.slice(4, 6));
+        let msgYearThis = parseInt(this.cropMessage[index + 1].time.slice(0, 4));
 
         //日付の差を計算
         let dayDifference = (msgDayBefore !== msgDayThis);
