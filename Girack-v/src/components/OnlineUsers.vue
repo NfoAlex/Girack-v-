@@ -135,6 +135,9 @@ export default {
   <div
     class="mx-auto d-flex flex-column justify-space-evenly"
     style="width: 95%;"
+    v-touch="{
+      right: () => $emit('toggleSidebar')
+    }"
   >
 
     <!-- リスト表示 -->

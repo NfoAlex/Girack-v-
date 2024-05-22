@@ -177,7 +177,11 @@ export default {
     </v-snackbar>
 
     <!-- ログイン後(Main) -->
-    <div v-if="loggedin" class="pa-0 ma-0" style="width:100vw; height:100vh !important; ">
+    <div
+      v-if="loggedin"
+      class="pa-0 ma-0"
+      style="width:100vw; height:100vh !important;"
+    >
       <div style="height:100%;" class="d-flex">
         <!-- サイドバー(左側) -->
           <!-- デスクトップ用 -->
@@ -188,16 +192,27 @@ export default {
           v-model="sideBarMobileDisplay"
           fullscreen
           transition="slide-x-transition"
+          v-touch="{
+            left: ()=>console.log('App :: すわいぷ(left)')
+          }"
         >
           <Sidebar
             :sessionOnlineNum="sessionOnlineNum"
             @closeSidebar="sideBarMobileDisplay = false"
+            v-touch="{
+              left: () => sideBarMobileDisplay=false
+            }"
           />
         </v-dialog>
 
         <!-- メイン画面（右側） -->
-        <div style="min-width:0;" class="flex-grow-1">
-          <RouterView @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay" />
+        <div
+          style="min-width:0;"
+          class="flex-grow-1"
+        >
+          <RouterView
+            @toggleSidebar="sideBarMobileDisplay = !sideBarMobileDisplay"
+          />
         </div>
       </div>
 

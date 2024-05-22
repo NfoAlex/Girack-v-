@@ -74,7 +74,7 @@ export default {
 
         return this.PreviewChannelData;
       }
-    }
+    },
 
   },
 };
@@ -92,6 +92,9 @@ export default {
     <div
       style="width:100%; overflow-y: auto;"
       class="me-auto flex-grow-1 flex-shrink-1"
+      v-touch="{
+        right: () => $emit('toggleSidebar')
+      }"
     >
       <KeepAlive :max="10" :exclude="'Userpage'">
         <component
@@ -107,7 +110,7 @@ export default {
     </div>
   </div>
   <div v-else>
-      <v-card width="40vw" class="pa-4 mx-auto d-flex flex-column" style="margin-top:10vh;">
+      <v-card width="40vw" class="pa-4 mx-auto d-flex flex-column" style="margin-top:10vh;" loading>
         <h3 class="text-center">Loading...</h3>
       </v-card>
   </div>

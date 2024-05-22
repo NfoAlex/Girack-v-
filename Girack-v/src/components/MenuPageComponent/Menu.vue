@@ -86,17 +86,6 @@ export default {
       >
         <p class="pa-2 text-h6">メニュー</p>
 
-        <!-- スマホUI用 -->
-        <v-card
-          v-if="isMobile"
-          @click="$emit('toggleSidebar')"
-          class="rounded-0 d-flex align-center pa-3"
-          variant="text"
-          v-ripple
-        >
-          <v-icon size="large" style="margin: 0 auto"> mdi:mdi-menu-open </v-icon>
-        </v-card>
-
         <v-card
           @click="displayMenuPage='Profile'"
           class="rounded-0 d-flex align-center pa-3"
