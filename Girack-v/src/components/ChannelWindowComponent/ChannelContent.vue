@@ -562,6 +562,7 @@ export default {
         :MsgDBActive="MsgDBActive"
         :msgDisplayNum="msgDisplayNum"
         :msgEditing="msgIdEditing===m.messageid?true:false"
+        @edit-message="(msgId) => msgIdEditing=msgId"
         @close-editing="msgIdEditing='xxxxxx';"
       />
 
