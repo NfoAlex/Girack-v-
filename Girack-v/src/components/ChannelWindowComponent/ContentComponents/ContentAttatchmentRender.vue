@@ -195,7 +195,7 @@ export default {
 
       <v-divider></v-divider>
 
-      <v-card-action>
+      <v-card-actions>
         <v-btn
           @click="downloadFile(file)"
           variant="text"
@@ -204,7 +204,7 @@ export default {
           <v-icon size="small">mdi:mdi-download</v-icon>
           ダウンロード
         </v-btn>
-      </v-card-action>
+      </v-card-actions>
 
     </v-card>
 

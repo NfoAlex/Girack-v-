@@ -470,7 +470,7 @@ export default {
             <ContentMessageRender style="font-size:14px;" v-if="!msgEditing" :content="m.content" />
             <ContentEditing
               v-else
-              @close-editing="$emit('closeEditing'); msgEditing=false;"
+              @close-editing="()=>{$emit('closeEditing'); msgEditing=false;}"
               :channelid="m.channelid"
               :content="m.content"
               :messageid="m.messageid"

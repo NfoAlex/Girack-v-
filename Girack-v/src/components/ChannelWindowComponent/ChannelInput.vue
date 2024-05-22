@@ -613,25 +613,25 @@ export default {
         <v-card-text>
           <p>まだ返信を終えていません。チャンネル移動しますか？</p>
         </v-card-text>
-        <v-card-action>
-        <v-btn
-          @click="
-            resetReply();
-            dialogChannelMove = false;
-          "
-          class="rounded ma-1"
-          color="primary"
-        >
-          いいよ
-        </v-btn>
-        <v-btn
-          @click="goBackToPreviousChannel()"
-          class="rounded ma-1"
-          variant="text"
-        >
-          だめ
-        </v-btn>
-        </v-card-action>
+        <v-card-actions>
+          <v-btn
+            @click="
+              resetReply();
+              dialogChannelMove = false;
+            "
+            class="rounded ma-1"
+            color="primary"
+          >
+            いいよ
+          </v-btn>
+          <v-btn
+            @click="goBackToPreviousChannel()"
+            class="rounded ma-1"
+            variant="text"
+          >
+            だめ
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
 
