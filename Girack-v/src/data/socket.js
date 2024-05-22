@@ -48,6 +48,8 @@ import { dataUser } from "./dataUserinfo.js";
 import { dataChannel } from "./dataChannel.js";
 import { dataMsg } from "./dataMsg.js";
 
+//通知オブジェクト格納用、下のsocket.on("messageReceive")にて使う
+let NotificationHolder = null;
 //メッセージ受け取り、履歴への保存
 socket.on("messageReceive", (msg) => {
   //メッセージ発信元のチャンネルに参加してなくてかつプレビューでもないなら
@@ -164,10 +166,15 @@ socket.on("messageReceive", (msg) => {
       !LIST_NOTIFICATION_MUTE_CHANNEL.value.includes(msg.channelid) && //ミュートリストにチャンネルが入っていない
       (!location.pathname.includes(msg.channelid) || document.hidden) //今いるチャンネルじゃなく、または違うタブなら
     ) {
+      //今通知が出ている状態なら通知を閉じさせる
+      try {
+        NotificationHolder.close();
+      } catch(e) { /* empty */ }
+
       //すべてのメッセージを通知に出すようにしているなら通知
       if (CONFIG_NOTIFICATION.value.NOTIFY_ALL) {
         //通知を出す
-        new Notification(
+        NotificationHolder = new Notification(
           dataChannel().ChannelIndex.value[msg.channelid].channelname,
           {
             body:
@@ -198,7 +205,7 @@ socket.on("messageReceive", (msg) => {
           );
 
           //通知を出す
-          new Notification(
+          NotificationHolder = new Notification(
             dataChannel().ChannelIndex.value[msg.channelid].channelname,
             {
               body:
@@ -216,7 +223,7 @@ socket.on("messageReceive", (msg) => {
         //自分宛の返信なら
         if (msg.replyData.userid === dataUser().myUserinfo.value.userid) {
           //通知を出す
-          new Notification(
+          NotificationHolder = new Notification(
             dataChannel().ChannelIndex.value[msg.channelid].channelname,
             {
               body:
