@@ -17,7 +17,7 @@ export default {
 <template>
   <div class="text-center pa-5" style="width:100%">
     <span>
-      <p class="text-h3">WeNeedDate</p>
+      <p class="text-h3">ItsJune</p>
     </span>
     
     <br>
