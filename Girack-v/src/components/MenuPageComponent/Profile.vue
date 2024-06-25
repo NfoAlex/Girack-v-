@@ -82,7 +82,7 @@ export default {
       handler() {
         try {
           //ファイルサイズが3MB以上なら無効化
-          if (this.iconUploadFile[0].size > 3072000) {
+          if (this.iconUploadFile[0].size > Serverinfo.value.config.PROFILE.PROFILE_ICON_MAXSIZE) {
             this.iconUploadable = false;
           } else {
             this.iconUploadable = true;
