@@ -264,9 +264,9 @@ export default {
           </v-alert>
 
           <v-file-input
+            v-model="iconUploadFile"
             accept="image/jpeg, image/gif, image/png"
             :rules="iconUploadRule"
-            v-model="iconUploadFile"
             variant="underlined"
             :label="
               'アイコン用画像(' +
