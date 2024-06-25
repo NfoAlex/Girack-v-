@@ -256,7 +256,7 @@ export default {
         <v-card-title> アイコンアップロード </v-card-title>
 
         <v-card-text>
-          <v-alert title="注意" type="info" color="grey">
+          <v-alert title="注意" type="info" color="grey" class="mb-2">
             <p class="text-subtitle-2">
               現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
               表示がおかしくります。だから予め自分でクロップしてね
