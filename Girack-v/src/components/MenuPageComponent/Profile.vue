@@ -280,7 +280,7 @@ export default {
           ></v-file-input>
         </v-card-text>
 
-        <v-card-action>
+        <v-card-actions>
           <v-btn
             :disabled="!iconUploadable"
             @click="uploadIcon"
@@ -289,7 +289,7 @@ export default {
           >
             更新
           </v-btn>
-        </v-card-action>
+        </v-card-actions>
         
       </v-card>
 
@@ -363,7 +363,7 @@ export default {
           </v-text-field>
         </v-card-text>
 
-        <v-card-action>
+        <v-card-actions>
           <v-btn
             @click="changePassword"
             color="secondary"
@@ -376,7 +376,7 @@ export default {
           >
             パスワード変更
           </v-btn>
-        </v-card-action>
+        </v-card-actions>
 
         <v-alert
           v-if="
@@ -445,7 +445,7 @@ export default {
         </v-card-text>
 
         <!-- ボタン -->
-        <v-card-action>
+        <v-card-actions>
           <v-btn
             @click="updateName();nameChangeDialog=false;"
             :disabled="!canUseThisName"
@@ -463,7 +463,7 @@ export default {
           >
             キャンセル
           </v-btn>
-        </v-card-action>
+        </v-card-actions>
 
       </v-card>
     </v-dialog>
