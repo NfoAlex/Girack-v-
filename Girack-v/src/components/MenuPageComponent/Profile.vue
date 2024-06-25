@@ -82,7 +82,7 @@ export default {
       handler() {
         try {
           //ファイルサイズが3MB以上なら無効化
-          if (this.iconUploadFile[0].size > 3072000) {
+          if (this.iconUploadFile.size > Serverinfo.value.config.PROFILE.PROFILE_ICON_MAXSIZE) {
             this.iconUploadable = false;
           } else {
             this.iconUploadable = true;
@@ -184,10 +184,10 @@ export default {
         "changeProfileIcon",
         {
           fileData: {
-            name: this.iconUploadFile[0].name,
-            size: this.iconUploadFile[0].size,
-            type: this.iconUploadFile[0].type,
-            buffer: this.iconUploadFile[0],
+            name: this.iconUploadFile.name,
+            size: this.iconUploadFile.size,
+            type: this.iconUploadFile.type,
+            buffer: this.iconUploadFile,
           },
           reqSender: {
             userid: this.myUserinfo.userid,
@@ -196,7 +196,7 @@ export default {
         },
         (status) => {
           console.log("Profile :: uploadIcon : 結果->", status);
-          console.log(this.iconUploadFile[0]);
+          console.log(this.iconUploadFile);
         }
       );
 
@@ -256,7 +256,7 @@ export default {
         <v-card-title> アイコンアップロード </v-card-title>
 
         <v-card-text>
-          <v-alert title="注意" type="info" color="grey">
+          <v-alert title="注意" type="info" color="grey" class="mb-2">
             <p class="text-subtitle-2">
               現在アイコンのクロップ機能が実装できていないため縦横比率が違う画像の場合
               表示がおかしくります。だから予め自分でクロップしてね
@@ -264,9 +264,9 @@ export default {
           </v-alert>
 
           <v-file-input
+            v-model="iconUploadFile"
             accept="image/jpeg, image/gif, image/png"
             :rules="iconUploadRule"
-            v-model="iconUploadFile"
             variant="underlined"
             :label="
               'アイコン用画像(' +
@@ -280,7 +280,7 @@ export default {
           ></v-file-input>
         </v-card-text>
 
-        <v-card-action>
+        <v-card-actions>
           <v-btn
             :disabled="!iconUploadable"
             @click="uploadIcon"
@@ -289,7 +289,7 @@ export default {
           >
             更新
           </v-btn>
-        </v-card-action>
+        </v-card-actions>
         
       </v-card>
 
@@ -363,7 +363,7 @@ export default {
           </v-text-field>
         </v-card-text>
 
-        <v-card-action>
+        <v-card-actions>
           <v-btn
             @click="changePassword"
             color="secondary"
@@ -376,7 +376,7 @@ export default {
           >
             パスワード変更
           </v-btn>
-        </v-card-action>
+        </v-card-actions>
 
         <v-alert
           v-if="
@@ -445,7 +445,7 @@ export default {
         </v-card-text>
 
         <!-- ボタン -->
-        <v-card-action>
+        <v-card-actions>
           <v-btn
             @click="updateName();nameChangeDialog=false;"
             :disabled="!canUseThisName"
@@ -463,7 +463,7 @@ export default {
           >
             キャンセル
           </v-btn>
-        </v-card-action>
+        </v-card-actions>
 
       </v-card>
     </v-dialog>
