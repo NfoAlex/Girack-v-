@@ -82,7 +82,7 @@ export default {
       handler() {
         try {
           //ファイルサイズが3MB以上なら無効化
-          if (this.iconUploadFile[0].size > Serverinfo.value.config.PROFILE.PROFILE_ICON_MAXSIZE) {
+          if (this.iconUploadFile.size > Serverinfo.value.config.PROFILE.PROFILE_ICON_MAXSIZE) {
             this.iconUploadable = false;
           } else {
             this.iconUploadable = true;
@@ -184,10 +184,10 @@ export default {
         "changeProfileIcon",
         {
           fileData: {
-            name: this.iconUploadFile[0].name,
-            size: this.iconUploadFile[0].size,
-            type: this.iconUploadFile[0].type,
-            buffer: this.iconUploadFile[0],
+            name: this.iconUploadFile.name,
+            size: this.iconUploadFile.size,
+            type: this.iconUploadFile.type,
+            buffer: this.iconUploadFile,
           },
           reqSender: {
             userid: this.myUserinfo.userid,
