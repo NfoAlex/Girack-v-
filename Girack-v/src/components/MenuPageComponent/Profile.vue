@@ -196,7 +196,7 @@ export default {
         },
         (status) => {
           console.log("Profile :: uploadIcon : 結果->", status);
-          console.log(this.iconUploadFile[0]);
+          console.log(this.iconUploadFile);
         }
       );
 
