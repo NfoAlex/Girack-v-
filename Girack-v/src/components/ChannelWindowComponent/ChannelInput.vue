@@ -75,6 +75,8 @@ export default {
 
       searchDisplayArray: [], //検索するときに表示する配列
       userHereArray: [], //このチャンネルに参加しているユーザー配列
+
+      channelListData: [], //ユーザーが見れるチャンネル配列
     };
   },
 
@@ -567,6 +569,96 @@ export default {
     SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
       this.channelJoinedUserArray = channelJoinedUserList;
     },
+
+    getPotentialChannelLink() {
+      const cursorPosition = this.$refs.inp.selectionStart;
+      const hashPosition = this.txt.lastIndexOf("#", cursorPosition - 1);
+
+      // カーソル位置が先頭の場合に例外処理をする
+      if (cursorPosition === 0) {
+        return "こんなチャンネル名は作らないでね";
+      }
+
+      // カーソル位置より前に#がなければ例外処理をする
+      if (hashPosition === -1) {
+        return "こんなチャンネル名は作らないでね";
+      }
+
+      // カーソル位置から#の一文字後ろまでの文字列を返す
+      return this.txt.substring(hashPosition + 1, cursorPosition);
+    },
+
+    verifyHashPositions(txt) {
+      const cursorPosition = this.$refs.inp.selectionStart;
+      const hashPosition = txt.lastIndexOf("#", cursorPosition - 1);
+            
+      // カーソル位置が先頭の場合に例外処理をする
+      if (cursorPosition === 0) {
+        return false;
+      }
+      
+      // カーソル位置より前に#がなければ例外処理をする
+      if (hashPosition === -1) {
+        return false;
+      }
+
+      return [" ", "　", "\n", undefined].includes(txt[hashPosition - 1]);
+    },
+
+    findChannelStartingWith(prefix) {
+      //チャンネルリストを取得
+      socket.emit("getInfoList", {
+        target: "channel",
+        reqSender: {
+          userid: this.myUserinfo.userid, //ユーザーID
+          sessionid: this.myUserinfo.sessionid, //セッションID
+        },
+      }, (response) => {
+        if (response.error) {
+          console.error("チャンネルリストの取得中にエラーが発生しました:", response.error);
+          return [];
+        }
+      });
+      
+      // 先頭一致検索する。検索にヒットした名前だけ配列に残す。
+      const filteredChannels = this.channelListData.filter(channel => channel.name.startsWith(prefix));
+      
+      return filteredChannels;
+    },
+
+    handleSelectionChange() {
+      const potentialChannelLink = this.getPotentialChannelLink();
+
+      // ((#が行の先頭 or #の前が空白) and 文字入力位置が「チャンネルリンク」になる可能性がある場所)
+      if (this.verifyHashPositions(this.txt) && this.findChannelStartingWith(potentialChannelLink).length > 0) {
+        console.log("チャンネルリンク入力モード");
+      }
+    },
+
+    //チャンネルリストの取得
+    SOCKETinfoList(dat) {
+      //型が違うかデータが無効なら関数を終わらせる
+      if (dat.type !== "channel" || dat === -1) {
+        console.log("ChannelBrwoser :: infoList : データ違うっぽい???");
+        return;
+      }
+
+      //チャンネル情報のJSONを配列化
+      let ArrayChannelList = Object.entries(dat.channelList);
+      //配列化したデータの中のチャンネル情報のみを入れるよう配列
+      let ArrayChannelListFiltered = [];
+
+      //チャンネル情報のみを抜き出して配列へ追加
+      for (let channelObject of ArrayChannelList) {
+        //あらかじめチャンネルIDを設定しておく
+        channelObject[1].channelid = channelObject[0];
+        //配列化用変数へプッシュ
+        ArrayChannelListFiltered.push(channelObject[1]);
+      }
+
+      //受信データを配列化したものを保存
+      this.channelListData = ArrayChannelListFiltered;
+    },
   },
 
   mounted() {
@@ -588,6 +680,9 @@ export default {
     //cookieに保存している「最後に入力していた値」を入力フォームの初期値に設定
     let previousText = getCookie("previousText");
     this.txt = previousText;
+
+    // チャンネルリスト取得
+    socket.on("infoList", this.SOCKETinfoList);
   },
 
   unmounted() {
@@ -596,6 +691,7 @@ export default {
       "infoChannelJoinedUserList",
       this.SOCKETinfoChannelJoinedUserList
     );
+    socket.off("infoList", this.SOCKETinfoList);
     //メニューページなどにいったら返信状態をリセット
     this.resetReply();
     //直前に入力していた値をcookieに保存。有効期限は1日
@@ -774,6 +870,7 @@ export default {
         @keydown.up="arrowUpTrigger"
         @keydown.down="arrowDownTrigger"
         @paste="fileInputFromClipboard"
+        @selectionchange="handleSelectionChange"
         variant="solo"
         max-rows="5"
         clearable
