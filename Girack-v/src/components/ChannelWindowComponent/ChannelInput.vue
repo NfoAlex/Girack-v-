@@ -76,7 +76,15 @@ export default {
       searchDisplayArray: [], //検索するときに表示する配列
       userHereArray: [], //このチャンネルに参加しているユーザー配列
 
-      channelListData: [], //ユーザーが見れるチャンネル配列
+      channelList: [], //ユーザーが見れるチャンネル配列
+      cursorPosition: 0, //入力フォームのカーソル位置
+
+      channelLink: {
+        isSearchMode: false, //チャンネルリンク入力モードならtrue,
+        hashPosition: -1, //カーソル位置より前にある一番近いハッシュタグの場所
+        searchingQuery: "", //チャンネルリンクの検索をしてる文字列
+        searchDisplayArray: [], //検索するときに表示する配列
+      },
     };
   },
 
@@ -570,39 +578,33 @@ export default {
       this.channelJoinedUserArray = channelJoinedUserList;
     },
 
-    getPotentialChannelLink() {
-      const cursorPosition = this.$refs.inp.selectionStart;
-      const hashPosition = this.txt.lastIndexOf("#", cursorPosition - 1);
-
+    getChannelLinkSearchQuery() {
       // カーソル位置が先頭の場合に例外処理をする
-      if (cursorPosition === 0) {
+      if (this.cursorPosition === 0) {
         return "こんなチャンネル名は作らないでね";
       }
 
       // カーソル位置より前に#がなければ例外処理をする
-      if (hashPosition === -1) {
+      if (this.channelLink.hashPosition === -1) {
         return "こんなチャンネル名は作らないでね";
       }
 
       // カーソル位置から#の一文字後ろまでの文字列を返す
-      return this.txt.substring(hashPosition + 1, cursorPosition);
+      return this.txt.substring(this.channelLink.hashPosition + 1, this.cursorPosition);
     },
 
     verifyHashPositions(txt) {
-      const cursorPosition = this.$refs.inp.selectionStart;
-      const hashPosition = txt.lastIndexOf("#", cursorPosition - 1);
-            
       // カーソル位置が先頭の場合に例外処理をする
-      if (cursorPosition === 0) {
+      if (this.cursorPosition === 0) {
         return false;
       }
       
       // カーソル位置より前に#がなければ例外処理をする
-      if (hashPosition === -1) {
+      if (this.channelLink.hashPosition === -1) {
         return false;
       }
 
-      return [" ", "　", "\n", undefined].includes(txt[hashPosition - 1]);
+      return [" ", "　", "\n", undefined].includes(txt[this.channelLink.hashPosition - 1]);
     },
 
     findChannelStartingWith(prefix) {
@@ -621,18 +623,34 @@ export default {
       });
       
       // 先頭一致検索する。検索にヒットした名前だけ配列に残す。
-      const filteredChannels = this.channelListData.filter(channel => channel.name.startsWith(prefix));
-      
+      const filteredChannels = this.channelList.filter(channel => channel.name.startsWith(prefix));
+
       return filteredChannels;
     },
 
     handleSelectionChange() {
-      const potentialChannelLink = this.getPotentialChannelLink();
+      this.cursorPosition = this.$refs.inp.selectionStart;      
+      this.channelLink.hashPosition = this.txt.lastIndexOf("#", this.cursorPosition - 1);
+      this.channelLink.searchingQuery = this.getChannelLinkSearchQuery();
+      this.channelLink.searchDisplayArray = this.findChannelStartingWith(this.channelLink.searchingQuery);
 
       // ((#が行の先頭 or #の前が空白) and 文字入力位置が「チャンネルリンク」になる可能性がある場所)
-      if (this.verifyHashPositions(this.txt) && this.findChannelStartingWith(potentialChannelLink).length > 0) {
+      if (this.verifyHashPositions(this.txt) && this.channelLink.searchDisplayArray.length > 0) {
         console.log("チャンネルリンク入力モード");
+        this.channelLink.isSearchMode = true;
+      } else { 
+        this.channelLink.isSearchMode = false;
       }
+    },
+
+    //チャンネルリンクウィンドウの要素をクリックされたらチャンネルリンクに置き換える処理
+    replaceChannelLink(targetChannelId) { //TODO 仮の実装。あとで直す
+      this.txt = 
+        this.txt.slice(0, this.channelLink.hashPosition) +
+        "#/" + targetChannelId + "/ " +
+        this.txt.slice(this.cursorPosition);
+      //入力欄へフォーカスしなおす
+      this.$el.querySelector("#inp").focus();
     },
 
     //チャンネルリストの取得
@@ -657,7 +675,7 @@ export default {
       }
 
       //受信データを配列化したものを保存
-      this.channelListData = ArrayChannelListFiltered;
+      this.channelList = ArrayChannelListFiltered;
     },
   },
 
@@ -820,6 +838,23 @@ export default {
       style="width:95%; height:fit-content; position:relative;"
       class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
+
+      <!-- チャンネルリンクウィンドウ -->
+      <v-card
+        v-if="channelLink.isSearchMode"
+        width="100%"
+        position="absolute"
+        max-height="30vh"
+        class="rounded-lg"
+        style="bottom:101%; overflow-y:auto; z-index:100;"
+      >
+        <v-list-item 
+          v-for="(value, key) in channelLink.searchDisplayArray"
+          @click="replaceChannelLink(key)"
+        > 
+          {{ value.name }} 
+        </v-list-item>
+      </v-card> 
 
       <!-- メンションウィンドウ -->
       <v-card
