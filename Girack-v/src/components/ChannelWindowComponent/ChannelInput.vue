@@ -644,10 +644,10 @@ export default {
     },
 
     //チャンネルリンクウィンドウの要素をクリックされたらチャンネルリンクに置き換える処理
-    replaceChannelLink(targetChannelId) { //TODO 仮の実装。あとで直す
+    replaceChannelLink(targetChannelInfo) { //TODO 仮の実装。あとで直す
       this.txt = 
         this.txt.slice(0, this.channelLink.hashPosition) +
-        "#/" + targetChannelId + "/ " +
+        "#/" + targetChannelInfo.channelid + "/ " +
         this.txt.slice(this.cursorPosition);
       //入力欄へフォーカスしなおす
       this.$el.querySelector("#inp").focus();
@@ -849,8 +849,8 @@ export default {
         style="bottom:101%; overflow-y:auto; z-index:100;"
       >
         <v-list-item 
-          v-for="(value, key) in channelLink.searchDisplayArray"
-          @click="replaceChannelLink(key)"
+          v-for="value in channelLink.searchDisplayArray"
+          @click="replaceChannelLink(value)"
         > 
           {{ value.name }} 
         </v-list-item>
