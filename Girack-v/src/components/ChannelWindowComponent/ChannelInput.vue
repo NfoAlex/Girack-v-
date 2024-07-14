@@ -293,6 +293,12 @@ export default {
       }
     },
 
+    // バックスペースキーのトリガー処理
+    backspaceTrigger(event) {
+      // チャンネルリンクをまとめて削除する処理
+      this.deleteChannelLink();
+    },
+
     //メッセージを送信する
     msgSend() {
       //fxTwitter化する
@@ -652,6 +658,27 @@ export default {
       //入力欄へフォーカスしなおす
       this.$el.querySelector("#inp").focus();
     },
+    
+    // チャンネルリンクをまとめて削除する処理
+    deleteChannelLink() {
+      const textBeforeCursor = this.txt.slice(0, this.cursorPosition);
+      
+      // チャンネルリンクを探す
+      for (let channel of this.channelList) {
+        const link = `#/${channel.channelid}/`;
+        const startPos = textBeforeCursor.lastIndexOf(link);
+        
+        if (startPos !== -1 && this.cursorPosition === startPos + link.length) {
+          // 削除
+          this.txt = this.txt.slice(0, startPos) + this.txt.slice(this.cursorPosition);
+          // 次のDOM更新後にカーソル位置を更新
+          this.$nextTick(() => {
+            this.$el.querySelector("#inp").setSelectionRange(startPos, startPos);
+          });
+          break;
+        }
+      }
+    },
 
     //チャンネルリストの取得
     SOCKETinfoList(dat) {
@@ -904,6 +931,7 @@ export default {
         @keydown.@="AtsignTrigger"
         @keydown.up="arrowUpTrigger"
         @keydown.down="arrowDownTrigger"
+        @keydown.backspace="backspaceTrigger"
         @paste="fileInputFromClipboard"
         @selectionchange="handleSelectionChange"
         variant="solo"
