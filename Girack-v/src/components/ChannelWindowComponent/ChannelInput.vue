@@ -263,13 +263,12 @@ export default {
         this.searchMode.enabled = false;
 
         //もし250文字以内ならメッセージ送信
+      } else if (this.channelLink.isSearchMode) {
+        event.preventDefault();
+        this.replaceChannelLink(this.channelLink.selectedChannel);
       } else if (this.txt.length <= this.Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH) {
         //メッセージ送信開始
         this.msgSend(event);
-      }
-
-      if (this.channelLink.isSearchMode) {
-        this.replaceChannelLink(this.channelLink.selectedChannel);
       }
     },
 
