@@ -84,6 +84,7 @@ export default {
         hashPosition: -1, //カーソル位置より前にある一番近いハッシュタグの場所
         searchingQuery: "", //チャンネルリンクの検索をしてる文字列
         searchDisplayArray: [], //検索するときに表示する配列
+        selectedChannel: [], // チャンネルリストで選択中のチャンネル情報
       },
     };
   },
@@ -266,6 +267,10 @@ export default {
         //メッセージ送信開始
         this.msgSend(event);
       }
+
+      if (this.channelLink.isSearchMode) {
+        this.replaceChannelLink(this.channelLink.selectedChannel);
+      }
     },
 
     //テキスト入力中の@押された時のトリガー処理
@@ -277,11 +282,22 @@ export default {
         document.querySelector("#inp").selectionStart;
     },
 
-    //下十字キーのトリガー(メンション時のユーザー検索用)
+    //下十字キーのトリガー
     arrowDownTrigger(e) {
+      //メンション時のユーザー検索用
       if (this.searchMode.enabled) {
         e.preventDefault();
         this.changeMentionUserSelect("down");
+      }
+
+      //チャンネルリンク選択用
+      if (this.channelLink.isSearchMode) {
+        const currentIndex = this.channelLink.searchDisplayArray.indexOf(this.channelLink.selectedChannel);
+        
+        if (currentIndex !== -1 && currentIndex < this.channelLink.searchDisplayArray.length - 1) {
+          e.preventDefault();
+          this.channelLink.selectedChannel = this.channelLink.searchDisplayArray[currentIndex + 1];
+        }
       }
     },
 
@@ -290,6 +306,16 @@ export default {
       if (this.searchMode.enabled) {
         e.preventDefault();
         this.changeMentionUserSelect("up");
+      }
+
+      //チャンネルリンク選択用
+      if (this.channelLink.isSearchMode) {
+        const currentIndex = this.channelLink.searchDisplayArray.indexOf(this.channelLink.selectedChannel);
+        
+        if (currentIndex !== -1 && 0 < currentIndex) {
+          e.preventDefault();
+          this.channelLink.selectedChannel = this.channelLink.searchDisplayArray[currentIndex - 1];
+        }
       }
     },
 
@@ -644,6 +670,7 @@ export default {
       if (this.verifyHashPositions(this.txt) && this.channelLink.searchDisplayArray.length > 0) {
         console.log("チャンネルリンク入力モード");
         this.channelLink.isSearchMode = true;
+        this.channelLink.selectedChannel = this.channelLink.searchDisplayArray[0];
       } else { 
         this.channelLink.isSearchMode = false;
       }
@@ -879,7 +906,10 @@ export default {
           v-for="value in channelLink.searchDisplayArray"
           @click="replaceChannelLink(value)"
         > 
-          {{ value.name }} 
+          <span style="margin-left: 8px">
+            <span v-if="value === channelLink.selectedChannel"> ⇒ </span>
+            {{ "＃" + value.name }} 
+          </span>
         </v-list-item>
       </v-card> 
 
