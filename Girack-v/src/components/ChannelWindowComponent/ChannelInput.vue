@@ -75,6 +75,17 @@ export default {
 
       searchDisplayArray: [], //検索するときに表示する配列
       userHereArray: [], //このチャンネルに参加しているユーザー配列
+
+      channelList: [], //ユーザーが見れるチャンネル配列
+      cursorPosition: 0, //入力フォームのカーソル位置
+
+      channelLink: {
+        isSearchMode: false, //チャンネルリンク入力モードならtrue,
+        hashPosition: -1, //カーソル位置より前にある一番近いハッシュタグの場所
+        searchingQuery: "", //チャンネルリンクの検索をしてる文字列
+        searchDisplayArray: [], //検索するときに表示する配列
+        selectedChannel: [], // チャンネルリストで選択中のチャンネル情報
+      },
     };
   },
 
@@ -252,6 +263,9 @@ export default {
         this.searchMode.enabled = false;
 
         //もし250文字以内ならメッセージ送信
+      } else if (this.channelLink.isSearchMode) {
+        event.preventDefault();
+        this.replaceChannelLink(this.channelLink.selectedChannel);
       } else if (this.txt.length <= this.Serverinfo.config.MESSAGE.MESSAGE_TXT_MAXLENGTH) {
         //メッセージ送信開始
         this.msgSend(event);
@@ -267,11 +281,22 @@ export default {
         document.querySelector("#inp").selectionStart;
     },
 
-    //下十字キーのトリガー(メンション時のユーザー検索用)
+    //下十字キーのトリガー
     arrowDownTrigger(e) {
+      //メンション時のユーザー検索用
       if (this.searchMode.enabled) {
         e.preventDefault();
         this.changeMentionUserSelect("down");
+      }
+
+      //チャンネルリンク選択用
+      if (this.channelLink.isSearchMode) {
+        const currentIndex = this.channelLink.searchDisplayArray.indexOf(this.channelLink.selectedChannel);
+        
+        if (currentIndex !== -1 && currentIndex < this.channelLink.searchDisplayArray.length - 1) {
+          e.preventDefault();
+          this.channelLink.selectedChannel = this.channelLink.searchDisplayArray[currentIndex + 1];
+        }
       }
     },
 
@@ -281,6 +306,22 @@ export default {
         e.preventDefault();
         this.changeMentionUserSelect("up");
       }
+
+      //チャンネルリンク選択用
+      if (this.channelLink.isSearchMode) {
+        const currentIndex = this.channelLink.searchDisplayArray.indexOf(this.channelLink.selectedChannel);
+        
+        if (currentIndex !== -1 && 0 < currentIndex) {
+          e.preventDefault();
+          this.channelLink.selectedChannel = this.channelLink.searchDisplayArray[currentIndex - 1];
+        }
+      }
+    },
+
+    // バックスペースキーのトリガー処理
+    backspaceTrigger(event) {
+      // チャンネルリンクをまとめて削除する処理
+      this.deleteChannelLink();
     },
 
     //メッセージを送信する
@@ -567,6 +608,128 @@ export default {
     SOCKETinfoChannelJoinedUserList(channelJoinedUserList) {
       this.channelJoinedUserArray = channelJoinedUserList;
     },
+
+    getChannelLinkSearchQuery() {
+      // カーソル位置が先頭の場合に例外処理をする
+      if (this.cursorPosition === 0) {
+        return "こんなチャンネル名は作らないでね";
+      }
+
+      // カーソル位置より前に#がなければ例外処理をする
+      if (this.channelLink.hashPosition === -1) {
+        return "こんなチャンネル名は作らないでね";
+      }
+
+      // カーソル位置から#の一文字後ろまでの文字列を返す
+      return this.txt.substring(this.channelLink.hashPosition + 1, this.cursorPosition);
+    },
+
+    verifyHashPositions(txt) {
+      // カーソル位置が先頭の場合に例外処理をする
+      if (this.cursorPosition === 0) {
+        return false;
+      }
+      
+      // カーソル位置より前に#がなければ例外処理をする
+      if (this.channelLink.hashPosition === -1) {
+        return false;
+      }
+
+      return [" ", "　", "\n", undefined].includes(txt[this.channelLink.hashPosition - 1]);
+    },
+
+    findChannelStartingWith(prefix) {
+      //チャンネルリストを取得
+      socket.emit("getInfoList", {
+        target: "channel",
+        reqSender: {
+          userid: this.myUserinfo.userid, //ユーザーID
+          sessionid: this.myUserinfo.sessionid, //セッションID
+        },
+      }, (response) => {
+        if (response.error) {
+          console.error("チャンネルリストの取得中にエラーが発生しました:", response.error);
+          return [];
+        }
+      });
+      
+      // 先頭一致検索する。検索にヒットした名前だけ配列に残す。
+      const filteredChannels = this.channelList.filter(channel => channel.name.startsWith(prefix));
+
+      return filteredChannels;
+    },
+
+    handleSelectionChange() {
+      this.cursorPosition = this.$refs.inp.selectionStart;      
+      this.channelLink.hashPosition = this.txt.lastIndexOf("#", this.cursorPosition - 1);
+      this.channelLink.searchingQuery = this.getChannelLinkSearchQuery();
+      this.channelLink.searchDisplayArray = this.findChannelStartingWith(this.channelLink.searchingQuery);
+
+      // ((#が行の先頭 or #の前が空白) and 文字入力位置が「チャンネルリンク」になる可能性がある場所)
+      if (this.verifyHashPositions(this.txt) && this.channelLink.searchDisplayArray.length > 0) {
+        console.log("チャンネルリンク入力モード");
+        this.channelLink.isSearchMode = true;
+        this.channelLink.selectedChannel = this.channelLink.searchDisplayArray[0];
+      } else { 
+        this.channelLink.isSearchMode = false;
+      }
+    },
+
+    //チャンネルリンクウィンドウの要素をクリックされたらチャンネルリンクに置き換える処理
+    replaceChannelLink(targetChannelInfo) { //TODO 仮の実装。あとで直す
+      this.txt = 
+        this.txt.slice(0, this.channelLink.hashPosition) +
+        "#/" + targetChannelInfo.channelid + "/ " +
+        this.txt.slice(this.cursorPosition);
+      //入力欄へフォーカスしなおす
+      this.$el.querySelector("#inp").focus();
+    },
+    
+    // チャンネルリンクをまとめて削除する処理
+    deleteChannelLink() {
+      const textBeforeCursor = this.txt.slice(0, this.cursorPosition);
+      
+      // チャンネルリンクを探す
+      for (let channel of this.channelList) {
+        const link = `#/${channel.channelid}/`;
+        const startPos = textBeforeCursor.lastIndexOf(link);
+        
+        if (startPos !== -1 && this.cursorPosition === startPos + link.length) {
+          // 削除
+          this.txt = this.txt.slice(0, startPos) + this.txt.slice(this.cursorPosition);
+          // 次のDOM更新後にカーソル位置を更新
+          this.$nextTick(() => {
+            this.$el.querySelector("#inp").setSelectionRange(startPos, startPos);
+          });
+          break;
+        }
+      }
+    },
+
+    //チャンネルリストの取得
+    SOCKETinfoList(dat) {
+      //型が違うかデータが無効なら関数を終わらせる
+      if (dat.type !== "channel" || dat === -1) {
+        console.log("ChannelBrwoser :: infoList : データ違うっぽい???");
+        return;
+      }
+
+      //チャンネル情報のJSONを配列化
+      let ArrayChannelList = Object.entries(dat.channelList);
+      //配列化したデータの中のチャンネル情報のみを入れるよう配列
+      let ArrayChannelListFiltered = [];
+
+      //チャンネル情報のみを抜き出して配列へ追加
+      for (let channelObject of ArrayChannelList) {
+        //あらかじめチャンネルIDを設定しておく
+        channelObject[1].channelid = channelObject[0];
+        //配列化用変数へプッシュ
+        ArrayChannelListFiltered.push(channelObject[1]);
+      }
+
+      //受信データを配列化したものを保存
+      this.channelList = ArrayChannelListFiltered;
+    },
   },
 
   mounted() {
@@ -588,6 +751,9 @@ export default {
     //cookieに保存している「最後に入力していた値」を入力フォームの初期値に設定
     let previousText = getCookie("previousText");
     this.txt = previousText;
+
+    // チャンネルリスト取得
+    socket.on("infoList", this.SOCKETinfoList);
   },
 
   unmounted() {
@@ -596,6 +762,7 @@ export default {
       "infoChannelJoinedUserList",
       this.SOCKETinfoChannelJoinedUserList
     );
+    socket.off("infoList", this.SOCKETinfoList);
     //メニューページなどにいったら返信状態をリセット
     this.resetReply();
     //直前に入力していた値をcookieに保存。有効期限は1日
@@ -725,6 +892,26 @@ export default {
       class="mt-2 mx-auto d-flex justify-space-between align-center"
     >
 
+      <!-- チャンネルリンクウィンドウ -->
+      <v-card
+        v-if="channelLink.isSearchMode"
+        width="100%"
+        position="absolute"
+        max-height="30vh"
+        class="rounded-lg"
+        style="bottom:101%; overflow-y:auto; z-index:100;"
+      >
+        <v-list-item 
+          v-for="value in channelLink.searchDisplayArray"
+          @click="replaceChannelLink(value)"
+        > 
+          <span style="margin-left: 8px">
+            <span v-if="value === channelLink.selectedChannel"> ⇒ </span>
+            {{ "＃" + value.name }} 
+          </span>
+        </v-list-item>
+      </v-card> 
+
       <!-- メンションウィンドウ -->
       <v-card
         v-if="searchMode.enabled"
@@ -773,7 +960,9 @@ export default {
         @keydown.@="AtsignTrigger"
         @keydown.up="arrowUpTrigger"
         @keydown.down="arrowDownTrigger"
+        @keydown.backspace="backspaceTrigger"
         @paste="fileInputFromClipboard"
+        @selectionchange="handleSelectionChange"
         variant="solo"
         max-rows="5"
         clearable
